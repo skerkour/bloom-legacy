@@ -1,8 +1,10 @@
 mod db;
+mod server;
 
-use actix_web::{server, App, HttpRequest, HttpResponse, Result as ActixResult};
+use actix_web::{server as actix_server, App, HttpRequest, HttpResponse, Result as ActixResult};
 use actix::System;
 use serde::{Serialize, Deserialize};
+use server::middlewares;
 
 #[derive(Serialize)]
 pub struct Response<T: Serialize> {
@@ -39,13 +41,15 @@ fn index(_req: &HttpRequest) -> ActixResult<HttpResponse> {
 fn main() {
     let sys = System::new("kernel");
 
-    server::new(|| {
-        App::new().resource("/", |r| r.method(http::Method::GET).f(index))
+    actix_server::new(|| {
+        App::new()
+        .middleware(middlewares::request_id::RequestIDHeader)
+        .resource("/", |r| r.method(http::Method::GET).f(index))
     })
     .backlog(8192)
     .bind("127.0.0.1:8000")
     .unwrap()
-    .keep_alive(server::KeepAlive::Timeout(60))
+    .keep_alive(actix_server::KeepAlive::Timeout(60))
     .shutdown_timeout(2)
     .workers(8)
     .start();
