@@ -23,8 +23,8 @@ build_debug:
 
 build_static:
 	mkdir -p $(DIST_DIR)
-	cargo build --target=x86_64-unknown-linux-musl
-	cp target/x86_64-unknown-linux-musl/debug/$(NAME) $(DIST_DIR)/$(NAME)
+	cargo build --release --target=x86_64-unknown-linux-musl
+	cp target/x86_64-unknown-linux-musl/release/$(NAME) $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 dev:
