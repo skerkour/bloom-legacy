@@ -1,0 +1,44 @@
+image: docker:stable
+
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - release
+
+
+test:
+  stage: test
+  image: 'golang:1.11-stretch'
+  tags:
+    - docker
+    - bloom42cicd
+  script:
+    - apt update && apt install -y gcc make git
+    - make test
+
+build:
+  stage: build
+  tags:
+    - docker
+    - bloom42cicd
+  script:
+    - apk update && apk add make
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - make docker
+    - make docker_push
+
+
+release:
+  only:
+    - tags
+  stage: release
+  tags:
+    - docker
+    - bloom42cicd
+  script:
+    - apk update && apk add make
+    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - make docker_release

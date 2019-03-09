@@ -1,0 +1,30 @@
+sudo: required
+language: rust
+services:
+  - docker
+
+rust:
+  - 1.33.0
+
+before_install:
+  - rustup self update
+
+script:
+  - make test
+  # - make lint
+  # - make build
+  - make docker_build
+
+deploy:
+  - provider: releases
+    api_key: $GITHUB_TOKEN
+    on:
+      tags: true
+  - provider: script
+    script: make docker_login && make docker_release
+    on:
+      tags: true
+
+notifications:
+  email:
+    on_success: never

@@ -1,0 +1,29 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.com>"]
+edition = "2018"
+homepage = "https://bloom.sh"
+repository = "https://github.com/bloom42/kernel.git"
+description = "Open internet services"
+keywords = ["bloom"]
+license-file = "LICENSE.txt"
+
+[dependencies]
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+diesel = { version = "^1.1.0", features = ["postgres", "chrono", "serde_json", "r2d2"] }
+actix = "0.7"
+actix-web = "0.7"
+http = "0.1.0"
+dotenv = "^0.13.0"
+chrono = { version = "0.4", features = ["serde"] }
+futures = "0.1"
+uuid = { version = "0.7", features = ["v4"] }
+rand="0.6"
+failure = "0.1.5"
+
+
+[profile.release]
+# for error tracking
+debug = true
