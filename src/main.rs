@@ -1,7 +1,7 @@
 mod db;
 mod server;
 
-use actix_web::{server as actix_server, App, HttpRequest, HttpResponse, Result as ActixResult, http::NormalizePath};
+use actix_web::{server as actix_server, App, HttpRequest, HttpResponse, Result as ActixResult};
 use actix::System;
 use serde::{Serialize, Deserialize};
 use server::middlewares;
@@ -49,6 +49,7 @@ fn main() {
     actix_server::new(|| {
         App::new()
         .middleware(middlewares::request_id::RequestIDHeader)
+        .middleware(middlewares::logger::Logger)
         .resource("/", |r| r.method(http::Method::GET).f(index))
         .resource("/hello", |r| r.method(http::Method::GET).f(index))
         .default_resource(|r|
