@@ -1,9 +1,9 @@
-// extern crate actix_web;
-// extern crate rand;
+use actix_web::{
+    FromRequest, HttpRequest, HttpResponse, Result,
+    http::header::HeaderValue,
+    middleware::{Middleware, Response},
+};
 
-use actix_web::http::header::HeaderValue;
-use actix_web::middleware::{Middleware, Response};
-use actix_web::{FromRequest, HttpRequest, HttpResponse, Result};
 
 /// The header set by the middleware
 pub const REQUEST_ID_HEADER: &str = "X-Bloom-Request-ID";
@@ -11,20 +11,19 @@ pub const REQUEST_ID_HEADER: &str = "X-Bloom-Request-ID";
 /// The HTTP Request ID
 ///
 /// **note:** must contain as String that is valid to put in HTTP Header values
-/// using base62 / base64 is a great way to sanitize the string
 ///
 /// It can also be extracted from a request and Helper converter to be able to extract the RequestID easily in an handler
 #[derive(Debug, Clone, PartialEq)]
 pub struct RequestID(pub String);
 
 /// Permits retrieving the HttpRequest associated RequestID
-pub trait RequestIDGetter {
+pub trait GetRequestID {
     /// Returns the HttpRequest RequestID, if the HttpRequest currently has none
     /// it creates one and associates it to the HttpRequest.
     fn request_id(&self) -> RequestID;
 }
 
-impl<S> RequestIDGetter for HttpRequest<S> {
+impl<S> GetRequestID for HttpRequest<S> {
     fn request_id(&self) -> RequestID {
         if let Some(req_id) = self.extensions().get::<RequestID>() {
             return req_id.clone();

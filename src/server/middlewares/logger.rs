@@ -1,7 +1,7 @@
 use actix_web::{Result, HttpResponse, HttpRequest};
 use actix_web::middleware::{Started, Finished, Middleware};
 use chrono::{Utc, DateTime};
-use crate::server::middlewares::request_id::RequestIDGetter;
+use crate::server::middlewares::request_id::GetRequestID;
 
 
 pub struct Logger;
