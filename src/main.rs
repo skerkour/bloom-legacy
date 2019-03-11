@@ -40,19 +40,16 @@ fn index(req: &HttpRequest<api::State>) -> ActixResult<HttpResponse> {
     return Ok(HttpResponse::Ok().json(api::Response::data(res)));
 }
 
-
-fn json_default_config(cfg: &mut (dev::JsonConfig<api::State>, ())) {
-    cfg.0.error_handler(|err, _req| {  // <- create custom error response
-        api::Error::BadClientData{error: err.to_string()}.into()
-    });
-}
-
 fn main() {
     let (_guard, logger) = log::setup_slog();
     let sys = System::new("kernel");
+    let db_actor_addr = db::init();
+    let api_state = api::State{
+        db: db_actor_addr,
+    };
 
-    actix_server::new(|| {
-        App::with_state(api::State{})
+    actix_server::new(move || {
+        App::with_state(api_state.clone())
         .middleware(middlewares::request_id::RequestIDHeader)
         .middleware(middlewares::logger::Logger)
         .resource("/", |r| r.method(http::Method::GET).f(index))

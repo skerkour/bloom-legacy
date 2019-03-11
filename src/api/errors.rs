@@ -20,11 +20,11 @@ pub enum Error {
 impl error::ResponseError for Error {
     fn error_response(&self) -> HttpResponse {
         let res: Response<String> = Response::error(&format!("{}", self));
-       match *self {
-          Error::Internal => HttpResponse::InternalServerError().json(&res),
-          Error::BadClientData{..} => HttpResponse::BadRequest().json(&res),
-          Error::Timeout => HttpResponse::RequestTimeout().json(&res),
-          Error::RouteNotFound => HttpResponse::NotFound().json(&res),
-       }
+        match *self {
+            Error::Internal => HttpResponse::InternalServerError().json(&res),
+            Error::BadClientData{..} => HttpResponse::BadRequest().json(&res),
+            Error::Timeout => HttpResponse::RequestTimeout().json(&res),
+            Error::RouteNotFound => HttpResponse::NotFound().json(&res),
+        }
     }
 }
