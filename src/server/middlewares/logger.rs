@@ -5,7 +5,7 @@ use actix_web::{
 };
 use chrono::{Utc, DateTime};
 use crate::server::middlewares::request_id::{GetRequestID, RequestID};
-use slog::{slog_o, slog_info};
+use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 
 
@@ -77,19 +77,28 @@ impl<S> Middleware<S> for Logger {
         } else {
             "-"
         };
-
-        slog_info!(logger, "access";
-            slog_o!("duration" => duration,
+        let status = resp.status().as_u16();
+        let default_user_agent = header::HeaderValue::from_str("").unwrap();
+        let fields =  slog_o!(
+            "duration" => duration,
             "size" => resp.response_size(),
-            "status" => resp.status().as_u16(),
+            "status" => status,
             "scheme" => connection_info.scheme(),
             "url" => req.path(),
             "method" => req.method().as_str(),
             "remote_address" => remote,
             // TODO: not working
-            "user_agent" => resp.headers().get(header::USER_AGENT).unwrap_or(&header::HeaderValue::from_str("").unwrap()).to_str().unwrap(),
-            )
-        );
+            "user_agent" => resp.headers().get(header::USER_AGENT).unwrap_or(&default_user_agent).to_str().unwrap(),
+            );
+        match status {
+            x if x < 400 => { slog_info!(logger, "access"; fields) },
+            x if x < 500 => { slog_warn!(logger, "access"; fields) },
+            _  => { slog_error!(logger, "access"; fields) },
+        }
+
+        // slog_info!(logger, "access";
+
+        // );
         return Finished::Done;
     }
 }
