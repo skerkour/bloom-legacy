@@ -86,7 +86,7 @@ impl<S> Middleware<S> for Logger {
             "remote_address" => remote,
             // TODO: not working
             "user_agent" => resp.headers().get(header::USER_AGENT).unwrap_or(&default_user_agent).to_str().unwrap(),
-            );
+        );
         match status {
             x if x < 400 => { slog_info!(logger, "access"; fields) },
             x if x < 500 => { slog_warn!(logger, "access"; fields) },
@@ -123,5 +123,18 @@ impl Deref for RequestLogger {
 
     fn deref(&self) -> &slog::Logger {
         &self.0
+    }
+}
+
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use actix_web::test::TestRequest;
+
+    #[test]
+    fn request_get_logger() {
+        let req = TestRequest::default().finish();
+        let _ = req.logger();
     }
 }

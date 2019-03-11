@@ -8,29 +8,32 @@ RUN apt install -y git ca-certificates make libssl-dev libpq-dev \
     libsqlite-dev pkgconf \
     sudo xutils-dev
 #    gcc-4.7-multilib-arm-linux-gnueabihf
-RUN useradd -ms /bin/bash bloom
 
 WORKDIR /kernel
 COPY . ./
-ENV PKG_CONFIG_ALLOW_CROSS=1
-RUN make build_static
+# ENV PKG_CONFIG_ALLOW_CROSS=1
+RUN make build
 
 ####################################################################################################
 ## Image
 ####################################################################################################
 
-FROM alpine:latest
-RUN apk --no-cache add ca-certificates postgresql-dev libressl-dev openssl-dev libldap \
-  libsasl musl
+FROM debian:stretch-slim
 
-RUN adduser -D -g '' bloom
-RUN ln -s /lib/libc.musl-x86_64.so.1 /lib/ld64.so.1
+RUN apt-get update && apt-get upgrade -y
+
+RUN apt-get install --no-install-recommends -y ca-certificates libssl-dev libpq-dev \
+  && apt-get remove -y --allow-remove-essential gzip \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/*
+
+RUN useradd -ms /bin/bash bloom
 
 RUN mkdir /kernel && chown -R bloom:bloom /kernel && chmod 700 /kernel
 COPY --from=builder /kernel/dist/kernel /kernel/kernel
 COPY --from=builder /kernel/dist/assets /kernel/assets
 
-USER bloom
+#USER bloom
 WORKDIR /kernel
 
 EXPOSE 8000
