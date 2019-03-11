@@ -1,4 +1,4 @@
-mod errors;
+mod error;
 mod state;
 
 use serde::Serialize;
@@ -11,7 +11,7 @@ use actix_web::{
 
 
 pub mod middlewares;
-pub use errors::Error;
+pub use error::Error;
 pub use state::State;
 
 
@@ -49,6 +49,6 @@ pub fn route_404(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
 
 pub fn json_default_config(cfg: &mut (dev::JsonConfig<State>, ())) {
     cfg.0.error_handler(|err, _req| {  // <- create custom error response
-        Error::BadClientData{error: err.to_string()}.into()
+        Error::BadRequest{error: err.to_string()}.into()
     });
 }

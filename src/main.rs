@@ -8,12 +8,8 @@ mod api;
 
 use actix_web::{
     server as actix_server, App, HttpRequest, HttpResponse, Result as ActixResult,
-    error,
-    dev,
-    State,
-    Json,
     middleware::cors::Cors,
-    http::{header, Method},
+    http::{header},
 };
 use actix::System;
 use serde::{Serialize, Deserialize};
