@@ -66,10 +66,7 @@ impl<S> Middleware<S> for Logger {
 
         let start_time: RequestStartTime = req.extensions_mut().remove().unwrap();
         let now = Utc::now();
-        let duration = match start_time.0.signed_duration_since(now).num_milliseconds() {
-            d if d < 0 => 0,
-            d => d,
-        };
+        let duration = now.signed_duration_since(start_time.0).num_milliseconds();
 
         let connection_info = req.connection_info();
         let remote = if let Some(remote) = connection_info.remote() {

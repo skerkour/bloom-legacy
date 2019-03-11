@@ -23,6 +23,8 @@ uuid = { version = "0.7", features = ["v4"] }
 rand="0.6"
 failure = "0.1.5"
 
+tokio-timer = "0.2"
+
 # error tracking
 sentry = "0.12.0"
 
