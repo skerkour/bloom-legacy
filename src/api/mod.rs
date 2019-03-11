@@ -1,5 +1,6 @@
 mod errors;
 mod state;
+pub mod middlewares;
 
 use serde::Serialize;
 use actix_web::{

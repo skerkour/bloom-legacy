@@ -2,7 +2,6 @@
 extern crate failure;
 
 mod db;
-mod server;
 mod log;
 mod api;
 
@@ -17,8 +16,8 @@ use actix_web::{
 use actix::System;
 use serde::{Serialize, Deserialize};
 use crate::{
-    server::middlewares::logger::GetRequestLogger,
-    server::middlewares,
+    api::middlewares::logger::GetRequestLogger,
+    api::middlewares,
     log::macros::{slog_info, slog_o}
 };
 
@@ -52,6 +51,7 @@ fn main() {
         App::with_state(api_state.clone())
         .middleware(middlewares::request_id::RequestIDHeader)
         .middleware(middlewares::logger::Logger)
+        .middleware(middlewares::DefaultHeaders)
         .resource("/", |r| r.method(http::Method::GET).f(index))
         .resource("/hello", |r| r.method(http::Method::GET).f(index))
         .default_resource(|r| r.f(api::route_404))

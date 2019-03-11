@@ -4,7 +4,7 @@ use actix_web::{
     http::header,
 };
 use chrono::{Utc, DateTime};
-use crate::server::middlewares::request_id::{GetRequestID, RequestID};
+use crate::api::middlewares::request_id::{GetRequestID, RequestID};
 use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 
