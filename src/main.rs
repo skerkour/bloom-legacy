@@ -12,6 +12,8 @@ use actix_web::{
     dev,
     State,
     Json,
+    middleware::cors::Cors,
+    http::{header, Method},
 };
 use actix::System;
 use serde::{Serialize, Deserialize};
@@ -52,9 +54,17 @@ fn main() {
         .middleware(middlewares::request_id::RequestIDHeader)
         .middleware(middlewares::logger::Logger)
         .middleware(middlewares::DefaultHeaders)
-        .resource("/", |r| r.method(http::Method::GET).f(index))
-        .resource("/hello", |r| r.method(http::Method::GET).f(index))
         .default_resource(|r| r.f(api::route_404))
+        .configure(|app| {
+            Cors::for_app(app)
+                .allowed_origin("*")
+                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                .allowed_headers(vec![header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+                .max_age(3600)
+                .resource("/", |r| r.method(http::Method::GET).f(index))
+                .resource("/hello", |r| r.method(http::Method::GET).f(index))
+                .register()
+        })
     })
     .backlog(8192)
     .bind("127.0.0.1:8000")

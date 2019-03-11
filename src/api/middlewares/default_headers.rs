@@ -1,16 +1,10 @@
 use actix_web::{
-    FromRequest, HttpRequest, HttpResponse, Result,
+    HttpRequest, HttpResponse, Result,
     http::header::HeaderValue,
     middleware::{Middleware, Response},
 };
-use std::ops::Deref;
 
-
-
-/// The header set by the middleware
-pub const REQUEST_ID_HEADER: &str = "X-Bloom-Request-ID";
-
-
+/// DefaultHeaders appends to response some headers (primarily for security purpose)
 #[derive(Debug, Clone, PartialEq)]
 pub struct DefaultHeaders;
 

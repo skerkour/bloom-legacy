@@ -1,6 +1,5 @@
 mod errors;
 mod state;
-pub mod middlewares;
 
 use serde::Serialize;
 use actix_web::{
@@ -10,6 +9,8 @@ use actix_web::{
     dev,
 };
 
+
+pub mod middlewares;
 pub use errors::Error;
 pub use state::State;
 
