@@ -3,6 +3,8 @@ use actix_web::{
     http::header::HeaderValue,
     middleware::{Middleware, Response},
 };
+use std::ops::Deref;
+
 
 
 /// The header set by the middleware
@@ -49,13 +51,23 @@ impl<S> FromRequest<S> for RequestID {
 pub struct RequestIDHeader;
 impl<S> Middleware<S> for RequestIDHeader {
     fn response(&self, req: &HttpRequest<S>, mut resp: HttpResponse) -> Result<Response> {
-        if let Ok(v) = HeaderValue::from_str(&(req.request_id().0)) {
+        if let Ok(v) = HeaderValue::from_str(&(req.request_id())) {
             resp.headers_mut().append(REQUEST_ID_HEADER, v);
         }
 
         Ok(Response::Done(resp))
     }
 }
+
+/// Allow direct access to `String` methods from a `RequestID`.
+impl Deref for RequestID {
+    type Target = String;
+
+    fn deref(&self) -> &String {
+        &self.0
+    }
+}
+
 
 #[cfg(test)]
 mod tests {
@@ -103,7 +115,7 @@ mod tests {
 
         assert_eq!(
             resp.headers().get(REQUEST_ID_HEADER).unwrap().as_bytes(),
-            req_id.0.as_bytes()
+            req_id.as_bytes()
         );
     }
 }
