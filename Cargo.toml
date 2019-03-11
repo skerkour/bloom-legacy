@@ -1,6 +1,6 @@
 [package]
 name = "kernel"
-version = "0.1.0"
+version = "0.1.1"
 authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
 homepage = "https://bloom.sh"
