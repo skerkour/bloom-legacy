@@ -1,12 +1,12 @@
 mod actor;
 
-use actix::{Addr, SyncArbiter, Actor};
+use actix::{Addr, SyncArbiter};
 use diesel::{
     prelude::PgConnection,
     r2d2::{ Pool, ConnectionManager },
 };
 
-
+pub mod schema;
 pub use actor::DbActor;
 const POOL_SIZE: u32 = 20;
 

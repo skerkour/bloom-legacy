@@ -22,6 +22,7 @@ futures = "0.1"
 uuid = { version = "0.7", features = ["v4"] }
 rand="0.6"
 failure = "0.1.5"
+diesel_as_jsonb = { path = "crates/diesel_as_jsonb" }
 
 tokio-timer = "0.2"
 
@@ -38,3 +39,10 @@ slog-scope = "4.1"
 [profile.release]
 # for error tracking
 debug = true
+
+
+[workspace]
+members = [
+    "./",
+    "crates/diesel_as_jsonb",
+]
