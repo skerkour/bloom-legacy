@@ -10,8 +10,8 @@
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
-4. [Contributing](#contributing)
-5. [License](#license)
+3. [Contributing](#contributing)
+4. [License](#license)
 
 --------
 
