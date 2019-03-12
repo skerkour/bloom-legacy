@@ -1,0 +1,9 @@
+Bloom kernel -  Proprietary License
+--------------------------------------------------
+
+This license is temporary while a more official one is drafted. However,
+this should make it clear:
+.
+
+All the content of this repository is proprietary and may not be reproduced
+or reused. The license is owned solely by Sylvain Kerkour.

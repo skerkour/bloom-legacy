@@ -10,6 +10,8 @@
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
+4. [Contributing](#contributing)
+5. [License](#license)
 
 --------
 
@@ -21,3 +23,14 @@ See the `docs` directory.
 ## Docker image
 
 [quay.io/helloworld/kernel](https://quay.io/repository/helloworld/kernel?tab=tags)
+
+
+## Contributing
+
+Thank you for your interest in contributing! Please refer to
+[https://opensource.bloom.sh/contributing](https://opensource.bloom.sh/contributing) for guidance.
+
+
+## License
+
+See `LICENSE.txt` and [https://opensource.bloom.sh/licensing](https://opensource.bloom.sh/licensing)
