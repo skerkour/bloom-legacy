@@ -1,39 +1,23 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
+use actix::{Message, Handler};
+use failure::Error;
+use crate::{
+    api,
+    db::DbActor,
+};
+use crate::error::KernelError;
 
-// type PendingAccount struct {
-// 	goes.BaseAggregate
-// 	FirstName string `json:"first_name"`
-// 	LastName  string `json:"last_name"`
-// 	Email     string `json:"email"`
-// 	Password  string `json:"password"`
-// 	Token     string `json:"token"` // hashed token
-// }
-
-// // TableName to indicate to gorm which postgres table to use
-// func (PendingAccount) TableName() string {
-// 	return "account_pending_accounts"
-// }
-
-// // AggregateType to implement the goes.Aggregate interface
-// func (PendingAccount) AggregateType() string {
-// 	return "account_pending_account"
-// }
-
-// 	ID            string      `json:"id"`
-// 	Timestamp     time.Time   `json:"timestamp"`
-// 	AggregateID   string      `json:"aggregate_id"`
-// 	AggregateType string      `json:"aggregate_type"`
-// 	Action        string      `json:"action"`
-// 	Version       uint64      `json:"version"`
-// 	Type          string      `json:"type"`
-// 	Data          interface{} `json:"data"`
-// 	Metadata      Metadata    `json:"metadata"`
-// NonPersisted interface{} `json:"-"`
 
 #[derive(Clone, Debug, Deserialize, Queryable, Serialize)]
 pub struct PendingAccount {
+    pub id: uuid::Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub updated_at: chrono::DateTime<chrono::Utc>,
+    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub version: i64,
+
     pub password: String, // hashed password
     pub email: String,
     pub first_name: String,
@@ -50,8 +34,6 @@ pub struct PendingAccountEvent {
 }
 
 
-
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum PendingAccountCommand {
     Create,
@@ -64,4 +46,27 @@ pub enum PendingAccountEventData {
     CreatedV1,
     CodeResentV1,
     VerifiedV1,
+}
+
+pub struct GetAllPendingAccounts;
+
+impl Message for GetAllPendingAccounts {
+    type Result = Result<Vec<PendingAccount>, KernelError>;
+}
+
+impl Handler<GetAllPendingAccounts> for DbActor {
+    type Result = Result<Vec<PendingAccount>, KernelError>;
+
+    fn handle(&mut self, msg: GetAllPendingAccounts, _: &mut Self::Context) -> Self::Result {
+        use crate::db::schema::{
+            account_pending_accounts,
+            account_pending_accounts::dsl::*,
+        };
+        use diesel::RunQueryDsl;
+
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+        let items = account_pending_accounts.load::<PendingAccount>(&conn)?;
+
+        Ok(items)
+    }
 }

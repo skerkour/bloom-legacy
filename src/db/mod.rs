@@ -8,7 +8,7 @@ use diesel::{
 
 pub mod schema;
 pub use actor::DbActor;
-const POOL_SIZE: u32 = 20;
+static POOL_SIZE: u32 = 20;
 
 
 pub fn init() -> Addr<DbActor> {

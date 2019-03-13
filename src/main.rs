@@ -7,6 +7,7 @@ mod db;
 mod log;
 mod api;
 mod services;
+mod error;
 
 
 use actix_web::{

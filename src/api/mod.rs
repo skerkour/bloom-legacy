@@ -31,13 +31,13 @@ impl<T: Serialize> Response<T> {
         return Response{
             data: Some(data),
             error: None,
-            };
+        };
     }
 
-    pub fn error(err: &str) -> Response<T> {
+    pub fn error(err: error::Error) -> Response<T> {
         return Response{
             data: None,
-            error: Some(ResponseError{message: err.to_string()}),
+            error: Some(ResponseError{message: format!("{}", err)}),
         };
     }
 }
