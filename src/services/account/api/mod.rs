@@ -1,5 +1,1 @@
-mod register;
-
-pub mod models;
-
-pub use register::post_register;
+pub mod v1;

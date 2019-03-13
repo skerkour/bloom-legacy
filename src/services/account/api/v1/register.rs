@@ -1,14 +1,15 @@
-
 use crate::{
     api,
-    services::account::api::models::Register
+    services::account::api::v1::models::Register
 };
 use std::time::Duration;
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, Json, State,
 };
-use crate::services::account::domain::{GetAllPendingAccounts, PendingAccount};
+use crate::services::account::domain::{
+    pending_account,
+};
 use futures::future::IntoFuture;
 
 
@@ -18,11 +19,16 @@ pub fn post_register(register_data: Json<Register>, state: State<api::State>) ->
     .and_then(move |_|
         state
         .db
-        .send(GetAllPendingAccounts).flatten()
+        .send(pending_account::Create{
+            first_name: register_data.first_name.clone(),
+            last_name: register_data.last_name.clone(),
+            email: register_data.email.clone(),
+            password: register_data.password.clone(),
+        }).flatten()
     )
     .and_then(move |res| {
         let res = api::Response::data(res);
-        Ok(HttpResponse::Ok().json(&res))
+        Ok(HttpResponse::Created().json(&res))
     })
     .map_err(|err| api::Error::from(err))
     .from_err()

@@ -1,3 +1,5 @@
+mod create;
+
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
@@ -6,11 +8,16 @@ use failure::Error;
 use crate::{
     api,
     db::DbActor,
+    db::schema::account_pending_accounts,
 };
 use crate::error::KernelError;
 
 
-#[derive(Clone, Debug, Deserialize, Queryable, Serialize)]
+pub use create::Create;
+
+
+#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
+#[table_name = "account_pending_accounts"]
 pub struct PendingAccount {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
@@ -48,25 +55,25 @@ pub enum PendingAccountEventData {
     VerifiedV1,
 }
 
-pub struct GetAllPendingAccounts;
+// pub struct GetAllPendingAccounts;
 
-impl Message for GetAllPendingAccounts {
-    type Result = Result<Vec<PendingAccount>, KernelError>;
-}
+// impl Message for GetAllPendingAccounts {
+//     type Result = Result<Vec<PendingAccount>, KernelError>;
+// }
 
-impl Handler<GetAllPendingAccounts> for DbActor {
-    type Result = Result<Vec<PendingAccount>, KernelError>;
+// impl Handler<GetAllPendingAccounts> for DbActor {
+//     type Result = Result<Vec<PendingAccount>, KernelError>;
 
-    fn handle(&mut self, msg: GetAllPendingAccounts, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            account_pending_accounts,
-            account_pending_accounts::dsl::*,
-        };
-        use diesel::RunQueryDsl;
+//     fn handle(&mut self, msg: GetAllPendingAccounts, _: &mut Self::Context) -> Self::Result {
+//         use crate::db::schema::{
+//             account_pending_accounts,
+//             account_pending_accounts::dsl::*,
+//         };
+//         use diesel::RunQueryDsl;
 
-        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
-        let items = account_pending_accounts.load::<PendingAccount>(&conn)?;
+//         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+//         let items = account_pending_accounts.load::<PendingAccount>(&conn)?;
 
-        Ok(items)
-    }
-}
+//         Ok(items)
+//     }
+// }
