@@ -1,4 +1,9 @@
 mod create;
+mod created;
+mod verify;
+mod verified;
+mod resend_code;
+mod code_resent;
 
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
@@ -14,6 +19,11 @@ use crate::error::KernelError;
 
 
 pub use create::Create;
+pub use created::CreatedV1;
+pub use verify::Verify;
+pub use verified::VerifiedV1;
+pub use resend_code::ResendCode;
+pub use code_resent::CodeResentV1;
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
@@ -33,47 +43,28 @@ pub struct PendingAccount {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct PendingAccountEvent {
+pub struct Event {
     pub id: String,
-    pub data: PendingAccountEventData,
+    pub data: EventData,
     pub aggregate_id: String,
     pub metadata: String, // TODO: change
 }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum PendingAccountCommand {
-    Create,
-    ResendCode,
-    Verify,
+pub enum Command {
+    Create(Create),
+    ResendCode(ResendCode),
+    Verify(Verify),
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub enum PendingAccountEventData {
-    CreatedV1,
-    CodeResentV1,
-    VerifiedV1,
+pub enum EventData {
+    CreatedV1(CreatedV1),
+    CodeResentV1(CodeResentV1),
+    VerifiedV1(VerifiedV1),
 }
 
-// pub struct GetAllPendingAccounts;
-
-// impl Message for GetAllPendingAccounts {
-//     type Result = Result<Vec<PendingAccount>, KernelError>;
-// }
-
-// impl Handler<GetAllPendingAccounts> for DbActor {
-//     type Result = Result<Vec<PendingAccount>, KernelError>;
-
-//     fn handle(&mut self, msg: GetAllPendingAccounts, _: &mut Self::Context) -> Self::Result {
-//         use crate::db::schema::{
-//             account_pending_accounts,
-//             account_pending_accounts::dsl::*,
-//         };
-//         use diesel::RunQueryDsl;
-
-//         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
-//         let items = account_pending_accounts.load::<PendingAccount>(&conn)?;
-
-//         Ok(items)
-//     }
-// }
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum NonePersistedData {
+}

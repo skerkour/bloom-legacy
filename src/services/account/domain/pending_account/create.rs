@@ -1,14 +1,13 @@
-
-use diesel_as_jsonb::AsJsonb;
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     services::account::domain::PendingAccount,
 };
 use crate::error::KernelError;
+use serde::{Serialize, Deserialize};
 
 
-
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Create {
     pub first_name: String,
     pub last_name: String,
@@ -24,10 +23,7 @@ impl Handler<Create> for DbActor {
     type Result = Result<PendingAccount, KernelError>;
 
     fn handle(&mut self, msg: Create, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            account_pending_accounts,
-            account_pending_accounts::dsl::*,
-        };
+        use crate::db::schema::account_pending_accounts::dsl::*;
         use diesel::RunQueryDsl;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
