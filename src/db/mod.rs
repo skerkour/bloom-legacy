@@ -5,6 +5,7 @@ use diesel::{
     prelude::PgConnection,
     r2d2::{ Pool, ConnectionManager },
 };
+use crate::config;
 
 pub mod schema;
 pub use actor::DbActor;
@@ -12,9 +13,8 @@ pub static PG_POOL_SIZE: u32 = 20;
 pub static ACTOR_POOL_SIZE: u32 = PG_POOL_SIZE * 3;
 
 
-pub fn init() -> Addr<DbActor> {
-    let db_url = dotenv::var("DATABASE_URL").expect("DATABASE_URL must be set");
-    let manager = ConnectionManager::<PgConnection>::new(db_url);
+pub fn init(cfg: &config::Config) -> Addr<DbActor> {
+    let manager = ConnectionManager::<PgConnection>::new(cfg.database_url().as_str());
     let conn = Pool::builder().max_size(PG_POOL_SIZE).build(manager).expect("Failed to create pool.");
     // Start POOL_SIZE `DbActor ` actors, each with its own database
     // connection, and each in its own thread

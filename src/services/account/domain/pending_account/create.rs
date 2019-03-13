@@ -40,6 +40,7 @@ impl Handler<Create> for DbActor {
             last_name: msg.last_name,
             token: "".to_string(), // hashed token
         };
+
         diesel::insert_into(account_pending_accounts).values(&pending_account).execute(&conn)?;
 
         Ok(pending_account)

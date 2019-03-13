@@ -8,14 +8,9 @@ mod code_resent;
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use actix::{Message, Handler};
-use failure::Error;
 use crate::{
-    api,
-    db::DbActor,
     db::schema::account_pending_accounts,
 };
-use crate::error::KernelError;
 
 
 pub use create::Create;
@@ -66,5 +61,5 @@ pub enum EventData {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum NonePersistedData {
+pub enum NonPersistedData {
 }

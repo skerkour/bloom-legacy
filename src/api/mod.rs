@@ -1,7 +1,8 @@
 mod error;
 mod state;
+mod app;
 
-use serde::Serialize;
+use serde::{Deserialize, Serialize};
 use actix_web::{
     Result as ActixResult,
     HttpResponse,
@@ -13,6 +14,7 @@ use actix_web::{
 pub mod middlewares;
 pub use error::Error;
 pub use state::State;
+pub use app::init;
 
 
 #[derive(Serialize)]
@@ -25,6 +27,13 @@ pub struct Response<T: Serialize> {
 pub struct ResponseError{
     message: String,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct HelloWorld<'a> {
+    pub hello: &'a str,
+}
+
 
 impl<T: Serialize> Response<T> {
     pub fn data(data: T) -> Response<T> {
@@ -42,6 +51,10 @@ impl<T: Serialize> Response<T> {
     }
 }
 
+pub fn index(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
+    let res = HelloWorld{hello: "world"};
+    return Ok(HttpResponse::Ok().json(Response::data(res)));
+}
 
 pub fn route_404(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
     return Err(Error::RouteNotFound.into());
