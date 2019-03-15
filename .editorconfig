@@ -14,6 +14,6 @@ insert_final_newline = true
 indent_style = tab
 
 # 4 space indentation
-[{*.rs,*.toml,*.sane,*.json}]
+[{*.rs,*.toml,*.sane,*.json, *.sql}]
 indent_style = space
 indent_size = 4
