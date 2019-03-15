@@ -11,6 +11,7 @@ static API_URL: &'static str = "https://api.sendgrid.com/api/mail.send.json?";
 
 /// This is the struct that allows you to authenticate to the SendGrid API.
 /// It's only field is the API key which allows you to send messages.
+#[derive(Clone, Debug)]
 pub struct SGClient {
     api_key: String,
 }

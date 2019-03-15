@@ -17,6 +17,7 @@ const V3_API_URL: &str = "https://api.sendgrid.com/v3/mail/send";
 pub type SGMap = HashMap<String, String>;
 
 /// Used to send a V3 message body.
+#[derive(Clone, Debug)]
 pub struct Sender {
     api_key: String,
 }
