@@ -43,7 +43,7 @@ fn main() {
     .unwrap()
     .keep_alive(actix_server::KeepAlive::Timeout(60))
     .shutdown_timeout(2)
-    .workers(8)
+    .workers(num_cpus::get())
     .start();
 
     slog_info!(logger, "server started"; slog_o!("address" => binding_addr));
