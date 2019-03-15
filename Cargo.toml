@@ -26,6 +26,10 @@ diesel_as_jsonb = { path = "crates/diesel_as_jsonb" }
 num_cpus = "1.0"
 # lazy_static = "1.3.0"
 
+# AWS libs
+rusoto_core = "0.37"
+rusoto_s3 = "0.37"
+
 tokio-timer = "0.2"
 
 # error tracking

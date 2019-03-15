@@ -7,7 +7,7 @@ CREATE TABLE account_pending_emails (
     version BIGINT NOT NULL,
 
     email TEXT NOT NULL,
-    account_id UUID NOT NULL REFERENCES accounts (id),
+    account_id UUID NOT NULL REFERENCES account_accounts (id),
     token TEXT NOT NULL,
 
     PRIMARY KEY(id)

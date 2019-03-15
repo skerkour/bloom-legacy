@@ -17,7 +17,7 @@ CREATE TABLE contacts_contacts (
     emails JSONB,
     phones JSONB,
     birthday TIMESTAMP WITH TIME ZONE,
-    owner_id UUID NOT NULL REFERENCES accounts (id),
+    owner_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)
 );

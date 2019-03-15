@@ -10,7 +10,7 @@ CREATE TABLE notes_notes (
     body TEXT NOT NULL,
     archived_at TIMESTAMP WITH TIME ZONE,
     removed_at TIMESTAMP WITH TIME ZONE,
-    owner_id UUID NOT NULL REFERENCES accounts (id),
+    owner_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)
 );

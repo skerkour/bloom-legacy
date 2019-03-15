@@ -9,7 +9,7 @@ CREATE TABLE account_sessions (
     ip TEXT NOT NULL,
     location JSONB,
     device JSONB NOT NULL,
-    account_id UUID NOT NULL REFERENCES accounts (id),
+    account_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)
 );

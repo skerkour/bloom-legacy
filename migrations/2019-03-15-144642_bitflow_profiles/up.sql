@@ -6,7 +6,7 @@ CREATE TABLE bitflow_profiles (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    account_id UUID NOT NULL REFERENCES accounts (id),
+    account_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)
 );
