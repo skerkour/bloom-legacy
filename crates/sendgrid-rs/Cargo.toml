@@ -1,0 +1,21 @@
+[package]
+name = "sendgrid"
+version = "0.8.0"
+authors = ["Garrett Squire <garrettsquire@gmail.com>"]
+description = "An unofficial client library for the SendGrid API"
+repository = "https://github.com/gsquire/sendgrid-rs"
+license = "MIT"
+homepage = "https://sendgrid.com"
+keywords = ["email"]
+documentation = "https://docs.rs/sendgrid"
+readme = "README.md"
+
+[dependencies]
+data-encoding = "2.1"
+reqwest = "0.9"
+serde = "1.0"
+serde_derive = "1.0"
+serde_json = "1.0"
+url = "1.7"
+failure = "0.1.2"
+failure_derive = "0.1.2"
