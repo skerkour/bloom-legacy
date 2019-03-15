@@ -1,5 +1,6 @@
 .PHONY: build clean re dev test build_static release
 .PHONY: docker_login docker_build docker_release docker_push docker_dev
+.PHONY: disposable_emails
 
 DIST_DIR = dist
 NAME := $(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
@@ -71,3 +72,6 @@ docker_release:
 
 docker_dev:
 	docker build -t $(DOCKER_IMAGE)_dev:latest -f dev.Dockerfile .
+
+disposable_emails:
+	cd scripts && ./disposable_emails.sh
