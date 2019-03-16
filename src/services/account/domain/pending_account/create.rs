@@ -2,6 +2,8 @@ use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     services::account::domain::PendingAccount,
+    services::account::notifications::emails::send_account_verification_code,
+    config::Config,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -13,6 +15,7 @@ pub struct Create {
     pub last_name: String,
     pub email: String,
     pub password: String,
+    pub config: Config,
 }
 
 impl Message for Create {
@@ -22,7 +25,7 @@ impl Message for Create {
 impl Handler<Create> for DbActor {
     type Result = Result<PendingAccount, KernelError>;
 
-    fn handle(&mut self, msg: Create, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, cmd: Create, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::account_pending_accounts::dsl::*;
         use diesel::RunQueryDsl;
 
@@ -34,12 +37,17 @@ impl Handler<Create> for DbActor {
             deleted_at: None,
             version: 1,
 
-            password: msg.password, // hashed password
-            email: msg.email,
-            first_name: msg.first_name,
-            last_name: msg.last_name,
-            token: "".to_string(), // hashed token
+            password: cmd.password, // hashed password
+            email: cmd.email.clone(),
+            first_name: cmd.first_name.clone(),
+            last_name: cmd.last_name.clone(),
+            token: "".to_string(), // hashed code
         };
+
+        send_account_verification_code(
+            &cmd.config, cmd.email.as_str(), cmd.first_name.as_str(),
+            cmd.last_name.as_str(), pending_account.id.to_string().as_str(), "122221",
+        ).expect("error sendin email");
 
         diesel::insert_into(account_pending_accounts).values(&pending_account).execute(&conn)?;
 

@@ -24,6 +24,7 @@ pub fn post_register(register_data: Json<Register>, state: State<api::State>) ->
             last_name: register_data.last_name.clone(),
             email: register_data.email.clone(),
             password: register_data.password.clone(),
+            config: state.config.clone(),
         }).flatten()
     )
     .and_then(move |res| {
