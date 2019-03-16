@@ -1,7 +1,6 @@
 use crate::error::KernelError;
 
-
-fn send_account_verification_code(email: &str, first_name: &str, last_name: &str,
+pub fn send_account_verification_code(email: &str, first_name: &str, last_name: &str,
 pending_account_id: &str, code: &str) -> Result<(), KernelError> {
 
     let formatted_code = code.to_string().insert(3, '-');
