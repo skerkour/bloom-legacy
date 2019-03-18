@@ -31,3 +31,17 @@ pub struct VerifyBody {
 pub struct VerifyResponse {
     pub is_valid: bool,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompleteRegistrationBody {
+    pub id: String,
+    pub code: String,
+    pub username: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompleteRegistrationResponse {
+    pub id: String,
+    pub token: String,
+}
