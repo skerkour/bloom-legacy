@@ -10,6 +10,8 @@ pub enum KernelError {
     R2d2,
     #[fail(display="TokioError")]
     Tokio,
+    #[fail(display="BcryptError")]
+    Bcrypt,
 }
 
 

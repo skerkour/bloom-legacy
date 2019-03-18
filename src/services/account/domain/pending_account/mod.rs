@@ -20,6 +20,8 @@ pub use verified::VerifiedV1;
 pub use resend_code::ResendCode;
 pub use code_resent::CodeResentV1;
 
+pub const TOKEN_BCRYPT_COST: u32 = 11;
+
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_pending_accounts"]

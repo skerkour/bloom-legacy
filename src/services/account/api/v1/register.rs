@@ -1,6 +1,6 @@
 use crate::{
     api,
-    services::account::api::v1::models::Register
+    services::account::api::v1::models
 };
 use std::time::Duration;
 use futures::future::Future;
@@ -11,10 +11,14 @@ use crate::services::account::domain::{
     pending_account,
 };
 use futures::future::IntoFuture;
+use rand::Rng;
 
 
-pub fn post_register(register_data: Json<Register>, state: State<api::State>) -> FutureResponse<HttpResponse> {
-    tokio_timer::sleep(Duration::from_millis(400)).into_future()
+
+pub fn post_register(register_data: Json<models::RegisterBody>, state: State<api::State>) -> FutureResponse<HttpResponse> {
+    let mut rng = rand::thread_rng();
+
+    tokio_timer::sleep(Duration::from_millis(rng.gen_range(200, 400))).into_future()
     .from_err()
     .and_then(move |_|
         state
@@ -27,7 +31,8 @@ pub fn post_register(register_data: Json<Register>, state: State<api::State>) ->
             config: state.config.clone(),
         }).flatten()
     )
-    .and_then(move |res| {
+    .and_then(move |pending_account| {
+        let res = models::RegisterResponse::from(pending_account);
         let res = api::Response::data(res);
         Ok(HttpResponse::Created().json(&res))
     })
