@@ -29,15 +29,13 @@ pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<ap
     .and_then(move |_|
         state.db
         .send(pending_account::Verify{
+            id: verify_data.id.clone(),
             code: verify_data.code.clone(),
         }).flatten()
     )
     .and_then(move |is_valid| {
-        let res = models::VerifyResponse{
-            is_valid,
-        };
-        let res = api::Response::data(res);
-        Ok(HttpResponse::Created().json(&res))
+        let res = api::Response::data(models::VerifyResponse{is_valid: true});
+        Ok(HttpResponse::Ok().json(&res))
     })
     .map_err(move |err| {
         slog_error!(logger, "{}", err);

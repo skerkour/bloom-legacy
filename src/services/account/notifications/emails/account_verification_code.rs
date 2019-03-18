@@ -22,7 +22,7 @@ pub fn send_account_verification_code(config: &Config, email: &str, recipient_na
 pending_account_id: &str, code: &str) -> Result<(), KernelError> {
 
     let mut formatted_code = code.to_string();
-    formatted_code.insert(3, '-');
+    formatted_code.insert(4, '-');
     let handlebars = Handlebars::new();
     let url = format!("{}/welcome/verify?id={}&code={}", config.www_host(), pending_account_id, code);
 

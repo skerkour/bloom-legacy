@@ -24,6 +24,7 @@ impl From<PendingAccount> for RegisterResponse {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyBody {
+    pub id: String,
     pub code: String,
 }
 

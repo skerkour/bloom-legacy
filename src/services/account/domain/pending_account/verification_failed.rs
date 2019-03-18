@@ -2,4 +2,4 @@ use serde::{Serialize, Deserialize};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifiedV1 {}
+pub struct VerificationFailedV1 {}

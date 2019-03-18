@@ -1,9 +1,12 @@
 mod create;
 mod created;
 mod verify;
-mod verified;
+mod verification_failed;
+mod verification_succeeded;
 mod resend_code;
 mod code_resent;
+mod complete_registration;
+mod registration_completed;
 
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
@@ -17,9 +20,12 @@ use crate::{
 pub use create::Create;
 pub use created::CreatedV1;
 pub use verify::Verify;
-pub use verified::VerifiedV1;
+pub use verification_failed::VerificationFailedV1;
+pub use verification_succeeded::VerificationSucceededV1;
 pub use resend_code::ResendCode;
 pub use code_resent::CodeResentV1;
+pub use complete_registration::CompleteRegistration;
+pub use registration_completed::RegistrationCompletedV1;
 
 pub const TOKEN_BCRYPT_COST: u32 = 11;
 
@@ -55,15 +61,18 @@ pub struct Event {
 #[derive(Clone, Debug)]
 pub enum Command {
     Create(Create),
-    ResendCode(ResendCode),
     Verify(Verify),
+    ResendCode(ResendCode),
+    CompleteRegistration(CompleteRegistration),
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
     CodeResentV1(CodeResentV1),
-    VerifiedV1(VerifiedV1),
+    VerificationFailedV1(VerificationFailedV1),
+    VerificationSucceededV1(VerificationSucceededV1),
+    RegistrationCompletedV1(RegistrationCompletedV1)
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
