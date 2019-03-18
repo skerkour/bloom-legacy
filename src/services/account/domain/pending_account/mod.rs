@@ -36,7 +36,8 @@ pub struct PendingAccount {
     pub email: String,
     pub first_name: String,
     pub last_name: String,
-    pub token: String, // hashed token
+    pub token: String, // hashed code
+    pub trials: i64,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -48,7 +49,7 @@ pub struct Event {
 }
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub enum Command {
     Create(Create),
     ResendCode(ResendCode),

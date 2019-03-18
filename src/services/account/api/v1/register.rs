@@ -15,7 +15,7 @@ use rand::Rng;
 
 
 
-pub fn post_register(register_data: Json<models::RegisterBody>, state: State<api::State>) -> FutureResponse<HttpResponse> {
+pub fn register_post(register_data: Json<models::RegisterBody>, state: State<api::State>) -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();
 
     tokio_timer::sleep(Duration::from_millis(rng.gen_range(200, 400))).into_future()

@@ -30,7 +30,8 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
             .max_age(3600)
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
-            .resource("/account/v1/register", |r| r.method(http::Method::POST).with_config(services::account::api::v1::post_register, api::json_default_config))
+            .resource("/account/v1/register", |r| r.method(http::Method::POST).with_config(services::account::api::v1::register_post, api::json_default_config))
+            .resource("/account/v1/verify", |r| r.method(http::Method::POST).with_config(services::account::api::v1::verify_post, api::json_default_config))
             .register()
     })
 }

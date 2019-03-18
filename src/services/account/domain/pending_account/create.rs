@@ -6,18 +6,19 @@ use crate::{
     services::account::notifications::emails::send_account_verification_code,
     config::Config,
     services::common::utils,
+    api::middlewares::logger::RequestLogger,
 };
 use crate::error::KernelError;
-use serde::{Serialize, Deserialize};
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct Create {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
     pub password: String,
     pub config: Config,
+    // pub logger: RequestLogger,
 }
 
 impl Message for Create {
@@ -54,6 +55,7 @@ impl Handler<Create> for DbActor {
             first_name: cmd.first_name.clone(),
             last_name: cmd.last_name.clone(),
             token: hashed_code.clone(),
+            trials: 0,
         };
 
         send_account_verification_code(
@@ -63,7 +65,7 @@ impl Handler<Create> for DbActor {
 
         diesel::insert_into(account_pending_accounts).values(&pending_account).execute(&conn)?;
 
-        Ok(pending_account)
+        return Ok(pending_account);
     }
 }
 

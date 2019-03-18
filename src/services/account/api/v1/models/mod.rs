@@ -21,3 +21,13 @@ impl From<PendingAccount> for RegisterResponse {
         };
     }
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerifyBody {
+    pub code: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerifyResponse {
+    pub is_valid: bool,
+}

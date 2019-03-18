@@ -39,6 +39,7 @@ table! {
         email -> Text,
         password -> Text,
         token -> Text,
+        trials -> Int8,
     }
 }
 
@@ -160,6 +161,38 @@ table! {
 }
 
 table! {
+    contacts_contacts (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        first_name -> Nullable<Text>,
+        last_name -> Nullable<Text>,
+        company -> Nullable<Text>,
+        occupation -> Nullable<Text>,
+        notes -> Nullable<Text>,
+        organizations -> Nullable<Jsonb>,
+        websites -> Nullable<Jsonb>,
+        addresses -> Nullable<Jsonb>,
+        emails -> Nullable<Jsonb>,
+        phones -> Nullable<Jsonb>,
+        birthday -> Nullable<Timestamptz>,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    contacts_contacts_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
     drive_files (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -206,6 +239,31 @@ table! {
 
 table! {
     drive_profiles_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    notes_notes (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        title -> Text,
+        body -> Text,
+        archived_at -> Nullable<Timestamptz>,
+        removed_at -> Nullable<Timestamptz>,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    notes_notes_events (id) {
         id -> Uuid,
         timestamp -> Timestamptz,
         aggregate_id -> Uuid,
@@ -280,9 +338,11 @@ joinable!(account_sessions -> account_accounts (account_id));
 joinable!(bitflow_downloads -> account_accounts (owner_id));
 joinable!(bitflow_downloads -> drive_files (file_id));
 joinable!(bitflow_profiles -> account_accounts (account_id));
+joinable!(contacts_contacts -> account_accounts (owner_id));
 joinable!(drive_files -> account_accounts (owner_id));
 joinable!(drive_profiles -> account_accounts (account_id));
 joinable!(drive_profiles -> drive_files (home_id));
+joinable!(notes_notes -> account_accounts (owner_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));
 joinable!(phaser_scans -> account_accounts (owner_id));
 
@@ -300,10 +360,14 @@ allow_tables_to_appear_in_same_query!(
     bitflow_profiles,
     bitflow_profiles_events,
     bloom_contributors,
+    contacts_contacts,
+    contacts_contacts_events,
     drive_files,
     drive_files_events,
     drive_profiles,
     drive_profiles_events,
+    notes_notes,
+    notes_notes_events,
     phaser_reports,
     phaser_reports_events,
     phaser_scans,

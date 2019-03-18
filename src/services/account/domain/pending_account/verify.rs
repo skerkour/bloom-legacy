@@ -5,17 +5,18 @@ use crate::{
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 
+// verify that the given code is valid or not
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
-    pub token: String,
+    pub code: String,
 }
 
 impl Message for Verify {
-    type Result = Result<(), KernelError>;
+    type Result = Result<bool, KernelError>;
 }
 
 impl Handler<Verify> for DbActor {
-    type Result = Result<(), KernelError>;
+    type Result = Result<bool, KernelError>;
 
     fn handle(&mut self, msg: Verify, _: &mut Self::Context) -> Self::Result {
         // use crate::db::schema::account_pending_accounts::dsl::*;
@@ -24,6 +25,6 @@ impl Handler<Verify> for DbActor {
         // verify token is valdi
         // verify token hasn't expired
 
-        Ok(())
+        return Ok(false);
     }
 }

@@ -9,6 +9,7 @@ use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 
 
+#[derive(Clone, Debug)]
 pub struct RequestLogger(slog::Logger);
 
 pub struct Logger;
