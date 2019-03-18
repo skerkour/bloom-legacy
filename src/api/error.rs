@@ -12,7 +12,7 @@ use crate::{
 pub enum Error {
     #[fail(display="Internal error")]
     Internal,
-    #[fail(display="Bad request: {}", error)]
+    #[fail(display="{}", error)]
     BadRequest{ error: String },
     #[fail(display="Timeout")]
     Timeout,
@@ -34,6 +34,10 @@ impl error::ResponseError for Error {
 
 impl std::convert::From<KernelError> for Error {
     fn from(e: KernelError) -> Self {
-        Error::Internal
+        match e {
+            KernelError::Validation(m) => Error::BadRequest{error: m},
+            _ => Error::Internal,
+        }
+        // Error::Internal
     }
 }

@@ -12,6 +12,8 @@ pub enum KernelError {
     Tokio,
     #[fail(display="BcryptError")]
     Bcrypt,
+    #[fail(display = "validation error: {}", 0)]
+    Validation(String),
 }
 
 

@@ -10,6 +10,7 @@ use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::account_pending_accounts,
+    db::schema::account_pending_accounts_events,
 };
 
 
@@ -40,12 +41,14 @@ pub struct PendingAccount {
     pub trials: i64,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
+#[table_name = "account_pending_accounts_events"]
 pub struct Event {
-    pub id: String,
+    pub id: uuid::Uuid,
+    pub timestamp: chrono::DateTime<chrono::Utc>,
     pub data: EventData,
-    pub aggregate_id: String,
-    pub metadata: String, // TODO: change
+    pub aggregate_id: uuid::Uuid,
+    pub metadata: EventMetadata, // TODO: change
 }
 
 
@@ -61,6 +64,10 @@ pub enum EventData {
     CreatedV1(CreatedV1),
     CodeResentV1(CodeResentV1),
     VerifiedV1(VerifiedV1),
+}
+
+#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+pub struct EventMetadata {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
