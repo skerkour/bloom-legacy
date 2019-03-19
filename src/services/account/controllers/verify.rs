@@ -54,10 +54,16 @@ impl Handler<Verify> for DbActor {
         };
 
         pending_account.trials += 1;
+        pending_account.version += 1;
+        pending_account.updated_at = now;
 
         // update pending_account
         diesel::update(account_pending_accounts::dsl::account_pending_accounts)
-            .set(account_pending_accounts::dsl::trials.eq(pending_account.trials))
+            .set((
+                account_pending_accounts::dsl::trials.eq(pending_account.trials),
+                account_pending_accounts::dsl::version.eq(pending_account.version),
+                account_pending_accounts::dsl::updated_at.eq(pending_account.updated_at),
+            ))
             .execute(&conn)?;
 
         let event = pending_account::Event{

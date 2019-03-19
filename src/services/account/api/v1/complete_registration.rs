@@ -23,6 +23,7 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
     let logger = req.logger();
+    let config = state.config.clone();
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 650))).into_future()
@@ -33,6 +34,7 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
             id: registration_data.id.clone(),
             code: registration_data.code.clone(),
             username: registration_data.username.clone(),
+            config,
         }).flatten()
     )
     .and_then(move |session| {

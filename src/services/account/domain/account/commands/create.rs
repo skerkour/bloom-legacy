@@ -33,8 +33,8 @@ impl Create {
         // TODO: validate email
 
         // verify that an email isn't already in use
-
         // verify that username isn't already in use
+
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));
         }

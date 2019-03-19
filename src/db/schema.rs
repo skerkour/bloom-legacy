@@ -10,7 +10,7 @@ table! {
         email -> Text,
         username -> Text,
         password -> Text,
-        avatar -> Text,
+        avatar_url -> Text,
         is_admin -> Bool,
         recovery_id -> Nullable<Uuid>,
         recovery_token -> Nullable<Text>,

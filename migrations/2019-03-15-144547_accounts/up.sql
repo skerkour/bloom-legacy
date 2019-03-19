@@ -11,7 +11,7 @@ CREATE TABLE account_accounts (
     email TEXT NOT NULL,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    avatar TEXT NOT NULL,
+    avatar_url TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
     recovery_id UUID,
     recovery_token TEXT,

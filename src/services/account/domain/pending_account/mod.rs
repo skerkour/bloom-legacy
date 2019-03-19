@@ -36,13 +36,14 @@ pub struct PendingAccount {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub password: String, // hashed password
-    pub email: String,
-    pub first_name: String,
+    pub first_name: String, // hashed password
     pub last_name: String,
+    pub email: String,
+    pub password: String,
     pub token: String, // hashed code
     pub trials: i64,
 }
+
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_pending_accounts_events"]
