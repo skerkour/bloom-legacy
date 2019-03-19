@@ -10,9 +10,11 @@ use crate::{
         session,
     },
     services::account::domain,
+    services::common::utils,
 };
 use serde::{Serialize, Deserialize};
 use chrono::{Utc};
+use rand::Rng;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -141,10 +143,12 @@ impl Handler<CompleteRegistration> for DbActor {
 
         // start Session
         // build_event
+        let mut rng = rand::thread_rng();
+        let token_length = rng.gen_range(session::TOKEN_MIN_LENGTH, session::TOKEN_MAX_LENGTH);
         let started = domain::session::StartedV1{
             id: uuid::Uuid::new_v4(),
             account_id: new_account.id.clone(),
-            token: uuid::Uuid::new_v4().to_string(),
+            token: utils::random_hex_string(token_length as usize),
             ip: "127.0.0.1".to_string(), // TODO
         };
 

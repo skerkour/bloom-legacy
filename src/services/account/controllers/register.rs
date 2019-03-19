@@ -44,7 +44,7 @@ impl Handler<Register> for DbActor {
         cmd.validate(&conn)?;
 
 
-        let code = utils::random_digit_str(8);
+        let code = utils::random_digit_string(8);
         let pending_account_id = uuid::Uuid::new_v4();
         let hashed_password = bcrypt::hash(&cmd.password, account::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;

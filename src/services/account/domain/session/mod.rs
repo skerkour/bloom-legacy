@@ -19,6 +19,11 @@ use crate::error::KernelError;
 pub use events::StartedV1;
 pub use commands::Start;
 
+pub const TOKEN_BCRYPT_COST: u32 = 5;
+pub const TOKEN_MIN_LENGTH: u32 = 256;
+pub const TOKEN_MAX_LENGTH: u32 = 512;
+
+
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_sessions"]
 pub struct Session {
