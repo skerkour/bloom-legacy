@@ -22,14 +22,6 @@ use crate::{
 };
 
 
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct NewUserRequest {
-    pub name: String,
-}
-
-
-
 fn main() {
     let (_guard, logger) = log::setup_slog();
     let sys = System::new("kernel");
