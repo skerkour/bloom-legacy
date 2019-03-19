@@ -18,26 +18,26 @@ pub enum KernelError {
 
 
 impl std::convert::From<actix::MailboxError> for KernelError {
-    fn from(e: actix::MailboxError) -> Self {
+    fn from(_e: actix::MailboxError) -> Self {
         KernelError::ActixMailbox
     }
 }
 
 impl std::convert::From<diesel::result::Error> for KernelError {
-    fn from(e: diesel::result::Error) -> Self {
-        KernelError::Diesel(format!("{:?}", e))
+    fn from(err: diesel::result::Error) -> Self {
+        KernelError::Diesel(format!("{:?}", err))
     }
 }
 
 
 impl std::convert::From<diesel::r2d2::Error> for KernelError {
-    fn from(e: diesel::r2d2::Error) -> Self {
+    fn from(_err: diesel::r2d2::Error) -> Self {
         KernelError::R2d2
     }
 }
 
 impl std::convert::From<tokio_timer::Error> for KernelError {
-    fn from(e: tokio_timer::Error) -> Self {
+    fn from(_err: tokio_timer::Error) -> Self {
         KernelError::Tokio
     }
 }

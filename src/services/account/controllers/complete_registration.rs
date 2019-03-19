@@ -4,7 +4,6 @@ use crate::{
     error::KernelError,
     config::Config,
     services::account::domain::{
-        Account,
         PendingAccount,
         pending_account,
         account,
@@ -12,7 +11,7 @@ use crate::{
     services::account::domain,
 };
 use serde::{Serialize, Deserialize};
-use chrono::{Utc, DateTime};
+use chrono::{Utc};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

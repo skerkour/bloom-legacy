@@ -10,12 +10,8 @@ use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, Json, HttpRequest,
 };
-use crate::services::account::domain::{
-    pending_account,
-};
 use futures::future::IntoFuture;
 use rand::Rng;
-use failure::Fail;
 
 
 pub fn complete_registration_post((registration_data, req): (Json<models::CompleteRegistrationBody>, HttpRequest<api::State>))
