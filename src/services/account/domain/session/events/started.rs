@@ -10,3 +10,8 @@ pub struct StartedV1 {
     // Location  *domain.SessionLocation `json:"location"`
     // Device    domain.SessionDevice    `json:"device"`
 }
+
+// #[derive(Clone, Debug, Deserialize, Serialize)]
+// pub struct StartedV1NonPersisted {
+//     pub token: String,
+// }

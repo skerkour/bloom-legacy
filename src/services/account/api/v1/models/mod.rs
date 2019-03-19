@@ -50,11 +50,11 @@ pub struct CompleteRegistrationResponse {
     pub token: String,
 }
 
-impl From<Session> for CompleteRegistrationResponse {
-    fn from(session: Session) -> Self {
-        return CompleteRegistrationResponse{
-            id: session.id.to_string(),
-            token: session.token,
-        };
-    }
-}
+// impl From<Session> for CompleteRegistrationResponse {
+//     fn from(session: Session) -> Self {
+//         return CompleteRegistrationResponse{
+//             id: session.id.to_string(),
+//             token: session.token,
+//         };
+//     }
+// }

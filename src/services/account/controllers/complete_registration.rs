@@ -26,11 +26,11 @@ pub struct CompleteRegistration {
 }
 
 impl Message for CompleteRegistration {
-    type Result = Result<session::Session, KernelError>;
+    type Result = Result<(session::Session, String), KernelError>;
 }
 
 impl Handler<CompleteRegistration> for DbActor {
-    type Result = Result<session::Session, KernelError>;
+    type Result = Result<(session::Session, String), KernelError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
@@ -145,10 +145,13 @@ impl Handler<CompleteRegistration> for DbActor {
         // build_event
         let mut rng = rand::thread_rng();
         let token_length = rng.gen_range(session::TOKEN_MIN_LENGTH, session::TOKEN_MAX_LENGTH);
+        let token = utils::random_hex_string(token_length as usize);
+        let hashed_token = bcrypt::hash(&token, session::TOKEN_BCRYPT_COST)
+            .map_err(|_| KernelError::Bcrypt)?;
         let started = domain::session::StartedV1{
             id: uuid::Uuid::new_v4(),
             account_id: new_account.id.clone(),
-            token: utils::random_hex_string(token_length as usize),
+            token: hashed_token,
             ip: "127.0.0.1".to_string(), // TODO
         };
 
@@ -184,6 +187,7 @@ impl Handler<CompleteRegistration> for DbActor {
             .values(&event)
             .execute(&conn)?;
 
-        return Ok(new_session);
+        // TODO: return the non hashed token
+        return Ok((new_session, token));
     }
 }
