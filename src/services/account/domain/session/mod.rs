@@ -1,3 +1,7 @@
+mod events;
+mod commands;
+
+
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
@@ -11,6 +15,9 @@ use crate::{
 };
 use crate::error::KernelError;
 
+
+pub use events::StartedV1;
+pub use commands::Start;
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_sessions"]
@@ -30,10 +37,10 @@ pub struct Session {
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub enum Device {}
+pub struct Device {}
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub enum Location {}
+pub struct Location {}
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
@@ -48,10 +55,12 @@ pub struct Event {
 
 #[derive(Clone, Debug)]
 pub enum Command {
+    Start(Start),
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
+    StartedV1(StartedV1),
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]

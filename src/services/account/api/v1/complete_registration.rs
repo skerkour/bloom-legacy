@@ -34,10 +34,7 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
         }).flatten()
     )
     .and_then(move |session| {
-        let res = api::Response::data(models::CompleteRegistrationResponse{
-            id: "a".to_string(),
-            token: "b".to_string(),
-        });
+        let res = api::Response::data(models::CompleteRegistrationResponse::from(session));
         Ok(HttpResponse::Created().json(&res))
     })
     .map_err(move |err| {

@@ -7,6 +7,7 @@ use crate::{
         PendingAccount,
         pending_account,
         account,
+        session,
     },
     services::account::domain,
 };
@@ -23,11 +24,11 @@ pub struct CompleteRegistration {
 }
 
 impl Message for CompleteRegistration {
-    type Result = Result<bool, KernelError>;
+    type Result = Result<session::Session, KernelError>;
 }
 
 impl Handler<CompleteRegistration> for DbActor {
-    type Result = Result<bool, KernelError>;
+    type Result = Result<session::Session, KernelError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
@@ -36,6 +37,8 @@ impl Handler<CompleteRegistration> for DbActor {
             account_pending_accounts_events,
             account_accounts,
             account_accounts_events,
+            account_sessions,
+            account_sessions_events,
         };
         use diesel::RunQueryDsl;
         use diesel::query_dsl::filter_dsl::FilterDsl;
@@ -102,7 +105,7 @@ impl Handler<CompleteRegistration> for DbActor {
         };
 
         // apply event to aggregate
-        let created_account = domain::Account{
+        let new_account = domain::Account{
             id: created.id.clone(),
             created_at: now.clone(),
             updated_at: now.clone(),
@@ -125,19 +128,58 @@ impl Handler<CompleteRegistration> for DbActor {
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data: account::EventData::CreatedV1(created),
-            aggregate_id: created_account.id.clone(),
+            aggregate_id: new_account.id.clone(),
             metadata: account::EventMetadata{},
         };
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
-            .values(&created_account)
+            .values(&new_account)
             .execute(&conn)?;
         diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
             .values(&event)
             .execute(&conn)?;
 
         // start Session
+        // build_event
+        let started = domain::session::StartedV1{
+            id: uuid::Uuid::new_v4(),
+            account_id: new_account.id.clone(),
+            token: uuid::Uuid::new_v4().to_string(),
+            ip: "127.0.0.1".to_string(), // TODO
+        };
 
-        return Ok(false);
+        // apply event to aggregate
+        let new_session = domain::Session{
+            id: started.id.clone(),
+            created_at: now.clone(),
+            updated_at: now.clone(),
+            deleted_at: None,
+            version: 1,
+
+            device: session::Device{},
+            ip: started.ip.clone(),
+            location: session::Location{},
+            token: started.token.clone(),
+
+            account_id: started.account_id.clone(),
+        };
+
+
+        let event = session::Event{
+            id: uuid::Uuid::new_v4(),
+            timestamp: now,
+            data: session::EventData::StartedV1(started),
+            aggregate_id: new_account.id.clone(),
+            metadata: session::EventMetadata{},
+        };
+
+        diesel::insert_into(account_sessions::dsl::account_sessions)
+            .values(&new_session)
+            .execute(&conn)?;
+        diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+            .values(&event)
+            .execute(&conn)?;
+
+        return Ok(new_session);
     }
 }
