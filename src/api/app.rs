@@ -32,7 +32,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
             .resource("/account/v1/welcome/register", |r| r.method(http::Method::POST).with_config(services::account::api::v1::register_post, api::json_default_config))
             .resource("/account/v1/welcome/verify", |r| r.method(http::Method::POST).with_config(services::account::api::v1::verify_post, api::json_default_config))
-
+            .resource("/account/v1/welcome/complete", |r| r.method(http::Method::POST).with_config(services::account::api::v1::complete_registration_post, api::json_default_config))
             .register()
     })
 }

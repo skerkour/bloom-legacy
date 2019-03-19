@@ -3,14 +3,12 @@ use crate::{
     services::account::api::v1::models,
     log::macros::*,
     api::middlewares::logger::GetRequestLogger,
+    services::account::controllers,
 };
 use std::time::Duration;
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, Json, HttpRequest,
-};
-use crate::services::account::domain::{
-    pending_account,
 };
 use futures::future::IntoFuture;
 use rand::Rng;
@@ -23,11 +21,12 @@ pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequ
     let state = req.state().clone();
     let logger = req.logger();
 
+    // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(200, 400))).into_future()
     .from_err()
     .and_then(move |_|
         state.db
-        .send(pending_account::Create{
+        .send(controllers::Register{
             first_name: register_data.first_name.clone(),
             last_name: register_data.last_name.clone(),
             email: register_data.email.clone(),

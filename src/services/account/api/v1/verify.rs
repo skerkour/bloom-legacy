@@ -3,14 +3,12 @@ use crate::{
     services::account::api::v1::models,
     log::macros::*,
     api::middlewares::logger::GetRequestLogger,
+    services::account::controllers,
 };
 use std::time::Duration;
 use futures::future::Future;
 use actix_web::{
     FutureResponse, HttpResponse, Json, HttpRequest, AsyncResponder,
-};
-use crate::services::account::domain::{
-    pending_account,
 };
 use futures::future::IntoFuture;
 use rand::Rng;
@@ -24,16 +22,17 @@ pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<ap
     let state = req.state().clone();
     let logger = req.logger();
 
+    // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(700, 900))).into_future()
     .from_err()
     .and_then(move |_|
         state.db
-        .send(pending_account::Verify{
+        .send(controllers::Verify{
             id: verify_data.id.clone(),
             code: verify_data.code.clone(),
         }).flatten()
     )
-    .and_then(move |is_valid| {
+    .and_then(move |_| {
         let res = api::Response::data(models::VerifyResponse{is_valid: true});
         Ok(HttpResponse::Ok().json(&res))
     })

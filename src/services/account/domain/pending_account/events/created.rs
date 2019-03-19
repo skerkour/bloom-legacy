@@ -11,3 +11,7 @@ pub struct CreatedV1 {
     pub token: String,
     pub trials: i64,
 }
+
+// impl CreatedV1 {
+
+// }

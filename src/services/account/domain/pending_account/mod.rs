@@ -1,12 +1,5 @@
-mod create;
-mod created;
-mod verify;
-mod verification_failed;
-mod verification_succeeded;
-mod resend_code;
-mod code_resent;
-mod complete_registration;
-mod registration_completed;
+mod commands;
+mod events;
 
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
@@ -17,15 +10,19 @@ use crate::{
 };
 
 
-pub use create::Create;
-pub use created::CreatedV1;
-pub use verify::Verify;
-pub use verification_failed::VerificationFailedV1;
-pub use verification_succeeded::VerificationSucceededV1;
-pub use resend_code::ResendCode;
-pub use code_resent::CodeResentV1;
-pub use complete_registration::CompleteRegistration;
-pub use registration_completed::RegistrationCompletedV1;
+pub use commands::{
+    CompleteRegistration,
+    Create,
+    ResendCode,
+    Verify,
+};
+pub use events::{
+    CodeResentV1,
+    CreatedV1,
+    RegistrationCompletedV1,
+    // VerificationFailedV1,
+    // VerificationSucceededV1,
+};
 
 pub const TOKEN_BCRYPT_COST: u32 = 11;
 
@@ -69,10 +66,10 @@ pub enum Command {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
-    CodeResentV1(CodeResentV1),
-    VerificationFailedV1(VerificationFailedV1),
-    VerificationSucceededV1(VerificationSucceededV1),
-    RegistrationCompletedV1(RegistrationCompletedV1)
+    CodeResentV1,
+    VerificationFailedV1,
+    VerificationSucceededV1,
+    RegistrationCompletedV1,
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]

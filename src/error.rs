@@ -4,8 +4,8 @@ use failure::Fail;
 pub enum KernelError {
     #[fail(display="ActixMailboxError")]
     ActixMailbox,
-    #[fail(display="DieselError")]
-    Diesel,
+    #[fail(display="DieselError: {}", 0)]
+    Diesel(String),
     #[fail(display="R2d2Error")]
     R2d2,
     #[fail(display="TokioError")]
@@ -25,7 +25,7 @@ impl std::convert::From<actix::MailboxError> for KernelError {
 
 impl std::convert::From<diesel::result::Error> for KernelError {
     fn from(e: diesel::result::Error) -> Self {
-        KernelError::Diesel
+        KernelError::Diesel(format!("{:?}", e))
     }
 }
 

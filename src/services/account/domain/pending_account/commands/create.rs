@@ -3,17 +3,20 @@ use crate::{
     db::DbActor,
     services::account::domain,
     services::account,
+    services::account::controllers,
+    services::account::domain::pending_account,
     services::account::validators,
     services::account::notifications::emails::send_account_verification_code,
     config::Config,
     services::common::utils,
     api::middlewares::logger::RequestLogger,
+    error::KernelError,
 };
-use crate::error::KernelError;
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
+
 
 
 #[derive(Clone, Debug)]
@@ -22,7 +25,17 @@ pub struct Create {
     pub last_name: String,
     pub email: String,
     pub password: String,
-    pub username: String,
+}
+
+impl From<controllers::Register> for Create {
+    fn from(msg: controllers::Register) -> Self {
+        return Create{
+            first_name: msg.first_name,
+            last_name: msg.last_name,
+            email: msg.email,
+            password: msg.password,
+        };
+    }
 }
 
 impl Create {
@@ -32,9 +45,6 @@ impl Create {
         validators::password(&self.password)?;
         // TODO: validate email
 
-        // verify that an email isn't already in use
-
-        // verify that username isn't already in use
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));
         }
