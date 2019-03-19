@@ -24,6 +24,7 @@ rand = "0.6"
 failure = "0.1.5"
 diesel_as_jsonb = { path = "crates/diesel_as_jsonb" }
 bcrypt = { path = "crates/bcrypt-rs" }
+hex = { path = "crates/hex-rs" }
 lettre = "0.8"
 lettre_email = "0.8"
 num_cpus = "1.0"
@@ -57,4 +58,5 @@ members = [
     "crates/diesel_as_jsonb",
     "crates/sendgrid-rs",
     "crates/bcrypt-rs",
+    "crates/hex-rs",
 ]
