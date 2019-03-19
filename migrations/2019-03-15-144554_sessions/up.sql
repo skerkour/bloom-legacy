@@ -5,10 +5,11 @@ CREATE TABLE account_sessions (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    token TEXT NOT NULL,
+    device JSONB NOT NULL,
     ip TEXT NOT NULL,
     location JSONB,
-    device JSONB NOT NULL,
+    token TEXT NOT NULL,
+
     account_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)

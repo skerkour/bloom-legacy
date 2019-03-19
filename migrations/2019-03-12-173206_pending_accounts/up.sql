@@ -6,9 +6,9 @@ CREATE TABLE account_pending_accounts (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
+    email TEXT NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-    email TEXT NOT NULL,
     password TEXT NOT NULL,
     token TEXT NOT NULL,
     trials BIGINT NOT NULL,

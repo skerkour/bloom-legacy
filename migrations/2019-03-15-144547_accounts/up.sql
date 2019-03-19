@@ -6,15 +6,15 @@ CREATE TABLE account_accounts (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    first_name TEXT NOT NULL,
-    last_name TEXT NOT NULL,
-    email TEXT NOT NULL,
-    username TEXT UNIQUE NOT NULL,
-    password TEXT NOT NULL,
     avatar_url TEXT NOT NULL,
+    email TEXT NOT NULL,
+    first_name TEXT NOT NULL,
     is_admin BOOLEAN NOT NULL,
+    last_name TEXT NOT NULL,
+    password TEXT NOT NULL,
     recovery_id UUID,
     recovery_token TEXT,
+    username TEXT UNIQUE NOT NULL,
 
     PRIMARY KEY(id)
 );

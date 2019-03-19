@@ -36,11 +36,11 @@ pub struct PendingAccount {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub first_name: String, // hashed password
-    pub last_name: String,
     pub email: String,
-    pub password: String,
-    pub token: String, // hashed code
+    pub first_name: String,
+    pub last_name: String,
+    pub password: String, // hashed password
+    pub token: String, // hashed verification code
     pub trials: i64,
 }
 

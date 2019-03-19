@@ -28,15 +28,15 @@ pub struct Account {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub first_name: String,
-    pub last_name: String,
-    pub email: String,
-    pub username: String,
-    pub password: String, // hashed password
     pub avatar_url: String,
+    pub email: String,
+    pub first_name: String,
     pub is_admin: bool,
+    pub last_name: String,
+    pub password: String, // hashed password
     pub recovery_id: Option<uuid::Uuid>,
     pub recovery_token: Option<String>,
+    pub username: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
