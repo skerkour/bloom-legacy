@@ -10,14 +10,21 @@ use crate::{
 
 #[derive(Clone, Debug, Fail)]
 pub enum Error {
-    #[fail(display="Internal error")]
-    Internal,
+    // 400
     #[fail(display="{}", error)]
     BadRequest{ error: String },
-    #[fail(display="Timeout")]
-    Timeout,
+
+    // 404
     #[fail(display="Route not found")]
     RouteNotFound,
+
+    // 408
+    #[fail(display="Timeout")]
+    Timeout,
+
+    // 500
+    #[fail(display="Internal error")]
+    Internal,
 }
 
 impl error::ResponseError for Error {
