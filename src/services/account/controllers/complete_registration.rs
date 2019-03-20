@@ -100,47 +100,30 @@ impl Handler<CompleteRegistration> for DbActor {
 
         // create account
         // build_event
-        let created = domain::account::CreatedV1{
-            id: uuid::Uuid::new_v4(),
-            password: pending_account_to_update.password.clone(),
-            email: pending_account_to_update.email.clone(),
-            first_name: pending_account_to_update.first_name.clone(),
-            last_name: pending_account_to_update.last_name.clone(),
-            username: msg.username.clone(),
-            avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
-            is_admin: false,
-        };
+        // let created = domain::account::CreatedV1{
+        //     id: uuid::Uuid::new_v4(),
+        //     password: pending_account_to_update.password.clone(),
+        //     email: pending_account_to_update.email.clone(),
+        //     first_name: pending_account_to_update.first_name.clone(),
+        //     last_name: pending_account_to_update.last_name.clone(),
+        //     username: msg.username.clone(),
+        //     avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
+        //     is_admin: false,
+        // };
 
         // apply event to aggregate
-        let new_account = domain::Account{
-            id: created.id.clone(),
-            created_at: now.clone(),
-            updated_at: now.clone(),
-            deleted_at: None,
-            version: 1,
-
-            password: created.password.clone(),
-            email: created.email.clone(),
-            first_name: created.first_name.clone(),
-            last_name: created.last_name.clone(),
-            username: created.username.clone(),
-            avatar_url: created.avatar_url.clone(),
-            recovery_token: None,
-            recovery_id: None,
-            is_admin: created.is_admin,
+        let new_account = domain::Account::new();
+        let create_cmd = domain::account::Create{
+            first_name: pending_account_to_update.first_name.clone(),
+            last_name: pending_account_to_update.last_name.clone(),
+            email: pending_account_to_update.email.clone(),
+            password: pending_account_to_update.password.clone(),
+            username: msg.username.clone(),
+            avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
         };
 
-
-        let event = account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data: account::EventData::CreatedV1(created),
-            aggregate_id: new_account.id.clone(),
-            metadata: EventMetadata{
-                actor_id: None,
-                request_id: Some(msg.request_id.clone()),
-            },
-        };
+        let (new_account, event) = eventsourcing::execute(&conn, &new_account, &create_cmd)
+            .map_err(|_| KernelError::Validation("eventsourcing".to_string()))?;
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
             .values(&new_account)
