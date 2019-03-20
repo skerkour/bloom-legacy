@@ -7,6 +7,7 @@ use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::account_pending_accounts,
     db::schema::account_pending_accounts_events,
+    services::common::events::EventMetadata,
 };
 
 
@@ -71,10 +72,6 @@ pub enum EventData {
     VerificationFailedV1,
     VerificationSucceededV1,
     RegistrationCompletedV1,
-}
-
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub struct EventMetadata {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

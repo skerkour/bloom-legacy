@@ -11,6 +11,7 @@ use crate::{
     },
     services::account::domain,
     services::common::utils,
+    services::common::events::EventMetadata,
 };
 use serde::{Serialize, Deserialize};
 use chrono::{Utc};
@@ -23,6 +24,7 @@ pub struct CompleteRegistration {
     pub code: String,
     pub username: String,
     pub config: Config,
+    pub request_id: String,
 }
 
 impl Message for CompleteRegistration {
@@ -86,7 +88,10 @@ impl Handler<CompleteRegistration> for DbActor {
             timestamp: now,
             data: pending_account::EventData::RegistrationCompletedV1,
             aggregate_id: pending_account_to_update.id,
-            metadata: pending_account::EventMetadata{},
+            metadata: EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id.clone()),
+            },
         };
         diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
             .values(&event)
@@ -131,7 +136,10 @@ impl Handler<CompleteRegistration> for DbActor {
             timestamp: now,
             data: account::EventData::CreatedV1(created),
             aggregate_id: new_account.id.clone(),
-            metadata: account::EventMetadata{},
+            metadata: EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id.clone()),
+            },
         };
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
@@ -153,23 +161,21 @@ impl Handler<CompleteRegistration> for DbActor {
             account_id: new_account.id.clone(),
             token: hashed_token,
             ip: "127.0.0.1".to_string(), // TODO
+            device: domain::session::Device{},
+            location: domain::session::Location{},
         };
 
         // apply event to aggregate
-        let new_session = domain::Session{
-            id: started.id.clone(),
-            created_at: now.clone(),
-            updated_at: now.clone(),
-            deleted_at: None,
-            version: 1,
-
-            device: session::Device{},
-            ip: started.ip.clone(),
-            location: session::Location{},
-            token: started.token.clone(),
-
-            account_id: started.account_id.clone(),
-        };
+        let mut new_session = domain::Session::new();
+        new_session.id = started.id;
+        new_session.created_at = now;
+        new_session.updated_at = now;
+        new_session.version += 1;
+        new_session.ip = started.ip.clone();
+        new_session.token = started.token.clone();
+        new_session.device = started.device.clone();
+        new_session.location = started.location.clone();
+        new_session.account_id = started.account_id;
 
 
         let event = session::Event{
@@ -177,7 +183,10 @@ impl Handler<CompleteRegistration> for DbActor {
             timestamp: now,
             data: session::EventData::StartedV1(started),
             aggregate_id: new_account.id.clone(),
-            metadata: session::EventMetadata{},
+            metadata: EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id.clone()),
+            },
         };
 
         diesel::insert_into(account_sessions::dsl::account_sessions)
@@ -187,7 +196,6 @@ impl Handler<CompleteRegistration> for DbActor {
             .values(&event)
             .execute(&conn)?;
 
-        // TODO: return the non hashed token
         return Ok((new_session, token));
     }
 }

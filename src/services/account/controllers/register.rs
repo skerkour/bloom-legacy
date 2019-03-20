@@ -5,6 +5,7 @@ use crate::{
     services::account,
     services::account::domain::pending_account,
     services::account::notifications::emails::send_account_verification_code,
+    services::common::events::EventMetadata,
     config::Config,
     services::common::utils,
     error::KernelError,
@@ -18,6 +19,7 @@ pub struct Register {
     pub email: String,
     pub password: String,
     pub config: Config,
+    pub request_id: String,
     // pub logger: RequestLogger,
 }
 
@@ -38,7 +40,12 @@ impl Handler<Register> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
         let config = msg.config.clone();
-        let cmd = pending_account::Create::from(msg);
+        let cmd = pending_account::Create{
+            first_name: msg.first_name.clone(),
+            last_name: msg.last_name.clone(),
+            email: msg.email.clone(),
+            password: msg.password.clone(),
+        };
 
         // validate
         cmd.validate(&conn)?;
@@ -86,7 +93,10 @@ impl Handler<Register> for DbActor {
             timestamp: now,
             data: pending_account::EventData::CreatedV1(created),
             aggregate_id: pending_account_id,
-            metadata: pending_account::EventMetadata{},
+            metadata: EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id),
+            },
         };
 
         diesel::insert_into(account_pending_accounts)

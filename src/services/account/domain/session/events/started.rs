@@ -1,4 +1,5 @@
 use serde::{Serialize, Deserialize};
+use crate::services::account::domain::session::{Location, Device};
 
 // TODO
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -7,8 +8,8 @@ pub struct StartedV1 {
     pub account_id: uuid::Uuid,
     pub token: String,
     pub ip: String,
-    // Location  *domain.SessionLocation `json:"location"`
-    // Device    domain.SessionDevice    `json:"device"`
+    pub location: Location,
+    pub device: Device,
 }
 
 // #[derive(Clone, Debug, Deserialize, Serialize)]

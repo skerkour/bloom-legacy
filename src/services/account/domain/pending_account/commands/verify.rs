@@ -23,14 +23,6 @@ pub struct Verify {
     pub code: String,
 }
 
-impl From<controllers::Verify> for Verify {
-    fn from(msg: controllers::Verify) -> Self {
-        return Verify{
-            id: msg.id,
-            code: msg.code,
-        };
-    }
-}
 
 impl Verify {
     pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>, aggregate: &PendingAccount) -> Result<(), KernelError> {

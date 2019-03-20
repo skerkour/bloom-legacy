@@ -27,16 +27,6 @@ pub struct Create {
     pub password: String,
 }
 
-impl From<controllers::Register> for Create {
-    fn from(msg: controllers::Register) -> Self {
-        return Create{
-            first_name: msg.first_name,
-            last_name: msg.last_name,
-            email: msg.email,
-            password: msg.password,
-        };
-    }
-}
 
 impl Create {
     pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>) -> Result<(), KernelError> {

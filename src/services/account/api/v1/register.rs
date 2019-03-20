@@ -4,6 +4,7 @@ use crate::{
     log::macros::*,
     api::middlewares::logger::GetRequestLogger,
     services::account::controllers,
+    api::middlewares::request_id::GetRequestID,
 };
 use std::time::Duration;
 use futures::future::Future;
@@ -20,6 +21,8 @@ pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequ
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
     let logger = req.logger();
+    let request_id = req.request_id().0;
+    let config = state.config.clone();
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(200, 400))).into_future()
@@ -31,7 +34,8 @@ pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequ
             last_name: register_data.last_name.clone(),
             email: register_data.email.clone(),
             password: register_data.password.clone(),
-            config: state.config.clone(),
+            config,
+            request_id,
         }).flatten()
     )
     .and_then(move |pending_account| {

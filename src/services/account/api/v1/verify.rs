@@ -4,6 +4,7 @@ use crate::{
     log::macros::*,
     api::middlewares::logger::GetRequestLogger,
     services::account::controllers,
+    api::middlewares::request_id::GetRequestID,
 };
 use std::time::Duration;
 use futures::future::Future;
@@ -21,6 +22,7 @@ pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<ap
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
     let logger = req.logger();
+    let request_id = req.request_id();
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(700, 900))).into_future()
@@ -30,6 +32,7 @@ pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<ap
         .send(controllers::Verify{
             id: verify_data.id.clone(),
             code: verify_data.code.clone(),
+            request_id: request_id.0,
         }).flatten()
     )
     .and_then(move |_| {

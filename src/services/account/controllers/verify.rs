@@ -6,6 +6,7 @@ use crate::{
         pending_account,
         pending_account::EventData,
     },
+    services::common::events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -15,6 +16,7 @@ use chrono::{Utc};
 pub struct Verify {
     pub id: String,
     pub code: String,
+    pub request_id: String,
 }
 
 impl Message for Verify {
@@ -37,7 +39,10 @@ impl Handler<Verify> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
         let now = Utc::now();
-        let cmd = pending_account::Verify::from(msg);
+        let cmd = pending_account::Verify{
+            id: msg.id.clone(),
+            code: msg.code.clone(),
+        };
 
         let pending_account_id = uuid::Uuid::parse_str(&cmd.id)
             .map_err(|_| KernelError::Validation("id is not a valid uuid".to_string()))?;
@@ -71,7 +76,10 @@ impl Handler<Verify> for DbActor {
             timestamp: now,
             data: event_data,
             aggregate_id: pending_account.id,
-            metadata: pending_account::EventMetadata{},
+            metadata: EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id),
+            },
         };
         diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
             .values(&event)

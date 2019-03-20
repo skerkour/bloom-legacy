@@ -4,6 +4,7 @@ use crate::{
     log::macros::*,
     api::middlewares::logger::GetRequestLogger,
     services::account::controllers,
+    api::middlewares::request_id::GetRequestID,
 };
 use std::time::Duration;
 use futures::future::Future;
@@ -20,6 +21,7 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
     let state = req.state().clone();
     let logger = req.logger();
     let config = state.config.clone();
+    let request_id = req.request_id().0;
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 650))).into_future()
@@ -31,6 +33,7 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
             code: registration_data.code.clone(),
             username: registration_data.username.clone(),
             config,
+            request_id,
         }).flatten()
     )
     .and_then(move |(session, token)| {
