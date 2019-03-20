@@ -1,22 +1,11 @@
-use actix::{Message, Handler};
 use crate::{
-    db::DbActor,
-    services::account::domain,
-    services::account,
-    services::account::controllers,
-    services::account::domain::pending_account,
     services::account::validators,
-    services::account::notifications::emails::send_account_verification_code,
-    config::Config,
-    services::common::utils,
-    api::middlewares::logger::RequestLogger,
     error::KernelError,
 };
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
-
 
 
 #[derive(Clone, Debug)]

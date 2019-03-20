@@ -693,6 +693,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "eventsourcing"
+version = "0.1.0"
+
+[[package]]
 name = "failure"
 version = "0.1.5"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1012,6 +1016,7 @@ dependencies = [
  "diesel 1.4.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel_as_jsonb 0.1.0",
  "dotenv 0.13.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "eventsourcing 0.1.0",
  "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.25 (registry+https://github.com/rust-lang/crates.io-index)",
  "handlebars 2.0.0-beta.1 (registry+https://github.com/rust-lang/crates.io-index)",
