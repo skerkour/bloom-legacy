@@ -2,7 +2,6 @@ use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::account_accounts,
     db::schema::account_accounts_events,
     services::common::events::EventMetadata,
 };
