@@ -22,8 +22,9 @@ struct WithdrawFunds {
 impl eventsourcing::Command for WithdrawFunds {
     type Aggregate = Account;
     type Event = AccountEvent;
+    type DbConn = ();
 
-    fn build_event(&self, aggregate: &Self::Aggregate) -> Result<Self::Event, String> {
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, String> {
         let data = AccountEventData::FundsWithdrawn(FundsWithdrawn{
             account: self.account.clone(),
             amount: self.amount,
@@ -36,7 +37,7 @@ impl eventsourcing::Command for WithdrawFunds {
         });
     }
 
-    fn validate(&self, _aggregate: &Self::Aggregate) -> Result<(), String> {
+    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), String> {
         return Ok(());
     }
 }
@@ -98,9 +99,12 @@ fn main() {
         version: 1,
     };
 
-    let (current_state, event) = eventsourcing::execute(&initial_state, &withdraw_cmd).expect("error execurting");
+    let (current_state, event) = eventsourcing::execute(&(), &initial_state, &withdraw_cmd)
+        .expect("error execurting");
 
-    println!("initial state: {:#?}", initial_state);
-    println!("current state: {:#?}", current_state);
-    println!("event: {:#?}", event);
+    println!("initial state: {:#?}", &initial_state);
+    println!("current state: {:#?}", &current_state);
+    println!("event: {:#?}", &event);
+    assert_eq!(current_state.balance, 300);
+    assert_eq!(current_state.version, 2);
 }

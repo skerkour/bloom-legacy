@@ -11,19 +11,21 @@ pub trait Event {
 pub trait Command {
     type Aggregate: Aggregate;
     type Event: Event;
+    type DbConn;
 
-    fn build_event(&self, aggregate: &Self::Aggregate) -> Result<Self::Event, String>;
-    fn validate(&self, aggregate: &Self::Aggregate) -> Result<(), String>;
+    fn build_event(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, String>;
+    fn validate(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(), String>;
 }
 
 
-pub fn execute<A, C, E>(aggregate: &A, cmd: &C)
+pub fn execute<A, CON, CMD, E>(conn: &CON, aggregate: &A, cmd: &CMD)
     -> Result<(A, E), String>
     where A: Aggregate,
-    C: Command<Aggregate = A, Event = E>,
+    CMD: Command<Aggregate = A, Event = E, DbConn = CON>,
     E: Event<Aggregate = A> {
 
-    let event = cmd.build_event(aggregate)?;
+    cmd.validate(conn, aggregate)?;
+    let event = cmd.build_event(conn, aggregate)?;
     let mut aggregate = event.apply(aggregate);
     aggregate.increment_version();
     return Ok((aggregate, event));
