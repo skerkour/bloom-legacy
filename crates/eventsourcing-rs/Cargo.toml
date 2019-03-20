@@ -3,5 +3,8 @@ name = "eventsourcing"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
+description = "Event Sourcing for Rust"
+license = "Apache-2.0"
+keywords = ["event", "eventsourcing", "aggregate", "command"]
 
 [dependencies]
