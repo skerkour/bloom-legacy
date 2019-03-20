@@ -15,17 +15,18 @@ pub trait Command {
     type Aggregate: Aggregate;
     type Event: Event;
     type DbConn;
+    type Error;
 
-    fn build_event(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, String>;
-    fn validate(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(), String>;
+    fn build_event(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, Self::Error>;
+    fn validate(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(), Self::Error>;
 }
 
 
-pub fn execute<A, CON, CMD, E>(conn: &CON, aggregate: &A, cmd: &CMD)
-    -> Result<(A, E), String>
+pub fn execute<A, CON, CMD, Ev, Err>(conn: &CON, aggregate: &A, cmd: &CMD)
+    -> Result<(A, Ev), Err>
     where A: Aggregate,
-    CMD: Command<Aggregate = A, Event = E, DbConn = CON>,
-    E: Event<Aggregate = A> {
+    CMD: Command<Aggregate = A, Event = Ev, DbConn = CON, Error = Err>,
+    Ev: Event<Aggregate = A> {
 
     cmd.validate(conn, aggregate)?;
     let event = cmd.build_event(conn, aggregate)?;

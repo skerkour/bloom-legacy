@@ -1,6 +1,8 @@
 use crate::{
     services::account::domain::account,
     services::common::events::EventMetadata,
+    services::account::validators,
+    error::KernelError,
 };
 
 
@@ -14,34 +16,24 @@ pub struct Create {
     pub avatar_url: String,
 }
 
-// impl Create {
-//     pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>) -> Result<(), KernelError> {
-//         validators::first_name(&self.first_name)?;
-//         validators::last_name(&self.last_name)?;
-//         validators::password(&self.password)?;
-//         // TODO: validate email
-
-//         // verify that an email isn't already in use
-//         // verify that username isn't already in use
-
-//         if self.password == self.email {
-//             return Err(KernelError::Validation("password must be different than your email address".to_string()).to_string());
-//         }
-
-//         return Ok(());
-//     }
-// }
-
 impl eventsourcing::Command for Create {
     type Aggregate = account::Account;
     type Event = account::Event;
     type DbConn = diesel::r2d2::PooledConnection<diesel::r2d2::ConnectionManager<diesel::PgConnection>>;
+    type Error = KernelError;
 
-    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), String> {
+    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        validators::first_name(&self.first_name)?;
+        validators::last_name(&self.last_name)?;
+        validators::password(&self.password)?;
+        // TODO: validate email
+
+        // verify that an email isn't already in use
+        // verify that username isn't already in use
         return Ok(());
     }
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, String> {
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, Self::Error> {
         let now = chrono::Utc::now();
         // TODO: metdata
         let data = account::EventData::CreatedV1(account::CreatedV1{

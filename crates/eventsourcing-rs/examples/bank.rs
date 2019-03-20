@@ -26,8 +26,9 @@ impl eventsourcing::Command for WithdrawFunds {
     type Aggregate = Account;
     type Event = AccountEvent;
     type DbConn = ();
+    type Error = String;
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, String> {
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, Self::Error> {
         let data = AccountEventData::FundsWithdrawn(FundsWithdrawn{
             account: self.account.clone(),
             amount: self.amount,
@@ -40,7 +41,7 @@ impl eventsourcing::Command for WithdrawFunds {
         });
     }
 
-    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), String> {
+    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());
     }
 }
