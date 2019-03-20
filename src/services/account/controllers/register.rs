@@ -40,67 +40,26 @@ impl Handler<Register> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
         let config = msg.config.clone();
-        let cmd = pending_account::Create{
+
+
+        let metdata = EventMetadata{
+            actor_id: None,
+            request_id: Some(msg.request_id.clone()),
+        };
+        let new_pending_account = pending_account::PendingAccount::new();
+        let create_cmd = pending_account::Create{
             first_name: msg.first_name.clone(),
             last_name: msg.last_name.clone(),
             email: msg.email.clone(),
             password: msg.password.clone(),
-        };
-
-        // validate
-        cmd.validate(&conn)?;
-
-
-        let code = utils::random_digit_string(8);
-        let pending_account_id = uuid::Uuid::new_v4();
-        let hashed_password = bcrypt::hash(&cmd.password, account::PASSWORD_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
-        let hashed_code = bcrypt::hash(&code, pending_account::TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
-        let now = chrono::Utc::now();
-
-
-        // build_event
-        let created = domain::pending_account::CreatedV1{
-            id: pending_account_id.clone(),
-            password: hashed_password.clone(),
-            email: cmd.email.clone(),
-            first_name: cmd.first_name.clone(),
-            last_name: cmd.last_name.clone(),
-            token: hashed_code.clone(),
-            trials: 0,
-        };
-
-        // apply event to aggregate
-        let pending_account = domain::PendingAccount{
-            id: pending_account_id.clone(),
-            created_at: now.clone(),
-            updated_at: now.clone(),
-            deleted_at: None,
-            version: 1,
-
-            password: hashed_password.clone(),
-            email: cmd.email.clone(),
-            first_name: cmd.first_name.clone(),
-            last_name: cmd.last_name.clone(),
-            token: hashed_code.clone(),
-            trials: 0,
+            metdata,
         };
 
 
-        let event = pending_account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data: pending_account::EventData::CreatedV1(created),
-            aggregate_id: pending_account_id,
-            metadata: EventMetadata{
-                actor_id: None,
-                request_id: Some(msg.request_id),
-            },
-        };
+        let (new_pending_account, event, non_persisted) = eventsourcing::execute(&conn, &new_pending_account, &create_cmd)?;
 
         diesel::insert_into(account_pending_accounts)
-            .values(&pending_account)
+            .values(&new_pending_account)
             .execute(&conn)?;
         diesel::insert_into(account_pending_accounts_events)
             .values(&event)
@@ -108,12 +67,12 @@ impl Handler<Register> for DbActor {
 
         send_account_verification_code(
             &config,
-            cmd.email.as_str(),
-            format!("{} {}", &cmd.first_name, &cmd.last_name).as_str(),
-            pending_account.id.to_string().as_str(),
-            &code,
+            new_pending_account.email.as_str(),
+            format!("{} {}", &new_pending_account.first_name, &new_pending_account.last_name).as_str(),
+            new_pending_account.id.to_string().as_str(),
+            &non_persisted.code,
         ).expect("error sending email");
 
-        return Ok(pending_account);
+        return Ok(new_pending_account);
     }
 }

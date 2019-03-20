@@ -98,20 +98,12 @@ impl Handler<CompleteRegistration> for DbActor {
             .execute(&conn)?;
 
 
-        // create account
-        // build_event
-        // let created = domain::account::CreatedV1{
-        //     id: uuid::Uuid::new_v4(),
-        //     password: pending_account_to_update.password.clone(),
-        //     email: pending_account_to_update.email.clone(),
-        //     first_name: pending_account_to_update.first_name.clone(),
-        //     last_name: pending_account_to_update.last_name.clone(),
-        //     username: msg.username.clone(),
-        //     avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
-        //     is_admin: false,
-        // };
+        let metdata = EventMetadata{
+            actor_id: None,
+            request_id: Some(msg.request_id.clone()),
+        };
 
-        // apply event to aggregate
+        // create account
         let new_account = domain::Account::new();
         let create_cmd = domain::account::Create{
             first_name: pending_account_to_update.first_name.clone(),
@@ -120,10 +112,10 @@ impl Handler<CompleteRegistration> for DbActor {
             password: pending_account_to_update.password.clone(),
             username: msg.username.clone(),
             avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
+            metdata,
         };
 
-        let (new_account, event) = eventsourcing::execute(&conn, &new_account, &create_cmd)
-            .map_err(|_| KernelError::Validation("eventsourcing".to_string()))?;
+        let (new_account, event, _) = eventsourcing::execute(&conn, &new_account, &create_cmd)?;
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
             .values(&new_account)

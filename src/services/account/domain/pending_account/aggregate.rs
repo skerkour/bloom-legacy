@@ -1,56 +1,49 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use crate::{
-    db::schema::account_accounts,
+    db::schema::account_pending_accounts,
 };
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "account_accounts"]
-pub struct Account {
+#[table_name = "account_pending_accounts"]
+pub struct PendingAccount {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub avatar_url: String,
     pub email: String,
     pub first_name: String,
-    pub is_admin: bool,
     pub last_name: String,
     pub password: String, // hashed password
-    pub recovery_id: Option<uuid::Uuid>,
-    pub recovery_token: Option<String>,
-    pub username: String,
+    pub token: String, // hashed verification code
+    pub trials: i64,
 }
 
-
-impl Account {
-    // create a new, unitialized Account
+impl PendingAccount {
+    // create a new, unitialized PendingAccount
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Account{
+        return PendingAccount{
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
             deleted_at: None,
             version: 0,
 
-            avatar_url: String::new(),
-            email:String::new(),
+            email: String::new(),
             first_name: String::new(),
-            is_admin: false,
             last_name: String::new(),
             password: String::new(),
-            recovery_id: None,
-            recovery_token: None,
-            username: String::new(),
+            token: String::new(),
+            trials: 0,
         };
     }
 }
 
-impl eventsourcing::Aggregate for Account {
+impl eventsourcing::Aggregate for PendingAccount {
     fn increment_version(&mut self) {
         self.version += 1;
     }
@@ -59,3 +52,12 @@ impl eventsourcing::Aggregate for Account {
         self.updated_at = timestamp;
     }
 }
+
+
+// #[derive(Clone, Debug)]
+// pub enum Command {
+//     Create(Create),
+//     Verify(Verify),
+//     ResendCode(ResendCode),
+//     CompleteRegistration(CompleteRegistration),
+// }

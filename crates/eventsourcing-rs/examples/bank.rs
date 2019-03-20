@@ -27,18 +27,19 @@ impl eventsourcing::Command for WithdrawFunds {
     type Event = AccountEvent;
     type DbConn = ();
     type Error = String;
+    type NonStoredData = ();
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, Self::Error> {
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = AccountEventData::FundsWithdrawn(FundsWithdrawn{
             account: self.account.clone(),
             amount: self.amount,
         });
-        return  Ok(AccountEvent{
+        return  Ok((AccountEvent{
             id: 1, // random
             timestamp: 123,
             data,
             aggregate_id: aggregate.id,
-        });
+        }, ()));
     }
 
     fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
@@ -107,7 +108,7 @@ fn main() {
         version: 1,
     };
 
-    let (current_state, event) = eventsourcing::execute(&(), &initial_state, &withdraw_cmd)
+    let (current_state, event, _) = eventsourcing::execute(&(), &initial_state, &withdraw_cmd)
         .expect("error execurting");
 
     println!("initial state: {:#?}", &initial_state);

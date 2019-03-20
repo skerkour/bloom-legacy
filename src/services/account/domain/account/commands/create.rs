@@ -14,6 +14,7 @@ pub struct Create {
     pub password: String,
     pub username: String,
     pub avatar_url: String,
+    pub metdata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
@@ -21,6 +22,7 @@ impl eventsourcing::Command for Create {
     type Event = account::Event;
     type DbConn = diesel::r2d2::PooledConnection<diesel::r2d2::ConnectionManager<diesel::PgConnection>>;
     type Error = KernelError;
+    type NonStoredData = ();
 
     fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::first_name(&self.first_name)?;
@@ -33,11 +35,13 @@ impl eventsourcing::Command for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<Self::Event, Self::Error> {
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
-        // TODO: metdata
+        let id = uuid::Uuid::new_v4();
+        let mut metadata = self.metdata.clone();
+        metadata.actor_id = Some(id);
         let data = account::EventData::CreatedV1(account::CreatedV1{
-            id: uuid::Uuid::new_v4(),
+            id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
             email: self.email.clone(),
@@ -46,15 +50,13 @@ impl eventsourcing::Command for Create {
             username: self.username.clone(),
             is_admin: false,
         });
-        return  Ok(account::Event{
+
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,
             aggregate_id: aggregate.id,
-            metadata: EventMetadata{
-                actor_id: None,
-                request_id: None,
-            },
-        });
+            metadata,
+        }, ()));
     }
 }

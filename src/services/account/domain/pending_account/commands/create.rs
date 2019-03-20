@@ -1,6 +1,10 @@
 use crate::{
     services::account::validators,
     error::KernelError,
+    services::account::domain::pending_account,
+    services::account,
+    services::common::events::EventMetadata,
+    services::common::utils,
 };
 use diesel::{
     PgConnection,
@@ -14,11 +18,23 @@ pub struct Create {
     pub last_name: String,
     pub email: String,
     pub password: String,
+    pub metdata: EventMetadata,
+}
+
+#[derive(Clone, Debug)]
+pub struct CreateNonStored {
+    pub code: String,
 }
 
 
-impl Create {
-    pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>) -> Result<(), KernelError> {
+impl eventsourcing::Command for Create {
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
+    type DbConn = PooledConnection<ConnectionManager<PgConnection>>;
+    type Error = KernelError;
+    type NonStoredData = CreateNonStored;
+
+    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
@@ -29,5 +45,37 @@ impl Create {
         }
 
         return Ok(());
+    }
+
+    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let now = chrono::Utc::now();
+        let id = uuid::Uuid::new_v4();
+        let mut metadata = self.metdata.clone();
+        let code = utils::random_digit_string(8);
+        let hashed_password = bcrypt::hash(&self.password, account::PASSWORD_BCRYPT_COST)
+            .map_err(|_| KernelError::Bcrypt)?;
+        let token = bcrypt::hash(&code, account::PENDING_ACCOUNT_TOKEN_BCRYPT_COST)
+            .map_err(|_| KernelError::Bcrypt)?;
+
+        let data = pending_account::EventData::CreatedV1(pending_account::CreatedV1{
+            id,
+            first_name: self.first_name.clone(),
+            last_name: self.last_name.clone(),
+            email: self.email.clone(),
+            password: hashed_password,
+            token,
+        });
+
+        let non_stored = CreateNonStored{
+            code,
+        };
+
+        return  Ok((pending_account::Event{
+            id: uuid::Uuid::new_v4(),
+            timestamp: now,
+            data,
+            aggregate_id: aggregate.id,
+            metadata,
+        }, non_stored));
     }
 }
