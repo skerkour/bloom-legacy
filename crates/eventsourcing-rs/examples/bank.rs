@@ -9,6 +9,9 @@ impl eventsourcing::Aggregate for Account {
     fn increment_version(&mut self) {
         self.version += 1;
     }
+
+    fn update_updated_at(&mut self, _timestamp: chrono::DateTime<chrono::Utc>) {
+    }
 }
 
 
@@ -83,6 +86,10 @@ impl eventsourcing::Event for AccountEvent {
                 ..aggregate.clone()
             },
         }
+    }
+
+    fn timestamp(&self) -> chrono::DateTime<chrono::Utc> {
+        return chrono::Utc::now();
     }
 }
 

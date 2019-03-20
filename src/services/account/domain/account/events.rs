@@ -51,6 +51,7 @@ impl eventsourcing::Event for Event {
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
                 deleted_at: None,
+                version: 0,
                 avatar_url: data.avatar_url.clone(),
                 email: data.email.clone(),
                 first_name: data.first_name.clone(),
@@ -60,9 +61,12 @@ impl eventsourcing::Event for Event {
                 recovery_id: None,
                 recovery_token: None,
                 username: data.username.clone(),
-                ..*aggregate // version
             },
         }
+    }
+
+    fn timestamp(&self) -> chrono::DateTime<chrono::Utc> {
+        return self.timestamp;
     }
 }
 

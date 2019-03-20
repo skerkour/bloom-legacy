@@ -4,6 +4,7 @@ use crate::{
     db::schema::account_accounts,
 };
 
+
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_accounts"]
 pub struct Account {
@@ -51,5 +52,9 @@ impl Account {
 impl eventsourcing::Aggregate for Account {
     fn increment_version(&mut self) {
         self.version += 1;
+    }
+
+    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
+        self.updated_at = timestamp;
     }
 }
