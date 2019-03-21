@@ -2,12 +2,10 @@ use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     services::account::domain,
-    services::account,
     services::account::domain::pending_account,
     services::account::notifications::emails::send_account_verification_code,
     services::common::events::EventMetadata,
     config::Config,
-    services::common::utils,
     error::KernelError,
 };
 
