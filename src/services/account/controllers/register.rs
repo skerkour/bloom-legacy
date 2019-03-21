@@ -36,43 +36,44 @@ impl Handler<Register> for DbActor {
             account_pending_accounts_events,
         };
         use diesel::RunQueryDsl;
+        use diesel::Connection;
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
-        let config = msg.config.clone();
 
+        return Ok(conn.transaction::<_, KernelError, _>(|| {
+            let config = msg.config.clone();
 
-        let metadata = EventMetadata{
-            actor_id: None,
-            request_id: Some(msg.request_id.clone()),
-        };
-        let new_pending_account = pending_account::PendingAccount::new();
-        let create_cmd = pending_account::Create{
-            first_name: msg.first_name.clone(),
-            last_name: msg.last_name.clone(),
-            email: msg.email.clone(),
-            password: msg.password.clone(),
-            metadata,
-        };
+            let metadata = EventMetadata{
+                actor_id: None,
+                request_id: Some(msg.request_id.clone()),
+            };
+            let new_pending_account = pending_account::PendingAccount::new();
+            let create_cmd = pending_account::Create{
+                first_name: msg.first_name.clone(),
+                last_name: msg.last_name.clone(),
+                email: msg.email.clone(),
+                password: msg.password.clone(),
+                metadata,
+            };
+            let (new_pending_account, event, non_persisted) = eventsourcing::execute(&conn, new_pending_account, &create_cmd)?;
 
+            diesel::insert_into(account_pending_accounts::dsl::account_pending_accounts)
+                .values(&new_pending_account)
+                .execute(&conn)?;
+            diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
+                .values(&event)
+                .execute(&conn)?;
 
-        let (new_pending_account, event, non_persisted) = eventsourcing::execute(&conn, new_pending_account, &create_cmd)?;
+            send_account_verification_code(
+                &config,
+                new_pending_account.email.as_str(),
+                format!("{} {}", &new_pending_account.first_name, &new_pending_account.last_name).as_str(),
+                new_pending_account.id.to_string().as_str(),
+                &non_persisted.code,
+            ).expect("error sending email");
 
-        diesel::insert_into(account_pending_accounts::dsl::account_pending_accounts)
-            .values(&new_pending_account)
-            .execute(&conn)?;
-        diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
-            .values(&event)
-            .execute(&conn)?;
-
-        send_account_verification_code(
-            &config,
-            new_pending_account.email.as_str(),
-            format!("{} {}", &new_pending_account.first_name, &new_pending_account.last_name).as_str(),
-            new_pending_account.id.to_string().as_str(),
-            &non_persisted.code,
-        ).expect("error sending email");
-
-        return Ok(new_pending_account);
+            return Ok(new_pending_account);
+        })?);
     }
 }

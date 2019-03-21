@@ -34,7 +34,14 @@ impl<'a> eventsourcing::Command<'a> for Create {
     type Error = KernelError;
     type NonStoredData = CreateNonStored;
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        use crate::db::schema::{
+            account_accounts::dsl::*,
+        };
+        use diesel::QueryDsl;
+        use diesel::ExpressionMethods;
+        use diesel::RunQueryDsl;
+
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
@@ -42,6 +49,16 @@ impl<'a> eventsourcing::Command<'a> for Create {
 
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));
+        }
+
+        // verify that an email isn't already in use
+        let existing_email: i64 = account_accounts
+            .filter(email.eq(&self.email))
+            .filter(deleted_at.is_null())
+            .count()
+            .get_result(ctx)?;
+        if existing_email != 0 {
+            return Err(KernelError::Validation(format!("Email: {} is already in use.", &self.email)));
         }
 
         return Ok(());

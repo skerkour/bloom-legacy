@@ -61,6 +61,9 @@ impl eventsourcing::Event for Event {
                 token: data.token.clone(),
                 trials: 0,
             },
+            EventData::VerificationSucceededV1 => super::PendingAccount{
+                ..aggregate
+            },
             EventData::VerificationFailedV1(_) => super::PendingAccount{
                 trials: aggregate.trials + 1,
                 ..aggregate

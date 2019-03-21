@@ -32,8 +32,8 @@ impl<'a> eventsourcing::Command<'a> for Verify {
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let metadata = self.metdata.clone();
-        let now = Utc::now();
-        let duration = aggregate.created_at.signed_duration_since(now);
+        let timestamp = Utc::now();
+        let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         let data = if aggregate.trials + 1 >= 10 {
             pending_account::EventData::VerificationFailedV1("Maximum number of trials reached. Please create another account.".to_string())
@@ -49,7 +49,7 @@ impl<'a> eventsourcing::Command<'a> for Verify {
 
         return  Ok((pending_account::Event{
             id: uuid::Uuid::new_v4(),
-            timestamp: now,
+            timestamp,
             data,
             aggregate_id: aggregate.id,
             metadata,
