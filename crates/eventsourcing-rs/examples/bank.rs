@@ -22,14 +22,14 @@ struct WithdrawFunds {
     amount: i64,
 }
 
-impl eventsourcing::Command for WithdrawFunds {
+impl<'a> eventsourcing::Command<'a> for WithdrawFunds {
     type Aggregate = Account;
     type Event = AccountEvent;
-    type DbConn = ();
+    type Context = Ctx<'a>;
     type Error = String;
     type NonStoredData = ();
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _conn: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = AccountEventData::FundsWithdrawn(FundsWithdrawn{
             account: self.account.clone(),
             amount: self.amount,
@@ -42,7 +42,7 @@ impl eventsourcing::Command for WithdrawFunds {
         }, ()));
     }
 
-    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _conn: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());
     }
 }
@@ -74,18 +74,22 @@ pub struct FundsDeposited {
     amount: i64,
 }
 
+pub struct Ctx<'a> {
+    pub x: &'a i32,
+}
+
 impl eventsourcing::Event for AccountEvent {
     type Aggregate = Account;
 
-    fn apply(&self, aggregate: &Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             AccountEventData::FundsWithdrawn(ref data) => Account {
                 balance: aggregate.balance - data.amount,
-                ..aggregate.clone()
+                ..aggregate
             },
             AccountEventData::FundsDeposited(ref data) => Account {
                 balance: aggregate.balance + data.amount,
-                ..aggregate.clone()
+                ..aggregate
             },
         }
     }
@@ -107,11 +111,15 @@ fn main() {
         balance: 800,
         version: 1,
     };
+    let initial_state2 = initial_state.clone();
 
-    let (current_state, event, _) = eventsourcing::execute(&(), &initial_state, &withdraw_cmd)
+    let x = 42;
+    let ctx = Ctx{x: &x};
+
+    let (current_state, event, _) = eventsourcing::execute(&ctx, initial_state, &withdraw_cmd)
         .expect("error execurting");
 
-    println!("initial state: {:#?}", &initial_state);
+    println!("initial state: {:#?}", &initial_state2);
     println!("current state: {:#?}", &current_state);
     println!("event: {:#?}", &event);
     assert_eq!(current_state.balance, 300);

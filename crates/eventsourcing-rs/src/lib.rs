@@ -6,31 +6,31 @@ pub trait Aggregate {
 pub trait Event {
     type Aggregate: Aggregate;
 
-    fn apply(&self, agrgegate: &Self::Aggregate) -> Self::Aggregate;
+    fn apply(&self, agrgegate: Self::Aggregate) -> Self::Aggregate;
     #[inline]
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
 }
 
-pub trait Command {
+pub trait Command<'a> {
     type Aggregate: Aggregate;
     type Event: Event;
-    type DbConn;
+    type Context;
     type Error;
     type NonStoredData;
 
-    fn build_event(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error>;
-    fn validate(&self, conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(), Self::Error>;
+    fn validate(&self, conn: &'a Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error>;
+    fn build_event(&self, conn: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error>;
 }
 
 
-pub fn execute<A, CON, CMD, Ev, Err, D>(conn: &CON, aggregate: &A, cmd: &CMD)
+pub fn execute<'a, A, CON, CMD, Ev, Err, D>(ctx: &'a CON, aggregate: A, cmd: &CMD)
     -> Result<(A, Ev, D), Err>
     where A: Aggregate,
-    CMD: Command<Aggregate = A, Event = Ev, DbConn = CON, Error = Err, NonStoredData = D>,
+    CMD: Command<'a, Aggregate = A, Event = Ev, Context = CON, Error = Err, NonStoredData = D>,
     Ev: Event<Aggregate = A> {
 
-    cmd.validate(conn, aggregate)?;
-    let (event, non_stored_data) = cmd.build_event(conn, aggregate)?;
+    cmd.validate(ctx, &aggregate)?;
+    let (event, non_stored_data) = cmd.build_event(ctx, &aggregate)?;
     let mut aggregate = event.apply(aggregate);
     aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
