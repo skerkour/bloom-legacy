@@ -6,7 +6,10 @@ use crate::{
     services::account::domain::{
         PendingAccount,
         pending_account,
-        session,
+        Session,
+        session::{
+            Start,
+        },
     },
     services::account,
     services::account::domain,
@@ -28,11 +31,11 @@ pub struct CompleteRegistration {
 }
 
 impl Message for CompleteRegistration {
-    type Result = Result<(session::Session, String), KernelError>;
+    type Result = Result<(Session, String), KernelError>;
 }
 
 impl Handler<CompleteRegistration> for DbActor {
-    type Result = Result<(session::Session, String), KernelError>;
+    type Result = Result<(Session, String), KernelError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
@@ -59,14 +62,10 @@ impl Handler<CompleteRegistration> for DbActor {
             request_id: Some(msg.request_id.clone()),
         };
 
-        let mut pending_account_to_update: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
+        let pending_account_to_update: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
             .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
             .filter(account_pending_accounts::dsl::deleted_at.is_null())
             .first(&conn)?;
-
-        println!("pending_account: {:?}", &pending_account_to_update);
-
-        let now = Utc::now();
 
         // complete registration
         let complete_registration_cmd = pending_account::CompleteRegistration{
@@ -74,7 +73,6 @@ impl Handler<CompleteRegistration> for DbActor {
             code: msg.code.clone(),
             metadata: metadata.clone(),
         };
-
         let (pending_account_to_update, event, _) = eventsourcing::execute(&conn, pending_account_to_update, &complete_registration_cmd)?;
 
         diesel::update(account_pending_accounts::dsl::account_pending_accounts
@@ -103,7 +101,6 @@ impl Handler<CompleteRegistration> for DbActor {
             avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
             metdata: metadata.clone(),
         };
-
         let (new_account, event, _) = eventsourcing::execute(&conn, new_account, &create_cmd)?;
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
@@ -114,7 +111,7 @@ impl Handler<CompleteRegistration> for DbActor {
             .execute(&conn)?;
 
         // start Session
-        let start_cmd = domain::session::Start{
+        let start_cmd = Start{
             account_id: new_account.id,
             ip: "127.0.0.1".to_string(), // TODO
             user_agent: "".to_string(), // TODO
@@ -123,9 +120,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 ..metadata.clone()
             },
         };
-        let new_session = session::Session::new();
-
-        let (new_session, event, non_stored) = eventsourcing::execute(&conn, new_session, &start_cmd)?;
+        let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
         diesel::insert_into(account_sessions::dsl::account_sessions)
             .values(&new_session)

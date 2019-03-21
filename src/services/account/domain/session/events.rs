@@ -20,6 +20,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     StartedV1(StartedV1),
+    EndedV1,
 }
 
 
@@ -50,6 +51,11 @@ impl eventsourcing::Event for Event {
                 location: data.location.clone(),
                 token: data.token.clone(),
                 account_id: data.account_id,
+            },
+            // EndedV1
+            EventData::EndedV1 => super::Session{
+                deleted_at: Some(self.timestamp),
+                ..aggregate
             },
         }
     }

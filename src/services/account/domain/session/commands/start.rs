@@ -35,14 +35,16 @@ impl<'a> eventsourcing::Command<'a> for Start {
     type Error = KernelError;
     type NonStoredData = StartNonStored;
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        // TODO
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        if aggregate.version != 0 {
+            return Err(KernelError::Validation("Session is already started.".to_string()));
+        }
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(account::SESSION_TOKEN_MIN_LENGTH, account::SESSION_TOKEN_MIN_LENGTH);
+        let token_length = rng.gen_range(account::SESSION_TOKEN_MIN_LENGTH, account::SESSION_TOKEN_MAX_LENGTH);
         let token = utils::random_hex_string(token_length as usize);
         let hashed_token = bcrypt::hash(&token, account::SESSION_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
@@ -54,7 +56,7 @@ impl<'a> eventsourcing::Command<'a> for Start {
             account_id: self.account_id,
             token: hashed_token,
             ip: self.ip.clone(),
-            device: session::Device{},
+            device: session::Device{}, // TODO
             location: session::Location{},
         });
 

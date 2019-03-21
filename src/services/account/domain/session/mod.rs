@@ -8,7 +8,10 @@ pub use aggregate::{
     Device,
     Location,
 };
-pub use commands::Start;
+pub use commands::{
+    Start,
+    End,
+};
 pub use events::{
     Event,
     EventData,
