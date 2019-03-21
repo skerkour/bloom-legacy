@@ -1,12 +1,11 @@
 use crate::{
-    services::{
-        account::{
-            domain::{PendingAccount, pending_account::EventData},
-            controllers,
-        },
-    },
+    services::account::validators,
+    error::KernelError,
+    services::account::domain::pending_account,
+    services::account,
+    services::common::events::EventMetadata,
+    services::common::utils,
 };
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 use chrono::Utc;
 use diesel::{
@@ -19,11 +18,17 @@ use diesel::{
 pub struct CompleteRegistration {
     pub id: String,
     pub code: String,
+    pub metadata: EventMetadata,
 }
 
+impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
+    type Error = KernelError;
+    type NonStoredData = ();
 
-impl CompleteRegistration {
-    pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>, aggregate: &PendingAccount) -> Result<(), KernelError> {
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         let now = Utc::now();
 
         if aggregate.trials + 1 >= 10 {
@@ -43,5 +48,15 @@ impl CompleteRegistration {
         }
 
         return Ok(());
+    }
+
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        return  Ok((pending_account::Event{
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
+            data: pending_account::EventData::RegistrationCompletedV1,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        }, ()));
     }
 }

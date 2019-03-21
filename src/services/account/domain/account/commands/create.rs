@@ -4,6 +4,10 @@ use crate::{
     services::account::validators,
     error::KernelError,
 };
+use diesel::{
+    PgConnection,
+    r2d2::{PooledConnection, ConnectionManager},
+};
 
 
 #[derive(Clone, Debug)]
@@ -17,14 +21,14 @@ pub struct Create {
     pub metdata: EventMetadata,
 }
 
-impl eventsourcing::Command for Create {
+impl<'a> eventsourcing::Command<'a> for Create {
     type Aggregate = account::Account;
     type Event = account::Event;
-    type DbConn = diesel::r2d2::PooledConnection<diesel::r2d2::ConnectionManager<diesel::PgConnection>>;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
@@ -35,7 +39,7 @@ impl eventsourcing::Command for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
         let id = uuid::Uuid::new_v4();
         let mut metadata = self.metdata.clone();

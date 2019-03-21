@@ -1,14 +1,14 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::account_accounts_events,
+    db::schema::account_sessions_events,
     services::common::events::EventMetadata,
 };
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "account_accounts_events"]
+#[table_name = "account_sessions_events"]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -19,47 +19,37 @@ pub struct Event {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
-    CreatedV1(CreatedV1),
+    StartedV1(StartedV1),
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum NonPersistedData {
-}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CreatedV1 {
+pub struct StartedV1 {
     pub id: uuid::Uuid,
-    pub first_name: String,
-    pub last_name: String,
-    pub email: String,
-    pub password: String,
-    pub avatar_url: String,
-    pub username: String,
-    pub is_admin: bool,
+    pub account_id: uuid::Uuid,
+    pub token: String,
+    pub ip: String,
+    pub location: super::Location,
+    pub device: super::Device,
 }
-
 
 impl eventsourcing::Event for Event {
-    type Aggregate = super::Account;
+    type Aggregate = super::Session;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
-            // CreatedV1
-            EventData::CreatedV1(ref data) => super::Account {
+            // StartedV1
+            EventData::StartedV1(ref data) => super::Session{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
                 deleted_at: None,
                 version: 0,
-                avatar_url: data.avatar_url.clone(),
-                email: data.email.clone(),
-                first_name: data.first_name.clone(),
-                is_admin: data.is_admin,
-                last_name: data.last_name.clone(),
-                password: data.password.clone(),
-                recovery_id: None,
-                recovery_token: None,
-                username: data.username.clone(),
+                device: data.device.clone(),
+                ip: data.ip.clone(),
+                location: data.location.clone(),
+                token: data.token.clone(),
+                account_id: data.account_id,
             },
         }
     }
@@ -68,5 +58,3 @@ impl eventsourcing::Event for Event {
         return self.timestamp;
     }
 }
-
-

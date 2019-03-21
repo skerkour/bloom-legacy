@@ -32,8 +32,8 @@ impl Handler<Register> for DbActor {
 
     fn handle(&mut self, msg: Register, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_pending_accounts::dsl::*,
-            account_pending_accounts_events::dsl::*,
+            account_pending_accounts,
+            account_pending_accounts_events,
         };
         use diesel::RunQueryDsl;
 
@@ -42,7 +42,7 @@ impl Handler<Register> for DbActor {
         let config = msg.config.clone();
 
 
-        let metdata = EventMetadata{
+        let metadata = EventMetadata{
             actor_id: None,
             request_id: Some(msg.request_id.clone()),
         };
@@ -52,16 +52,16 @@ impl Handler<Register> for DbActor {
             last_name: msg.last_name.clone(),
             email: msg.email.clone(),
             password: msg.password.clone(),
-            metdata,
+            metadata,
         };
 
 
-        let (new_pending_account, event, non_persisted) = eventsourcing::execute(&conn, &new_pending_account, &create_cmd)?;
+        let (new_pending_account, event, non_persisted) = eventsourcing::execute(&conn, new_pending_account, &create_cmd)?;
 
-        diesel::insert_into(account_pending_accounts)
+        diesel::insert_into(account_pending_accounts::dsl::account_pending_accounts)
             .values(&new_pending_account)
             .execute(&conn)?;
-        diesel::insert_into(account_pending_accounts_events)
+        diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
             .values(&event)
             .execute(&conn)?;
 

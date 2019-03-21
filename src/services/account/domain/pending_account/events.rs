@@ -22,7 +22,7 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     CodeResentV1,
-    VerificationFailedV1,
+    VerificationFailedV1(String),
     VerificationSucceededV1,
     RegistrationCompletedV1,
 }
@@ -45,10 +45,10 @@ pub struct CodeResentV1 {
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingAccount;
 
-    fn apply(&self, aggregate: &Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::PendingAccount {
+            EventData::CreatedV1(ref data) => super::PendingAccount{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -61,7 +61,15 @@ impl eventsourcing::Event for Event {
                 token: data.token.clone(),
                 trials: 0,
             },
-            _ => aggregate.clone(),
+            EventData::VerificationFailedV1(_) => super::PendingAccount{
+                trials: aggregate.trials + 1,
+                ..aggregate
+            },
+            EventData::RegistrationCompletedV1 => super::PendingAccount{
+                deleted_at: Some(self.timestamp),
+                ..aggregate
+            },
+            _ => aggregate,
         }
     }
 

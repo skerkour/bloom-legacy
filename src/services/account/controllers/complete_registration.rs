@@ -6,9 +6,9 @@ use crate::{
     services::account::domain::{
         PendingAccount,
         pending_account,
-        account,
         session,
     },
+    services::account,
     services::account::domain,
     services::common::utils,
     services::common::events::EventMetadata,
@@ -54,6 +54,11 @@ impl Handler<CompleteRegistration> for DbActor {
         let pending_account_id = uuid::Uuid::parse_str(&msg.id)
             .map_err(|_| KernelError::Validation("id is not a valid uuid".to_string()))?;
 
+        let metadata = EventMetadata{
+            actor_id: None,
+            request_id: Some(msg.request_id.clone()),
+        };
+
         let mut pending_account_to_update: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
             .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
             .filter(account_pending_accounts::dsl::deleted_at.is_null())
@@ -62,16 +67,15 @@ impl Handler<CompleteRegistration> for DbActor {
         println!("pending_account: {:?}", &pending_account_to_update);
 
         let now = Utc::now();
+
+        // complete registration
         let complete_registration_cmd = pending_account::CompleteRegistration{
             id: msg.id.clone(),
             code: msg.code.clone(),
+            metadata: metadata.clone(),
         };
 
-        // validate
-        complete_registration_cmd.validate(&conn, &pending_account_to_update)?;
-
-        pending_account_to_update.version += 1;
-        pending_account_to_update.updated_at = now;
+        let (pending_account_to_update, event, _) = eventsourcing::execute(&conn, pending_account_to_update, &complete_registration_cmd)?;
 
         diesel::update(account_pending_accounts::dsl::account_pending_accounts
             .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
@@ -79,29 +83,14 @@ impl Handler<CompleteRegistration> for DbActor {
             .set((
                 account_pending_accounts::dsl::version.eq(pending_account_to_update.version),
                 account_pending_accounts::dsl::updated_at.eq(pending_account_to_update.updated_at),
-                account_pending_accounts::dsl::deleted_at.eq(Some(now)),
+                account_pending_accounts::dsl::deleted_at.eq(pending_account_to_update.deleted_at),
             ))
             .execute(&conn)?;
 
-        let event = pending_account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data: pending_account::EventData::RegistrationCompletedV1,
-            aggregate_id: pending_account_to_update.id,
-            metadata: EventMetadata{
-                actor_id: None,
-                request_id: Some(msg.request_id.clone()),
-            },
-        };
         diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
             .values(&event)
             .execute(&conn)?;
 
-
-        let metdata = EventMetadata{
-            actor_id: None,
-            request_id: Some(msg.request_id.clone()),
-        };
 
         // create account
         let new_account = domain::Account::new();
@@ -112,10 +101,10 @@ impl Handler<CompleteRegistration> for DbActor {
             password: pending_account_to_update.password.clone(),
             username: msg.username.clone(),
             avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
-            metdata,
+            metdata: metadata.clone(),
         };
 
-        let (new_account, event, _) = eventsourcing::execute(&conn, &new_account, &create_cmd)?;
+        let (new_account, event, _) = eventsourcing::execute(&conn, new_account, &create_cmd)?;
 
         diesel::insert_into(account_accounts::dsl::account_accounts)
             .values(&new_account)
@@ -125,44 +114,18 @@ impl Handler<CompleteRegistration> for DbActor {
             .execute(&conn)?;
 
         // start Session
-        // build_event
-        let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(session::TOKEN_MIN_LENGTH, session::TOKEN_MAX_LENGTH);
-        let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, session::TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
-        let started = domain::session::StartedV1{
-            id: uuid::Uuid::new_v4(),
-            account_id: new_account.id.clone(),
-            token: hashed_token,
+        let start_cmd = domain::session::Start{
+            account_id: new_account.id,
             ip: "127.0.0.1".to_string(), // TODO
-            device: domain::session::Device{},
-            location: domain::session::Location{},
-        };
-
-        // apply event to aggregate
-        let mut new_session = domain::Session::new();
-        new_session.id = started.id;
-        new_session.created_at = now;
-        new_session.updated_at = now;
-        new_session.version += 1;
-        new_session.ip = started.ip.clone();
-        new_session.token = started.token.clone();
-        new_session.device = started.device.clone();
-        new_session.location = started.location.clone();
-        new_session.account_id = started.account_id;
-
-
-        let event = session::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data: session::EventData::StartedV1(started),
-            aggregate_id: new_account.id.clone(),
+            user_agent: "".to_string(), // TODO
             metadata: EventMetadata{
-                actor_id: None,
-                request_id: Some(msg.request_id.clone()),
+                actor_id: Some(new_account.id),
+                ..metadata.clone()
             },
         };
+        let new_session = session::Session::new();
+
+        let (new_session, event, non_stored) = eventsourcing::execute(&conn, new_session, &start_cmd)?;
 
         diesel::insert_into(account_sessions::dsl::account_sessions)
             .values(&new_session)
@@ -171,6 +134,6 @@ impl Handler<CompleteRegistration> for DbActor {
             .values(&event)
             .execute(&conn)?;
 
-        return Ok((new_session, token));
+        return Ok((new_session, non_stored.token_cleartext));
     }
 }

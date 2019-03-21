@@ -18,7 +18,7 @@ pub struct Create {
     pub last_name: String,
     pub email: String,
     pub password: String,
-    pub metdata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 #[derive(Clone, Debug)]
@@ -27,14 +27,14 @@ pub struct CreateNonStored {
 }
 
 
-impl eventsourcing::Command for Create {
+impl<'a> eventsourcing::Command<'a> for Create {
     type Aggregate = pending_account::PendingAccount;
     type Event = pending_account::Event;
-    type DbConn = PooledConnection<ConnectionManager<PgConnection>>;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = CreateNonStored;
 
-    fn validate(&self, _conn: &Self::DbConn, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
@@ -47,10 +47,9 @@ impl eventsourcing::Command for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _conn: &Self::DbConn, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
-        let id = uuid::Uuid::new_v4();
-        let mut metadata = self.metdata.clone();
+        let new_pending_account_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
         let hashed_password = bcrypt::hash(&self.password, account::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
@@ -58,7 +57,7 @@ impl eventsourcing::Command for Create {
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = pending_account::EventData::CreatedV1(pending_account::CreatedV1{
-            id,
+            id: new_pending_account_id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
             email: self.email.clone(),
@@ -74,8 +73,8 @@ impl eventsourcing::Command for Create {
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,
-            aggregate_id: aggregate.id,
-            metadata,
+            aggregate_id: new_pending_account_id,
+            metadata: self.metadata.clone(),
         }, non_stored));
     }
 }

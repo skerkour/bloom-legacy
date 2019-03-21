@@ -38,29 +38,26 @@ impl Handler<Verify> for DbActor {
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
-        let now = Utc::now();
-        let cmd = pending_account::Verify{
+
+        let metdata = EventMetadata{
+            actor_id: None,
+            request_id: Some(msg.request_id.clone()),
+        };
+        let verify_cmd = pending_account::Verify{
             id: msg.id.clone(),
             code: msg.code.clone(),
+            metdata,
         };
 
-        let pending_account_id = uuid::Uuid::parse_str(&cmd.id)
+        let pending_account_id = uuid::Uuid::parse_str(&verify_cmd.id)
             .map_err(|_| KernelError::Validation("id is not a valid uuid".to_string()))?;
 
-        let mut pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
+        let pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
             .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
             .filter(account_pending_accounts::dsl::deleted_at.is_null())
             .first(&conn)?;
 
-        // validate
-        let event_data = match cmd.validate(&conn, &pending_account) {
-            Ok(_) => EventData::VerificationSucceededV1,
-            Err(_) => EventData::VerificationFailedV1,
-        };
-
-        pending_account.trials += 1;
-        pending_account.version += 1;
-        pending_account.updated_at = now;
+        let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_cmd)?;
 
         // update pending_account
         diesel::update(account_pending_accounts::dsl::account_pending_accounts)
@@ -71,23 +68,14 @@ impl Handler<Verify> for DbActor {
             ))
             .execute(&conn)?;
 
-        let event = pending_account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data: event_data,
-            aggregate_id: pending_account.id,
-            metadata: EventMetadata{
-                actor_id: None,
-                request_id: Some(msg.request_id),
-            },
-        };
+
         diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
             .values(&event)
             .execute(&conn)?;
 
-        // TODO: return error
-        // if event_data == EventData::VerificationFailedV1 {
-        // }
-        return Ok(());
+        return match event.data {
+            EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err)),
+            _ => Ok(()),
+        };
     }
 }

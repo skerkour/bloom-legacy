@@ -1,12 +1,6 @@
-use actix::{Message, Handler};
 use crate::{
-    db::DbActor,
-    services::{
-        account::{
-            domain::{PendingAccount, pending_account::EventData},
-            controllers,
-        },
-    },
+    services::common::events::EventMetadata,
+    services::account::domain::pending_account,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -21,29 +15,45 @@ use diesel::{
 pub struct Verify {
     pub id: String,
     pub code: String,
+    pub metdata: EventMetadata,
 }
 
 
-impl Verify {
-    pub fn validate(&self, _conn: &PooledConnection<ConnectionManager<PgConnection>>, aggregate: &PendingAccount) -> Result<(), KernelError> {
-        let now = Utc::now();
+impl<'a> eventsourcing::Command<'a> for Verify {
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
+    type Error = KernelError;
+    type NonStoredData = ();
 
-        if aggregate.trials + 1 >= 10 {
-            return Err(KernelError::Validation("Maximum number of trials reached. Please create another account.".to_string()));
-        }
-
-        // verify given code
-        let is_valid = bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)?;
-        if !is_valid {
-            return Err(KernelError::Validation("Code is not valid.".to_string()));
-        }
-
-        // verify code expiration
-        let duration = aggregate.created_at.signed_duration_since(now);
-        if duration.num_minutes() > 30 {
-            return Err(KernelError::Validation("Code has expired. Please create another account.".to_string()));
-        }
-
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());
     }
+
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let metadata = self.metdata.clone();
+        let now = Utc::now();
+        let duration = aggregate.created_at.signed_duration_since(now);
+
+        let data = if aggregate.trials + 1 >= 10 {
+            pending_account::EventData::VerificationFailedV1("Maximum number of trials reached. Please create another account.".to_string())
+        } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
+            // verify given code
+            pending_account::EventData::VerificationFailedV1("Code is not valid.".to_string())
+        } else if duration.num_minutes() > 30 {
+            // verify code expiration
+            pending_account::EventData::VerificationFailedV1("Code has expired. Please create another account.".to_string())
+        } else {
+            pending_account::EventData::VerificationSucceededV1
+        };
+
+        return  Ok((pending_account::Event{
+            id: uuid::Uuid::new_v4(),
+            timestamp: now,
+            data,
+            aggregate_id: aggregate.id,
+            metadata,
+        }, ()));
+    }
 }
+
