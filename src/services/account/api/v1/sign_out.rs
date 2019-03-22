@@ -15,6 +15,7 @@ use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
+use rand::Rng;
 
 
 pub fn sign_out_post(req: &HttpRequest<api::State>)
@@ -25,7 +26,7 @@ pub fn sign_out_post(req: &HttpRequest<api::State>)
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("auth required".to_string())).error_response()))
+        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
             .responder();
     }
 

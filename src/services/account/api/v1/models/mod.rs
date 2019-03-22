@@ -52,3 +52,15 @@ pub struct CompleteRegistrationResponse {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignOutResponse {}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct SignInBody {
+    pub username: String,
+    pub password: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct SignInResponse {
+    pub id: String,
+    pub token: String,
+}
