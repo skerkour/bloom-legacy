@@ -21,6 +21,16 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
     .middleware(middlewares::request_id::RequestIDHeader)
     .middleware(middlewares::logger::Logger)
     .middleware(middlewares::DefaultHeaders)
+    .middleware(
+        // cors 2 times because otherwise authmiddleware doesn't works...
+        Cors::build()
+        .send_wildcard()
+        .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+        .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+        .max_age(3600)
+        .finish()
+    )
+    .middleware(middlewares::Auth)
     .default_resource(|r| r.f(api::route_404))
     .configure(|app| {
         Cors::for_app(app)
