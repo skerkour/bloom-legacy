@@ -11,7 +11,7 @@ pub struct RegisterBody {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegisterResponse {
-    pub id: String,
+    pub id: uuid::Uuid,
 }
 
 
@@ -36,7 +36,7 @@ pub struct CompleteRegistrationBody {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistrationResponse {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub token: String,
 }
 
@@ -52,6 +52,17 @@ pub struct SignInBody {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignInResponse {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub token: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct MeResponse {
+  pub id: uuid::Uuid,
+  pub created_at: chrono::DateTime<chrono::Utc>,
+  pub first_name: String,
+  pub last_name: String,
+  pub username: String,
+  pub email: String,
+  pub avatar_url: String,
 }

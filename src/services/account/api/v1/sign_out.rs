@@ -17,8 +17,7 @@ use actix_web::{
 use futures::future;
 
 
-pub fn sign_out_post(req: &HttpRequest<api::State>)
--> FutureResponse<HttpResponse> {
+pub fn sign_out_post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();

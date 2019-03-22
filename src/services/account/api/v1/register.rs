@@ -41,7 +41,7 @@ pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequ
     )
     .and_then(move |pending_account| {
         let res = models::RegisterResponse{
-            id: pending_account.id.to_string(),
+            id: pending_account.id,
         };
         let res = api::Response::data(res);
         Ok(HttpResponse::Created().json(&res))

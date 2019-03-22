@@ -46,6 +46,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/account/v1/welcome/complete", |r| r.method(http::Method::POST).with_config(services::account::api::v1::complete_registration_post, api::json_default_config))
             .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(services::account::api::v1::sign_in_post, api::json_default_config))
             .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(services::account::api::v1::sign_out_post))
+            .resource("/account/v1/me", |r| r.method(http::Method::GET).f(services::account::api::v1::me_get))
             .register()
     })
 }

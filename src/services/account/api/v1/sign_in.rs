@@ -46,10 +46,9 @@ pub fn sign_in_post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<
         }).flatten()
     )
     .and_then(move |(session, token)| {
-        let session_id = session.id.to_string();
         let res = api::Response::data(models::SignInResponse{
-            token: utils::encode_session(&session_id, &token),
-            id: session_id,
+            token: utils::encode_session(&session.id.to_string(), &token),
+            id: session.id,
         });
         Ok(HttpResponse::Ok().json(&res))
     })
