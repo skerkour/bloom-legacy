@@ -16,7 +16,7 @@ impl Message for ResendCode {
 impl Handler<ResendCode> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: ResendCode, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, _msg: ResendCode, _: &mut Self::Context) -> Self::Result {
         Ok(())
     }
 }

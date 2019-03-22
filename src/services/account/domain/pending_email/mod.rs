@@ -1,14 +1,5 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
-use diesel_as_jsonb::AsJsonb;
-use actix::{Message, Handler};
-use failure::Error;
-use crate::{
-    api,
-    db::DbActor,
-    db::schema::account_pending_accounts,
-};
-use crate::error::KernelError;
 
 
 #[derive(Clone, Debug, Deserialize, Queryable, Serialize)]

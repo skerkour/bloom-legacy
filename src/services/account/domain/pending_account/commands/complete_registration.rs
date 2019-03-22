@@ -1,10 +1,7 @@
 use crate::{
-    services::account::validators,
     error::KernelError,
     services::account::domain::pending_account,
-    services::account,
     services::common::events::EventMetadata,
-    services::common::utils,
 };
 use serde::{Serialize, Deserialize};
 use chrono::Utc;

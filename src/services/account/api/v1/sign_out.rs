@@ -15,7 +15,6 @@ use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
-use rand::Rng;
 
 
 pub fn sign_out_post(req: &HttpRequest<api::State>)

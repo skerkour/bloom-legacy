@@ -2,6 +2,7 @@ mod commands;
 mod events;
 mod aggregate;
 
+
 pub use aggregate::PendingAccount;
 pub use commands::{
     CompleteRegistration,

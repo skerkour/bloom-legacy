@@ -3,7 +3,6 @@ use crate::{
     db::DbActor,
     services::account::domain::{
         Account,
-        account,
         session,
         Session,
     },
@@ -11,7 +10,7 @@ use crate::{
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
-use chrono::{Utc};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignOut {
@@ -24,7 +23,6 @@ impl Message for SignOut {
     type Result = Result<(), KernelError>;
 }
 
-// TODO: transaction
 impl Handler<SignOut> for DbActor {
     type Result = Result<(), KernelError>;
 

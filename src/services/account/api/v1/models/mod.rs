@@ -1,8 +1,5 @@
 use serde::{Serialize, Deserialize};
-use crate::services::account::domain::{
-    PendingAccount,
-    Session,
-};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegisterBody {
@@ -17,13 +14,6 @@ pub struct RegisterResponse {
     pub id: String,
 }
 
-impl From<PendingAccount> for RegisterResponse {
-    fn from(pending_account: PendingAccount) -> Self {
-        return RegisterResponse{
-            id: pending_account.id.to_string(),
-        };
-    }
-}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyBody {
@@ -49,6 +39,7 @@ pub struct CompleteRegistrationResponse {
     pub id: String,
     pub token: String,
 }
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignOutResponse {}

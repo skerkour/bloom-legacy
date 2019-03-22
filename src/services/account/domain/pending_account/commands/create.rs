@@ -64,7 +64,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
         let new_pending_account_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);

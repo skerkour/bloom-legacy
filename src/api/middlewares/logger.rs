@@ -6,7 +6,6 @@ use actix_web::{
 use chrono::{Utc, DateTime};
 use crate::api::middlewares::{
     GetRequestId,
-    RequestId,
 };
 use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;

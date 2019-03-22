@@ -15,7 +15,6 @@ use actix_web::{
 };
 use futures::future::IntoFuture;
 use rand::Rng;
-use failure::Fail;
 
 
 pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequest<api::State>))
@@ -41,7 +40,9 @@ pub fn register_post((register_data, req): (Json<models::RegisterBody>, HttpRequ
         }).flatten()
     )
     .and_then(move |pending_account| {
-        let res = models::RegisterResponse::from(pending_account);
+        let res = models::RegisterResponse{
+            id: pending_account.id.to_string(),
+        };
         let res = api::Response::data(res);
         Ok(HttpResponse::Created().json(&res))
     })
