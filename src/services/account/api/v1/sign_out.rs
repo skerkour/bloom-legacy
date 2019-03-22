@@ -41,7 +41,7 @@ pub fn sign_out_post((_, req): (Json<models::SignOutBody>, HttpRequest<api::Stat
     .and_then(move |_| {
         let res = models::SignOutResponse{};
         let res = api::Response::data(res);
-        Ok(HttpResponse::Created().json(&res))
+        Ok(HttpResponse::Ok().json(&res))
     })
     .from_err() // MailboxError to KernelError
     .map_err(move |err: KernelError| {

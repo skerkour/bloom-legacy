@@ -44,7 +44,6 @@ impl Middleware<api::State> for AuthMiddleware {
         }
 
         let req = req.clone(); // TODO: improve...
-        println!("auth header: {:?}", auth_header);
 
         let auth_header = match auth_header.unwrap().to_str() {
             Ok(x) => x,
