@@ -1,23 +1,16 @@
 use actix_web::{
-    HttpRequest, HttpResponse, Result, Error,
+    HttpRequest, Result, Error,
     middleware::{Middleware, Started},
     http::header,
-    error::ResponseError,
-    FutureResponse, AsyncResponder,
 };
-use futures::{Future, future};
+use futures::{Future};
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     services::account::domain,
     api,
-    services::account::domain::pending_account,
-    services::account::notifications::emails::send_account_verification_code,
-    services::common::events::EventMetadata,
-    config::Config,
     error::KernelError,
 };
-use base64::{encode, decode};
 
 
 #[derive(Debug, Clone)]
@@ -43,22 +36,15 @@ impl Middleware<api::State> for AuthMiddleware {
             return Ok(Started::Done);
         }
 
-        let req = req.clone(); // TODO: improve...
+        // TODO: improve...
+        // the problem is: req.extensions_mut().insert(auth);
+        // we can either clone req or use a sync middleware
+        let req = req.clone();
 
-        let auth_header = match auth_header.unwrap().to_str() {
-            Ok(x) => x,
-            Err(_) => return Ok(Started::Response(
-                api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
-            )),
-        };
-        let msg = match extract_authorization_header(auth_header) {
-            Ok(x) => x,
-            Err(_) => return Ok(Started::Response(
-                api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
-            )),
-        };
-
-        //TODO: split header
+        let auth_header = auth_header.unwrap().to_str()
+            .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
+        let msg = extract_authorization_header(auth_header)
+            .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
 
         let fut = state.db.send(msg)
             .from_err()
@@ -86,6 +72,7 @@ fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     let decoded = String::from_utf8(decoded)
         .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
     let parts: Vec<String> = decoded.split(":").map(String::from).collect();
+
     if parts.len() != 2 {
         return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
     }
@@ -132,7 +119,7 @@ impl Handler<CheckAuth> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        // ind session + account
+        // find session + account
         let (session, account): (domain::Session, domain::Account) = account_sessions::dsl::account_sessions
                 .filter(account_sessions::dsl::id.eq(msg.session_id))
                 .filter(account_sessions::dsl::deleted_at.is_null())
