@@ -10,24 +10,19 @@ use crate::{
     },
     error::KernelError,
 };
-use std::time::Duration;
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, Json, HttpRequest, ResponseError,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
-use rand::Rng;
-use failure::Fail;
 
 
-pub fn sign_out_post((_, req): (Json<models::SignOutBody>, HttpRequest<api::State>))
+pub fn sign_out_post(req: &HttpRequest<api::State>)
 -> FutureResponse<HttpResponse> {
-    let mut rng = rand::thread_rng();
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
-    let config = state.config.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(api::Error::from(KernelError::Unauthorized("auth required".to_string())).error_response()))

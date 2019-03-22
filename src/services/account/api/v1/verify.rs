@@ -18,7 +18,6 @@ use rand::Rng;
 
 
 
-// pub fn verify_post(verify_data: Json<models::VerifyBody>, state: State<api::State>) -> FutureResponse<HttpResponse> {
 pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();

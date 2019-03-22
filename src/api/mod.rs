@@ -60,7 +60,6 @@ pub fn route_404(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
     return Err(Error::RouteNotFound.into());
 }
 
-
 pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {
     (cfg.0).0.error_handler(|err, _req| {  // <- create custom error response
         Error::BadRequest{error: err.to_string()}.into()
