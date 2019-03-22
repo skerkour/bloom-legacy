@@ -46,8 +46,6 @@ impl Handler<SignIn> for DbActor {
                 .first(&conn)
                 .map_err(|_| KernelError::Unauthorized("Invalid username/password combination".to_string()))?;
 
-            println!("yeaaaaaahahahahahahaha");
-            println!("{}", &user.password);
             // verify password
             if !bcrypt::verify(&msg.password, &user.password)
                 .map_err(|_| KernelError::Bcrypt)? {

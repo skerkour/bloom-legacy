@@ -53,6 +53,7 @@ impl std::convert::From<KernelError> for Error {
     fn from(e: KernelError) -> Self {
         match e {
             KernelError::Validation(m) => Error::BadRequest{error: m},
+            KernelError::Unauthorized(m) => Error::Unauthorized(m),
             _ => Error::Internal,
         }
     }
