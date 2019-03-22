@@ -17,6 +17,10 @@ pub fn random_hex_string(n: usize) -> String {
     return hex::encode(bytes);
 }
 
+pub fn encode_session(session_id: &str, token: &str) -> String {
+    return base64::encode(format!("{}:{}", session_id, token).as_str());
+}
+
 
 // func RandomHex(n uint) (string, error) {
 // 	b, err := RandomBytes(n)

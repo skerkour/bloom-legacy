@@ -5,6 +5,7 @@ use crate::{
     api::middlewares::logger::GetRequestLogger,
     services::account::controllers,
     api::middlewares::request_id::GetRequestID,
+    services::common::utils,
 };
 use std::time::Duration;
 use futures::future::Future;
@@ -37,9 +38,10 @@ pub fn complete_registration_post((registration_data, req): (Json<models::Comple
         }).flatten()
     )
     .and_then(move |(session, token)| {
+        let session_id = session.id.to_string();
         let res = api::Response::data(models::CompleteRegistrationResponse{
-            id: session.id.to_string(),
-            token,
+            token: utils::encode_session(&session_id, &token),
+            id: session_id,
         });
         Ok(HttpResponse::Created().json(&res))
     })

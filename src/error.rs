@@ -14,6 +14,8 @@ pub enum KernelError {
     Bcrypt,
     #[fail(display = "validation error: {}", 0)]
     Validation(String),
+    #[fail(display = "Unauthorized: {}", 0)]
+    Unauthorized(String),
 }
 
 

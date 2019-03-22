@@ -22,8 +22,8 @@ use base64::{encode, decode};
 
 #[derive(Debug, Clone)]
 pub struct Auth {
-    account: Option<domain::Account>,
-    session: Option<domain::Session>,
+    pub account: Option<domain::Account>,
+    pub session: Option<domain::Session>,
 }
 
 /// AuthMiddleware
@@ -36,6 +36,10 @@ impl Middleware<api::State> for AuthMiddleware {
 
         let auth_header = req.headers().get(header::AUTHORIZATION);
         if auth_header.is_none() {
+            req.extensions_mut().insert(Auth{
+                account: None,
+                session: None,
+            });
             return Ok(Started::Done);
         }
 
@@ -48,7 +52,7 @@ impl Middleware<api::State> for AuthMiddleware {
                 api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
             )),
         };
-        let msg = match extractAuthorizationHeader(auth_header) {
+        let msg = match extract_authorization_header(auth_header) {
             Ok(x) => x,
             Err(_) => return Ok(Started::Response(
                 api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
@@ -72,7 +76,7 @@ impl Middleware<api::State> for AuthMiddleware {
     }
 }
 
-fn extractAuthorizationHeader(value: &str) -> Result<CheckAuth, KernelError> {
+fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     let parts: Vec<&str> = value.split("Basic ").collect();
     if parts.len() != 2 {
         return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
@@ -93,6 +97,16 @@ fn extractAuthorizationHeader(value: &str) -> Result<CheckAuth, KernelError> {
         session_id,
         token: parts[1].clone(),
     });
+}
+
+pub trait GetRequestAuth {
+    fn request_auth(&self) -> Auth;
+}
+
+impl<S> GetRequestAuth for HttpRequest<S> {
+    fn request_auth(&self) -> Auth {
+        return self.extensions().get::<Auth>().expect("retrieving request auth").clone();
+    }
 }
 
 
