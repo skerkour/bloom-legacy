@@ -30,7 +30,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
         .max_age(3600)
         .finish()
     )
-    .middleware(middlewares::Auth)
+    .middleware(middlewares::auth::AuthMiddleware)
     .default_resource(|r| r.f(api::route_404))
     .configure(|app| {
         Cors::for_app(app)

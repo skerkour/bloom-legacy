@@ -17,13 +17,20 @@ use crate::{
     config::Config,
     error::KernelError,
 };
+use base64::{encode, decode};
 
 
-/// Auth
+#[derive(Debug, Clone)]
+pub struct Auth {
+    account: Option<domain::Account>,
+    session: Option<domain::Session>,
+}
+
+/// AuthMiddleware
 #[derive(Debug, Clone, PartialEq)]
-pub struct Auth;
+pub struct AuthMiddleware;
 
-impl Middleware<api::State> for Auth {
+impl Middleware<api::State> for AuthMiddleware {
     fn start(&self, req: &HttpRequest<api::State>) -> Result<Started, Error> {
         let state = req.state().clone();
 
@@ -32,18 +39,32 @@ impl Middleware<api::State> for Auth {
             return Ok(Started::Done);
         }
 
+        let req = req.clone(); // TODO: improve...
         println!("auth header: {:?}", auth_header);
+
+        let auth_header = match auth_header.unwrap().to_str() {
+            Ok(x) => x,
+            Err(_) => return Ok(Started::Response(
+                api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
+            )),
+        };
+        let msg = match extractAuthorizationHeader(auth_header) {
+            Ok(x) => x,
+            Err(_) => return Ok(Started::Response(
+                api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())).error_response()
+            )),
+        };
+
         //TODO: split header
 
-        let fut = state.db
-            .send(CheckSession{
-                session_id: "aa".to_string(),
-                token: "bb".to_string(),
-            })
+        let fut = state.db.send(msg)
             .from_err()
-            .and_then(|res| {
+            .and_then(move |res| {
                 match res {
-                    Ok(_) => Ok(None),
+                    Ok(auth) => {
+                        req.extensions_mut().insert(auth);
+                        return Ok(None);
+                    },
                     Err(e) => Err(api::Error::from(e).into()),
                 }
             });
@@ -51,21 +72,44 @@ impl Middleware<api::State> for Auth {
     }
 }
 
+fn extractAuthorizationHeader(value: &str) -> Result<CheckAuth, KernelError> {
+    let parts: Vec<&str> = value.split("Basic ").collect();
+    if parts.len() != 2 {
+        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+    }
+
+    let decoded = base64::decode(parts[1].trim())
+        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+    let decoded = String::from_utf8(decoded)
+        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+    let parts: Vec<String> = decoded.split(":").map(String::from).collect();
+    if parts.len() != 2 {
+        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+    }
+
+    let session_id = uuid::Uuid::parse_str(&parts[0])
+        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+    return Ok(CheckAuth{
+        session_id,
+        token: parts[1].clone(),
+    });
+}
+
 
 #[derive(Clone, Debug)]
-struct CheckSession {
-    pub session_id: String,
+struct CheckAuth {
+    pub session_id: uuid::Uuid,
     pub token: String,
 }
 
-impl Message for CheckSession {
-    type Result = Result<(domain::Account, domain::Session), KernelError>;
+impl Message for CheckAuth {
+    type Result = Result<Auth, KernelError>;
 }
 
-impl Handler<CheckSession> for DbActor {
-    type Result = Result<(domain::Account, domain::Session), KernelError>;
+impl Handler<CheckAuth> for DbActor {
+    type Result = Result<Auth, KernelError>;
 
-    fn handle(&mut self, msg: CheckSession, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             account_sessions,
             account_sessions_events,
@@ -78,8 +122,20 @@ impl Handler<CheckSession> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         // TODO: find session + account
-        // verify session token
+        let session: domain::Session = account_sessions::dsl::account_sessions
+                .filter(account_sessions::dsl::id.eq(msg.session_id))
+                .filter(account_sessions::dsl::deleted_at.is_null())
+                .first(&conn)?;
 
-        return Err(KernelError::Validation("checking session".to_string()));
+        // verify session token
+        if !bcrypt::verify(&msg.token, &session.token)
+            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))? {
+            return Err(KernelError::Validation("Authorization token is not valid".to_string()));
+        }
+
+        return Ok(Auth{
+            account: None, // TODO
+            session: Some(session),
+        });
     }
 }

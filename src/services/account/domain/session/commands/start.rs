@@ -56,7 +56,7 @@ impl<'a> eventsourcing::Command<'a> for Start {
             account_id: self.account_id,
             token: hashed_token,
             ip: self.ip.clone(),
-            device: session::Device{}, // TODO
+            device: session::Device{},
             location: session::Location{},
         });
 

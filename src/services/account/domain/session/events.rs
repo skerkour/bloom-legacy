@@ -48,7 +48,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
                 device: data.device.clone(),
                 ip: data.ip.clone(),
-                location: data.location.clone(),
+                location: Some(data.location.clone()),
                 token: data.token.clone(),
                 account_id: data.account_id,
             },

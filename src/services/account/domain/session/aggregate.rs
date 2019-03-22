@@ -14,10 +14,10 @@ pub struct Session {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub device: Device,
-    pub ip: String,
-    pub location: Location,
     pub token: String,
+    pub ip: String,
+    pub location: Option<Location>,
+    pub device: Device,
 
     pub account_id: uuid::Uuid,
 }
@@ -35,7 +35,7 @@ impl Session {
 
             device: Device{},
             ip: "".to_string(),
-            location: Location{},
+            location: None,
             token: "".to_string(),
 
             account_id: uuid,
