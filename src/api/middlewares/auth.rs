@@ -112,19 +112,18 @@ impl Handler<CheckAuth> for DbActor {
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             account_sessions,
-            account_sessions_events,
             account_accounts,
-            account_accounts_events,
         };
         use diesel::prelude::*;
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        // TODO: find session + account
-        let session: domain::Session = account_sessions::dsl::account_sessions
+        // ind session + account
+        let (session, account): (domain::Session, domain::Account) = account_sessions::dsl::account_sessions
                 .filter(account_sessions::dsl::id.eq(msg.session_id))
                 .filter(account_sessions::dsl::deleted_at.is_null())
+                .inner_join(account_accounts::table)
                 .first(&conn)?;
 
         // verify session token
@@ -134,7 +133,7 @@ impl Handler<CheckAuth> for DbActor {
         }
 
         return Ok(Auth{
-            account: None, // TODO
+            account: Some(account),
             session: Some(session),
         });
     }

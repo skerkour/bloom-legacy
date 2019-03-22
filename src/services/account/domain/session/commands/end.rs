@@ -12,7 +12,7 @@ use diesel::{
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct End {
-    metadata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for End {

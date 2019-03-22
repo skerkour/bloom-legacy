@@ -32,10 +32,8 @@ impl Handler<Verify> for DbActor {
             account_pending_accounts,
             account_pending_accounts_events,
         };
-        use diesel::RunQueryDsl;
-        use diesel::query_dsl::filter_dsl::FilterDsl;
-        use diesel::ExpressionMethods;
-        use diesel::Connection;
+        use diesel::prelude::*;
+
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;

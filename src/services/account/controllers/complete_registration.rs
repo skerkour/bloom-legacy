@@ -43,10 +43,7 @@ impl Handler<CompleteRegistration> for DbActor {
             account_sessions,
             account_sessions_events,
         };
-        use diesel::RunQueryDsl;
-        use diesel::query_dsl::filter_dsl::FilterDsl;
-        use diesel::ExpressionMethods;
-        use diesel::Connection;
+        use diesel::prelude::*;
 
 
         let conn = self.pool.get()

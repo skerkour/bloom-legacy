@@ -33,8 +33,8 @@ impl Handler<Register> for DbActor {
             account_pending_accounts,
             account_pending_accounts_events,
         };
-        use diesel::RunQueryDsl;
-        use diesel::Connection;
+        use diesel::prelude::*;
+
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
