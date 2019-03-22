@@ -4,15 +4,16 @@ use actix_web::{
     http::header,
 };
 use chrono::{Utc, DateTime};
-use crate::api::middlewares::request_id::{GetRequestID, RequestID};
+use crate::api::middlewares::{
+    GetRequestId,
+    RequestId,
+};
 use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 
 
 #[derive(Clone, Debug)]
 pub struct RequestLogger(slog::Logger);
-
-pub struct Logger;
 
 pub trait GetRequestLogger {
     /// Returns the HttpRequest RequestID, if the HttpRequest currently has none
@@ -55,8 +56,9 @@ impl RequestLogger {
     }
 }
 
+pub struct LoggerMiddleware;
 
-impl<S> Middleware<S> for Logger {
+impl<S> Middleware<S> for LoggerMiddleware {
     fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
         req.extensions_mut().insert(RequestStartTime(Utc::now()));
         return Ok(Started::Done);

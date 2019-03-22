@@ -18,8 +18,8 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
         config: cfg,
     };
     App::with_state(api_state.clone())
-    .middleware(middlewares::request_id::RequestIDHeader)
-    .middleware(middlewares::logger::Logger)
+    .middleware(middlewares::RequestIdMiddleware)
+    .middleware(middlewares::LoggerMiddleware)
     .middleware(middlewares::DefaultHeaders)
     .middleware(
         // cors 2 times because otherwise authmiddleware doesn't works...
@@ -30,7 +30,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
         .max_age(3600)
         .finish()
     )
-    .middleware(middlewares::auth::AuthMiddleware)
+    .middleware(middlewares::AuthMiddleware)
     .default_resource(|r| r.f(api::route_404))
     .configure(|app| {
         Cors::for_app(app)

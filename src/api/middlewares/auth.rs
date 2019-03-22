@@ -36,21 +36,25 @@ impl Middleware<api::State> for AuthMiddleware {
             return Ok(Started::Done);
         }
 
-        // TODO: improve...
-        // the problem is: req.extensions_mut().insert(auth);
-        // we can either clone req or use a sync middleware
-        let req = req.clone();
 
         let auth_header = auth_header.unwrap().to_str()
             .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
         let msg = extract_authorization_header(auth_header)
             .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
 
+
+        // TODO: improve...
+        // the problem is: req.extensions_mut().insert(auth);
+        // we can either clone req or use a sync middleware
+        // the question is: what is the cost of clonning req ?
+        let req = req.clone();
+
         let fut = state.db.send(msg)
             .from_err()
             .and_then(move |res| {
                 match res {
                     Ok(auth) => {
+
                         req.extensions_mut().insert(auth);
                         return Ok(None);
                     },

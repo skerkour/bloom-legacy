@@ -2,9 +2,11 @@ use crate::{
     api,
     services::account::api::v1::models,
     log::macros::*,
-    api::middlewares::logger::GetRequestLogger,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+    },
     services::account::controllers,
-    api::middlewares::request_id::GetRequestID,
     services::common::utils,
 };
 use std::time::Duration;

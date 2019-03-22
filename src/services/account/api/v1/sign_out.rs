@@ -2,10 +2,12 @@ use crate::{
     api,
     services::account::api::v1::models,
     log::macros::*,
-    api::middlewares::logger::GetRequestLogger,
     services::account::controllers,
-    api::middlewares::request_id::GetRequestID,
-    api::middlewares::auth::GetRequestAuth,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
     error::KernelError,
 };
 use std::time::Duration;
