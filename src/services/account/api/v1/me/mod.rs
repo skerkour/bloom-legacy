@@ -16,6 +16,9 @@ use actix_web::{
 };
 
 
+pub use sessions::me_sessions_get;
+
+
 pub fn me_get(req: &HttpRequest<api::State>) -> HttpResponse {
     let auth = req.request_auth();
 

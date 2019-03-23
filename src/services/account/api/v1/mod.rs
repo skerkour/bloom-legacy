@@ -11,4 +11,7 @@ pub use verify::verify_post;
 pub use complete_registration::complete_registration_post;
 pub use sign_out::sign_out_post;
 pub use sign_in::sign_in_post;
-pub use me::me_get;
+pub use me::{
+    me_get,
+    me_sessions_get,
+};

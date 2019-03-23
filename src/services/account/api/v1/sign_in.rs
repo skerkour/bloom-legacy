@@ -35,7 +35,7 @@ pub fn sign_in_post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<
     }
 
 
-    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(700, 900))).into_future()
+    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
     .from_err()
     .and_then(move |_|
         state.db

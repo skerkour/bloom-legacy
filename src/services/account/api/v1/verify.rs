@@ -26,7 +26,7 @@ pub fn verify_post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<ap
     let request_id = req.request_id();
 
     // random sleep to prevent bruteforce and sidechannels attacks
-    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(700, 900))).into_future()
+    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(500, 650))).into_future()
     .from_err()
     .and_then(move |_|
         state.db
