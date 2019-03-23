@@ -25,6 +25,7 @@ pub fn post((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
+    let account_data = account_data.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
