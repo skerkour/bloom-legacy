@@ -9,15 +9,18 @@ use crate::{
         GetRequestAuth,
     },
     error::KernelError,
+    services::common::utils,
 };
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
+use futures::future::IntoFuture;
 
 
-pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn post((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
+-> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
@@ -28,18 +31,15 @@ pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> Fut
             .responder();
     }
 
-    let session_id = match uuid::Uuid::parse_str(&session_id) {
-        Ok(x) => x,
-        Err(_) => return future::result(Ok(api::Error::from(KernelError::Validation("session_id is not valid".to_string())).error_response()))
-            .responder(),
-    };
-
     return state.db
-    .send(controllers::RevokeSession{
-        actor: auth.account.unwrap(),
-        session_id: session_id,
-        request_id: request_id,
-        current_session_id: auth.session.unwrap().id,
+    .send(controllers::UpdateAccount{
+        account: auth.account.unwrap(),
+        avatar_url: account_data.avatar_url,
+        first_name: account_data.first_name,
+        last_name: account_data.last_name,
+        current_password: account_data.current_password,
+        new_password: account_data.new_password,
+        request_id,
     })
     .and_then(move |_| {
         let res = models::SignOutResponse{};

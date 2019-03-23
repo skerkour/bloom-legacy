@@ -18,7 +18,7 @@ use futures::future::IntoFuture;
 use rand::Rng;
 
 
-pub fn complete_registration_post((registration_data, req): (Json<models::CompleteRegistrationBody>, HttpRequest<api::State>))
+pub fn post((registration_data, req): (Json<models::CompleteRegistrationBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();
     let state = req.state().clone();

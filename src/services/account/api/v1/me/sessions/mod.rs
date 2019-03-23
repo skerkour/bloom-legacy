@@ -1,6 +1,3 @@
-mod revoke;
-
-
 use crate::{
     api,
     log::macros::*,
@@ -20,9 +17,10 @@ use actix_web::{
 use futures::future;
 
 
-pub use revoke::me_sessions_revoke_post;
+pub mod revoke;
 
-pub fn me_sessions_get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
+
+pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();

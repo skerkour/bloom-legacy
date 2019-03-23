@@ -6,6 +6,7 @@ mod sign_in;
 mod find_account;
 mod find_account_sessions;
 mod revoke_session;
+mod update_account;
 
 pub use complete_registration::CompleteRegistration;
 pub use verify::Verify;
@@ -15,3 +16,4 @@ pub use sign_in::SignIn;
 pub use find_account::FindAccount;
 pub use find_account_sessions::FindAccountSessions;
 pub use revoke_session::RevokeSession;
+pub use update_account::UpdateAccount;

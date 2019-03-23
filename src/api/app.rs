@@ -2,8 +2,8 @@ use crate::{
     db::DbActor,
     api,
     api::middlewares,
-    services,
     config,
+    services::account::api::v1 as accountv1,
 };
 use actix_web::{
     App,
@@ -40,14 +40,17 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
             .max_age(3600)
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
-            .resource("/account/v1/welcome/register", |r| r.method(http::Method::POST).with_config(services::account::api::v1::register_post, api::json_default_config))
-            .resource("/account/v1/welcome/verify", |r| r.method(http::Method::POST).with_config(services::account::api::v1::verify_post, api::json_default_config))
-            .resource("/account/v1/welcome/complete", |r| r.method(http::Method::POST).with_config(services::account::api::v1::complete_registration_post, api::json_default_config))
-            .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(services::account::api::v1::sign_in_post, api::json_default_config))
-            .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(services::account::api::v1::sign_out_post))
-            .resource("/account/v1/me", |r| r.method(http::Method::GET).f(services::account::api::v1::me_get))
-            .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(services::account::api::v1::me_sessions_get))
-            .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(services::account::api::v1::me_sessions_revoke_post))
+            .resource("/account/v1/welcome/register", |r| r.method(http::Method::POST).with_config(accountv1::register::post, api::json_default_config))
+            .resource("/account/v1/welcome/verify", |r| r.method(http::Method::POST).with_config(accountv1::verify::post, api::json_default_config))
+            .resource("/account/v1/welcome/complete", |r| r.method(http::Method::POST).with_config(accountv1::complete_registration::post, api::json_default_config))
+            .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(accountv1::sign_in::post, api::json_default_config))
+            .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(accountv1::sign_out::post))
+            .resource("/account/v1/me", |r| {
+                r.method(http::Method::GET).f(accountv1::me::get);
+                r.method(http::Method::POST).with_config(accountv1::me::post, api::json_default_config);
+            })
+            .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(accountv1::me::sessions::get))
+            .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountv1::me::sessions::revoke::post))
             .register()
     })
 }

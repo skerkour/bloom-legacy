@@ -21,7 +21,7 @@ use std::time::Duration;
 use rand::Rng;
 
 
-pub fn sign_in_post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::State>))
+pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
