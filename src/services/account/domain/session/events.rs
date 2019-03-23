@@ -21,6 +21,7 @@ pub struct Event {
 pub enum EventData {
     StartedV1(StartedV1),
     EndedV1,
+    RevokedV1,
 }
 
 
@@ -52,8 +53,8 @@ impl eventsourcing::Event for Event {
                 token: data.token.clone(),
                 account_id: data.account_id,
             },
-            // EndedV1
-            EventData::EndedV1 => super::Session{
+            // EndedV1 | RevokedV1
+            EventData::EndedV1 | EventData::RevokedV1 => super::Session{
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

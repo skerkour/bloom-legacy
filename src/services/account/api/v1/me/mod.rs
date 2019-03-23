@@ -16,7 +16,10 @@ use actix_web::{
 };
 
 
-pub use sessions::me_sessions_get;
+pub use sessions::{
+    me_sessions_get,
+    me_sessions_revoke_post,
+};
 
 
 pub fn me_get(req: &HttpRequest<api::State>) -> HttpResponse {

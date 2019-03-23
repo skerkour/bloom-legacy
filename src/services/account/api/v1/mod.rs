@@ -14,4 +14,5 @@ pub use sign_in::sign_in_post;
 pub use me::{
     me_get,
     me_sessions_get,
+    me_sessions_revoke_post,
 };
