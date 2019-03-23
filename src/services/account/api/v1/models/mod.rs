@@ -1,5 +1,7 @@
 use serde::{Serialize, Deserialize};
-
+use crate::services::account::domain::{
+    session,
+};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegisterBody {
@@ -58,11 +60,21 @@ pub struct SignInResponse {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct MeResponse {
-  pub id: uuid::Uuid,
-  pub created_at: chrono::DateTime<chrono::Utc>,
-  pub first_name: String,
-  pub last_name: String,
-  pub username: String,
-  pub email: String,
-  pub avatar_url: String,
+    pub id: uuid::Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub first_name: String,
+    pub last_name: String,
+    pub username: String,
+    pub email: String,
+    pub avatar_url: String,
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Session {
+    pub id: uuid::Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub ip: String,
+    pub location: Option<session::Location>,
+    pub device: session::Device,
 }
