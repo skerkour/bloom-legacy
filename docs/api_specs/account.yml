@@ -23,8 +23,7 @@ tags:
     description: Everything related to the registration flow
   - name: account
     description: Everything related to Bloom accounts
-  - name: session
-    description: Everything related to Bloom sessions
+
 
 
 ################################################################################
@@ -32,6 +31,9 @@ tags:
 ################################################################################
 
 paths:
+  ##############################################################################
+  # welcome
+  ##############################################################################
   /account/v1/welcome/register:
     post:
       tags:
@@ -53,13 +55,11 @@ paths:
               schema:
                 $ref: '#/components/schemas/RegisterResponse'
         400:
-          description: Invalid ID supplied
+          description: Error
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
                   
   /account/v1/welcome/verify:
     post:
@@ -72,25 +72,177 @@ paths:
         content:
           application/json:
             schema:
-              $ref: '#/components/schemas/RegisterBody'
+              $ref: '#/components/schemas/VerifyBody'
         required: true
       responses:
-        201:
+        200:
           description: Success
           content:
             application/json:
               schema:
-                $ref: '#/components/schemas/RegisterResponse'
+                $ref: '#/components/schemas/VerifyResponse'
         400:
-          description: Invalid ID supplied
+          description: Error
           content:
             application/json:
               schema:
-                type: object
-                items:
-                  $ref: '#/components/schemas/ErrorResponse'
+                $ref: '#/components/schemas/ErrorResponse'
+
+  /account/v1/welcome/complete:
+    post:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_welcome_complete
+      requestBody:
+        description: Required data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteBody'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
+                
+        400:
+          description: Error
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ErrorResponse'
+
+  ##############################################################################
+  # account
+  ##############################################################################
+  # TODO
+  /account/v1/sign-in:
+    post:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_account_sign_in
+      requestBody:
+        description: Required data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteBody'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
 
 
+  # TODO
+  /account/v1/sign-out:
+    post:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_account_sign_out
+      requestBody:
+        description: Required data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteBody'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
+
+
+  # TODO
+  /account/v1/me:
+    get:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_me_get
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
+    post:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_me_post
+      requestBody:
+        description: Required data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteBody'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
+
+
+  # TODO
+  /account/v1/me/sessions:
+    get:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_me_sessions
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
+                
+  /account/v1/me/sessions/{session_id}/revoke:
+    post:
+      tags:
+        - welcome
+      summary: Complete registration
+      operationId: v1_me_sessions_revoke
+      parameters:
+      - name: session_id
+        in: path
+        description: The id of the session
+        required: true
+        schema:
+          type: string
+          format: uuid
+      requestBody:
+        description: Required data
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/CompleteBody'
+        required: true
+      responses:
+        200:
+          description: Success
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CompleteResponse'
 
 ################################################################################
 # SCHEMA
@@ -142,6 +294,38 @@ components:
                 is_valid:
                   type: boolean
                   description: always `true`
+  
+  
+    CompleteBody:
+      type: object
+      properties:
+        id:
+          type: string
+          description: The id of the pending account created during the `register`
+            step
+        code:
+          type: string
+          description: The id of the pending account received during the `register`
+            step
+        username:
+          type: string
+          description: The username of the new account
+
+
+    CompleteResponse:
+      allOf:
+        - $ref: '#/components/schemas/ApiResponse'
+        - type: object
+          properties:
+            data:
+              type: object
+              properties:
+                id:
+                  type: string
+                  description: sessions Id
+                token:
+                  type: string
+                  description: sessions Token
 
 
     ApiResponse:
@@ -149,32 +333,16 @@ components:
       properties:
         data:
           type: object
-          # nullable: true
         error:
           type: object
-          # nullable: true
     ErrorResponse:
-      allOf:     # Combines the BasicErrorModel and the inline model
+      allOf:
         - $ref: '#/components/schemas/ApiResponse'
         - type: object
           properties:
-            data:
-              nullable: true
             error:
               type: object
               properties:
                 message:
                   type: string
-  # securitySchemes:
-  #   petstore_auth:
-  #     type: oauth2
-  #     flows:
-  #       implicit:
-  #         authorizationUrl: http://petstore.swagger.io/oauth/dialog
-  #         scopes:
-  #           write:pets: modify pets in your account
-  #           read:pets: read your pets
-  #   api_key:
-  #     type: apiKey
-  #     name: api_key
-  #     in: header
+
