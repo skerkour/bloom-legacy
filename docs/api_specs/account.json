@@ -1,0 +1,235 @@
+{
+  "openapi": "3.0.1",
+  "info": {
+    "title": "Bloom API",
+    "description": "This is a sample server Petstore server.  You can find out more about     Swagger at [http://swagger.io](http://swagger.io) or on [irc.freenode.net, #swagger](http://swagger.io/irc/).      For this sample, you can use the api key `special-key` to test the authorization     filters.",
+    "contact": {
+      "email": "hello@bloom.sh"
+    },
+    "license": {
+      "name": "Apache 2.0",
+      "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+    },
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://api.bloom.sh"
+    }
+  ],
+  "tags": [
+    {
+      "name": "welcome",
+      "description": "Everything related to the registration flow"
+    },
+    {
+      "name": "account",
+      "description": "Everything related to Bloom accounts"
+    },
+    {
+      "name": "session",
+      "description": "Everything related to Bloom sessions"
+    }
+  ],
+  "paths": {
+    "/account/v1/welcome/register": {
+      "post": {
+        "tags": [
+          "welcome"
+        ],
+        "summary": "Start the registration flow",
+        "operationId": "v1_welcome_register",
+        "requestBody": {
+          "description": "User information",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/account/v1/welcome/verify": {
+      "post": {
+        "tags": [
+          "welcome"
+        ],
+        "summary": "Verify that given code is correct",
+        "operationId": "v1_welcome_verify",
+        "requestBody": {
+          "description": "The code received during the `register` step",
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RegisterBody"
+              }
+            }
+          },
+          "required": true
+        },
+        "responses": {
+          "201": {
+            "description": "Success",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/RegisterResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Invalid ID supplied",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "items": {
+                    "$ref": "#/components/schemas/ErrorResponse"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  "components": {
+    "schemas": {
+      "RegisterBody": {
+        "type": "object",
+        "properties": {
+          "first_name": {
+            "type": "string"
+          },
+          "last_name": {
+            "type": "string"
+          },
+          "email": {
+            "type": "string",
+            "format": "email"
+          },
+          "password": {
+            "type": "string"
+          }
+        }
+      },
+      "RegisterResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApiResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "id": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "VerifyBody": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string",
+            "description": "The id of the pending account created during the `register` step"
+          },
+          "code": {
+            "type": "string"
+          }
+        }
+      },
+      "VerifyResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApiResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "type": "object",
+                "properties": {
+                  "is_valid": {
+                    "type": "boolean",
+                    "description": "always `true`"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      },
+      "ApiResponse": {
+        "type": "object",
+        "properties": {
+          "data": {
+            "type": "object"
+          },
+          "error": {
+            "type": "object"
+          }
+        }
+      },
+      "ErrorResponse": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/ApiResponse"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "data": {
+                "nullable": true
+              },
+              "error": {
+                "type": "object",
+                "properties": {
+                  "message": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        ]
+      }
+    }
+  }
+}
