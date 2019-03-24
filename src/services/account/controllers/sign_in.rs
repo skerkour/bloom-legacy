@@ -50,12 +50,13 @@ impl Handler<SignIn> for DbActor {
             // verify password
             if !bcrypt::verify(&msg.password, &user.password)
                 .map_err(|_| KernelError::Bcrypt)? {
+                // store a SignInFailed event
                 let metadata = EventMetadata{
                     actor_id: None,
                     request_id: Some(msg.request_id.clone()),
                 };
                 let fail_sign_in_cmd = account::FailSignIn{metadata};
-                let (user, event, non_stored) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
+                let (user, event, _) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
 
                 diesel::insert_into(account_accounts::dsl::account_accounts)
                     .values(&user)

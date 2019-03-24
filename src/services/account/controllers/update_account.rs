@@ -16,12 +16,9 @@ use serde::{Serialize, Deserialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateAccount {
     pub account: Account,
-    pub current_session: Session,
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
-    pub current_password: Option<String>,
-    pub new_password: Option<String>,
     pub request_id: String,
 }
 
@@ -36,8 +33,6 @@ impl Handler<UpdateAccount> for DbActor {
         use crate::db::schema::{
             account_accounts,
             account_accounts_events,
-            account_sessions,
-            account_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -105,64 +100,6 @@ impl Handler<UpdateAccount> for DbActor {
                     account_to_update
                 },
                 None => account_to_update,
-            };
-
-            // password
-            let account_to_update = match (msg.new_password, msg.current_password) {
-                (Some(new_password), Some(current_password)) => {
-                    let update_last_name_cmd = account::UpdatePassword{
-                        current_password,
-                        new_password,
-                        metadata: metadata.clone(),
-                    };
-
-                    let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
-
-                    // update account
-                    diesel::update(account_accounts::dsl::account_accounts
-                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
-                        .set((
-                            account_accounts::dsl::version.eq(account_to_update.version),
-                            account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
-                            account_accounts::dsl::password.eq(&account_to_update.password),
-                        ))
-                        .execute(&conn)?;
-                    diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
-                        .values(&event)
-                        .execute(&conn)?;
-
-                    // revoke all other active sessions
-                    let sessions: Vec<Session> = account_sessions::dsl::account_sessions
-                        .filter(account_sessions::dsl::account_id.eq(account_to_update.id))
-                        .filter(account_sessions::dsl::deleted_at.is_null())
-                        .filter(account_sessions::dsl::id.ne(msg.current_session.id))
-                        .load(&conn)?;
-
-                    let revoke_cmd = session::Revoke{
-                        current_session_id: msg.current_session.id,
-                        metadata: metadata.clone(),
-                    };
-
-                    for session in sessions {
-                        let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
-                        // update session
-                        diesel::update(account_sessions::dsl::account_sessions
-                            .filter(account_sessions::dsl::id.eq(session.id)))
-                            .set((
-                                account_sessions::dsl::version.eq(session.version),
-                                account_sessions::dsl::updated_at.eq(session.updated_at),
-                                account_sessions::dsl::deleted_at.eq(session.deleted_at),
-                            ))
-                            .execute(&conn)?;
-                        diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
-                            .values(&event)
-                            .execute(&conn)?;
-                    }
-
-                    account_to_update
-                },
-                (None, Some(_)) | (Some(_), None) => return Err(KernelError::Validation("new_password and current_password must be both provided to update password".to_string())),
-                _ => account_to_update,
             };
 
             return Ok(account_to_update);

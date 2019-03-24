@@ -79,6 +79,10 @@ pub struct UpdateAccount {
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
-    pub current_password: Option<String>,
-    pub new_password: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdatePassword {
+    pub current_password: String,
+    pub new_password: String,
 }

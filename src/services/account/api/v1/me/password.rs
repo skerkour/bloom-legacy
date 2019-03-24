@@ -9,17 +9,15 @@ use crate::{
         GetRequestAuth,
     },
     error::KernelError,
-    services::common::utils,
 };
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
-use futures::future::IntoFuture;
 
 
-pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
+pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
@@ -33,32 +31,20 @@ pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::S
     }
 
     return state.db
-    .send(controllers::UpdateAccount{
+    .send(controllers::UpdatePassword{
+        current_session: auth.session.expect("unwraping auth session"),
         account: auth.account.expect("unwraping auth account"),
-        avatar_url: account_data.avatar_url,
-        first_name: account_data.first_name,
-        last_name: account_data.last_name,
+        current_password: account_data.current_password,
+        new_password: account_data.new_password,
         request_id,
     })
     .from_err()
-    .and_then(move |account| {
-        match account {
-            Ok(account) => {
-                let res = models::MeResponse{
-                    id: account.id,
-                    created_at: account.created_at,
-                    first_name: account.first_name,
-                    last_name: account.last_name,
-                    username: account.username,
-                    email: account.email,
-                    avatar_url: account.avatar_url,
-                };
-                let res = api::Response::data(res);
-                Ok(HttpResponse::Ok().json(&res))
-            },
+    .and_then(move |res|
+        match res {
+            Ok(_) => Ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
             Err(err) => Err(err),
         }
-    })
+    )
     .from_err()
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
