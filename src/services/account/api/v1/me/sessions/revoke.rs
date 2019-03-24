@@ -42,8 +42,7 @@ pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> Fut
         current_session_id: auth.session.unwrap().id,
     })
     .and_then(move |_| {
-        let res = models::EmptyData{};
-        let res = api::Response::data(res);
+        let res = api::Response::data(models::NoData{});
         Ok(HttpResponse::Ok().json(&res))
     })
     .from_err() // MailboxError to KernelError

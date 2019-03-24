@@ -37,7 +37,7 @@ pub fn post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<api::Stat
         }).flatten()
     )
     .and_then(move |_| {
-        let res = api::Response::data(models::VerifyResponse{is_valid: true});
+        let res = api::Response::data(models::NoData{});
         Ok(HttpResponse::Ok().json(&res))
     })
     .map_err(move |err| {

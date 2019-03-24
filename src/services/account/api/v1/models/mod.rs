@@ -23,11 +23,6 @@ pub struct VerifyBody {
     pub code: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyResponse {
-    pub is_valid: bool,
-}
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistrationBody {
@@ -44,7 +39,7 @@ pub struct CompleteRegistrationResponse {
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct EmptyData {}
+pub struct NoData {}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignInBody {

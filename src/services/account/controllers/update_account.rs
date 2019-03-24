@@ -3,8 +3,6 @@ use crate::{
     db::DbActor,
     services::account::domain::{
         Account,
-        session,
-        Session,
         account,
     },
     services::common::events::EventMetadata,
@@ -116,6 +114,7 @@ impl Handler<UpdateAccount> for DbActor {
                     let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
 
                     // update account
+                    // TODO: remove all active session other than the current
                     diesel::update(account_accounts::dsl::account_accounts
                         .filter(account_accounts::dsl::id.eq(account_to_update.id)))
                         .set((

@@ -35,8 +35,7 @@ pub fn post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         request_id,
     })
     .and_then(move |_| {
-        let res = models::EmptyData{};
-        let res = api::Response::data(res);
+        let res = api::Response::data(models::NoData{});
         Ok(HttpResponse::Ok().json(&res))
     })
     .from_err() // MailboxError to KernelError
