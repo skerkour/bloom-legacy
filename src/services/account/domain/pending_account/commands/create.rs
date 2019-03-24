@@ -45,7 +45,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
-        // TODO: validate email
+        validators::email(&self.email)?;
 
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));

@@ -9,6 +9,7 @@ pub use commands::{
     UpdateFirstName,
     UpdateLastName,
     UpdatePassword,
+    UpdateEmail,
 };
 pub use events::{
     Event,
@@ -17,4 +18,5 @@ pub use events::{
     FirstNameUpdatedV1,
     LastNameUpdatedV1,
     PasswordUpdatedV1,
+    EmailUpdatedV1,
 };

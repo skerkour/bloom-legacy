@@ -30,3 +30,9 @@ pub fn password(password: &str) -> Result<(), KernelError> {
     return Ok(());
 }
 
+
+// TODO
+pub fn email(email: &str) -> Result<(), KernelError> {
+    return Ok(());
+}
+

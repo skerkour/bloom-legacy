@@ -24,6 +24,7 @@ pub enum EventData {
     FirstNameUpdatedV1(FirstNameUpdatedV1),
     LastNameUpdatedV1(LastNameUpdatedV1),
     PasswordUpdatedV1(PasswordUpdatedV1),
+    EmailUpdatedV1(EmailUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -51,6 +52,11 @@ pub struct LastNameUpdatedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct PasswordUpdatedV1 {
     pub password: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct EmailUpdatedV1 {
+    pub email: String,
 }
 
 impl eventsourcing::Event for Event {
@@ -88,6 +94,11 @@ impl eventsourcing::Event for Event {
             // PasswordUpdatedV1
             EventData::PasswordUpdatedV1(ref data) => domain::Account {
                 password: data.password.clone(),
+                ..aggregate
+            },
+            // EmailUpdatedV1
+            EventData::EmailUpdatedV1(ref data) => domain::Account {
+                email: data.email.clone(),
                 ..aggregate
             },
         }
