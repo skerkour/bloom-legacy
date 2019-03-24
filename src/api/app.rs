@@ -47,7 +47,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(accountv1::sign_out::post))
             .resource("/account/v1/me", |r| {
                 r.method(http::Method::GET).f(accountv1::me::get);
-                r.method(http::Method::POST).with_config(accountv1::me::post, api::json_default_config);
+                r.method(http::Method::PUT).with_config(accountv1::me::put, api::json_default_config);
             })
             .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(accountv1::me::sessions::get))
             .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountv1::me::sessions::revoke::post))

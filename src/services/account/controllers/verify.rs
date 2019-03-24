@@ -39,14 +39,14 @@ impl Handler<Verify> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metdata = EventMetadata{
+            let metadata = EventMetadata{
                 actor_id: None,
                 request_id: Some(msg.request_id.clone()),
             };
             let verify_cmd = pending_account::Verify{
                 id: msg.id.clone(),
                 code: msg.code.clone(),
-                metdata,
+                metadata,
             };
 
             let pending_account_id = uuid::Uuid::parse_str(&verify_cmd.id)

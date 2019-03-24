@@ -44,7 +44,7 @@ pub struct CompleteRegistrationResponse {
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct SignOutResponse {}
+pub struct EmptyData {}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignInBody {

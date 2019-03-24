@@ -15,7 +15,7 @@ use diesel::{
 pub struct UpdatePassword {
     pub current_password: String,
     pub new_password: String,
-    pub metdata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdatePassword {
@@ -48,7 +48,7 @@ impl<'a> eventsourcing::Command<'a> for UpdatePassword {
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = account_domain::EventData::PasswordUpdatedV1(account_domain::PasswordUpdatedV1{
-            password: self.new_password.clone(),
+            password: hashed_password,
         });
 
         return  Ok((account_domain::Event{
@@ -56,7 +56,7 @@ impl<'a> eventsourcing::Command<'a> for UpdatePassword {
             timestamp: chrono::Utc::now(),
             data,
             aggregate_id: aggregate.id,
-            metadata: self.metdata.clone(),
+            metadata: self.metadata.clone(),
         }, ()));
     }
 }

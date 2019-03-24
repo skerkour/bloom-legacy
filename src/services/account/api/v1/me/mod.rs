@@ -1,8 +1,8 @@
 mod logs;
 mod get;
-mod post;
+mod put;
 
 
 pub mod sessions;
 pub use get::get;
-pub use post::post;
+pub use put::put;

@@ -13,7 +13,7 @@ use diesel::{
 #[derive(Clone, Debug)]
 pub struct UpdateFirstName {
     pub first_name: String,
-    pub metdata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
@@ -39,7 +39,7 @@ impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
             timestamp: chrono::Utc::now(),
             data,
             aggregate_id: aggregate.id,
-            metadata: self.metdata.clone(),
+            metadata: self.metadata.clone(),
         }, ()));
     }
 }

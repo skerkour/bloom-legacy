@@ -15,7 +15,7 @@ use diesel::{
 pub struct Verify {
     pub id: String,
     pub code: String,
-    pub metdata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 
@@ -31,7 +31,7 @@ impl<'a> eventsourcing::Command<'a> for Verify {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let metadata = self.metdata.clone();
+        let metadata = self.metadata.clone();
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 

@@ -95,7 +95,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 password: pending_account_to_update.password.clone(),
                 username: msg.username.clone(),
                 avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
-                metdata: metadata.clone(),
+                metadata: metadata.clone(),
             };
             let (new_account, event, _) = eventsourcing::execute(&conn, new_account, &create_cmd)?;
 

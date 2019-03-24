@@ -18,7 +18,7 @@ pub struct Create {
     pub password: String,
     pub username: String,
     pub avatar_url: String,
-    pub metdata: EventMetadata,
+    pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for Create {
@@ -70,7 +70,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
         let id = uuid::Uuid::new_v4();
-        let mut metadata = self.metdata.clone();
+        let mut metadata = self.metadata.clone();
         metadata.actor_id = Some(id);
         let data = account::EventData::CreatedV1(account::CreatedV1{
             id,

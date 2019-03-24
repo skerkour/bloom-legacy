@@ -35,7 +35,7 @@ pub fn post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         request_id,
     })
     .and_then(move |_| {
-        let res = models::SignOutResponse{};
+        let res = models::EmptyData{};
         let res = api::Response::data(res);
         Ok(HttpResponse::Ok().json(&res))
     })

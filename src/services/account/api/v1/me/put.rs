@@ -19,7 +19,7 @@ use futures::future;
 use futures::future::IntoFuture;
 
 
-pub fn post((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
+pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
@@ -42,12 +42,26 @@ pub fn post((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::
         new_password: account_data.new_password,
         request_id,
     })
-    .and_then(move |_| {
-        let res = models::SignOutResponse{};
-        let res = api::Response::data(res);
-        Ok(HttpResponse::Ok().json(&res))
+    .from_err()
+    .and_then(move |account| {
+        match account {
+            Ok(account) => {
+                let res = models::MeResponse{
+                    id: account.id,
+                    created_at: account.created_at,
+                    first_name: account.first_name,
+                    last_name: account.last_name,
+                    username: account.username,
+                    email: account.email,
+                    avatar_url: account.avatar_url,
+                };
+                let res = api::Response::data(res);
+                Ok(HttpResponse::Ok().json(&res))
+            },
+            Err(err) => Err(err),
+        }
     })
-    .from_err() // MailboxError to KernelError
+    .from_err()
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
         return api::Error::from(err);

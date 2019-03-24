@@ -42,7 +42,7 @@ pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> Fut
         current_session_id: auth.session.unwrap().id,
     })
     .and_then(move |_| {
-        let res = models::SignOutResponse{};
+        let res = models::EmptyData{};
         let res = api::Response::data(res);
         Ok(HttpResponse::Ok().json(&res))
     })

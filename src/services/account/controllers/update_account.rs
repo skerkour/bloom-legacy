@@ -5,6 +5,7 @@ use crate::{
         Account,
         session,
         Session,
+        account,
     },
     services::common::events::EventMetadata,
 };
@@ -42,40 +43,66 @@ impl Handler<UpdateAccount> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            // let metadata = EventMetadata{
-            //     actor_id: Some(msg.actor.id),
-            //     request_id: Some(msg.request_id.clone()),
-            // };
+            let metadata = EventMetadata{
+                actor_id: Some(msg.account.id),
+                request_id: Some(msg.request_id.clone()),
+            };
 
-            // let session: Session = account_sessions::dsl::account_sessions
-            //     .filter(account_sessions::dsl::id.eq(msg.session_id))
-            //     .filter(account_sessions::dsl::account_id.eq(msg.actor.id))
-            //     .filter(account_sessions::dsl::deleted_at.is_null())
-            //     .first(&conn)?;
+            let account_to_update = msg.account;
 
-            // let revoke_cmd = session::Revoke{
-            //     current_session_id: msg.current_session_id,
-            //     metadata,
-            // };
+            let account_to_update = match msg.first_name {
+                Some(first_name) => {
+                    let update_first_name_cmd = account::UpdateFirstName{
+                        first_name,
+                        metadata: metadata.clone(),
+                    };
 
-            // let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+                    let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_first_name_cmd)?;
 
-            // // update session
-            // diesel::update(account_sessions::dsl::account_sessions
-            //     .filter(account_sessions::dsl::id.eq(session.id))
-            // )
-            //     .set((
-            //         account_sessions::dsl::version.eq(session.version),
-            //         account_sessions::dsl::updated_at.eq(session.updated_at),
-            //         account_sessions::dsl::deleted_at.eq(session.deleted_at),
-            //     ))
-            //     .execute(&conn)?;
+                    // update account
+                    diesel::update(account_accounts::dsl::account_accounts
+                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+                        .set((
+                            account_accounts::dsl::version.eq(account_to_update.version),
+                            account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
+                            account_accounts::dsl::first_name.eq(&account_to_update.first_name),
+                        ))
+                        .execute(&conn)?;
+                    diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                        .values(&event)
+                        .execute(&conn)?;
+                    account_to_update
+                },
+                None => account_to_update,
+            };
 
-            // diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
-            //     .values(&event)
-            //     .execute(&conn)?;
+            let account_to_update = match msg.last_name {
+                Some(last_name) => {
+                    let update_last_name_cmd = account::UpdateLastName{
+                        last_name,
+                        metadata: metadata.clone(),
+                    };
 
-            return Ok(msg.account);
+                    let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
+
+                    // update account
+                    diesel::update(account_accounts::dsl::account_accounts
+                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+                        .set((
+                            account_accounts::dsl::version.eq(account_to_update.version),
+                            account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
+                            account_accounts::dsl::last_name.eq(&account_to_update.last_name),
+                        ))
+                        .execute(&conn)?;
+                    diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                        .values(&event)
+                        .execute(&conn)?;
+                    account_to_update
+                },
+                None => account_to_update,
+            };
+
+            return Ok(account_to_update);
         })?);
     }
 }
