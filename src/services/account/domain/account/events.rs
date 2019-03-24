@@ -4,6 +4,7 @@ use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::account_accounts_events,
     services::common::events::EventMetadata,
+    services::account::domain,
 };
 
 
@@ -20,10 +21,8 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum NonPersistedData {
+    FirstNameUpdatedV1(FirstNameUpdatedV1),
+    LastNameUpdatedV1(LastNameUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -38,14 +37,23 @@ pub struct CreatedV1 {
     pub is_admin: bool,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FirstNameUpdatedV1 {
+    pub first_name: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct LastNameUpdatedV1 {
+    pub last_name: String,
+}
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::Account;
 
-    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Account {
+            EventData::CreatedV1(ref data) => domain::Account {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -60,6 +68,16 @@ impl eventsourcing::Event for Event {
                 recovery_id: None,
                 recovery_token: None,
                 username: data.username.clone(),
+            },
+            // FirstNameUpdatedV1
+            EventData::FirstNameUpdatedV1(ref data) => domain::Account {
+                first_name: data.first_name.clone(),
+                ..aggregate
+            },
+            // LastNameUpdatedV1
+            EventData::LastNameUpdatedV1(ref data) => domain::Account {
+                last_name: data.last_name.clone(),
+                ..aggregate
             },
         }
     }
