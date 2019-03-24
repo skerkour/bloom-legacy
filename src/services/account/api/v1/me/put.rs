@@ -34,7 +34,8 @@ pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::S
 
     return state.db
     .send(controllers::UpdateAccount{
-        account: auth.account.unwrap(),
+        current_session: auth.session.expect("unwraping auth session"),
+        account: auth.account.expect("unwraping auth account"),
         avatar_url: account_data.avatar_url,
         first_name: account_data.first_name,
         last_name: account_data.last_name,
