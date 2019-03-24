@@ -7,6 +7,8 @@ pub use aggregate::Account;
 pub use commands::{
     Create,
     UpdateFirstName,
+    UpdateLastName,
+    UpdatePassword,
 };
 pub use events::{
     Event,
@@ -14,4 +16,5 @@ pub use events::{
     CreatedV1,
     FirstNameUpdatedV1,
     LastNameUpdatedV1,
+    PasswordUpdatedV1,
 };
