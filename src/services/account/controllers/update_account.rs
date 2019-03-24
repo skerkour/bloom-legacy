@@ -50,6 +50,7 @@ impl Handler<UpdateAccount> for DbActor {
 
             let account_to_update = msg.account;
 
+            // first_name
             let account_to_update = match msg.first_name {
                 Some(first_name) => {
                     let update_first_name_cmd = account::UpdateFirstName{
@@ -76,6 +77,7 @@ impl Handler<UpdateAccount> for DbActor {
                 None => account_to_update,
             };
 
+            // last_name
             let account_to_update = match msg.last_name {
                 Some(last_name) => {
                     let update_last_name_cmd = account::UpdateLastName{
@@ -100,6 +102,35 @@ impl Handler<UpdateAccount> for DbActor {
                     account_to_update
                 },
                 None => account_to_update,
+            };
+
+            // password
+            let account_to_update = match (msg.new_password, msg.current_password) {
+                (Some(new_password), Some(current_password)) => {
+                    let update_last_name_cmd = account::UpdatePassword{
+                        current_password,
+                        new_password,
+                        metadata: metadata.clone(),
+                    };
+
+                    let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
+
+                    // update account
+                    diesel::update(account_accounts::dsl::account_accounts
+                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+                        .set((
+                            account_accounts::dsl::version.eq(account_to_update.version),
+                            account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
+                            account_accounts::dsl::password.eq(&account_to_update.password),
+                        ))
+                        .execute(&conn)?;
+                    diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                        .values(&event)
+                        .execute(&conn)?;
+                    account_to_update
+                },
+                (None, Some(_)) | (Some(_), None) => return Err(KernelError::Validation("new_password and current_password must be both provided to update password".to_string())),
+                _ => account_to_update,
             };
 
             return Ok(account_to_update);
