@@ -25,6 +25,7 @@ pub enum EventData {
     LastNameUpdatedV1(LastNameUpdatedV1),
     PasswordUpdatedV1(PasswordUpdatedV1),
     EmailUpdatedV1(EmailUpdatedV1),
+    SignInFailedV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -99,6 +100,10 @@ impl eventsourcing::Event for Event {
             // EmailUpdatedV1
             EventData::EmailUpdatedV1(ref data) => domain::Account {
                 email: data.email.clone(),
+                ..aggregate
+            },
+            // SignInFailedV1
+            EventData::SignInFailedV1 => domain::Account {
                 ..aggregate
             },
         }

@@ -5,6 +5,7 @@ use crate::{
         Account,
         session,
         Session,
+        account,
     },
     services::common::events::EventMetadata,
 };
@@ -29,6 +30,7 @@ impl Handler<SignIn> for DbActor {
     fn handle(&mut self, msg: SignIn, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             account_accounts,
+            account_accounts_events,
             account_sessions,
             account_sessions_events,
         };
@@ -48,6 +50,19 @@ impl Handler<SignIn> for DbActor {
             // verify password
             if !bcrypt::verify(&msg.password, &user.password)
                 .map_err(|_| KernelError::Bcrypt)? {
+                let metadata = EventMetadata{
+                    actor_id: None,
+                    request_id: Some(msg.request_id.clone()),
+                };
+                let fail_sign_in_cmd = account::FailSignIn{metadata};
+                let (user, event, non_stored) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
+
+                diesel::insert_into(account_accounts::dsl::account_accounts)
+                    .values(&user)
+                    .execute(&conn)?;
+                diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                    .values(&event)
+                    .execute(&conn)?;
                 return Err(KernelError::Unauthorized("Invalid username/password combination".to_string()));
             }
 

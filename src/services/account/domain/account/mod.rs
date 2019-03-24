@@ -10,6 +10,7 @@ pub use commands::{
     UpdateLastName,
     UpdatePassword,
     UpdateEmail,
+    FailSignIn,
 };
 pub use events::{
     Event,
