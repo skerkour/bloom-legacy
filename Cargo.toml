@@ -8,6 +8,7 @@ repository = "https://github.com/bloom42/kernel.git"
 description = "Open internet services"
 keywords = ["bloom"]
 license-file = "LICENSE.txt"
+private = true
 
 [dependencies]
 serde = { version = "1.0", features = ["derive"] }
@@ -62,4 +63,5 @@ members = [
     "crates/bcrypt-rs",
     "crates/hex-rs",
     "crates/eventsourcing-rs",
+    "crates/mimesniff-rs",
 ]
