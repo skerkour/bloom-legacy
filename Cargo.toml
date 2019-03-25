@@ -34,6 +34,7 @@ handlebars = "2.0.0-beta.1"
 base64 = "0.10.1"
 mimesniff = { path = "crates/mimesniff-rs" }
 mime = "0.3"
+image = "0.21"
 
 # lazy_static = "1.3.0"
 

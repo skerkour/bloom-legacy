@@ -18,6 +18,8 @@ pub enum KernelError {
     Unauthorized(String),
     #[fail(display = "Io: {}", 0)]
     Io(String),
+    #[fail(display = "Io: {}", 0)]
+    Image(String),
 }
 
 
@@ -30,6 +32,12 @@ impl std::convert::From<actix::MailboxError> for KernelError {
 impl std::convert::From<diesel::result::Error> for KernelError {
     fn from(err: diesel::result::Error) -> Self {
         KernelError::Diesel(format!("{:?}", err))
+    }
+}
+
+impl std::convert::From<image::ImageError> for KernelError {
+    fn from(err: image::ImageError) -> Self {
+        KernelError::Image(format!("{:?}", err))
     }
 }
 

@@ -9,6 +9,7 @@ use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
+use image::{FilterType, ImageFormat};
 
 
 #[derive(Clone, Debug)]
@@ -37,14 +38,20 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
         return Ok(());
     }
 
-    // TODO:
-    // resize + crop image to account::AVATAR_RESIZE
-    // encode to jpeg
-    // uplaod to s3
+
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1{
             avatar_url: aggregate.avatar_url.clone(),
         });
+
+        // resize image to account::AVATAR_RESIZE
+        let img = image::load_from_memory(&self.avatar)?;
+        let scaled = img.resize(account_service::AVATAR_RESIZE as u32, account_service::AVATAR_RESIZE as u32, FilterType::Lanczos3);
+        let mut result = Vec::new();
+        // encode to jpeg
+        scaled.write_to(&mut result, ImageFormat::JPEG)?;
+
+        // TODO: uplaod to s3
 
         return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
