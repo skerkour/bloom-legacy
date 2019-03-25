@@ -3,6 +3,7 @@ use crate::{
     log::macros::*,
     services::account::controllers,
     services::account::api::v1::models,
+    services::account,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -10,35 +11,67 @@ use crate::{
     },
     error::KernelError,
 };
-use actix_web::{actix::System,server, App, AsyncResponder, Error, HttpMessage, FutureResponse,
-HttpRequest, HttpResponse, Json, Result, middleware, State, dev, multipart, error, http::header::{ContentDisposition, HeaderMap}, Responder};
-use serde::{Serialize, Deserialize};
-use futures::{Future, Stream};
+use actix_web::{
+    ResponseError, AsyncResponder, Error, HttpMessage, FutureResponse,
+    HttpRequest, HttpResponse, dev, multipart, error,
+};
+use futures::{Future, Stream, IntoFuture};
 use futures::future;
-use rand::Rng;
-use std::fs;
-use std::io::Write;
+
 
 const MB2: usize = 2_097_152;
 
 pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
-    Box::new(
-        req.multipart()
-            .map_err(error::ErrorInternalServerError)
-            .map(handle_multipart_item)
-            .flatten()
-            .collect()
-            .map(|_| HttpResponse::Ok().json(models::NoData{}))
-            .map_err(|e| {
-                println!("failed: {}", e);
-                e
-            })
-    )
+    let state = req.state().clone();
+    let logger = req.logger();
+    let auth = req.request_auth();
+    let request_id = req.request_id().0;
+
+    if auth.session.is_none() || auth.account.is_none() {
+        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
+        .responder();
+    }
+
+    return req.multipart()
+        .map_err(error::ErrorInternalServerError)
+        .map(handle_multipart_item)
+        .flatten()
+        .collect()
+        .into_future()
+        .map_err(|_| KernelError::Validation("file too large".to_string()))
+        .and_then(move |avatar| {
+            state.db
+            .send(controllers::UpdateAvatar{
+                account: auth.account.expect("unwrapping non none account"),
+                avatar: avatar.get(0).expect("processing file").to_vec(),
+                request_id,
+            }).flatten()
+        })
+        .and_then(move |account| {
+            let res = models::MeResponse{
+                id: account.id,
+                created_at: account.created_at,
+                first_name: account.first_name,
+                last_name: account.last_name,
+                username: account.username,
+                email: account.email,
+                avatar_url: account.avatar_url,
+            };
+            let res = api::Response::data(res);
+            Ok(HttpResponse::Ok().json(&res))
+        })
+        .from_err()
+        .map_err(move |err: KernelError| {
+            slog_error!(logger, "{}", err);
+            return api::Error::from(err);
+        })
+        .from_err()
+        .responder();
 }
 
 fn handle_multipart_item(
     item: multipart::MultipartItem<dev::Payload>,
-) -> Box<Stream<Item = i64, Error = Error>> {
+) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
     match item {
         multipart::MultipartItem::Field(field) => {
             println!("Field:");
@@ -46,7 +79,7 @@ fn handle_multipart_item(
                 println!("FieldName: {:?}", cd.get_name());
                 println!("FieldFileName: {:?}", cd.get_filename());
             }
-            Box::new(save_file(field).into_stream())
+            Box::new(read_file(field).into_stream())
         }
         multipart::MultipartItem::Nested(mp) => {
             println!("nested");
@@ -59,16 +92,9 @@ fn handle_multipart_item(
     }
 }
 
-fn save_file(
+fn read_file(
     field: multipart::Field<dev::Payload>,
-) -> Box<Future<Item = i64, Error = Error>> {
-    let mut rng = rand::thread_rng();
-    let x: u8 = rng.gen();
-    let file_path_string = format!("avatar_{}.png", x);
-    let mut file = match fs::File::create(file_path_string) {
-        Ok(file) => file,
-        Err(e) => return Box::new(future::err(error::ErrorInternalServerError(e))),
-    };
+) -> Box<Future<Item = Vec<u8>, Error = Error>> {
     Box::new(
         field
         .fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, error::MultipartError> {
@@ -77,15 +103,6 @@ fn save_file(
                 return future::err(error::MultipartError::Payload(error::PayloadError::Overflow))
             }
             future::ok(acc)
-        })
-        .and_then(move |buffer| {
-            let len = file.write(&buffer)
-                .map(|len| len as i64)
-                .map_err(|e| {
-                    println!("file.write failed: {:?}", e);
-                    error::MultipartError::Payload(error::PayloadError::Io(e))
-                });
-            return future::result(len);
         })
         .map_err(|e| {
             println!("save_file failed, {:?}", e);

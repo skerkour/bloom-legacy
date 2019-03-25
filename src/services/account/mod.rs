@@ -10,3 +10,4 @@ pub const SESSION_TOKEN_BCRYPT_COST: u32 = 5;
 pub const SESSION_TOKEN_MIN_LENGTH: u32 = 256;
 pub const SESSION_TOKEN_MAX_LENGTH: u32 = 356;
 pub const AVATAR_MAX_SIZE: usize = 3_145_728; // 3MB
+pub const AVATAR_RESIZE: usize = 256;
