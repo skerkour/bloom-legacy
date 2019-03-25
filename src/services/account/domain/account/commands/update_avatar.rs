@@ -40,7 +40,7 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
     // uplaod to s3
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1{
-            avatar_url: "".to_string(),
+            avatar_url: aggregate.avatar_url.clone(),
         });
 
         return  Ok((account::Event{

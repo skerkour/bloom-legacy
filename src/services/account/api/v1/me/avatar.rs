@@ -19,8 +19,6 @@ use futures::{Future, Stream, IntoFuture};
 use futures::future;
 
 
-const MB2: usize = 2_097_152;
-
 pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
@@ -74,15 +72,15 @@ fn handle_multipart_item(
 ) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
     match item {
         multipart::MultipartItem::Field(field) => {
-            println!("Field:");
-            if let Some(cd) = field.content_disposition() {
-                println!("FieldName: {:?}", cd.get_name());
-                println!("FieldFileName: {:?}", cd.get_filename());
-            }
+            // println!("Field:");
+            // if let Some(cd) = field.content_disposition() {
+            //     println!("FieldName: {:?}", cd.get_name());
+            //     println!("FieldFileName: {:?}", cd.get_filename());
+            // }
             Box::new(read_file(field).into_stream())
         }
         multipart::MultipartItem::Nested(mp) => {
-            println!("nested");
+            // println!("nested");
             Box::new(
             mp.map_err(error::ErrorInternalServerError)
                 .map(handle_multipart_item)
@@ -99,13 +97,13 @@ fn read_file(
         field
         .fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, error::MultipartError> {
             acc.extend_from_slice(&bytes);
-            if acc.len() > MB2 {
+            if acc.len() > account::AVATAR_MAX_SIZE {
                 return future::err(error::MultipartError::Payload(error::PayloadError::Overflow))
             }
             future::ok(acc)
         })
         .map_err(|e| {
-            println!("save_file failed, {:?}", e);
+            // println!("save_file failed, {:?}", e);
             error::ErrorInternalServerError(e)
         }),
     )
