@@ -72,19 +72,13 @@ fn handle_multipart_item(
 ) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
     match item {
         multipart::MultipartItem::Field(field) => {
-            // println!("Field:");
-            // if let Some(cd) = field.content_disposition() {
-            //     println!("FieldName: {:?}", cd.get_name());
-            //     println!("FieldFileName: {:?}", cd.get_filename());
-            // }
             Box::new(read_file(field).into_stream())
         }
         multipart::MultipartItem::Nested(mp) => {
-            // println!("nested");
             Box::new(
-            mp.map_err(error::ErrorInternalServerError)
-                .map(handle_multipart_item)
-                .flatten(),
+                mp.map_err(error::ErrorInternalServerError)
+                    .map(handle_multipart_item)
+                    .flatten(),
             )
         },
     }
@@ -102,9 +96,6 @@ fn read_file(
             }
             future::ok(acc)
         })
-        .map_err(|e| {
-            // println!("save_file failed, {:?}", e);
-            error::ErrorInternalServerError(e)
-        }),
+        .map_err(|e| error::ErrorInternalServerError(e)),
     )
 }
