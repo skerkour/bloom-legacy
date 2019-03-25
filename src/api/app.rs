@@ -58,6 +58,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/account/v1/me/password", |r| r.method(http::Method::PUT).with_config(accountv1::me::password::put, api::json_default_config))
             .resource("/account/v1/me/avatar", |r| r.method(http::Method::PUT).f(accountv1::me::avatar::put))
             .resource("/account/v1/me/email", |r| r.method(http::Method::PUT).with_config(accountv1::me::email::put, api::json_default_config))
+            .resource("/account/v1/me/email/verify", |r| r.method(http::Method::POST).with_config(accountv1::me::email::verify::post, api::json_default_config))
             .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(accountv1::me::sessions::get))
             .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountv1::me::sessions::revoke::post))
             .register()

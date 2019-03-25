@@ -10,6 +10,7 @@ mod update_account;
 mod update_password;
 mod update_avatar;
 mod update_email;
+mod verify_email;
 
 pub use complete_registration::CompleteRegistration;
 pub use verify::Verify;
@@ -23,3 +24,4 @@ pub use update_account::UpdateAccount;
 pub use update_password::UpdatePassword;
 pub use update_avatar::UpdateAvatar;
 pub use update_email::UpdateEmail;
+pub use verify_email::VerifyEmail;

@@ -23,7 +23,6 @@ impl Message for Verify {
     type Result = Result<(), KernelError>;
 }
 
-// TODO: transaction
 impl Handler<Verify> for DbActor {
     type Result = Result<(), KernelError>;
 

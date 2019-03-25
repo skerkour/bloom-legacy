@@ -1,0 +1,73 @@
+use crate::{
+    api,
+    services::account::api::v1::models,
+    log::macros::*,
+    services::account::controllers,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
+    error::KernelError,
+    services::common::utils,
+};
+use futures::future::Future;
+use actix_web::{
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
+};
+use futures::future;
+use futures::future::IntoFuture;
+use rand::Rng;
+use std::time::Duration;
+
+
+
+pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::State>))
+-> FutureResponse<HttpResponse> {
+    let state = req.state().clone();
+    let logger = req.logger();
+    let auth = req.request_auth();
+    let request_id = req.request_id().0;
+    let config = state.config.clone();
+    let mut rng = rand::thread_rng();
+
+    if auth.session.is_none() || auth.account.is_none() {
+        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
+            .responder();
+    }
+
+    let account = auth.account.expect("unwraping auth account");
+    let account2 = account.clone(); // ugly...
+
+    // random sleep to prevent bruteforce and sidechannels attacks
+    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(350, 550))).into_future()
+    .from_err()
+    .and_then(move |_|
+        state.db
+        .send(controllers::VerifyEmail{
+            account,
+            id: email_data.id,
+            code: email_data.code.clone(),
+            request_id,
+        }).flatten()
+    )
+    .and_then(move |_| {
+        let res = models::MeResponse{
+            id: account2.id,
+            created_at: account2.created_at,
+            first_name: account2.first_name,
+            last_name: account2.last_name,
+            username: account2.username,
+            email: account2.email,
+            avatar_url: account2.avatar_url,
+        };
+        let res = api::Response::data(res);
+        Ok(HttpResponse::Ok().json(&res))
+    })
+    .map_err(move |err: KernelError| {
+        slog_error!(logger, "{}", err);
+        return api::Error::from(err);
+    })
+    .from_err()
+    .responder();
+}

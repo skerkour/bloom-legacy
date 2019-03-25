@@ -97,3 +97,8 @@ pub struct UpdateEmailResponse {
     pub id: uuid::Uuid, // id of the new pending_email
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerifyEmailBody {
+    pub id: uuid::Uuid,
+    pub code: String,
+}

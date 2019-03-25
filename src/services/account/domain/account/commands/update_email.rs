@@ -29,18 +29,19 @@ impl<'a> eventsourcing::Command<'a> for UpdateEmail {
         };
         use diesel::prelude::*;
 
-
         validators::email(&self.email)?;
 
         // verify that an email isn't already in use
-        let existing_email: i64 = account_accounts
-            .filter(email.eq(&self.email))
-            .filter(deleted_at.is_null())
-            .count()
-            .get_result(ctx)?;
-        if existing_email != 0 {
-            return Err(KernelError::Validation(format!("Email: {} is already in use.", &self.email)));
-        }
+        // already done in pending emial verify
+
+        // let existing_email: i64 = account_accounts
+        //     .filter(email.eq(&self.email))
+        //     .filter(deleted_at.is_null())
+        //     .count()
+        //     .get_result(ctx)?;
+        // if existing_email != 0 {
+        //     return Err(KernelError::Validation(format!("Email: {} is already in use.", &self.email)));
+        // }
 
         return Ok(());
     }
