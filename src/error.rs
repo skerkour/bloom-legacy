@@ -16,7 +16,7 @@ pub enum KernelError {
     Validation(String),
     #[fail(display = "Unauthorized: {}", 0)]
     Unauthorized(String),
-    #[fail(display = "Io", 0)]
+    #[fail(display = "Io: {}", 0)]
     Io(String),
 }
 
