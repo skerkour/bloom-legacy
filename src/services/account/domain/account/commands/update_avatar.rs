@@ -50,8 +50,8 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
 
         // upload to s3
         let id = uuid::Uuid::new_v4();
-        let key = format!("/account/avatars/{}.jpeg", id);
-        let avatar_url = format!("https://s3.{}.amazonaws.com/{}{}", &self.s3_region, &self.s3_bucket, &key);
+        let key = format!("account/avatars/{}.jpeg", id);
+        let avatar_url = format!("https://s3.{}.amazonaws.com/{}/{}", &self.s3_region, &self.s3_bucket, &key);
         let req = PutObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: key,
