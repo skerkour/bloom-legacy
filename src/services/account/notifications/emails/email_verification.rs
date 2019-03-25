@@ -26,7 +26,7 @@ new_email: &str, code: &str) -> Result<(), KernelError> {
 
     let mut data = BTreeMap::new();
     data.insert("code".to_string(), formatted_code);
-    data.insert("url".to_string(), new_email.to_string());
+    data.insert("new_email".to_string(), new_email.to_string());
 
     emails::send_email(
         config,

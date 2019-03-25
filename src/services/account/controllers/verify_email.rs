@@ -22,11 +22,11 @@ pub struct VerifyEmail {
 }
 
 impl Message for VerifyEmail {
-    type Result = Result<(), KernelError>;
+    type Result = Result<Account, KernelError>;
 }
 
 impl Handler<VerifyEmail> for DbActor {
-    type Result = Result<(), KernelError>;
+    type Result = Result<Account, KernelError>;
 
     fn handle(&mut self, msg: VerifyEmail, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
@@ -47,10 +47,12 @@ impl Handler<VerifyEmail> for DbActor {
                 request_id: Some(msg.request_id.clone()),
             };
 
+            let account_to_update = msg.account;
+
             let pending_email: PendingEmail = account_pending_emails::dsl::account_pending_emails
                 .filter(account_pending_emails::dsl::id.eq(msg.id))
                 .filter(account_pending_emails::dsl::deleted_at.is_null())
-                .filter(account_pending_emails::dsl::account_id.eq(msg.account.id))
+                .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
                 .first(&conn)?;
 
             let verify_cmd = pending_email::Verify{
@@ -76,13 +78,12 @@ impl Handler<VerifyEmail> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            match event.data {
+            let account_to_update = match event.data {
                 pending_email::EventData::VerificationSucceededV1 => {
                     let update_email_cmd = account::UpdateEmail{
                         email: pending_email.email,
                         metadata: metadata.clone(),
                     };
-                    let account_to_update = msg.account;
 
                     let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_email_cmd)?;
 
@@ -124,13 +125,14 @@ impl Handler<VerifyEmail> for DbActor {
                             .values(&event)
                             .execute(&conn)?;
                     }
+                    account_to_update
                 },
-                _ => {},
-            }
+                _ => account_to_update,
+            };
 
             return match event.data {
                 pending_email::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.reason)),
-                _ => Ok(()),
+                _ => Ok(account_to_update),
             };
         })?);
     }

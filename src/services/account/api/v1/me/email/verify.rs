@@ -36,30 +36,27 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
             .responder();
     }
 
-    let account = auth.account.expect("unwraping auth account");
-    let account2 = account.clone(); // ugly...
-
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(350, 550))).into_future()
     .from_err()
     .and_then(move |_|
         state.db
         .send(controllers::VerifyEmail{
-            account,
+            account: auth.account.expect("unwraping auth account"),
             id: email_data.id,
             code: email_data.code.clone(),
             request_id,
         }).flatten()
     )
-    .and_then(move |_| {
+    .and_then(move |account| {
         let res = models::MeResponse{
-            id: account2.id,
-            created_at: account2.created_at,
-            first_name: account2.first_name,
-            last_name: account2.last_name,
-            username: account2.username,
-            email: account2.email,
-            avatar_url: account2.avatar_url,
+            id: account.id,
+            created_at: account.created_at,
+            first_name: account.first_name,
+            last_name: account.last_name,
+            username: account.username,
+            email: account.email,
+            avatar_url: account.avatar_url,
         };
         let res = api::Response::data(res);
         Ok(HttpResponse::Ok().json(&res))
