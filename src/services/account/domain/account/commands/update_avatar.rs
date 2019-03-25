@@ -24,12 +24,15 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         if self.avatar.len() > account_service::AVATAR_MAX_SIZE {
             return Err(KernelError::Validation("Image size must be inferior or equal to 3MB.".to_string()));
         }
 
-        // TODO: validate avatar image type
+        let content_type = mimesniff::detect_content_type(&self.avatar);
+        if content_type != mime::IMAGE_PNG && content_type != mime::IMAGE_JPEG {
+            return Err(KernelError::Validation("Image format must be png, jpg or jpeg.".to_string()));
+        }
 
         return Ok(());
     }
