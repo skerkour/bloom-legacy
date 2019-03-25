@@ -10,13 +10,19 @@ use actix_web::{
     middleware::cors::Cors,
     http::{header},
 };
-
+use rusoto_core::Region;
+use rusoto_s3::S3Client;
+use std::str::FromStr;
 
 pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
+
+    let region = Region::from_str(&cfg.aws_region()).expect("AWS region not valid");
     let api_state = api::State{
         db,
         config: cfg,
+        s3_client: S3Client::new(region),
     };
+
     App::with_state(api_state.clone())
     .middleware(middlewares::RequestIdMiddleware)
     .middleware(middlewares::LoggerMiddleware)

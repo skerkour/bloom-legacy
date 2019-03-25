@@ -53,6 +53,14 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
 
         // TODO: uplaod to s3
 
+        // let req = PutObjectRequest {
+        //         bucket: bucket.to_owned(),
+        //         key: dest_filename.to_owned(),
+        //         body: Some(contents.into()),
+        //         ..Default::default()
+        //     };
+        // let result = client.put_object(req).sync().expect("Couldn't PUT object");
+
         return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
