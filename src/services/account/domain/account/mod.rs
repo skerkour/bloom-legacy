@@ -23,3 +23,15 @@ pub use events::{
     EmailUpdatedV1,
     AvatarUpdatedV1,
 };
+
+
+use diesel::{
+    PgConnection,
+    r2d2::{PooledConnection, ConnectionManager},
+};
+use rusoto_s3::S3Client;
+
+pub struct UpdateAvatarCtx<'a> {
+    pub conn: &'a PooledConnection<ConnectionManager<PgConnection>>,
+    pub s3_client: S3Client,
+}

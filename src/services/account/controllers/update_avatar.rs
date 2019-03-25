@@ -13,11 +13,14 @@ use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone)]
 pub struct UpdateAvatar {
     pub account: Account,
     pub avatar: Vec<u8>,
     pub request_id: String,
+    pub s3_bucket: String,
+    pub s3_region: String,
+    pub s3_client: rusoto_s3::S3Client,
 }
 
 impl Message for UpdateAvatar {
@@ -48,10 +51,12 @@ impl Handler<UpdateAvatar> for DbActor {
 
             let update_first_name_cmd = account::UpdateAvatar{
                 avatar: msg.avatar,
+                s3_bucket: msg.s3_bucket,
+                s3_region: msg.s3_region,
                 metadata: metadata.clone(),
             };
 
-            let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_first_name_cmd)?;
+            let (account_to_update, event, _) = eventsourcing::execute(&msg.s3_client, account_to_update, &update_first_name_cmd)?;
 
             // update account
             diesel::update(account_accounts::dsl::account_accounts
