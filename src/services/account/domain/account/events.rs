@@ -26,6 +26,7 @@ pub enum EventData {
     PasswordUpdatedV1(PasswordUpdatedV1),
     EmailUpdatedV1(EmailUpdatedV1),
     SignInFailedV1,
+    AvatarUpdatedV1(AvatarUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -58,6 +59,11 @@ pub struct PasswordUpdatedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct EmailUpdatedV1 {
     pub email: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct AvatarUpdatedV1 {
+    pub avatar_url: String,
 }
 
 impl eventsourcing::Event for Event {
@@ -104,6 +110,11 @@ impl eventsourcing::Event for Event {
             },
             // SignInFailedV1
             EventData::SignInFailedV1 => domain::Account {
+                ..aggregate
+            },
+            // AvatarUpdatedV1
+            EventData::AvatarUpdatedV1(ref data) => domain::Account {
+                avatar_url: data.avatar_url.clone(),
                 ..aggregate
             },
         }

@@ -19,6 +19,7 @@ use rand::Rng;
 use std::fs;
 use std::io::Write;
 
+const MB2: usize = 2_097_152;
 
 pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     Box::new(
@@ -68,16 +69,15 @@ fn save_file(
         Ok(file) => file,
         Err(e) => return Box::new(future::err(error::ErrorInternalServerError(e))),
     };
-    // let mut vec: Vec<u8> = Vec::new();
     Box::new(
         field
-        // .concat2()
         .fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, error::MultipartError> {
-                    // let mut acc = acc;
-                    acc.extend_from_slice(&bytes);
-                    future::ok(acc)
+            acc.extend_from_slice(&bytes);
+            if acc.len() > MB2 {
+                return future::err(error::MultipartError::Payload(error::PayloadError::Overflow))
+            }
+            future::ok(acc)
         })
-        // .map(|chunk| chunk.to_vec())
         .and_then(move |buffer| {
             let len = file.write(&buffer)
                 .map(|len| len as i64)
@@ -87,9 +87,9 @@ fn save_file(
                 });
             return future::result(len);
         })
-            .map_err(|e| {
-                println!("save_file failed, {:?}", e);
-                error::ErrorInternalServerError(e)
-            }),
+        .map_err(|e| {
+            println!("save_file failed, {:?}", e);
+            error::ErrorInternalServerError(e)
+        }),
     )
 }

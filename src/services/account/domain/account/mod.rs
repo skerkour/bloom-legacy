@@ -11,6 +11,7 @@ pub use commands::{
     UpdatePassword,
     UpdateEmail,
     FailSignIn,
+    UpdateAvatar,
 };
 pub use events::{
     Event,
@@ -20,4 +21,5 @@ pub use events::{
     LastNameUpdatedV1,
     PasswordUpdatedV1,
     EmailUpdatedV1,
+    AvatarUpdatedV1,
 };
