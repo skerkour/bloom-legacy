@@ -76,7 +76,6 @@ impl Handler<VerifyEmail> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            // TODO:  delete all other pending emails with this account
             match event.data {
                 pending_email::EventData::VerificationSucceededV1 => {
                     let update_email_cmd = account::UpdateEmail{
@@ -99,6 +98,32 @@ impl Handler<VerifyEmail> for DbActor {
                     diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                         .values(&event)
                         .execute(&conn)?;
+
+                    // delete all other pending emails for account
+                    let pending_emails_to_delete: Vec<PendingEmail> = account_pending_emails::dsl::account_pending_emails
+                        .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
+                        .filter(account_pending_emails::dsl::deleted_at.is_null())
+                        .filter(account_pending_emails::dsl::id.ne(msg.id))
+                        .load(&conn)?;
+
+                    let delete_cmd = pending_email::Delete{
+                        metadata: metadata.clone(),
+                    };
+
+                    for pending_email_to_delete in pending_emails_to_delete {
+                        let (session, event, _) = eventsourcing::execute(&conn, pending_email_to_delete, &delete_cmd)?;
+                        diesel::update(account_pending_emails::dsl::account_pending_emails
+                            .filter(account_pending_emails::dsl::id.eq(session.id)))
+                            .set((
+                                account_pending_emails::dsl::version.eq(session.version),
+                                account_pending_emails::dsl::updated_at.eq(session.updated_at),
+                                account_pending_emails::dsl::deleted_at.eq(session.deleted_at),
+                            ))
+                            .execute(&conn)?;
+                        diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
+                            .values(&event)
+                            .execute(&conn)?;
+                    }
                 },
                 _ => {},
             }
