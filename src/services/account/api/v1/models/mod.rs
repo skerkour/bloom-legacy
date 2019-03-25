@@ -86,3 +86,8 @@ pub struct UpdatePassword {
     pub current_password: String,
     pub new_password: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateEmail {
+    pub email: String,
+}

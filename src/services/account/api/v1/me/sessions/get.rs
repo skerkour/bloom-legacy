@@ -29,7 +29,7 @@ pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
 
     return state.db
     .send(controllers::FindAccountSessions{
-        account_id: auth.account.expect("unwrapping non non account").id,
+        account_id: auth.account.expect("unwrapping non none account").id,
     })
     .from_err()
     .and_then(move |sessions| {
