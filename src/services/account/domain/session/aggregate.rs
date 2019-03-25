@@ -14,10 +14,10 @@ pub struct Session {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub token: String,
+    pub device: Device,
     pub ip: String,
     pub location: Option<Location>,
-    pub device: Device,
+    pub token: String,
 
     pub account_id: uuid::Uuid,
 }

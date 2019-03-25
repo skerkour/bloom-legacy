@@ -9,6 +9,7 @@ mod revoke_session;
 mod update_account;
 mod update_password;
 mod update_avatar;
+mod update_email;
 
 pub use complete_registration::CompleteRegistration;
 pub use verify::Verify;
@@ -21,3 +22,4 @@ pub use revoke_session::RevokeSession;
 pub use update_account::UpdateAccount;
 pub use update_password::UpdatePassword;
 pub use update_avatar::UpdateAvatar;
+pub use update_email::UpdateEmail;

@@ -22,7 +22,8 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     DeletedV1,
-    VerifiedV1,
+    VerificationFailedV1(VerificationFailedV1),
+    VerificationSucceededV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -33,6 +34,10 @@ pub struct CreatedV1 {
     pub account_id: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerificationFailedV1 {
+    pub reason: String,
+}
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingEmail;
@@ -48,9 +53,18 @@ impl eventsourcing::Event for Event {
                 version: 0,
                 email: data.email.clone(),
                 token: data.token.clone(),
+                trials: 0,
                 account_id: data.account_id,
             },
-            EventData::DeletedV1 | EventData::VerifiedV1 => super::PendingEmail{
+            // VerificationSucceededV1
+            EventData::VerificationSucceededV1 => aggregate,
+            // VerificationFailedV1
+            EventData::VerificationFailedV1(_) => super::PendingEmail{
+                trials: aggregate.trials + 1,
+                ..aggregate
+            },
+            // PendingEmail
+            EventData::DeletedV1 => super::PendingEmail{
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

@@ -38,9 +38,8 @@ impl<'a> eventsourcing::Command<'a> for Create {
         use crate::db::schema::{
             account_accounts::dsl::*,
         };
-        use diesel::QueryDsl;
-        use diesel::ExpressionMethods;
-        use diesel::RunQueryDsl;
+        use diesel::prelude::*;
+
 
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;

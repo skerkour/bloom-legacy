@@ -61,8 +61,9 @@ table! {
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         email -> Text,
-        account_id -> Uuid,
         token -> Text,
+        trials -> Int8,
+        account_id -> Uuid,
     }
 }
 
@@ -83,10 +84,10 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        token -> Text,
+        device -> Jsonb,
         ip -> Text,
         location -> Nullable<Jsonb>,
-        device -> Jsonb,
+        token -> Text,
         account_id -> Uuid,
     }
 }

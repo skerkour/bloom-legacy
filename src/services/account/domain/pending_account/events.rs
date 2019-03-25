@@ -21,7 +21,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
-    VerificationFailedV1(String),
+    VerificationFailedV1(VerificationFailedV1),
     VerificationSucceededV1,
     RegistrationCompletedV1,
 }
@@ -37,8 +37,8 @@ pub struct CreatedV1 {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CodeResentV1 {
-    pub token: String,
+pub struct VerificationFailedV1 {
+    pub reason: String,
 }
 
 impl eventsourcing::Event for Event {
@@ -60,9 +60,7 @@ impl eventsourcing::Event for Event {
                 token: data.token.clone(),
                 trials: 0,
             },
-            EventData::VerificationSucceededV1 => super::PendingAccount{
-                ..aggregate
-            },
+            EventData::VerificationSucceededV1 => aggregate,
             EventData::VerificationFailedV1(_) => super::PendingAccount{
                 trials: aggregate.trials + 1,
                 ..aggregate

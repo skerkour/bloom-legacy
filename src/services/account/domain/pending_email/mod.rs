@@ -4,6 +4,9 @@ mod aggregate;
 
 
 pub use aggregate::PendingEmail;
+pub use commands::{
+    Create,
+};
 pub use events::{
     Event,
     EventData,

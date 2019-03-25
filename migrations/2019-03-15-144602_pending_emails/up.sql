@@ -8,6 +8,7 @@ CREATE TABLE account_pending_emails (
 
     email TEXT NOT NULL,
     token TEXT NOT NULL,
+    trials BIGINT NOT NULL,
 
     account_id UUID NOT NULL REFERENCES account_accounts (id),
 

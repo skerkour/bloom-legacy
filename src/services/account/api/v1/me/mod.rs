@@ -2,6 +2,8 @@ mod logs;
 mod get;
 mod put;
 
+
+pub mod email;
 pub mod sessions;
 pub mod password;
 pub mod avatar;

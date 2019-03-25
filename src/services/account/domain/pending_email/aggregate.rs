@@ -16,6 +16,7 @@ pub struct PendingEmail {
 
     pub email: String,
     pub token: String, // hashed token
+    pub trials: i64,
 
     pub account_id: uuid::Uuid,
 }
@@ -34,6 +35,7 @@ impl PendingEmail {
 
             email: String::new(),
             token: String::new(),
+            trials: 0,
 
             account_id: uuid::Uuid::new_v4(),
         };

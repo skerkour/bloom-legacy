@@ -88,6 +88,12 @@ pub struct UpdatePassword {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct UpdateEmail {
+pub struct UpdateEmailBody {
     pub email: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateEmailResponse {
+    pub id: uuid::Uuid, // id of the new pending_email
+}
+

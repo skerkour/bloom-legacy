@@ -14,5 +14,6 @@ pub use events::{
     Event,
     EventData,
     CreatedV1,
+    VerificationFailedV1,
 };
 
