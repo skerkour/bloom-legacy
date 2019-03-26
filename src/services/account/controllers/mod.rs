@@ -12,6 +12,8 @@ mod update_avatar;
 mod update_email;
 mod verify_email;
 mod reset_password;
+mod request_password_reset;
+
 
 pub use complete_registration::CompleteRegistration;
 pub use verify::Verify;
@@ -27,3 +29,4 @@ pub use update_avatar::UpdateAvatar;
 pub use update_email::UpdateEmail;
 pub use verify_email::VerifyEmail;
 pub use reset_password::ResetPassword;
+pub use request_password_reset::RequestPasswordReset;

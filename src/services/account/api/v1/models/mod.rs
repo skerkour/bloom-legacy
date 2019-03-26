@@ -110,3 +110,9 @@ pub struct ResetPassowrdBody {
     pub new_password: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PasswordResetRequestBody {
+    pub email_or_username: String,
+}
+
+

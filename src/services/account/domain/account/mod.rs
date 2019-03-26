@@ -13,6 +13,7 @@ pub use commands::{
     FailSignIn,
     UpdateAvatar,
     ResetPassword,
+    RequestPasswordReset,
 };
 pub use events::{
     Event,
