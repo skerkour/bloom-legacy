@@ -33,7 +33,6 @@ pub fn post((registration_data, req): (Json<models::CompleteRegistrationBody>, H
         state.db
         .send(controllers::CompleteRegistration{
             id: registration_data.id.clone(),
-            code: registration_data.code.clone(),
             username: registration_data.username.clone(),
             config,
             request_id,

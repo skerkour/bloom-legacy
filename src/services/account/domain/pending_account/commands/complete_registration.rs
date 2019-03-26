@@ -14,7 +14,6 @@ use diesel::{
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
     pub id: String,
-    pub code: String,
     pub metadata: EventMetadata,
 }
 
@@ -33,15 +32,8 @@ impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
         }
 
         // verify given code
-        let is_valid = bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)?;
-        if !is_valid {
-            return Err(KernelError::Validation("Code is not valid.".to_string()));
-        }
-
-        // verify code expiration
-        let duration = aggregate.created_at.signed_duration_since(now);
-        if duration.num_minutes() > 30 {
-            return Err(KernelError::Validation("Code has expired. Please create another account.".to_string()));
+        if !aggregate.verified {
+            return Err(KernelError::Validation("Please verify your email before.".to_string()));
         }
 
         return Ok(());

@@ -18,7 +18,7 @@ use rand::Rng;
 
 
 
-pub fn post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<api::State>))
+pub fn post((verify_data, req): (Json<models::VerifyPendingAccountBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
@@ -30,7 +30,7 @@ pub fn post((verify_data, req): (Json<models::VerifyBody>, HttpRequest<api::Stat
     .from_err()
     .and_then(move |_|
         state.db
-        .send(controllers::Verify{
+        .send(controllers::VerifyPendingAccount{
             id: verify_data.id.clone(),
             code: verify_data.code.clone(),
             request_id: request_id.0,

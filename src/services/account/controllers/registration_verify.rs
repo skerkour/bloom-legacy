@@ -13,20 +13,20 @@ use serde::{Serialize, Deserialize};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Verify {
+pub struct VerifyPendingAccount {
     pub id: String,
     pub code: String,
     pub request_id: String,
 }
 
-impl Message for Verify {
+impl Message for VerifyPendingAccount {
     type Result = Result<(), KernelError>;
 }
 
-impl Handler<Verify> for DbActor {
+impl Handler<VerifyPendingAccount> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: Verify, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: VerifyPendingAccount, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             account_pending_accounts,
             account_pending_accounts_events,
@@ -42,13 +42,13 @@ impl Handler<Verify> for DbActor {
                 actor_id: None,
                 request_id: Some(msg.request_id.clone()),
             };
-            let verify_cmd = pending_account::Verify{
+            let VerifyPendingAccount_cmd = pending_account::Verify{
                 id: msg.id.clone(),
                 code: msg.code.clone(),
                 metadata,
             };
 
-            let pending_account_id = uuid::Uuid::parse_str(&verify_cmd.id)
+            let pending_account_id = uuid::Uuid::parse_str(&VerifyPendingAccount_cmd.id)
                 .map_err(|_| KernelError::Validation("id is not a valid uuid".to_string()))?;
 
             let pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
@@ -56,16 +56,16 @@ impl Handler<Verify> for DbActor {
                 .filter(account_pending_accounts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_cmd)?;
+            let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &VerifyPendingAccount_cmd)?;
 
             // update pending_account
             diesel::update(account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
-            )
+                .filter(account_pending_accounts::dsl::id.eq(pending_account_id)))
                 .set((
                     account_pending_accounts::dsl::trials.eq(pending_account.trials),
                     account_pending_accounts::dsl::version.eq(pending_account.version),
                     account_pending_accounts::dsl::updated_at.eq(pending_account.updated_at),
+                    account_pending_accounts::dsl::verified.eq(pending_account.verified),
                 ))
                 .execute(&conn)?;
 

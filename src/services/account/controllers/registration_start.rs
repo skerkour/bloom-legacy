@@ -11,7 +11,7 @@ use crate::{
 
 
 #[derive(Clone, Debug)]
-pub struct Register {
+pub struct StartRegistration {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
@@ -21,14 +21,14 @@ pub struct Register {
     // pub logger: RequestLogger,
 }
 
-impl Message for Register {
+impl Message for StartRegistration {
     type Result = Result<domain::PendingAccount, KernelError>;
 }
 
-impl Handler<Register> for DbActor {
+impl Handler<StartRegistration> for DbActor {
     type Result = Result<domain::PendingAccount, KernelError>;
 
-    fn handle(&mut self, msg: Register, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: StartRegistration, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             account_pending_accounts,
             account_pending_accounts_events,

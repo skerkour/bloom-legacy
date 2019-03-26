@@ -12,6 +12,7 @@ use crate::{
         },
     },
     services::account::domain,
+    services::account as account_service,
     services::common::events::EventMetadata,
 };
 use serde::{Serialize, Deserialize};
@@ -20,7 +21,6 @@ use serde::{Serialize, Deserialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
     pub id: String,
-    pub code: String,
     pub username: String,
     pub config: Config,
     pub request_id: String,
@@ -66,14 +66,12 @@ impl Handler<CompleteRegistration> for DbActor {
             // complete registration
             let complete_registration_cmd = pending_account::CompleteRegistration{
                 id: msg.id.clone(),
-                code: msg.code.clone(),
                 metadata: metadata.clone(),
             };
             let (pending_account_to_update, event, _) = eventsourcing::execute(&conn, pending_account_to_update, &complete_registration_cmd)?;
 
             diesel::update(account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
-            )
+                .filter(account_pending_accounts::dsl::id.eq(pending_account_id)))
                 .set((
                     account_pending_accounts::dsl::version.eq(pending_account_to_update.version),
                     account_pending_accounts::dsl::updated_at.eq(pending_account_to_update.updated_at),
@@ -94,7 +92,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 email: pending_account_to_update.email.clone(),
                 password: pending_account_to_update.password.clone(),
                 username: msg.username.clone(),
-                avatar_url: format!("{}/imgs/profile.jpg", msg.config.www_host()),
+                avatar_url: format!("{}{}", msg.config.www_host(), account_service::AVATAR_DEFAULT_PATH),
                 metadata: metadata.clone(),
             };
             let (new_account, event, _) = eventsourcing::execute(&conn, new_account, &create_cmd)?;

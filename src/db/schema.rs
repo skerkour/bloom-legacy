@@ -40,6 +40,7 @@ table! {
         password -> Text,
         token -> Text,
         trials -> Int8,
+        verified -> Bool,
     }
 }
 

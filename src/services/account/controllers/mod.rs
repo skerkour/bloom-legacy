@@ -1,6 +1,6 @@
-mod complete_registration;
-mod register;
-mod verify;
+mod registration_start;
+mod registration_verify;
+mod registration_complete;
 mod sign_out;
 mod sign_in;
 mod find_account;
@@ -15,9 +15,9 @@ mod reset_password;
 mod request_password_reset;
 
 
-pub use complete_registration::CompleteRegistration;
-pub use verify::Verify;
-pub use register::Register;
+pub use registration_start::StartRegistration;
+pub use registration_verify::VerifyPendingAccount;
+pub use registration_complete::CompleteRegistration;
 pub use sign_out::SignOut;
 pub use sign_in::SignIn;
 pub use find_account::FindAccount;

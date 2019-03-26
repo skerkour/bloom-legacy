@@ -4,7 +4,7 @@ use crate::services::account::domain::{
 };
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RegisterBody {
+pub struct StartRegistrationBody {
     pub first_name: String,
     pub last_name: String,
     pub email: String,
@@ -12,13 +12,13 @@ pub struct RegisterBody {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RegisterResponse {
+pub struct StartRegistrationResponse {
     pub id: uuid::Uuid,
 }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyBody {
+pub struct VerifyPendingAccountBody {
     pub id: String,
     pub code: String,
 }
@@ -27,7 +27,6 @@ pub struct VerifyBody {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistrationBody {
     pub id: String,
-    pub code: String,
     pub username: String,
 }
 

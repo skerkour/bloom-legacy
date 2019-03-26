@@ -12,6 +12,7 @@ CREATE TABLE account_pending_accounts (
     password TEXT NOT NULL,
     token TEXT NOT NULL,
     trials BIGINT NOT NULL,
+    verified BOOLEAN NOT NULL,
 
     PRIMARY KEY(id)
 );

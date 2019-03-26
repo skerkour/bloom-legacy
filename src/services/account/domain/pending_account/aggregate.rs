@@ -20,6 +20,7 @@ pub struct PendingAccount {
     pub password: String, // hashed password
     pub token: String, // hashed verification code
     pub trials: i64,
+    pub verified: bool,
 }
 
 impl PendingAccount {
@@ -39,6 +40,7 @@ impl PendingAccount {
             password: String::new(),
             token: String::new(),
             trials: 0,
+            verified: false,
         };
     }
 }

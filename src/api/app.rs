@@ -46,9 +46,9 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
             .max_age(3600)
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
-            .resource("/account/v1/welcome/register", |r| r.method(http::Method::POST).with_config(accountv1::register::post, api::json_default_config))
-            .resource("/account/v1/welcome/verify", |r| r.method(http::Method::POST).with_config(accountv1::verify::post, api::json_default_config))
-            .resource("/account/v1/welcome/complete", |r| r.method(http::Method::POST).with_config(accountv1::complete_registration::post, api::json_default_config))
+            .resource("/account/v1/registration/start", |r| r.method(http::Method::POST).with_config(accountv1::registration::start::post, api::json_default_config))
+            .resource("/account/v1/registration/verify", |r| r.method(http::Method::POST).with_config(accountv1::registration::verify::post, api::json_default_config))
+            .resource("/account/v1/registration/complete", |r| r.method(http::Method::POST).with_config(accountv1::registration::complete::post, api::json_default_config))
             .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(accountv1::sign_in::post, api::json_default_config))
             .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(accountv1::sign_out::post))
             .resource("/account/v1/recover", |r| {

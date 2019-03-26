@@ -17,7 +17,7 @@ use futures::future::IntoFuture;
 use rand::Rng;
 
 
-pub fn post((register_data, req): (Json<models::RegisterBody>, HttpRequest<api::State>))
+pub fn post((register_data, req): (Json<models::StartRegistrationBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
@@ -30,7 +30,7 @@ pub fn post((register_data, req): (Json<models::RegisterBody>, HttpRequest<api::
     .from_err()
     .and_then(move |_|
         state.db
-        .send(controllers::Register{
+        .send(controllers::StartRegistration{
             first_name: register_data.first_name.clone(),
             last_name: register_data.last_name.clone(),
             email: register_data.email.clone(),
@@ -40,7 +40,7 @@ pub fn post((register_data, req): (Json<models::RegisterBody>, HttpRequest<api::
         }).flatten()
     )
     .and_then(move |pending_account| {
-        let res = models::RegisterResponse{
+        let res = models::StartRegistrationResponse{
             id: pending_account.id,
         };
         let res = api::Response::data(res);
