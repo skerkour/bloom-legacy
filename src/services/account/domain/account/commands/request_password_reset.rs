@@ -55,6 +55,6 @@ impl<'a> eventsourcing::Command<'a> for RequestPasswordReset {
             data,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
-        }, RequestPasswordResetNonStored{cleartext_token: hashed_token}));
+        }, RequestPasswordResetNonStored{cleartext_token: token}));
     }
 }

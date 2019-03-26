@@ -30,12 +30,6 @@ pub fn put((password_data, req): (Json<models::ResetPassowrdBody>, HttpRequest<a
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-     if auth.session.is_some() || auth.account.is_some() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Must not be authenticated".to_string())).error_response()))
-            .responder();
-    }
-
-
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(250, 350))).into_future()
     .from_err()

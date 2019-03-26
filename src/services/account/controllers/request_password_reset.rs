@@ -41,6 +41,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                 .filter(account_accounts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
+
             let metadata = EventMetadata{
                 actor_id: Some(user.id),
                 request_id: Some(msg.request_id.clone()),
@@ -62,11 +63,8 @@ impl Handler<RequestPasswordReset> for DbActor {
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                 .values(&event)
                 .execute(&conn)?;
-            diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
-                .values(&event)
-                .execute(&conn)?;
 
-            // end email
+            // send email
             // we can safely unwrap user.password_reset_id because it's set when applying the event to user
             send_password_reset(
                 &msg.config,
