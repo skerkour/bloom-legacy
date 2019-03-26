@@ -12,8 +12,8 @@ CREATE TABLE account_accounts (
     is_admin BOOLEAN NOT NULL,
     last_name TEXT NOT NULL,
     password TEXT NOT NULL,
-    recovery_id UUID,
-    recovery_token TEXT,
+    password_reset_id UUID,
+    password_reset_token TEXT,
     username TEXT UNIQUE NOT NULL,
 
     PRIMARY KEY(id)

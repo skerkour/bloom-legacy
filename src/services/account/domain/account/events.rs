@@ -27,6 +27,8 @@ pub enum EventData {
     EmailUpdatedV1(EmailUpdatedV1),
     SignInFailedV1,
     AvatarUpdatedV1(AvatarUpdatedV1),
+    PasswordResetRequestedV1(PasswordResetRequestedV1),
+    PasswordResetedV1(PasswordResetedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -66,6 +68,17 @@ pub struct AvatarUpdatedV1 {
     pub avatar_url: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PasswordResetRequestedV1 {
+    pub password_reset_id: uuid::Uuid,
+    pub password_reset_token: String, // hashed token
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PasswordResetedV1 {
+    pub password: String, // hashed password
+}
+
 impl eventsourcing::Event for Event {
     type Aggregate = super::Account;
 
@@ -84,8 +97,8 @@ impl eventsourcing::Event for Event {
                 is_admin: data.is_admin,
                 last_name: data.last_name.clone(),
                 password: data.password.clone(),
-                recovery_id: None,
-                recovery_token: None,
+                password_reset_id: None,
+                password_reset_token: None,
                 username: data.username.clone(),
             },
             // FirstNameUpdatedV1
@@ -115,6 +128,19 @@ impl eventsourcing::Event for Event {
             // AvatarUpdatedV1
             EventData::AvatarUpdatedV1(ref data) => domain::Account {
                 avatar_url: data.avatar_url.clone(),
+                ..aggregate
+            },
+            // PasswordResetRequestedV1
+            EventData::PasswordResetRequestedV1(ref data) => domain::Account {
+                password_reset_id: Some(data.password_reset_id),
+                password_reset_token: Some(data.password_reset_token.clone()),
+                ..aggregate
+            },
+            // PasswordResetedV1
+            EventData::PasswordResetedV1(ref data) => domain::Account {
+                password: data.password.clone(),
+                password_reset_id: None,
+                password_reset_token: None,
                 ..aggregate
             },
         }

@@ -20,8 +20,8 @@ pub struct Account {
     pub is_admin: bool,
     pub last_name: String,
     pub password: String, // hashed password
-    pub recovery_id: Option<uuid::Uuid>,
-    pub recovery_token: Option<String>,
+    pub password_reset_id: Option<uuid::Uuid>,
+    pub password_reset_token: Option<String>,
     pub username: String,
 }
 
@@ -43,8 +43,8 @@ impl Account {
             is_admin: false,
             last_name: String::new(),
             password: String::new(),
-            recovery_id: None,
-            recovery_token: None,
+            password_reset_id: None,
+            password_reset_token: None,
             username: String::new(),
         };
     }

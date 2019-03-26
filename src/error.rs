@@ -53,3 +53,9 @@ impl std::convert::From<tokio_timer::Error> for KernelError {
         KernelError::Tokio
     }
 }
+
+impl std::convert::From<bcrypt::BcryptError> for KernelError {
+    fn from(_err: bcrypt::BcryptError) -> Self {
+        KernelError::Bcrypt
+    }
+}

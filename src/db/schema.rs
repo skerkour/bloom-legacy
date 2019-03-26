@@ -11,8 +11,8 @@ table! {
         is_admin -> Bool,
         last_name -> Text,
         password -> Text,
-        recovery_id -> Nullable<Uuid>,
-        recovery_token -> Nullable<Text>,
+        password_reset_id -> Nullable<Uuid>,
+        password_reset_token -> Nullable<Text>,
         username -> Text,
     }
 }
