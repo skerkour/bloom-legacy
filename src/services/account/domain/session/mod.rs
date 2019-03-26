@@ -10,11 +10,12 @@ pub use aggregate::{
 };
 pub use commands::{
     Start,
-    End,
+    SignOut,
     Revoke,
 };
 pub use events::{
     Event,
     EventData,
     StartedV1,
+    RevokedReason,
 };

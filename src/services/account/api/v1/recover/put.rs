@@ -17,11 +17,12 @@ use actix_web::{
 };
 use futures::future;
 use futures::future::IntoFuture;
-use std::time::Duration;
 use rand::Rng;
+use std::time::Duration;
 
 
-pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::State>))
+
+pub fn put((password_data, req): (Json<models::ResetPassowrdBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
@@ -29,19 +30,21 @@ pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::Sta
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-    if auth.session.is_some() || auth.account.is_some() {
+     if auth.session.is_some() || auth.account.is_some() {
         return future::result(Ok(api::Error::from(KernelError::Unauthorized("Must not be authenticated".to_string())).error_response()))
             .responder();
     }
 
 
-    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
+    // random sleep to prevent bruteforce and sidechannels attacks
+    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(250, 350))).into_future()
     .from_err()
     .and_then(move |_|
         state.db
-        .send(controllers::SignIn{
-            username: sign_in_data.username.clone(),
-            password: sign_in_data.password.clone(),
+        .send(controllers::ResetPassword{
+            reset_password_id: password_data.id,
+            token: password_data.token.clone(),
+            new_password: password_data.new_password.clone(),
             request_id,
         }).flatten()
     )
@@ -52,7 +55,6 @@ pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::Sta
         });
         Ok(HttpResponse::Ok().json(&res))
     })
-    .from_err() // MailboxError to KernelError
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
         return api::Error::from(err);

@@ -1,7 +1,7 @@
 mod start;
-mod end;
+mod sign_out;
 mod revoke;
 
 pub use start::Start;
-pub use end::End;
+pub use sign_out::SignOut;
 pub use revoke::Revoke;

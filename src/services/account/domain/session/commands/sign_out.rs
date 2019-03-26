@@ -11,11 +11,11 @@ use diesel::{
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct End {
+pub struct SignOut {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for End {
+impl<'a> eventsourcing::Command<'a> for SignOut {
     type Aggregate = session::Session;
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
@@ -30,7 +30,7 @@ impl<'a> eventsourcing::Command<'a> for End {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = session::EventData::EndedV1;
+        let data = session::EventData::SignedOutV1;
         let timestamp = chrono::Utc::now();
 
         return  Ok((session::Event{

@@ -102,3 +102,11 @@ pub struct VerifyEmailBody {
     pub id: uuid::Uuid,
     pub code: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ResetPassowrdBody {
+    pub id: uuid::Uuid,
+    pub token: String,
+    pub new_password: String,
+}
+

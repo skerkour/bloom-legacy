@@ -51,7 +51,8 @@ impl Handler<RevokeSession> for DbActor {
                 .first(&conn)?;
 
             let revoke_cmd = session::Revoke{
-                current_session_id: msg.current_session_id,
+                current_session_id: Some(msg.current_session_id),
+                reason: session::RevokedReason::Manually,
                 metadata,
             };
 

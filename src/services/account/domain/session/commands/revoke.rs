@@ -12,7 +12,8 @@ use diesel::{
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Revoke {
-    pub current_session_id: uuid::Uuid,
+    pub current_session_id: Option<uuid::Uuid>,
+    pub reason: session::RevokedReason,
     pub metadata: EventMetadata,
 }
 
@@ -28,15 +29,17 @@ impl<'a> eventsourcing::Command<'a> for Revoke {
             return Err(KernelError::Validation("Session is currently not active.".to_string()));
         }
 
-        if self.current_session_id == aggregate.id {
-            return Err(KernelError::Validation("Revoking current session is not permitted".to_string()));
+        if let Some(current_session_id) = self.current_session_id {
+            if current_session_id == aggregate.id {
+                return Err(KernelError::Validation("Revoking current session is not permitted".to_string()));
+            }
         }
 
         return Ok(());
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = session::EventData::RevokedV1;
+        let data = session::EventData::RevokedV1(self.reason);
         let timestamp = chrono::Utc::now();
 
         return  Ok((session::Event{

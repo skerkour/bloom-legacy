@@ -42,11 +42,11 @@ impl Handler<SignOut> for DbActor {
                 actor_id: Some(msg.actor.id),
                 request_id: Some(msg.request_id.clone()),
             };
-            let end_cmd = session::End{
+            let sign_out_cmd = session::SignOut{
                 metadata,
             };
 
-            let (session, event, _) = eventsourcing::execute(&conn, msg.session, &end_cmd)?;
+            let (session, event, _) = eventsourcing::execute(&conn, msg.session, &sign_out_cmd)?;
 
             // update session
             diesel::update(account_sessions::dsl::account_sessions

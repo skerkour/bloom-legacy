@@ -79,7 +79,8 @@ impl Handler<UpdatePassword> for DbActor {
                 .load(&conn)?;
 
             let revoke_cmd = session::Revoke{
-                current_session_id: msg.current_session.id,
+                current_session_id: Some(msg.current_session.id),
+                reason: session::RevokedReason::PasswordUpdated,
                 metadata: metadata.clone(),
             };
 

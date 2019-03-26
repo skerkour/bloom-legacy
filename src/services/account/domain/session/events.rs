@@ -20,9 +20,10 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     StartedV1(StartedV1),
-    EndedV1,
-    RevokedV1,
+    SignedOutV1,
+    RevokedV1(RevokedReason),
 }
+
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -33,6 +34,14 @@ pub struct StartedV1 {
     pub ip: String,
     pub location: super::Location,
     pub device: super::Device,
+}
+
+
+#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+pub enum RevokedReason {
+    Manually,
+    PasswordUpdated,
+    PasswordReseted,
 }
 
 impl eventsourcing::Event for Event {
@@ -53,8 +62,8 @@ impl eventsourcing::Event for Event {
                 token: data.token.clone(),
                 account_id: data.account_id,
             },
-            // EndedV1 | RevokedV1
-            EventData::EndedV1 | EventData::RevokedV1 => super::Session{
+            // SignedOutV1 | RevokedV1
+            EventData::SignedOutV1 | EventData::RevokedV1(_) => super::Session{
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },
