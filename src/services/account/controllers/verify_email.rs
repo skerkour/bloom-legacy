@@ -131,7 +131,7 @@ impl Handler<VerifyEmail> for DbActor {
             };
 
             return match event.data {
-                pending_email::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.reason)),
+                pending_email::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.to_string())),
                 _ => Ok(account_to_update),
             };
         })?);

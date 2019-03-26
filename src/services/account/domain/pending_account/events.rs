@@ -21,7 +21,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
-    VerificationFailedV1(VerificationFailedV1),
+    VerificationFailedV1(VerificationFailedReason),
     VerificationSucceededV1,
     RegistrationCompletedV1,
 }
@@ -36,9 +36,21 @@ pub struct CreatedV1 {
     pub token: String,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerificationFailedV1 {
-    pub reason: String,
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+pub enum VerificationFailedReason {
+    CodeNotValid,
+    CodeExpired,
+    TooManyTrials,
+}
+
+impl ToString for VerificationFailedReason {
+    fn to_string(&self) -> String {
+        match self {
+            VerificationFailedReason::CodeNotValid => "Code is not valid.".to_string(),
+            VerificationFailedReason::CodeExpired => "Code has expired. Please create another account.".to_string(),
+            VerificationFailedReason::TooManyTrials => "Maximum number of trials reached. Please create another account.".to_string(),
+        }
+    }
 }
 
 impl eventsourcing::Event for Event {

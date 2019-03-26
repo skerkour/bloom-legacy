@@ -5,6 +5,7 @@ use crate::{
     db::schema::account_pending_emails_events,
     services::common::events::EventMetadata,
 };
+use std::string::ToString;
 
 
 
@@ -22,7 +23,7 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     DeletedV1,
-    VerificationFailedV1(VerificationFailedV1),
+    VerificationFailedV1(VerificationFailedReason),
     VerificationSucceededV1,
 }
 
@@ -34,9 +35,21 @@ pub struct CreatedV1 {
     pub account_id: uuid::Uuid,
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerificationFailedV1 {
-    pub reason: String,
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+pub enum VerificationFailedReason {
+    CodeNotValid,
+    CodeExpired,
+    TooManyTrials,
+}
+
+impl ToString for VerificationFailedReason {
+    fn to_string(&self) -> String {
+        match self {
+            VerificationFailedReason::CodeNotValid => "Code is not valid.".to_string(),
+            VerificationFailedReason::CodeExpired => "Code has expired. Please try again".to_string(),
+            VerificationFailedReason::TooManyTrials => "Maximum number of trials reached. Please ry again".to_string(),
+        }
+    }
 }
 
 impl eventsourcing::Event for Event {

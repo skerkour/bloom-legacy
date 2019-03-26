@@ -74,7 +74,7 @@ impl Handler<Verify> for DbActor {
                 .execute(&conn)?;
 
             return match event.data {
-                EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.reason)),
+                EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.to_string())),
                 _ => Ok(()),
             };
         })?);

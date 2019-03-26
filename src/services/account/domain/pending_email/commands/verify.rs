@@ -54,19 +54,13 @@ impl<'a> eventsourcing::Command<'a> for Verify {
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         let data = if aggregate.trials + 1 >= 8 {
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedV1{
-                reason: "Maximum number of trials reached. Please create another account.".to_string(),
-            })
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::TooManyTrials)
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedV1{
-                reason: "Code is not valid.".to_string(),
-            })
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeNotValid)
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedV1{
-                reason: "Code has expired. Please create another account.".to_string(),
-            })
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeExpired)
         } else {
             pending_email::EventData::VerificationSucceededV1
         };
