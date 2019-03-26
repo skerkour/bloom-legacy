@@ -157,9 +157,9 @@
     "/account/v1/sign-in": {
       "post": {
         "tags": [
-          "welcome"
+          "account"
         ],
-        "summary": "Complete registration",
+        "summary": "Sign in",
         "operationId": "v1_account_sign_in",
         "requestBody": {
           "description": "Required data",
@@ -189,21 +189,10 @@
     "/account/v1/sign-out": {
       "post": {
         "tags": [
-          "welcome"
+          "account"
         ],
-        "summary": "Complete registration",
+        "summary": "Sign out",
         "operationId": "v1_account_sign_out",
-        "requestBody": {
-          "description": "Required data",
-          "content": {
-            "application/json": {
-              "schema": {
-                "$ref": "#/components/schemas/CompleteBody"
-              }
-            }
-          },
-          "required": true
-        },
         "responses": {
           "200": {
             "description": "Success",
@@ -221,9 +210,9 @@
     "/account/v1/me": {
       "get": {
         "tags": [
-          "welcome"
+          "account"
         ],
-        "summary": "Complete registration",
+        "summary": "fetch account's data",
         "operationId": "v1_me_get",
         "responses": {
           "200": {
@@ -238,11 +227,11 @@
           }
         }
       },
-      "post": {
+      "put": {
         "tags": [
-          "welcome"
+          "account"
         ],
-        "summary": "Complete registration",
+        "summary": "Update account",
         "operationId": "v1_me_post",
         "requestBody": {
           "description": "Required data",
@@ -272,9 +261,9 @@
     "/account/v1/me/sessions": {
       "get": {
         "tags": [
-          "welcome"
+          "account"
         ],
-        "summary": "Complete registration",
+        "summary": "returns account's sessions",
         "operationId": "v1_me_sessions",
         "responses": {
           "200": {
@@ -293,7 +282,7 @@
     "/account/v1/me/sessions/{session_id}/revoke": {
       "post": {
         "tags": [
-          "welcome"
+          "account"
         ],
         "summary": "Complete registration",
         "operationId": "v1_me_sessions_revoke",
@@ -336,6 +325,13 @@
     }
   },
   "components": {
+    "securitySchemes": {
+      "BasicAuth": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "Authorization"
+      }
+    },
     "schemas": {
       "RegisterBody": {
         "type": "object",
@@ -391,20 +387,6 @@
         "allOf": [
           {
             "$ref": "#/components/schemas/ApiResponse"
-          },
-          {
-            "type": "object",
-            "properties": {
-              "data": {
-                "type": "object",
-                "properties": {
-                  "is_valid": {
-                    "type": "boolean",
-                    "description": "always `true`"
-                  }
-                }
-              }
-            }
           }
         ]
       },
@@ -438,11 +420,11 @@
                 "properties": {
                   "id": {
                     "type": "string",
-                    "description": "sessions Id"
+                    "description": "session Id"
                   },
                   "token": {
                     "type": "string",
-                    "description": "sessions Token"
+                    "description": "session Token"
                   }
                 }
               }

@@ -25,7 +25,6 @@ tags:
     description: Everything related to Bloom accounts
 
 
-
 ################################################################################
 # ROUTES
 ################################################################################
@@ -123,8 +122,8 @@ paths:
   /account/v1/sign-in:
     post:
       tags:
-        - welcome
-      summary: Complete registration
+        - account
+      summary: Sign in
       operationId: v1_account_sign_in
       requestBody:
         description: Required data
@@ -146,16 +145,9 @@ paths:
   /account/v1/sign-out:
     post:
       tags:
-        - welcome
-      summary: Complete registration
+        - account
+      summary: Sign out
       operationId: v1_account_sign_out
-      requestBody:
-        description: Required data
-        content:
-          application/json:
-            schema:
-              $ref: '#/components/schemas/CompleteBody'
-        required: true
       responses:
         200:
           description: Success
@@ -169,8 +161,8 @@ paths:
   /account/v1/me:
     get:
       tags:
-        - welcome
-      summary: Complete registration
+        - account
+      summary: fetch account's data
       operationId: v1_me_get
       responses:
         200:
@@ -179,10 +171,10 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/CompleteResponse'
-    post:
+    put:
       tags:
-        - welcome
-      summary: Complete registration
+        - account
+      summary: Update account
       operationId: v1_me_post
       requestBody:
         description: Required data
@@ -204,8 +196,8 @@ paths:
   /account/v1/me/sessions:
     get:
       tags:
-        - welcome
-      summary: Complete registration
+        - account
+      summary: returns account's sessions
       operationId: v1_me_sessions
       responses:
         200:
@@ -218,7 +210,7 @@ paths:
   /account/v1/me/sessions/{session_id}/revoke:
     post:
       tags:
-        - welcome
+        - account
       summary: Complete registration
       operationId: v1_me_sessions_revoke
       parameters:
@@ -244,12 +236,24 @@ paths:
               schema:
                 $ref: '#/components/schemas/CompleteResponse'
 
+
+components:
+################################################################################
+# AUTH
+################################################################################
+
+  securitySchemes:
+    BasicAuth: # arbitrary name for the security scheme
+      type: apiKey
+      in: header # can be "header", "query" or "cookie"
+      name: Authorization  # name of the header
+
 ################################################################################
 # SCHEMA
 ################################################################################
 
-components:
   schemas:
+
     RegisterBody:
       type: object
       properties:
@@ -262,6 +266,7 @@ components:
           format: email
         password:
           type: string
+
     RegisterResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -283,17 +288,11 @@ components:
             step
         code:
           type: string
+
     VerifyResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
-        - type: object
-          properties:
-            data:
-              type: object
-              properties:
-                is_valid:
-                  type: boolean
-                  description: always `true`
+
   
   
     CompleteBody:
@@ -311,7 +310,6 @@ components:
           type: string
           description: The username of the new account
 
-
     CompleteResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
@@ -322,10 +320,10 @@ components:
               properties:
                 id:
                   type: string
-                  description: sessions Id
+                  description: session Id
                 token:
                   type: string
-                  description: sessions Token
+                  description: session Token
 
 
     ApiResponse:
@@ -335,6 +333,7 @@ components:
           type: object
         error:
           type: object
+
     ErrorResponse:
       allOf:
         - $ref: '#/components/schemas/ApiResponse'
