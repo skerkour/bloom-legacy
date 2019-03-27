@@ -6,9 +6,9 @@ use rand;
 /// Library generic result type.
 pub type BcryptResult<T> = Result<T, BcryptError>;
 
-#[derive(Debug)]
 /// All the errors we can encounter while hashing/verifying
 /// passwords
+#[derive(Debug)]
 pub enum BcryptError {
     Io(io::Error),
     CostNotAllowed(u32),

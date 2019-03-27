@@ -24,7 +24,7 @@ pub enum KernelError {
     #[fail(display="BcryptError")]
     Bcrypt,
 
-    #[fail(display = "validation error: {}", 0)]
+    #[fail(display = "Not valid: {}", 0)]
     Validation(String),
 
     #[fail(display = "Unauthorized: {}", 0)]
@@ -87,33 +87,6 @@ impl std::convert::From<bcrypt::BcryptError> for KernelError {
     }
 }
 
-
-// #[derive(Clone, Debug, Fail)]
-// pub enum Error {
-//     // 400
-//     #[fail(display="{}", error)]
-//     BadRequest{ error: String },
-
-//     // 401
-//     #[fail(display="{}", 0)]
-//     Unauthorized(String),
-
-//     // 403
-//     #[fail(display = "{}", 0)]
-//     Forbidden(String),
-
-//     // 404
-//     #[fail(display="Route not found")]
-//     RouteNotFound,
-
-//     // 408
-//     #[fail(display="Timeout")]
-//     Timeout,
-
-//     // 500
-//     #[fail(display="Internal error")]
-//     Internal,
-// }
 
 impl error::ResponseError for KernelError {
     fn error_response(&self) -> HttpResponse {
