@@ -44,6 +44,9 @@ pub enum KernelError {
 
     #[fail(display="Timeout")]
     Timeout,
+
+    #[fail(display="Internal error")]
+    Internal(String),
 }
 
 
@@ -102,7 +105,10 @@ impl error::ResponseError for KernelError {
             KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
             // 500
             KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::Tokio
-            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) => HttpResponse::InternalServerError().json(&res),
+            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_) => {
+                let res: Response<()> = Response::error(KernelError::Internal(String::new()));
+                HttpResponse::InternalServerError().json(&res)
+            },
         }
     }
 }
