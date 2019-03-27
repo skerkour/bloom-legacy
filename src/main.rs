@@ -19,6 +19,9 @@ use crate::{
 };
 
 
+pub use error::KernelError;
+
+
 fn main() {
     let (_guard, logger) = log::setup_slog();
     let sys = System::new("kernel");

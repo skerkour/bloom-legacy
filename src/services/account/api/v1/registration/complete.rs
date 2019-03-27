@@ -47,7 +47,7 @@ pub fn post((registration_data, req): (Json<models::CompleteRegistrationBody>, H
     })
     .map_err(move |err| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

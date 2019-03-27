@@ -30,7 +30,7 @@ pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::Sta
     let mut rng = rand::thread_rng();
 
     if auth.session.is_some() || auth.account.is_some() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Must not be authenticated".to_string())).error_response()))
+        return future::result(Ok(KernelError::Unauthorized("Must not be authenticated".to_string()).error_response()))
             .responder();
     }
 
@@ -55,7 +55,7 @@ pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::Sta
     .from_err() // MailboxError to KernelError
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

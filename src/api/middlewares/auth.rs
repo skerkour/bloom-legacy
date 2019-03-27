@@ -38,9 +38,9 @@ impl Middleware<api::State> for AuthMiddleware {
 
 
         let auth_header = auth_header.unwrap().to_str()
-            .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
+            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
         let msg = extract_authorization_header(auth_header)
-            .map_err(|_| api::Error::from(KernelError::Validation("Authorization HTTP header is not valid".to_string())))?;
+            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
 
 
         // TODO: improve...
@@ -58,7 +58,7 @@ impl Middleware<api::State> for AuthMiddleware {
                         req.extensions_mut().insert(auth);
                         return Ok(None);
                     },
-                    Err(e) => Err(api::Error::from(e).into()),
+                    Err(e) => Err(e.into()),
                 }
             });
         return Ok(Started::Future(Box::new(fut)));

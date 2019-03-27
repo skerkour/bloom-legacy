@@ -24,7 +24,7 @@ pub fn post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
+        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
 
@@ -41,7 +41,7 @@ pub fn post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     .from_err() // MailboxError to KernelError
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

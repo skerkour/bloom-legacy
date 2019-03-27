@@ -17,27 +17,27 @@ use actix_web::{
 use futures::future;
 
 
-pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn post((session_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
+        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
 
-    let session_id = match uuid::Uuid::parse_str(&session_id) {
-        Ok(x) => x,
-        Err(_) => return future::result(Ok(api::Error::from(KernelError::Validation("session_id is not valid".to_string())).error_response()))
-            .responder(),
-    };
+    // let session_id = match uuid::Uuid::parse_str(&session_id) {
+    //     Ok(x) => x,
+    //     Err(_) => return future::result(Ok(apiKernelError::Validation("session_id is not valid".to_string())).error_response()))
+    //         .responder(),
+    // };
 
     return state.db
     .send(controllers::RevokeSession{
         actor: auth.account.unwrap(),
-        session_id: session_id,
+        session_id: session_id.into_inner(),
         request_id: request_id,
         current_session_id: auth.session.unwrap().id,
     })
@@ -48,7 +48,7 @@ pub fn post((session_id, req): (Path<(String)>, HttpRequest<api::State>)) -> Fut
     .from_err() // MailboxError to KernelError
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

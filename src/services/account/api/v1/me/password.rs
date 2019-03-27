@@ -26,7 +26,7 @@ pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::
     let account_data = account_data.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response()))
+        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
 
@@ -48,7 +48,7 @@ pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::
     .from_err()
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

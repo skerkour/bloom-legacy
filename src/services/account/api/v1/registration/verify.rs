@@ -42,7 +42,7 @@ pub fn post((verify_data, req): (Json<models::VerifyPendingAccountBody>, HttpReq
     })
     .map_err(move |err| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

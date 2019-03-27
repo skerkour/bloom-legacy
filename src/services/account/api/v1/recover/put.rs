@@ -58,7 +58,7 @@ pub fn put((password_data, req): (Json<models::ResetPassowrdBody>, HttpRequest<a
     })
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

@@ -16,7 +16,7 @@ pub fn get(req: &HttpRequest<api::State>) -> HttpResponse {
     let auth = req.request_auth();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return api::Error::from(KernelError::Unauthorized("Authentication required".to_string())).error_response();
+        return KernelError::Unauthorized("Authentication required".to_string()).error_response();
     }
 
     let account = auth.account.unwrap();

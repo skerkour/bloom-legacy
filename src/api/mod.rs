@@ -1,4 +1,3 @@
-mod error;
 mod state;
 mod app;
 
@@ -9,10 +8,10 @@ use actix_web::{
     HttpRequest,
     dev,
 };
+use crate::KernelError;
 
 
 pub mod middlewares;
-pub use error::Error;
 pub use state::State;
 pub use app::init;
 
@@ -43,7 +42,7 @@ impl<T: Serialize> Response<T> {
         };
     }
 
-    pub fn error(err: error::Error) -> Response<T> {
+    pub fn error(err: KernelError) -> Response<T> {
         return Response{
             data: None,
             error: Some(ResponseError{message: format!("{}", err)}),
@@ -57,11 +56,11 @@ pub fn index(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
 }
 
 pub fn route_404(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
-    return Err(Error::RouteNotFound.into());
+    return Err(KernelError::RouteNotFound.into());
 }
 
 pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {
     (cfg.0).0.error_handler(|err, _req| {  // <- create custom error response
-        Error::BadRequest{error: err.to_string()}.into()
+        KernelError::Validation(err.to_string()).into()
     });
 }

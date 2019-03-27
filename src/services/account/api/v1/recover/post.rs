@@ -52,7 +52,7 @@ pub fn post((data, req): (Json<models::PasswordResetRequestBody>, HttpRequest<ap
     })
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return api::Error::from(err);
+        return err;
     })
     .from_err()
     .responder();

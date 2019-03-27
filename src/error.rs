@@ -1,4 +1,11 @@
 use failure::Fail;
+use actix_web::{
+    error,
+    HttpResponse,
+};
+use crate::{
+    api::Response,
+};
 
 #[derive(Clone, Debug, Fail)]
 pub enum KernelError {
@@ -31,6 +38,12 @@ pub enum KernelError {
 
     #[fail(display = "NotFound: {}", 0)]
     NotFound(String),
+
+    #[fail(display="Route not found")]
+    RouteNotFound,
+
+    #[fail(display="Timeout")]
+    Timeout,
 }
 
 
@@ -71,5 +84,52 @@ impl std::convert::From<tokio_timer::Error> for KernelError {
 impl std::convert::From<bcrypt::BcryptError> for KernelError {
     fn from(_err: bcrypt::BcryptError) -> Self {
         KernelError::Bcrypt
+    }
+}
+
+
+// #[derive(Clone, Debug, Fail)]
+// pub enum Error {
+//     // 400
+//     #[fail(display="{}", error)]
+//     BadRequest{ error: String },
+
+//     // 401
+//     #[fail(display="{}", 0)]
+//     Unauthorized(String),
+
+//     // 403
+//     #[fail(display = "{}", 0)]
+//     Forbidden(String),
+
+//     // 404
+//     #[fail(display="Route not found")]
+//     RouteNotFound,
+
+//     // 408
+//     #[fail(display="Timeout")]
+//     Timeout,
+
+//     // 500
+//     #[fail(display="Internal error")]
+//     Internal,
+// }
+
+impl error::ResponseError for KernelError {
+    fn error_response(&self) -> HttpResponse {
+        let res: Response<()> = Response::error(self.clone());
+        match *self {
+            // 400
+            KernelError::Validation(_) => HttpResponse::BadRequest().json(&res),
+            // 401
+            KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
+            // 404
+            KernelError::NotFound(_) | KernelError::RouteNotFound => HttpResponse::NotFound().json(&res),
+            // 408
+            KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
+            // 500
+            KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::Tokio
+            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) => HttpResponse::InternalServerError().json(&res),
+        }
     }
 }
