@@ -13,7 +13,7 @@ use diesel::{
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub code: String,
     pub metadata: EventMetadata,
 }

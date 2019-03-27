@@ -5,8 +5,9 @@ use crate::{
 };
 
 
-#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
+#[derive(AsChangeset, Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_pending_emails"]
+#[changeset_options(treat_none_as_null = "true")]
 pub struct PendingEmail {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,

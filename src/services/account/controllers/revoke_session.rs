@@ -60,13 +60,8 @@ impl Handler<RevokeSession> for DbActor {
 
             // update session
             diesel::update(account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::id.eq(session.id))
-            )
-                .set((
-                    account_sessions::dsl::version.eq(session.version),
-                    account_sessions::dsl::updated_at.eq(session.updated_at),
-                    account_sessions::dsl::deleted_at.eq(session.deleted_at),
-                ))
+                .filter(account_sessions::dsl::id.eq(session.id)))
+                .set(&session)
                 .execute(&conn)?;
 
             diesel::insert_into(account_sessions_events::dsl::account_sessions_events)

@@ -31,7 +31,7 @@ pub fn post((verify_data, req): (Json<models::VerifyPendingAccountBody>, HttpReq
     .and_then(move |_|
         state.db
         .send(controllers::VerifyPendingAccount{
-            id: verify_data.id.clone(),
+            id: verify_data.id,
             code: verify_data.code.clone(),
             request_id: request_id.0,
         }).flatten()

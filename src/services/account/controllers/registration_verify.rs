@@ -14,7 +14,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyPendingAccount {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub code: String,
     pub request_id: String,
 }
@@ -40,35 +40,26 @@ impl Handler<VerifyPendingAccount> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: None,
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
             };
-            let VerifyPendingAccount_cmd = pending_account::Verify{
-                id: msg.id.clone(),
+            let verify_pending_account_cmd = pending_account::Verify{
+                id: msg.id,
                 code: msg.code.clone(),
                 metadata,
             };
 
-            let pending_account_id = uuid::Uuid::parse_str(&VerifyPendingAccount_cmd.id)
-                .map_err(|_| KernelError::Validation("id is not a valid uuid".to_string()))?;
-
             let pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account_id))
+                .filter(account_pending_accounts::dsl::id.eq(msg.id))
                 .filter(account_pending_accounts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &VerifyPendingAccount_cmd)?;
+            let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;
 
             // update pending_account
             diesel::update(account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account_id)))
-                .set((
-                    account_pending_accounts::dsl::trials.eq(pending_account.trials),
-                    account_pending_accounts::dsl::version.eq(pending_account.version),
-                    account_pending_accounts::dsl::updated_at.eq(pending_account.updated_at),
-                    account_pending_accounts::dsl::verified.eq(pending_account.verified),
-                ))
+                .filter(account_pending_accounts::dsl::id.eq(pending_account.id)))
+                .set(&pending_account)
                 .execute(&conn)?;
-
             diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
                 .values(&event)
                 .execute(&conn)?;

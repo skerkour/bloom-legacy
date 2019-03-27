@@ -61,11 +61,7 @@ impl Handler<UpdatePassword> for DbActor {
             // update account
             diesel::update(account_accounts::dsl::account_accounts
                 .filter(account_accounts::dsl::id.eq(account_to_update.id)))
-                .set((
-                    account_accounts::dsl::version.eq(account_to_update.version),
-                    account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
-                    account_accounts::dsl::password.eq(&account_to_update.password),
-                ))
+                .set(&account_to_update)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                 .values(&event)
@@ -89,11 +85,7 @@ impl Handler<UpdatePassword> for DbActor {
                 // update session
                 diesel::update(account_sessions::dsl::account_sessions
                     .filter(account_sessions::dsl::id.eq(session.id)))
-                    .set((
-                        account_sessions::dsl::version.eq(session.version),
-                        account_sessions::dsl::updated_at.eq(session.updated_at),
-                        account_sessions::dsl::deleted_at.eq(session.deleted_at),
-                    ))
+                    .set(&session)
                     .execute(&conn)?;
                 diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
                     .values(&event)

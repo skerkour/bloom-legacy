@@ -61,11 +61,7 @@ impl Handler<UpdateAvatar> for DbActor {
             // update account
             diesel::update(account_accounts::dsl::account_accounts
                 .filter(account_accounts::dsl::id.eq(account_to_update.id)))
-                .set((
-                    account_accounts::dsl::version.eq(account_to_update.version),
-                    account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
-                    account_accounts::dsl::avatar_url.eq(&account_to_update.avatar_url),
-                ))
+                .set(&account_to_update)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                 .values(&event)

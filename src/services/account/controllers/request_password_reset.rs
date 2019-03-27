@@ -53,12 +53,7 @@ impl Handler<RequestPasswordReset> for DbActor {
 
             diesel::update(account_accounts::dsl::account_accounts
                 .filter(account_accounts::dsl::id.eq(user.id)))
-                .set((
-                    account_accounts::dsl::version.eq(user.version),
-                    account_accounts::dsl::updated_at.eq(user.updated_at),
-                    account_accounts::dsl::password_reset_id.eq(&user.password_reset_id),
-                    account_accounts::dsl::password_reset_token.eq(&user.password_reset_token),
-                ))
+                .set(&user)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                 .values(&event)

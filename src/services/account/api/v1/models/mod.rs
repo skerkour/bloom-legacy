@@ -19,14 +19,14 @@ pub struct StartRegistrationResponse {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyPendingAccountBody {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub code: String,
 }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistrationBody {
-    pub id: String,
+    pub id:  uuid::Uuid,
     pub username: String,
 }
 

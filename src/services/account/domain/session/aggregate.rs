@@ -5,8 +5,9 @@ use crate::{
 };
 use diesel_as_jsonb::AsJsonb;
 
-#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
+#[derive(AsChangeset, Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "account_sessions"]
+#[changeset_options(treat_none_as_null = "true")]
 pub struct Session {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,

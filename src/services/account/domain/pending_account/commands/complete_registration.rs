@@ -13,7 +13,7 @@ use diesel::{
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
-    pub id: String,
+    pub id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
@@ -25,8 +25,6 @@ impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        let now = Utc::now();
-
         if aggregate.trials + 1 >= 10 {
             return Err(KernelError::Validation("Maximum number of trials reached. Please create another account.".to_string()));
         }

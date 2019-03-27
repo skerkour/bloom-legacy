@@ -67,12 +67,7 @@ impl Handler<VerifyEmail> for DbActor {
             // update pending_email
             diesel::update(account_pending_emails::dsl::account_pending_emails
                 .filter(account_pending_emails::dsl::id.eq(pending_email.id)))
-                .set((
-                    account_pending_emails::dsl::trials.eq(pending_email.trials),
-                    account_pending_emails::dsl::version.eq(pending_email.version),
-                    account_pending_emails::dsl::updated_at.eq(pending_email.updated_at),
-                    account_pending_emails::dsl::deleted_at.eq(pending_email.deleted_at),
-                ))
+                .set(&pending_email)
                 .execute(&conn)?;
             diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
                 .values(&event)
@@ -90,11 +85,7 @@ impl Handler<VerifyEmail> for DbActor {
                     // update account
                     diesel::update(account_accounts::dsl::account_accounts
                         .filter(account_accounts::dsl::id.eq(account_to_update.id)))
-                        .set((
-                            account_accounts::dsl::version.eq(account_to_update.version),
-                            account_accounts::dsl::updated_at.eq(account_to_update.updated_at),
-                            account_accounts::dsl::email.eq(&account_to_update.email),
-                        ))
+                        .set(&account_to_update)
                         .execute(&conn)?;
                     diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                         .values(&event)
@@ -103,8 +94,8 @@ impl Handler<VerifyEmail> for DbActor {
                     // delete all other pending emails for account
                     let pending_emails_to_delete: Vec<PendingEmail> = account_pending_emails::dsl::account_pending_emails
                         .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
-                        .filter(account_pending_emails::dsl::deleted_at.is_null())
                         .filter(account_pending_emails::dsl::id.ne(msg.id))
+                        .filter(account_pending_emails::dsl::deleted_at.is_null())
                         .load(&conn)?;
 
                     let delete_cmd = pending_email::Delete{
@@ -112,14 +103,10 @@ impl Handler<VerifyEmail> for DbActor {
                     };
 
                     for pending_email_to_delete in pending_emails_to_delete {
-                        let (session, event, _) = eventsourcing::execute(&conn, pending_email_to_delete, &delete_cmd)?;
+                        let (pending_email_to_delete, event, _) = eventsourcing::execute(&conn, pending_email_to_delete, &delete_cmd)?;
                         diesel::update(account_pending_emails::dsl::account_pending_emails
-                            .filter(account_pending_emails::dsl::id.eq(session.id)))
-                            .set((
-                                account_pending_emails::dsl::version.eq(session.version),
-                                account_pending_emails::dsl::updated_at.eq(session.updated_at),
-                                account_pending_emails::dsl::deleted_at.eq(session.deleted_at),
-                            ))
+                            .filter(account_pending_emails::dsl::id.eq(account_to_update.id)))
+                            .set(&pending_email_to_delete)
                             .execute(&conn)?;
                         diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
                             .values(&event)

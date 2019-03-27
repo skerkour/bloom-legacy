@@ -4,22 +4,33 @@ use failure::Fail;
 pub enum KernelError {
     #[fail(display="ActixMailboxError")]
     ActixMailbox,
+
     #[fail(display="DieselError: {}", 0)]
     Diesel(String),
+
     #[fail(display="R2d2Error")]
     R2d2,
+
     #[fail(display="TokioError")]
     Tokio,
+
     #[fail(display="BcryptError")]
     Bcrypt,
+
     #[fail(display = "validation error: {}", 0)]
     Validation(String),
+
     #[fail(display = "Unauthorized: {}", 0)]
     Unauthorized(String),
+
     #[fail(display = "Io: {}", 0)]
     Io(String),
+
     #[fail(display = "Io: {}", 0)]
     Image(String),
+
+    #[fail(display = "NotFound: {}", 0)]
+    NotFound(String),
 }
 
 
@@ -31,7 +42,10 @@ impl std::convert::From<actix::MailboxError> for KernelError {
 
 impl std::convert::From<diesel::result::Error> for KernelError {
     fn from(err: diesel::result::Error) -> Self {
-        KernelError::Diesel(format!("{:?}", err))
+        match err {
+            e @ diesel::result::Error::NotFound => KernelError::NotFound(format!("{}", e)),
+            e @ _ => KernelError::Diesel(format!("{:?}", e)),
+        }
     }
 }
 
