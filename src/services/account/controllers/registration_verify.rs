@@ -52,6 +52,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
             let pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
                 .filter(account_pending_accounts::dsl::id.eq(msg.id))
                 .filter(account_pending_accounts::dsl::deleted_at.is_null())
+                .for_update()
                 .first(&conn)?;
 
             let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;

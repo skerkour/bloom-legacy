@@ -49,6 +49,7 @@ impl Handler<RevokeSession> for DbActor {
                 .filter(account_sessions::dsl::id.eq(msg.session_id))
                 .filter(account_sessions::dsl::account_id.eq(msg.actor.id))
                 .filter(account_sessions::dsl::deleted_at.is_null())
+                .for_update()
                 .first(&conn)?;
 
             let revoke_cmd = session::Revoke{
@@ -63,7 +64,6 @@ impl Handler<RevokeSession> for DbActor {
             diesel::update(&session)
                 .set(&session)
                 .execute(&conn)?;
-
             diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
                 .values(&event)
                 .execute(&conn)?;

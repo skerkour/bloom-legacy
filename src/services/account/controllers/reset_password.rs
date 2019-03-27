@@ -46,6 +46,7 @@ impl Handler<ResetPassword> for DbActor {
             let user: Account = account_accounts::dsl::account_accounts
                 .filter(account_accounts::dsl::password_reset_id.eq(msg.reset_password_id))
                 .filter(account_accounts::dsl::deleted_at.is_null())
+                .for_update()
                 .first(&conn)?;
 
             let metadata = EventMetadata{
@@ -74,6 +75,7 @@ impl Handler<ResetPassword> for DbActor {
             let sessions: Vec<Session> = account_sessions::dsl::account_sessions
                 .filter(account_sessions::dsl::account_id.eq(user.id))
                 .filter(account_sessions::dsl::deleted_at.is_null())
+                .for_update()
                 .load(&conn)?;
 
             let revoke_cmd = session::Revoke{

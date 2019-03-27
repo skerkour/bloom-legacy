@@ -44,6 +44,7 @@ impl Handler<SignIn> for DbActor {
             let user: Account = account_accounts::dsl::account_accounts
                 .filter(account_accounts::dsl::username.eq(&msg.username))
                 .filter(account_accounts::dsl::deleted_at.is_null())
+                .for_update()
                 .first(&conn)
                 .map_err(|_| KernelError::Unauthorized("Invalid username/password combination".to_string()))?;
 

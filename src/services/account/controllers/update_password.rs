@@ -71,6 +71,7 @@ impl Handler<UpdatePassword> for DbActor {
                 .filter(account_sessions::dsl::account_id.eq(account_to_update.id))
                 .filter(account_sessions::dsl::id.ne(msg.current_session.id))
                 .filter(account_sessions::dsl::deleted_at.is_null())
+                .for_update()
                 .load(&conn)?;
 
             let revoke_cmd = session::Revoke{

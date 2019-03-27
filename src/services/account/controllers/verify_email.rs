@@ -54,6 +54,7 @@ impl Handler<VerifyEmail> for DbActor {
                 .filter(account_pending_emails::dsl::id.eq(msg.id))
                 .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
                 .filter(account_pending_emails::dsl::deleted_at.is_null())
+                .for_update()
                 .first(&conn)?;
 
             let verify_cmd = pending_email::Verify{
@@ -95,6 +96,7 @@ impl Handler<VerifyEmail> for DbActor {
                         .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
                         .filter(account_pending_emails::dsl::id.ne(msg.id))
                         .filter(account_pending_emails::dsl::deleted_at.is_null())
+                        .for_update()
                         .load(&conn)?;
 
                     let delete_cmd = pending_email::Delete{
