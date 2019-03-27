@@ -67,15 +67,12 @@ impl Handler<CompleteRegistration> for DbActor {
             };
             let (pending_account_to_update, event, _) = eventsourcing::execute(&conn, pending_account_to_update, &complete_registration_cmd)?;
 
-            diesel::update(account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account_to_update.id)))
+            diesel::update(&pending_account_to_update)
                 .set(&pending_account_to_update)
                 .execute(&conn)?;
-
             diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
                 .values(&event)
                 .execute(&conn)?;
-
 
             // create account
             let new_account = domain::Account::new();

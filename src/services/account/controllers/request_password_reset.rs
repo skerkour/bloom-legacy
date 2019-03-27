@@ -51,8 +51,7 @@ impl Handler<RequestPasswordReset> for DbActor {
             };
             let (user, event, non_stored) = eventsourcing::execute(&conn, user, &request_password_reset_cmd)?;
 
-            diesel::update(account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::id.eq(user.id)))
+            diesel::update(&user)
                 .set(&user)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)

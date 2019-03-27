@@ -5,7 +5,7 @@ use crate::{
 };
 
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
+#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "account_pending_emails"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingEmail {

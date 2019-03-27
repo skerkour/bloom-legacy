@@ -59,8 +59,7 @@ impl Handler<UpdateAccount> for DbActor {
                     let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_first_name_cmd)?;
 
                     // update account
-                    diesel::update(account_accounts::dsl::account_accounts
-                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+                    diesel::update(&account_to_update)
                         .set(&account_to_update)
                         .execute(&conn)?;
                     diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
@@ -82,8 +81,7 @@ impl Handler<UpdateAccount> for DbActor {
                     let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
 
                     // update account
-                    diesel::update(account_accounts::dsl::account_accounts
-                        .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+                    diesel::update(&account_to_update)
                         .set(&account_to_update)
                         .execute(&conn)?;
                     diesel::insert_into(account_accounts_events::dsl::account_accounts_events)

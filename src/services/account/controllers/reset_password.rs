@@ -61,8 +61,7 @@ impl Handler<ResetPassword> for DbActor {
             let (user, event, _) = eventsourcing::execute(&conn, user, &update_last_name_cmd)?;
 
             // update account
-            diesel::update(account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::id.eq(user.id)))
+            diesel::update(&user)
                 .set(&user)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
@@ -84,8 +83,7 @@ impl Handler<ResetPassword> for DbActor {
             for session in sessions {
                 let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
-                diesel::update(account_sessions::dsl::account_sessions
-                    .filter(account_sessions::dsl::id.eq(session.id)))
+                diesel::update(&session)
                     .set(&session)
                     .execute(&conn)?;
                 diesel::insert_into(account_sessions_events::dsl::account_sessions_events)

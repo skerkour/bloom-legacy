@@ -59,8 +59,7 @@ impl Handler<UpdatePassword> for DbActor {
             let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
 
             // update account
-            diesel::update(account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::id.eq(account_to_update.id)))
+            diesel::update(&account_to_update)
                 .set(&account_to_update)
                 .execute(&conn)?;
             diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
@@ -83,8 +82,7 @@ impl Handler<UpdatePassword> for DbActor {
             for session in sessions {
                 let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
-                diesel::update(account_sessions::dsl::account_sessions
-                    .filter(account_sessions::dsl::id.eq(session.id)))
+                diesel::update(&session)
                     .set(&session)
                     .execute(&conn)?;
                 diesel::insert_into(account_sessions_events::dsl::account_sessions_events)

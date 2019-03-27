@@ -56,8 +56,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
             let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;
 
             // update pending_account
-            diesel::update(account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(pending_account.id)))
+            diesel::update(&pending_account)
                 .set(&pending_account)
                 .execute(&conn)?;
             diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)

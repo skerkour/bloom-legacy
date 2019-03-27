@@ -59,8 +59,7 @@ impl Handler<RevokeSession> for DbActor {
             let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
 
             // update session
-            diesel::update(account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::id.eq(session.id)))
+            diesel::update(&session)
                 .set(&session)
                 .execute(&conn)?;
 
