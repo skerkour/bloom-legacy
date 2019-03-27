@@ -115,7 +115,7 @@ mod tests {
 
         assert_eq!(
             resp.headers().get(REQUEST_ID_HEADER).unwrap().as_bytes(),
-            req_id.as_bytes()
+            req_id.to_string().as_bytes()
         );
     }
 }
