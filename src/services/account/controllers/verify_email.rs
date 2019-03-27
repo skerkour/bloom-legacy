@@ -32,7 +32,6 @@ impl Handler<VerifyEmail> for DbActor {
         use crate::db::schema::{
             account_pending_emails,
             account_pending_emails_events,
-            account_accounts,
             account_accounts_events,
         };
         use diesel::prelude::*;
@@ -51,8 +50,8 @@ impl Handler<VerifyEmail> for DbActor {
 
             let pending_email: PendingEmail = account_pending_emails::dsl::account_pending_emails
                 .filter(account_pending_emails::dsl::id.eq(msg.id))
-                .filter(account_pending_emails::dsl::deleted_at.is_null())
                 .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
+                .filter(account_pending_emails::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let verify_cmd = pending_email::Verify{

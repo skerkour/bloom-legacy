@@ -4,8 +4,6 @@ use crate::{
     services::account::domain::{
         Account,
         account,
-        Session,
-        session,
     },
     services::common::events::EventMetadata,
 };
@@ -31,7 +29,6 @@ impl Handler<UpdateAccount> for DbActor {
 
     fn handle(&mut self, msg: UpdateAccount, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts,
             account_accounts_events,
         };
         use diesel::prelude::*;

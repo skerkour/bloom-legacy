@@ -4,13 +4,10 @@ use crate::{
     services::account::domain::{
         Account,
         account,
-        Session,
-        session,
     },
     services::common::events::EventMetadata,
 };
 use crate::error::KernelError;
-use serde::{Serialize, Deserialize};
 
 
 #[derive(Clone)]
@@ -32,7 +29,6 @@ impl Handler<UpdateAvatar> for DbActor {
 
     fn handle(&mut self, msg: UpdateAvatar, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts,
             account_accounts_events,
         };
         use diesel::prelude::*;

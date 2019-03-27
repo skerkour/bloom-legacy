@@ -37,7 +37,9 @@ impl Handler<RequestPasswordReset> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let user: domain::Account = account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::email.eq(&msg.email_or_username).or(account_accounts::dsl::username.eq(&msg.email_or_username)))
+                .filter(account_accounts::dsl::email.eq(&msg.email_or_username)
+                    .or(account_accounts::dsl::username.eq(&msg.email_or_username))
+                )
                 .filter(account_accounts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 

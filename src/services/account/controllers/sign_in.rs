@@ -56,7 +56,7 @@ impl Handler<SignIn> for DbActor {
                     request_id: Some(msg.request_id.clone()),
                 };
                 let fail_sign_in_cmd = account::FailSignIn{metadata};
-                let (user, event, _) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
+                let (_, event, _) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
                 diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
                     .values(&event)
                     .execute(&conn)?;

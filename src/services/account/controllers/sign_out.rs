@@ -28,7 +28,6 @@ impl Handler<SignOut> for DbActor {
 
     fn handle(&mut self, msg: SignOut, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_sessions,
             account_sessions_events,
         };
         use diesel::prelude::*;
@@ -52,7 +51,6 @@ impl Handler<SignOut> for DbActor {
             diesel::update(&session)
                 .set(&session)
                 .execute(&conn)?;
-
             diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
