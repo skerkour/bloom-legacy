@@ -34,11 +34,12 @@ pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::S
 
     return state.db
     .send(controllers::UpdateAccount{
-        account: auth.account.expect("unwraping auth account"),
+        account: auth.account.expect("unwraping non none account"),
         avatar_url: account_data.avatar_url,
         first_name: account_data.first_name,
         last_name: account_data.last_name,
         request_id,
+        session_id: auth.session.expect("unwraping non none session").id,
     })
     .from_err()
     .and_then(move |account| {

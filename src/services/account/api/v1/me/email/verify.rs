@@ -42,10 +42,11 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
     .and_then(move |_|
         state.db
         .send(controllers::VerifyEmail{
-            account: auth.account.expect("unwraping auth account"),
+            account: auth.account.expect("unwraping non none account"),
             id: email_data.id,
             code: email_data.code.clone(),
             request_id,
+            session_id: auth.session.expect("unwraping non none session").id,
         }).flatten()
     )
     .and_then(move |account| {

@@ -6,4 +6,5 @@ use diesel_as_jsonb::AsJsonb;
 pub struct EventMetadata {
     pub actor_id: Option<uuid::Uuid>,
     pub request_id: Option<String>,
+    pub session_id: Option<uuid::Uuid>,
 }

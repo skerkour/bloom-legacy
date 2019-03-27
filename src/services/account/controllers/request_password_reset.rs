@@ -15,6 +15,7 @@ pub struct RequestPasswordReset {
     pub email_or_username: String,
     pub config: Config,
     pub request_id: String,
+    pub session_id: Option<uuid::Uuid>,
 }
 
 impl Message for RequestPasswordReset {
@@ -47,6 +48,7 @@ impl Handler<RequestPasswordReset> for DbActor {
             let metadata = EventMetadata{
                 actor_id: Some(user.id),
                 request_id: Some(msg.request_id.clone()),
+                session_id: msg.session_id,
             };
             let request_password_reset_cmd = account::RequestPasswordReset{
                 metadata,

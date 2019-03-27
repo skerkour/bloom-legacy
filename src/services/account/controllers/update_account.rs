@@ -18,6 +18,7 @@ pub struct UpdateAccount {
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub request_id: String,
+    pub session_id: uuid::Uuid,
 }
 
 impl Message for UpdateAccount {
@@ -41,6 +42,7 @@ impl Handler<UpdateAccount> for DbActor {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
                 request_id: Some(msg.request_id.clone()),
+                session_id: Some(msg.session_id),
             };
 
             let account_to_update = msg.account;

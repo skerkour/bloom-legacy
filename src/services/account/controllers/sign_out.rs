@@ -40,6 +40,7 @@ impl Handler<SignOut> for DbActor {
             let metadata = EventMetadata{
                 actor_id: Some(msg.actor.id),
                 request_id: Some(msg.request_id.clone()),
+                session_id: Some(msg.session.id),
             };
             let sign_out_cmd = session::SignOut{
                 metadata,

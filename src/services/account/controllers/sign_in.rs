@@ -54,6 +54,7 @@ impl Handler<SignIn> for DbActor {
                 let metadata = EventMetadata{
                     actor_id: None,
                     request_id: Some(msg.request_id.clone()),
+                    session_id: None,
                 };
                 let fail_sign_in_cmd = account::FailSignIn{metadata};
                 let (_, event, _) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
@@ -64,14 +65,16 @@ impl Handler<SignIn> for DbActor {
             }
 
             // start Session
+            let metadata = EventMetadata{
+                actor_id: Some(user.id),
+                request_id: Some(msg.request_id.clone()),
+                session_id: None,
+            };
             let start_cmd = session::Start{
                 account_id: user.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(), // TODO
-                metadata: EventMetadata{
-                    actor_id: Some(user.id),
-                    request_id: Some(msg.request_id.clone()),
-                },
+                metadata,
             };
             let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 

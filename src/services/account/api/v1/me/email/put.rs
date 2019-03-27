@@ -46,6 +46,7 @@ pub fn put((email_data, req): (Json<models::UpdateEmailBody>, HttpRequest<api::S
             email: email_data.email.clone(),
             config,
             request_id,
+            session_id: auth.session.expect("unwraping non none session").id,
         }).flatten()
     )
     .and_then(move |pending_email| {

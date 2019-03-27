@@ -45,6 +45,7 @@ impl Handler<UpdatePassword> for DbActor {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
                 request_id: Some(msg.request_id.clone()),
+                session_id: Some(msg.current_session.id),
             };
 
             let account_to_update = msg.account;

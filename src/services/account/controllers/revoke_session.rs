@@ -42,6 +42,7 @@ impl Handler<RevokeSession> for DbActor {
             let metadata = EventMetadata{
                 actor_id: Some(msg.actor.id),
                 request_id: Some(msg.request_id.clone()),
+                session_id: Some(msg.current_session_id),
             };
 
             let session: Session = account_sessions::dsl::account_sessions

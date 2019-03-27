@@ -27,6 +27,12 @@ pub fn post((data, req): (Json<models::PasswordResetRequestBody>, HttpRequest<ap
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
     let config = state.config.clone();
+    let auth = req.request_auth();
+
+    let session_id = match auth.session {
+        Some(ref session) => Some(session.id),
+        None => None,
+    };
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(250, 350))).into_future()
@@ -37,6 +43,7 @@ pub fn post((data, req): (Json<models::PasswordResetRequestBody>, HttpRequest<ap
             config,
             email_or_username: data.email_or_username.clone(),
             request_id,
+            session_id,
         }).flatten()
     )
     .and_then(move |_| {

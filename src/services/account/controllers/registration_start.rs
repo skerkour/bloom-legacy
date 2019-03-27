@@ -45,6 +45,7 @@ impl Handler<StartRegistration> for DbActor {
             let metadata = EventMetadata{
                 actor_id: None,
                 request_id: Some(msg.request_id.clone()),
+                session_id: None,
             };
             let new_pending_account = pending_account::PendingAccount::new();
             let create_cmd = pending_account::Create{

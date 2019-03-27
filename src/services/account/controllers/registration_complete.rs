@@ -53,6 +53,7 @@ impl Handler<CompleteRegistration> for DbActor {
             let metadata = EventMetadata{
                 actor_id: None,
                 request_id: Some(msg.request_id.clone()),
+                session_id: None,
             };
 
             let pending_account_to_update: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
@@ -95,14 +96,15 @@ impl Handler<CompleteRegistration> for DbActor {
                 .execute(&conn)?;
 
             // start Session
+            let metadata = EventMetadata{
+                actor_id: Some(new_account.id),
+                ..metadata.clone()
+            };
             let start_cmd = Start{
                 account_id: new_account.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(), // TODO
-                metadata: EventMetadata{
-                    actor_id: Some(new_account.id),
-                    ..metadata.clone()
-                },
+                metadata,
             };
             let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 

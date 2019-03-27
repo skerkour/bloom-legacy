@@ -46,6 +46,7 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
                 s3_region: state.config.aws_region(),
                 s3_client: state.s3_client.clone(),
                 request_id,
+                session_id: auth.session.expect("unwraping non none session").id,
             }).flatten()
         })
         .and_then(move |account| {

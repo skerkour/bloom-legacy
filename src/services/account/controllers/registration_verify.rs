@@ -41,6 +41,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
             let metadata = EventMetadata{
                 actor_id: None,
                 request_id: Some(msg.request_id),
+                session_id: None,
             };
             let verify_pending_account_cmd = pending_account::Verify{
                 id: msg.id,

@@ -30,6 +30,12 @@ pub fn put((password_data, req): (Json<models::ResetPassowrdBody>, HttpRequest<a
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
+
+    let session_id = match auth.session {
+        Some(ref session) => Some(session.id),
+        None => None,
+    };
+
     // random sleep to prevent bruteforce and sidechannels attacks
     return tokio_timer::sleep(Duration::from_millis(rng.gen_range(250, 350))).into_future()
     .from_err()
@@ -40,6 +46,7 @@ pub fn put((password_data, req): (Json<models::ResetPassowrdBody>, HttpRequest<a
             token: password_data.token.clone(),
             new_password: password_data.new_password.clone(),
             request_id,
+            session_id,
         }).flatten()
     )
     .and_then(move |(session, token)| {
