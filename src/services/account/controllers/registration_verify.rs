@@ -16,7 +16,7 @@ use serde::{Serialize, Deserialize};
 pub struct VerifyPendingAccount {
     pub id: uuid::Uuid,
     pub code: String,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
 }
 
 impl Message for VerifyPendingAccount {

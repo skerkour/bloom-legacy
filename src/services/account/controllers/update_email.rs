@@ -15,7 +15,7 @@ pub struct UpdateEmail {
     pub account: domain::Account,
     pub email: String,
     pub config: Config,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
@@ -42,7 +42,7 @@ impl Handler<UpdateEmail> for DbActor {
 
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
             let new_pending_email = pending_email::PendingEmail::new();

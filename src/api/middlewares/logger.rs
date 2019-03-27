@@ -26,7 +26,7 @@ impl<S> GetRequestLogger for HttpRequest<S> {
         let req_id =  self.request_id().0.clone();
 
         // Return the current logger augmented with the request_id
-        let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id));
+        let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id.to_string()));
 
         // Ok(RequestLogger(new_log))
 
@@ -113,7 +113,7 @@ impl<S> FromRequest<S> for RequestLogger {
         let req_id = req.request_id().0.clone();
 
         // Return the current logger augmented with the request_id
-        let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id));
+        let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id.to_string()));
 
         Ok(RequestLogger(new_log))
     }

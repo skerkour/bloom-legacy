@@ -17,7 +17,7 @@ use serde::{Serialize, Deserialize};
 pub struct SignIn {
     pub username: String,
     pub password: String,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
 }
 
 impl Message for SignIn {
@@ -54,7 +54,7 @@ impl Handler<SignIn> for DbActor {
                 // store a SignInFailed event
                 let metadata = EventMetadata{
                     actor_id: None,
-                    request_id: Some(msg.request_id.clone()),
+                    request_id: Some(msg.request_id),
                     session_id: None,
                 };
                 let fail_sign_in_cmd = account::FailSignIn{metadata};
@@ -68,7 +68,7 @@ impl Handler<SignIn> for DbActor {
             // start Session
             let metadata = EventMetadata{
                 actor_id: Some(user.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: None,
             };
             let start_cmd = session::Start{

@@ -18,7 +18,7 @@ pub struct VerifyEmail {
     pub account: Account,
     pub id: uuid::Uuid,
     pub code: String,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
@@ -44,7 +44,7 @@ impl Handler<VerifyEmail> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 

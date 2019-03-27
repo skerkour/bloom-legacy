@@ -23,7 +23,7 @@ pub struct CompleteRegistration {
     pub id: uuid::Uuid,
     pub username: String,
     pub config: Config,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
 }
 
 impl Message for CompleteRegistration {
@@ -52,7 +52,7 @@ impl Handler<CompleteRegistration> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: None,
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: None,
             };
 

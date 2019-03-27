@@ -19,7 +19,7 @@ pub struct UpdatePassword {
     pub current_session: Session,
     pub current_password: String,
     pub new_password: String,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
 }
 
 impl Message for UpdatePassword {
@@ -44,7 +44,7 @@ impl Handler<UpdatePassword> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.current_session.id),
             };
 

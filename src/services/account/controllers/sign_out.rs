@@ -16,7 +16,7 @@ use serde::{Serialize, Deserialize};
 pub struct SignOut {
     pub actor: Account,
     pub session: Session,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
 }
 
 impl Message for SignOut {
@@ -39,7 +39,7 @@ impl Handler<SignOut> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.actor.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.session.id),
             };
             let sign_out_cmd = session::SignOut{

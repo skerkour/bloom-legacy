@@ -17,7 +17,7 @@ pub struct UpdateAvatar {
     pub s3_bucket: String,
     pub s3_region: String,
     pub s3_client: rusoto_s3::S3Client,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
@@ -41,7 +41,7 @@ impl Handler<UpdateAvatar> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 

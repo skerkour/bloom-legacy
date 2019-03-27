@@ -15,8 +15,8 @@ pub const REQUEST_ID_HEADER: &str = "X-Bloom-Request-ID";
 /// **note:** must contain as String that is valid to put in HTTP Header values
 ///
 /// It can also be extracted from a request and Helper converter to be able to extract the RequestID easily in an handler
-#[derive(Debug, Clone, PartialEq)]
-pub struct RequestId(pub String);
+#[derive(Debug, Clone, Copy, PartialEq)]
+pub struct RequestId(pub uuid::Uuid);
 
 /// Permits retrieving the HttpRequest associated RequestID
 pub trait GetRequestId {
@@ -28,11 +28,11 @@ pub trait GetRequestId {
 impl<S> GetRequestId for HttpRequest<S> {
     fn request_id(&self) -> RequestId {
         if let Some(req_id) = self.extensions().get::<RequestId>() {
-            return req_id.clone();
+            return *req_id;
         }
 
-        let id = uuid::Uuid::new_v4().to_string();
-        self.extensions_mut().insert(RequestId(id.clone()));
+        let id = uuid::Uuid::new_v4();
+        self.extensions_mut().insert(RequestId(id));
         RequestId(id)
     }
 }
@@ -49,9 +49,9 @@ impl<S> FromRequest<S> for RequestId {
 
 /// Allow direct access to `String` methods from a `RequestId`.
 impl Deref for RequestId {
-    type Target = String;
+    type Target = uuid::Uuid;
 
-    fn deref(&self) -> &String {
+    fn deref(&self) -> &Self::Target {
         &self.0
     }
 }
@@ -60,7 +60,7 @@ impl Deref for RequestId {
 pub struct RequestIdMiddleware;
 impl<S> Middleware<S> for RequestIdMiddleware {
     fn response(&self, req: &HttpRequest<S>, mut resp: HttpResponse) -> Result<Response> {
-        if let Ok(v) = HeaderValue::from_str(&(req.request_id())) {
+        if let Ok(v) = HeaderValue::from_str(&(req.request_id().to_string())) {
             resp.headers_mut().append(REQUEST_ID_HEADER, v);
         }
 

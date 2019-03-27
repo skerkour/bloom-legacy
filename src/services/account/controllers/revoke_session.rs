@@ -16,7 +16,7 @@ use serde::{Serialize, Deserialize};
 pub struct RevokeSession {
     pub actor: Account,
     pub session_id: uuid::Uuid,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub current_session_id: uuid::Uuid,
 }
 
@@ -41,7 +41,7 @@ impl Handler<RevokeSession> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.actor.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.current_session_id),
             };
 

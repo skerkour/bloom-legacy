@@ -17,7 +17,7 @@ pub struct UpdateAccount {
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
@@ -41,7 +41,7 @@ impl Handler<UpdateAccount> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
                 actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 

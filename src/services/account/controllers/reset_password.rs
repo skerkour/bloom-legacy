@@ -18,7 +18,7 @@ pub struct ResetPassword {
     pub reset_password_id: uuid::Uuid,
     pub token: String,
     pub new_password: String,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     pub session_id: Option<uuid::Uuid>,
 }
 
@@ -51,7 +51,7 @@ impl Handler<ResetPassword> for DbActor {
 
             let metadata = EventMetadata{
                 actor_id: Some(user.id),
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: msg.session_id,
             };
 

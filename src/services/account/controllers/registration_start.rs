@@ -17,7 +17,7 @@ pub struct StartRegistration {
     pub email: String,
     pub password: String,
     pub config: Config,
-    pub request_id: String,
+    pub request_id: uuid::Uuid,
     // pub logger: RequestLogger,
 }
 
@@ -44,7 +44,7 @@ impl Handler<StartRegistration> for DbActor {
 
             let metadata = EventMetadata{
                 actor_id: None,
-                request_id: Some(msg.request_id.clone()),
+                request_id: Some(msg.request_id),
                 session_id: None,
             };
             let new_pending_account = pending_account::PendingAccount::new();
