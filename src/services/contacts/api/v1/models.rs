@@ -38,3 +38,19 @@ pub struct ContactResponse {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NoData {}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateContactBody {
+    pub addresses: Option<Vec<contact::Address>>,
+    pub birthday: Option<chrono::DateTime<chrono::Utc>>,
+    pub company: Option<String>,
+    pub emails: Option<Vec<contact::Email>>,
+    pub first_name: Option<String>,
+    pub last_name: Option<String>,
+    pub notes: Option<String>,
+    pub occupation: Option<String>,
+    pub organizations: Option<Vec<contact::Organization>>,
+    pub phones: Option<Vec<contact::Phone>>,
+    pub websites: Option<Vec<contact::Website>>,
+}

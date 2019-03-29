@@ -92,6 +92,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/contacts/v1/contacts/{contact_id}", |r| {
                 r.method(http::Method::GET).with(contactsv1::contacts::id::get);
+                r.method(http::Method::PUT).with(contactsv1::contacts::put);
                 r.method(http::Method::DELETE).with(contactsv1::contacts::delete);
             })
 

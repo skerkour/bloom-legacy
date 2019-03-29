@@ -47,7 +47,7 @@ pub struct Contact {
 }
 
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Address {
     pub city: Option<String>,
     pub country: Option<String>,
@@ -57,7 +57,7 @@ pub struct Address {
     pub street_address2: Option<String>,
 }
 
-#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub enum AddressLabel {
     #[serde(rename = "HOME")]
     Home,
@@ -67,13 +67,13 @@ pub enum AddressLabel {
     Other,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Email {
     pub email: String,
     pub label: EmailLabel,
 }
 
-#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub enum EmailLabel {
     #[serde(rename = "HOME")]
     Home,
@@ -83,19 +83,19 @@ pub enum EmailLabel {
     Other,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Organization {
     pub name: Option<String>,
     pub title: Option<String>,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Phone {
     pub phone: String,
     pub label: PhoneLabel,
 }
 
-#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub enum PhoneLabel {
     #[serde(rename = "HOME")]
     Home,
@@ -113,13 +113,13 @@ pub enum PhoneLabel {
     Other,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Website {
     pub website: String,
     pub label: WebsiteLabel,
 }
 
-#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+#[derive(Copy, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub enum WebsiteLabel {
     #[serde(rename = "PROFILE")]
     Profile,

@@ -18,6 +18,15 @@ pub use aggregate::{
 pub use commands::{
     Create,
     Delete,
+    UpdateAddresses,
+    UpdateBirthday,
+    UpdateEmails,
+    UpdateFirstName,
+    UpdateLastName,
+    UpdateNotes,
+    UpdateOrganizations,
+    UpdatePhones,
+    UpdateWebsites,
 };
 pub use events::{
     Event,
