@@ -48,9 +48,6 @@ impl Handler<UpdateNote> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let unarchive_cmd = note::Unarchive{
-                metadata,
-            };
 
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
@@ -84,7 +81,7 @@ impl Handler<UpdateNote> for DbActor {
             // body
             let note_to_update = match msg.body {
                 Some(body) => {
-                    let update_body_cmd = note::UpdateTitle{
+                    let update_body_cmd = note::UpdateBody{
                         body,
                         metadata: metadata.clone(),
                     };
@@ -103,7 +100,7 @@ impl Handler<UpdateNote> for DbActor {
                 None => note_to_update,
             };
 
-            return Ok((note_to_update));
+            return Ok(note_to_update);
         })?);
     }
 }

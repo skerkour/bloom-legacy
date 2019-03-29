@@ -17,3 +17,12 @@ pub struct NoteResponse {
     pub title: String,
     pub body: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateNote {
+    pub title: Option<String>,
+    pub body: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NoData {}
