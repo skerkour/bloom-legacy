@@ -48,10 +48,10 @@ impl Handler<UpdateAccount> for DbActor {
             let account_to_update = msg.account;
 
             // first_name
-            let account_to_update = match msg.first_name {
-                Some(first_name) => {
+            let account_to_update = match &msg.first_name {
+                Some(first_name) if first_name != &account_to_update.first_name => {
                     let update_first_name_cmd = account::UpdateFirstName{
-                        first_name,
+                        first_name: first_name.to_string(),
                         metadata: metadata.clone(),
                     };
 
@@ -66,14 +66,14 @@ impl Handler<UpdateAccount> for DbActor {
                         .execute(&conn)?;
                     account_to_update
                 },
-                None => account_to_update,
+                _ => account_to_update,
             };
 
             // last_name
-            let account_to_update = match msg.last_name {
-                Some(last_name) => {
+            let account_to_update = match &msg.last_name {
+                Some(last_name) if last_name != &account_to_update.last_name => {
                     let update_last_name_cmd = account::UpdateLastName{
-                        last_name,
+                        last_name: last_name.to_string(),
                         metadata: metadata.clone(),
                     };
 
@@ -88,7 +88,7 @@ impl Handler<UpdateAccount> for DbActor {
                         .execute(&conn)?;
                     account_to_update
                 },
-                None => account_to_update,
+                _ => account_to_update,
             };
 
             return Ok(account_to_update);

@@ -57,10 +57,10 @@ impl Handler<UpdateNote> for DbActor {
                 .first(&conn)?;
 
             // title
-            let note_to_update = match msg.title {
-                Some(title) => {
+            let note_to_update = match &msg.title {
+                Some(title) if title != &note_to_update.title => {
                     let update_title_cmd = note::UpdateTitle{
-                        title,
+                        title: title.to_string(),
                         metadata: metadata.clone(),
                     };
 
@@ -75,14 +75,14 @@ impl Handler<UpdateNote> for DbActor {
                         .execute(&conn)?;
                     note_to_update
                 },
-                None => note_to_update,
+                _ => note_to_update,
             };
 
             // body
-            let note_to_update = match msg.body {
-                Some(body) => {
+            let note_to_update = match &msg.body {
+                Some(body) if body != &note_to_update.body => {
                     let update_body_cmd = note::UpdateBody{
-                        body,
+                        body: body.to_string(),
                         metadata: metadata.clone(),
                     };
 
@@ -97,7 +97,7 @@ impl Handler<UpdateNote> for DbActor {
                         .execute(&conn)?;
                     note_to_update
                 },
-                None => note_to_update,
+                _ => note_to_update,
             };
 
             return Ok(note_to_update);
