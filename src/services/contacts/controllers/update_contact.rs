@@ -129,8 +129,10 @@ impl Handler<UpdateContact> for DbActor {
             // first_name
             let contact_to_update = match &msg.first_name {
                 Some(first_name) if Some(first_name.to_string()) != contact_to_update.first_name => {
+                    let first_name = first_name.trim();
+                    let first_name = if first_name.is_empty() { None } else { Some(first_name.to_string()) };
                     let update_first_name_cmd = contact::UpdateFirstName{
-                        first_name: Some(first_name.clone()),
+                        first_name,
                         metadata: metadata.clone(),
                     };
 
@@ -151,8 +153,10 @@ impl Handler<UpdateContact> for DbActor {
             // last_name
             let contact_to_update = match &msg.last_name {
                 Some(last_name) if Some(last_name.to_string()) != contact_to_update.last_name => {
+                    let last_name = last_name.trim();
+                    let last_name = if last_name.is_empty() { None } else { Some(last_name.to_string()) };
                     let update_last_name_cmd = contact::UpdateLastName{
-                        last_name: Some(last_name.clone()),
+                        last_name,
                         metadata: metadata.clone(),
                     };
 
@@ -173,8 +177,10 @@ impl Handler<UpdateContact> for DbActor {
             // notes
             let contact_to_update = match &msg.notes {
                 Some(notes) if Some(notes.to_string()) != contact_to_update.notes => {
+                    let notes = notes.trim();
+                    let notes = if notes.is_empty() { None } else { Some(notes.to_string()) };
                     let update_notes_cmd = contact::UpdateNotes{
-                        notes: Some(notes.to_string()),
+                        notes,
                         metadata: metadata.clone(),
                     };
 
