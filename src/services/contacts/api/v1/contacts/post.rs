@@ -50,7 +50,7 @@ pub fn post((contact_data, req): (Json<models::CreateContactBody>, HttpRequest<a
         match contact {
             Ok(contact) => {
                 let res = models::ContactResponse{
-                    id: note.id,
+                    id: contact.id,
                     created_at: contact.created_at,
                     updated_at: contact.updated_at,
                     addresses: contact.addresses,
