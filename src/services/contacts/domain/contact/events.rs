@@ -23,6 +23,15 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     DeletedV1,
+    AddressesUpdatedV1(AddressesUpdatedV1),
+    BirthdayUpdatedV1(BirthdayUpdatedV1),
+    EmailsUpdatedV1(EmailsUpdatedV1),
+    FirstNameUpdatedV1(FirstNameUpdatedV1),
+    LastNameUpdatedV1(LastNameUpdatedV1),
+    NotesUpdatedV1(NotesUpdatedV1),
+    OrganizationsUpdatedV1(OrganizationsUpdatedV1),
+    PhonesUpdatedV1(PhonesUpdatedV1),
+    WebsitesUpdatedV1(WebsitesUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -40,6 +49,51 @@ pub struct CreatedV1 {
     pub phones: Vec<super::Phone>,
     pub websites: Vec<super::Website>,
     pub owner_id: uuid::Uuid,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct AddressesUpdatedV1 {
+    pub addresses: Vec<super::Address>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct BirthdayUpdatedV1 {
+    pub birthday: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct EmailsUpdatedV1 {
+    pub emails: Vec<super::Email>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FirstNameUpdatedV1 {
+    pub first_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct LastNameUpdatedV1 {
+    pub last_name: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NotesUpdatedV1 {
+    pub notes: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct OrganizationsUpdatedV1 {
+    pub organizations: Vec<super::Organization>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PhonesUpdatedV1 {
+    pub phones: Vec<super::Phone>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct WebsitesUpdatedV1 {
+    pub websites: Vec<super::Website>,
 }
 
 
@@ -73,6 +127,51 @@ impl eventsourcing::Event for Event {
             // DeletedV1
             EventData::DeletedV1 => super::Contact{
                 deleted_at: Some(self.timestamp),
+                ..aggregate.clone()
+            },
+            // AddressesUpdatedV1
+            EventData::AddressesUpdatedV1(ref data) => super::Contact{
+                addresses: data.addresses.clone(),
+                ..aggregate.clone()
+            },
+            // BirthdayUpdatedV1
+            EventData::BirthdayUpdatedV1(ref data) => super::Contact{
+                birthday: data.birthday.clone(),
+                ..aggregate.clone()
+            },
+            // EmailsUpdatedV1
+            EventData::EmailsUpdatedV1(ref data) => super::Contact{
+                emails: data.emails.clone(),
+                ..aggregate.clone()
+            },
+            // FirstNameUpdatedV1
+            EventData::FirstNameUpdatedV1(ref data) => super::Contact{
+                first_name: data.first_name.clone(),
+                ..aggregate.clone()
+            },
+            // LastNameUpdatedV1
+            EventData::LastNameUpdatedV1(ref data) => super::Contact{
+                last_name: data.last_name.clone(),
+                ..aggregate.clone()
+            },
+            // NotesUpdatedV1
+            EventData::NotesUpdatedV1(ref data) => super::Contact{
+                notes: data.notes.clone(),
+                ..aggregate.clone()
+            },
+            // OrganizationsUpdatedV1
+            EventData::OrganizationsUpdatedV1(ref data) => super::Contact{
+                organizations: data.organizations.clone(),
+                ..aggregate.clone()
+            },
+            // PhonesUpdatedV1
+            EventData::PhonesUpdatedV1(ref data) => super::Contact{
+                phones: data.phones.clone(),
+                ..aggregate.clone()
+            },
+            // WebsitesUpdatedV1
+            EventData::WebsitesUpdatedV1(ref data) => super::Contact{
+                websites: data.websites.clone(),
                 ..aggregate.clone()
             },
         }
