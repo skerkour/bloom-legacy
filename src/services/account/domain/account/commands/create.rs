@@ -87,7 +87,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,
-            aggregate_id: aggregate.id,
+            aggregate_id: id,
             metadata,
         }, ()));
     }

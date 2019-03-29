@@ -6,10 +6,11 @@ CREATE TABLE notes_notes (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    title TEXT NOT NULL,
-    body TEXT NOT NULL,
     archived_at TIMESTAMP WITH TIME ZONE,
+    body TEXT NOT NULL,
     removed_at TIMESTAMP WITH TIME ZONE,
+    title TEXT NOT NULL,
+
     owner_id UUID NOT NULL REFERENCES account_accounts (id),
 
     PRIMARY KEY(id)

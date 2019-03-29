@@ -256,10 +256,10 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        title -> Text,
-        body -> Text,
         archived_at -> Nullable<Timestamptz>,
+        body -> Text,
         removed_at -> Nullable<Timestamptz>,
+        title -> Text,
         owner_id -> Uuid,
     }
 }
