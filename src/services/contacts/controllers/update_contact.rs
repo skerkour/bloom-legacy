@@ -1,7 +1,6 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::Account,
     services::contacts::domain::contact,
     services::common::events::EventMetadata,
 };
