@@ -6,17 +6,17 @@ CREATE TABLE contacts_contacts (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    addresses JSONB,
+    addresses JSONB[],
     birthday TIMESTAMP WITH TIME ZONE,
     company TEXT,
-    emails JSONB,
+    emails JSONB[] NOT NULL,
     first_name TEXT,
     last_name TEXT,
     notes TEXT,
     occupation TEXT,
-    organizations JSONB,
-    phones JSONB,
-    websites JSONB,
+    organizations JSONB[] NOT NULL,
+    phones JSONB[] NOT NULL,
+    websites JSONB[] NOT NULL,
 
     owner_id UUID NOT NULL REFERENCES account_accounts (id),
 
