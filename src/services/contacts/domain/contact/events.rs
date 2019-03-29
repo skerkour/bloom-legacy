@@ -22,6 +22,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
+    DeletedV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -68,6 +69,11 @@ impl eventsourcing::Event for Event {
                 websites: data.websites.clone(),
 
                 owner_id: data.owner_id,
+            },
+            // DeletedV1
+            EventData::DeletedV1 => super::Contact{
+                deleted_at: Some(self.timestamp),
+                ..aggregate.clone()
             },
         }
     }

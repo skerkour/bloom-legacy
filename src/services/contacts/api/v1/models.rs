@@ -34,3 +34,7 @@ pub struct ContactResponse {
     pub phones: Vec<contact::Phone>,
     pub websites: Vec<contact::Website>,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NoData {}

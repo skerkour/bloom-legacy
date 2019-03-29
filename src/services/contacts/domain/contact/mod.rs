@@ -17,6 +17,7 @@ pub use aggregate::{
 };
 pub use commands::{
     Create,
+    Delete,
 };
 pub use events::{
     Event,
