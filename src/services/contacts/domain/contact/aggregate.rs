@@ -59,8 +59,11 @@ pub struct Address {
 
 #[derive(Copy, Clone, Debug, Deserialize, Serialize)]
 pub enum AddressLabel {
+    #[serde(rename = "HOME")]
     Home,
+    #[serde(rename = "WORK")]
     Work,
+    #[serde(rename = "OTHER")]
     Other,
 }
 
@@ -72,8 +75,11 @@ pub struct Email {
 
 #[derive(Copy, Clone, Debug, Deserialize, Serialize)]
 pub enum EmailLabel {
+    #[serde(rename = "HOME")]
     Home,
+    #[serde(rename = "OTHEWORKR")]
     Work,
+    #[serde(rename = "OTHER")]
     Other,
 }
 
@@ -91,12 +97,19 @@ pub struct Phone {
 
 #[derive(Copy, Clone, Debug, Deserialize, Serialize)]
 pub enum PhoneLabel {
+    #[serde(rename = "HOME")]
     Home,
+    #[serde(rename = "WORK")]
     Work,
+    #[serde(rename = "MOBILE")]
     Mobile,
+    #[serde(rename = "MAIN")]
     Main,
+    #[serde(rename = "HOME_FAX")]
     HomeFax,
+    #[serde(rename = "WORK_FAX")]
     WorkFax,
+    #[serde(rename = "OTHER")]
     Other,
 }
 
@@ -108,10 +121,15 @@ pub struct Website {
 
 #[derive(Copy, Clone, Debug, Deserialize, Serialize)]
 pub enum WebsiteLabel {
+    #[serde(rename = "PROFILE")]
     Profile,
+    #[serde(rename = "BLOG")]
     Blog,
+    #[serde(rename = "HOME_PAGE")]
     HomePage,
+    #[serde(rename = "WORK")]
     Work,
+    #[serde(rename = "OTHER")]
     Other,
 }
 
