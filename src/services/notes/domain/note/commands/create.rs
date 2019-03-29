@@ -44,7 +44,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: id,
+            aggregate_id: self.owner_id,
             metadata: self.metadata.clone(),
         }, ()));
     }

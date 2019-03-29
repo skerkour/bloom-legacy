@@ -1,7 +1,6 @@
 use crate::{
-    services::contacts::domain,
+    services::contacts::domain::contact,
     services::common::events::EventMetadata,
-    services::notes::validators,
     KernelError,
 };
 use diesel::{
@@ -12,23 +11,24 @@ use diesel::{
 
 #[derive(Clone, Debug)]
 pub struct Create {
-    pub addresses: Vec<domain::Address>,
+    pub addresses: Vec<contact::Address>,
     pub birthday: Option<chrono::DateTime<chrono::Utc>>,
     pub company: Option<String>,
-    pub emails: Vec<domain::Email>,
+    pub emails: Vec<contact::Email>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub notes: Option<String>,
     pub occupation: Option<String>,
-    pub organizations: Vec<domain::Organization>,
-    pub phones: Vec<domain::Phone>,
-    pub websites: Vec<domain::Website>,
+    pub organizations: Vec<contact::Organization>,
+    pub phones: Vec<contact::Phone>,
+    pub websites: Vec<contact::Website>,
+    pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for Create {
-    type Aggregate = domain::Contact;
-    type Event = domain::Contact;
+    type Aggregate = contact::Contact;
+    type Event = contact::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -40,7 +40,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
-        let data = domain::EventData::CreatedV1(domain::CreatedV1{
+        let data = contact::EventData::CreatedV1(contact::CreatedV1{
             id,
             addresses: self.addresses.clone(),
             birthday: self.birthday.clone(),
@@ -56,12 +56,12 @@ impl<'a> eventsourcing::Command<'a> for Create {
             owner_id: self.owner_id,
         });
 
-        return  Ok((domain::Event{
+        return  Ok((contact::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: id,
-            metadata: self.metaself.clone(),
+            aggregate_id: self.owner_id,
+            metadata: self.metadata.clone(),
         }, ()));
     }
 }
