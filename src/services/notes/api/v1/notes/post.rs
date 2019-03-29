@@ -30,12 +30,13 @@ pub fn post((note_data, req): (Json<models::CreateNoteBody>, HttpRequest<api::St
 
     return state.db
     .send(controllers::CreateNote{
-        title: note_data.title,
-        body: note_data.body,
+        title: note_data.title.clone(),
+        body: note_data.body.clone(),
         user_id: auth.account.expect("error unwraping non none account").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })
+    .from_err()
     .and_then(move |note| {
         match note {
             Ok(note) => {
