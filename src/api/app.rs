@@ -73,6 +73,8 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::GET).f(notesv1::notes::get);
                 r.method(http::Method::POST).with_config(notesv1::notes::post, api::json_default_config);
             })
+            .resource("/notes/v1/archive", |r| r.method(http::Method::GET).f(notesv1::archive::get))
+            .resource("/notes/v1/trash", |r| r.method(http::Method::GET).f(notesv1::trash::get))
             .register()
     })
 }
