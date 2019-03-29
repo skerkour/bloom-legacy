@@ -38,7 +38,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
         let data = contact::EventData::CreatedV1(contact::CreatedV1{
             id,
