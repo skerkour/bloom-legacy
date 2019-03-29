@@ -6,7 +6,7 @@ CREATE TABLE contacts_contacts (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    addresses JSONB[],
+    addresses JSONB[] NOT NULL,
     birthday TIMESTAMP WITH TIME ZONE,
     company TEXT,
     emails JSONB[] NOT NULL,

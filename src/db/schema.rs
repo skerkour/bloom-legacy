@@ -169,7 +169,7 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        addresses -> Nullable<Array<Jsonb>>,
+        addresses -> Array<Jsonb>,
         birthday -> Nullable<Timestamptz>,
         company -> Nullable<Text>,
         emails -> Array<Jsonb>,
