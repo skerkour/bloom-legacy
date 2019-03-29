@@ -12,12 +12,12 @@ use crate::{
 };
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json, Path,
 };
 use futures::future;
 
 
-pub fn put((note_data, req): (Json<models::UpdateNote>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn put((note_id, note_data, req): (Path<(uuid::Uuid)>, Json<models::UpdateNote>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
@@ -30,6 +30,7 @@ pub fn put((note_data, req): (Json<models::UpdateNote>, HttpRequest<api::State>)
 
     return state.db
     .send(controllers::UpdateNote{
+        note_id: note_id.into_inner(),
         title: note_data.title.clone(),
         body: note_data.body.clone(),
         actor_id: auth.account.expect("error unwraping non none account").id,
