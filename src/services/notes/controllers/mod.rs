@@ -7,6 +7,7 @@ mod delete_note;
 mod remove_note;
 mod restore_note;
 mod unarchive_note;
+mod update_note;
 
 
 pub use create_note::CreateNote;
@@ -18,3 +19,4 @@ pub use delete_note::DeleteNote;
 pub use remove_note::RemoveNote;
 pub use restore_note::RestoreNote;
 pub use unarchive_note::UnarchiveNote;
+pub use update_note::UpdateNote;
