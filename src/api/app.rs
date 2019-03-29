@@ -5,6 +5,7 @@ use crate::{
     config,
     services::account::api::v1 as accountv1,
     services::notes::api::v1 as notesv1,
+    services::contacts::api::v1 as contactsv1,
 };
 use actix_web::{
     App,
@@ -83,6 +84,13 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/notes/v1/notes/{note_id}/restore", |r| r.method(http::Method::POST).with(notesv1::notes::restore::post))
             .resource("/notes/v1/archive", |r| r.method(http::Method::GET).f(notesv1::archive::get))
             .resource("/notes/v1/trash", |r| r.method(http::Method::GET).f(notesv1::trash::get))
+
+            // contacts
+            .resource("/contacts/v1/contacts", |r| {
+                r.method(http::Method::POST).with_config(contactsv1::contacts::post, api::json_default_config);
+            })
+
+
             .register()
     })
 }
