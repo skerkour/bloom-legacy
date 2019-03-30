@@ -1,0 +1,16 @@
+[package]
+name = "api"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.com>"]
+edition = "2018"
+
+[dependencies]
+# AWS libs
+rusoto_core = "0.37"
+rusoto_s3 = "0.37"
+
+
+[profile.release]
+# for error tracking
+debug = true
+lto = true
