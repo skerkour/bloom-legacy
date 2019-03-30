@@ -27,7 +27,7 @@ CREATE TABLE phaser_reports (
 CREATE TABLE phaser_reports_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES phaser_reports (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

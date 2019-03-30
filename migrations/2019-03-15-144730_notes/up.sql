@@ -19,7 +19,7 @@ CREATE TABLE notes_notes (
 CREATE TABLE notes_notes_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES notes_notes (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

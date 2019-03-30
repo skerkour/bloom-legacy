@@ -18,7 +18,7 @@ CREATE TABLE account_sessions (
 CREATE TABLE account_sessions_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES account_sessions (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

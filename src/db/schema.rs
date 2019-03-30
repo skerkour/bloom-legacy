@@ -335,18 +335,29 @@ table! {
     }
 }
 
+joinable!(account_accounts_events -> account_accounts (aggregate_id));
 joinable!(account_pending_emails -> account_accounts (account_id));
+joinable!(account_pending_emails_events -> account_pending_emails (aggregate_id));
 joinable!(account_sessions -> account_accounts (account_id));
+joinable!(account_sessions_events -> account_sessions (aggregate_id));
 joinable!(bitflow_downloads -> account_accounts (owner_id));
 joinable!(bitflow_downloads -> drive_files (file_id));
+joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> account_accounts (account_id));
+joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
 joinable!(contacts_contacts -> account_accounts (owner_id));
+joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
 joinable!(drive_files -> account_accounts (owner_id));
+joinable!(drive_files_events -> drive_files (aggregate_id));
 joinable!(drive_profiles -> account_accounts (account_id));
 joinable!(drive_profiles -> drive_files (home_id));
+joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
 joinable!(notes_notes -> account_accounts (owner_id));
+joinable!(notes_notes_events -> notes_notes (aggregate_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));
+joinable!(phaser_reports_events -> phaser_reports (aggregate_id));
 joinable!(phaser_scans -> account_accounts (owner_id));
+joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
     account_accounts,

@@ -19,12 +19,12 @@ CREATE TABLE account_accounts (
     PRIMARY KEY(id)
 );
 
--- CREATE INDEX idx_accounts_username ON accounts (username);
+CREATE UNIQUE INDEX idx_account_accounts_username ON account_accounts (username);
 
 CREATE TABLE account_accounts_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES account_accounts (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

@@ -23,7 +23,7 @@ CREATE TABLE phaser_scans (
 CREATE TABLE phaser_scans_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES phaser_scans (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

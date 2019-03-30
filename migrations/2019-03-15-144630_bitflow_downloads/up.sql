@@ -21,7 +21,7 @@ CREATE TABLE bitflow_downloads (
 CREATE TABLE bitflow_downloads_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES bitflow_downloads(id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

@@ -26,7 +26,7 @@ CREATE TABLE contacts_contacts (
 CREATE TABLE contacts_contacts_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES contacts_contacts (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

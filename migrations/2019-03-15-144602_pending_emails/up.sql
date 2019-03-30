@@ -18,7 +18,7 @@ CREATE TABLE account_pending_emails (
 CREATE TABLE account_pending_emails_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL,
+    aggregate_id UUID NOT NULL REFERENCES account_pending_emails (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 
