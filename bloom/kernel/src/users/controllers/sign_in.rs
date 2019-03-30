@@ -1,13 +1,13 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        Account,
+    users::domain::{
+        User,
         session,
         Session,
         account,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -29,10 +29,10 @@ impl Handler<SignIn> for DbActor {
 
     fn handle(&mut self, msg: SignIn, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts,
-            account_accounts_events,
-            account_sessions,
-            account_sessions_events,
+            kernel_users,
+            kernel_users_events,
+            kernel_sessions,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -41,9 +41,9 @@ impl Handler<SignIn> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let user: Account = account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::username.eq(&msg.username))
-                .filter(account_accounts::dsl::deleted_at.is_null())
+            let user: User = kernel_users::dsl::kernel_users
+                .filter(kernel_users::dsl::username.eq(&msg.username))
+                .filter(kernel_users::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)
                 .map_err(|_| KernelError::Unauthorized("Invalid username/password combination".to_string()))?;
@@ -59,7 +59,7 @@ impl Handler<SignIn> for DbActor {
                 };
                 let fail_sign_in_cmd = account::FailSignIn{metadata};
                 let (_, event, _) = eventsourcing::execute(&conn, user, &fail_sign_in_cmd)?;
-                diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                diesel::insert_into(kernel_users_events::dsl::kernel_users_events)
                     .values(&event)
                     .execute(&conn)?;
                 return Err(KernelError::Unauthorized("Invalid username/password combination".to_string()));
@@ -79,10 +79,10 @@ impl Handler<SignIn> for DbActor {
             };
             let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
-            diesel::insert_into(account_sessions::dsl::account_sessions)
+            diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)
                 .execute(&conn)?;
-            diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
 

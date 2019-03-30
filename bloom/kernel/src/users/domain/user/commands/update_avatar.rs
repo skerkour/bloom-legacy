@@ -18,7 +18,7 @@ pub struct UpdateAvatar {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
-    type Aggregate = user::Account;
+    type Aggregate = user::User;
     type Event = user::Event;
     type Context = rusoto_s3::S3Client;
     type Error = KernelError;

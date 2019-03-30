@@ -1,6 +1,6 @@
 use crate::{
     users::domain::user,
-    common::events::EventMetadata,
+    events::EventMetadata,
     users::validators,
     users,
     error::KernelError,

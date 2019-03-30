@@ -1,12 +1,12 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        Account,
+    users::domain::{
+        User,
         session,
         Session,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -14,7 +14,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignOut {
-    pub actor: Account,
+    pub actor: User,
     pub session: Session,
     pub request_id: uuid::Uuid,
 }
@@ -28,7 +28,7 @@ impl Handler<SignOut> for DbActor {
 
     fn handle(&mut self, msg: SignOut, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_sessions_events,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -52,7 +52,7 @@ impl Handler<SignOut> for DbActor {
             diesel::update(&session)
                 .set(&session)
                 .execute(&conn)?;
-            diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
 

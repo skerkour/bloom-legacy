@@ -1,12 +1,12 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        Account,
+    users::domain::{
+        User,
         session,
         Session,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -14,7 +14,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RevokeSession {
-    pub actor: Account,
+    pub actor: User,
     pub session_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub current_session_id: uuid::Uuid,
@@ -29,8 +29,8 @@ impl Handler<RevokeSession> for DbActor {
 
     fn handle(&mut self, msg: RevokeSession, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_sessions,
-            account_sessions_events,
+            kernel_sessions,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -45,10 +45,10 @@ impl Handler<RevokeSession> for DbActor {
                 session_id: Some(msg.current_session_id),
             };
 
-            let session: Session = account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::id.eq(msg.session_id))
-                .filter(account_sessions::dsl::account_id.eq(msg.actor.id))
-                .filter(account_sessions::dsl::deleted_at.is_null())
+            let session: Session = kernel_sessions::dsl::kernel_sessions
+                .filter(kernel_sessions::dsl::id.eq(msg.session_id))
+                .filter(kernel_sessions::dsl::account_id.eq(msg.actor.id))
+                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -64,7 +64,7 @@ impl Handler<RevokeSession> for DbActor {
             diesel::update(&session)
                 .set(&session)
                 .execute(&conn)?;
-            diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
 

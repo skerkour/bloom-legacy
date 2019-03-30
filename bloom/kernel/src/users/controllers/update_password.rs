@@ -1,13 +1,13 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        Account,
-        account,
+    users::domain::{
+        User,
+        user,
         Session,
         session,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -15,7 +15,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdatePassword {
-    pub account: Account,
+    pub user: User,
     pub current_session: Session,
     pub current_password: String,
     pub new_password: String,
@@ -31,9 +31,9 @@ impl Handler<UpdatePassword> for DbActor {
 
     fn handle(&mut self, msg: UpdatePassword, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts_events,
-            account_sessions,
-            account_sessions_events,
+            kernel_users_events,
+            kernel_sessions,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -43,34 +43,34 @@ impl Handler<UpdatePassword> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
-                actor_id: Some(msg.account.id),
+                actor_id: Some(msg.user.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.current_session.id),
             };
 
-            let account_to_update = msg.account;
+            let user_to_update = msg.user;
 
-            let update_last_name_cmd = account::UpdatePassword{
+            let update_last_name_cmd = user::UpdatePassword{
                 current_password: msg.current_password,
                 new_password: msg.new_password,
                 metadata: metadata.clone(),
             };
 
-            let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
+            let (user_to_update, event, _) = eventsourcing::execute(&conn, user_to_update, &update_last_name_cmd)?;
 
-            // update account
-            diesel::update(&account_to_update)
-                .set(&account_to_update)
+            // update user
+            diesel::update(&user_to_update)
+                .set(&user_to_update)
                 .execute(&conn)?;
-            diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+            diesel::insert_into(kernel_users_events::dsl::kernel_users_events)
                 .values(&event)
                 .execute(&conn)?;
 
             // revoke all other active sessions
-            let sessions: Vec<Session> = account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::account_id.eq(account_to_update.id))
-                .filter(account_sessions::dsl::id.ne(msg.current_session.id))
-                .filter(account_sessions::dsl::deleted_at.is_null())
+            let sessions: Vec<Session> = kernel_sessions::dsl::kernel_sessions
+                .filter(kernel_sessions::dsl::user_id.eq(user_to_update.id))
+                .filter(kernel_sessions::dsl::id.ne(msg.current_session.id))
+                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .load(&conn)?;
 
@@ -86,7 +86,7 @@ impl Handler<UpdatePassword> for DbActor {
                 diesel::update(&session)
                     .set(&session)
                     .execute(&conn)?;
-                diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+                diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                     .values(&event)
                     .execute(&conn)?;
             }

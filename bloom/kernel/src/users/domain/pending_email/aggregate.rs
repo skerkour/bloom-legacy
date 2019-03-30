@@ -1,12 +1,12 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use crate::{
-    db::schema::account_pending_emails,
+    db::schema::kernel_pending_emails,
 };
 
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
-#[table_name = "account_pending_emails"]
+#[table_name = "kernel_pending_emails"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingEmail {
     pub id: uuid::Uuid,
@@ -19,7 +19,7 @@ pub struct PendingEmail {
     pub token: String, // hashed token
     pub trials: i64,
 
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 }
 
 
@@ -38,7 +38,7 @@ impl PendingEmail {
             token: String::new(),
             trials: 0,
 
-            account_id: uuid::Uuid::new_v4(),
+            user_id: uuid::Uuid::new_v4(),
         };
     }
 }

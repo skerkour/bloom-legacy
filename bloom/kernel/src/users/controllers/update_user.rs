@@ -2,7 +2,7 @@ use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     users::domain::user,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};

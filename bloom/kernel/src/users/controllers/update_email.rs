@@ -1,10 +1,10 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain,
-    services::account::domain::pending_email,
-    services::account::notifications::emails::send_email_verification_code,
-    services::common::events::EventMetadata,
+    users::domain,
+    users::domain::pending_email,
+    users::notifications::emails::send_email_verification_code,
+    events::EventMetadata,
     config::Config,
     error::KernelError,
 };
@@ -12,7 +12,7 @@ use crate::{
 
 #[derive(Clone, Debug)]
 pub struct UpdateEmail {
-    pub account: domain::Account,
+    pub user: domain::User,
     pub email: String,
     pub config: Config,
     pub request_id: uuid::Uuid,
@@ -28,8 +28,8 @@ impl Handler<UpdateEmail> for DbActor {
 
     fn handle(&mut self, msg: UpdateEmail, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_pending_emails,
-            account_pending_emails_events,
+            kernel_pending_emails,
+            kernel_pending_emails_events,
         };
         use diesel::prelude::*;
 
@@ -41,29 +41,29 @@ impl Handler<UpdateEmail> for DbActor {
             let config = msg.config.clone();
 
             let metadata = EventMetadata{
-                actor_id: Some(msg.account.id),
+                actor_id: Some(msg.user.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
             let new_pending_email = pending_email::PendingEmail::new();
             let create_cmd = pending_email::Create{
                 email: msg.email.clone(),
-                account_id: msg.account.id,
+                user_id: msg.user.id,
                 metadata,
             };
             let (new_pending_email, event, non_persisted) = eventsourcing::execute(&conn, new_pending_email, &create_cmd)?;
 
-            diesel::insert_into(account_pending_emails::dsl::account_pending_emails)
+            diesel::insert_into(kernel_pending_emails::dsl::kernel_pending_emails)
                 .values(&new_pending_email)
                 .execute(&conn)?;
-            diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
+            diesel::insert_into(kernel_pending_emails_events::dsl::kernel_pending_emails_events)
                 .values(&event)
                 .execute(&conn)?;
 
             send_email_verification_code(
                 &config,
                 new_pending_email.email.as_str(),
-                format!("{} {}", &msg.account.first_name, &msg.account.last_name).as_str(),
+                format!("{} {}", &msg.user.first_name, &msg.user.last_name).as_str(),
                 &new_pending_email.email,
                 &non_persisted.code,
             ).expect("error sending email");

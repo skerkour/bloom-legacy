@@ -1,10 +1,9 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain,
-    services::account::domain::account,
-    services::account::notifications::emails::send_password_reset,
-    services::common::events::EventMetadata,
+    users::domain::user,
+    users::notifications::emails::send_password_reset,
+    events::EventMetadata,
     config::Config,
     error::KernelError,
 };
@@ -27,8 +26,8 @@ impl Handler<RequestPasswordReset> for DbActor {
 
     fn handle(&mut self, msg: RequestPasswordReset, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts,
-            account_accounts_events,
+            kernel_users,
+            kernel_users_events,
         };
         use diesel::prelude::*;
 
@@ -37,11 +36,11 @@ impl Handler<RequestPasswordReset> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let user: domain::Account = account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::email.eq(&msg.email_or_username)
-                    .or(account_accounts::dsl::username.eq(&msg.email_or_username))
+            let user: user::User = kernel_users::dsl::kernel_users
+                .filter(kernel_users::dsl::email.eq(&msg.email_or_username)
+                    .or(kernel_users::dsl::username.eq(&msg.email_or_username))
                 )
-                .filter(account_accounts::dsl::deleted_at.is_null())
+                .filter(kernel_users::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -51,7 +50,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: msg.session_id,
             };
-            let request_password_reset_cmd = account::RequestPasswordReset{
+            let request_password_reset_cmd = user::RequestPasswordReset{
                 metadata,
             };
             let (user, event, non_stored) = eventsourcing::execute(&conn, user, &request_password_reset_cmd)?;
@@ -59,7 +58,7 @@ impl Handler<RequestPasswordReset> for DbActor {
             diesel::update(&user)
                 .set(&user)
                 .execute(&conn)?;
-            diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+            diesel::insert_into(kernel_users_events::dsl::kernel_users_events)
                 .values(&event)
                 .execute(&conn)?;
 

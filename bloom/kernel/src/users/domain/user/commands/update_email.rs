@@ -1,7 +1,7 @@
 use crate::{
     users::domain::user,
     events::EventMetadata,
-    usersvalidators,
+    users::validators,
     error::KernelError,
 };
 use diesel::{

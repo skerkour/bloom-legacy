@@ -71,7 +71,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let id = uuid::Uuid::new_v4();
         let mut metadata = self.metadata.clone();
         metadata.actor_id = Some(id);
-        let data = account::EventData::CreatedV1(account::CreatedV1{
+        let data = user::EventData::CreatedV1(user::CreatedV1{
             id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
@@ -82,7 +82,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
             is_admin: false,
         });
 
-        return  Ok((account::Event{
+        return  Ok((user::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,

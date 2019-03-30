@@ -1,35 +1,35 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        PendingAccount,
-        pending_account,
-        pending_account::EventData,
+    users::domain::{
+        PendingUser,
+        pending_user,
+        pending_user::EventData,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyPendingAccount {
+pub struct VerifyPendingUser {
     pub id: uuid::Uuid,
     pub code: String,
     pub request_id: uuid::Uuid,
 }
 
-impl Message for VerifyPendingAccount {
+impl Message for VerifyPendingUser {
     type Result = Result<(), KernelError>;
 }
 
-impl Handler<VerifyPendingAccount> for DbActor {
+impl Handler<VerifyPendingUser> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: VerifyPendingAccount, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: VerifyPendingUser, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_pending_accounts,
-            account_pending_accounts_events,
+            kernel_pending_users,
+            kernel_pending_users_events,
         };
         use diesel::prelude::*;
 
@@ -43,25 +43,25 @@ impl Handler<VerifyPendingAccount> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: None,
             };
-            let verify_pending_account_cmd = pending_account::Verify{
+            let verify_pending_user_cmd = pending_user::Verify{
                 id: msg.id,
                 code: msg.code.clone(),
                 metadata,
             };
 
-            let pending_account: PendingAccount = account_pending_accounts::dsl::account_pending_accounts
-                .filter(account_pending_accounts::dsl::id.eq(msg.id))
-                .filter(account_pending_accounts::dsl::deleted_at.is_null())
+            let pending_user: PendingUser = kernel_pending_users::dsl::kernel_pending_users
+                .filter(kernel_pending_users::dsl::id.eq(msg.id))
+                .filter(kernel_pending_users::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
-            let (pending_account, event, _) = eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;
+            let (pending_user, event, _) = eventsourcing::execute(&conn, pending_user, &verify_pending_user_cmd)?;
 
-            // update pending_account
-            diesel::update(&pending_account)
-                .set(&pending_account)
+            // update pending_user
+            diesel::update(&pending_user)
+                .set(&pending_user)
                 .execute(&conn)?;
-            diesel::insert_into(account_pending_accounts_events::dsl::account_pending_accounts_events)
+            diesel::insert_into(kernel_pending_users_events::dsl::kernel_pending_users_events)
                 .values(&event)
                 .execute(&conn)?;
 

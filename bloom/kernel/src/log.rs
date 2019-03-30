@@ -1,4 +1,4 @@
-use log; // see https://github.com/rust-lang/rust/issues/56398
+use ::log; // see https://github.com/rust-lang/rust/issues/56398
 use slog;
 use slog_json;
 use slog_scope;

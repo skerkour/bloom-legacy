@@ -1,13 +1,13 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
-        Account,
-        account,
+    users::domain::{
+        User,
+        user,
         Session,
         session,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -31,10 +31,10 @@ impl Handler<ResetPassword> for DbActor {
 
     fn handle(&mut self, msg: ResetPassword, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_accounts,
-            account_accounts_events,
-            account_sessions,
-            account_sessions_events,
+            kernel_users,
+            kernel_users_events,
+            kernel_sessions,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -43,9 +43,9 @@ impl Handler<ResetPassword> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let user: Account = account_accounts::dsl::account_accounts
-                .filter(account_accounts::dsl::password_reset_id.eq(msg.reset_password_id))
-                .filter(account_accounts::dsl::deleted_at.is_null())
+            let user: User = kernel_users::dsl::kernel_users
+                .filter(kernel_users::dsl::password_reset_id.eq(msg.reset_password_id))
+                .filter(kernel_users::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -55,7 +55,7 @@ impl Handler<ResetPassword> for DbActor {
                 session_id: msg.session_id,
             };
 
-            let update_last_name_cmd = account::ResetPassword{
+            let update_last_name_cmd = user::ResetPassword{
                 new_password: msg.new_password,
                 token: msg.token,
                 metadata: metadata.clone(),
@@ -63,18 +63,18 @@ impl Handler<ResetPassword> for DbActor {
 
             let (user, event, _) = eventsourcing::execute(&conn, user, &update_last_name_cmd)?;
 
-            // update account
+            // update user
             diesel::update(&user)
                 .set(&user)
                 .execute(&conn)?;
-            diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+            diesel::insert_into(kernel_users_events::dsl::kernel_users_events)
                 .values(&event)
                 .execute(&conn)?;
 
             // revoke all active sessions
-            let sessions: Vec<Session> = account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::account_id.eq(user.id))
-                .filter(account_sessions::dsl::deleted_at.is_null())
+            let sessions: Vec<Session> = kernel_sessions::dsl::kernel_sessions
+                .filter(kernel_sessions::dsl::user_id.eq(user.id))
+                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .load(&conn)?;
 
@@ -90,24 +90,24 @@ impl Handler<ResetPassword> for DbActor {
                 diesel::update(&session)
                     .set(&session)
                     .execute(&conn)?;
-                diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+                diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                     .values(&event)
                     .execute(&conn)?;
             }
 
             // start new session
             let start_cmd = session::Start{
-                account_id: user.id,
+                user_id: user.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(), // TODO
                 metadata,
             };
             let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
-            diesel::insert_into(account_sessions::dsl::account_sessions)
+            diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)
                 .execute(&conn)?;
-            diesel::insert_into(account_sessions_events::dsl::account_sessions_events)
+            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
 

@@ -1,13 +1,13 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain::{
+    users::domain::{
         PendingEmail,
         pending_email,
-        Account,
-        account,
+        User,
+        user,
     },
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -15,7 +15,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyEmail {
-    pub account: Account,
+    pub user: User,
     pub id: uuid::Uuid,
     pub code: String,
     pub request_id: uuid::Uuid,
@@ -23,17 +23,17 @@ pub struct VerifyEmail {
 }
 
 impl Message for VerifyEmail {
-    type Result = Result<Account, KernelError>;
+    type Result = Result<User, KernelError>;
 }
 
 impl Handler<VerifyEmail> for DbActor {
-    type Result = Result<Account, KernelError>;
+    type Result = Result<User, KernelError>;
 
     fn handle(&mut self, msg: VerifyEmail, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_pending_emails,
-            account_pending_emails_events,
-            account_accounts_events,
+            kernel_users_events,
+            kernel_users_events_events,
+            kernel_users_events,
         };
         use diesel::prelude::*;
 
@@ -43,17 +43,17 @@ impl Handler<VerifyEmail> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
-                actor_id: Some(msg.account.id),
+                actor_id: Some(msg.user.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 
-            let account_to_update = msg.account;
+            let user_to_update = msg.user;
 
-            let pending_email: PendingEmail = account_pending_emails::dsl::account_pending_emails
-                .filter(account_pending_emails::dsl::id.eq(msg.id))
-                .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
-                .filter(account_pending_emails::dsl::deleted_at.is_null())
+            let pending_email: PendingEmail = kernel_users_events::dsl::kernel_users_events
+                .filter(kernel_users_events::dsl::id.eq(msg.id))
+                .filter(kernel_users_events::dsl::user_id.eq(user_to_update.id))
+                .filter(kernel_users_events::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -70,32 +70,32 @@ impl Handler<VerifyEmail> for DbActor {
             diesel::update(&pending_email)
                 .set(&pending_email)
                 .execute(&conn)?;
-            diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
+            diesel::insert_into(kernel_users_events_events::dsl::kernel_users_events_events)
                 .values(&event)
                 .execute(&conn)?;
 
-            let account_to_update = match event.data {
+            let user_to_update = match event.data {
                 pending_email::EventData::VerificationSucceededV1 => {
-                    let update_email_cmd = account::UpdateEmail{
+                    let update_email_cmd = user::UpdateEmail{
                         email: pending_email.email,
                         metadata: metadata.clone(),
                     };
 
-                    let (account_to_update, event, _) = eventsourcing::execute(&conn, account_to_update, &update_email_cmd)?;
+                    let (user_to_update, event, _) = eventsourcing::execute(&conn, user_to_update, &update_email_cmd)?;
 
-                    // update account
-                    diesel::update(&account_to_update)
-                        .set(&account_to_update)
+                    // update user
+                    diesel::update(&user_to_update)
+                        .set(&user_to_update)
                         .execute(&conn)?;
-                    diesel::insert_into(account_accounts_events::dsl::account_accounts_events)
+                    diesel::insert_into(kernel_users_events::dsl::kernel_users_events)
                         .values(&event)
                         .execute(&conn)?;
 
-                    // delete all other pending emails for account
-                    let pending_emails_to_delete: Vec<PendingEmail> = account_pending_emails::dsl::account_pending_emails
-                        .filter(account_pending_emails::dsl::account_id.eq(account_to_update.id))
-                        .filter(account_pending_emails::dsl::id.ne(msg.id))
-                        .filter(account_pending_emails::dsl::deleted_at.is_null())
+                    // delete all other pending emails for user
+                    let pending_emails_to_delete: Vec<PendingEmail> = kernel_users_events::dsl::kernel_users_events
+                        .filter(kernel_users_events::dsl::user_id.eq(user_to_update.id))
+                        .filter(kernel_users_events::dsl::id.ne(msg.id))
+                        .filter(kernel_users_events::dsl::deleted_at.is_null())
                         .for_update()
                         .load(&conn)?;
 
@@ -108,18 +108,18 @@ impl Handler<VerifyEmail> for DbActor {
                         diesel::update(&pending_email_to_delete)
                             .set(&pending_email_to_delete)
                             .execute(&conn)?;
-                        diesel::insert_into(account_pending_emails_events::dsl::account_pending_emails_events)
+                        diesel::insert_into(kernel_users_events_events::dsl::kernel_users_events_events)
                             .values(&event)
                             .execute(&conn)?;
                     }
-                    account_to_update
+                    user_to_update
                 },
-                _ => account_to_update,
+                _ => user_to_update,
             };
 
             return match event.data {
                 pending_email::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.to_string())),
-                _ => Ok(account_to_update),
+                _ => Ok(user_to_update),
             };
         })?);
     }

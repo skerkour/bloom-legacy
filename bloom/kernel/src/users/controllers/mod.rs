@@ -16,7 +16,7 @@ mod request_password_reset;
 
 
 pub use registration_start::StartRegistration;
-pub use registration_verify::VerifyPendingAccount;
+pub use registration_verify::VerifyPendingUser;
 pub use registration_complete::CompleteRegistration;
 pub use sign_out::SignOut;
 pub use sign_in::SignIn;

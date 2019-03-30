@@ -10,6 +10,7 @@ diesel_as_jsonb = { path = "../../crates/diesel_as_jsonb" }
 bcrypt = { path = "../../crates/bcrypt-rs" }
 eventsourcing = { path = "../../crates/eventsourcing-rs" }
 mimesniff = { path = "../../crates/mimesniff-rs" }
+hex = { path = "../../crates/hex-rs" }
 
 failure = "0.1.5"
 actix-web = "0.7.19"
@@ -25,6 +26,8 @@ serde_json = "1.0"
 image = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
 rand = "0.6"
+base64 = "0.10.1"
+mime = "0.3"
 
 # emails
 handlebars = "2.0.0-beta.1"
