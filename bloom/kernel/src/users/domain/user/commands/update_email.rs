@@ -1,7 +1,7 @@
 use crate::{
-    services::account::domain::account,
-    services::common::events::EventMetadata,
-    services::account::validators,
+    users::domain::user,
+    events::EventMetadata,
+    usersvalidators,
     error::KernelError,
 };
 use diesel::{
@@ -17,15 +17,15 @@ pub struct UpdateEmail {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateEmail {
-    type Aggregate = account::Account;
-    type Event = account::Event;
+    type Aggregate = user::User;
+    type Event = user::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use crate::db::schema::{
-            account_accounts::dsl::*,
+            kernel_users::dsl::*,
         };
         use diesel::prelude::*;
 
@@ -34,7 +34,7 @@ impl<'a> eventsourcing::Command<'a> for UpdateEmail {
         // verify that an email isn't already in use
         // already done in pending emial verify
 
-        // let existing_email: i64 = account_accounts
+        // let existing_email: i64 = kernel_users
         //     .filter(email.eq(&self.email))
         //     .filter(deleted_at.is_null())
         //     .count()
@@ -47,11 +47,11 @@ impl<'a> eventsourcing::Command<'a> for UpdateEmail {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = account::EventData::EmailUpdatedV1(account::EmailUpdatedV1{
+        let data = user::EventData::EmailUpdatedV1(user::EmailUpdatedV1{
             email: self.email.clone(),
         });
 
-        return  Ok((account::Event{
+        return  Ok((user::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

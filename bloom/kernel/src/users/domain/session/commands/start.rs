@@ -1,10 +1,10 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    services::account::domain::session,
-    services::account,
+    users,
+    users::domain::session,
     error::KernelError,
-    services::common::utils,
-    services::common::events::EventMetadata,
+    utils,
+    events::EventMetadata,
 };
 use diesel::{
     PgConnection,
@@ -15,7 +15,7 @@ use rand::Rng;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Start {
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
     pub ip: String,
     pub user_agent: String,
     pub metadata: EventMetadata,
@@ -44,16 +44,16 @@ impl<'a> eventsourcing::Command<'a> for Start {
 
     fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(account::SESSION_TOKEN_MIN_LENGTH, account::SESSION_TOKEN_MAX_LENGTH);
+        let token_length = rng.gen_range(users::SESSION_TOKEN_MIN_LENGTH, users::SESSION_TOKEN_MAX_LENGTH);
         let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, account::SESSION_TOKEN_BCRYPT_COST)
+        let hashed_token = bcrypt::hash(&token, users::SESSION_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
         let timestamp = chrono::Utc::now();
 
         let new_session_id = uuid::Uuid::new_v4();
         let data = session::EventData::StartedV1(session::StartedV1{
             id: new_session_id,
-            account_id: self.account_id,
+            user_id: self.user_id,
             token: hashed_token,
             ip: self.ip.clone(),
             device: session::Device{},

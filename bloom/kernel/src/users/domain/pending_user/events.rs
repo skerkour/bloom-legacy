@@ -2,14 +2,14 @@ use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::account_pending_accounts_events,
-    services::common::events::EventMetadata,
+    db::schema::kernel_pending_users_events,
+    events::EventMetadata,
 };
 
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "account_pending_accounts_events"]
+#[table_name = "kernel_pending_users_events"]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -54,12 +54,12 @@ impl ToString for VerificationFailedReason {
 }
 
 impl eventsourcing::Event for Event {
-    type Aggregate = super::PendingAccount;
+    type Aggregate = super::PendingUser;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::PendingAccount{
+            EventData::CreatedV1(ref data) => super::PendingUser{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -73,15 +73,15 @@ impl eventsourcing::Event for Event {
                 trials: 0,
                 verified: false,
             },
-            EventData::VerificationSucceededV1 => super::PendingAccount{
+            EventData::VerificationSucceededV1 => super::PendingUser{
                 verified: true,
                 ..aggregate
             },
-            EventData::VerificationFailedV1(_) => super::PendingAccount{
+            EventData::VerificationFailedV1(_) => super::PendingUser{
                 trials: aggregate.trials + 1,
                 ..aggregate
             },
-            EventData::RegistrationCompletedV1 => super::PendingAccount{
+            EventData::RegistrationCompletedV1 => super::PendingUser{
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

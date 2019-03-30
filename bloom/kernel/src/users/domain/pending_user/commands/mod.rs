@@ -1,6 +1,5 @@
 mod complete_registration;
 mod create;
-mod resend_code;
 mod verify;
 
 pub use complete_registration::CompleteRegistration;

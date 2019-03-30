@@ -1,10 +1,10 @@
 use crate::{
-    services::account::validators,
+    users::validators,
     error::KernelError,
-    services::account::domain::pending_email,
-    services::account,
-    services::common::events::EventMetadata,
-    services::common::utils,
+    users::domain::pending_email,
+    users,
+    events::EventMetadata,
+    utils,
 };
 use diesel::{
     PgConnection,
@@ -15,7 +15,7 @@ use diesel::{
 #[derive(Clone, Debug)]
 pub struct Create {
     pub email: String,
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
@@ -33,14 +33,14 @@ impl<'a> eventsourcing::Command<'a> for Create {
 
     fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use crate::db::schema::{
-            account_accounts::dsl::*,
+            kernel_users::dsl::*,
         };
         use diesel::prelude::*;
 
         validators::email(&self.email)?;
 
         // verify that an email isn't already in use
-        let existing_email: i64 = account_accounts
+        let existing_email: i64 = kernel_users
             .filter(email.eq(&self.email))
             .filter(deleted_at.is_null())
             .count()
@@ -62,7 +62,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let data = pending_email::EventData::CreatedV1(pending_email::CreatedV1{
             id: new_pending_email_id,
             email: self.email.clone(),
-            account_id: self.account_id,
+            user_id: self.user_id,
             token,
         });
 

@@ -1,7 +1,7 @@
 use crate::{
-    services::account::domain::account,
-    services::common::events::EventMetadata,
-    services::account::validators,
+    users::domain::user,
+    events::EventMetadata,
+    users::validators,
     error::KernelError,
 };
 use diesel::{
@@ -17,8 +17,8 @@ pub struct UpdateFirstName {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
-    type Aggregate = account::Account;
-    type Event = account::Event;
+    type Aggregate = user::User;
+    type Event = user::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -30,11 +30,11 @@ impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = account::EventData::FirstNameUpdatedV1(account::FirstNameUpdatedV1{
+        let data = user::EventData::FirstNameUpdatedV1(user::FirstNameUpdatedV1{
             first_name: self.first_name.clone(),
         });
 
-        return  Ok((account::Event{
+        return  Ok((user::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

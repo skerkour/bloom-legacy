@@ -1,8 +1,8 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    services::account::domain::pending_email,
+    users::domain::pending_email,
     error::KernelError,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use diesel::{
     PgConnection,

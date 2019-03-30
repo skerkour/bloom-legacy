@@ -8,7 +8,8 @@ edition = "2018"
 [dependencies]
 diesel_as_jsonb = { path = "../../crates/diesel_as_jsonb" }
 bcrypt = { path = "../../crates/bcrypt-rs" }
-eventsourcing = { path = "crates/eventsourcing-rs" }
+eventsourcing = { path = "../../crates/eventsourcing-rs" }
+mimesniff = { path = "../../crates/mimesniff-rs" }
 
 failure = "0.1.5"
 actix-web = "0.7.19"

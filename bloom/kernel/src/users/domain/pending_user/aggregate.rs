@@ -2,15 +2,13 @@ use serde::{Serialize, Deserialize};
 use diesel::{
     Queryable,
 };
-use crate::{
-    db::schema::account_pending_accounts,
-};
+use crate::db::schema::kernel_pending_users;
 
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
-#[table_name = "account_pending_accounts"]
+#[table_name = "kernel_pending_users"]
 #[changeset_options(treat_none_as_null = "true")]
-pub struct PendingAccount {
+pub struct PendingUser {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
@@ -26,11 +24,11 @@ pub struct PendingAccount {
     pub verified: bool,
 }
 
-impl PendingAccount {
-    // create a new, unitialized PendingAccount
+impl PendingUser {
+    // create a new, unitialized PendingUser
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return PendingAccount{
+        return PendingUser{
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -48,7 +46,7 @@ impl PendingAccount {
     }
 }
 
-impl eventsourcing::Aggregate for PendingAccount {
+impl eventsourcing::Aggregate for PendingUser {
     fn increment_version(&mut self) {
         self.version += 1;
     }

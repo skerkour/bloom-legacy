@@ -3,7 +3,7 @@ mod events;
 mod aggregate;
 
 
-pub use aggregate::Account;
+pub use aggregate::User;
 pub use commands::{
     Create,
     UpdateFirstName,

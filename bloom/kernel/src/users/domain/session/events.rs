@@ -2,13 +2,13 @@ use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::account_sessions_events,
-    services::common::events::EventMetadata,
+    db::schema::kernel_sessions_events,
+    events::EventMetadata,
 };
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "account_sessions_events"]
+#[table_name = "kernel_sessions_events"]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -29,7 +29,7 @@ pub enum EventData {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StartedV1 {
     pub id: uuid::Uuid,
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
     pub token: String,
     pub ip: String,
     pub location: super::Location,
@@ -60,7 +60,7 @@ impl eventsourcing::Event for Event {
                 ip: data.ip.clone(),
                 location: Some(data.location.clone()),
                 token: data.token.clone(),
-                account_id: data.account_id,
+                user_id: data.user_id,
             },
             // SignedOutV1 | RevokedV1
             EventData::SignedOutV1 | EventData::RevokedV1(_) => super::Session{

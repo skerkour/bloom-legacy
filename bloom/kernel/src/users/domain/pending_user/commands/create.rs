@@ -1,10 +1,10 @@
 use crate::{
-    services::account::validators,
+    users::validators,
     error::KernelError,
-    services::account::domain::pending_account,
-    services::account,
-    services::common::events::EventMetadata,
-    services::common::utils,
+    users::domain::pending_user,
+    user,
+    events::EventMetadata,
+    utils,
 };
 use diesel::{
     PgConnection,
@@ -28,15 +28,15 @@ pub struct CreateNonStored {
 
 
 impl<'a> eventsourcing::Command<'a> for Create {
-    type Aggregate = pending_account::PendingAccount;
-    type Event = pending_account::Event;
+    type Aggregate = pending_user::PendingUser;
+    type Event = pending_user::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = CreateNonStored;
 
     fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use crate::db::schema::{
-            account_accounts::dsl::*,
+            kernel_users::dsl::*,
         };
         use diesel::prelude::*;
 
@@ -51,7 +51,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         }
 
         // verify that an email isn't already in use
-        let existing_email: i64 = account_accounts
+        let existing_email: i64 = kernel_users
             .filter(email.eq(&self.email))
             .filter(deleted_at.is_null())
             .count()
@@ -65,15 +65,15 @@ impl<'a> eventsourcing::Command<'a> for Create {
 
     fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
-        let new_pending_account_id = uuid::Uuid::new_v4();
+        let new_pending_user_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
-        let hashed_password = bcrypt::hash(&self.password, account::PASSWORD_BCRYPT_COST)
+        let hashed_password = bcrypt::hash(&self.password, user::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
-        let token = bcrypt::hash(&code, account::PENDING_ACCOUNT_TOKEN_BCRYPT_COST)
+        let token = bcrypt::hash(&code, user::PENDING_user_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = pending_account::EventData::CreatedV1(pending_account::CreatedV1{
-            id: new_pending_account_id,
+        let data = pending_user::EventData::CreatedV1(pending_user::CreatedV1{
+            id: new_pending_user_id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
             email: self.email.clone(),
@@ -85,11 +85,11 @@ impl<'a> eventsourcing::Command<'a> for Create {
             code,
         };
 
-        return  Ok((pending_account::Event{
+        return  Ok((pending_user::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,
-            aggregate_id: new_pending_account_id,
+            aggregate_id: new_pending_user_id,
             metadata: self.metadata.clone(),
         }, non_stored));
     }

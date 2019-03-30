@@ -2,7 +2,7 @@ use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::account_pending_emails_events,
+    db::schema::kernel_pending_emails_events,
     services::common::events::EventMetadata,
 };
 use std::string::ToString;
@@ -10,7 +10,7 @@ use std::string::ToString;
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "account_pending_emails_events"]
+#[table_name = "kernel_pending_emails_events"]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -32,7 +32,7 @@ pub struct CreatedV1 {
     pub id: uuid::Uuid,
     pub email: String,
     pub token: String,
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
@@ -67,7 +67,7 @@ impl eventsourcing::Event for Event {
                 email: data.email.clone(),
                 token: data.token.clone(),
                 trials: 0,
-                account_id: data.account_id,
+                user_id: data.user_id,
             },
             // VerificationSucceededV1
             EventData::VerificationSucceededV1 => aggregate,

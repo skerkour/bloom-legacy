@@ -1,8 +1,8 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    services::account::domain::session,
+    users::domain::session,
     error::KernelError,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use diesel::{
     PgConnection,

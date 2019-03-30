@@ -1,12 +1,12 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use crate::{
-    db::schema::account_sessions,
+    db::schema::kernel_sessions,
 };
 use diesel_as_jsonb::AsJsonb;
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
-#[table_name = "account_sessions"]
+#[table_name = "kernel_sessions"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Session {
     pub id: uuid::Uuid,
@@ -20,7 +20,7 @@ pub struct Session {
     pub location: Option<Location>,
     pub token: String,
 
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 }
 
 impl Session {
@@ -39,7 +39,7 @@ impl Session {
             location: None,
             token: "".to_string(),
 
-            account_id: uuid,
+            user_id: uuid,
         };
     }
 }

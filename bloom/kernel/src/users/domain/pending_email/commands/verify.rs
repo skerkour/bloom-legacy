@@ -1,7 +1,7 @@
 use crate::{
-    services::common::events::EventMetadata,
-    services::account::domain::pending_email,
-    services::account::validators,
+    events::EventMetadata,
+    users::domain::pending_email,
+    users::validators,
     error::KernelError,
 };
 use serde::{Serialize, Deserialize};
@@ -30,14 +30,14 @@ impl<'a> eventsourcing::Command<'a> for Verify {
 
     fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use crate::db::schema::{
-            account_accounts::dsl::*,
+            kernel_users::dsl::*,
         };
         use diesel::prelude::*;
 
         validators::email(&self.email)?;
 
         // verify that an email isn't already in use
-        let existing_email: i64 = account_accounts
+        let existing_email: i64 = kernel_users
             .filter(email.eq(&self.email))
             .filter(deleted_at.is_null())
             .count()

@@ -3,8 +3,8 @@ use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::kernel_users_events,
-    services::common::events::EventMetadata,
-    services::account::domain,
+    events::EventMetadata,
+    domain,
 };
 
 
@@ -80,12 +80,12 @@ pub struct PasswordResetedV1 {
 }
 
 impl eventsourcing::Event for Event {
-    type Aggregate = super::Account;
+    type Aggregate = super::User;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => domain::Account {
+            EventData::CreatedV1(ref data) => domain::User {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -102,42 +102,42 @@ impl eventsourcing::Event for Event {
                 username: data.username.clone(),
             },
             // FirstNameUpdatedV1
-            EventData::FirstNameUpdatedV1(ref data) => domain::Account {
+            EventData::FirstNameUpdatedV1(ref data) => domain::User {
                 first_name: data.first_name.clone(),
                 ..aggregate
             },
             // LastNameUpdatedV1
-            EventData::LastNameUpdatedV1(ref data) => domain::Account {
+            EventData::LastNameUpdatedV1(ref data) => domain::User {
                 last_name: data.last_name.clone(),
                 ..aggregate
             },
             // PasswordUpdatedV1
-            EventData::PasswordUpdatedV1(ref data) => domain::Account {
+            EventData::PasswordUpdatedV1(ref data) => domain::User {
                 password: data.password.clone(),
                 ..aggregate
             },
             // EmailUpdatedV1
-            EventData::EmailUpdatedV1(ref data) => domain::Account {
+            EventData::EmailUpdatedV1(ref data) => domain::User {
                 email: data.email.clone(),
                 ..aggregate
             },
             // SignInFailedV1
-            EventData::SignInFailedV1 => domain::Account {
+            EventData::SignInFailedV1 => domain::User {
                 ..aggregate
             },
             // AvatarUpdatedV1
-            EventData::AvatarUpdatedV1(ref data) => domain::Account {
+            EventData::AvatarUpdatedV1(ref data) => domain::User {
                 avatar_url: data.avatar_url.clone(),
                 ..aggregate
             },
             // PasswordResetRequestedV1
-            EventData::PasswordResetRequestedV1(ref data) => domain::Account {
+            EventData::PasswordResetRequestedV1(ref data) => domain::User {
                 password_reset_id: Some(data.password_reset_id),
                 password_reset_token: Some(data.password_reset_token.clone()),
                 ..aggregate
             },
             // PasswordResetedV1
-            EventData::PasswordResetedV1(ref data) => domain::Account {
+            EventData::PasswordResetedV1(ref data) => domain::User {
                 password: data.password.clone(),
                 password_reset_id: None,
                 password_reset_token: None,
