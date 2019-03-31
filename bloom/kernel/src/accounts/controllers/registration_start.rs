@@ -2,7 +2,7 @@ use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     accounts::domain,
-    accounts::domain::pending_accounts,
+    accounts::domain::pending_account,
     accounts::notifications::emails::send_account_verification_code,
     events::EventMetadata,
     config::Config,
@@ -48,7 +48,7 @@ impl Handler<StartRegistration> for DbActor {
             };
 
 
-            let create_cmd = pending_accounts::Create{
+            let create_cmd = pending_account::Create{
                 first_name: msg.first_name.clone(),
                 last_name: msg.last_name.clone(),
                 email: msg.email.clone(),
@@ -56,7 +56,7 @@ impl Handler<StartRegistration> for DbActor {
                 metadata,
             };
             let (new_pending_account, event, non_persisted) = eventsourcing::execute(
-                &conn, pending_accounts::PendingAccount::new(), &create_cmd)?;
+                &conn, pending_account::PendingAccount::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)

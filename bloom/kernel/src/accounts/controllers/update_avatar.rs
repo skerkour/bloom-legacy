@@ -3,7 +3,7 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         Account,
-        accounts,
+        account,
     },
     events::EventMetadata,
 };
@@ -47,7 +47,7 @@ impl Handler<UpdateAvatar> for DbActor {
 
             let account_to_update = msg.account;
 
-            let update_first_name_cmd = accounts::UpdateAvatar{
+            let update_first_name_cmd = account::UpdateAvatar{
                 avatar: msg.avatar,
                 s3_bucket: msg.s3_bucket,
                 s3_region: msg.s3_region,

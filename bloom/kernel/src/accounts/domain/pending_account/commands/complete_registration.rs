@@ -1,6 +1,6 @@
 use crate::{
     error::KernelError,
-    accounts::domain::pending_accounts,
+    accounts::domain::pending_account,
     events::EventMetadata,
 };
 use serde::{Serialize, Deserialize};
@@ -17,8 +17,8 @@ pub struct CompleteRegistration {
 }
 
 impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
-    type Aggregate = pending_accounts::PendingAccount;
-    type Event = pending_accounts::Event;
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -37,10 +37,10 @@ impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return  Ok((pending_accounts::Event{
+        return  Ok((pending_account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            data: pending_accounts::EventData::RegistrationCompletedV1,
+            data: pending_account::EventData::RegistrationCompletedV1,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));

@@ -1,7 +1,7 @@
 use crate::{
     accounts::validators,
     error::KernelError,
-    accounts::domain::pending_accounts,
+    accounts::domain::pending_account,
     accounts,
     events::EventMetadata,
     utils,
@@ -28,8 +28,8 @@ pub struct CreateNonStored {
 
 
 impl<'a> eventsourcing::Command<'a> for Create {
-    type Aggregate = pending_accounts::PendingAccount;
-    type Event = pending_accounts::Event;
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = CreateNonStored;
@@ -72,7 +72,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let token = bcrypt::hash(&code, accounts::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = pending_accounts::EventData::CreatedV1(pending_accounts::CreatedV1{
+        let data = pending_account::EventData::CreatedV1(pending_account::CreatedV1{
             id: new_pending_account_id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
@@ -85,7 +85,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
             code,
         };
 
-        return  Ok((pending_accounts::Event{
+        return  Ok((pending_account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,

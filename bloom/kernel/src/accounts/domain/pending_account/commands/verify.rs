@@ -1,6 +1,6 @@
 use crate::{
     events::EventMetadata,
-    accounts::domain::pending_accounts,
+    accounts::domain::pending_account,
 };
 use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
@@ -20,8 +20,8 @@ pub struct Verify {
 
 
 impl<'a> eventsourcing::Command<'a> for Verify {
-    type Aggregate = pending_accounts::PendingAccount;
-    type Event = pending_accounts::Event;
+    type Aggregate = pending_account::PendingAccount;
+    type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -36,18 +36,18 @@ impl<'a> eventsourcing::Command<'a> for Verify {
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         let data = if aggregate.trials + 1 >= 10 {
-            pending_accounts::EventData::VerificationFailedV1(pending_accounts::VerificationFailedReason::TooManyTrials)
+            pending_account::EventData::VerificationFailedV1(pending_account::VerificationFailedReason::TooManyTrials)
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_accounts::EventData::VerificationFailedV1(pending_accounts::VerificationFailedReason::CodeNotValid)
+            pending_account::EventData::VerificationFailedV1(pending_account::VerificationFailedReason::CodeNotValid)
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_accounts::EventData::VerificationFailedV1(pending_accounts::VerificationFailedReason::CodeExpired)
+            pending_account::EventData::VerificationFailedV1(pending_account::VerificationFailedReason::CodeExpired)
         } else {
-            pending_accounts::EventData::VerificationSucceededV1
+            pending_account::EventData::VerificationSucceededV1
         };
 
-        return  Ok((pending_accounts::Event{
+        return  Ok((pending_account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp,
             data,

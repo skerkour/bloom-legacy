@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    accounts::domain::sessions,
+    accounts::domain::session,
     error::KernelError,
     events::EventMetadata,
 };
@@ -16,8 +16,8 @@ pub struct SignOut {
 }
 
 impl<'a> eventsourcing::Command<'a> for SignOut {
-    type Aggregate = sessions::Session;
-    type Event = sessions::Event;
+    type Aggregate = session::Session;
+    type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -30,10 +30,10 @@ impl<'a> eventsourcing::Command<'a> for SignOut {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = sessions::EventData::SignedOutV1;
+        let data = session::EventData::SignedOutV1;
         let timestamp = chrono::Utc::now();
 
-        return  Ok((sessions::Event{
+        return  Ok((session::Event{
             id: uuid::Uuid::new_v4(),
             timestamp,
             data,

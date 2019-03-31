@@ -3,9 +3,9 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         Account,
-        sessions,
+        session,
         Session,
-        accounts,
+        account,
     },
     events::EventMetadata,
 };
@@ -57,7 +57,7 @@ impl Handler<SignIn> for DbActor {
                     request_id: Some(msg.request_id),
                     session_id: None,
                 };
-                let fail_sign_in_cmd = accounts::FailSignIn{metadata};
+                let fail_sign_in_cmd = account::FailSignIn{metadata};
                 let (_, event, _) = eventsourcing::execute(&conn, account, &fail_sign_in_cmd)?;
                 diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
                     .values(&event)
@@ -71,7 +71,7 @@ impl Handler<SignIn> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: None,
             };
-            let start_cmd = sessions::Start{
+            let start_cmd = session::Start{
                 account_id: account.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 account_agent: "".to_string(), // TODO

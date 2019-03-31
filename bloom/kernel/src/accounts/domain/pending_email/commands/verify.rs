@@ -1,6 +1,6 @@
 use crate::{
     events::EventMetadata,
-    accounts::domain::pending_emails,
+    accounts::domain::pending_email,
     accounts::validators,
     error::KernelError,
 };
@@ -22,8 +22,8 @@ pub struct Verify {
 
 
 impl<'a> eventsourcing::Command<'a> for Verify {
-    type Aggregate = pending_emails::PendingEmail;
-    type Event = pending_emails::Event;
+    type Aggregate = pending_email::PendingEmail;
+    type Event = pending_email::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -54,18 +54,18 @@ impl<'a> eventsourcing::Command<'a> for Verify {
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         let data = if aggregate.trials + 1 >= 8 {
-            pending_emails::EventData::VerificationFailedV1(pending_emails::VerificationFailedReason::TooManyTrials)
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::TooManyTrials)
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_emails::EventData::VerificationFailedV1(pending_emails::VerificationFailedReason::CodeNotValid)
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeNotValid)
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_emails::EventData::VerificationFailedV1(pending_emails::VerificationFailedReason::CodeExpired)
+            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeExpired)
         } else {
-            pending_emails::EventData::VerificationSucceededV1
+            pending_email::EventData::VerificationSucceededV1
         };
 
-        return  Ok((pending_emails::Event{
+        return  Ok((pending_email::Event{
             id: uuid::Uuid::new_v4(),
             timestamp,
             data,

@@ -3,8 +3,8 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         PendingAccount,
-        pending_accounts,
-        pending_accounts::EventData,
+        pending_account,
+        pending_account::EventData,
     },
     events::EventMetadata,
 };
@@ -43,7 +43,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: None,
             };
-            let verify_pending_account_cmd = pending_accounts::Verify{
+            let verify_pending_account_cmd = pending_account::Verify{
                 id: msg.id,
                 code: msg.code.clone(),
                 metadata,

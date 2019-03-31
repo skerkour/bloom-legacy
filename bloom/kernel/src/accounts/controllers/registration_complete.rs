@@ -5,11 +5,11 @@ use crate::{
     config::Config,
     accounts::domain::{
         PendingAccount,
-        pending_accounts,
+        pending_account,
         Session,
-        sessions,
+        session,
         Account,
-        accounts,
+        account,
     },
     events::EventMetadata,
 };
@@ -61,11 +61,12 @@ impl Handler<CompleteRegistration> for DbActor {
                 .first(&conn)?;
 
             // complete registration
-            let complete_registration_cmd = pending_accounts::CompleteRegistration{
+            let complete_registration_cmd = pending_account::CompleteRegistration{
                 id: msg.id,
                 metadata: metadata.clone(),
             };
-            let (pending_account_to_update, event, _) = eventsourcing::execute(&conn, pending_account_to_update, &complete_registration_cmd)?;
+            let (pending_account_to_update, event, _) = eventsourcing::execute(
+                &conn, pending_account_to_update, &complete_registration_cmd)?;
 
             diesel::update(&pending_account_to_update)
                 .set(&pending_account_to_update)
@@ -75,7 +76,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 .execute(&conn)?;
 
             // create account
-            let create_cmd = accounts::Create{
+            let create_cmd = account::Create{
                 first_name: pending_account_to_update.first_name.clone(),
                 last_name: pending_account_to_update.last_name.clone(),
                 email: pending_account_to_update.email.clone(),
@@ -98,13 +99,14 @@ impl Handler<CompleteRegistration> for DbActor {
                 actor_id: Some(new_account.id),
                 ..metadata.clone()
             };
-            let start_cmd = sessions::Start{
+            let start_cmd = session::Start{
                 account_id: new_account.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 account_agent: "".to_string(), // TODO
                 metadata,
             };
-            let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
+            let (new_session, event, non_stored) = eventsourcing::execute(
+                &conn, Session::new(), &start_cmd)?;
 
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)

@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    accounts::domain::sessions,
+    accounts::domain::session,
     error::KernelError,
     events::EventMetadata,
 };
@@ -13,13 +13,13 @@ use diesel::{
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Revoke {
     pub current_session_id: Option<uuid::Uuid>,
-    pub reason: sessions::RevokedReason,
+    pub reason: session::RevokedReason,
     pub metadata: EventMetadata,
 }
 
 impl<'a> eventsourcing::Command<'a> for Revoke {
-    type Aggregate = sessions::Session;
-    type Event = sessions::Event;
+    type Aggregate = session::Session;
+    type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -39,10 +39,10 @@ impl<'a> eventsourcing::Command<'a> for Revoke {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = sessions::EventData::RevokedV1(self.reason);
+        let data = session::EventData::RevokedV1(self.reason);
         let timestamp = chrono::Utc::now();
 
-        return  Ok((sessions::Event{
+        return  Ok((session::Event{
             id: uuid::Uuid::new_v4(),
             timestamp,
             data,

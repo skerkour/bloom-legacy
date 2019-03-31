@@ -3,9 +3,9 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         Account,
-        accounts,
+        account,
         Session,
-        sessions,
+        session,
     },
     events::EventMetadata,
 };
@@ -50,7 +50,7 @@ impl Handler<UpdatePassword> for DbActor {
 
             let account_to_update = msg.account;
 
-            let update_last_name_cmd = accounts::UpdatePassword{
+            let update_last_name_cmd = account::UpdatePassword{
                 current_password: msg.current_password,
                 new_password: msg.new_password,
                 metadata: metadata.clone(),
@@ -74,9 +74,9 @@ impl Handler<UpdatePassword> for DbActor {
                 .for_update()
                 .load(&conn)?;
 
-            let revoke_cmd = sessions::Revoke{
+            let revoke_cmd = session::Revoke{
                 current_session_id: Some(msg.current_session.id),
-                reason: sessions::RevokedReason::PasswordUpdated,
+                reason: session::RevokedReason::PasswordUpdated,
                 metadata: metadata.clone(),
             };
 

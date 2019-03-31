@@ -3,7 +3,7 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         Account,
-        sessions,
+        session,
         Session,
     },
     events::EventMetadata,
@@ -52,9 +52,9 @@ impl Handler<RevokeSession> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let revoke_cmd = sessions::Revoke{
+            let revoke_cmd = session::Revoke{
                 current_session_id: Some(msg.current_session_id),
-                reason: sessions::RevokedReason::Manually,
+                reason: session::RevokedReason::Manually,
                 metadata,
             };
 

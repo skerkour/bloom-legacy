@@ -1,7 +1,7 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
 };
 use crate::error::KernelError;
@@ -10,7 +10,7 @@ use serde::{Serialize, Deserialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateAccount {
-    pub account: accounts::Account,
+    pub account: account::Account,
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
@@ -19,11 +19,11 @@ pub struct UpdateAccount {
 }
 
 impl Message for UpdateAccount {
-    type Result = Result<accounts::Account, KernelError>;
+    type Result = Result<account::Account, KernelError>;
 }
 
 impl Handler<UpdateAccount> for DbActor {
-    type Result = Result<accounts::Account, KernelError>;
+    type Result = Result<account::Account, KernelError>;
 
     fn handle(&mut self, msg: UpdateAccount, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
@@ -47,7 +47,7 @@ impl Handler<UpdateAccount> for DbActor {
             // first_name
             let account_to_update = match &msg.first_name {
                 Some(first_name) if first_name != &account_to_update.first_name => {
-                    let update_first_name_cmd = accounts::UpdateFirstName{
+                    let update_first_name_cmd = account::UpdateFirstName{
                         first_name: first_name.to_string(),
                         metadata: metadata.clone(),
                     };
@@ -69,7 +69,7 @@ impl Handler<UpdateAccount> for DbActor {
             // last_name
             let account_to_update = match &msg.last_name {
                 Some(last_name) if last_name != &account_to_update.last_name => {
-                    let update_last_name_cmd = accounts::UpdateLastName{
+                    let update_last_name_cmd = account::UpdateLastName{
                         last_name: last_name.to_string(),
                         metadata: metadata.clone(),
                     };

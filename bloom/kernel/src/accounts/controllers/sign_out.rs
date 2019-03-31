@@ -3,7 +3,7 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         Account,
-        sessions,
+        session,
         Session,
     },
     events::EventMetadata,
@@ -42,7 +42,7 @@ impl Handler<SignOut> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session.id),
             };
-            let sign_out_cmd = sessions::SignOut{
+            let sign_out_cmd = session::SignOut{
                 metadata,
             };
 

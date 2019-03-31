@@ -3,9 +3,9 @@ use crate::{
     db::DbActor,
     accounts::domain::{
         PendingEmail,
-        pending_emails,
+        pending_email,
         Account,
-        accounts,
+        account,
     },
     events::EventMetadata,
 };
@@ -57,7 +57,7 @@ impl Handler<VerifyEmail> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let verify_cmd = pending_emails::Verify{
+            let verify_cmd = pending_email::Verify{
                 id: msg.id,
                 code: msg.code.clone(),
                 email: pending_email.email.clone(),
@@ -75,8 +75,8 @@ impl Handler<VerifyEmail> for DbActor {
                 .execute(&conn)?;
 
             let account_to_update = match event.data {
-                pending_emails::EventData::VerificationSucceededV1 => {
-                    let update_email_cmd = accounts::UpdateEmail{
+                pending_email::EventData::VerificationSucceededV1 => {
+                    let update_email_cmd = account::UpdateEmail{
                         email: pending_email.email,
                         metadata: metadata.clone(),
                     };
@@ -99,7 +99,7 @@ impl Handler<VerifyEmail> for DbActor {
                         .for_update()
                         .load(&conn)?;
 
-                    let delete_cmd = pending_emails::Delete{
+                    let delete_cmd = pending_email::Delete{
                         metadata: metadata.clone(),
                     };
 
@@ -118,7 +118,7 @@ impl Handler<VerifyEmail> for DbActor {
             };
 
             return match event.data {
-                pending_emails::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.to_string())),
+                pending_email::EventData::VerificationFailedV1(err) => Err(KernelError::Validation(err.to_string())),
                 _ => Ok(account_to_update),
             };
         })?);

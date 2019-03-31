@@ -2,7 +2,7 @@ use actix::{Message, Handler};
 use crate::{
     db::DbActor,
     accounts::domain,
-    accounts::domain::pending_emails,
+    accounts::domain::pending_email,
     accounts::notifications::emails::send_email_verification_code,
     events::EventMetadata,
     config::Config,
@@ -45,13 +45,13 @@ impl Handler<UpdateEmail> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let create_cmd = pending_emails::Create{
+            let create_cmd = pending_email::Create{
                 email: msg.email.clone(),
                 account_id: msg.account.id,
                 metadata,
             };
             let (new_pending_email, event, non_persisted) = eventsourcing::execute(
-                &conn, pending_emails::PendingEmail::new(), &create_cmd)?;
+                &conn, pending_email::PendingEmail::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_pending_emails::dsl::kernel_pending_emails)
                 .values(&new_pending_email)

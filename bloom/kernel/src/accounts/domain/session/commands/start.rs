@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::{
     accounts,
-    accounts::domain::sessions,
+    accounts::domain::session,
     error::KernelError,
     utils,
     events::EventMetadata,
@@ -29,8 +29,8 @@ pub struct StartNonStored {
 
 
 impl<'a> eventsourcing::Command<'a> for Start {
-    type Aggregate = sessions::Session;
-    type Event = sessions::Event;
+    type Aggregate = session::Session;
+    type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = StartNonStored;
@@ -51,20 +51,20 @@ impl<'a> eventsourcing::Command<'a> for Start {
         let timestamp = chrono::Utc::now();
 
         let new_session_id = uuid::Uuid::new_v4();
-        let data = sessions::EventData::StartedV1(sessions::StartedV1{
+        let data = session::EventData::StartedV1(session::StartedV1{
             id: new_session_id,
             account_id: self.account_id,
             token: hashed_token,
             ip: self.ip.clone(),
-            device: sessions::Device{},
-            location: sessions::Location{},
+            device: session::Device{},
+            location: session::Location{},
         });
 
         let non_stored = StartNonStored{
             token_plaintext: token,
         };
 
-        return  Ok((sessions::Event{
+        return  Ok((session::Event{
             id: uuid::Uuid::new_v4(),
             timestamp,
             data,

@@ -1,7 +1,7 @@
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     accounts,
     events::EventMetadata,
     error::KernelError,
