@@ -22,7 +22,7 @@ pub struct CreateContact {
     pub organizations: Vec<contact::Organization>,
     pub phones: Vec<contact::Phone>,
     pub websites: Vec<contact::Website>,
-    pub user_id: uuid::Uuid,
+    pub account_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
@@ -49,7 +49,7 @@ impl Handler<CreateContact> for DbActor {
 
             // create Contact
             let metadata = EventMetadata{
-                actor_id: Some(msg.user_id),
+                actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
@@ -65,7 +65,7 @@ impl Handler<CreateContact> for DbActor {
                 organizations: msg.organizations,
                 phones: msg.phones,
                 websites: msg.websites,
-                owner_id: msg.user_id,
+                owner_id: msg.account_id,
                 metadata,
             };
             let (note, event, _) = eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;

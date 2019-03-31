@@ -14,7 +14,7 @@ CREATE TABLE phaser_scans (
     last TIMESTAMP WITH TIME ZONE,
     description TEXT NOT NULL,
 
-    owner_id UUID NOT NULL REFERENCES kernel_users (id),
+    owner_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
     PRIMARY KEY(id)
 );

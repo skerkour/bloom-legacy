@@ -18,7 +18,7 @@ CREATE TABLE contacts_contacts (
     phones JSONB[] NOT NULL,
     websites JSONB[] NOT NULL,
 
-    owner_id UUID NOT NULL REFERENCES kernel_users(id),
+    owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
 
     PRIMARY KEY(id)
 );

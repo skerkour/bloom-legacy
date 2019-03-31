@@ -7,7 +7,7 @@ use futures::{Future};
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    users::domain,
+    accounts::domain,
     api,
     error::KernelError,
 };
@@ -15,7 +15,7 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub struct Auth {
-    pub user: Option<domain::User>,
+    pub account: Option<domain::Account>,
     pub session: Option<domain::Session>,
 }
 
@@ -30,7 +30,7 @@ impl Middleware<api::State> for AuthMiddleware {
         let auth_header = req.headers().get(header::AUTHORIZATION);
         if auth_header.is_none() {
             req.extensions_mut().insert(Auth{
-                user: None,
+                account: None,
                 session: None,
             });
             return Ok(Started::Done);
@@ -116,18 +116,18 @@ impl Handler<CheckAuth> for DbActor {
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             kernel_sessions,
-            kernel_users,
+            kernel_accounts,
         };
         use diesel::prelude::*;
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        // find session + user
-        let (session, user): (domain::Session, domain::User) = kernel_sessions::dsl::kernel_sessions
+        // find session + account
+        let (session, account): (domain::Session, domain::Account) = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::id.eq(msg.session_id))
                 .filter(kernel_sessions::dsl::deleted_at.is_null())
-                .inner_join(kernel_users::table)
+                .inner_join(kernel_accounts::table)
                 .first(&conn)?;
 
         // verify session token
@@ -137,7 +137,7 @@ impl Handler<CheckAuth> for DbActor {
         }
 
         return Ok(Auth{
-            user: Some(user),
+            account: Some(account),
             session: Some(session),
         });
     }

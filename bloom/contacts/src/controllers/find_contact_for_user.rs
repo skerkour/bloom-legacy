@@ -9,19 +9,19 @@ use crate::domain::contact;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct FindContactForUser {
+pub struct FindContactForAccount {
     pub contact_id: uuid::Uuid,
-    pub user_id: uuid::Uuid,
+    pub account_id: uuid::Uuid,
 }
 
-impl Message for FindContactForUser {
+impl Message for FindContactForAccount {
     type Result = Result<contact::Contact, KernelError>;
 }
 
-impl Handler<FindContactForUser> for DbActor {
+impl Handler<FindContactForAccount> for DbActor {
     type Result = Result<contact::Contact, KernelError>;
 
-    fn handle(&mut self, msg: FindContactForUser, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: FindContactForAccount, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             contacts_contacts,
         };
@@ -33,7 +33,7 @@ impl Handler<FindContactForUser> for DbActor {
 
         let contact: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
-                .filter(contacts_contacts::dsl::owner_id.eq(msg.user_id))
+                .filter(contacts_contacts::dsl::owner_id.eq(msg.account_id))
                 .filter(contacts_contacts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 

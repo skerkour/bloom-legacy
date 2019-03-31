@@ -8,18 +8,18 @@ use crate::domain;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct FindUserNotes {
-    pub user_id: uuid::Uuid,
+pub struct FindAccountNotes {
+    pub account_id: uuid::Uuid,
 }
 
-impl Message for FindUserNotes {
+impl Message for FindAccountNotes {
     type Result = Result<Vec<domain::Note>, KernelError>;
 }
 
-impl Handler<FindUserNotes> for DbActor {
+impl Handler<FindAccountNotes> for DbActor {
     type Result = Result<Vec<domain::Note>, KernelError>;
 
-    fn handle(&mut self, msg: FindUserNotes, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: FindAccountNotes, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             notes_notes,
         };
@@ -30,7 +30,7 @@ impl Handler<FindUserNotes> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         let notes: Vec<domain::Note> = notes_notes::dsl::notes_notes
-                .filter(notes_notes::dsl::owner_id.eq(msg.user_id))
+                .filter(notes_notes::dsl::owner_id.eq(msg.account_id))
                 .filter(notes_notes::dsl::deleted_at.is_null())
                 .filter(notes_notes::dsl::archived_at.is_null())
                 .filter(notes_notes::dsl::removed_at.is_null())

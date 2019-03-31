@@ -1,5 +1,5 @@
 table! {
-    kernel_users (id) {
+    kernel_accounts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -18,7 +18,7 @@ table! {
 }
 
 table! {
-    kernel_users_events (id) {
+    kernel_accounts_events (id) {
         id -> Uuid,
         timestamp -> Timestamptz,
         aggregate_id -> Uuid,
@@ -28,7 +28,7 @@ table! {
 }
 
 table! {
-    kernel_pending_users (id) {
+    kernel_pending_accounts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -45,7 +45,7 @@ table! {
 }
 
 table! {
-    kernel_pending_users_events (id) {
+    kernel_pending_accounts_events (id) {
         id -> Uuid,
         timestamp -> Timestamptz,
         aggregate_id -> Uuid,
@@ -64,7 +64,7 @@ table! {
         email -> Text,
         token -> Text,
         trials -> Int8,
-        user_id -> Uuid,
+        account_id -> Uuid,
     }
 }
 
@@ -89,7 +89,7 @@ table! {
         ip -> Text,
         location -> Nullable<Jsonb>,
         token -> Text,
-        user_id -> Uuid,
+        account_id -> Uuid,
     }
 }
 
@@ -138,7 +138,7 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        user_id -> Uuid,
+        account_id -> Uuid,
     }
 }
 
@@ -232,7 +232,7 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        user_id -> Uuid,
+        account_id -> Uuid,
         total_space -> Int8,
         used_space -> Int8,
         home_id -> Uuid,
@@ -335,35 +335,35 @@ table! {
     }
 }
 
-joinable!(kernel_users_events -> kernel_users (aggregate_id));
-joinable!(kernel_pending_emails -> kernel_users (user_id));
+joinable!(kernel_accounts_events -> kernel_accounts (aggregate_id));
+joinable!(kernel_pending_emails -> kernel_accounts (account_id));
 joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));
-joinable!(kernel_sessions -> kernel_users (user_id));
+joinable!(kernel_sessions -> kernel_accounts (account_id));
 joinable!(kernel_sessions_events -> kernel_sessions (aggregate_id));
-joinable!(bitflow_downloads -> kernel_users (owner_id));
+joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads -> drive_files (file_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
-joinable!(bitflow_profiles -> kernel_users (user_id));
+joinable!(bitflow_profiles -> kernel_accounts (account_id));
 joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
-joinable!(contacts_contacts -> kernel_users (owner_id));
+joinable!(contacts_contacts -> kernel_accounts (owner_id));
 joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
-joinable!(drive_files -> kernel_users (owner_id));
+joinable!(drive_files -> kernel_accounts (owner_id));
 joinable!(drive_files_events -> drive_files (aggregate_id));
-joinable!(drive_profiles -> kernel_users (user_id));
+joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles -> drive_files (home_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
-joinable!(notes_notes -> kernel_users (owner_id));
+joinable!(notes_notes -> kernel_accounts (owner_id));
 joinable!(notes_notes_events -> notes_notes (aggregate_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));
 joinable!(phaser_reports_events -> phaser_reports (aggregate_id));
-joinable!(phaser_scans -> kernel_users (owner_id));
+joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
-    kernel_users,
-    kernel_users_events,
-    kernel_pending_users,
-    kernel_pending_users_events,
+    kernel_accounts,
+    kernel_accounts_events,
+    kernel_pending_accounts,
+    kernel_pending_accounts_events,
     kernel_pending_emails,
     kernel_pending_emails_events,
     kernel_sessions,

@@ -11,7 +11,7 @@ CREATE TABLE bitflow_downloads (
     url TEXT NOT NULL,
     progress INT NOT NULL,
     error TEXT,
-    owner_id UUID NOT NULL REFERENCES kernel_users(id),
+    owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
     file_id UUID REFERENCES drive_files(id),
     removed_at TIMESTAMP WITH TIME ZONE,
 

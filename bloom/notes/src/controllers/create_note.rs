@@ -15,7 +15,7 @@ use crate::domain::{
 pub struct CreateNote {
     pub title: String,
     pub body: String,
-    pub user_id: uuid::Uuid,
+    pub account_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
@@ -42,14 +42,14 @@ impl Handler<CreateNote> for DbActor {
 
             // create Note
             let metadata = EventMetadata{
-                actor_id: Some(msg.user_id),
+                actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
             let create_cmd = note::Create{
                 title: msg.title,
                 body: msg.body,
-                owner_id: msg.user_id,
+                owner_id: msg.account_id,
                 metadata,
             };
             let (note, event, _) = eventsourcing::execute(&conn, Note::new(), &create_cmd)?;

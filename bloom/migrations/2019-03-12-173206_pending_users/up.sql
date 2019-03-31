@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE kernel_pending_users (
+CREATE TABLE kernel_pending_accounts (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -17,7 +17,7 @@ CREATE TABLE kernel_pending_users (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE kernel_pending_users_events (
+CREATE TABLE kernel_pending_accounts_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
     aggregate_id UUID NOT NULL,

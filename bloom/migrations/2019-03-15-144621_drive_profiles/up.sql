@@ -6,7 +6,7 @@ CREATE TABLE drive_profiles (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    user_id UUID NOT NULL REFERENCES kernel_users(id),
+    account_id UUID NOT NULL REFERENCES kernel_accounts(id),
     total_space BIGINT NOT NULL,
     used_space BIGINT NOT NULL,
     home_id UUID NOT NULL REFERENCES drive_files (id),

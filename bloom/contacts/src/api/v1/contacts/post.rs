@@ -25,7 +25,7 @@ pub fn post((contact_data, req): (Json<models::CreateContactBody>, HttpRequest<a
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.user.is_none() {
+    if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -43,7 +43,7 @@ pub fn post((contact_data, req): (Json<models::CreateContactBody>, HttpRequest<a
         organizations: contact_data.organizations.clone(),
         phones: contact_data.phones.clone(),
         websites: contact_data.websites.clone(),
-        user_id: auth.user.expect("error unwraping non none user").id,
+        account_id: auth.account.expect("error unwraping non none account").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })

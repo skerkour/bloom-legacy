@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE kernel_users (
+CREATE TABLE kernel_accounts (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -19,12 +19,12 @@ CREATE TABLE kernel_users (
     PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX idx_kernel_users_username ON kernel_users (username);
+CREATE UNIQUE INDEX idx_kernel_accounts_username ON kernel_accounts (username);
 
-CREATE TABLE kernel_users_events (
+CREATE TABLE kernel_accounts_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES kernel_users (id),
+    aggregate_id UUID NOT NULL REFERENCES kernel_accounts (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

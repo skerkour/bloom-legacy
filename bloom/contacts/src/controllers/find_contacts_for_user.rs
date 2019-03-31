@@ -9,18 +9,18 @@ use crate::domain::contact;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct FindContactsForUser {
-    pub user_id: uuid::Uuid,
+pub struct FindContactsForAccount {
+    pub account_id: uuid::Uuid,
 }
 
-impl Message for FindContactsForUser {
+impl Message for FindContactsForAccount {
     type Result = Result<Vec<contact::Contact>, KernelError>;
 }
 
-impl Handler<FindContactsForUser> for DbActor {
+impl Handler<FindContactsForAccount> for DbActor {
     type Result = Result<Vec<contact::Contact>, KernelError>;
 
-    fn handle(&mut self, msg: FindContactsForUser, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: FindContactsForAccount, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             contacts_contacts,
         };
@@ -31,7 +31,7 @@ impl Handler<FindContactsForUser> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         let contacts: Vec<contact::Contact> = contacts_contacts::dsl::contacts_contacts
-                .filter(contacts_contacts::dsl::owner_id.eq(msg.user_id))
+                .filter(contacts_contacts::dsl::owner_id.eq(msg.account_id))
                 .filter(contacts_contacts::dsl::deleted_at.is_null())
                 .load(&conn)?;
 

@@ -10,7 +10,7 @@ CREATE TABLE kernel_sessions (
     location JSONB,
     token TEXT NOT NULL,
 
-    user_id UUID NOT NULL REFERENCES kernel_users (id),
+    account_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
     PRIMARY KEY(id)
 );

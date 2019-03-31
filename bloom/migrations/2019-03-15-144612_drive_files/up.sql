@@ -10,7 +10,7 @@ CREATE TABLE drive_files (
     type TEXT NOT NULL,
     size BIGINT NOT NULL,
     parent_id UUID REFERENCES drive_files (id),
-    owner_id UUID NOT NULL REFERENCES kernel_users (id),
+    owner_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
     md5 TEXT,
     sha1 TEXT,
