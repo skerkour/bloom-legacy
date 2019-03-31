@@ -3,7 +3,7 @@
 .PHONY: disposable_emails
 
 DIST_DIR = dist
-NAME := api #$(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
+NAME := $(shell cat  bloom/kernel/Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
 VERSION := $(shell cat bloom/kernel/Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
 DOCKER_IMAGE = quay.io/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
@@ -13,19 +13,19 @@ all: build
 build:
 	mkdir -p $(DIST_DIR)
 	cargo build -p api --release
-	cp target/release/$(NAME) $(DIST_DIR)/$(NAME)
+	cp target/release/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 build_debug:
 	mkdir -p $(DIST_DIR)
 	cargo build -p api
-	cp target/debug/$(NAME) $(DIST_DIR)/$(NAME)
+	cp target/debug/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 build_static:
 	mkdir -p $(DIST_DIR)
-	cargo build --release --target=x86_64-unknown-linux-musl
-	cp target/x86_64-unknown-linux-musl/release/$(NAME) $(DIST_DIR)/$(NAME)
+	cargo build -p api --release --target=x86_64-unknown-linux-musl
+	cp target/x86_64-unknown-linux-musl/release/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 dev:
