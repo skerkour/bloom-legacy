@@ -1,4 +1,4 @@
-CREATE TABLE account_sessions (
+CREATE TABLE kernel_session (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -10,15 +10,15 @@ CREATE TABLE account_sessions (
     location JSONB,
     token TEXT NOT NULL,
 
-    account_id UUID NOT NULL REFERENCES account_accounts (id),
+    user_id UUID NOT NULL REFERENCES kernel_users (id),
 
     PRIMARY KEY(id)
 );
 
-CREATE TABLE account_sessions_events (
+CREATE TABLE kernel_session_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES account_sessions (id),
+    aggregate_id UUID NOT NULL REFERENCES kernel_session (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

@@ -11,7 +11,7 @@ CREATE TABLE notes_notes (
     removed_at TIMESTAMP WITH TIME ZONE,
     title TEXT NOT NULL,
 
-    owner_id UUID NOT NULL REFERENCES account_accounts (id),
+    owner_id UUID NOT NULL REFERENCES kernel_users (id),
 
     PRIMARY KEY(id)
 );

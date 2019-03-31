@@ -1,30 +1,26 @@
 -- Your SQL goes here
-CREATE TABLE account_accounts (
+CREATE TABLE kernel_pending_users (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    avatar_url TEXT NOT NULL,
     email TEXT NOT NULL,
     first_name TEXT NOT NULL,
-    is_admin BOOLEAN NOT NULL,
     last_name TEXT NOT NULL,
     password TEXT NOT NULL,
-    password_reset_id UUID,
-    password_reset_token TEXT,
-    username TEXT UNIQUE NOT NULL,
+    token TEXT NOT NULL,
+    trials BIGINT NOT NULL,
+    verified BOOLEAN NOT NULL,
 
     PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX idx_account_accounts_username ON account_accounts (username);
-
-CREATE TABLE account_accounts_events (
+CREATE TABLE kernel_pending_users_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES account_accounts (id),
+    aggregate_id UUID NOT NULL,
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 
