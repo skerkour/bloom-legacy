@@ -1,8 +1,8 @@
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
     accounts::validators,
-    accounts as accounts_service,
+    accounts,
     error::KernelError,
 };
 use diesel::{
@@ -19,8 +19,8 @@ pub struct UpdatePassword {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdatePassword {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -44,14 +44,14 @@ impl<'a> eventsourcing::Command<'a> for UpdatePassword {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let hashed_password = bcrypt::hash(&self.new_password, accounts_service::PASSWORD_BCRYPT_COST)
+        let hashed_password = bcrypt::hash(&self.new_password, accounts::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = accounts::EventData::PasswordUpdatedV1(accounts::PasswordUpdatedV1{
+        let data = account::EventData::PasswordUpdatedV1(account::PasswordUpdatedV1{
             password: hashed_password,
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

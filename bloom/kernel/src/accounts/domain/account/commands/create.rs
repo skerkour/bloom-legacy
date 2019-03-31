@@ -3,11 +3,11 @@ use diesel::{
     r2d2::{PooledConnection, ConnectionManager},
 };
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
     accounts::validators,
     error::KernelError,
-    accounts as accounts_service,
+    accounts,
 };
 
 #[derive(Clone, Debug)]
@@ -22,8 +22,8 @@ pub struct Create {
 }
 
 impl<'a> eventsourcing::Command<'a> for Create {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -72,18 +72,18 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let id = uuid::Uuid::new_v4();
         let mut metadata = self.metadata.clone();
         metadata.actor_id = Some(id);
-        let data = accounts::EventData::CreatedV1(accounts::CreatedV1{
+        let data = account::EventData::CreatedV1(account::CreatedV1{
             id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
             email: self.email.clone(),
             password: self.password.clone(),
-            avatar_url: format!("{}{}", &self.www_host, accounts_service::AVATAR_DEFAULT_PATH),
+            avatar_url: format!("{}{}", &self.www_host, accounts::AVATAR_DEFAULT_PATH),
             username: self.username.clone(),
             is_admin: false,
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: now,
             data,

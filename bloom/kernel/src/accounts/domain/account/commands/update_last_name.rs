@@ -1,35 +1,43 @@
+use crate::{
+    accounts::domain::account,
+    events::EventMetadata,
+    accounts::validators,
+    error::KernelError,
+};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
-use crate::{
-    accounts::domain::accounts,
-    events::EventMetadata,
-    error::KernelError,
-};
 
 
 #[derive(Clone, Debug)]
-pub struct FailSignIn {
+pub struct UpdateLastName {
+    pub last_name: String,
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for FailSignIn {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+impl<'a> eventsourcing::Command<'a> for UpdateLastName {
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        validators::last_name(&self.last_name)?;
+
         return Ok(());
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return  Ok((accounts::Event{
+        let data = account::EventData::LastNameUpdatedV1(account::LastNameUpdatedV1{
+            last_name: self.last_name.clone(),
+        });
+
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            data: accounts::EventData::SignInFailedV1,
+            data,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));

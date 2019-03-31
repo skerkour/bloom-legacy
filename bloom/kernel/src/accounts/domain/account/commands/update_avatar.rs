@@ -2,7 +2,7 @@ use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
 use crate::{
     accounts::domain::accounts,
-    accounts as accounts_service,
+    accounts,
     events::EventMetadata,
     error::KernelError,
 };
@@ -17,14 +17,14 @@ pub struct UpdateAvatar {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = rusoto_s3::S3Client;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        if self.avatar.len() > accounts_service::AVATAR_MAX_SIZE {
+        if self.avatar.len() > accounts::AVATAR_MAX_SIZE {
             return Err(KernelError::Validation("Image size must be inferior or equal to 3MB.".to_string()));
         }
 
@@ -40,9 +40,9 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
 
 
-        // resize image to accounts::AVATAR_RESIZE
+        // resize image to account::AVATAR_RESIZE
         let img = image::load_from_memory(&self.avatar)?;
-        let scaled = img.resize(accounts_service::AVATAR_RESIZE as u32, accounts_service::AVATAR_RESIZE as u32, FilterType::Lanczos3);
+        let scaled = img.resize(accounts::AVATAR_RESIZE as u32, accounts::AVATAR_RESIZE as u32, FilterType::Lanczos3);
         let mut result = Vec::new();
         // encode to jpeg
         scaled.write_to(&mut result, ImageFormat::JPEG)?;
@@ -60,11 +60,11 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
         // TODO: handle error
         ctx.put_object(req).sync().expect("Couldn't PUT object");
 
-        let event_data = accounts::EventData::AvatarUpdatedV1(accounts::AvatarUpdatedV1{
+        let event_data = account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1{
             avatar_url,
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data: event_data,

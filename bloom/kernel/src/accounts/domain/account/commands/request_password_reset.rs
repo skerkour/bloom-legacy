@@ -4,9 +4,9 @@ use diesel::{
 };
 use rand::Rng;
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
-    accounts as accounts_service,
+    accounts,
     error::KernelError,
     utils,
 };
@@ -25,8 +25,8 @@ pub struct RequestPasswordResetNonStored {
 
 
 impl<'a> eventsourcing::Command<'a> for RequestPasswordReset {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = RequestPasswordResetNonStored;
@@ -38,17 +38,17 @@ impl<'a> eventsourcing::Command<'a> for RequestPasswordReset {
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let password_reset_id = uuid::Uuid::new_v4();
         let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(accounts_service::PASSWORD_RESET_TOKEN_MIN_LENGTH, accounts_service::PASSWORD_RESET_TOKEN_MAX_LENGTH);
+        let token_length = rng.gen_range(accounts::PASSWORD_RESET_TOKEN_MIN_LENGTH, accounts::PASSWORD_RESET_TOKEN_MAX_LENGTH);
         let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, accounts_service::PASSWORD_RESET_TOKEN_BCRYPT_COST)
+        let hashed_token = bcrypt::hash(&token, accounts::PASSWORD_RESET_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = accounts::EventData::PasswordResetRequestedV1(accounts::PasswordResetRequestedV1{
+        let data = account::EventData::PasswordResetRequestedV1(account::PasswordResetRequestedV1{
             password_reset_id,
             password_reset_token: hashed_token.clone(),
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

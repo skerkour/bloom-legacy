@@ -1,5 +1,5 @@
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
     accounts::validators,
     error::KernelError,
@@ -11,30 +11,34 @@ use diesel::{
 
 
 #[derive(Clone, Debug)]
-pub struct UpdateLastName {
-    pub last_name: String,
+pub struct UpdateEmail {
+    pub email: String,
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateLastName {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+impl<'a> eventsourcing::Command<'a> for UpdateEmail {
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        validators::last_name(&self.last_name)?;
+
+        validators::email(&self.email)?;
+
+        // verify that an email isn't already in use
+        // already done in pending emial verify
 
         return Ok(());
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = accounts::EventData::LastNameUpdatedV1(accounts::LastNameUpdatedV1{
-            last_name: self.last_name.clone(),
+        let data = account::EventData::EmailUpdatedV1(account::EmailUpdatedV1{
+            email: self.email.clone(),
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

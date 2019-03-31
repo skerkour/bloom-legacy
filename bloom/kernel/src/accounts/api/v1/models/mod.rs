@@ -1,7 +1,6 @@
 use serde::{Serialize, Deserialize};
-use crate::accounts::domain::{
-    sessions,
-};
+use crate::accounts::domain::session;
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StartRegistrationBody {
@@ -69,8 +68,8 @@ pub struct Session {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub ip: String,
-    pub location: Option<sessions::Location>,
-    pub device: sessions::Device,
+    pub location: Option<session::Location>,
+    pub device: session::Device,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

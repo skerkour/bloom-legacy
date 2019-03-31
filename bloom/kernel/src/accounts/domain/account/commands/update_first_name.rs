@@ -1,5 +1,5 @@
 use crate::{
-    accounts::domain::accounts,
+    accounts::domain::account,
     events::EventMetadata,
     accounts::validators,
     error::KernelError,
@@ -17,8 +17,8 @@ pub struct UpdateFirstName {
 }
 
 impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
-    type Aggregate = accounts::Account;
-    type Event = accounts::Event;
+    type Aggregate = account::Account;
+    type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -30,11 +30,11 @@ impl<'a> eventsourcing::Command<'a> for UpdateFirstName {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = accounts::EventData::FirstNameUpdatedV1(accounts::FirstNameUpdatedV1{
+        let data = account::EventData::FirstNameUpdatedV1(account::FirstNameUpdatedV1{
             first_name: self.first_name.clone(),
         });
 
-        return  Ok((accounts::Event{
+        return  Ok((account::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
