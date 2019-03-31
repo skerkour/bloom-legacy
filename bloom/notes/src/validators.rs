@@ -1,4 +1,4 @@
-use crate::error::KernelError;
+use kernel::KernelError;
 
 
 pub fn title(title: &str) -> Result<(), KernelError> {

@@ -1,10 +1,10 @@
 use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    services::notes::domain,
-    error::KernelError,
-};
 use serde::{Serialize, Deserialize};
+use kernel::{
+    KernelError,
+    db::DbActor,
+};
+use crate::domain;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -20,7 +20,7 @@ impl Handler<FindUserArchive> for DbActor {
     type Result = Result<Vec<domain::Note>, KernelError>;
 
     fn handle(&mut self, msg: FindUserArchive, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             notes_notes,
         };
         use diesel::prelude::*;

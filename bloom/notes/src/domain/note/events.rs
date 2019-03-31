@@ -1,12 +1,10 @@
 use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kernel::{
     db::schema::notes_notes_events,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
-use std::string::ToString;
-
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
@@ -16,7 +14,7 @@ pub struct Event {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub data: EventData,
     pub aggregate_id: uuid::Uuid,
-    pub metadata: EventMetadata, // TODO: change
+    pub metadata: EventMetadata,
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]

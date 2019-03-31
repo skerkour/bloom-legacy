@@ -1,14 +1,15 @@
-use crate::{
-    error::KernelError,
-    services::notes::domain::note,
-    services::notes::validators,
-    services::common::events::EventMetadata,
-};
 use serde::{Serialize, Deserialize};
-use chrono::Utc;
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
+};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+};
+use crate::{
+    domain::note,
+    validators,
 };
 
 

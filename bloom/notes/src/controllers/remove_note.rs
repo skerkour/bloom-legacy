@@ -1,17 +1,14 @@
 use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    services::account::domain::{
-        Account,
-    },
-    services::notes::domain::{
-        note,
-        Note,
-    },
-    services::common::events::EventMetadata,
-};
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
+use kernel::{
+    db::DbActor,
+    events::EventMetadata,
+    KernelError,
+};
+use crate::domain::{
+    note,
+    Note,
+};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -30,7 +27,7 @@ impl Handler<RemoveNote> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: RemoveNote, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             notes_notes,
             notes_notes_events,
         };

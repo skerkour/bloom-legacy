@@ -1,20 +1,22 @@
-use crate::{
-    api,
-    services::notes::api::v1::models,
-    log::macros::*,
-    services::notes::controllers,
-    api::middlewares::{
-        GetRequestLogger,
-        GetRequestId,
-        GetRequestAuth,
-    },
-    error::KernelError,
-};
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
+use kernel::{
+    api,
+    log::macros::*,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
+    KernelError,
+};
+use crate::{
+    controllers,
+    api::v1::models,
+};
 
 
 pub fn post((note_data, req): (Json<models::CreateNoteBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {

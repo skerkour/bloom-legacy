@@ -1,14 +1,14 @@
 use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    services::notes::domain::{
-        Note,
-        note,
-    },
-    services::common::events::EventMetadata,
-};
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+    db::DbActor
+};
+use crate::domain::{
+    Note,
+    note,
+};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -28,7 +28,7 @@ impl Handler<CreateNote> for DbActor {
     type Result = Result<Note, KernelError>;
 
     fn handle(&mut self, msg: CreateNote, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             notes_notes,
             notes_notes_events,
         };
@@ -52,7 +52,7 @@ impl Handler<CreateNote> for DbActor {
                 owner_id: msg.user_id,
                 metadata,
             };
-            let (note, event, non_stored) = eventsourcing::execute(&conn, Note::new(), &create_cmd)?;
+            let (note, event, _) = eventsourcing::execute(&conn, Note::new(), &create_cmd)?;
 
             diesel::insert_into(notes_notes::dsl::notes_notes)
                 .values(&note)

@@ -1,20 +1,21 @@
-use crate::{
-    api,
-    log::macros::*,
-    services::notes::controllers,
-    services::notes::api::v1::models,
-    api::middlewares::{
-        GetRequestLogger,
-        GetRequestId,
-        GetRequestAuth,
-    },
-    error::KernelError,
-};
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
+use kernel::{
+    api,
+    log::macros::*,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestAuth,
+    },
+    KernelError,
+};
+use crate::{
+    controllers,
+    api::v1::models,
+};
 
 
 pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {

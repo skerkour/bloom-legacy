@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
-use crate::{
+use kernel::{
     db::schema::notes_notes,
 };
 

@@ -1,12 +1,14 @@
-use crate::{
-    services::notes::domain::note,
-    services::common::events::EventMetadata,
-    services::notes::validators,
-    KernelError,
-};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
+};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+};
+use crate::{
+    domain::note,
+    validators,
 };
 
 
@@ -31,7 +33,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
         let data = note::EventData::CreatedV1(note::CreatedV1{
             id,

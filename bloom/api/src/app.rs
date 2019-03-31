@@ -8,7 +8,7 @@ use crate::{
     services::contacts::api::v1 as contactsv1,
 };
 use notes::v1 as notesv1;
-
+use contacts::v1 as contactsv1;
 use actix_web::{
     App,
     middleware::cors::Cors,

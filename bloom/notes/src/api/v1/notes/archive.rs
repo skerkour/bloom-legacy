@@ -1,20 +1,22 @@
-use crate::{
-    api,
-    log::macros::*,
-    services::notes::api::v1::models,
-    services::notes::controllers,
-    api::middlewares::{
-        GetRequestLogger,
-        GetRequestId,
-        GetRequestAuth,
-    },
-    error::KernelError,
-};
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
 };
 use futures::future;
+use kernel::{
+    api,
+    log::macros::*,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
+    KernelError,
+};
+use crate::{
+    controllers,
+    api::v1::models,
+};
 
 
 pub fn post((note_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
@@ -31,7 +33,7 @@ pub fn post((note_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> Fu
     return state.db
     .send(controllers::ArchiveNote{
         note_id: note_id.into_inner(),
-        actor_id: auth.account.expect("unwraping non none account").id,
+        user_id: auth.account.expect("unwraping non none account").id,
         session_id: auth.session.expect("unwraping non none session").id,
         request_id: request_id,
     })
