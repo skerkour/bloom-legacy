@@ -1,9 +1,11 @@
+mod default_template;
+
 use crate::config::Config;
 use lettre::{EmailTransport, SmtpTransport};
 use lettre::smtp::authentication::{Credentials};
 use lettre_email::EmailBuilder;
 
-
+pub use default_template::DEFAULT_TEMPLATE;
 pub static HELLO_ADDRESS: &str = "hello@bloom.sh";
 pub static WELCOME_ADDRESS: &str = "welcome@bloom.sh";
 pub static NOTIFY_ADDRESS: &str = "notify@bloom.sh";
