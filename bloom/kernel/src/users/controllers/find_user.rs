@@ -30,7 +30,7 @@ impl Handler<FindUser> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         let account: domain::User = kernel_users::dsl::kernel_users
-                .filter(kernel_users::dsl::id.eq(msg.account_id))
+                .filter(kernel_users::dsl::id.eq(msg.user_id))
                 .filter(kernel_users::dsl::deleted_at.is_null())
                 .first(&conn)?;
 

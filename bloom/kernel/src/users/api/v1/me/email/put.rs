@@ -1,15 +1,14 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
         GetRequestAuth,
     },
     error::KernelError,
-    services::common::utils,
 };
 use futures::future::Future;
 use actix_web::{
@@ -42,7 +41,7 @@ pub fn put((email_data, req): (Json<models::UpdateEmailBody>, HttpRequest<api::S
     .and_then(move |_|
         state.db
         .send(controllers::UpdateEmail{
-            account: auth.account.expect("unwraping auth account"),
+            user: auth.account.expect("unwraping auth account"),
             email: email_data.email.clone(),
             config,
             request_id,

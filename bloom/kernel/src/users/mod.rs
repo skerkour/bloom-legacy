@@ -5,7 +5,7 @@ pub mod validators;
 pub mod controllers;
 
 pub const PASSWORD_BCRYPT_COST: u32 = 13;
-pub const PENDING_ACCOUNT_TOKEN_BCRYPT_COST: u32 = 11;
+pub const PENDING_USER_TOKEN_BCRYPT_COST: u32 = 11;
 pub const PENDING_EMAIL_TOKEN_BCRYPT_COST: u32 = 11;
 pub const SESSION_TOKEN_BCRYPT_COST: u32 = 5;
 pub const SESSION_TOKEN_MIN_LENGTH: u32 = 256;

@@ -19,11 +19,11 @@ pub struct UpdateUser {
 }
 
 impl Message for UpdateUser {
-    type Result = Result<User, KernelError>;
+    type Result = Result<user::User, KernelError>;
 }
 
 impl Handler<UpdateUser> for DbActor {
-    type Result = Result<User, KernelError>;
+    type Result = Result<user::User, KernelError>;
 
     fn handle(&mut self, msg: UpdateUser, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
@@ -37,17 +37,17 @@ impl Handler<UpdateUser> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let metadata = EventMetadata{
-                actor_id: Some(msg.account.id),
+                actor_id: Some(msg.user.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 
-            let user_to_update = msg.account;
+            let user_to_update = msg.user;
 
             // first_name
             let user_to_update = match &msg.first_name {
                 Some(first_name) if first_name != &user_to_update.first_name => {
-                    let update_first_name_cmd = account::UpdateFirstName{
+                    let update_first_name_cmd = user::UpdateFirstName{
                         first_name: first_name.to_string(),
                         metadata: metadata.clone(),
                     };
@@ -69,7 +69,7 @@ impl Handler<UpdateUser> for DbActor {
             // last_name
             let user_to_update = match &msg.last_name {
                 Some(last_name) if last_name != &user_to_update.last_name => {
-                    let update_last_name_cmd = account::UpdateLastName{
+                    let update_last_name_cmd = user::UpdateLastName{
                         last_name: last_name.to_string(),
                         metadata: metadata.clone(),
                     };

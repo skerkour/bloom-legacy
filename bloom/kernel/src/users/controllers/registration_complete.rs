@@ -100,7 +100,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 ..metadata.clone()
             };
             let start_cmd = session::Start{
-                account_id: new_user.id,
+                user_id: new_user.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(), // TODO
                 metadata,

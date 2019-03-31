@@ -1,7 +1,6 @@
 use crate::{
     users::domain::user,
     events::EventMetadata,
-    users::validators,
     error::KernelError,
 };
 use diesel::{
@@ -22,7 +21,7 @@ impl<'a> eventsourcing::Command<'a> for FailSignIn {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());
     }
 

@@ -2,7 +2,7 @@ use crate::{
     users::validators,
     error::KernelError,
     users::domain::pending_user,
-    user,
+    users,
     events::EventMetadata,
     utils,
 };
@@ -67,9 +67,9 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let now = chrono::Utc::now();
         let new_pending_user_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
-        let hashed_password = bcrypt::hash(&self.password, user::PASSWORD_BCRYPT_COST)
+        let hashed_password = bcrypt::hash(&self.password, users::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
-        let token = bcrypt::hash(&code, user::PENDING_user_TOKEN_BCRYPT_COST)
+        let token = bcrypt::hash(&code, users::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = pending_user::EventData::CreatedV1(pending_user::CreatedV1{

@@ -25,7 +25,7 @@ impl<'a> eventsourcing::Command<'a> for UpdatePassword {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::password(&self.new_password)?;
 
         if aggregate.email == self.new_password {

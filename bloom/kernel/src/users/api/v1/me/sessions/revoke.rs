@@ -1,8 +1,8 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,

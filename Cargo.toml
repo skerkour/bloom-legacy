@@ -66,8 +66,8 @@ members = [
     "crates/mimesniff-rs",
 
     "bloom/kernel",
-    "bloom/notes",
-    "bloom/contacts",
-    "bloom/api",
-    "bloom/myaccount",
+    # "bloom/notes",
+    # "bloom/contacts",
+    # "bloom/api",
+    # "bloom/myaccount",
 ]

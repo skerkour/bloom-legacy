@@ -1,15 +1,14 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
         GetRequestAuth,
     },
     error::KernelError,
-    services::common::utils,
 };
 use futures::future::Future;
 use actix_web::{
@@ -28,7 +27,6 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
-    let config = state.config.clone();
     let mut rng = rand::thread_rng();
 
     if auth.session.is_none() || auth.account.is_none() {
@@ -42,7 +40,7 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
     .and_then(move |_|
         state.db
         .send(controllers::VerifyEmail{
-            account: auth.account.expect("unwraping non none account"),
+            user: auth.account.expect("unwraping non none account"),
             id: email_data.id,
             code: email_data.code.clone(),
             request_id,

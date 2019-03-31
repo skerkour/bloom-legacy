@@ -7,7 +7,6 @@ pub use aggregate::PendingUser;
 pub use commands::{
     CompleteRegistration,
     Create,
-    ResendCode,
     Verify,
 };
 pub use events::{

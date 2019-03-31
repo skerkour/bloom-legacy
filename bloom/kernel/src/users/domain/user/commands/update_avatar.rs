@@ -4,7 +4,6 @@ use crate::{
     users::domain::user,
     users,
     events::EventMetadata,
-    users::validators,
     error::KernelError,
 };
 
@@ -58,7 +57,8 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
             body: Some(result.into()),
             ..Default::default()
         };
-        let result = ctx.put_object(req).sync().expect("Couldn't PUT object");
+        // TODO: handle error
+        ctx.put_object(req).sync().expect("Couldn't PUT object");
 
         let event_data = user::EventData::AvatarUpdatedV1(user::AvatarUpdatedV1{
             avatar_url,

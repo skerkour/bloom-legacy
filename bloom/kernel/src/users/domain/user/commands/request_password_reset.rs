@@ -6,7 +6,6 @@ use rand::Rng;
 use crate::{
     users::domain::user,
     events::EventMetadata,
-    users::validators,
     users,
     error::KernelError,
     utils,
@@ -32,7 +31,7 @@ impl<'a> eventsourcing::Command<'a> for RequestPasswordReset {
     type Error = KernelError;
     type NonStoredData = RequestPasswordResetNonStored;
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());
     }
 

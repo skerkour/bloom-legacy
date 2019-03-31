@@ -47,7 +47,7 @@ impl Handler<RevokeSession> for DbActor {
 
             let session: Session = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::id.eq(msg.session_id))
-                .filter(kernel_sessions::dsl::account_id.eq(msg.actor.id))
+                .filter(kernel_sessions::dsl::user_id.eq(msg.actor.id))
                 .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;

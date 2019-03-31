@@ -1,13 +1,13 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
     },
-    services::account::controllers,
-    services::common::utils,
+    users::controllers,
+    utils,
 };
 use std::time::Duration;
 use futures::future::Future;

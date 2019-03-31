@@ -23,7 +23,7 @@ impl<'a> eventsourcing::Command<'a> for UpdateLastName {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::last_name(&self.last_name)?;
 
         return Ok(());

@@ -4,7 +4,6 @@ use crate::{
     events::EventMetadata,
 };
 use serde::{Serialize, Deserialize};
-use chrono::Utc;
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},

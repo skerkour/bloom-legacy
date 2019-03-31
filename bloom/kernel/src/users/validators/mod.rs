@@ -32,7 +32,7 @@ pub fn password(password: &str) -> Result<(), KernelError> {
 
 
 // TODO
-pub fn email(email: &str) -> Result<(), KernelError> {
+pub fn email(_email: &str) -> Result<(), KernelError> {
     return Ok(());
 }
 

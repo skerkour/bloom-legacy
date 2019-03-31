@@ -13,6 +13,7 @@ pub mod macros {
     pub use slog::{slog_crit, slog_debug, slog_error, slog_info, slog_log, slog_o, slog_trace, slog_warn, slog_kv};
 }
 
+
 // lazy_static::lazy_static! {
 //   pub static ref LOGGER: Mutex<slog::Logger> = Mutex::new(SlogStdLogger::new());
 // }

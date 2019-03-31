@@ -1,11 +1,10 @@
 use crate::{
     api,
     log::macros::*,
-    services::account::controllers,
-    services::account::api::v1::models,
+    users::controllers,
+    users::api::v1::models,
     api::middlewares::{
         GetRequestLogger,
-        GetRequestId,
         GetRequestAuth,
     },
     error::KernelError,
@@ -28,8 +27,8 @@ pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     }
 
     return state.db
-    .send(controllers::FindAccountSessions{
-        account_id: auth.account.expect("unwrapping non none account").id,
+    .send(controllers::FindSessionsForUser{
+        user_id: auth.account.expect("unwrapping non none user").id,
     })
     .from_err()
     .and_then(move |sessions| {

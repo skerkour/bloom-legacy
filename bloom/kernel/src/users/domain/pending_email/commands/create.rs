@@ -56,7 +56,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
         let now = chrono::Utc::now();
         let new_pending_email_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
-        let token = bcrypt::hash(&code, account::PENDING_EMAIL_TOKEN_BCRYPT_COST)
+        let token = bcrypt::hash(&code, users::PENDING_EMAIL_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = pending_email::EventData::CreatedV1(pending_email::CreatedV1{

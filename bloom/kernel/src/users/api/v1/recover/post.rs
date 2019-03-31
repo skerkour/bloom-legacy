@@ -1,8 +1,8 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -12,7 +12,7 @@ use crate::{
 };
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, Json,
 };
 use futures::future::IntoFuture;
 use rand::Rng;

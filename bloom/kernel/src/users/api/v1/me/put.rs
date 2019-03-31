@@ -1,8 +1,8 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -31,8 +31,8 @@ pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::S
     }
 
     return state.db
-    .send(controllers::UpdateAccount{
-        account: auth.account.expect("unwraping non none account"),
+    .send(controllers::UpdateUser{
+        user: auth.account.expect("unwraping non none account"),
         avatar_url: account_data.avatar_url,
         first_name: account_data.first_name,
         last_name: account_data.last_name,

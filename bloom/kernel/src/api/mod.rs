@@ -13,7 +13,6 @@ use crate::KernelError;
 
 pub mod middlewares;
 pub use state::State;
-pub use app::init;
 
 
 #[derive(Serialize)]

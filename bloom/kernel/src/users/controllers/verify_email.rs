@@ -32,8 +32,8 @@ impl Handler<VerifyEmail> for DbActor {
     fn handle(&mut self, msg: VerifyEmail, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
             kernel_users_events,
-            kernel_users_events_events,
-            kernel_users_events,
+            kernel_pending_emails,
+            kernel_pending_emails_events,
         };
         use diesel::prelude::*;
 
@@ -50,10 +50,10 @@ impl Handler<VerifyEmail> for DbActor {
 
             let user_to_update = msg.user;
 
-            let pending_email: PendingEmail = kernel_users_events::dsl::kernel_users_events
-                .filter(kernel_users_events::dsl::id.eq(msg.id))
-                .filter(kernel_users_events::dsl::user_id.eq(user_to_update.id))
-                .filter(kernel_users_events::dsl::deleted_at.is_null())
+            let pending_email: PendingEmail = kernel_pending_emails::dsl::kernel_pending_emails
+                .filter(kernel_pending_emails::dsl::id.eq(msg.id))
+                .filter(kernel_pending_emails::dsl::user_id.eq(user_to_update.id))
+                .filter(kernel_pending_emails::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -70,7 +70,7 @@ impl Handler<VerifyEmail> for DbActor {
             diesel::update(&pending_email)
                 .set(&pending_email)
                 .execute(&conn)?;
-            diesel::insert_into(kernel_users_events_events::dsl::kernel_users_events_events)
+            diesel::insert_into(kernel_pending_emails_events::dsl::kernel_pending_emails_events)
                 .values(&event)
                 .execute(&conn)?;
 
@@ -92,10 +92,10 @@ impl Handler<VerifyEmail> for DbActor {
                         .execute(&conn)?;
 
                     // delete all other pending emails for user
-                    let pending_emails_to_delete: Vec<PendingEmail> = kernel_users_events::dsl::kernel_users_events
-                        .filter(kernel_users_events::dsl::user_id.eq(user_to_update.id))
-                        .filter(kernel_users_events::dsl::id.ne(msg.id))
-                        .filter(kernel_users_events::dsl::deleted_at.is_null())
+                    let pending_emails_to_delete: Vec<PendingEmail> = kernel_pending_emails::dsl::kernel_pending_emails
+                        .filter(kernel_pending_emails::dsl::user_id.eq(user_to_update.id))
+                        .filter(kernel_pending_emails::dsl::id.ne(msg.id))
+                        .filter(kernel_pending_emails::dsl::deleted_at.is_null())
                         .for_update()
                         .load(&conn)?;
 
@@ -108,7 +108,7 @@ impl Handler<VerifyEmail> for DbActor {
                         diesel::update(&pending_email_to_delete)
                             .set(&pending_email_to_delete)
                             .execute(&conn)?;
-                        diesel::insert_into(kernel_users_events_events::dsl::kernel_users_events_events)
+                        diesel::insert_into(kernel_pending_emails_events::dsl::kernel_pending_emails_events)
                             .values(&event)
                             .execute(&conn)?;
                     }

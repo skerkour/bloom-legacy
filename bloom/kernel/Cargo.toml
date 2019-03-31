@@ -37,5 +37,5 @@ lettre_email = "0.8"
 # logging
 slog = "2.4"
 slog-json = "2.3"
-log = "0.4"
+log = { version = "0.4", features = ["std"] }
 slog-scope = "4.1"

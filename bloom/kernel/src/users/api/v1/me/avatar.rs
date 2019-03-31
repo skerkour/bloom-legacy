@@ -1,9 +1,9 @@
 use crate::{
     api,
     log::macros::*,
-    services::account::controllers,
-    services::account::api::v1::models,
-    services::account,
+    users::controllers,
+    users::api::v1::models,
+    users,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -40,7 +40,7 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         .and_then(move |avatar| {
             state.db
             .send(controllers::UpdateAvatar{
-                account: auth.account.expect("unwrapping non none account"),
+                user: auth.account.expect("unwrapping non none account"),
                 avatar: avatar.get(0).expect("processing file").to_vec(),
                 s3_bucket: state.config.aws_s3_bucket(),
                 s3_region: state.config.aws_region(),
@@ -95,7 +95,7 @@ fn read_file(
         field
         .fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, error::MultipartError> {
             acc.extend_from_slice(&bytes);
-            if acc.len() > account::AVATAR_MAX_SIZE {
+            if acc.len() > users::AVATAR_MAX_SIZE {
                 return future::err(error::MultipartError::Payload(error::PayloadError::Overflow))
             }
             future::ok(acc)

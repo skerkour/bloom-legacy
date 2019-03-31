@@ -1,8 +1,8 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -33,7 +33,7 @@ pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::
     return state.db
     .send(controllers::UpdatePassword{
         current_session: auth.session.expect("unwraping auth session"),
-        account: auth.account.expect("unwraping auth account"),
+        user: auth.account.expect("unwraping auth account"),
         current_password: account_data.current_password,
         new_password: account_data.new_password,
         request_id,

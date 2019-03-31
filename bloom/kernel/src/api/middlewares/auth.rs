@@ -7,7 +7,7 @@ use futures::{Future};
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    services::account::domain,
+    users::domain,
     api,
     error::KernelError,
 };
@@ -15,7 +15,7 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub struct Auth {
-    pub account: Option<domain::Account>,
+    pub account: Option<domain::User>,
     pub session: Option<domain::Session>,
 }
 
@@ -115,8 +115,8 @@ impl Handler<CheckAuth> for DbActor {
 
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            account_sessions,
-            account_accounts,
+            kernel_sessions,
+            kernel_users,
         };
         use diesel::prelude::*;
 
@@ -124,10 +124,10 @@ impl Handler<CheckAuth> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         // find session + account
-        let (session, account): (domain::Session, domain::Account) = account_sessions::dsl::account_sessions
-                .filter(account_sessions::dsl::id.eq(msg.session_id))
-                .filter(account_sessions::dsl::deleted_at.is_null())
-                .inner_join(account_accounts::table)
+        let (session, account): (domain::Session, domain::User) = kernel_sessions::dsl::kernel_sessions
+                .filter(kernel_sessions::dsl::id.eq(msg.session_id))
+                .filter(kernel_sessions::dsl::deleted_at.is_null())
+                .inner_join(kernel_users::table)
                 .first(&conn)?;
 
         // verify session token

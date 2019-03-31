@@ -18,13 +18,13 @@ You can also use the following link to verify your account: <br/>
 "#;
 
 
-pub fn send_account_verification_code(config: &Config, email: &str, recipient_name: &str,
-pending_account_id: &str, code: &str) -> Result<(), KernelError> {
+pub fn send_user_verification_code(config: &Config, email: &str, recipient_name: &str,
+pending_user_id: &str, code: &str) -> Result<(), KernelError> {
 
     let mut formatted_code = code.to_string();
     formatted_code.insert(4, '-');
     let handlebars = Handlebars::new();
-    let url = format!("{}/welcome/verify?id={}&code={}", config.www_host(), pending_account_id, code);
+    let url = format!("{}/welcome/verify?id={}&code={}", config.www_host(), pending_user_id, code);
 
     let subject = format!("Confirmation code: {}", formatted_code);
 

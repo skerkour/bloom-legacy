@@ -26,7 +26,7 @@ impl<'a> eventsourcing::Command<'a> for ResetPassword {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::password(&self.new_password)?;
         let timestamp = Utc::now();
         let duration = aggregate.updated_at.signed_duration_since(timestamp);

@@ -1,15 +1,15 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
         GetRequestAuth,
     },
     error::KernelError,
-    services::common::utils,
+    utils,
 };
 use futures::future::Future;
 use actix_web::{

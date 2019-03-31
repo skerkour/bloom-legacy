@@ -1,8 +1,8 @@
 use crate::{
     api,
-    services::account::api::v1::models,
+    users::api::v1::models,
     log::macros::*,
-    services::account::controllers,
+    users::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -30,7 +30,7 @@ pub fn post((verify_data, req): (Json<models::VerifyPendingAccountBody>, HttpReq
     .from_err()
     .and_then(move |_|
         state.db
-        .send(controllers::VerifyPendingAccount{
+        .send(controllers::VerifyPendingUser{
             id: verify_data.id,
             code: verify_data.code.clone(),
             request_id: request_id.0,

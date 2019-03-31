@@ -3,7 +3,7 @@ use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::kernel_pending_emails_events,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
 use std::string::ToString;
 
