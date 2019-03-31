@@ -1,13 +1,13 @@
-use crate::{
-    error::KernelError,
-    services::contacts::domain::contact,
-    services::common::events::EventMetadata,
-};
 use serde::{Serialize, Deserialize};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+};
+use crate::domain::contact;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

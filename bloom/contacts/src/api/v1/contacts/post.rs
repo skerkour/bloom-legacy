@@ -1,20 +1,22 @@
-use crate::{
-    api,
-    services::contacts::api::v1::models,
-    log::macros::*,
-    services::contacts::controllers,
-    api::middlewares::{
-        GetRequestLogger,
-        GetRequestId,
-        GetRequestAuth,
-    },
-    error::KernelError,
-};
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
+use kernel::{
+    api,
+    log::macros::*,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
+    KernelError,
+};
+use crate::{
+    api::v1::models,
+    controllers,
+};
 
 
 pub fn post((contact_data, req): (Json<models::CreateContactBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {

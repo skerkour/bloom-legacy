@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use crate::services::contacts::domain::contact;
+use crate::domain::contact;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateContactBody {

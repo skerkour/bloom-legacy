@@ -1,11 +1,12 @@
 use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    services::contacts::domain::contact,
-    services::common::events::EventMetadata,
-};
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+    db::DbActor,
+};
+use crate::domain::contact;
+
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -34,7 +35,7 @@ impl Handler<CreateContact> for DbActor {
     type Result = Result<contact::Contact, KernelError>;
 
     fn handle(&mut self, msg: CreateContact, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             contacts_contacts,
             contacts_contacts_events,
         };
@@ -67,7 +68,7 @@ impl Handler<CreateContact> for DbActor {
                 owner_id: msg.user_id,
                 metadata,
             };
-            let (note, event, non_stored) = eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
+            let (note, event, _) = eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
 
             diesel::insert_into(contacts_contacts::dsl::contacts_contacts)
                 .values(&note)

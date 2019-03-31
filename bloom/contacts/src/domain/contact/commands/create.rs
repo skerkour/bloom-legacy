@@ -1,13 +1,12 @@
-use crate::{
-    services::contacts::domain::contact,
-    services::common::events::EventMetadata,
-    KernelError,
-};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
-
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+};
+use crate::domain::contact;
 
 #[derive(Clone, Debug)]
 pub struct Create {

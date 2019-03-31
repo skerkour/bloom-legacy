@@ -1,12 +1,10 @@
 use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kernel::{
     db::schema::contacts_contacts_events,
-    services::common::events::EventMetadata,
+    events::EventMetadata,
 };
-use std::string::ToString;
-
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]

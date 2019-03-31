@@ -1,11 +1,12 @@
 use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    services::contacts::domain::contact,
-    services::common::events::EventMetadata,
-};
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+    db::DbActor,
+};
+use crate::domain::contact;
+
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -24,7 +25,7 @@ impl Handler<DeleteConatct> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: DeleteConatct, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             contacts_contacts,
             contacts_contacts_events,
         };

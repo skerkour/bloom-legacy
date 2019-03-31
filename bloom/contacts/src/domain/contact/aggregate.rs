@@ -1,25 +1,10 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
-use crate::{
+use diesel_as_jsonb::AsJsonb;
+use kernel::{
     db::schema::contacts_contacts,
 };
-use diesel_as_jsonb::AsJsonb;
 
-
-
-    // addresses JSONB,
-    // birthday TIMESTAMP WITH TIME ZONE,
-    // company TEXT,
-    // emails JSONB,
-    // first_name TEXT,
-    // last_name TEXT,
-    // notes TEXT,
-    // occupation TEXT,
-    // organizations JSONB,
-    // phones JSONB,
-    // websites JSONB,
-
-    // owner_id UUID NOT NULL REFERENCES account_accounts (id),
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "contacts_contacts"]

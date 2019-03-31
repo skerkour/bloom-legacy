@@ -1,20 +1,22 @@
-use crate::{
-    api,
-    log::macros::*,
-    services::contacts::api::v1::models,
-    services::contacts::controllers,
-    api::middlewares::{
-        GetRequestLogger,
-        GetRequestId,
-        GetRequestAuth,
-    },
-    error::KernelError,
-};
 use futures::future::Future;
 use actix_web::{
     FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
 };
 use futures::future;
+use kernel::{
+    api,
+    log::macros::*,
+    api::middlewares::{
+        GetRequestLogger,
+        GetRequestId,
+        GetRequestAuth,
+    },
+    KernelError,
+};
+use crate::{
+    api::v1::models,
+    controllers,
+};
 
 
 pub fn delete((contact_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {

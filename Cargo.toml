@@ -67,7 +67,6 @@ members = [
 
     "bloom/kernel",
     "bloom/notes",
-    # "bloom/contacts",
+    "bloom/contacts",
     # "bloom/api",
-    # "bloom/myaccount",
 ]
