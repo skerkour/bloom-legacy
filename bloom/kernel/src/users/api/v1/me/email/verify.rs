@@ -29,7 +29,7 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -40,22 +40,22 @@ pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::
     .and_then(move |_|
         state.db
         .send(controllers::VerifyEmail{
-            user: auth.account.expect("unwraping non none account"),
+            user: auth.user.expect("unwraping non none user"),
             id: email_data.id,
             code: email_data.code.clone(),
             request_id,
             session_id: auth.session.expect("unwraping non none session").id,
         }).flatten()
     )
-    .and_then(move |account| {
+    .and_then(move |user| {
         let res = models::MeResponse{
-            id: account.id,
-            created_at: account.created_at,
-            first_name: account.first_name,
-            last_name: account.last_name,
-            username: account.username,
-            email: account.email,
-            avatar_url: account.avatar_url,
+            id: user.id,
+            created_at: user.created_at,
+            first_name: user.first_name,
+            last_name: user.last_name,
+            username: user.username,
+            email: user.email,
+            avatar_url: user.avatar_url,
         };
         let res = api::Response::data(res);
         Ok(HttpResponse::Ok().json(&res))

@@ -23,7 +23,7 @@ pub fn get((contact_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> 
     let logger = req.logger();
     let auth = req.request_auth();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
         .responder();
     }
@@ -31,7 +31,7 @@ pub fn get((contact_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> 
     return state.db
     .send(controllers::FindContactForUser{
         contact_id: contact_id.into_inner(),
-        account_id: auth.account.expect("unwrapping non none account").id,
+        user_id: auth.user.expect("unwrapping non none user").id,
     })
     .from_err()
     .and_then(move |contact| {

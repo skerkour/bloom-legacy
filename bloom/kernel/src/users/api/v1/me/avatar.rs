@@ -25,7 +25,7 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
         .responder();
     }
@@ -40,7 +40,7 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         .and_then(move |avatar| {
             state.db
             .send(controllers::UpdateAvatar{
-                user: auth.account.expect("unwrapping non none account"),
+                user: auth.user.expect("unwrapping non none user"),
                 avatar: avatar.get(0).expect("processing file").to_vec(),
                 s3_bucket: state.config.aws_s3_bucket(),
                 s3_region: state.config.aws_region(),
@@ -49,15 +49,15 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
                 session_id: auth.session.expect("unwraping non none session").id,
             }).flatten()
         })
-        .and_then(move |account| {
+        .and_then(move |user| {
             let res = models::MeResponse{
-                id: account.id,
-                created_at: account.created_at,
-                first_name: account.first_name,
-                last_name: account.last_name,
-                username: account.username,
-                email: account.email,
-                avatar_url: account.avatar_url,
+                id: user.id,
+                created_at: user.created_at,
+                first_name: user.first_name,
+                last_name: user.last_name,
+                username: user.username,
+                email: user.email,
+                avatar_url: user.avatar_url,
             };
             let res = api::Response::data(res);
             Ok(HttpResponse::Ok().json(&res))

@@ -47,8 +47,8 @@ impl ToString for VerificationFailedReason {
     fn to_string(&self) -> String {
         match self {
             VerificationFailedReason::CodeNotValid => "Code is not valid.".to_string(),
-            VerificationFailedReason::CodeExpired => "Code has expired. Please create another account.".to_string(),
-            VerificationFailedReason::TooManyTrials => "Maximum number of trials reached. Please create another account.".to_string(),
+            VerificationFailedReason::CodeExpired => "Code has expired. Please create another user.".to_string(),
+            VerificationFailedReason::TooManyTrials => "Maximum number of trials reached. Please create another user.".to_string(),
         }
     }
 }

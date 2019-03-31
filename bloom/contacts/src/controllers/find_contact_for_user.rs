@@ -11,7 +11,7 @@ use crate::domain::contact;
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindContactForUser {
     pub contact_id: uuid::Uuid,
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 }
 
 impl Message for FindContactForUser {
@@ -33,7 +33,7 @@ impl Handler<FindContactForUser> for DbActor {
 
         let contact: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
-                .filter(contacts_contacts::dsl::owner_id.eq(msg.account_id))
+                .filter(contacts_contacts::dsl::owner_id.eq(msg.user_id))
                 .filter(contacts_contacts::dsl::deleted_at.is_null())
                 .first(&conn)?;
 

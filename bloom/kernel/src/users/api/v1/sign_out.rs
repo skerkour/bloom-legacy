@@ -23,14 +23,14 @@ pub fn post(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
 
     return state.db
     .send(controllers::SignOut{
-        actor: auth.account.unwrap(),
+        actor: auth.user.unwrap(),
         session: auth.session.unwrap(),
         request_id,
     })

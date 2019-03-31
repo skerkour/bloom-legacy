@@ -15,19 +15,19 @@ use actix_web::{
 pub fn get(req: &HttpRequest<api::State>) -> HttpResponse {
     let auth = req.request_auth();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return KernelError::Unauthorized("Authentication required".to_string()).error_response();
     }
 
-    let account = auth.account.unwrap();
+    let user = auth.user.unwrap();
     let res = models::MeResponse{
-        id: account.id,
-        created_at: account.created_at,
-        first_name: account.first_name,
-        last_name: account.last_name,
-        username: account.username,
-        email: account.email,
-        avatar_url: account.avatar_url,
+        id: user.id,
+        created_at: user.created_at,
+        first_name: user.first_name,
+        last_name: user.last_name,
+        username: user.username,
+        email: user.email,
+        avatar_url: user.avatar_url,
     };
     let res = api::Response::data(res);
     return HttpResponse::Ok().json(&res);

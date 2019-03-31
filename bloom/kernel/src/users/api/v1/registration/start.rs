@@ -39,9 +39,9 @@ pub fn post((register_data, req): (Json<models::StartRegistrationBody>, HttpRequ
             request_id,
         }).flatten()
     )
-    .and_then(move |pending_account| {
+    .and_then(move |pending_user| {
         let res = models::StartRegistrationResponse{
-            id: pending_account.id,
+            id: pending_user.id,
         };
         let res = api::Response::data(res);
         Ok(HttpResponse::Created().json(&res))

@@ -18,7 +18,7 @@ pub struct StartRegistrationResponse {
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyPendingAccountBody {
+pub struct VerifyPendingUserBody {
     pub id: uuid::Uuid,
     pub code: String,
 }
@@ -74,7 +74,7 @@ pub struct Session {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct UpdateAccount {
+pub struct UpdateUser {
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,

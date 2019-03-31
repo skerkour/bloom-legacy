@@ -54,7 +54,7 @@ impl Handler<UpdateUser> for DbActor {
 
                     let (user_to_update, event, _) = eventsourcing::execute(&conn, user_to_update, &update_first_name_cmd)?;
 
-                    // update account
+                    // update user
                     diesel::update(&user_to_update)
                         .set(&user_to_update)
                         .execute(&conn)?;
@@ -76,7 +76,7 @@ impl Handler<UpdateUser> for DbActor {
 
                     let (user_to_update, event, _) = eventsourcing::execute(&conn, user_to_update, &update_last_name_cmd)?;
 
-                    // update account
+                    // update user
                     diesel::update(&user_to_update)
                         .set(&user_to_update)
                         .execute(&conn)?;

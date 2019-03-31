@@ -25,7 +25,7 @@ pub fn post((note_data, req): (Json<models::CreateNoteBody>, HttpRequest<api::St
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -34,7 +34,7 @@ pub fn post((note_data, req): (Json<models::CreateNoteBody>, HttpRequest<api::St
     .send(controllers::CreateNote{
         title: note_data.title.clone(),
         body: note_data.body.clone(),
-        user_id: auth.account.expect("error unwraping non none account").id,
+        user_id: auth.user.expect("error unwraping non none user").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })

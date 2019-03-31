@@ -35,7 +35,7 @@ password_reset_id: &str, token: &str) -> Result<(), KernelError> {
 }
 
 
-// func SendAccountRecovery(email, firstName, lastName, id, token string) error {
+// func SendUserRecovery(email, firstName, lastName, id, token string) error {
 // 	escapedID := url.QueryEscape(id)
 // 	escapedToken := url.QueryEscape(token)
 // 	passwordResetURL := config.WWWHost + "/recovery?id=" + escapedID + "&token=" + escapedToken

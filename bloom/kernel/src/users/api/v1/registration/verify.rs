@@ -18,7 +18,7 @@ use rand::Rng;
 
 
 
-pub fn post((verify_data, req): (Json<models::VerifyPendingAccountBody>, HttpRequest<api::State>))
+pub fn post((verify_data, req): (Json<models::VerifyPendingUserBody>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let mut rng = rand::thread_rng();
     let state = req.state().clone();

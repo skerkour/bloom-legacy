@@ -33,7 +33,7 @@ impl Handler<CompleteRegistration> for DbActor {
     type Result = Result<(Session, String), KernelError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
-        // verify pending account
+        // verify pending user
         use crate::db::schema::{
             kernel_pending_users,
             kernel_pending_users_events,
@@ -75,7 +75,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            // create account
+            // create user
             let create_cmd = user::Create{
                 first_name: pending_user_to_update.first_name.clone(),
                 last_name: pending_user_to_update.last_name.clone(),

@@ -56,7 +56,7 @@ pending_user_id: &str, code: &str) -> Result<(), KernelError> {
 	// 		This code will only be valid for 30 minutes. <br/>
 	// 		If you did not ask for a code, please ignore this email.
 	// 		<hr>
-	// 		You can also use the following link to verify your account: <br/>
+	// 		You can also use the following link to verify your user: <br/>
 	// 		<a href="%s">%s</a>
 	// 	`, formattedToken, verifyURL, verifyURL),
 	// )

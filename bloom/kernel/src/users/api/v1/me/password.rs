@@ -17,15 +17,15 @@ use actix_web::{
 use futures::future;
 
 
-pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::State>))
+pub fn put((user_data, req): (Json<models::UpdatePassword>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
-    let account_data = account_data.clone();
+    let user_data = user_data.clone();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -33,9 +33,9 @@ pub fn put((account_data, req): (Json<models::UpdatePassword>, HttpRequest<api::
     return state.db
     .send(controllers::UpdatePassword{
         current_session: auth.session.expect("unwraping auth session"),
-        user: auth.account.expect("unwraping auth account"),
-        current_password: account_data.current_password,
-        new_password: account_data.new_password,
+        user: auth.user.expect("unwraping auth user"),
+        current_password: user_data.current_password,
+        new_password: user_data.new_password,
         request_id,
     })
     .from_err()

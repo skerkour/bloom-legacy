@@ -15,7 +15,7 @@ use crate::{
 
 #[derive(Debug, Clone)]
 pub struct Auth {
-    pub account: Option<domain::User>,
+    pub user: Option<domain::User>,
     pub session: Option<domain::Session>,
 }
 
@@ -30,7 +30,7 @@ impl Middleware<api::State> for AuthMiddleware {
         let auth_header = req.headers().get(header::AUTHORIZATION);
         if auth_header.is_none() {
             req.extensions_mut().insert(Auth{
-                account: None,
+                user: None,
                 session: None,
             });
             return Ok(Started::Done);
@@ -123,8 +123,8 @@ impl Handler<CheckAuth> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        // find session + account
-        let (session, account): (domain::Session, domain::User) = kernel_sessions::dsl::kernel_sessions
+        // find session + user
+        let (session, user): (domain::Session, domain::User) = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::id.eq(msg.session_id))
                 .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .inner_join(kernel_users::table)
@@ -137,7 +137,7 @@ impl Handler<CheckAuth> for DbActor {
         }
 
         return Ok(Auth{
-            account: Some(account),
+            user: Some(user),
             session: Some(session),
         });
     }

@@ -25,7 +25,7 @@ pub fn post((note_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> Fu
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -33,7 +33,7 @@ pub fn post((note_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> Fu
     return state.db
     .send(controllers::ArchiveNote{
         note_id: note_id.into_inner(),
-        user_id: auth.account.expect("unwraping non none account").id,
+        user_id: auth.user.expect("unwraping non none user").id,
         session_id: auth.session.expect("unwraping non none session").id,
         request_id: request_id,
     })

@@ -24,7 +24,7 @@ pub struct PendingEmail {
 
 
 impl PendingEmail {
-    // create a new, unitialized PendingAccount
+    // create a new, unitialized PendingUser
     pub fn new() -> Self {
         let now = chrono::Utc::now();
         return PendingEmail{

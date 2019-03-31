@@ -17,40 +17,40 @@ use actix_web::{
 use futures::future;
 
 
-pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
+pub fn put((user_data, req): (Json<models::UpdateUser>, HttpRequest<api::State>))
 -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
-    let account_data = account_data.clone();
+    let user_data = user_data.clone();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
 
     return state.db
     .send(controllers::UpdateUser{
-        user: auth.account.expect("unwraping non none account"),
-        avatar_url: account_data.avatar_url,
-        first_name: account_data.first_name,
-        last_name: account_data.last_name,
+        user: auth.user.expect("unwraping non none user"),
+        avatar_url: user_data.avatar_url,
+        first_name: user_data.first_name,
+        last_name: user_data.last_name,
         request_id,
         session_id: auth.session.expect("unwraping non none session").id,
     })
     .from_err()
-    .and_then(move |account| {
-        match account {
-            Ok(account) => {
+    .and_then(move |user| {
+        match user {
+            Ok(user) => {
                 let res = models::MeResponse{
-                    id: account.id,
-                    created_at: account.created_at,
-                    first_name: account.first_name,
-                    last_name: account.last_name,
-                    username: account.username,
-                    email: account.email,
-                    avatar_url: account.avatar_url,
+                    id: user.id,
+                    created_at: user.created_at,
+                    first_name: user.first_name,
+                    last_name: user.last_name,
+                    username: user.username,
+                    email: user.email,
+                    avatar_url: user.avatar_url,
                 };
                 let res = api::Response::data(res);
                 Ok(HttpResponse::Ok().json(&res))

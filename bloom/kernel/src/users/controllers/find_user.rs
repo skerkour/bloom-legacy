@@ -29,11 +29,11 @@ impl Handler<FindUser> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        let account: domain::User = kernel_users::dsl::kernel_users
+        let user: domain::User = kernel_users::dsl::kernel_users
                 .filter(kernel_users::dsl::id.eq(msg.user_id))
                 .filter(kernel_users::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-        return Ok(account);
+        return Ok(user);
     }
 }

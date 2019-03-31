@@ -21,14 +21,14 @@ pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let logger = req.logger();
     let auth = req.request_auth();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
         .responder();
     }
 
     return state.db
     .send(controllers::FindSessionsForUser{
-        user_id: auth.account.expect("unwrapping non none user").id,
+        user_id: auth.user.expect("unwrapping non none user").id,
     })
     .from_err()
     .and_then(move |sessions| {

@@ -25,7 +25,7 @@ impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         if aggregate.trials + 1 >= 10 {
-            return Err(KernelError::Validation("Maximum number of trials reached. Please create another account.".to_string()));
+            return Err(KernelError::Validation("Maximum number of trials reached. Please create another user.".to_string()));
         }
 
         // verify given code

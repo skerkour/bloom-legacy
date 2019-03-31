@@ -29,7 +29,7 @@ pub fn post((sign_in_data, req): (Json<models::SignInBody>, HttpRequest<api::Sta
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-    if auth.session.is_some() || auth.account.is_some() {
+    if auth.session.is_some() || auth.user.is_some() {
         return future::result(Ok(KernelError::Unauthorized("Must not be authenticated".to_string()).error_response()))
             .responder();
     }

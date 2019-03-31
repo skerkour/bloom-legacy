@@ -9,7 +9,7 @@ use crate::domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindUserTrash {
-    pub account_id: uuid::Uuid,
+    pub user_id: uuid::Uuid,
 }
 
 impl Message for FindUserTrash {
@@ -30,7 +30,7 @@ impl Handler<FindUserTrash> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         let notes: Vec<domain::Note> = notes_notes::dsl::notes_notes
-                .filter(notes_notes::dsl::owner_id.eq(msg.account_id))
+                .filter(notes_notes::dsl::owner_id.eq(msg.user_id))
                 .filter(notes_notes::dsl::deleted_at.is_null())
                 .filter(notes_notes::dsl::archived_at.is_null())
                 .filter(notes_notes::dsl::removed_at.is_not_null())

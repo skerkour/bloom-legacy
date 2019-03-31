@@ -25,7 +25,7 @@ pub fn put((contact_id, contact_data, req): (Path<(uuid::Uuid)>, Json<models::Up
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -44,7 +44,7 @@ pub fn put((contact_id, contact_data, req): (Path<(uuid::Uuid)>, Json<models::Up
         phones: contact_data.phones.clone(),
         websites: contact_data.websites.clone(),
         contact_id: contact_id.into_inner(),
-        actor_id: auth.account.expect("error unwraping non none account").id,
+        actor_id: auth.user.expect("error unwraping non none user").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })

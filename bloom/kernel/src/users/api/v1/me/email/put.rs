@@ -30,7 +30,7 @@ pub fn put((email_data, req): (Json<models::UpdateEmailBody>, HttpRequest<api::S
     let config = state.config.clone();
     let mut rng = rand::thread_rng();
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.user.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
             .responder();
     }
@@ -41,7 +41,7 @@ pub fn put((email_data, req): (Json<models::UpdateEmailBody>, HttpRequest<api::S
     .and_then(move |_|
         state.db
         .send(controllers::UpdateEmail{
-            user: auth.account.expect("unwraping auth account"),
+            user: auth.user.expect("unwraping auth user"),
             email: email_data.email.clone(),
             config,
             request_id,
