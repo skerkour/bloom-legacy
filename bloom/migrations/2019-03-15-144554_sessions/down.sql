@@ -1,3 +1,3 @@
 -- This file should undo anything in `up.sql`
-DROP TABLE kernel_session_events;
-DROP TABLE kernel_session;
+DROP TABLE kernel_sessions_events;
+DROP TABLE kernel_sessions;

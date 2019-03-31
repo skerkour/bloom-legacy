@@ -1,4 +1,4 @@
-CREATE TABLE kernel_session (
+CREATE TABLE kernel_sessions (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -15,10 +15,10 @@ CREATE TABLE kernel_session (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE kernel_session_events (
+CREATE TABLE kernel_sessions_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES kernel_session (id),
+    aggregate_id UUID NOT NULL REFERENCES kernel_sessions (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 
