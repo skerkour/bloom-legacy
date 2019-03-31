@@ -5,12 +5,14 @@ authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
 
 [dependencies]
-# AWS libs
+kernel = { path = "../kernel" }
+notes = { path = "../notes" }
+contacts = { path = "../contacts" }
+
+
+actix-web = "0.7.19"
+actix = "0.7"
 rusoto_core = "0.37"
 rusoto_s3 = "0.37"
-
-
-[profile.release]
-# for error tracking
-debug = true
-lto = true
+num_cpus = "1.0"
+http = "0.1.0"

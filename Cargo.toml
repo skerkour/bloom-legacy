@@ -50,10 +50,10 @@
 
 
 
-# [profile.release]
-# # for error tracking
-# debug = true
-# lto = true
+[profile.release]
+# for error tracking
+debug = true
+lto = true
 
 
 [workspace]
@@ -68,5 +68,5 @@ members = [
     "bloom/kernel",
     "bloom/notes",
     "bloom/contacts",
-    # "bloom/api",
+    "bloom/api",
 ]

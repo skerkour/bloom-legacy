@@ -3,22 +3,22 @@
 .PHONY: disposable_emails
 
 DIST_DIR = dist
-NAME := $(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
-VERSION := $(shell cat Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
-DOCKER_IMAGE = quay.io/helloworld/$(NAME)
+NAME := api #$(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
+VERSION := $(shell cat bloom/kernel/Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
+DOCKER_IMAGE = quay.io/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 
 all: build
 
 build:
 	mkdir -p $(DIST_DIR)
-	cargo build --release
+	cargo build -p api --release
 	cp target/release/$(NAME) $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
 build_debug:
 	mkdir -p $(DIST_DIR)
-	cargo build
+	cargo build -p api
 	cp target/debug/$(NAME) $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
@@ -29,7 +29,7 @@ build_static:
 	cp -r assets $(DIST_DIR)/
 
 dev:
-	cargo watch -x 'run'
+	cargo watch -x 'run -p api'
 
 clean:
 	rm -rf $(DIST_DIR) target/

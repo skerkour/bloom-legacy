@@ -1,14 +1,4 @@
-use crate::{
-    db::DbActor,
-    api,
-    api::middlewares,
-    config,
-    services::account::api::v1 as accountv1,
-    services::notes::api::v1 as notesv1,
-    services::contacts::api::v1 as contactsv1,
-};
-use notes::v1 as notesv1;
-use contacts::v1 as contactsv1;
+
 use actix_web::{
     App,
     middleware::cors::Cors,
@@ -17,6 +7,15 @@ use actix_web::{
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
 use std::str::FromStr;
+use notes::api::v1 as notesv1;
+use contacts::api::v1 as contactsv1;
+use kernel::{
+    db::DbActor,
+    api,
+    api::middlewares,
+    config,
+    users::api::v1 as usersv1,
+};
 
 pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
 
@@ -50,26 +49,27 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
             .max_age(3600)
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
+
             // account
-            .resource("/account/v1/registration/start", |r| r.method(http::Method::POST).with_config(accountv1::registration::start::post, api::json_default_config))
-            .resource("/account/v1/registration/verify", |r| r.method(http::Method::POST).with_config(accountv1::registration::verify::post, api::json_default_config))
-            .resource("/account/v1/registration/complete", |r| r.method(http::Method::POST).with_config(accountv1::registration::complete::post, api::json_default_config))
-            .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(accountv1::sign_in::post, api::json_default_config))
-            .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(accountv1::sign_out::post))
+            .resource("/account/v1/registration/start", |r| r.method(http::Method::POST).with_config(usersv1::registration::start::post, api::json_default_config))
+            .resource("/account/v1/registration/verify", |r| r.method(http::Method::POST).with_config(usersv1::registration::verify::post, api::json_default_config))
+            .resource("/account/v1/registration/complete", |r| r.method(http::Method::POST).with_config(usersv1::registration::complete::post, api::json_default_config))
+            .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(usersv1::sign_in::post, api::json_default_config))
+            .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(usersv1::sign_out::post))
             .resource("/account/v1/recover", |r| {
-                r.method(http::Method::POST).with_config(accountv1::recover::post, api::json_default_config);
-                r.method(http::Method::PUT).with_config(accountv1::recover::put, api::json_default_config);
+                r.method(http::Method::POST).with_config(usersv1::recover::post, api::json_default_config);
+                r.method(http::Method::PUT).with_config(usersv1::recover::put, api::json_default_config);
             })
             .resource("/account/v1/me", |r| {
-                r.method(http::Method::GET).f(accountv1::me::get);
-                r.method(http::Method::PUT).with_config(accountv1::me::put, api::json_default_config);
+                r.method(http::Method::GET).f(usersv1::me::get);
+                r.method(http::Method::PUT).with_config(usersv1::me::put, api::json_default_config);
             })
-            .resource("/account/v1/me/password", |r| r.method(http::Method::PUT).with_config(accountv1::me::password::put, api::json_default_config))
-            .resource("/account/v1/me/avatar", |r| r.method(http::Method::PUT).f(accountv1::me::avatar::put))
-            .resource("/account/v1/me/email", |r| r.method(http::Method::PUT).with_config(accountv1::me::email::put, api::json_default_config))
-            .resource("/account/v1/me/email/verify", |r| r.method(http::Method::POST).with_config(accountv1::me::email::verify::post, api::json_default_config))
-            .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(accountv1::me::sessions::get))
-            .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountv1::me::sessions::revoke::post))
+            .resource("/account/v1/me/password", |r| r.method(http::Method::PUT).with_config(usersv1::me::password::put, api::json_default_config))
+            .resource("/account/v1/me/avatar", |r| r.method(http::Method::PUT).f(usersv1::me::avatar::put))
+            .resource("/account/v1/me/email", |r| r.method(http::Method::PUT).with_config(usersv1::me::email::put, api::json_default_config))
+            .resource("/account/v1/me/email/verify", |r| r.method(http::Method::POST).with_config(usersv1::me::email::verify::post, api::json_default_config))
+            .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(usersv1::me::sessions::get))
+            .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(usersv1::me::sessions::revoke::post))
 
             // notes
             .resource("/notes/v1/notes", |r| {

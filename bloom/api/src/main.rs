@@ -5,7 +5,12 @@ use actix_web::{
     server as actix_server,
 };
 use actix::System;
-use kernel::log::macros::{slog_info, slog_o};
+use kernel::{
+    log,
+    log::macros::{slog_info, slog_o},
+    config,
+    db,
+};
 
 
 fn main() {
@@ -15,7 +20,7 @@ fn main() {
     let db_actor_addr = db::init(&cfg);
     let binding_addr = format!("0.0.0.0:{}", cfg.port());
 
-    actix_server::new(move || api::init(db_actor_addr.clone(), cfg.clone()))
+    actix_server::new(move || app::init(db_actor_addr.clone(), cfg.clone()))
         .backlog(8192)
         .bind(&binding_addr)
         .expect("error binding server")
