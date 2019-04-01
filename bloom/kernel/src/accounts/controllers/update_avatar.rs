@@ -15,7 +15,7 @@ pub struct UpdateAvatar {
     pub account: Account,
     pub avatar: Vec<u8>,
     pub s3_bucket: String,
-    pub s3_region: String,
+    pub s3_base_url: String,
     pub s3_client: rusoto_s3::S3Client,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
@@ -50,7 +50,7 @@ impl Handler<UpdateAvatar> for DbActor {
             let update_first_name_cmd = account::UpdateAvatar{
                 avatar: msg.avatar,
                 s3_bucket: msg.s3_bucket,
-                s3_region: msg.s3_region,
+                s3_base_url: msg.s3_base_url,
                 metadata: metadata.clone(),
             };
 

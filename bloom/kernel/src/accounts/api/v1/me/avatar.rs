@@ -42,8 +42,8 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
             .send(controllers::UpdateAvatar{
                 account: auth.account.expect("unwrapping non none account"),
                 avatar: avatar.get(0).expect("processing file").to_vec(),
-                s3_bucket: state.config.aws_s3_bucket(),
-                s3_region: state.config.aws_region(),
+                s3_bucket: state.config.s3_bucket(),
+                s3_base_url: state.config.s3_base_url(),
                 s3_client: state.s3_client.clone(),
                 request_id,
                 session_id: auth.session.expect("unwraping non none session").id,

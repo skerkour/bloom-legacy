@@ -14,7 +14,8 @@ pub struct Config {
     aws_access_key_id: String,
     aws_secret_access_key: String,
     aws_region: String,
-    aws_s3_bucket: String,
+    s3_bucket: String,
+    s3_base_url: String,
     github_token: String,
     sentry_url: String,
     phaser_secret: String,
@@ -44,7 +45,8 @@ pub fn init() -> Config {
         aws_access_key_id: get_env("AWS_ACCESS_KEY_ID"),
         aws_secret_access_key: get_env("AWS_SECRET_ACCESS_KEY"),
         aws_region: get_env("AWS_REGION"),
-        aws_s3_bucket: get_env("AWS_S3_BUCKET"),
+        s3_bucket: get_env("S3_BUCKET"),
+        s3_base_url: get_env("S3_BASE_URL"),
         github_token: get_env("GITHUB_TOKEN"),
         sentry_url: get_env("SENTRY_URL"),
         phaser_secret: get_env("PHASER_SECRET"),
@@ -94,8 +96,12 @@ impl Config {
         return self.aws_region.clone();
     }
 
-    pub fn aws_s3_bucket(&self) -> String {
-        return self.aws_s3_bucket.clone();
+    pub fn s3_bucket(&self) -> String {
+        return self.s3_bucket.clone();
+    }
+
+    pub fn s3_base_url(&self) -> String {
+        return self.s3_base_url.clone();
     }
 
     pub fn github_token(&self) -> String {

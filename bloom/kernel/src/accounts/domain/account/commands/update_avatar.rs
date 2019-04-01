@@ -12,7 +12,7 @@ use crate::{
 pub struct UpdateAvatar {
     pub avatar: Vec<u8>,
     pub s3_bucket: String,
-    pub s3_region: String,
+    pub s3_base_url: String,
     pub metadata: EventMetadata,
 }
 
@@ -50,7 +50,7 @@ impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
         // upload to s3
         let id = uuid::Uuid::new_v4();
         let key = format!("account/avatars/{}.jpeg", id);
-        let avatar_url = format!("https://s3.{}.amazonaws.com/{}/{}", &self.s3_region, &self.s3_bucket, &key);
+        let avatar_url = format!("{}/{}/{}", &self.s3_base_url, &self.s3_bucket, &key);
         let req = PutObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: key,
