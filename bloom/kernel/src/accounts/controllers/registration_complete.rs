@@ -102,7 +102,7 @@ impl Handler<CompleteRegistration> for DbActor {
             let start_cmd = session::Start{
                 account_id: new_account.id,
                 ip: "127.0.0.1".to_string(), // TODO
-                account_agent: "".to_string(), // TODO
+                user_agent: "".to_string(), // TODO
                 metadata,
             };
             let (new_session, event, non_stored) = eventsourcing::execute(

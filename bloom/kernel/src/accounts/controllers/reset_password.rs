@@ -99,7 +99,7 @@ impl Handler<ResetPassword> for DbActor {
             let start_cmd = session::Start{
                 account_id: account.id,
                 ip: "127.0.0.1".to_string(), // TODO
-                account_agent: "".to_string(), // TODO
+                user_agent: "".to_string(), // TODO
                 metadata,
             };
             let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;

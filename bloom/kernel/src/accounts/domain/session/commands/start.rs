@@ -17,7 +17,7 @@ use rand::Rng;
 pub struct Start {
     pub account_id: uuid::Uuid,
     pub ip: String,
-    pub account_agent: String,
+    pub user_agent: String,
     pub metadata: EventMetadata,
 }
 

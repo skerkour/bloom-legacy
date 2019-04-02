@@ -47,7 +47,6 @@ impl<'a> eventsourcing::Command<'a> for Complete {
         };
         // TODO: handle error + improve content type detection... currently it's done by the browser
         let head_output = ctx.head_object(req).sync().expect("Couldn't PUT object");
-        println!("{:?}", head_output);
 
         let event_data = upload_session::EventData::CompletedV1(upload_session::CompletedV1{
             size: head_output.content_length.expect("error getting content length"),

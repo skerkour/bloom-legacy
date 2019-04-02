@@ -51,7 +51,7 @@ impl<'a> eventsourcing::Command<'a> for Upload {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data: event_data,
-            aggregate_id: aggregate.id,
+            aggregate_id: id,
             metadata: self.metadata.clone(),
         }, ()));
     }

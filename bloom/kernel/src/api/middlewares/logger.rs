@@ -77,7 +77,7 @@ impl<S> Middleware<S> for LoggerMiddleware {
             "-"
         };
         let status = resp.status().as_u16();
-        let default_account_agent = header::HeaderValue::from_str("").unwrap();
+        let default_user_agent = header::HeaderValue::from_str("").unwrap();
         let fields =  slog_o!(
             "duration" => duration,
             "size" => resp.response_size(),
@@ -87,7 +87,7 @@ impl<S> Middleware<S> for LoggerMiddleware {
             "method" => req.method().as_str(),
             "remote_address" => remote,
             // TODO: not working
-            "account_agent" => resp.headers().get(header::USER_AGENT).unwrap_or(&default_account_agent).to_str().unwrap(),
+            "user_agent" => resp.headers().get(header::USER_AGENT).unwrap_or(&default_user_agent).to_str().unwrap(),
         );
         match status {
             x if x < 400 => { slog_info!(logger, "access"; fields) },
