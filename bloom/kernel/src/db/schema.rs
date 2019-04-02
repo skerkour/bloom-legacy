@@ -1,4 +1,166 @@
 table! {
+    bitflow_downloads (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        name -> Text,
+        status -> Text,
+        url -> Text,
+        progress -> Int4,
+        error -> Nullable<Text>,
+        owner_id -> Uuid,
+        file_id -> Nullable<Uuid>,
+        removed_at -> Nullable<Timestamptz>,
+    }
+}
+
+table! {
+    bitflow_downloads_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    bitflow_profiles (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        account_id -> Uuid,
+    }
+}
+
+table! {
+    bitflow_profiles_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    bloom_contributors (github_login) {
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        github_login -> Text,
+        commits -> Int8,
+    }
+}
+
+table! {
+    contacts_contacts (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        addresses -> Array<Jsonb>,
+        birthday -> Nullable<Timestamptz>,
+        company -> Nullable<Text>,
+        emails -> Array<Jsonb>,
+        first_name -> Nullable<Text>,
+        last_name -> Nullable<Text>,
+        notes -> Nullable<Text>,
+        occupation -> Nullable<Text>,
+        organizations -> Array<Jsonb>,
+        phones -> Array<Jsonb>,
+        websites -> Array<Jsonb>,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    contacts_contacts_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    drive_files (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        version -> Int8,
+        name -> Text,
+        #[sql_name = "type"]
+        type_ -> Text,
+        size -> Int8,
+        parent_id -> Nullable<Uuid>,
+        removed_at -> Nullable<Timestamptz>,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    drive_files_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    drive_profiles (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        version -> Int8,
+        account_id -> Uuid,
+        total_space -> Int8,
+        used_space -> Int8,
+        home_id -> Uuid,
+    }
+}
+
+table! {
+    drive_profiles_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    drive_upload_sessions (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        version -> Int8,
+        name -> Text,
+        parent_id -> Nullable<Uuid>,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    drive_upload_sessions_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
     kernel_accounts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -104,152 +266,6 @@ table! {
 }
 
 table! {
-    bitflow_downloads (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        name -> Text,
-        status -> Text,
-        url -> Text,
-        progress -> Int4,
-        error -> Nullable<Text>,
-        owner_id -> Uuid,
-        file_id -> Nullable<Uuid>,
-        removed_at -> Nullable<Timestamptz>,
-    }
-}
-
-table! {
-    bitflow_downloads_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
-table! {
-    bitflow_profiles (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        account_id -> Uuid,
-    }
-}
-
-table! {
-    bitflow_profiles_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
-table! {
-    bloom_contributors (github_login) {
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        github_login -> Text,
-        commits -> Int8,
-    }
-}
-
-table! {
-    contacts_contacts (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        addresses -> Array<Jsonb>,
-        birthday -> Nullable<Timestamptz>,
-        company -> Nullable<Text>,
-        emails -> Array<Jsonb>,
-        first_name -> Nullable<Text>,
-        last_name -> Nullable<Text>,
-        notes -> Nullable<Text>,
-        occupation -> Nullable<Text>,
-        organizations -> Array<Jsonb>,
-        phones -> Array<Jsonb>,
-        websites -> Array<Jsonb>,
-        owner_id -> Uuid,
-    }
-}
-
-table! {
-    contacts_contacts_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
-table! {
-    drive_files (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        name -> Text,
-        #[sql_name = "type"]
-        type_ -> Text,
-        size -> Int8,
-        parent_id -> Nullable<Uuid>,
-        owner_id -> Uuid,
-        md5 -> Nullable<Text>,
-        sha1 -> Nullable<Text>,
-        sha256 -> Nullable<Text>,
-        sha512 -> Nullable<Text>,
-        removed_at -> Nullable<Timestamptz>,
-    }
-}
-
-table! {
-    drive_files_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
-table! {
-    drive_profiles (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        account_id -> Uuid,
-        total_space -> Int8,
-        used_space -> Int8,
-        home_id -> Uuid,
-    }
-}
-
-table! {
-    drive_profiles_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
-table! {
     notes_notes (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -335,13 +351,8 @@ table! {
     }
 }
 
-joinable!(kernel_accounts_events -> kernel_accounts (aggregate_id));
-joinable!(kernel_pending_emails -> kernel_accounts (account_id));
-joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));
-joinable!(kernel_sessions -> kernel_accounts (account_id));
-joinable!(kernel_sessions_events -> kernel_sessions (aggregate_id));
-joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads -> drive_files (file_id));
+joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> kernel_accounts (account_id));
 joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
@@ -349,9 +360,17 @@ joinable!(contacts_contacts -> kernel_accounts (owner_id));
 joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
 joinable!(drive_files -> kernel_accounts (owner_id));
 joinable!(drive_files_events -> drive_files (aggregate_id));
-joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles -> drive_files (home_id));
+joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
+joinable!(drive_upload_sessions -> drive_files (parent_id));
+joinable!(drive_upload_sessions -> kernel_accounts (owner_id));
+joinable!(drive_upload_sessions_events -> drive_files (aggregate_id));
+joinable!(kernel_accounts_events -> kernel_accounts (aggregate_id));
+joinable!(kernel_pending_emails -> kernel_accounts (account_id));
+joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));
+joinable!(kernel_sessions -> kernel_accounts (account_id));
+joinable!(kernel_sessions_events -> kernel_sessions (aggregate_id));
 joinable!(notes_notes -> kernel_accounts (owner_id));
 joinable!(notes_notes_events -> notes_notes (aggregate_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));
@@ -360,14 +379,6 @@ joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
-    kernel_accounts,
-    kernel_accounts_events,
-    kernel_pending_accounts,
-    kernel_pending_accounts_events,
-    kernel_pending_emails,
-    kernel_pending_emails_events,
-    kernel_sessions,
-    kernel_sessions_events,
     bitflow_downloads,
     bitflow_downloads_events,
     bitflow_profiles,
@@ -379,6 +390,16 @@ allow_tables_to_appear_in_same_query!(
     drive_files_events,
     drive_profiles,
     drive_profiles_events,
+    drive_upload_sessions,
+    drive_upload_sessions_events,
+    kernel_accounts,
+    kernel_accounts_events,
+    kernel_pending_accounts,
+    kernel_pending_accounts_events,
+    kernel_pending_emails,
+    kernel_pending_emails_events,
+    kernel_sessions,
+    kernel_sessions_events,
     notes_notes,
     notes_notes_events,
     phaser_reports,
