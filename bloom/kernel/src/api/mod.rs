@@ -33,6 +33,10 @@ struct HelloWorld<'a> {
 }
 
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NoData {}
+
+
 impl<T: Serialize> Response<T> {
     pub fn data(data: T) -> Response<T> {
         return Response{

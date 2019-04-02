@@ -9,6 +9,7 @@ use rusoto_s3::S3Client;
 use std::str::FromStr;
 use notes::api::v1 as notesv1;
 use contacts::api::v1 as contactsv1;
+use drive::api::v1 as drivev1;
 use kernel::{
     db::DbActor,
     api,
@@ -98,6 +99,10 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::DELETE).with(contactsv1::contacts::delete);
             })
 
+            // drive
+            .resource("/drive/v1/upload", |r| {
+                r.method(http::Method::POST).f(drivev1::upload::post);
+            })
 
             .register()
     })

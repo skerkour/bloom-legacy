@@ -5,6 +5,7 @@ CREATE TABLE drive_upload_sessions (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     version BIGINT NOT NULL,
 
+    file_id UUID NOT NULL,
     file_name TEXT NOT NULL,
     parent_id UUID REFERENCES drive_files (id),
     presigned_url TEXT NOT NULL,

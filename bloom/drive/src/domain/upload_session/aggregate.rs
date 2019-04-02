@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use kernel::{
-    db::schema::drive,
+    db::schema::drive_upload_sessions,
 };
 
 
@@ -14,6 +14,7 @@ pub struct UploadSession {
     pub updated_at: chrono::DateTime<chrono::Utc>,
     pub version: i64,
 
+    pub file_id: uuid::Uuid,
     pub file_name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub presigned_url: String,
@@ -32,8 +33,9 @@ impl UploadSession {
             updated_at: now,
             version: 0,
 
+            file_id: uuid::Uuid::new_v4(),
             file_name: String::new(),
-            parent_id: uuid::Uuid::new_v4(),
+            parent_id: None,
             presigned_url: String::new(),
 
             owner_id: uuid::Uuid::new_v4(),

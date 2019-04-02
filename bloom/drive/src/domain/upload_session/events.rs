@@ -19,14 +19,15 @@ pub struct Event {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
-    CreatedV1(CreatedV1),
+    StartedV1(StartedV1),
     CompletedV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CreatedV1 {
+pub struct StartedV1 {
     pub id: uuid::Uuid,
     pub file_name: String,
+    pub file_id: uuid::Uuid,
     pub parent_id: Option<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub presigned_url: String,
@@ -37,14 +38,15 @@ impl eventsourcing::Event for Event {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
-            // CreatedV1
-            EventData::CreatedV1(ref data) => super::UploadSession{
+            // StartedV1
+            EventData::StartedV1(ref data) => super::UploadSession{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
                 version: 0,
 
                 file_name: data.file_name.clone(),
+                file_id: data.file_id,
                 parent_id: data.parent_id,
                 presigned_url: data.presigned_url.clone(),
 

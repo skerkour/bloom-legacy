@@ -144,8 +144,10 @@ table! {
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
         version -> Int8,
-        name -> Text,
+        file_id -> Uuid,
+        file_name -> Text,
         parent_id -> Nullable<Uuid>,
+        presigned_url -> Text,
         owner_id -> Uuid,
     }
 }

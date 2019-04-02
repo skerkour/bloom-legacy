@@ -4,9 +4,13 @@ mod commands;
 
 
 pub use aggregate::{
-    UploadSession
+    UploadSession,
 };
 pub use commands::{
+    Start,
 };
 pub use events::{
+    Event,
+    EventData,
+    StartedV1,
 };

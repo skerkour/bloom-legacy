@@ -8,7 +8,7 @@ edition = "2018"
 kernel = { path = "../kernel" }
 notes = { path = "../notes" }
 contacts = { path = "../contacts" }
-
+drive = { path = "../drive" }
 
 actix-web = "0.7.19"
 actix = "0.7"
