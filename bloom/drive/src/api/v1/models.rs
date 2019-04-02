@@ -14,3 +14,8 @@ pub struct StartUploadSessionResponse {
     pub id: Uuid,
     pub presigned_url: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompleteUploadSessionBody {
+    pub upload_session_id: Uuid,
+}

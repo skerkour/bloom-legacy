@@ -20,7 +20,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     StartedV1(StartedV1),
-    CompletedV1,
+    CompletedV1(CompletedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -32,6 +32,15 @@ pub struct StartedV1 {
     pub owner_id: uuid::Uuid,
     pub presigned_url: String,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompletedV1 {
+    pub size: i64,
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::UploadSession;
@@ -49,11 +58,15 @@ impl eventsourcing::Event for Event {
                 file_id: data.file_id,
                 parent_id: data.parent_id,
                 presigned_url: data.presigned_url.clone(),
+                size: 0,
+                type_: String::new(),
 
                 owner_id: data.owner_id,
             },
             // CompletedV1
-            EventData::CompletedV1 => super::UploadSession{
+            EventData::CompletedV1(ref data) => super::UploadSession{
+                size: data.size,
+                type_: data.type_.clone(),
                 ..aggregate
             },
         }

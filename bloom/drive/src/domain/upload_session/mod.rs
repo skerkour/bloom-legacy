@@ -8,9 +8,11 @@ pub use aggregate::{
 };
 pub use commands::{
     Start,
+    Complete,
 };
 pub use events::{
     Event,
     EventData,
     StartedV1,
+    CompletedV1,
 };

@@ -148,6 +148,9 @@ table! {
         file_name -> Text,
         parent_id -> Nullable<Uuid>,
         presigned_url -> Text,
+        size -> Int8,
+        #[sql_name = "type"]
+        type_ -> Text,
         owner_id -> Uuid,
     }
 }
@@ -367,7 +370,7 @@ joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
 joinable!(drive_upload_sessions -> drive_files (parent_id));
 joinable!(drive_upload_sessions -> kernel_accounts (owner_id));
-joinable!(drive_upload_sessions_events -> drive_files (aggregate_id));
+joinable!(drive_upload_sessions_events -> drive_upload_sessions (aggregate_id));
 joinable!(kernel_accounts_events -> kernel_accounts (aggregate_id));
 joinable!(kernel_pending_emails -> kernel_accounts (account_id));
 joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));

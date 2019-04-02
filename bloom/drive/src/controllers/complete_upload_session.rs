@@ -11,25 +11,24 @@ use crate::domain::{
 };
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct StartUploadSession {
-    pub file_name: String,
-    pub parent_id: Option<uuid::Uuid>,
+#[derive(Clone)]
+pub struct CompleteUploadSession {
+    pub upload_session_id: uuid::Uuid,
     pub s3_bucket: String,
-    pub s3_region: String,
+    pub s3_client: rusoto_s3::S3Client,
     pub account_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
-impl Message for StartUploadSession {
+impl Message for CompleteUploadSession {
     type Result = Result<UploadSession, KernelError>;
 }
 
-impl Handler<StartUploadSession> for DbActor {
+impl Handler<CompleteUploadSession> for DbActor {
     type Result = Result<UploadSession, KernelError>;
 
-    fn handle(&mut self, msg: StartUploadSession, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: CompleteUploadSession, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             drive_upload_sessions,
             drive_upload_sessions_events,
@@ -41,31 +40,33 @@ impl Handler<StartUploadSession> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
+            let upload_session_to_update: UploadSession = drive_upload_sessions::dsl::drive_upload_sessions
+                .filter(drive_upload_sessions::dsl::id.eq(msg.upload_session_id))
+                .filter(drive_upload_sessions::dsl::owner_id.eq(msg.account_id))
+                .for_update()
+                .first(&conn)?;
 
-            // start UploadSession
+            // complete UplaodSession
             let metadata = EventMetadata{
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let start_cmd = upload_session::Start{
-                file_name: msg.file_name.clone(),
-                parent_id: msg.parent_id,
-                owner_id: msg.account_id,
+            let complete_cmd = upload_session::Complete{
                 s3_bucket: msg.s3_bucket.clone(),
-                s3_region: msg.s3_region.clone(),
                 metadata,
             };
-            let (upload_session, event, _) = eventsourcing::execute(&conn, UploadSession::new(), &start_cmd)?;
+            let (upload_session_to_update, event, _) = eventsourcing::execute(
+                &msg.s3_client, upload_session_to_update, &complete_cmd)?;
 
-            diesel::insert_into(drive_upload_sessions::dsl::drive_upload_sessions)
-                .values(&upload_session)
-                .execute(&conn)?;
             diesel::insert_into(drive_upload_sessions_events::dsl::drive_upload_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
+            diesel::delete(drive_upload_sessions::dsl::drive_upload_sessions
+                .filter(drive_upload_sessions::dsl::id.eq(upload_session_to_update.id)))
+                .execute(&conn)?;
 
-            return Ok(upload_session);
+            return Ok(upload_session_to_update);
         })?);
     }
 }
