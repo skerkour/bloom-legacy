@@ -24,11 +24,11 @@ pub struct CompleteUploadSession {
 }
 
 impl Message for CompleteUploadSession {
-    type Result = Result<UploadSession, KernelError>;
+    type Result = Result<File, KernelError>;
 }
 
 impl Handler<CompleteUploadSession> for DbActor {
-    type Result = Result<UploadSession, KernelError>;
+    type Result = Result<File, KernelError>;
 
     fn handle(&mut self, msg: CompleteUploadSession, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
@@ -90,7 +90,7 @@ impl Handler<CompleteUploadSession> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            return Ok(upload_session_to_update);
+            return Ok(uploaded_file);
         })?);
     }
 }

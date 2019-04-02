@@ -40,9 +40,9 @@ pub fn put((upload_data, req): (Json<models::CompleteUploadSessionBody>, HttpReq
         request_id,
     })
     .from_err()
-    .and_then(move |upload_session| {
-        match upload_session {
-            Ok(upload_session) => {
+    .and_then(move |file| {
+        match file {
+            Ok(file) => {
                 // let res = models::StartUploadSessionResponse{
                 //     id: upload_session.id,
                 //     presigned_url: upload_session.presigned_url,
