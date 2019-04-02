@@ -52,6 +52,7 @@ impl eventsourcing::Event for Event {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
+                deleted_at: None,
                 version: 0,
 
                 file_name: data.file_name.clone(),
@@ -65,6 +66,7 @@ impl eventsourcing::Event for Event {
             },
             // CompletedV1
             EventData::CompletedV1(ref data) => super::UploadSession{
+                deleted_at: self.timestamp,
                 size: data.size,
                 type_: data.type_.clone(),
                 ..aggregate

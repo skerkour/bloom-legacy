@@ -3,6 +3,7 @@ CREATE TABLE drive_upload_sessions (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
     file_id UUID NOT NULL,

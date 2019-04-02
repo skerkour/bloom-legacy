@@ -42,6 +42,7 @@ impl Handler<CompleteUploadSession> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let upload_session_to_update: UploadSession = drive_upload_sessions::dsl::drive_upload_sessions
                 .filter(drive_upload_sessions::dsl::id.eq(msg.upload_session_id))
+                .filter(drive_upload_sessions::dsl::deleted_at.is_null())
                 .filter(drive_upload_sessions::dsl::owner_id.eq(msg.account_id))
                 .for_update()
                 .first(&conn)?;
@@ -59,12 +60,14 @@ impl Handler<CompleteUploadSession> for DbActor {
             let (upload_session_to_update, event, _) = eventsourcing::execute(
                 &msg.s3_client, upload_session_to_update, &complete_cmd)?;
 
+            diesel::update(&upload_session_to_update)
+                .set(&upload_session_to_update)
+                .execute(&conn)?;
             diesel::insert_into(drive_upload_sessions_events::dsl::drive_upload_sessions_events)
                 .values(&event)
                 .execute(&conn)?;
-            diesel::delete(drive_upload_sessions::dsl::drive_upload_sessions
-                .filter(drive_upload_sessions::dsl::id.eq(upload_session_to_update.id)))
-                .execute(&conn)?;
+
+            // TODO: uplaod file
 
             return Ok(upload_session_to_update);
         })?);

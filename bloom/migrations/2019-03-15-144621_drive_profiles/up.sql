@@ -3,6 +3,7 @@ CREATE TABLE drive_profiles (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
     account_id UUID NOT NULL REFERENCES kernel_accounts(id),

@@ -94,13 +94,14 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         name -> Text,
-        #[sql_name = "type"]
-        type_ -> Text,
-        size -> Int8,
         parent_id -> Nullable<Uuid>,
         removed_at -> Nullable<Timestamptz>,
+        size -> Int8,
+        #[sql_name = "type"]
+        type_ -> Text,
         owner_id -> Uuid,
     }
 }
@@ -120,6 +121,7 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         account_id -> Uuid,
         total_space -> Int8,
@@ -143,6 +145,7 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         file_id -> Uuid,
         file_name -> Text,

@@ -3,13 +3,14 @@ CREATE TABLE drive_files (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
     name TEXT NOT NULL,
-    type TEXT NOT NULL, -- MIME type
-    size BIGINT NOT NULL,
     parent_id UUID REFERENCES drive_files (id),
     removed_at TIMESTAMP WITH TIME ZONE,
+    size BIGINT NOT NULL,
+    type TEXT NOT NULL, -- MIME type
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
