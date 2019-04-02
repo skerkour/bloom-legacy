@@ -8,6 +8,8 @@ use kernel::{
 use crate::domain::{
     UploadSession,
     upload_session,
+    file,
+    File,
 };
 
 
@@ -32,6 +34,8 @@ impl Handler<CompleteUploadSession> for DbActor {
         use kernel::db::schema::{
             drive_upload_sessions,
             drive_upload_sessions_events,
+            drive_files,
+            drive_files_events,
         };
         use diesel::prelude::*;
 
@@ -47,15 +51,16 @@ impl Handler<CompleteUploadSession> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            // complete UplaodSession
             let metadata = EventMetadata{
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
+
+            // complete UplaodSession
             let complete_cmd = upload_session::Complete{
                 s3_bucket: msg.s3_bucket.clone(),
-                metadata,
+                metadata: metadata.clone(),
             };
             let (upload_session_to_update, event, _) = eventsourcing::execute(
                 &msg.s3_client, upload_session_to_update, &complete_cmd)?;
@@ -67,7 +72,23 @@ impl Handler<CompleteUploadSession> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            // TODO: uplaod file
+            // create file
+            let upload_cmd = file::Upload{
+                name: upload_session_to_update.file_name.clone(),
+                parent_id: upload_session_to_update.parent_id,
+                size: upload_session_to_update.size,
+                type_: upload_session_to_update.type_.clone(),
+                owner_id: upload_session_to_update.owner_id,
+                metadata,
+            };
+            let (uploaded_file, event, _) = eventsourcing::execute(&conn, File::new(), &upload_cmd)?;
+
+            diesel::insert_into(drive_files::dsl::drive_files)
+                .values(&uploaded_file)
+                .execute(&conn)?;
+            diesel::insert_into(drive_files_events::dsl::drive_files_events)
+                .values(&event)
+                .execute(&conn)?;
 
             return Ok(upload_session_to_update);
         })?);

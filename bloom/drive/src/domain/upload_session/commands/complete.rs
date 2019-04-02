@@ -1,5 +1,5 @@
 use rusoto_s3::{
-    PutObjectRequest,
+    HeadObjectRequest,
     S3,
 };
 use diesel::{
@@ -37,12 +37,21 @@ impl<'a> eventsourcing::Command<'a> for Complete {
     }
 
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         // TODO: HEAD request
 
+        let req = HeadObjectRequest {
+            bucket: self.s3_bucket.clone(),
+            key: format!("drive/{}/{}", aggregate.owner_id, aggregate.file_id),
+            ..Default::default()
+        };
+        // TODO: handle error + improve content type detection... currently it's done by the browser
+        let head_output = ctx.head_object(req).sync().expect("Couldn't PUT object");
+        println!("{:?}", head_output);
+
         let event_data = upload_session::EventData::CompletedV1(upload_session::CompletedV1{
-            size: 0,
-            type_: "application/octet-stream".to_string(),
+            size: head_output.content_length.expect("error getting content length"),
+            type_: head_output.content_type.expect("error getting content type"),
         });
 
         return  Ok((upload_session::Event{
