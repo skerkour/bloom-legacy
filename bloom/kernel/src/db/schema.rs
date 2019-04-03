@@ -33,7 +33,10 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
+        total_space -> Int8,
+        used_space -> Int8,
         account_id -> Uuid,
+        home_id -> Uuid,
     }
 }
 
@@ -362,6 +365,7 @@ table! {
 joinable!(bitflow_downloads -> drive_files (file_id));
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
+joinable!(bitflow_profiles -> drive_files (home_id));
 joinable!(bitflow_profiles -> kernel_accounts (account_id));
 joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
 joinable!(contacts_contacts -> kernel_accounts (owner_id));
