@@ -49,6 +49,8 @@ impl eventsourcing::Command for Download {
         let req = GetObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: key,
+            response_content_disposition: Some(format!(r#"attachment; filename="{}""#, &aggregate.name)),
+            response_content_type: Some(aggregate.type_.clone()),
             ..Default::default()
         };
         // TODO: handle error
