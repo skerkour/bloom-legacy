@@ -43,11 +43,15 @@ pub fn put((upload_data, req): (Json<models::CompleteUploadSessionBody>, HttpReq
     .and_then(move |file| {
         match file {
             Ok(file) => {
-                // let res = models::StartUploadSessionResponse{
-                //     id: upload_session.id,
-                //     presigned_url: upload_session.presigned_url,
-                // };
-                let res = api::Response::data(api::NoData{});
+               let file = models::FileBody{
+                    id: file.id,
+                    created_at: file.created_at,
+                    updated_at: file.updated_at,
+                    name: file.name,
+                    type_: file.type_,
+                    size: file.size,
+                };
+                let res = api::Response::data(file);
                 Ok(HttpResponse::Ok().json(&res))
             },
             Err(err) => Err(err),
