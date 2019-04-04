@@ -26,3 +26,27 @@ pub struct PorfileBody {
     pub total_space: i64,
     pub home: Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FileBody {
+    pub id: Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub updated_at: chrono::DateTime<chrono::Utc>,
+    pub name: String,
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub size: i64,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FolderBody {
+    pub id: Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub updated_at: chrono::DateTime<chrono::Utc>,
+    pub path: Vec<String>,
+    pub name: String,
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub size: i64,
+    pub children: Vec<FileBody>,
+}

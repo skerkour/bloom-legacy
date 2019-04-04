@@ -18,3 +18,6 @@ pub const DEFAULT_FOLDERS: [&'static str; 8] = [
     "Videos",
     "Projects",
 ];
+
+pub const BLOOM_ROOT_NAME: &str = "__BLOOM_ROOT";
+pub const FOLDER_TYPE: &str = "application/vnd.bloom.folder";

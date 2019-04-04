@@ -12,6 +12,8 @@ use crate::{
         profile,
     },
     DEFAULT_FOLDERS,
+    BLOOM_ROOT_NAME,
+    FOLDER_TYPE,
 };
 
 
@@ -37,8 +39,8 @@ impl eventsourcing::Subscription for AccountCreated {
 
             // create home
             let create_cmd = file::Create{
-                name: "__BLOOM_ROOT".to_string(),
-                type_: "application/vnd.bloom.folder".to_string(),
+                name: BLOOM_ROOT_NAME.to_string(),
+                type_: FOLDER_TYPE.to_string(),
                 parent_id: None,
                 size: 0,
                 owner_id: msg.aggregate_id,
@@ -73,7 +75,7 @@ impl eventsourcing::Subscription for AccountCreated {
             for default_folder in DEFAULT_FOLDERS.iter() {
                 let create_cmd = file::Create{
                     name: default_folder.to_string(),
-                    type_: "application/vnd.bloom.folder".to_string(),
+                    type_: FOLDER_TYPE.to_string(),
                     parent_id: Some(home.id),
                     size: 0,
                     owner_id: msg.aggregate_id,
