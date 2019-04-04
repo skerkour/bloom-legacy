@@ -51,3 +51,8 @@ pub struct FolderBody {
     pub size: i64,
     pub children: Vec<FileBody>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FileUrl {
+    pub url: String,
+}

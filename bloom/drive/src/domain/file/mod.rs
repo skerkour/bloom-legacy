@@ -10,10 +10,12 @@ pub use aggregate::{
 pub use commands::{
     Upload,
     Create,
+    Download,
 };
 pub use events::{
     Event,
     EventData,
     UploadedV1,
     CreatedV1,
+    DownloadedV1,
 };

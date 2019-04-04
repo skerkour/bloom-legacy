@@ -21,6 +21,7 @@ pub struct Event {
 pub enum EventData {
     UploadedV1(UploadedV1),
     CreatedV1(CreatedV1),
+    DownloadedV1(DownloadedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -43,6 +44,11 @@ pub struct CreatedV1 {
      #[serde(rename = "type")]
     pub type_: String, // MIME type
     pub owner_id: uuid::Uuid,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DownloadedV1 {
+    pub presigned_url: String,
 }
 
 
@@ -82,6 +88,10 @@ impl eventsourcing::Event for Event {
                 removed_at: None,
 
                 owner_id: data.owner_id,
+            },
+            // DownloadedV1
+            EventData::DownloadedV1(_) => super::File{
+                ..aggregate
             },
         }
     }

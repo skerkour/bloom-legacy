@@ -74,6 +74,7 @@ impl Handler<CompleteUploadSession> for DbActor {
 
             // create file
             let upload_cmd = file::Upload{
+                id: upload_session_to_update.file_id,
                 name: upload_session_to_update.file_name.clone(),
                 parent_id: upload_session_to_update.parent_id,
                 size: upload_session_to_update.size,

@@ -1,0 +1,75 @@
+use diesel::{
+    PgConnection,
+    r2d2::{PooledConnection, ConnectionManager},
+};
+use kernel::{
+    KernelError,
+    events::EventMetadata,
+};
+use rusoto_s3::{
+    GetObjectRequest,
+    util::PreSignedRequest,
+};
+use rusoto_core::{Region};
+use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
+use std::str::FromStr;
+use futures::future::Future;
+use crate::{
+    domain::file,
+    FOLDER_TYPE,
+};
+
+
+#[derive(Clone, Debug)]
+pub struct Download {
+    pub file_id: uuid::Uuid,
+    pub owner_id: uuid::Uuid,
+    pub s3_bucket: String,
+    pub s3_region: String,
+    pub metadata: EventMetadata,
+}
+
+impl eventsourcing::Command for Download {
+    type Aggregate = file::File;
+    type Event = file::Event;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
+    type Error = KernelError;
+    type NonStoredData = String;
+
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        if aggregate.type_ == FOLDER_TYPE {
+            return Err(KernelError::Validation("You can't download a folder".to_string()))
+        }
+        return Ok(());
+    }
+
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+
+        let key = format!("drive/{}/{}", self.owner_id, self.file_id);
+        let req = GetObjectRequest {
+            bucket: self.s3_bucket.clone(),
+            key: key,
+            ..Default::default()
+        };
+        // TODO: handle error
+        let region = Region::from_str(&self.s3_region).expect("AWS region not valid");
+        let credentials = EnvironmentProvider::default()
+            .credentials()
+            .wait()
+            .expect("error getting default credentials");
+        let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
+
+
+        let event_data = file::EventData::DownloadedV1(file::DownloadedV1{
+            presigned_url: presigned_url.clone(),
+        });;
+
+        return  Ok((file::Event{
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
+            data: event_data,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        }, presigned_url));
+    }
+}

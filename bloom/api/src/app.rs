@@ -108,6 +108,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/drive/v1/folders", |r| {
                 r.method(http::Method::GET).with(drivev1::folders::get);
             })
+            .resource("/drive/v1/files/{file_id}/url", |r| r.method(http::Method::GET).with(drivev1::files::url::get))
 
             .register()
     })

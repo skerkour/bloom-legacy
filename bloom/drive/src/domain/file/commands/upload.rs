@@ -14,6 +14,7 @@ use crate::{
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Upload {
+    pub id: uuid::Uuid,
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
@@ -36,10 +37,8 @@ impl eventsourcing::Command for Upload {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-
         let event_data = file::EventData::UploadedV1(file::UploadedV1{
-            id,
+            id: self.id,
             parent_id: self.parent_id,
             name: self.name.clone(),
             size: self.size,
@@ -51,7 +50,7 @@ impl eventsourcing::Command for Upload {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data: event_data,
-            aggregate_id: id,
+            aggregate_id: self.id,
             metadata: self.metadata.clone(),
         }, ()));
     }
