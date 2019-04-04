@@ -20,7 +20,7 @@ pub struct Create {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Create {
+impl eventsourcing::Command for Create {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
@@ -46,7 +46,7 @@ impl<'a> eventsourcing::Command<'a> for Create {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: self.owner_id,
+            aggregate_id: id,
             metadata: self.metadata.clone(),
         }, ()));
     }

@@ -19,7 +19,7 @@ pub struct Verify {
 }
 
 
-impl<'a> eventsourcing::Command<'a> for Verify {
+impl eventsourcing::Command for Verify {
     type Aggregate = pending_account::PendingAccount;
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

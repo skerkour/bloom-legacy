@@ -16,7 +16,7 @@ pub struct UpdateBirthday {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateBirthday {
+impl eventsourcing::Command for UpdateBirthday {
     type Aggregate = contact::Contact;
     type Event = contact::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

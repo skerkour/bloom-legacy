@@ -15,7 +15,7 @@ pub struct Delete {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Delete {
+impl eventsourcing::Command for Delete {
     type Aggregate = pending_email::PendingEmail;
     type Event = pending_email::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

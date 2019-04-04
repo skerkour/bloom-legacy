@@ -16,7 +16,7 @@ pub struct UpdateAvatar {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateAvatar {
+impl eventsourcing::Command for UpdateAvatar {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = rusoto_s3::S3Client;

@@ -15,7 +15,7 @@ pub struct SignOut {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for SignOut {
+impl eventsourcing::Command for SignOut {
     type Aggregate = session::Session;
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

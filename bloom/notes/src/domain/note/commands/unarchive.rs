@@ -17,7 +17,7 @@ pub struct Unarchive {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Unarchive {
+impl eventsourcing::Command for Unarchive {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

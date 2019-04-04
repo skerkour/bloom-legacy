@@ -16,7 +16,7 @@ pub struct CompleteRegistration {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for CompleteRegistration {
+impl eventsourcing::Command for CompleteRegistration {
     type Aggregate = pending_account::PendingAccount;
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

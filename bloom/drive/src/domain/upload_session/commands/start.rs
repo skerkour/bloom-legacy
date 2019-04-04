@@ -30,7 +30,7 @@ pub struct Start {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Start {
+impl eventsourcing::Command for Start {
     type Aggregate = upload_session::UploadSession;
     type Event = upload_session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

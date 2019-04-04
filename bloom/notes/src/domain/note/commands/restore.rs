@@ -17,7 +17,7 @@ pub struct Restore {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Restore {
+impl eventsourcing::Command for Restore {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

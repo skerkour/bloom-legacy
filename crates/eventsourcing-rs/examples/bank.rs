@@ -22,10 +22,10 @@ struct WithdrawFunds {
     amount: i64,
 }
 
-impl<'a> eventsourcing::Command<'a> for WithdrawFunds {
+impl eventsourcing::Command for WithdrawFunds {
     type Aggregate = Account;
     type Event = AccountEvent;
-    type Context = Ctx<'a>;
+    type Context = Ctx;
     type Error = String;
     type NonStoredData = ();
 
@@ -74,8 +74,8 @@ pub struct FundsDeposited {
     amount: i64,
 }
 
-pub struct Ctx<'a> {
-    pub x: &'a i32,
+pub struct Ctx {
+    pub x: i32,
 }
 
 impl eventsourcing::Event for AccountEvent {
@@ -100,7 +100,28 @@ impl eventsourcing::Event for AccountEvent {
 }
 
 
+// fn create_profile(_ctx: &Ctx, event: &AccountEvent) -> Result<(), String> {
+//     println!("event received: {:?}", event.data);
+//     return Ok(());
+// }
+
+
+struct CreateProfile;
+impl eventsourcing::Subscription for CreateProfile {
+    type Error = String;
+    type Message = AccountEvent;
+    type Context = Ctx;
+
+    fn handle(&self, _ctx: &Self::Context, msg: &Self::Message) -> Result<(), Self::Error> {
+        println!("account created: {}", msg.id);
+        return Ok(());
+    }
+}
+
+
 fn main() {
+    eventsourcing::subscribe::<_, AccountEvent, _>(Box::new(CreateProfile{}));
+
     let withdraw_cmd = WithdrawFunds{
         account: "SAVINGS100".to_string(),
         amount: 500,
@@ -114,7 +135,7 @@ fn main() {
     let initial_state2 = initial_state.clone();
 
     let x = 42;
-    let ctx = Ctx{x: &x};
+    let ctx = Ctx{x: x};
 
     let (current_state, event, _) = eventsourcing::execute(&ctx, initial_state, &withdraw_cmd)
         .expect("error execurting");

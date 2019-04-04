@@ -16,7 +16,7 @@ pub struct UpdateLastName {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateLastName {
+impl eventsourcing::Command for UpdateLastName {
     type Aggregate = contact::Contact;
     type Event = contact::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

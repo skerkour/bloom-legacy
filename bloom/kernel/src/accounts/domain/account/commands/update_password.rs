@@ -18,7 +18,7 @@ pub struct UpdatePassword {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdatePassword {
+impl eventsourcing::Command for UpdatePassword {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

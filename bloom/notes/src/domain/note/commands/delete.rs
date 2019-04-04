@@ -17,7 +17,7 @@ pub struct Delete {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Delete {
+impl eventsourcing::Command for Delete {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

@@ -17,7 +17,7 @@ pub struct Revoke {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Revoke {
+impl eventsourcing::Command for Revoke {
     type Aggregate = session::Session;
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

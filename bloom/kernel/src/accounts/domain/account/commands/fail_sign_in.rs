@@ -14,7 +14,7 @@ pub struct FailSignIn {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for FailSignIn {
+impl eventsourcing::Command for FailSignIn {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

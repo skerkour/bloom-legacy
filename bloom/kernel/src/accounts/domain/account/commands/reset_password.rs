@@ -19,7 +19,7 @@ pub struct ResetPassword {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for ResetPassword {
+impl eventsourcing::Command for ResetPassword {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

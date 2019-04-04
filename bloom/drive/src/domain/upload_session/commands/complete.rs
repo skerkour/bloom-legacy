@@ -24,7 +24,7 @@ pub struct Complete {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Complete {
+impl eventsourcing::Command for Complete {
     type Aggregate = upload_session::UploadSession;
     type Event = upload_session::Event;
     type Context = rusoto_s3::S3Client;

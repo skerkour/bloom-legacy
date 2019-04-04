@@ -19,7 +19,7 @@ pub struct UpdateTitle {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateTitle {
+impl eventsourcing::Command for UpdateTitle {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

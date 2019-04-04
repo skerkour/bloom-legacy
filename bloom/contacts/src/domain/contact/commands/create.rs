@@ -25,7 +25,7 @@ pub struct Create {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Create {
+impl eventsourcing::Command for Create {
     type Aggregate = contact::Contact;
     type Event = contact::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

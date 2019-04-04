@@ -24,7 +24,7 @@ pub struct CreateNonStored {
     pub code: String,
 }
 
-impl<'a> eventsourcing::Command<'a> for Create {
+impl eventsourcing::Command for Create {
     type Aggregate = pending_email::PendingEmail;
     type Event = pending_email::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

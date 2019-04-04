@@ -10,7 +10,13 @@ use kernel::{
     log::macros::{slog_info, slog_o},
     config,
     db,
+    accounts::domain::account,
 };
+
+
+fn register_reactors() {
+    eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated{}));
+}
 
 
 fn main() {
@@ -19,6 +25,8 @@ fn main() {
     let cfg = config::init();
     let db_actor_addr = db::init(&cfg);
     let binding_addr = format!("0.0.0.0:{}", cfg.port());
+
+    register_reactors();
 
     actix_server::new(move || app::init(db_actor_addr.clone(), cfg.clone()))
         .backlog(8192)

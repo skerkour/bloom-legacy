@@ -16,7 +16,7 @@ pub struct UpdateEmail {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for UpdateEmail {
+impl eventsourcing::Command for UpdateEmail {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

@@ -27,7 +27,7 @@ pub struct CreateNonStored {
 }
 
 
-impl<'a> eventsourcing::Command<'a> for Create {
+impl eventsourcing::Command for Create {
     type Aggregate = pending_account::PendingAccount;
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

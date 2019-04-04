@@ -24,7 +24,7 @@ pub struct RequestPasswordResetNonStored {
 }
 
 
-impl<'a> eventsourcing::Command<'a> for RequestPasswordReset {
+impl eventsourcing::Command for RequestPasswordReset {
     type Aggregate = account::Account;
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

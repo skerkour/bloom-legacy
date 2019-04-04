@@ -28,7 +28,7 @@ pub struct StartNonStored {
 }
 
 
-impl<'a> eventsourcing::Command<'a> for Start {
+impl eventsourcing::Command for Start {
     type Aggregate = session::Session;
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;

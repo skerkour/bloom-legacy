@@ -15,7 +15,7 @@ pub struct Archive {
     pub metadata: EventMetadata,
 }
 
-impl<'a> eventsourcing::Command<'a> for Archive {
+impl eventsourcing::Command for Archive {
     type Aggregate = note::Note;
     type Event = note::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
