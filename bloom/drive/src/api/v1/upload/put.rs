@@ -52,7 +52,7 @@ pub fn put((upload_data, req): (Json<models::CompleteUploadSessionBody>, HttpReq
                     size: file.size,
                 };
                 let res = api::Response::data(file);
-                Ok(HttpResponse::Ok().json(&res))
+                Ok(HttpResponse::Created().json(&res))
             },
             Err(err) => Err(err),
         }

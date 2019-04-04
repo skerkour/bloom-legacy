@@ -49,7 +49,7 @@ pub fn post((upload_data, req): (Json<models::StartUploadSessionBody>, HttpReque
                     presigned_url: upload_session.presigned_url,
                 };
                 let res = api::Response::data(res);
-                Ok(HttpResponse::Ok().json(&res))
+                Ok(HttpResponse::Created().json(&res))
             },
             Err(err) => Err(err),
         }
