@@ -126,9 +126,9 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        account_id -> Uuid,
         total_space -> Int8,
         used_space -> Int8,
+        account_id -> Uuid,
         home_id -> Uuid,
     }
 }

@@ -11,6 +11,7 @@ use crate::{
         file,
         profile,
     },
+    DEFAULT_FOLDERS,
 };
 
 
@@ -31,7 +32,7 @@ impl eventsourcing::Subscription for AccountCreated {
         };
         use diesel::prelude::*;
 
-        if let account::EventData::CreatedV1(ref data) = msg.data {
+        if let account::EventData::CreatedV1(ref _data) = msg.data {
             let metadata = msg.metadata.clone();
 
             // create home
@@ -67,6 +68,26 @@ impl eventsourcing::Subscription for AccountCreated {
             diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
                 .values(&event)
                 .execute(ctx)?;
+
+            // create all default folders
+            for default_folder in DEFAULT_FOLDERS.iter() {
+                let create_cmd = file::Create{
+                    name: default_folder.to_string(),
+                    type_: "application/vnd.bloom.folder".to_string(),
+                    parent_id: Some(home.id),
+                    size: 0,
+                    owner_id: msg.aggregate_id,
+                    metadata: metadata.clone(),
+                };
+                let (new_folder, event, _) = eventsourcing::execute(ctx, file::File::new(), &create_cmd)?;
+
+                diesel::insert_into(drive_files::dsl::drive_files)
+                    .values(&new_folder)
+                    .execute(ctx)?;
+                diesel::insert_into(drive_files_events::dsl::drive_files_events)
+                    .values(&event)
+                    .execute(ctx)?;
+            }
 
         }
 

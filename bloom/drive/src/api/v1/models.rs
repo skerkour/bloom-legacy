@@ -19,3 +19,10 @@ pub struct StartUploadSessionResponse {
 pub struct CompleteUploadSessionBody {
     pub upload_session_id: Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PorfileBody {
+    pub used_space: i64,
+    pub total_space: i64,
+    pub home: Uuid,
+}

@@ -22,6 +22,7 @@ pub struct Profile {
     pub home_id: uuid::Uuid,
 }
 
+
 impl Profile {
     // create a new, unitialized Profile
     pub fn new() -> Self {

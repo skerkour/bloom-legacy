@@ -104,6 +104,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::POST).with_config(drivev1::upload::post, api::json_default_config);
                 r.method(http::Method::PUT).with_config(drivev1::upload::put, api::json_default_config);
             })
+            .resource("/drive/v1/upload", |r| r.method(http::Method::GET).f(drivev1::me::get))
 
             .register()
     })
