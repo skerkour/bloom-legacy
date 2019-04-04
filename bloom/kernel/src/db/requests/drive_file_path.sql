@@ -41,6 +41,7 @@ AS (
 )
 SELECT * FROM menu_tree ORDER BY level;
 
+598d2876-967d-48fa-b17f-9ec75f58c623
 
 
 WITH ancestors AS (
@@ -55,3 +56,17 @@ WITH RECURSIVE tree AS (
   WHERE drive_files.parent_id = tree.id
 ) SELECT * FROM tree WHERE name = 'test3'
 ) SELECT drive_files.* FROM drive_files, ancestors WHERE drive_files.id = ANY(ancestors.ancestors);
+
+
+WITH ancestors AS (
+	WITH RECURSIVE tree AS (
+	  SELECT id, name, ARRAY[]::UUID[] AS ancestors
+	  FROM drive_files WHERE parent_id IS NULL
+
+	  UNION ALL
+
+	  SELECT drive_files.id, drive_files.name, tree.ancestors || drive_files.parent_id
+	  FROM drive_files, tree
+	  WHERE drive_files.parent_id = tree.id
+	) SELECT * FROM tree WHERE id = '1e29fa22-a0c4-4315-9364-411608851e01'
+) SELECT drive_files.id, drive_files.name FROM drive_files, ancestors WHERE drive_files.id = ANY(ancestors.ancestors);

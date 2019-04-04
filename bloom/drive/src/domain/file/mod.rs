@@ -5,6 +5,7 @@ mod commands;
 
 pub use aggregate::{
     File,
+    FolderPath,
 };
 pub use commands::{
     Upload,

@@ -4,10 +4,15 @@ use kernel::{
     db::DbActor,
     KernelError,
 };
+use diesel::{
+    sql_query,
+    pg::types::sql_types,
+};
 use crate::{
     domain,
     FOLDER_TYPE,
     BLOOM_ROOT_NAME,
+    domain::file::FolderPath,
 };
 
 
@@ -18,11 +23,11 @@ pub struct FindFolder {
 }
 
 impl Message for FindFolder {
-    type Result = Result<(String, domain::File, Vec<domain::File>), KernelError>;
+    type Result = Result<(Vec<FolderPath>, domain::File, Vec<domain::File>), KernelError>;
 }
 
 impl Handler<FindFolder> for DbActor {
-    type Result = Result<(String, domain::File, Vec<domain::File>), KernelError>;
+    type Result = Result<(Vec<FolderPath>, domain::File, Vec<domain::File>), KernelError>;
 
     fn handle(&mut self, msg: FindFolder, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
@@ -62,7 +67,9 @@ impl Handler<FindFolder> for DbActor {
             .filter(drive_files::dsl::removed_at.is_null())
             .load(&conn)?;
 
-        let path = BLOOM_ROOT_NAME.to_string();
+        let path: Vec<FolderPath> = sql_query(include_str!("../../sql_requests/path.sql"))
+            .bind::<sql_types::Uuid, _>(folder.id)
+            .load(&conn)?;
 
         return Ok((path, folder, children));
     }

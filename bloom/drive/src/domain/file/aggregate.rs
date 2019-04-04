@@ -25,6 +25,13 @@ pub struct File {
     pub owner_id: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, QueryableByName, Serialize)]
+#[table_name = "drive_files"]
+pub struct FolderPath {
+    pub id: uuid::Uuid,
+    pub name: String,
+}
+
 impl File {
     // create a new, unitialized File
     pub fn new() -> Self {

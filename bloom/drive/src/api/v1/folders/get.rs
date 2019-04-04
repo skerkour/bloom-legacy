@@ -50,11 +50,20 @@ pub fn get((query_params, req): (Query<QueryParams>, HttpRequest<api::State>)) -
                     id: folder.id,
                     created_at: folder.created_at,
                     updated_at: folder.updated_at,
-                    path: vec!(path),
+                    path,
                     name: folder.name,
                     type_: folder.type_,
                     size: folder.size,
-                    children: Vec::new(),
+                    children: children.into_iter().map(|file|
+                        models::FileBody{
+                            id: file.id,
+                            created_at: file.created_at,
+                            updated_at: file.updated_at,
+                            name: file.name,
+                            type_: file.type_,
+                            size: file.size,
+                        }
+                    ).collect(),
                 };
                 let res = api::Response::data(folder);
                 Ok(HttpResponse::Ok().json(&res))

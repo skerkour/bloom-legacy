@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
+use crate::domain;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -43,7 +44,7 @@ pub struct FolderBody {
     pub id: Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
-    pub path: Vec<String>,
+    pub path: Vec<domain::file::FolderPath>,
     pub name: String,
     #[serde(rename = "type")]
     pub type_: String,
