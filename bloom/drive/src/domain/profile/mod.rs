@@ -7,6 +7,7 @@ pub use aggregate::{
     Profile,
 };
 pub use commands::{
+    Create,
 };
 pub use events::{
     Event,

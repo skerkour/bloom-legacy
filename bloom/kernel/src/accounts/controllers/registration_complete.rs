@@ -94,6 +94,8 @@ impl Handler<CompleteRegistration> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
+            eventsourcing::publish::<_, _, KernelError>(&conn, &event)?;
+
             // start Session
             let metadata = EventMetadata{
                 actor_id: Some(new_account.id),

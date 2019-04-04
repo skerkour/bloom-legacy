@@ -150,7 +150,7 @@ pub fn execute<A, CTX, CMD, Ev, Err, D>(ctx: &CTX, aggregate: A, cmd: &CMD)
     let mut aggregate = event.apply(aggregate);
     aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
-    publish::<_, _, Err>(ctx, &event)?;
+    // publish::<_, _, Err>(ctx, &event)?;
     return Ok((aggregate, event, non_stored_data));
 }
 // pub fn execute execute<A, C, E, ED>(conn: &PgConnection, aggregate: &mut A, cmd: C, event: &mut E)() -> Result<(Aggregate)

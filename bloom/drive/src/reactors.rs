@@ -26,32 +26,51 @@ impl eventsourcing::Subscription for AccountCreated {
         use kernel::db::schema::{
             drive_files,
             drive_files_events,
+            drive_profiles,
+            drive_profiles_events,
         };
         use diesel::prelude::*;
-        // create home
 
         if let account::EventData::CreatedV1(ref data) = msg.data {
             let metadata = msg.metadata.clone();
+
+            // create home
             let create_cmd = file::Create{
                 name: "__BLOOM_ROOT".to_string(),
                 type_: "application/vnd.bloom.folder".to_string(),
                 parent_id: None,
                 size: 0,
                 owner_id: msg.aggregate_id,
-                metadata,
+                metadata: metadata.clone(),
             };
-            let (note, event, _) = eventsourcing::execute(ctx, file::File::new(), &create_cmd)?;
+            let (home, event, _) = eventsourcing::execute(ctx, file::File::new(), &create_cmd)?;
 
             diesel::insert_into(drive_files::dsl::drive_files)
-                .values(&note)
+                .values(&home)
                 .execute(ctx)?;
             diesel::insert_into(drive_files_events::dsl::drive_files_events)
                 .values(&event)
                 .execute(ctx)?;
 
+
+            // create drive profile
+            let create_cmd = profile::Create{
+                account_id: msg.aggregate_id,
+                home_id: home.id,
+                metadata: metadata.clone(),
+            };
+            let (new_profile, event, _) = eventsourcing::execute(ctx, profile::Profile::new(), &create_cmd)?;
+
+            diesel::insert_into(drive_profiles::dsl::drive_profiles)
+                .values(&new_profile)
+                .execute(ctx)?;
+            diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
+                .values(&event)
+                .execute(ctx)?;
+
         }
 
-        // create drive profile
+
         return Ok(());
     }
 }
