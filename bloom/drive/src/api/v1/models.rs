@@ -56,3 +56,10 @@ pub struct FolderBody {
 pub struct FileUrl {
     pub url: String,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CreateFolderBody {
+    pub name: String,
+    pub parent_id: Uuid,
+}
