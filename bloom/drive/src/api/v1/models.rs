@@ -63,3 +63,8 @@ pub struct CreateFolderBody {
     pub name: String,
     pub parent_id: Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct MoveBody {
+    pub to: Uuid,
+}

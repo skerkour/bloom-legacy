@@ -11,6 +11,7 @@ pub use commands::{
     Upload,
     Create,
     Download,
+    Move,
 };
 pub use events::{
     Event,
@@ -18,4 +19,5 @@ pub use events::{
     UploadedV1,
     CreatedV1,
     DownloadedV1,
+    MovedV1,
 };

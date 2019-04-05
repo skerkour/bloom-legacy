@@ -22,6 +22,7 @@ pub enum EventData {
     UploadedV1(UploadedV1),
     CreatedV1(CreatedV1),
     DownloadedV1(DownloadedV1),
+    MovedV1(MovedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -49,6 +50,11 @@ pub struct CreatedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DownloadedV1 {
     pub presigned_url: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct MovedV1 {
+    pub to: uuid::Uuid,
 }
 
 
@@ -91,6 +97,11 @@ impl eventsourcing::Event for Event {
             },
             // DownloadedV1
             EventData::DownloadedV1(_) => super::File{
+                ..aggregate
+            },
+            // MovedV1
+            EventData::MovedV1(ref data) => super::File{
+                parent_id: Some(data.to),
                 ..aggregate
             },
         }
