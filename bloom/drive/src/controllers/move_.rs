@@ -16,18 +16,18 @@ use crate::{
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Move {
     pub to: uuid::Uuid,
-    pub file_id: uuid::Uuid,
+    pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
 impl Message for Move {
-    type Result = Result<file::File, KernelError>;
+    type Result = Result<(), KernelError>;
 }
 
 impl Handler<Move> for DbActor {
-    type Result = Result<file::File, KernelError>;
+    type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: Move, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
@@ -41,32 +41,35 @@ impl Handler<Move> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
 
-            let file_to_move: domain::File = drive_files::dsl::drive_files
-                .filter(drive_files::dsl::id.eq(msg.file_id))
-                .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
-                .filter(drive_files::dsl::deleted_at.is_null())
-                .filter(drive_files::dsl::removed_at.is_null())
-                .first(&conn)?;
-
             let metadata = EventMetadata{
                 actor_id: Some(msg.owner_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 
-            let create_cmd = file::Move{
-                to: msg.to,
-                metadata: metadata.clone(),
-            };
-            let (file_to_move, event, _) = eventsourcing::execute(&conn, file_to_move, &create_cmd)?;
-            diesel::update(&file_to_move)
-                .set(&file_to_move)
-                .execute(&conn)?;
-            diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                .values(&event)
-                .execute(&conn)?;
+            for file_id in msg.files.into_iter() {
 
-            return Ok(file_to_move);
+                let file_to_move: domain::File = drive_files::dsl::drive_files
+                    .filter(drive_files::dsl::id.eq(file_id))
+                    .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
+                    .filter(drive_files::dsl::deleted_at.is_null())
+                    .filter(drive_files::dsl::removed_at.is_null())
+                    .first(&conn)?;
+
+                let create_cmd = file::Move{
+                    to: msg.to,
+                    metadata: metadata.clone(),
+                };
+                let (file_to_move, event, _) = eventsourcing::execute(&conn, file_to_move, &create_cmd)?;
+                diesel::update(&file_to_move)
+                    .set(&file_to_move)
+                    .execute(&conn)?;
+                diesel::insert_into(drive_files_events::dsl::drive_files_events)
+                    .values(&event)
+                    .execute(&conn)?;
+            }
+
+            return Ok(());
         })?);
     }
 }

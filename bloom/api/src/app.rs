@@ -110,7 +110,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::POST).with_config(drivev1::folders::post, api::json_default_config);
             })
             .resource("/drive/v1/files/{file_id}/url", |r| r.method(http::Method::GET).with(drivev1::files::url::get))
-            .resource("/drive/v1/files/{file_id}/move", |r| r.method(http::Method::POST).with_config(drivev1::files::move_::post, api::json_default_config_path))
+            .resource("/drive/v1/files/move", |r| r.method(http::Method::POST).with_config(drivev1::files::move_::post, api::json_default_config))
 
             .register()
     })

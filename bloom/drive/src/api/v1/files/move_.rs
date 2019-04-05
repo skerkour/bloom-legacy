@@ -19,7 +19,7 @@ use crate::{
 };
 
 
-pub fn post((file_id, move_data, req): (Path<(uuid::Uuid)>, Json<models::MoveBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn post((move_data, req): (Json<models::MoveBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
@@ -32,26 +32,18 @@ pub fn post((file_id, move_data, req): (Path<(uuid::Uuid)>, Json<models::MoveBod
 
     return state.db
     .send(controllers::Move{
+        files: move_data.files.clone(),
         to: move_data.to.clone(),
-        file_id: file_id.clone(),
         owner_id: auth.account.expect("error unwraping non none account").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })
     .from_err()
-    .and_then(move |moved_file| {
-        match moved_file {
-            Ok(moved_file) => {
-                let res = models::FileBody{
-                    id: moved_file.id,
-                    created_at: moved_file.created_at,
-                    updated_at: moved_file.updated_at,
-                    name: moved_file.name,
-                    type_: moved_file.type_,
-                    size: moved_file.size,
-                };
-                let res = api::Response::data(res);
-                Ok(HttpResponse::Created().json(&res))
+    .and_then(move |res| {
+        match res {
+            Ok(_) => {
+                let res = api::Response::data(api::NoData{});
+                Ok(HttpResponse::Ok().json(&res))
             },
             Err(err) => Err(err),
         }
