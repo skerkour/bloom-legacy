@@ -49,7 +49,7 @@ pub struct FolderBody {
     #[serde(rename = "type")]
     pub type_: String,
     pub size: i64,
-    pub children: Vec<FileBody>,
+    pub files: Vec<FileBody>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

@@ -54,7 +54,7 @@ pub fn get((query_params, req): (Query<QueryParams>, HttpRequest<api::State>)) -
                     name: folder.name,
                     type_: folder.type_,
                     size: folder.size,
-                    children: children.into_iter().map(|file|
+                    files: children.into_iter().map(|file|
                         models::FileBody{
                             id: file.id,
                             created_at: file.created_at,
