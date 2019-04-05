@@ -9,4 +9,4 @@ WITH ancestors AS (
         FROM drive_files, tree
         WHERE drive_files.parent_id = tree.id
     ) SELECT * FROM tree WHERE id = $1
-) SELECT drive_files.id, drive_files.name FROM drive_files, ancestors WHERE drive_files.id = ANY(ancestors.ancestors);
+) SELECT drive_files.id, drive_files.name FROM drive_files, ancestors WHERE drive_files.id = ANY(ancestors.ancestors) OR drive_files.id = $1;

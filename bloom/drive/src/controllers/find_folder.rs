@@ -67,9 +67,13 @@ impl Handler<FindFolder> for DbActor {
             .filter(drive_files::dsl::removed_at.is_null())
             .load(&conn)?;
 
-        let path: Vec<FolderPath> = sql_query(include_str!("../../sql_requests/file_path.sql"))
+        let mut path: Vec<FolderPath> = sql_query(include_str!("../../sql_requests/file_path.sql"))
             .bind::<sql_types::Uuid, _>(folder.id)
             .load(&conn)?;
+        // path.push(FolderPath{
+        //     id: folder.id,
+        //     name: folder.name.clone(),
+        // });
 
         return Ok((path, folder, children));
     }
