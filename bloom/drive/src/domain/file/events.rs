@@ -23,7 +23,7 @@ pub enum EventData {
     CreatedV1(CreatedV1),
     DownloadedV1(DownloadedV1),
     MovedV1(MovedV1),
-    TrashedV1,
+    TrashedV1(TrashedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

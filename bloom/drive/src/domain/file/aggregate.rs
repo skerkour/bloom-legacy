@@ -15,7 +15,7 @@ pub struct File {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    explicitly_trashed: bool,
+    pub explicitly_trashed: bool,
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,

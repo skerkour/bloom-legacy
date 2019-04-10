@@ -14,11 +14,11 @@ use crate::{
 
 #[derive(Clone, Debug)]
 pub struct Trash {
-    pub explicitely_trashed: bool,
+    pub explicitly_trashed: bool,
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for Move {
+impl eventsourcing::Command for Trash {
     type Aggregate = file::File;
     type Event = file::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
@@ -32,7 +32,7 @@ impl eventsourcing::Command for Move {
         };
         use diesel::prelude::*;
 
-        if aggregate.is_some() {
+        if aggregate.trashed_at.is_some() {
             return Err(KernelError::Validation("File is already in trash".to_string()))
         }
 
@@ -41,7 +41,7 @@ impl eventsourcing::Command for Move {
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let event_data = file::EventData::TrashedV1(file::TrashedV1{
-            explicitely_trashed: self.explicitely_trashed,
+            explicitly_trashed: self.explicitly_trashed,
         });;
 
         return  Ok((file::Event{

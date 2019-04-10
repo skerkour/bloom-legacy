@@ -56,7 +56,7 @@ impl Handler<TrashFiles> for DbActor {
                     .first(&conn)?;
 
                 let create_cmd = file::Trash{
-                    explicitely_trashed: true,
+                    explicitly_trashed: true,
                     metadata: metadata.clone(),
                 };
                 let (file_to_trash, event, _) = eventsourcing::execute(&conn, file_to_trash, &create_cmd)?;

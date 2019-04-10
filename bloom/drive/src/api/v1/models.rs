@@ -69,3 +69,8 @@ pub struct MoveBody {
     pub files: Vec<Uuid>,
     pub to: Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct TrashFilesBody {
+    pub files: Vec<Uuid>,
+}
