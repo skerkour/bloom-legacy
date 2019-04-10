@@ -12,6 +12,7 @@ pub use commands::{
     Create,
     Download,
     Move,
+    Trash,
 };
 pub use events::{
     Event,
@@ -20,4 +21,5 @@ pub use events::{
     CreatedV1,
     DownloadedV1,
     MovedV1,
+    TrashedV1,
 };

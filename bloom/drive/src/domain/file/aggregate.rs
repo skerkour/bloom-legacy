@@ -15,6 +15,7 @@ pub struct File {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
+    explicitly_trashed: bool,
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
@@ -43,6 +44,7 @@ impl File {
             deleted_at: None,
             version: 0,
 
+            explicitly_trashed: false,
             name: String::new(),
             parent_id: None,
             trashed_at: None,

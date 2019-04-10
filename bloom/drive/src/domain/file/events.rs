@@ -58,6 +58,11 @@ pub struct MovedV1 {
     pub to: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct TrashedV1 {
+    pub explicitly_trashed: bool,
+}
+
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::File;
@@ -72,6 +77,7 @@ impl eventsourcing::Event for Event {
                 deleted_at: None,
                 version: 0,
 
+                explicitly_trashed: false,
                 name: data.name.clone(),
                 parent_id: data.parent_id,
                 size: data.size,
@@ -88,6 +94,7 @@ impl eventsourcing::Event for Event {
                 deleted_at: None,
                 version: 0,
 
+                explicitly_trashed: false,
                 name: data.name.clone(),
                 parent_id: data.parent_id,
                 size: data.size,
@@ -106,7 +113,8 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // TrashedV1
-            EventData::TrashedV1 => super::File{
+            EventData::TrashedV1(ref data) => super::File{
+                explicitly_trashed: data.explicitly_trashed,
                 trashed_at: Some(self.timestamp),
                 ..aggregate
             },

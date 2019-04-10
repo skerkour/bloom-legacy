@@ -47,7 +47,6 @@ impl eventsourcing::Subscription for AccountCreated {
                 metadata: metadata.clone(),
             };
             let (home, event, _) = eventsourcing::execute(ctx, file::File::new(), &create_cmd)?;
-
             diesel::insert_into(drive_files::dsl::drive_files)
                 .values(&home)
                 .execute(ctx)?;

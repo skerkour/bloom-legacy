@@ -11,7 +11,6 @@ CREATE TABLE drive_profiles (
 
     account_id UUID NOT NULL REFERENCES kernel_accounts(id),
     home_id UUID NOT NULL REFERENCES drive_files (id),
-    trash_id UUID NOT NULL REFERENCES drive_files (id),
 
     PRIMARY KEY(id)
 );

@@ -6,6 +6,7 @@ CREATE TABLE drive_files (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
+    explicitly_trashed BOOLEAN NOT NULL,
     name TEXT NOT NULL,
     parent_id UUID REFERENCES drive_files (id),
     size BIGINT NOT NULL,

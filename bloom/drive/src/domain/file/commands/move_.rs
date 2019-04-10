@@ -32,7 +32,7 @@ impl eventsourcing::Command for Move {
         };
         use diesel::prelude::*;
 
-
+        // fetch new parent
         let new_parent: file::File = drive_files::dsl::drive_files
             .filter(drive_files::dsl::id.eq(self.to))
             .filter(drive_files::dsl::owner_id.eq(aggregate.owner_id))

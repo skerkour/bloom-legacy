@@ -99,6 +99,7 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
+        explicitly_trashed -> Bool,
         name -> Text,
         parent_id -> Nullable<Uuid>,
         size -> Int8,
@@ -130,7 +131,6 @@ table! {
         used_space -> Int8,
         account_id -> Uuid,
         home_id -> Uuid,
-        trash_id -> Uuid,
     }
 }
 
@@ -373,6 +373,7 @@ joinable!(contacts_contacts -> kernel_accounts (owner_id));
 joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
 joinable!(drive_files -> kernel_accounts (owner_id));
 joinable!(drive_files_events -> drive_files (aggregate_id));
+joinable!(drive_profiles -> drive_files (home_id));
 joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
 joinable!(drive_upload_sessions -> drive_files (parent_id));
