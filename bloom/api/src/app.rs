@@ -114,6 +114,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/drive/v1/trash", |r| {
                 r.method(http::Method::GET).f(drivev1::trash::get);
                 r.method(http::Method::POST).with_config(drivev1::trash::post, api::json_default_config);
+                r.method(http::Method::DELETE).with_config(drivev1::trash::delete, api::json_default_config);
             })
 
             .register()

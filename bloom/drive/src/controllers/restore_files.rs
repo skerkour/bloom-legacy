@@ -14,22 +14,22 @@ use crate::{
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct TrashFiles {
+pub struct RestoreFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
 
-impl Message for TrashFiles {
+impl Message for RestoreFiles {
     type Result = Result<(), KernelError>;
 }
 
-// TODO: recursively trash
-impl Handler<TrashFiles> for DbActor {
+// TODO: recursively restore
+impl Handler<RestoreFiles> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: TrashFiles, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: RestoreFiles, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             drive_files,
             drive_files_events,
@@ -49,19 +49,18 @@ impl Handler<TrashFiles> for DbActor {
 
             for file_id in msg.files.into_iter() {
 
-                let file_to_trash: domain::File = drive_files::dsl::drive_files
+                let file_to_restore: domain::File = drive_files::dsl::drive_files
                     .filter(drive_files::dsl::id.eq(file_id))
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                     .filter(drive_files::dsl::deleted_at.is_null())
                     .first(&conn)?;
 
-                let trash_cmd = file::Trash{
-                    explicitly_trashed: true,
+                let restore_cmd = file::Restore{
                     metadata: metadata.clone(),
                 };
-                let (file_to_trash, event, _) = eventsourcing::execute(&conn, file_to_trash, &trash_cmd)?;
-                diesel::update(&file_to_trash)
-                    .set(&file_to_trash)
+                let (file_to_restore, event, _) = eventsourcing::execute(&conn, file_to_restore, &restore_cmd)?;
+                diesel::update(&file_to_restore)
+                    .set(&file_to_restore)
                     .execute(&conn)?;
                 diesel::insert_into(drive_files_events::dsl::drive_files_events)
                     .values(&event)

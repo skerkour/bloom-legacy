@@ -13,6 +13,7 @@ pub use commands::{
     Download,
     Move,
     Trash,
+    Restore,
 };
 pub use events::{
     Event,
