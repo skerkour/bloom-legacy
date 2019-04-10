@@ -45,7 +45,7 @@ impl Handler<CreateFolder> for DbActor {
                 .filter(drive_files::dsl::id.eq(msg.parent_id))
                 .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                 .filter(drive_files::dsl::deleted_at.is_null())
-                .filter(drive_files::dsl::removed_at.is_null())
+                .filter(drive_files::dsl::trashed_at.is_null())
                 .first(&conn)?;
 
             let metadata = EventMetadata{

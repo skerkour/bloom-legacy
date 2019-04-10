@@ -23,6 +23,7 @@ pub enum EventData {
     CreatedV1(CreatedV1),
     DownloadedV1(DownloadedV1),
     MovedV1(MovedV1),
+    TrashedV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -75,7 +76,7 @@ impl eventsourcing::Event for Event {
                 parent_id: data.parent_id,
                 size: data.size,
                 type_: data.type_.clone(),
-                removed_at: None,
+                trashed_at: None,
 
                 owner_id: data.owner_id,
             },
@@ -91,7 +92,7 @@ impl eventsourcing::Event for Event {
                 parent_id: data.parent_id,
                 size: data.size,
                 type_: data.type_.clone(),
-                removed_at: None,
+                trashed_at: None,
 
                 owner_id: data.owner_id,
             },
@@ -102,6 +103,11 @@ impl eventsourcing::Event for Event {
             // MovedV1
             EventData::MovedV1(ref data) => super::File{
                 parent_id: Some(data.to),
+                ..aggregate
+            },
+            // TrashedV1
+            EventData::TrashedV1 => super::File{
+                trashed_at: Some(self.timestamp),
                 ..aggregate
             },
         }

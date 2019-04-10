@@ -17,8 +17,8 @@ pub struct File {
 
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
-    pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
     pub size: i64,
+    pub trashed_at: Option<chrono::DateTime<chrono::Utc>>,
      #[serde(rename = "type")]
     pub type_: String, // MIME type
 
@@ -45,7 +45,7 @@ impl File {
 
             name: String::new(),
             parent_id: None,
-            removed_at: None,
+            trashed_at: None,
             size: 0,
             type_: String::new(),
 

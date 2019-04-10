@@ -41,7 +41,7 @@ impl Handler<FindTrashed> for DbActor {
         let trashed: Vec<domain::File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
             .filter(drive_files::dsl::deleted_at.is_null())
-            .filter(drive_files::dsl::removed_at.is_not_null())
+            .filter(drive_files::dsl::trashed_at.is_not_null())
             .load(&conn)?;
 
         return Ok(trashed);

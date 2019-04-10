@@ -8,8 +8,8 @@ CREATE TABLE drive_files (
 
     name TEXT NOT NULL,
     parent_id UUID REFERENCES drive_files (id),
-    removed_at TIMESTAMP WITH TIME ZONE,
     size BIGINT NOT NULL,
+    trashed_at TIMESTAMP WITH TIME ZONE,
     type TEXT NOT NULL, -- MIME type
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts (id),

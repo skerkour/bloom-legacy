@@ -101,8 +101,8 @@ table! {
         version -> Int8,
         name -> Text,
         parent_id -> Nullable<Uuid>,
-        removed_at -> Nullable<Timestamptz>,
         size -> Int8,
+        trashed_at -> Nullable<Timestamptz>,
         #[sql_name = "type"]
         type_ -> Text,
         owner_id -> Uuid,
@@ -130,6 +130,7 @@ table! {
         used_space -> Int8,
         account_id -> Uuid,
         home_id -> Uuid,
+        trash_id -> Uuid,
     }
 }
 
@@ -372,7 +373,6 @@ joinable!(contacts_contacts -> kernel_accounts (owner_id));
 joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
 joinable!(drive_files -> kernel_accounts (owner_id));
 joinable!(drive_files_events -> drive_files (aggregate_id));
-joinable!(drive_profiles -> drive_files (home_id));
 joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
 joinable!(drive_upload_sessions -> drive_files (parent_id));
