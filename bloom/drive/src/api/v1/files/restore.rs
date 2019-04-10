@@ -19,7 +19,7 @@ use crate::{
 };
 
 
-pub fn delete((restore_data, req): (Json<models::RestoreFilesBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn post((restore_data, req): (Json<models::RestoreFilesBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
