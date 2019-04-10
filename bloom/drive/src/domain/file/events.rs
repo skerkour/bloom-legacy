@@ -25,6 +25,7 @@ pub enum EventData {
     MovedV1(MovedV1),
     TrashedV1(TrashedV1),
     RestoredV1,
+    DeletedV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -123,6 +124,13 @@ impl eventsourcing::Event for Event {
             EventData::RestoredV1 => super::File{
                 explicitly_trashed: false,
                 trashed_at: None,
+                ..aggregate
+            },
+            // DeletedV1
+            EventData::DeletedV1 => super::File{
+                explicitly_trashed: false,
+                trashed_at: None,
+                deleted_at: Some(self.timestamp),
                 ..aggregate
             },
         }

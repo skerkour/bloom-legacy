@@ -58,11 +58,11 @@ impl Handler<CreateFolder> for DbActor {
                 name: msg.name,
                 type_: FOLDER_TYPE.to_string(),
                 size: 0,
-                parent_id: Some(msg.parent_id),
+                parent_id: Some(parent.id),
                 owner_id: msg.owner_id,
                 metadata: metadata.clone(),
             };
-            let (new_folder, event, presigned_url) = eventsourcing::execute(&conn, file::File::new(), &create_cmd)?;
+            let (new_folder, event, _) = eventsourcing::execute(&conn, file::File::new(), &create_cmd)?;
             diesel::insert_into(drive_files::dsl::drive_files)
                 .values(&new_folder)
                 .execute(&conn)?;

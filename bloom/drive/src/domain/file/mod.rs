@@ -14,6 +14,7 @@ pub use commands::{
     Move,
     Trash,
     Restore,
+    Delete,
 };
 pub use events::{
     Event,
