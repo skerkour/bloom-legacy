@@ -113,6 +113,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/drive/v1/files/move", |r| r.method(http::Method::POST).with_config(drivev1::files::move_::post, api::json_default_config))
             .resource("/drive/v1/files/restore", |r| r.method(http::Method::POST).with_config(drivev1::files::restore::post, api::json_default_config))
             .resource("/drive/v1/files/delete", |r| r.method(http::Method::POST).with_config(drivev1::files::delete::post, api::json_default_config))
+            .resource("/drive/v1/files/copy", |r| r.method(http::Method::POST).with_config(drivev1::files::copy::post, api::json_default_config))
             .resource("/drive/v1/trash", |r| {
                 r.method(http::Method::GET).f(drivev1::trash::get);
                 r.method(http::Method::POST).with_config(drivev1::trash::post, api::json_default_config);

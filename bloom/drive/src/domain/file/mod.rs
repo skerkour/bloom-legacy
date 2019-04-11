@@ -15,6 +15,7 @@ pub use commands::{
     Trash,
     Restore,
     Delete,
+    Copy_,
 };
 pub use events::{
     Event,
@@ -24,4 +25,5 @@ pub use events::{
     DownloadedV1,
     MovedV1,
     TrashedV1,
+    CopiedV1,
 };

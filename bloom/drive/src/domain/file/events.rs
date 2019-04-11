@@ -26,6 +26,7 @@ pub enum EventData {
     TrashedV1(TrashedV1),
     RestoredV1,
     DeletedV1,
+    CopiedV1(CopiedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -57,12 +58,18 @@ pub struct DownloadedV1 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct MovedV1 {
-    pub to: uuid::Uuid,
+    pub to: uuid::Uuid, // new parent
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct TrashedV1 {
     pub explicitly_trashed: bool,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CopiedV1 {
+    pub to: uuid::Uuid, // new parent
+    pub new_file: uuid::Uuid,
 }
 
 
@@ -131,6 +138,10 @@ impl eventsourcing::Event for Event {
                 explicitly_trashed: false,
                 trashed_at: None,
                 deleted_at: Some(self.timestamp),
+                ..aggregate
+            },
+            // CopiedV1
+            EventData::CopiedV1(_) => super::File{
                 ..aggregate
             },
         }

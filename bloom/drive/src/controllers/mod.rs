@@ -9,6 +9,7 @@ mod find_trashed;
 mod trash_files;
 mod restore_files;
 mod delete_files;
+mod copy_files;
 
 
 pub use start_upload_session::StartUploadSession;
@@ -22,3 +23,4 @@ pub use find_trashed::FindTrashed;
 pub use trash_files::TrashFiles;
 pub use restore_files::RestoreFiles;
 pub use delete_files::DeleteFiles;
+pub use copy_files::CopyFiles;

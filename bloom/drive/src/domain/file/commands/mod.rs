@@ -5,6 +5,7 @@ mod move_;
 mod trash;
 mod restore;
 mod delete;
+mod copy;
 
 
 pub use upload::Upload;
@@ -14,3 +15,4 @@ pub use move_::Move;
 pub use trash::Trash;
 pub use restore::Restore;
 pub use delete::Delete;
+pub use copy::Copy_;

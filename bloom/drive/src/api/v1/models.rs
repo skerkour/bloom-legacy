@@ -84,3 +84,10 @@ pub struct RestoreFilesBody {
 pub struct DeleteFilesBody {
     pub files: Vec<Uuid>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CopyFilesBody {
+    pub to: Uuid,
+    pub files: Vec<Uuid>,
+}
+

@@ -13,23 +13,25 @@ use crate::{
 };
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Move {
+#[derive(Clone)]
+pub struct CopyFiles {
     pub to: uuid::Uuid,
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
+    pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
 }
 
-impl Message for Move {
+impl Message for CopyFiles {
     type Result = Result<(), KernelError>;
 }
 
-impl Handler<Move> for DbActor {
+impl Handler<CopyFiles> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: Move, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: CopyFiles, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             drive_files,
             drive_files_events,
@@ -49,20 +51,41 @@ impl Handler<Move> for DbActor {
 
             for file_id in msg.files.into_iter() {
 
-                let file_to_move: domain::File = drive_files::dsl::drive_files
+                let file_to_copy: domain::File = drive_files::dsl::drive_files
                     .filter(drive_files::dsl::id.eq(file_id))
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                     .filter(drive_files::dsl::deleted_at.is_null())
                     .filter(drive_files::dsl::trashed_at.is_null())
                     .first(&conn)?;
 
-                let move_cmd = file::Move{
-                    to: msg.to,
+                // create new file
+                let create_cmd = file::Create{
+                    name: file_to_copy.name.clone(),
+                    type_: file_to_copy.type_.clone(),
+                    size: file_to_copy.size,
+                    parent_id: Some(msg.to),
+                    owner_id: file_to_copy.owner_id,
                     metadata: metadata.clone(),
                 };
-                let (file_to_move, event, _) = eventsourcing::execute(&conn, file_to_move, &move_cmd)?;
-                diesel::update(&file_to_move)
-                    .set(&file_to_move)
+                let (new_file, event, _) = eventsourcing::execute(&conn, file::File::new(), &create_cmd)?;
+                diesel::insert_into(drive_files::dsl::drive_files)
+                    .values(&new_file)
+                    .execute(&conn)?;
+                diesel::insert_into(drive_files_events::dsl::drive_files_events)
+                    .values(&event)
+                    .execute(&conn)?;
+
+                // copy file
+                let copy_cmd = file::Copy_{
+                    to: msg.to,
+                    new_file: new_file.id,
+                    s3_client: msg.s3_client.clone(),
+                    s3_bucket: msg.s3_bucket.clone(),
+                    metadata: metadata.clone(),
+                };
+                let (file_to_copy, event, _) = eventsourcing::execute(&conn, file_to_copy, &copy_cmd)?;
+                diesel::update(&file_to_copy)
+                    .set(&file_to_copy)
                     .execute(&conn)?;
                 diesel::insert_into(drive_files_events::dsl::drive_files_events)
                     .values(&event)
