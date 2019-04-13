@@ -6,3 +6,8 @@ edition = "2018"
 publish = false
 
 [dependencies]
+kernel = { path = "../kernel" }
+diesel_as_jsonb = { path = "../../crates/diesel_as_jsonb" }
+eventsourcing = { path = "../../crates/eventsourcing-rs" }
+drive = { path = "../drive" }
+

@@ -862,6 +862,12 @@ dependencies = [
 [[package]]
 name = "gallery"
 version = "0.1.0"
+dependencies = [
+ "diesel_as_jsonb 0.1.0",
+ "drive 0.1.0",
+ "eventsourcing 0.1.0",
+ "kernel 0.1.3",
+]
 
 [[package]]
 name = "generic-array"
