@@ -31,5 +31,5 @@ members = [
     "bloom/contacts",
     "bloom/api",
     "bloom/drive",
-    "bloom/photos",
+    "bloom/gallery",
 ]
