@@ -9,4 +9,10 @@ pub use aggregate::{
 pub use commands::{
 };
 pub use events::{
+    Event,
+    EventData,
+    CreatedV1,
+    RenamedV1,
+    ItemAddedV1,
+    ItemRemovedV1,
 };
