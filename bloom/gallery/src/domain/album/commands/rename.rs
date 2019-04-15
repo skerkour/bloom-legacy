@@ -13,13 +13,13 @@ use crate::{
 
 
 #[derive(Clone, Debug)]
-pub struct Create {
+pub struct Rename {
     pub name: String,
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for Create {
+impl eventsourcing::Command for Rename {
     type Aggregate = album::Album;
     type Event = album::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
@@ -32,9 +32,8 @@ impl eventsourcing::Command for Create {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-        let data = album::EventData::CreatedV1(album::CreatedV1{
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let data = album::EventData::RenamedV1(album::RenamedV1{
             id,
             name: self.name.clone(),
             owner_id: self.owner_id,
@@ -44,7 +43,7 @@ impl eventsourcing::Command for Create {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: id,
+            aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));
     }

@@ -1,3 +1,4 @@
+use serde::{Serialize, Deserialize};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
@@ -7,38 +8,35 @@ use kernel::{
     events::EventMetadata,
 };
 use crate::{
-    domain::file,
-    FOLDER_TYPE,
+    domain::album,
 };
 
 
-#[derive(Clone, Debug)]
-pub struct Restore {
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Delete {
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for Restore {
-    type Aggregate = file::File;
-    type Event = file::Event;
+impl eventsourcing::Command for Delete {
+    type Aggregate = album::Album;
+    type Event = album::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        if aggregate.trashed_at.is_none() {
-            return Err(KernelError::Validation("File is not in trash".to_string()))
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        if aggregate.deleted_at.is_some() {
+            return Err(KernelError::NotFound("Album not found".to_string()));
         }
 
         return Ok(());
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = file::EventData::RestoredV1;
-
-        return  Ok((file::Event{
+        return  Ok((album::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            data: event_data,
+            data: album::EventData::DeletedV1,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));

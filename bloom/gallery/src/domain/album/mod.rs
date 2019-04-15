@@ -7,6 +7,9 @@ pub use aggregate::{
     Album,
 };
 pub use commands::{
+    Create,
+    Delete,
+    Rename,
 };
 pub use events::{
     Event,
