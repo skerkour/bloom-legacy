@@ -25,6 +25,10 @@ CREATE TABLE gallery_albums_events (
 
 
 CREATE TABLE gallery_albums_items (
+    id UUID NOT NULL,
+
     album_id UUID NOT NULL REFERENCES gallery_albums(id),
-    file_id UUID NOT NULL REFERENCES drive_files(id)
+    file_id UUID NOT NULL REFERENCES drive_files(id),
+
+     PRIMARY KEY(id)
 );

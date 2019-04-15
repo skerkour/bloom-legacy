@@ -19,3 +19,16 @@ pub struct Album {
 
     pub owner_id: uuid::Uuid,
 }
+
+
+#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[table_name = "gallery_albums_items"]
+#[changeset_options(treat_none_as_null = "true")]
+pub struct AlbumItem {
+    pub id: uuid::Uuid,
+
+    pub album_id: uuid::Uuid,
+    pub file_id: uuid::Uuid,
+
+    pub owner_id: uuid::Uuid,
+}
