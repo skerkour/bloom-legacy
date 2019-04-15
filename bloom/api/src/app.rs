@@ -10,6 +10,7 @@ use std::str::FromStr;
 use notes::api::v1 as notesv1;
 use contacts::api::v1 as contactsv1;
 use drive::api::v1 as drivev1;
+use gallery::api::v1 as galleryv1;
 use kernel::{
     db::DbActor,
     api,
@@ -118,6 +119,10 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::GET).f(drivev1::trash::get);
                 r.method(http::Method::POST).with_config(drivev1::trash::post, api::json_default_config);
             })
+
+            // gallery
+            .resource("/gallery/v1/media", |r| r.method(http::Method::GET).f(galleryv1::media::get))
+
 
             .register()
     })

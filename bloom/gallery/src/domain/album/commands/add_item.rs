@@ -50,7 +50,7 @@ impl eventsourcing::Command for AddItem {
             .get_result(ctx)? >= 1;
 
         if is_already_in_album {
-            return Err(KernelError::Validation(format!("File is already in album.", &self.email)));
+            return Err(KernelError::Validation("File is already in album.".to_string()));
         }
 
         // check that file is good mimetype: TODO

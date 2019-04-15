@@ -9,6 +9,7 @@ kernel = { path = "../kernel" }
 notes = { path = "../notes" }
 contacts = { path = "../contacts" }
 drive = { path = "../drive" }
+gallery = { path = "../gallery" }
 eventsourcing = { path = "../../crates/eventsourcing-rs" }
 
 
