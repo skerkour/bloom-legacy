@@ -30,11 +30,11 @@ pub enum EventData {
 pub struct CreatedV1 {
     pub id: uuid::Uuid,
     pub name: String,
+    pub owner_id: uuid::Uuid,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RenamedV1 {
-    pub id: uuid::Uuid,
     pub name: String,
 }
 
@@ -62,12 +62,7 @@ impl eventsourcing::Event for Event {
                 deleted_at: None,
                 version: 0,
 
-                explicitly_trashed: false,
                 name: data.name.clone(),
-                parent_id: data.parent_id,
-                size: data.size,
-                type_: data.type_.clone(),
-                trashed_at: None,
 
                 owner_id: data.owner_id,
             },

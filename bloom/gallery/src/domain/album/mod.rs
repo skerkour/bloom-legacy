@@ -6,7 +6,6 @@ mod commands;
 pub use aggregate::{
     Album,
     AlbumItem,
-    File,
 };
 pub use commands::{
     Create,

@@ -28,7 +28,7 @@ impl Album {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Note{
+        return Album{
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -50,15 +50,6 @@ impl eventsourcing::Aggregate for Album {
     fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
         self.updated_at = timestamp;
     }
-}
-
-
-
-#[derive(Clone, Debug, Deserialize, QueryableByName, Serialize)]
-#[table_name = "drive_files"]
-pub struct File {
-    pub id: uuid::Uuid,
-    pub name: String,
 }
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]

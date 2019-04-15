@@ -10,11 +10,12 @@ use crate::{
     domain::album,
     validators,
 };
+use drive::domain::File;
 
 
 #[derive(Clone, Debug)]
 pub struct AddItem {
-    pub file_id: String,
+    pub file_id: uuid::Uuid,
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
@@ -28,34 +29,32 @@ impl eventsourcing::Command for AddItem {
 
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums::dsl::gallery_albums,
-            drive_files::dsl::drive_files,
-            gallery_albums_items::dsl::gallery_albums_items,
+            gallery_albums,
+            drive_files,
+            gallery_albums_items,
         };
         use diesel::prelude::*;
 
         // check that file is owned by same owner
-        let _ = drive_files::dsl::drive_files
-            .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
+        let _: File = drive_files::dsl::drive_files
+            .filter(drive_files::dsl::owner_id.eq(self.owner_id))
             .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
-            .filter(drive_files::dsl::id.eq(self.id))
+            .filter(drive_files::dsl::id.eq(self.file_id))
             .first(ctx)?;
 
         // check that file is not already in album
-        let is_already_in_album: bool = gallery_albums_items
-            .filter(gallery_albums_items::album_id.eq(aggregate.id))
-            .filter(gallery_albums_items::file_id.eq(self.file_id))
+        let already_in_album: i64 = gallery_albums_items::dsl::gallery_albums_items
+            .filter(gallery_albums_items::dsl::album_id.eq(aggregate.id))
+            .filter(gallery_albums_items::dsl::file_id.eq(self.file_id))
             .count()
-            .get_result(ctx)? >= 1;
+            .get_result(ctx)?;
 
-        if is_already_in_album {
+        if already_in_album >= 1 {
             return Err(KernelError::Validation("File is already in album.".to_string()));
         }
 
         // check that file is good mimetype: TODO
-
-        validators::album_name(&self.name)?;
 
         return Ok(());
     }
@@ -73,13 +72,11 @@ impl eventsourcing::Command for AddItem {
         };
 
         diesel::insert_into(gallery_albums_items)
-            .values(&new_folder)
+            .values(&item)
             .execute(ctx)?;
 
         let data = album::EventData::ItemAddedV1(album::ItemAddedV1{
-            id,
             file_id: self.file_id,
-            owner_id: self.owner_id,
         });
 
         return  Ok((album::Event{

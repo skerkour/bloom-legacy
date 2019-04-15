@@ -34,9 +34,7 @@ impl eventsourcing::Command for Rename {
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = album::EventData::RenamedV1(album::RenamedV1{
-            id,
             name: self.name.clone(),
-            owner_id: self.owner_id,
         });
 
         return  Ok((album::Event{

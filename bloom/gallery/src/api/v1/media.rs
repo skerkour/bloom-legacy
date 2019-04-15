@@ -30,6 +30,8 @@ pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
 
     return state.db
     .send(controllers::FindFiles{
+        s3_bucket: state.config.s3_bucket(),
+        s3_region: state.config.aws_region(),
         account_id: auth.account.expect("unwrapping non none account").id,
     })
     .from_err()
