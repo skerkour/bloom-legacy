@@ -68,7 +68,7 @@ impl eventsourcing::Command for AddItem {
 
         // check that file is good mimetype: TODO
         for file in files {
-            if valid_types.contains(&file.type_) {
+            if !valid_types.contains(&file.type_) {
                 return Err(KernelError::Validation("File type is not valid.".to_string()));
             }
         }
