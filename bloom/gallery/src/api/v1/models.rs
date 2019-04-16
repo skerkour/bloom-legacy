@@ -9,17 +9,10 @@ pub struct FileResponse {
     pub url: String,
 }
 
-// impl From<album::File> for FileResponse {
-//     fn from(file: album::File) -> Self {
-//         FileResponse{
-//             id: file.id,
-//             name: file.name,
-//             parent_id: file.parent_id,
-//             url: file.url,
-//         }
-//     }
-// }
-
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CreateAlbumBody {
+    pub name: String,
+}
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AlbumResponse {
