@@ -34,3 +34,8 @@ pub struct AlbumWithMediaResponse {
     pub album: AlbumResponse,
     pub media: Vec<FileResponse>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateAlbumBody {
+    pub name: String,
+}

@@ -15,7 +15,6 @@ use crate::{
 #[derive(Clone, Debug)]
 pub struct Rename {
     pub name: String,
-    pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
