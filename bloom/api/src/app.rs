@@ -122,6 +122,9 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
 
             // gallery
             .resource("/gallery/v1/media", |r| r.method(http::Method::GET).f(galleryv1::media::get))
+            .resource("/gallery/v1/albums", |r| {
+                r.method(http::Method::GET).f(galleryv1::albums::get);
+            })
 
 
             .register()
