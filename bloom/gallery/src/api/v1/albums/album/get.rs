@@ -40,8 +40,7 @@ pub fn get((album_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> Fu
         match res {
             Ok((album, media)) => {
                 let res = models::AlbumWithMediaResponse{
-                    id: album.id,
-                    name: album.name,
+                    album: From::from(album),
                     media,
                 };
                 let res = api::Response::data(res);

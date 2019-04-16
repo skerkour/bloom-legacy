@@ -5,7 +5,7 @@ use kernel::{
 };
 
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, QueryableByName, Serialize)]
 #[table_name = "drive_files"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct File {

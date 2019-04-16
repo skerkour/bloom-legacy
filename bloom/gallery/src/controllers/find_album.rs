@@ -37,11 +37,14 @@ impl Handler<FindAlbum> for DbActor {
     fn handle(&mut self, msg: FindAlbum, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             gallery_albums,
+            gallery_albums_items,
             drive_files,
         };
-        use diesel::prelude::*;
-        use diesel::pg::expression::dsl::any;
-
+        use diesel::{
+            sql_query,
+            pg::types::sql_types,
+            prelude::*,
+        };
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
@@ -54,13 +57,17 @@ impl Handler<FindAlbum> for DbActor {
             .filter(gallery_albums::dsl::id.eq(msg.album_id))
             .first(&conn)?;
 
+        // let files: Vec<File> = drive_files::dsl::drive_files
+        //     .filter(drive_files::dsl::deleted_at.is_null())
+        //     .filter(drive_files::dsl::trashed_at.is_null())
+        //     .inner_join(gallery_albums_items::table)
+        //     .filter(gallery_albums_items::dsl::id.eq(msg.album_id))
+        //     .load(&conn)?;
 
-
-        let files: Vec<File> = drive_files::dsl::drive_files
-            .filter(drive_files::dsl::owner_id.eq(msg.account_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
-            .filter(drive_files::dsl::trashed_at.is_null())
-            .filter(drive_files::dsl::type_.eq(any(vec!["image/gif", "image/png", "image/jpeg"])))
+        let files: Vec<File> = sql_query("SELECT * FROM drive_files AS file
+            INNER JOIN gallery_albums_items AS item ON file.id = item.file_id
+            WHERE item.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
+            .bind::<sql_types::Uuid, _>(msg.album_id)
             .load(&conn)?;
 
         let region = Region::from_str(&msg.s3_region).expect("AWS region not valid");
