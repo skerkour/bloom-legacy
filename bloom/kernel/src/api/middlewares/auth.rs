@@ -125,10 +125,10 @@ impl Handler<CheckAuth> for DbActor {
 
         // find session + account
         let (session, account): (domain::Session, domain::Account) = kernel_sessions::dsl::kernel_sessions
-                .filter(kernel_sessions::dsl::id.eq(msg.session_id))
-                .filter(kernel_sessions::dsl::deleted_at.is_null())
-                .inner_join(kernel_accounts::table)
-                .first(&conn)?;
+            .filter(kernel_sessions::dsl::id.eq(msg.session_id))
+            .filter(kernel_sessions::dsl::deleted_at.is_null())
+            .inner_join(kernel_accounts::table)
+            .first(&conn)?;
 
         // verify session token
         if !bcrypt::verify(&msg.token, &session.token)

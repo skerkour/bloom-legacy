@@ -29,12 +29,9 @@ impl From<album::Album> for AlbumResponse {
     }
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AlbumItemResponse {
-    pub id: uuid::Uuid, // file.id
+pub struct AlbumWithMediaResponse {
+    pub id: uuid::Uuid,
     pub name: String,
-    pub parent_id: uuid::Uuid,
-    pub album_id: uuid::Uuid,
-    pub url: String,
+    pub media: Vec<FileResponse>,
 }
