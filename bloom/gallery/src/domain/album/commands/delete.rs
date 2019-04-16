@@ -17,6 +17,8 @@ pub struct Delete {
     pub metadata: EventMetadata,
 }
 
+
+// TODO: remove all albums_items
 impl eventsourcing::Command for Delete {
     type Aggregate = album::Album;
     type Event = album::Event;

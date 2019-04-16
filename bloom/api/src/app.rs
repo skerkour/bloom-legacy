@@ -128,6 +128,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/gallery/v1/albums/{album_id}", |r| {
                 r.method(http::Method::GET).with(galleryv1::albums::album::get);
+                r.method(http::Method::DELETE).with(galleryv1::albums::album::delete);
             })
 
             .register()
