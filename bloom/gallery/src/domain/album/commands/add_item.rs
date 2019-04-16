@@ -6,6 +6,7 @@ use kernel::{
     KernelError,
     events::EventMetadata,
 };
+use std::collections::HashSet;
 use crate::{
     domain::album,
     validators,
@@ -15,7 +16,7 @@ use drive::domain::File;
 
 #[derive(Clone, Debug)]
 pub struct AddItem {
-    pub file_id: uuid::Uuid,
+    pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
@@ -34,19 +35,30 @@ impl eventsourcing::Command for AddItem {
             gallery_albums_items,
         };
         use diesel::prelude::*;
+        use diesel::pg::expression::dsl::any;
+
+        let mut valid_types = HashSet::new();
+        // Add some books.
+        valid_types.insert("image/gif".to_string());
+        valid_types.insert("image/png".to_string());
+        valid_types.insert("image/jpeg".to_string());
 
         // check that file is owned by same owner
-        let _: File = drive_files::dsl::drive_files
+        let files: Vec<File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::owner_id.eq(self.owner_id))
             .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
-            .filter(drive_files::dsl::id.eq(self.file_id))
-            .first(ctx)?;
+            .filter(drive_files::dsl::id.eq(any(&self.files)))
+            .load(ctx)?;
 
-        // check that file is not already in album
+        if files.len() != self.files.len() {
+            return Err(KernelError::Validation("File not found.".to_string()));
+        }
+
+        // check that files is not already in album
         let already_in_album: i64 = gallery_albums_items::dsl::gallery_albums_items
             .filter(gallery_albums_items::dsl::album_id.eq(aggregate.id))
-            .filter(gallery_albums_items::dsl::file_id.eq(self.file_id))
+            .filter(gallery_albums_items::dsl::file_id.eq(any(&self.files)))
             .count()
             .get_result(ctx)?;
 
@@ -55,6 +67,11 @@ impl eventsourcing::Command for AddItem {
         }
 
         // check that file is good mimetype: TODO
+        for file in files {
+            if valid_types.contains(&file.type_) {
+                return Err(KernelError::Validation("File type is not valid.".to_string()));
+            }
+        }
 
         return Ok(());
     }
@@ -65,18 +82,20 @@ impl eventsourcing::Command for AddItem {
         };
         use diesel::prelude::*;
 
-        let item = album::AlbumItem{
-            id: uuid::Uuid::new_v4(),
-            album_id: aggregate.id,
-            file_id: self.file_id,
-        };
+        let items: Vec<album::AlbumItem> = self.files.iter().map(|file_id|
+            album::AlbumItem{
+                id: uuid::Uuid::new_v4(),
+                album_id: aggregate.id,
+                file_id: *file_id,
+            }
+        ).collect();
 
         diesel::insert_into(gallery_albums_items)
-            .values(&item)
+            .values(&items)
             .execute(ctx)?;
 
         let data = album::EventData::ItemAddedV1(album::ItemAddedV1{
-            file_id: self.file_id,
+            files: self.files.clone(),
         });
 
         return  Ok((album::Event{

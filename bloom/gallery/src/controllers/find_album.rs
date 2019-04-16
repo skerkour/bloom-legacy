@@ -41,10 +41,12 @@ impl Handler<FindAlbum> for DbActor {
             drive_files,
         };
         use diesel::{
-            sql_query,
-            pg::types::sql_types,
+            // sql_query,
+            // pg::types::sql_types,
             prelude::*,
+            pg::expression::dsl::any,
         };
+
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
@@ -57,18 +59,19 @@ impl Handler<FindAlbum> for DbActor {
             .filter(gallery_albums::dsl::id.eq(msg.album_id))
             .first(&conn)?;
 
-        // let files: Vec<File> = drive_files::dsl::drive_files
-        //     .filter(drive_files::dsl::deleted_at.is_null())
-        //     .filter(drive_files::dsl::trashed_at.is_null())
-        //     .inner_join(gallery_albums_items::table)
-        //     .filter(gallery_albums_items::dsl::id.eq(msg.album_id))
-        //     .load(&conn)?;
-
-        let files: Vec<File> = sql_query("SELECT * FROM drive_files AS file
-            INNER JOIN gallery_albums_items AS item ON file.id = item.file_id
-            WHERE item.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
-            .bind::<sql_types::Uuid, _>(msg.album_id)
+        let files: Vec<(File, album::AlbumItem)> = drive_files::dsl::drive_files
+            .inner_join(gallery_albums_items::table)
+            .filter(gallery_albums_items::dsl::album_id.eq(msg.album_id))
+            .filter(drive_files::dsl::deleted_at.is_null())
+            .filter(drive_files::dsl::trashed_at.is_null())
             .load(&conn)?;
+        let files: Vec<File> = files.into_iter().map(|file| file.0).collect();
+
+        // let files: Vec<File> = sql_query("SELECT * FROM drive_files AS file
+        //     INNER JOIN gallery_albums_items AS item ON file.id = item.file_id
+        //     WHERE item.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
+        //     .bind::<sql_types::Uuid, _>(msg.album_id)
+        //     .load(&conn)?;
 
         let region = Region::from_str(&msg.s3_region).expect("AWS region not valid");
         let credentials = EnvironmentProvider::default()

@@ -11,6 +11,7 @@ pub use commands::{
     Create,
     Delete,
     Rename,
+    AddItem,
 };
 pub use events::{
     Event,

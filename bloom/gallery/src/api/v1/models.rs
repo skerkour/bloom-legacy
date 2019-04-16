@@ -39,3 +39,8 @@ pub struct AlbumWithMediaResponse {
 pub struct UpdateAlbumBody {
     pub name: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct AddToAlbumBody {
+    pub media: Vec<uuid::Uuid>,
+}

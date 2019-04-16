@@ -40,7 +40,7 @@ pub struct RenamedV1 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ItemAddedV1 {
-    pub file_id: uuid::Uuid,
+    pub files: Vec<uuid::Uuid>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
