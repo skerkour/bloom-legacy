@@ -1,4 +1,8 @@
 mod app;
+use std::env;
+use dotenv;
+
+use sentry::integrations::panic::register_panic_handler;
 
 
 use actix_web::{
@@ -20,7 +24,13 @@ fn register_reactors() {
 
 
 fn main() {
-    let (_guard, logger) = log::setup_slog();
+    dotenv::dotenv().ok();
+    let _sentry_guard = sentry::init(env::var("SENTRY_URL").unwrap());
+    env::set_var("RUST_BACKTRACE", "1");
+    register_panic_handler();
+
+    let (_log_guard, logger) = log::setup_slog();
+
     let sys = System::new("kernel");
     let cfg = config::init();
     let db_actor_addr = db::init(&cfg);

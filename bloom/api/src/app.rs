@@ -11,6 +11,7 @@ use notes::api::v1 as notesv1;
 use contacts::api::v1 as contactsv1;
 use drive::api::v1 as drivev1;
 use gallery::api::v1 as galleryv1;
+use sentry_actix::SentryMiddleware;
 use kernel::{
     db::DbActor,
     api,
@@ -18,6 +19,7 @@ use kernel::{
     config,
     accounts::api::v1 as accountsv1,
 };
+
 
 pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
 
@@ -42,6 +44,7 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
         .finish()
     )
     .middleware(middlewares::AuthMiddleware)
+    .middleware(SentryMiddleware::new())
     .default_resource(|r| r.f(api::route_404))
     .configure(|app| {
         Cors::for_app(app)
