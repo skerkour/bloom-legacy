@@ -12,6 +12,7 @@ pub use commands::{
     Delete,
     Rename,
     AddItem,
+    RemoveFiles,
 };
 pub use events::{
     Event,
@@ -19,5 +20,5 @@ pub use events::{
     CreatedV1,
     RenamedV1,
     ItemAddedV1,
-    ItemRemovedV1,
+    FilesRemovedV1,
 };

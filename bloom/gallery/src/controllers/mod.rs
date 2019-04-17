@@ -5,6 +5,7 @@ mod find_album;
 mod delete_album;
 mod rename_album;
 mod add_files_to_album;
+mod remove_files_from_album;
 
 
 pub use find_files::FindFiles;
@@ -14,3 +15,4 @@ pub use find_album::FindAlbum;
 pub use delete_album::DeleteAlbum;
 pub use rename_album::RenameAlbum;
 pub use add_files_to_album::AddFilesToAlbum;
+pub use remove_files_from_album::RemoveFilesFromAlbum;

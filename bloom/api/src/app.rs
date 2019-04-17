@@ -134,6 +134,9 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/gallery/v1/albums/{album_id}/add", |r| {
                 r.method(http::Method::POST).with_config(galleryv1::albums::album::add::post, api::json_default_config_path);
             })
+            .resource("/gallery/v1/albums/{album_id}/remove", |r| {
+                r.method(http::Method::POST).with_config(galleryv1::albums::album::remove::post, api::json_default_config_path);
+            })
 
             .register()
     })
