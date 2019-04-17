@@ -7,6 +7,7 @@ use kernel::{
     KernelError,
     events::EventMetadata,
 };
+use drive::domain::File;
 use crate::{
     domain::album,
 };
@@ -18,7 +19,6 @@ pub struct Delete {
 }
 
 
-// TODO: remove all albums_items
 impl eventsourcing::Command for Delete {
     type Aggregate = album::Album;
     type Event = album::Event;
@@ -34,7 +34,29 @@ impl eventsourcing::Command for Delete {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    // TODO: improve
+    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        use kernel::db::schema::{
+            gallery_albums,
+            drive_files,
+            gallery_albums_files,
+        };
+        use diesel::prelude::*;
+        use diesel::pg::expression::dsl::any;
+
+        let files: Vec<uuid::Uuid> = drive_files::dsl::drive_files
+            .inner_join(gallery_albums_files::table)
+            .filter(gallery_albums_files::dsl::album_id.eq(aggregate.id))
+            .filter(drive_files::dsl::deleted_at.is_null())
+            .filter(drive_files::dsl::trashed_at.is_null())
+            .select(drive_files::id)
+            .load(ctx)?;
+
+        diesel::delete(gallery_albums_files::dsl::gallery_albums_files
+            .filter(gallery_albums_files::dsl::file_id.eq(any(&files)))
+        )
+            .execute(ctx)?;
+
         return  Ok((album::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),

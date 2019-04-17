@@ -21,7 +21,7 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     RenamedV1(RenamedV1),
-    ItemAddedV1(ItemAddedV1),
+    FilesAddedV1(FilesAddedV1),
     FilesRemovedV1(FilesRemovedV1),
     DeletedV1,
 }
@@ -39,7 +39,7 @@ pub struct RenamedV1 {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ItemAddedV1 {
+pub struct FilesAddedV1 {
     pub files: Vec<uuid::Uuid>,
 }
 
@@ -71,8 +71,8 @@ impl eventsourcing::Event for Event {
                 name: data.name.clone(),
                 ..aggregate
             },
-            // ItemAddedV1
-            EventData::ItemAddedV1(_) => super::Album{
+            // FilesAddedV1
+            EventData::FilesAddedV1(_) => super::Album{
                 ..aggregate
             },
             // FilesRemovedV1

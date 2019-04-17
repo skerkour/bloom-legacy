@@ -37,7 +37,7 @@ impl Handler<FindAlbum> for DbActor {
     fn handle(&mut self, msg: FindAlbum, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             gallery_albums,
-            gallery_albums_items,
+            gallery_albums_files,
             drive_files,
         };
         use diesel::{
@@ -51,7 +51,7 @@ impl Handler<FindAlbum> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
-        // join avec gallery_albums_items
+        // join avec gallery_albums_files
         // il nous faut l'album + les files
         let album: album::Album = gallery_albums::dsl::gallery_albums
             .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
@@ -59,17 +59,17 @@ impl Handler<FindAlbum> for DbActor {
             .filter(gallery_albums::dsl::id.eq(msg.album_id))
             .first(&conn)?;
 
-        let files: Vec<(File, album::AlbumItem)> = drive_files::dsl::drive_files
-            .inner_join(gallery_albums_items::table)
-            .filter(gallery_albums_items::dsl::album_id.eq(msg.album_id))
+        let files: Vec<(File, album::AlbumFile)> = drive_files::dsl::drive_files
+            .inner_join(gallery_albums_files::table)
+            .filter(gallery_albums_files::dsl::album_id.eq(msg.album_id))
             .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .load(&conn)?;
         let files: Vec<File> = files.into_iter().map(|file| file.0).collect();
 
         // let files: Vec<File> = sql_query("SELECT * FROM drive_files AS file
-        //     INNER JOIN gallery_albums_items AS item ON file.id = item.file_id
-        //     WHERE item.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
+        //     INNER JOIN gallery_albums_files AS file ON file.id = file.file_id
+        //     WHERE file.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
         //     .bind::<sql_types::Uuid, _>(msg.album_id)
         //     .load(&conn)?;
 

@@ -32,7 +32,7 @@ impl eventsourcing::Command for RemoveFiles {
         use kernel::db::schema::{
             gallery_albums,
             drive_files,
-            gallery_albums_items,
+            gallery_albums_files,
         };
         use diesel::prelude::*;
         use diesel::pg::expression::dsl::any;
@@ -50,9 +50,9 @@ impl eventsourcing::Command for RemoveFiles {
         }
 
         // check that files are already in album
-        let already_in_album: i64 = gallery_albums_items::dsl::gallery_albums_items
-            .filter(gallery_albums_items::dsl::album_id.eq(aggregate.id))
-            .filter(gallery_albums_items::dsl::file_id.eq(any(&self.files)))
+        let already_in_album: i64 = gallery_albums_files::dsl::gallery_albums_files
+            .filter(gallery_albums_files::dsl::album_id.eq(aggregate.id))
+            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
             .count()
             .get_result(ctx)?;
 
@@ -65,14 +65,14 @@ impl eventsourcing::Command for RemoveFiles {
 
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums_items,
+            gallery_albums_files,
         };
         use diesel::prelude::*;
         use diesel::pg::expression::dsl::any;
 
 
-        diesel::delete(gallery_albums_items::dsl::gallery_albums_items
-            .filter(gallery_albums_items::dsl::file_id.eq(any(&self.files)))
+        diesel::delete(gallery_albums_files::dsl::gallery_albums_files
+            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
         )
             .execute(ctx)?;
 

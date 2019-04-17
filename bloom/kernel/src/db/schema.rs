@@ -195,7 +195,7 @@ table! {
 }
 
 table! {
-    gallery_albums_items (id) {
+    gallery_albums_files (id) {
         id -> Uuid,
         album_id -> Uuid,
         file_id -> Uuid,
@@ -411,8 +411,8 @@ joinable!(drive_upload_sessions -> kernel_accounts (owner_id));
 joinable!(drive_upload_sessions_events -> drive_upload_sessions (aggregate_id));
 joinable!(gallery_albums -> kernel_accounts (owner_id));
 joinable!(gallery_albums_events -> gallery_albums (aggregate_id));
-joinable!(gallery_albums_items -> drive_files (file_id));
-joinable!(gallery_albums_items -> gallery_albums (album_id));
+joinable!(gallery_albums_files -> drive_files (file_id));
+joinable!(gallery_albums_files -> gallery_albums (album_id));
 joinable!(kernel_accounts_events -> kernel_accounts (aggregate_id));
 joinable!(kernel_pending_emails -> kernel_accounts (account_id));
 joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));
@@ -441,7 +441,7 @@ allow_tables_to_appear_in_same_query!(
     drive_upload_sessions_events,
     gallery_albums,
     gallery_albums_events,
-    gallery_albums_items,
+    gallery_albums_files,
     kernel_accounts,
     kernel_accounts_events,
     kernel_pending_accounts,

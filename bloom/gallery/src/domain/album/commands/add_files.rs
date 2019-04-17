@@ -15,13 +15,13 @@ use drive::domain::File;
 
 
 #[derive(Clone, Debug)]
-pub struct AddItem {
+pub struct AddFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for AddItem {
+impl eventsourcing::Command for AddFiles {
     type Aggregate = album::Album;
     type Event = album::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
@@ -32,7 +32,7 @@ impl eventsourcing::Command for AddItem {
         use kernel::db::schema::{
             gallery_albums,
             drive_files,
-            gallery_albums_items,
+            gallery_albums_files,
         };
         use diesel::prelude::*;
         use diesel::pg::expression::dsl::any;
@@ -56,9 +56,9 @@ impl eventsourcing::Command for AddItem {
         }
 
         // check that files is not already in album
-        let already_in_album: i64 = gallery_albums_items::dsl::gallery_albums_items
-            .filter(gallery_albums_items::dsl::album_id.eq(aggregate.id))
-            .filter(gallery_albums_items::dsl::file_id.eq(any(&self.files)))
+        let already_in_album: i64 = gallery_albums_files::dsl::gallery_albums_files
+            .filter(gallery_albums_files::dsl::album_id.eq(aggregate.id))
+            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
             .count()
             .get_result(ctx)?;
 
@@ -78,23 +78,23 @@ impl eventsourcing::Command for AddItem {
 
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums_items::dsl::gallery_albums_items,
+            gallery_albums_files::dsl::gallery_albums_files,
         };
         use diesel::prelude::*;
 
-        let items: Vec<album::AlbumItem> = self.files.iter().map(|file_id|
-            album::AlbumItem{
+        let files: Vec<album::AlbumFile> = self.files.iter().map(|file_id|
+            album::AlbumFile{
                 id: uuid::Uuid::new_v4(),
                 album_id: aggregate.id,
                 file_id: *file_id,
             }
         ).collect();
 
-        diesel::insert_into(gallery_albums_items)
-            .values(&items)
+        diesel::insert_into(gallery_albums_files)
+            .values(&files)
             .execute(ctx)?;
 
-        let data = album::EventData::ItemAddedV1(album::ItemAddedV1{
+        let data = album::EventData::FilesAddedV1(album::FilesAddedV1{
             files: self.files.clone(),
         });
 

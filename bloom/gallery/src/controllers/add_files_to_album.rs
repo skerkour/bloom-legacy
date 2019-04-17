@@ -44,7 +44,7 @@ impl Handler<AddFilesToAlbum> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let add_cmd = album::AddItem{
+            let add_cmd = album::AddFiles{
                 files: msg.files.clone(),
                 owner_id: msg.account_id,
                 metadata,

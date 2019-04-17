@@ -3,7 +3,7 @@ use diesel::{Queryable};
 use kernel::{
     db::schema::{
         gallery_albums,
-        gallery_albums_items,
+        gallery_albums_files,
         drive_files,
     },
 };
@@ -53,8 +53,8 @@ impl eventsourcing::Aggregate for Album {
 }
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
-#[table_name = "gallery_albums_items"]
-pub struct AlbumItem {
+#[table_name = "gallery_albums_files"]
+pub struct AlbumFile {
     pub id: uuid::Uuid,
 
     pub album_id: uuid::Uuid,

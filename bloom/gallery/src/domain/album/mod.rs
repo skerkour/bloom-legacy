@@ -5,13 +5,13 @@ mod commands;
 
 pub use aggregate::{
     Album,
-    AlbumItem,
+    AlbumFile,
 };
 pub use commands::{
     Create,
     Delete,
     Rename,
-    AddItem,
+    AddFiles,
     RemoveFiles,
 };
 pub use events::{
@@ -19,6 +19,6 @@ pub use events::{
     EventData,
     CreatedV1,
     RenamedV1,
-    ItemAddedV1,
+    FilesAddedV1,
     FilesRemovedV1,
 };

@@ -24,7 +24,7 @@ CREATE TABLE gallery_albums_events (
 );
 
 
-CREATE TABLE gallery_albums_items (
+CREATE TABLE gallery_albums_files (
     id UUID NOT NULL,
 
     album_id UUID NOT NULL REFERENCES gallery_albums(id),
