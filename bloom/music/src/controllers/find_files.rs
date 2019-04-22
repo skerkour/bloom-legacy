@@ -43,11 +43,12 @@ impl Handler<FindFiles> for DbActor {
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
 
+
         let files: Vec<File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::owner_id.eq(msg.account_id))
             .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
-            .filter(drive_files::dsl::type_.eq(any(vec!["image/gif", "image/png", "image/jpeg"])))
+            .filter(drive_files::dsl::type_.eq(any(vec!["audio/mpeg", "audio/mp3"])))
             .load(&conn)?;
 
         let region = Region::from_str(&msg.s3_region).expect("AWS region not valid");
