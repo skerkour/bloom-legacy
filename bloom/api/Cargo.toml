@@ -5,12 +5,15 @@ authors = ["z0mbie42 <sylvain@kerkour.com>"]
 edition = "2018"
 
 [dependencies]
+eventsourcing = { path = "../../crates/eventsourcing-rs" }
+
 kernel = { path = "../kernel" }
 notes = { path = "../notes" }
 contacts = { path = "../contacts" }
 drive = { path = "../drive" }
 gallery = { path = "../gallery" }
-eventsourcing = { path = "../../crates/eventsourcing-rs" }
+music = { path = "../music" }
+
 
 
 actix-web = "0.7.19"

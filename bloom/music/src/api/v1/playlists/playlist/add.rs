@@ -16,11 +16,11 @@ use kernel::{
 use crate::{
     controllers,
     api::v1::models,
-    domain::Album,
+    domain::Playlist,
 };
 
 
-pub fn post((album_id, add_data, req): (Path<(uuid::Uuid)>, Json<models::AddToAlbumBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn post((playlist_id, add_data, req): (Path<(uuid::Uuid)>, Json<models::AddToPlaylistBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
@@ -32,18 +32,18 @@ pub fn post((album_id, add_data, req): (Path<(uuid::Uuid)>, Json<models::AddToAl
     }
 
     return state.db
-    .send(controllers::RemoveFilesFromAlbum{
-        files: add_data.media.clone(),
-        album_id: album_id.into_inner(),
+    .send(controllers::AddFilesToPlaylist{
+        files: add_data.musics.clone(),
+        playlist_id: playlist_id.into_inner(),
         account_id: auth.account.expect("error unwraping non none account").id,
         session_id: auth.session.expect("error unwraping non none session").id,
         request_id,
     })
     .from_err()
-    .and_then(move |album| {
-        match album {
-            Ok(album) => {
-                let res = models::AlbumResponse::from(album);
+    .and_then(move |playlist| {
+        match playlist {
+            Ok(playlist) => {
+                let res = models::PlaylistResponse::from(playlist);
                 let res = api::Response::data(res);
                 Ok(HttpResponse::Ok().json(&res))
             },

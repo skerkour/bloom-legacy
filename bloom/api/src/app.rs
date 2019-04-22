@@ -11,6 +11,7 @@ use notes::api::v1 as notesv1;
 use contacts::api::v1 as contactsv1;
 use drive::api::v1 as drivev1;
 use gallery::api::v1 as galleryv1;
+use music::api::v1 as musicv1;
 use sentry_actix::SentryMiddleware;
 use kernel::{
     db::DbActor,
@@ -139,6 +140,24 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/gallery/v1/albums/{album_id}/remove", |r| {
                 r.method(http::Method::POST).with_config(galleryv1::albums::album::remove::post, api::json_default_config_path);
+            })
+
+            // music
+            .resource("/music/v1/musics", |r| r.method(http::Method::GET).f(musicv1::musics::get))
+            .resource("/music/v1/playlists", |r| {
+                r.method(http::Method::GET).f(musicv1::playlists::get);
+                r.method(http::Method::POST).with_config(musicv1::playlists::post, api::json_default_config);
+            })
+            .resource("/music/v1/playlists/{playlist_id}", |r| {
+                r.method(http::Method::GET).with(musicv1::playlists::playlist::get);
+                r.method(http::Method::DELETE).with(musicv1::playlists::playlist::delete);
+                r.method(http::Method::PUT).with_config(musicv1::playlists::playlist::put, api::json_default_config_path);
+            })
+            .resource("/music/v1/playlists/{playlist_id}/add", |r| {
+                r.method(http::Method::POST).with_config(musicv1::playlists::playlist::add::post, api::json_default_config_path);
+            })
+            .resource("/music/v1/playlists/{playlist_id}/remove", |r| {
+                r.method(http::Method::POST).with_config(musicv1::playlists::playlist::remove::post, api::json_default_config_path);
             })
 
             .register()

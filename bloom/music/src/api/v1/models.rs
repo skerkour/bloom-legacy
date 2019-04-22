@@ -1,5 +1,5 @@
 use serde::{Serialize, Deserialize};
-use crate::domain::album;
+use crate::domain::playlist;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileResponse {
@@ -10,37 +10,37 @@ pub struct FileResponse {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CreateAlbumBody {
+pub struct CreatePlaylistBody {
     pub name: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AlbumResponse {
+pub struct PlaylistResponse {
     pub id: uuid::Uuid,
     pub name: String,
 }
 
-impl From<album::Album> for AlbumResponse {
-    fn from(album: album::Album) -> Self {
-        AlbumResponse{
-            id: album.id,
-            name: album.name,
+impl From<playlist::Playlist> for PlaylistResponse {
+    fn from(playlist: playlist::Playlist) -> Self {
+        PlaylistResponse{
+            id: playlist.id,
+            name: playlist.name,
         }
     }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AlbumWithMediaResponse {
-    pub album: AlbumResponse,
-    pub media: Vec<FileResponse>,
+pub struct PlaylistWithMediaResponse {
+    pub playlist: PlaylistResponse,
+    pub musics: Vec<FileResponse>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct UpdateAlbumBody {
+pub struct UpdatePlaylistBody {
     pub name: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct AddToAlbumBody {
-    pub media: Vec<uuid::Uuid>,
+pub struct AddToPlaylistBody {
+    pub musics: Vec<uuid::Uuid>,
 }

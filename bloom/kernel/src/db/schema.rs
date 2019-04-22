@@ -332,7 +332,7 @@ table! {
 table! {
     music_playlists_files (id) {
         id -> Uuid,
-        album_id -> Uuid,
+        playlist_id -> Uuid,
         file_id -> Uuid,
     }
 }
@@ -451,7 +451,7 @@ joinable!(kernel_sessions_events -> kernel_sessions (aggregate_id));
 joinable!(music_playlists -> kernel_accounts (owner_id));
 joinable!(music_playlists_events -> music_playlists (aggregate_id));
 joinable!(music_playlists_files -> drive_files (file_id));
-joinable!(music_playlists_files -> music_playlists (album_id));
+joinable!(music_playlists_files -> music_playlists (playlist_id));
 joinable!(notes_notes -> kernel_accounts (owner_id));
 joinable!(notes_notes_events -> notes_notes (aggregate_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));

@@ -6,30 +6,30 @@ use kernel::{
     db::DbActor,
 };
 use crate::domain::{
-    album,
-    Album,
+    playlist,
+    Playlist,
 };
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct DeleteAlbum {
-    pub album_id: uuid::Uuid,
+pub struct DeletePlaylist {
+    pub playlist_id: uuid::Uuid,
     pub account_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
 }
 
-impl Message for DeleteAlbum {
+impl Message for DeletePlaylist {
     type Result = Result<(), KernelError>;
 }
 
-impl Handler<DeleteAlbum> for DbActor {
+impl Handler<DeletePlaylist> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: DeleteAlbum, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: DeletePlaylist, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
-            gallery_albums,
-            gallery_albums_events,
+            music_playlists,
+            music_playlists_events,
         };
         use diesel::prelude::*;
 
@@ -43,23 +43,23 @@ impl Handler<DeleteAlbum> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let delete_cmd = album::Delete{
+            let delete_cmd = playlist::Delete{
                 metadata,
             };
 
-            let album_to_update: Album = gallery_albums::dsl::gallery_albums
-                .filter(gallery_albums::dsl::id.eq(msg.album_id))
-                .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
-                .filter(gallery_albums::dsl::deleted_at.is_null())
+            let playlist_to_update: Playlist = music_playlists::dsl::music_playlists
+                .filter(music_playlists::dsl::id.eq(msg.playlist_id))
+                .filter(music_playlists::dsl::owner_id.eq(msg.account_id))
+                .filter(music_playlists::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
-            let (album_to_update, event, _) = eventsourcing::execute(&conn, album_to_update, &delete_cmd)?;
-            // update album
-            diesel::update(&album_to_update)
-                .set(&album_to_update)
+            let (playlist_to_update, event, _) = eventsourcing::execute(&conn, playlist_to_update, &delete_cmd)?;
+            // update playlist
+            diesel::update(&playlist_to_update)
+                .set(&playlist_to_update)
                 .execute(&conn)?;
-            diesel::insert_into(gallery_albums_events::dsl::gallery_albums_events)
+            diesel::insert_into(music_playlists_events::dsl::music_playlists_events)
                 .values(&event)
                 .execute(&conn)?;
 

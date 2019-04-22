@@ -1,18 +1,18 @@
 mod find_files;
-mod find_albums;
-mod create_album;
-mod find_album;
-mod delete_album;
-mod rename_album;
-mod add_files_to_album;
-mod remove_files_from_album;
+mod find_playlists;
+mod create_playlist;
+mod find_playlist;
+mod delete_playlist;
+mod rename_playlist;
+mod add_files_to_playlist;
+mod remove_files_from_playlist;
 
 
 pub use find_files::FindFiles;
-pub use find_albums::FindAlbums;
-pub use create_album::CreateAlbum;
-pub use find_album::FindAlbum;
-pub use delete_album::DeleteAlbum;
-pub use rename_album::RenameAlbum;
-pub use add_files_to_album::AddFilesToAlbum;
-pub use remove_files_from_album::RemoveFilesFromAlbum;
+pub use find_playlists::FindPlaylists;
+pub use create_playlist::CreatePlaylist;
+pub use find_playlist::FindPlaylist;
+pub use delete_playlist::DeletePlaylist;
+pub use rename_playlist::RenamePlaylist;
+pub use add_files_to_playlist::AddFilesToPlaylist;
+pub use remove_files_from_playlist::RemoveFilesFromPlaylist;

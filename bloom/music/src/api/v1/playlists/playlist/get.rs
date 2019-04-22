@@ -1,6 +1,6 @@
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
 };
 use futures::future;
 use kernel::{
@@ -8,41 +8,41 @@ use kernel::{
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
-        GetRequestId,
         GetRequestAuth,
     },
     KernelError,
 };
 use crate::{
-    controllers,
     api::v1::models,
-    domain::Album,
+    controllers,
 };
 
 
-pub fn post((album_data, req): (Json<models::CreateAlbumBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn get((playlist_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
-    let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        .responder();
     }
 
     return state.db
-    .send(controllers::CreateAlbum{
-        name: album_data.name.clone(),
-        account_id: auth.account.expect("error unwraping non none account").id,
-        session_id: auth.session.expect("error unwraping non none session").id,
-        request_id,
+    .send(controllers::FindPlaylist{
+        playlist_id: playlist_id.into_inner(),
+        s3_bucket: state.config.s3_bucket(),
+        s3_region: state.config.aws_region(),
+        account_id: auth.account.expect("unwrapping non none account").id,
     })
     .from_err()
-    .and_then(move |album| {
-        match album {
-            Ok(album) => {
-                let res = models::AlbumResponse::from(album);
+    .and_then(move |res| {
+        match res {
+            Ok((playlist, musics)) => {
+                let res = models::PlaylistWithMediaResponse{
+                    playlist: From::from(playlist),
+                    musics,
+                };
                 let res = api::Response::data(res);
                 Ok(HttpResponse::Ok().json(&res))
             },

@@ -1,6 +1,6 @@
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json, Path,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
 use kernel::{
@@ -8,7 +8,6 @@ use kernel::{
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
-        GetRequestId,
         GetRequestAuth,
     },
     KernelError,
@@ -16,35 +15,29 @@ use kernel::{
 use crate::{
     controllers,
     api::v1::models,
-    domain::Album,
 };
 
 
-pub fn put((album_id, album_data, req): (Path<(uuid::Uuid)>, Json<models::UpdateAlbumBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
-    let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        .responder();
     }
 
     return state.db
-    .send(controllers::RenameAlbum{
-        name: album_data.name.clone(),
-        album_id: album_id.into_inner(),
-        account_id: auth.account.expect("error unwraping non none account").id,
-        session_id: auth.session.expect("error unwraping non none session").id,
-        request_id,
+    .send(controllers::FindPlaylists{
+        account_id: auth.account.expect("unwrapping non none account").id,
     })
     .from_err()
-    .and_then(move |album| {
-        match album {
-            Ok(album) => {
-                let res = models::AlbumResponse::from(album);
-                let res = api::Response::data(res);
+    .and_then(move |playlists| {
+        match playlists {
+            Ok(playlists) => {
+                let playlists: Vec<models::PlaylistResponse> = playlists.into_iter().map(From::from).collect();
+                let res = api::Response::data(playlists);
                 Ok(HttpResponse::Ok().json(&res))
             },
             Err(err) => Err(err),

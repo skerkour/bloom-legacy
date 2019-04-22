@@ -1,6 +1,6 @@
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
 use kernel::{
@@ -8,6 +8,7 @@ use kernel::{
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
+        GetRequestId,
         GetRequestAuth,
     },
     KernelError,
@@ -15,29 +16,34 @@ use kernel::{
 use crate::{
     controllers,
     api::v1::models,
+    domain::Playlist,
 };
 
 
-pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
+pub fn post((playlist_data, req): (Json<models::CreatePlaylistBody>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
+    let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-        .responder();
+            .responder();
     }
 
     return state.db
-    .send(controllers::FindAlbums{
-        account_id: auth.account.expect("unwrapping non none account").id,
+    .send(controllers::CreatePlaylist{
+        name: playlist_data.name.clone(),
+        account_id: auth.account.expect("error unwraping non none account").id,
+        session_id: auth.session.expect("error unwraping non none session").id,
+        request_id,
     })
     .from_err()
-    .and_then(move |albums| {
-        match albums {
-            Ok(albums) => {
-                let albums: Vec<models::AlbumResponse> = albums.into_iter().map(From::from).collect();
-                let res = api::Response::data(albums);
+    .and_then(move |playlist| {
+        match playlist {
+            Ok(playlist) => {
+                let res = models::PlaylistResponse::from(playlist);
+                let res = api::Response::data(res);
                 Ok(HttpResponse::Ok().json(&res))
             },
             Err(err) => Err(err),

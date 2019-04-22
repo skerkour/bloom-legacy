@@ -19,7 +19,7 @@ use crate::{
 };
 
 
-pub fn delete((album_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
+pub fn delete((playlist_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
     let state = req.state().clone();
     let logger = req.logger();
     let auth = req.request_auth();
@@ -31,8 +31,8 @@ pub fn delete((album_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) ->
     }
 
     return state.db
-    .send(controllers::DeleteAlbum{
-        album_id: album_id.into_inner(),
+    .send(controllers::DeletePlaylist{
+        playlist_id: playlist_id.into_inner(),
         account_id: auth.account.expect("unwraping non none account").id,
         session_id: auth.session.expect("unwraping non none session").id,
         request_id: request_id,
