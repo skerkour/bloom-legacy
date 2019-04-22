@@ -8,39 +8,34 @@ use kernel::{
 };
 use std::collections::HashSet;
 use crate::{
-    domain::album,
+    domain::playlist,
     validators,
 };
 use drive::domain::File;
 
 
 #[derive(Clone, Debug)]
-pub struct AddFiles {
+pub struct RemoveFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for AddFiles {
-    type Aggregate = album::Album;
-    type Event = album::Event;
+impl eventsourcing::Command for RemoveFiles {
+    type Aggregate = playlist::Playlist;
+    type Event = playlist::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums,
+            music_playlists,
             drive_files,
-            gallery_albums_files,
+            music_playlists_files,
         };
         use diesel::prelude::*;
         use diesel::pg::expression::dsl::any;
-
-        let mut valid_types = HashSet::new();
-        valid_types.insert("image/gif".to_string());
-        valid_types.insert("image/png".to_string());
-        valid_types.insert("image/jpeg".to_string());
 
         // check that file is owned by same owner
         let files: Vec<File> = drive_files::dsl::drive_files
@@ -54,22 +49,15 @@ impl eventsourcing::Command for AddFiles {
             return Err(KernelError::Validation("File not found.".to_string()));
         }
 
-        // check that files is not already in album
-        let already_in_album: i64 = gallery_albums_files::dsl::gallery_albums_files
-            .filter(gallery_albums_files::dsl::album_id.eq(aggregate.id))
-            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
+        // check that files are already in playlist
+        let already_in_playlist: i64 = music_playlists_files::dsl::music_playlists_files
+            .filter(music_playlists_files::dsl::playlist_id.eq(aggregate.id))
+            .filter(music_playlists_files::dsl::file_id.eq(any(&self.files)))
             .count()
             .get_result(ctx)?;
 
-        if already_in_album >= 1 {
-            return Err(KernelError::Validation("File is already in album.".to_string()));
-        }
-
-        // check that file is good mimetype: TODO
-        for file in files {
-            if !valid_types.contains(&file.type_) {
-                return Err(KernelError::Validation("File type is not valid.".to_string()));
-            }
+        if already_in_playlist as usize!= self.files.len() {
+            return Err(KernelError::Validation("File is not in in playlist.".to_string()));
         }
 
         return Ok(());
@@ -77,27 +65,22 @@ impl eventsourcing::Command for AddFiles {
 
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums_files::dsl::gallery_albums_files,
+            music_playlists_files,
         };
         use diesel::prelude::*;
+        use diesel::pg::expression::dsl::any;
 
-        let files: Vec<album::AlbumFile> = self.files.iter().map(|file_id|
-            album::AlbumFile{
-                id: uuid::Uuid::new_v4(),
-                album_id: aggregate.id,
-                file_id: *file_id,
-            }
-        ).collect();
 
-        diesel::insert_into(gallery_albums_files)
-            .values(&files)
+        diesel::delete(music_playlists_files::dsl::music_playlists_files
+            .filter(music_playlists_files::dsl::file_id.eq(any(&self.files)))
+        )
             .execute(ctx)?;
 
-        let data = album::EventData::FilesAddedV1(album::FilesAddedV1{
+        let data = playlist::EventData::FilesRemovedV1(playlist::FilesRemovedV1{
             files: self.files.clone(),
         });
 
-        return  Ok((album::Event{
+        return  Ok((playlist::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,

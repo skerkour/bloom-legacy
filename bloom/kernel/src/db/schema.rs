@@ -308,6 +308,36 @@ table! {
 }
 
 table! {
+    music_playlists (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        name -> Text,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    music_playlists_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    music_playlists_files (id) {
+        id -> Uuid,
+        album_id -> Uuid,
+        file_id -> Uuid,
+    }
+}
+
+table! {
     notes_notes (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -418,6 +448,10 @@ joinable!(kernel_pending_emails -> kernel_accounts (account_id));
 joinable!(kernel_pending_emails_events -> kernel_pending_emails (aggregate_id));
 joinable!(kernel_sessions -> kernel_accounts (account_id));
 joinable!(kernel_sessions_events -> kernel_sessions (aggregate_id));
+joinable!(music_playlists -> kernel_accounts (owner_id));
+joinable!(music_playlists_events -> music_playlists (aggregate_id));
+joinable!(music_playlists_files -> drive_files (file_id));
+joinable!(music_playlists_files -> music_playlists (album_id));
 joinable!(notes_notes -> kernel_accounts (owner_id));
 joinable!(notes_notes_events -> notes_notes (aggregate_id));
 joinable!(phaser_reports -> phaser_scans (scan_id));
@@ -450,6 +484,9 @@ allow_tables_to_appear_in_same_query!(
     kernel_pending_emails_events,
     kernel_sessions,
     kernel_sessions_events,
+    music_playlists,
+    music_playlists_events,
+    music_playlists_files,
     notes_notes,
     notes_notes_events,
     phaser_reports,

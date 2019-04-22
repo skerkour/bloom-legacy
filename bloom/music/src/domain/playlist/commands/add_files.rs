@@ -8,7 +8,7 @@ use kernel::{
 };
 use std::collections::HashSet;
 use crate::{
-    domain::album,
+    domain::playlist,
     validators,
 };
 use drive::domain::File;
@@ -22,25 +22,24 @@ pub struct AddFiles {
 }
 
 impl eventsourcing::Command for AddFiles {
-    type Aggregate = album::Album;
-    type Event = album::Event;
+    type Aggregate = playlist::Playlist;
+    type Event = playlist::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums,
+            music_playlists,
             drive_files,
-            gallery_albums_files,
+            music_playlists_files,
         };
         use diesel::prelude::*;
         use diesel::pg::expression::dsl::any;
 
         let mut valid_types = HashSet::new();
-        valid_types.insert("image/gif".to_string());
-        valid_types.insert("image/png".to_string());
-        valid_types.insert("image/jpeg".to_string());
+        valid_types.insert("audio/mpeg".to_string());
+        valid_types.insert("audio/mp3".to_string());
 
         // check that file is owned by same owner
         let files: Vec<File> = drive_files::dsl::drive_files
@@ -54,15 +53,15 @@ impl eventsourcing::Command for AddFiles {
             return Err(KernelError::Validation("File not found.".to_string()));
         }
 
-        // check that files is not already in album
-        let already_in_album: i64 = gallery_albums_files::dsl::gallery_albums_files
-            .filter(gallery_albums_files::dsl::album_id.eq(aggregate.id))
-            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
+        // check that files is not already in playlist
+        let already_in_playlist: i64 = music_playlists_files::dsl::music_playlists_files
+            .filter(music_playlists_files::dsl::playlist_id.eq(aggregate.id))
+            .filter(music_playlists_files::dsl::file_id.eq(any(&self.files)))
             .count()
             .get_result(ctx)?;
 
-        if already_in_album >= 1 {
-            return Err(KernelError::Validation("File is already in album.".to_string()));
+        if already_in_playlist >= 1 {
+            return Err(KernelError::Validation("File is already in playlist.".to_string()));
         }
 
         // check that file is good mimetype: TODO
@@ -77,27 +76,27 @@ impl eventsourcing::Command for AddFiles {
 
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums_files::dsl::gallery_albums_files,
+            music_playlists_files::dsl::music_playlists_files,
         };
         use diesel::prelude::*;
 
-        let files: Vec<album::AlbumFile> = self.files.iter().map(|file_id|
-            album::AlbumFile{
+        let files: Vec<playlist::PlaylistFile> = self.files.iter().map(|file_id|
+            playlist::PlaylistFile{
                 id: uuid::Uuid::new_v4(),
-                album_id: aggregate.id,
+                playlist_id: aggregate.id,
                 file_id: *file_id,
             }
         ).collect();
 
-        diesel::insert_into(gallery_albums_files)
+        diesel::insert_into(music_playlists_files)
             .values(&files)
             .execute(ctx)?;
 
-        let data = album::EventData::FilesAddedV1(album::FilesAddedV1{
+        let data = playlist::EventData::FilesAddedV1(playlist::FilesAddedV1{
             files: self.files.clone(),
         });
 
-        return  Ok((album::Event{
+        return  Ok((playlist::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
