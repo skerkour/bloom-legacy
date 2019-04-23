@@ -16,7 +16,6 @@ script:
   # - make lint
   # - make build
   - make docker_build
-  - make docker_login && make docker_release
 
 deploy:
   - provider: releases
