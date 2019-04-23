@@ -7,8 +7,6 @@ use rusoto_s3::{
     S3Client,
     S3,
 };
-use rusoto_core::{Region};
-use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 use kernel::{
     KernelError,
     events::EventMetadata,

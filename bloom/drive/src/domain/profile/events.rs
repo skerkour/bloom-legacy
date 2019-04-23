@@ -34,7 +34,7 @@ pub struct CreatedV1 {
 impl eventsourcing::Event for Event {
     type Aggregate = super::Profile;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
             EventData::CreatedV1(ref data) => super::Profile{

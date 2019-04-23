@@ -1,4 +1,4 @@
-FROM rust:1.33-stretch AS builder
+FROM rust:1.34-stretch AS builder
 
 RUN rustup target add x86_64-unknown-linux-musl
 RUN apt update
@@ -33,8 +33,8 @@ RUN mkdir /kernel && chown -R bloom:bloom /kernel && chmod 700 /kernel
 COPY --from=builder /kernel/dist/kernel /kernel/kernel
 COPY --from=builder /kernel/dist/assets /kernel/assets
 
-#USER bloom
 WORKDIR /kernel
+USER bloom
 
 EXPOSE 8000
 CMD ["./kernel"]

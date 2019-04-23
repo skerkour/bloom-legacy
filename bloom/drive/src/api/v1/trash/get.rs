@@ -1,7 +1,6 @@
 use futures::future::Future;
-use serde::{Deserialize};
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Query,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
 };
 use futures::future;
 use kernel::{
@@ -16,9 +15,6 @@ use kernel::{
 use crate::{
     controllers,
     api::v1::models,
-    domain::{
-        File,
-    }
 };
 
 

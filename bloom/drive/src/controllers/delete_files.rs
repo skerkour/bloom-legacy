@@ -7,8 +7,6 @@ use kernel::{
 };
 use crate::{
     domain,
-    FOLDER_TYPE,
-    BLOOM_ROOT_NAME,
     domain::file,
 };
 

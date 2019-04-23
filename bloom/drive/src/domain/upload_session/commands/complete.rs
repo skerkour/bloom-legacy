@@ -2,19 +2,12 @@ use rusoto_s3::{
     HeadObjectRequest,
     S3,
 };
-use diesel::{
-    PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
 use kernel::{
     events::EventMetadata,
     KernelError,
 };
-use futures::future::Future;
-use std::str::FromStr;
 use crate::{
     domain::upload_session,
-    validators,
 };
 
 

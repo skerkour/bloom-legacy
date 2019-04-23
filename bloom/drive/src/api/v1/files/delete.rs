@@ -1,6 +1,6 @@
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json, Path,
+    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
 };
 use futures::future;
 use kernel::{

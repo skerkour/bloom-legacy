@@ -4,15 +4,8 @@ use kernel::{
     db::DbActor,
     KernelError,
 };
-use diesel::{
-    sql_query,
-    pg::types::sql_types,
-};
 use crate::{
     domain,
-    FOLDER_TYPE,
-    BLOOM_ROOT_NAME,
-    domain::file::FolderPath,
 };
 
 

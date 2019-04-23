@@ -1,5 +1,4 @@
 use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
 use kernel::{
     db::DbActor,
     KernelError,
@@ -7,8 +6,6 @@ use kernel::{
 };
 use crate::{
     domain,
-    FOLDER_TYPE,
-    BLOOM_ROOT_NAME,
     domain::file,
 };
 

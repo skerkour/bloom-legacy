@@ -1,7 +1,7 @@
 use kernel::KernelError;
 
 // TODO
-pub fn file_name(file_name: &str) -> Result<(), KernelError> {
+pub fn file_name(_file_name: &str) -> Result<(), KernelError> {
 
     return Ok(());
 }
