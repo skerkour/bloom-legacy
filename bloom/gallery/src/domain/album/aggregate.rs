@@ -4,7 +4,6 @@ use kernel::{
     db::schema::{
         gallery_albums,
         gallery_albums_files,
-        drive_files,
     },
 };
 

@@ -15,7 +15,6 @@ use kernel::{
 };
 use crate::{
     controllers,
-    api::v1::models,
 };
 
 

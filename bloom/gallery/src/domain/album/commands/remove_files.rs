@@ -6,10 +6,8 @@ use kernel::{
     KernelError,
     events::EventMetadata,
 };
-use std::collections::HashSet;
 use crate::{
     domain::album,
-    validators,
 };
 use drive::domain::File;
 
@@ -30,7 +28,6 @@ impl eventsourcing::Command for RemoveFiles {
 
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums,
             drive_files,
             gallery_albums_files,
         };

@@ -9,7 +9,6 @@ use kernel::{
 use std::collections::HashSet;
 use crate::{
     domain::playlist,
-    validators,
 };
 use drive::domain::File;
 
@@ -30,7 +29,6 @@ impl eventsourcing::Command for AddFiles {
 
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
-            music_playlists,
             drive_files,
             music_playlists_files,
         };

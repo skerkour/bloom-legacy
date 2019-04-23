@@ -7,7 +7,6 @@ use kernel::{
     KernelError,
     events::EventMetadata,
 };
-use drive::domain::File;
 use crate::{
     domain::album,
 };
@@ -37,7 +36,6 @@ impl eventsourcing::Command for Delete {
     // TODO: improve
     fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use kernel::db::schema::{
-            gallery_albums,
             drive_files,
             gallery_albums_files,
         };

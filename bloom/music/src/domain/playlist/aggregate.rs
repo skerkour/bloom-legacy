@@ -4,7 +4,6 @@ use kernel::{
     db::schema::{
         music_playlists,
         music_playlists_files,
-        drive_files,
     },
 };
 
