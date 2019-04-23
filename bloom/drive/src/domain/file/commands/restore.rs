@@ -8,7 +8,6 @@ use kernel::{
 };
 use crate::{
     domain::file,
-    FOLDER_TYPE,
 };
 
 
@@ -24,7 +23,7 @@ impl eventsourcing::Command for Restore {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         if aggregate.trashed_at.is_none() {
             return Err(KernelError::Validation("File is not in trash".to_string()))
         }

@@ -28,7 +28,6 @@ impl eventsourcing::Command for Move {
     fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         use kernel::db::schema::{
             drive_files,
-            drive_files_events,
         };
         use diesel::prelude::*;
 

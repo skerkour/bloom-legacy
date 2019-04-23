@@ -8,7 +8,6 @@ use kernel::{
 };
 use crate::{
     domain::file,
-    FOLDER_TYPE,
 };
 
 
@@ -25,13 +24,7 @@ impl eventsourcing::Command for Trash {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use kernel::db::schema::{
-            drive_files,
-            drive_files_events,
-        };
-        use diesel::prelude::*;
-
+    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         if aggregate.trashed_at.is_some() {
             return Err(KernelError::Validation("File is already in trash".to_string()))
         }

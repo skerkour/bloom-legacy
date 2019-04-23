@@ -9,7 +9,6 @@ use kernel::{
 };
 use crate::{
     domain::file,
-    validators,
 };
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -36,7 +35,7 @@ impl eventsourcing::Command for Upload {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let event_data = file::EventData::UploadedV1(file::UploadedV1{
             id: self.id,
             parent_id: self.parent_id,
