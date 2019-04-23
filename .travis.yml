@@ -3,6 +3,8 @@ language: rust
 services:
   - docker
 
+sudo: required # may allocate more mory
+
 rust:
   - 1.33.0
 
