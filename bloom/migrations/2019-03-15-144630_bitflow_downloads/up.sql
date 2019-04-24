@@ -6,14 +6,15 @@ CREATE TABLE bitflow_downloads (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
+    error TEXT,
     name TEXT NOT NULL,
+    progress INT NOT NULL,
+    removed_at TIMESTAMP WITH TIME ZONE,
     status TEXT NOT NULL,
     url TEXT NOT NULL,
-    progress INT NOT NULL,
-    error TEXT,
-    owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
+
     file_id UUID REFERENCES drive_files(id),
-    removed_at TIMESTAMP WITH TIME ZONE,
+    owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
 
     PRIMARY KEY(id)
 );

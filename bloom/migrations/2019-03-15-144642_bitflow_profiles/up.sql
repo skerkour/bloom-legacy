@@ -6,9 +6,6 @@ CREATE TABLE bitflow_profiles (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    total_space BIGINT NOT NULL,
-    used_space BIGINT NOT NULL,
-
     account_id UUID NOT NULL REFERENCES kernel_accounts (id),
     home_id UUID NOT NULL REFERENCES drive_files (id),
 
