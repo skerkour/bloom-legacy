@@ -12,9 +12,6 @@ pool:
 variables:
   - group: kernel
 
-variables:
-  imageName: 'your-container-image-name:$(build.buildId)'
-
 steps:
   - script: |
       curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
