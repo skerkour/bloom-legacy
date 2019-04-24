@@ -31,8 +31,8 @@ mime = "0.3"
 
 # emails
 handlebars = "2.0.0-beta.1"
-lettre = "0.8"
-lettre_email = "0.8"
+lettre = "0.9.0"
+lettre_email = "0.9.0"
 
 # logging
 slog = "2.4"
