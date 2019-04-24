@@ -13,5 +13,12 @@ variables:
   imageName: 'your-container-image-name:$(build.buildId)'
 
 steps:
-- script: docker build -f Dockerfile -t $(imageName) .
-  displayName: 'docker build'
+  - script: |
+      curl https://sh.rustup.rs -sSf | sh -s -- -y --default-toolchain stable
+      export PATH=$PATH:$HOME/.cargo/bin
+    displayName: 'Install rust'
+  - script: make test
+    displayName: 'test'
+
+  - script: make docker_build
+    displayName: 'docker build'
