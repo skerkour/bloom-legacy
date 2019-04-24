@@ -10,6 +10,9 @@ pool:
   vmImage: 'Ubuntu-16.04'
 
 variables:
+  - group: kernel
+
+variables:
   imageName: 'your-container-image-name:$(build.buildId)'
 
 steps:
