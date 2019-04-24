@@ -4,7 +4,7 @@ services:
   - docker
 
 rust:
-  - 1.33.0
+  - 1.34.0
 
 before_install:
   - rustup self update
