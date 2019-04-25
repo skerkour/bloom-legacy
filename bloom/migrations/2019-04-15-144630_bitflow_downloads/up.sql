@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TYPE bitflow_downloads_states AS ENUM ('QUEUED', 'DOWNLOADING', 'COMPLETED', 'FAILED');
+-- CREATE TYPE bitflow_download_state AS ENUM ('QUEUED', 'DOWNLOADING', 'COMPLETED', 'FAILED');
 
 CREATE TABLE bitflow_downloads (
     id UUID NOT NULL,

@@ -5,14 +5,13 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        name -> Text,
-        status -> Text,
-        url -> Text,
-        progress -> Int4,
         error -> Nullable<Text>,
-        owner_id -> Uuid,
-        file_id -> Nullable<Uuid>,
+        name -> Text,
+        progress -> Int4,
         removed_at -> Nullable<Timestamptz>,
+        state -> Text,
+        url -> Text,
+        owner_id -> Uuid,
     }
 }
 
@@ -33,8 +32,6 @@ table! {
         updated_at -> Timestamptz,
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
-        total_space -> Int8,
-        used_space -> Int8,
         account_id -> Uuid,
         home_id -> Uuid,
     }
@@ -423,7 +420,6 @@ table! {
     }
 }
 
-joinable!(bitflow_downloads -> drive_files (file_id));
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> drive_files (home_id));

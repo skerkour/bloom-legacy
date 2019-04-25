@@ -5,6 +5,7 @@ use diesel::{
     prelude::PgConnection,
     r2d2::{ Pool, ConnectionManager },
 };
+// use diesel_derive_enum::
 use crate::config;
 
 pub mod schema;
@@ -23,4 +24,3 @@ pub fn init(cfg: &config::Config) -> Addr<DbActor> {
             pool: conn.clone()}
     })
 }
-
