@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TYPE bitflow_downloads_statuses AS ENUM ('QUEUED', 'DOWNLOADING', 'COMPLETED', 'FAILED');
+CREATE TYPE bitflow_downloads_states AS ENUM ('QUEUED', 'DOWNLOADING', 'COMPLETED', 'FAILED');
 
 CREATE TABLE bitflow_downloads (
     id UUID NOT NULL,
@@ -12,7 +12,7 @@ CREATE TABLE bitflow_downloads (
     name TEXT NOT NULL,
     progress INT NOT NULL,
     removed_at TIMESTAMP WITH TIME ZONE,
-    status TEXT NOT NULL,
+    state TEXT NOT NULL,
     url TEXT NOT NULL,
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
