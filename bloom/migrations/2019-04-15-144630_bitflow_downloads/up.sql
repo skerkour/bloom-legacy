@@ -1,4 +1,6 @@
 -- Your SQL goes here
+CREATE TYPE bitflow_downloads_statuses AS ENUM ('QUEUED', 'DOWNLOADING', 'COMPLETED', 'FAILED');
+
 CREATE TABLE bitflow_downloads (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -13,7 +15,6 @@ CREATE TABLE bitflow_downloads (
     status TEXT NOT NULL,
     url TEXT NOT NULL,
 
-    file_id UUID REFERENCES drive_files(id),
     owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
 
     PRIMARY KEY(id)
