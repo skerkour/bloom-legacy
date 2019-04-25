@@ -1,3 +1,5 @@
 * [sendgrid-rs](https://github.com/gsquire/sendgrid-rs)
 * [bcrypt-rs](https://github.com/Keats/rust-bcrypt)
 * [hex-rs](https://github.com/KokaKiwi/rust-hex)
+* [rust-dotenv](https://github.com/apiraino/rust-dotenv)
+* [diesel-derive-enum](https://github.com/adwhit/diesel-derive-enum)

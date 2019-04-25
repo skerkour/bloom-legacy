@@ -26,6 +26,7 @@ members = [
     "crates/eventsourcing-rs",
     "crates/mimesniff-rs",
     "crates/diesel-derive-enum",
+    "crates/rust-dotenv",
 
     "bloom/kernel",
     "bloom/drive",
