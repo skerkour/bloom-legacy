@@ -19,15 +19,21 @@ pub struct Event {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
-    QueuedV1,
+    QueuedV1(QueuedV1),
     StartedV1,
     ProgressUpdatedV1(ProgressUpdatedV1),
     NameUpdatedV1(NameUpdatedV1),
     CompletedV1,
     StoppedV1,
-    FailedV1,
+    FailedV1(FailedV1),
     RemovedV1,
     DeletedV1,
+}
+
+// TODO
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct QueuedV1 {
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -40,12 +46,27 @@ pub struct ProgressUpdatedV1 {
     pub progress: u32,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FailedV1 {
+    pub error: String,
+}
+
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::Download;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
+            // QueuedV1, TODO
+            EventData::QueuedV1(ref data) => super::Download{
+                name: data.name.clone(),
+                ..aggregate
+            },
+            // CompletedV1
+            EventData::StartedV1 => super::Download{
+                state: super::DownloadState::Downloading,
+                ..aggregate
+            },
             // ProgressUpdatedV1
             EventData::ProgressUpdatedV1(ref data) => super::Download{
                 progress: data.progress as i32,
@@ -56,7 +77,31 @@ impl eventsourcing::Event for Event {
                 name: data.name.clone(),
                 ..aggregate
             },
-            _ => aggregate,
+            // CompletedV1
+            EventData::CompletedV1 => super::Download{
+                state: super::DownloadState::Completed,
+                ..aggregate
+            },
+             // StoppedV1
+            EventData::StoppedV1 => super::Download{
+                state: super::DownloadState::Stopped,
+                ..aggregate
+            },
+            // FailedV1
+            EventData::FailedV1(ref data) => super::Download{
+                error: Some(data.error.clone()),
+                ..aggregate
+            },
+            // RemovedV1
+            EventData::RemovedV1 => super::Download{
+                removed_at: Some(self.timestamp),
+                ..aggregate
+            },
+            // DeletedV1
+            EventData::DeletedV1 => super::Download{
+                deleted_at: Some(self.timestamp),
+                ..aggregate
+            },
         }
     }
 
