@@ -7,7 +7,7 @@ CREATE TABLE bitflow_profiles (
     version BIGINT NOT NULL,
 
     account_id UUID NOT NULL REFERENCES kernel_accounts (id),
-    home_id UUID NOT NULL REFERENCES drive_files (id),
+    download_folder_id UUID NOT NULL REFERENCES drive_files (id),
 
     PRIMARY KEY(id)
 );

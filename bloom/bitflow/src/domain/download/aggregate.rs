@@ -30,8 +30,11 @@ pub struct Download {
 
 #[derive(Clone, Debug, Deserialize, DieselEnum, Serialize)]
 pub enum DownloadState {
-    Admin,
-    User,
+    Queued,
+    Downloading,
+    Stopped,
+    Completed,
+    Failed,
 }
 
 impl Download {
@@ -49,7 +52,7 @@ impl Download {
             name: String::new(),
             progress: 0,
             removed_at: None,
-            state: DownloadState::Admin,
+            state: DownloadState::Queued,
             url: String::new(),
 
             owner_id: uuid::Uuid::new_v4(),
