@@ -12,6 +12,7 @@ all: build
 
 build:
 	mkdir -p $(DIST_DIR)
+	# j = 1 to not consume too much RAM
 	cargo build -p api --release -j 1
 	cp target/release/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
@@ -24,7 +25,7 @@ build_debug:
 
 build_static:
 	mkdir -p $(DIST_DIR)
-	cargo build -p api --release --target=x86_64-unknown-linux-musl
+	cargo build -p api --release --target=x86_64-unknown-linux-musl -j 1
 	cp target/x86_64-unknown-linux-musl/release/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 
