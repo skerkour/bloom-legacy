@@ -12,7 +12,7 @@ all: build
 
 build:
 	mkdir -p $(DIST_DIR)
-	cargo build -p api --release
+	cargo build -p api --release -j 1
 	cp target/release/api $(DIST_DIR)/$(NAME)
 	cp -r assets $(DIST_DIR)/
 

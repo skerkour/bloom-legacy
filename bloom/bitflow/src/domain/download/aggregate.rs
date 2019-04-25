@@ -18,9 +18,9 @@ pub struct Download {
     pub version: i64,
 
 
-    pub error Option<String>,
+    pub error: Option<String>,
     pub name: String,
-    pub progress: i64,
+    pub progress: i32,
     pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
     pub state: DownloadState,
     pub url: String,
@@ -28,7 +28,7 @@ pub struct Download {
     pub owner_id: uuid::Uuid,
 }
 
-#[derive(DieselEnum)]
+#[derive(Clone, Debug, Deserialize, DieselEnum, Serialize)]
 pub enum DownloadState {
     Admin,
     User,
@@ -45,7 +45,7 @@ impl Download {
             deleted_at: None,
             version: 0,
 
-            error None,
+            error: None,
             name: String::new(),
             progress: 0,
             removed_at: None,
