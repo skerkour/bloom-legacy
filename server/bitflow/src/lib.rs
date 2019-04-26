@@ -5,6 +5,6 @@ extern crate diesel;
 extern crate diesel_enum_derive;
 
 pub mod validators;
-// pub mod api;
+pub mod api;
 pub mod domain;
-// pub mod controllers;
+pub mod controllers;

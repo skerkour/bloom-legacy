@@ -12,6 +12,7 @@ use contacts::api::v1 as contactsv1;
 use drive::api::v1 as drivev1;
 use gallery::api::v1 as galleryv1;
 use music::api::v1 as musicv1;
+use bitflow::api::v1 as bitflowv1;
 use sentry_actix::SentryMiddleware;
 use kernel::{
     db::DbActor,
@@ -158,6 +159,11 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/music/v1/playlists/{playlist_id}/remove", |r| {
                 r.method(http::Method::POST).with_config(musicv1::playlists::playlist::remove::post, api::json_default_config_path);
+            })
+
+            // bitflow
+            .resource("/bitflow/v1/downloads", |r| {
+                r.method(http::Method::GET).f(bitflowv1::downloads::get);
             })
 
             .register()
