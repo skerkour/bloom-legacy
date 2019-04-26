@@ -165,6 +165,9 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .resource("/bitflow/v1/downloads", |r| {
                 r.method(http::Method::GET).f(bitflowv1::downloads::get);
             })
+            .resource("/bitflow/v1/downloads/{download_id}", |r| {
+                r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
+            })
 
             .register()
     })
