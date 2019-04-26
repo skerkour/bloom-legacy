@@ -30,10 +30,12 @@ pub enum EventData {
     DeletedV1,
 }
 
-// TODO
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueuedV1 {
+    pub id: uuid::Uuid,
+    pub owner_id: uuid::Uuid,
     pub name: String,
+    pub url: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -57,10 +59,21 @@ impl eventsourcing::Event for Event {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
-            // QueuedV1, TODO
             EventData::QueuedV1(ref data) => super::Download{
+                id: data.id,
+                created_at: self.timestamp,
+                updated_at: self.timestamp,
+                deleted_at: None,
+                version: 0,
+
                 name: data.name.clone(),
-                ..aggregate
+                url: data.url.clone(),
+                state: super::DownloadState::Queued,
+                progress: 0,
+                removed_at: None,
+                error: None,
+
+                owner_id: data.owner_id,
             },
             // CompletedV1
             EventData::StartedV1 => super::Download{
