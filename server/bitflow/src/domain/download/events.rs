@@ -23,7 +23,7 @@ pub enum EventData {
     StartedV1,
     ProgressUpdatedV1(ProgressUpdatedV1),
     NameUpdatedV1(NameUpdatedV1),
-    CompletedV1,
+    CompletedV1(CompletedV1),
     StoppedV1,
     FailedV1(FailedV1),
     RemovedV1,
@@ -51,6 +51,11 @@ pub struct ProgressUpdatedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FailedV1 {
     pub error: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompletedV1 {
+    pub files: Vec<uuid::Uuid>,
 }
 
 
@@ -91,8 +96,9 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // CompletedV1
-            EventData::CompletedV1 => super::Download{
+            EventData::CompletedV1(_) => super::Download{
                 state: super::DownloadState::Completed,
+                progress: 100,
                 ..aggregate
             },
              // StoppedV1

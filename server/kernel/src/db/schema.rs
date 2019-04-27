@@ -33,7 +33,7 @@ table! {
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         account_id -> Uuid,
-        home_id -> Uuid,
+        download_folder_id -> Uuid,
     }
 }
 
@@ -422,7 +422,7 @@ table! {
 
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
-joinable!(bitflow_profiles -> drive_files (home_id));
+joinable!(bitflow_profiles -> drive_files (download_folder_id));
 joinable!(bitflow_profiles -> kernel_accounts (account_id));
 joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
 joinable!(contacts_contacts -> kernel_accounts (owner_id));

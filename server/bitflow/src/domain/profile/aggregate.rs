@@ -31,9 +31,6 @@ impl Profile {
             deleted_at: None,
             version: 0,
 
-            total_space: 0,
-            used_space: 0,
-
             account_id: uuid::Uuid::new_v4(),
             download_folder_id: uuid::Uuid::new_v4(),
         };

@@ -62,6 +62,7 @@ pub struct CompleteData {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteDataFile {
+    pub bitflow_id: uuid::Uuid,
     pub name: String,
     pub size: u64,
     #[serde(rename = "type")]

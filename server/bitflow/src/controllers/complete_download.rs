@@ -1,5 +1,4 @@
 use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
 use kernel::{
     KernelError,
     events::EventMetadata,
@@ -8,10 +7,12 @@ use kernel::{
 use crate::domain;
 
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone)]
 pub struct CompleteDownload {
     // pub actor_id: uuid::Uuid,
     // pub session_id: uuid::Uuid,
+    pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
     pub download_id: uuid::Uuid,
     pub complete_data: domain::download::CompleteData,
     pub request_id: uuid::Uuid,
@@ -28,6 +29,7 @@ impl Handler<CompleteDownload> for DbActor {
         use kernel::db::schema::{
             bitflow_downloads,
             bitflow_downloads_events,
+            bitflow_profiles,
         };
         use diesel::prelude::*;
 
@@ -41,12 +43,20 @@ impl Handler<CompleteDownload> for DbActor {
                 .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
+            let profile: domain::Profile = bitflow_profiles::dsl::bitflow_profiles
+                .filter(bitflow_profiles::dsl::account_id.eq(download.owner_id))
+                .filter(bitflow_profiles::dsl::deleted_at.is_null())
+                .first(&conn)?;
+
             let metadata = EventMetadata{
                 actor_id: None, // Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: None, // Some(msg.session_id),
             };
             let complete_cmd = domain::download::Complete{
+                s3_bucket: msg.s3_bucket,
+                s3_client: msg.s3_client,
+                profile,
                 data: msg.complete_data,
                 metadata,
             };

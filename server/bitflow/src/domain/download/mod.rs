@@ -28,4 +28,5 @@ pub use events::{
     ProgressUpdatedV1,
     NameUpdatedV1,
     FailedV1,
+    CompletedV1,
 };

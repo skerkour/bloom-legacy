@@ -43,11 +43,8 @@ impl eventsourcing::Event for Event {
                 deleted_at: None,
                 version: 0,
 
-                total_space: data.total_space,
-                used_space: 0,
-
                 account_id: data.account_id,
-                home_id: data.home_id,
+                download_folder_id: data.download_folder_id,
             },
         }
     }
