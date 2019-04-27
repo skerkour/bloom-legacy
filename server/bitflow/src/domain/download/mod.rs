@@ -8,8 +8,13 @@ pub use aggregate::{
     DownloadState,
 };
 pub use commands::{
+    Delete,
 };
 pub use events::{
     Event,
     EventData,
+    QueuedV1,
+    ProgressUpdatedV1,
+    NameUpdatedV1,
+    FailedV1,
 };
