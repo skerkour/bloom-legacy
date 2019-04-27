@@ -31,15 +31,21 @@ pub fn post((remove_data, req): (Json<models::RemoveDownloadsBody>, HttpRequest<
     }
 
     return state.db
-    .send(controllers::RemoveDownload{
+    .send(controllers::RemoveDownloads{
         downloads: remove_data.downloads.clone(),
         actor_id: auth.account.expect("unwraping non none account").id,
         session_id: auth.session.expect("unwraping non none session").id,
         request_id: request_id,
     })
-    .and_then(move |_| {
-        let res = api::Response::data(api::NoData{});
-        Ok(HttpResponse::Ok().json(&res))
+    .from_err()
+    .and_then(move |res| {
+        match res {
+            Ok(_) => {
+                let res = api::Response::data(api::NoData{});
+                Ok(HttpResponse::Ok().json(&res))
+            },
+            Err(err) => Err(err),
+        }
     })
     .from_err()
     .map_err(move |err: KernelError| {

@@ -9,28 +9,27 @@ use crate::domain;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct RemoveDownload {
+pub struct RemoveDownloads {
     pub downloads: Vec<uuid::Uuid>,
     pub actor_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
 }
 
-impl Message for RemoveDownload {
+impl Message for RemoveDownloads {
     type Result = Result<(), KernelError>;
 }
 
-impl Handler<RemoveDownload> for DbActor {
+impl Handler<RemoveDownloads> for DbActor {
     type Result = Result<(), KernelError>;
 
-    fn handle(&mut self, msg: RemoveDownload, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: RemoveDownloads, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
             bitflow_downloads,
             bitflow_downloads_events,
         };
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
-
 
         let conn = self.pool.get()
             .map_err(|_| KernelError::R2d2)?;
@@ -41,8 +40,12 @@ impl Handler<RemoveDownload> for DbActor {
                 .filter(bitflow_downloads::dsl::id.eq(any(&msg.downloads)))
                 .filter(bitflow_downloads::dsl::owner_id.eq(msg.actor_id))
                 .filter(bitflow_downloads::dsl::deleted_at.is_null())
-                .filter(bitflow_downloads::dsl::removed_at.is_not_null())
+                .filter(bitflow_downloads::dsl::removed_at.is_null())
                 .load(&conn)?;
+
+            if downloads.len() != msg.downloads.len() {
+                return Err(KernelError::NotFound("downloads not found".to_string()));
+            }
 
             let metadata = EventMetadata{
                 actor_id: Some(msg.actor_id),

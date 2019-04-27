@@ -108,6 +108,7 @@ impl eventsourcing::Event for Event {
             // RemovedV1
             EventData::RemovedV1 => super::Download{
                 removed_at: Some(self.timestamp),
+                state: super::DownloadState::Stopped,
                 ..aggregate
             },
             // DeletedV1
