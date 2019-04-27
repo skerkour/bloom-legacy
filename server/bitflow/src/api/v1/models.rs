@@ -34,3 +34,8 @@ impl From<download::Download> for DownloadResponse {
 pub struct QueueDownloadBody {
     pub url: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RemoveDownloadsBody {
+    pub downloads: Vec<uuid::Uuid>,
+}

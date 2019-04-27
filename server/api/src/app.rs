@@ -166,12 +166,15 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
                 r.method(http::Method::GET).f(bitflowv1::downloads::get);
                 r.method(http::Method::POST).with_config(bitflowv1::downloads::post, api::json_default_config);
             })
+            .resource("/bitflow/v1/downloads/remove", |r| {
+                r.method(http::Method::POST).with_config(bitflowv1::downloads::remove::post, api::json_default_config);
+            })
             .resource("/bitflow/v1/downloads/{download_id}", |r| {
+                r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
                 r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
             })
             .resource("/bitflow/v1/history", |r| {
                 r.method(http::Method::GET).f(bitflowv1::history::get);
-                r.method(http::Method::DELETE).f(bitflowv1::history::delete);
             })
 
             .register()

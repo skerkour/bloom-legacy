@@ -13,6 +13,7 @@ pub use aggregate::{
 pub use commands::{
     Delete,
     Queue,
+    Remove,
 };
 pub use events::{
     Event,
