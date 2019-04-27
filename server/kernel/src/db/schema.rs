@@ -10,7 +10,7 @@ table! {
         progress -> Int4,
         removed_at -> Nullable<Timestamptz>,
         state -> Text,
-        url -> Text,
+        url -> Jsonb,
         owner_id -> Uuid,
     }
 }

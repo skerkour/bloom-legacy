@@ -1,5 +1,6 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
+use diesel_as_jsonb::AsJsonb;
 use kernel::{
     db::schema::{
         bitflow_downloads,
@@ -23,7 +24,7 @@ pub struct Download {
     pub progress: i32,
     pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
     pub state: DownloadState,
-    pub url: String,
+    pub url: DownloadUrl,
 
     pub owner_id: uuid::Uuid,
 }
@@ -35,6 +36,23 @@ pub enum DownloadState {
     Stopped,
     Completed,
     Failed,
+}
+
+#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+pub enum DownloadUrl {
+    Http(DownloadUrlHttp),
+    TorrentMagnet(DownloadUrlTorrentMagnet),
+    None,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DownloadUrlHttp {
+    pub url: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DownloadUrlTorrentMagnet {
+    pub magnet: String,
 }
 
 impl Download {
@@ -53,7 +71,7 @@ impl Download {
             progress: 0,
             removed_at: None,
             state: DownloadState::Queued,
-            url: String::new(),
+            url: DownloadUrl::None,
 
             owner_id: uuid::Uuid::new_v4(),
         };

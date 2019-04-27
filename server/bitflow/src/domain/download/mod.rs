@@ -6,9 +6,13 @@ mod commands;
 pub use aggregate::{
     Download,
     DownloadState,
+    DownloadUrl,
+    DownloadUrlHttp,
+    DownloadUrlTorrentMagnet,
 };
 pub use commands::{
     Delete,
+    Queue,
 };
 pub use events::{
     Event,

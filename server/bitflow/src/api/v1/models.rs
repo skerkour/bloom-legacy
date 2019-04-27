@@ -11,7 +11,7 @@ pub struct DownloadResponse {
     pub progress: i32,
     pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
     pub state: download::DownloadState,
-    pub url: String,
+    pub url: download::DownloadUrl,
 }
 
 impl From<download::Download> for DownloadResponse {
@@ -27,4 +27,10 @@ impl From<download::Download> for DownloadResponse {
             url: download.url,
         }
     }
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct QueueDownloadBody {
+    pub url: String,
 }

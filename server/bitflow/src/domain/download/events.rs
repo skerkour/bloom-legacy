@@ -35,7 +35,7 @@ pub struct QueuedV1 {
     pub id: uuid::Uuid,
     pub owner_id: uuid::Uuid,
     pub name: String,
-    pub url: String,
+    pub url: super::DownloadUrl,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -67,7 +67,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
 
                 name: data.name.clone(),
-                url: data.url.clone(),
+                url: super::DownloadUrl::None,
                 state: super::DownloadState::Queued,
                 progress: 0,
                 removed_at: None,
