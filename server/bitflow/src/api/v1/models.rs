@@ -39,3 +39,10 @@ pub struct QueueDownloadBody {
 pub struct RemoveDownloadsBody {
     pub downloads: Vec<uuid::Uuid>,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateDownloadBody {
+    pub name: Option<String>,
+    pub progress: Option<u32>,
+}

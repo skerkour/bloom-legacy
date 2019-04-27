@@ -15,6 +15,8 @@ pub use commands::{
     Queue,
     Remove,
     Start,
+    UpdateName,
+    UpdateProgress,
 };
 pub use events::{
     Event,

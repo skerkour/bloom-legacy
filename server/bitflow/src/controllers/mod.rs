@@ -5,6 +5,7 @@ mod clear_history;
 mod queue_download;
 mod remove_downloads;
 mod start_download;
+mod update_download;
 
 
 pub use find_downloads::FindDownloads;
@@ -14,3 +15,4 @@ pub use clear_history::ClearHistory;
 pub use queue_download::QueueDownload;
 pub use remove_downloads::RemoveDownloads;
 pub use start_download::StartDownload;
+pub use update_download::UpdateDownload;
