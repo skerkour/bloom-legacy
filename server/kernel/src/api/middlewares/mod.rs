@@ -19,4 +19,5 @@ pub use auth::{
     Auth,
     AuthMiddleware,
     GetRequestAuth,
+    Service,
 };

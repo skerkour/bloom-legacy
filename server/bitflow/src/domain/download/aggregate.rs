@@ -29,7 +29,7 @@ pub struct Download {
     pub owner_id: uuid::Uuid,
 }
 
-#[derive(Clone, Debug, Deserialize, DieselEnum, Serialize)]
+#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
 pub enum DownloadState {
     Queued,
     Downloading,
