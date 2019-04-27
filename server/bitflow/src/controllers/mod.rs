@@ -6,6 +6,7 @@ mod queue_download;
 mod remove_downloads;
 mod start_download;
 mod update_download;
+mod complete_download;
 
 
 pub use find_downloads::FindDownloads;
@@ -16,3 +17,4 @@ pub use queue_download::QueueDownload;
 pub use remove_downloads::RemoveDownloads;
 pub use start_download::StartDownload;
 pub use update_download::UpdateDownload;
+pub use complete_download::CompleteDownload;

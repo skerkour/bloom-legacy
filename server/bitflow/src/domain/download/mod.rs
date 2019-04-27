@@ -9,6 +9,8 @@ pub use aggregate::{
     DownloadUrl,
     DownloadUrlHttp,
     DownloadUrlTorrentMagnet,
+    CompleteData,
+    CompleteDataFile,
 };
 pub use commands::{
     Delete,
@@ -17,6 +19,7 @@ pub use commands::{
     Start,
     UpdateName,
     UpdateProgress,
+    Complete,
 };
 pub use events::{
     Event,

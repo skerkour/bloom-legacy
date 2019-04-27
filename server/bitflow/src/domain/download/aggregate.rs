@@ -55,6 +55,19 @@ pub struct DownloadUrlTorrentMagnet {
     pub magnet: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompleteData {
+    pub files: Vec<CompleteDataFile>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompleteDataFile {
+    pub name: String,
+    pub size: u64,
+    #[serde(rename = "type")]
+    pub type_: String,
+}
+
 impl Download {
     // create a new, unitialized note
     pub fn new() -> Self {

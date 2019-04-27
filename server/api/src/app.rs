@@ -171,7 +171,10 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/bitflow/v1/downloads/{download_id}", |r| {
                 r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
-                r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
+                r.method(http::Method::PUT).with_config(bitflowv1::downloads::download::put, api::json_default_config_path);
+            })
+            .resource("/bitflow/v1/downloads/{download_id}", |r| {
+                r.method(http::Method::POST).with_config(bitflowv1::downloads::download::complete::post, api::json_default_config_path);
             })
             .resource("/bitflow/v1/history", |r| {
                 r.method(http::Method::GET).f(bitflowv1::history::get);

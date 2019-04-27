@@ -106,10 +106,18 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // RemovedV1
-            EventData::RemovedV1 => super::Download{
-                removed_at: Some(self.timestamp),
-                state: super::DownloadState::Stopped,
-                ..aggregate
+            EventData::RemovedV1 => {
+                let state = if aggregate.state == super::DownloadState::Queued
+                    || aggregate.state == super::DownloadState::Downloading {
+                    super::DownloadState::Stopped
+                } else {
+                    aggregate.state
+                };
+                super::Download{
+                    removed_at: Some(self.timestamp),
+                    state,
+                    ..aggregate
+                }
             },
             // DeletedV1
             EventData::DeletedV1 => super::Download{
