@@ -42,7 +42,6 @@ pub enum DownloadState {
 pub enum DownloadUrl {
     Http(DownloadUrlHttp),
     TorrentMagnet(DownloadUrlTorrentMagnet),
-    None,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -85,7 +84,7 @@ impl Download {
             progress: 0,
             removed_at: None,
             state: DownloadState::Queued,
-            url: DownloadUrl::None,
+            url: DownloadUrl::Http(DownloadUrlHttp{url: "".to_string()}),
 
             owner_id: uuid::Uuid::new_v4(),
         };

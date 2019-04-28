@@ -27,7 +27,8 @@ pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Phaser {
+    println!("service: {:?}", auth.service);
+    if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Bitflow {
         return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
         .responder();
     }

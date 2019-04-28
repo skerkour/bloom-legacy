@@ -178,7 +178,10 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             })
             .resource("/bitflow/v1/history", |r| {
                 r.method(http::Method::GET).f(bitflowv1::history::get);
-                 r.method(http::Method::DELETE).f(bitflowv1::history::delete);
+                r.method(http::Method::DELETE).f(bitflowv1::history::delete);
+            })
+            .resource("/bitflow/v1/job", |r| {
+                r.method(http::Method::GET).f(bitflowv1::job::get);
             })
 
             .register()

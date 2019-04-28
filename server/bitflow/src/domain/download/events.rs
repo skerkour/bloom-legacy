@@ -72,7 +72,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
 
                 name: data.name.clone(),
-                url: super::DownloadUrl::None,
+                url: data.url.clone(),
                 state: super::DownloadState::Queued,
                 progress: 0,
                 removed_at: None,
