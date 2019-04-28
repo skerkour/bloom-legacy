@@ -46,3 +46,9 @@ pub struct UpdateDownloadBody {
     pub name: Option<String>,
     pub progress: Option<u32>,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FailDownloadBody {
+    pub error: String,
+}

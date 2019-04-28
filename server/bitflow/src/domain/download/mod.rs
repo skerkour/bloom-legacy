@@ -20,6 +20,7 @@ pub use commands::{
     UpdateName,
     UpdateProgress,
     Complete,
+    Fail,
 };
 pub use events::{
     Event,
