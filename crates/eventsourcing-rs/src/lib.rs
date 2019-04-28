@@ -49,7 +49,11 @@ impl EventBus {
         let boxed = Box::new(subscription);
         // let boxed = Box::new(subscription) as Box<dyn Subscription<Context = C, Message = M, Error = E>>;
         // print_typeid(&boxed);
-        self.subscriptions.insert(msg_id, vec![boxed]);
+        if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
+            subscriptions.push(boxed);
+        } else {
+            self.subscriptions.insert(msg_id, vec![boxed]);
+        }
     }
 
     fn publish<C: Any, M: Any, E: Any>(&mut self, ctx: &C, message: &M) -> Result<(), E> {
