@@ -109,6 +109,7 @@ impl eventsourcing::Event for Event {
             // FailedV1
             EventData::FailedV1(ref data) => super::Download{
                 error: Some(data.error.clone()),
+                state: super::DownloadState::Failed,
                 ..aggregate
             },
             // RemovedV1
