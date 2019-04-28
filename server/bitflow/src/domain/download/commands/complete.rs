@@ -77,15 +77,18 @@ impl eventsourcing::Command for Complete {
 
             // copy s3 file
             // TODO: delete bitflow file
+            let from = format!("bitflow/{}/{}", aggregate.id, file.bitflow_id);
+            let to = format!("drive/{}/{}", aggregate.owner_id, uploaded_file.id);
+            println!("COPYING: from: {} to: {}", &from, &to);
             let req = CopyObjectRequest {
                 bucket: self.s3_bucket.clone(),
-                key: format!("drive/{}/{}", aggregate.owner_id, uploaded_file.id),
-                copy_source: format!("bitflow/{}/{}", aggregate.id, file.bitflow_id),
+                key: to,
+                copy_source: from,
                 content_type: Some(uploaded_file.type_),
                 ..Default::default()
             };
             // TODO: handle error
-            let _ = self.s3_client.copy_object(req).sync().expect("Couldn't PUT object");
+            let _ = self.s3_client.copy_object(req).sync().expect("Couldn't copy object");
             return Ok(uploaded_file.id);
         }).collect::<Result<Vec<uuid::Uuid>, KernelError>>()?;
 
