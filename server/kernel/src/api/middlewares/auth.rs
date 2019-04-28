@@ -110,6 +110,10 @@ fn extract_secret_header(value: &str) -> Result<CheckAuth, KernelError> {
     if parts.len() != 2 {
         return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
     }
+    let parts: Vec<&str> = parts[1].split(":").collect();
+    if parts.len() != 2 {
+        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+    }
 
     let service = match parts[0] {
         "phaser" => Service::Phaser,
