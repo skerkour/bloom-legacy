@@ -96,4 +96,3 @@ impl eventsourcing::Subscription for AccountCreated {
         return Ok(());
     }
 }
-

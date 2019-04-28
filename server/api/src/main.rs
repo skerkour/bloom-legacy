@@ -20,6 +20,7 @@ use kernel::{
 
 fn register_reactors() {
     eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated{}));
+    eventsourcing::subscribe::<_, account::Event, _>(Box::new(bitflow::reactors::AccountCreated{}));
 }
 
 
