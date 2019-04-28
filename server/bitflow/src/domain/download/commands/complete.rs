@@ -77,9 +77,8 @@ impl eventsourcing::Command for Complete {
 
             // copy s3 file
             // TODO: delete bitflow file
-            let from = format!("bitflow/{}/{}", aggregate.id, file.bitflow_id);
+            let from = format!("{}/bitflow/{}/{}", &self.s3_bucket, aggregate.id, file.bitflow_id);
             let to = format!("drive/{}/{}", aggregate.owner_id, uploaded_file.id);
-            println!("COPYING: from: {} to: {}", &from, &to);
             let req = CopyObjectRequest {
                 bucket: self.s3_bucket.clone(),
                 key: to,
