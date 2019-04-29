@@ -29,6 +29,7 @@ chrono = { version = "0.4", features = ["serde"] }
 rand = "0.6"
 base64 = "0.10.1"
 mime = "0.3"
+url = "1.7"
 
 # emails
 handlebars = "2.0.0-beta.1"

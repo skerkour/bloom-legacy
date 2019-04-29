@@ -47,6 +47,9 @@ pub enum KernelError {
 
     #[fail(display="Internal error")]
     Internal(String),
+
+    #[fail(display="URL parse error: {}", 0)]
+    UrlParseError(url::ParseError),
 }
 
 
@@ -90,13 +93,20 @@ impl std::convert::From<bcrypt::BcryptError> for KernelError {
     }
 }
 
+impl std::convert::From<url::ParseError> for KernelError {
+    fn from(err: url::ParseError) -> Self {
+        KernelError::UrlParseError(err)
+    }
+}
+
+
 
 impl error::ResponseError for KernelError {
     fn error_response(&self) -> HttpResponse {
         let res: Response<()> = Response::error(self.clone());
         match *self {
             // 400
-            KernelError::Validation(_) => HttpResponse::BadRequest().json(&res),
+            KernelError::Validation(_) | KernelError::UrlParseError(_) => HttpResponse::BadRequest().json(&res),
             // 401
             KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
             // 404
