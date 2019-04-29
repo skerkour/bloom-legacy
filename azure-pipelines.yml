@@ -18,7 +18,7 @@ steps:
       echo "##vso[task.setvariable variable=PATH;]$PATH:$HOME/.cargo/bin"
     displayName: 'Install rust'
   - script: |
-      sudo apt-get install -y ca-certificates libssl-dev libpq-dev
+      sudo apt-get install -y ca-certificates libssl-dev libpq-dev libsqlite3-dev mysqlclient
     displayName: 'Install dependencies'
   - script: make test
     displayName: 'test'
