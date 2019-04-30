@@ -36,7 +36,7 @@ impl eventsourcing::Command for SendNewCode {
         }
 
         let now = chrono::Utc::now();
-        if aggregate.updated_at.signed_duration_since(now) < Duration::seconds(20) {
+        if now.signed_duration_since(aggregate.updated_at) < Duration::seconds(20) {
             return Err(KernelError::Validation("Please wait at least for 20 seconds beffore requesting a new code".to_string()));
         }
 
