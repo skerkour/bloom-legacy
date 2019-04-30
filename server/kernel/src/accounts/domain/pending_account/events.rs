@@ -21,6 +21,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
+    NewCodeSentV1(NewCodeSentV1),
     VerificationFailedV1(VerificationFailedReason),
     VerificationSucceededV1,
     RegistrationCompletedV1,
@@ -53,6 +54,12 @@ impl ToString for VerificationFailedReason {
     }
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NewCodeSentV1 {
+    pub token: String,
+}
+
+
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingAccount;
 
@@ -73,16 +80,24 @@ impl eventsourcing::Event for Event {
                 trials: 0,
                 verified: false,
             },
+            // VerificationSucceededV1
             EventData::VerificationSucceededV1 => super::PendingAccount{
                 verified: true,
                 ..aggregate
             },
+            // VerificationFailedV1
             EventData::VerificationFailedV1(_) => super::PendingAccount{
                 trials: aggregate.trials + 1,
                 ..aggregate
             },
+            // RegistrationCompletedV1
             EventData::RegistrationCompletedV1 => super::PendingAccount{
                 deleted_at: Some(self.timestamp),
+                ..aggregate
+            },
+            // NewCodeSentV1
+            EventData::NewCodeSentV1(ref data) => super::PendingAccount{
+                token: data.token.clone(),
                 ..aggregate
             },
         }

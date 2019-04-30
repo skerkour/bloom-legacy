@@ -113,4 +113,7 @@ pub struct PasswordResetRequestBody {
     pub email_or_username: String,
 }
 
-
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NewCodeBody {
+    pub id: uuid::Uuid,
+}

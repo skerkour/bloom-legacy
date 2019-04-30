@@ -13,6 +13,7 @@ mod update_email;
 mod verify_email;
 mod reset_password;
 mod request_password_reset;
+mod send_new_verification_code;
 
 
 pub use registration_start::StartRegistration;
@@ -30,3 +31,4 @@ pub use update_email::UpdateEmail;
 pub use verify_email::VerifyEmail;
 pub use reset_password::ResetPassword;
 pub use request_password_reset::RequestPasswordReset;
+pub use send_new_verification_code::SendNewVerificationCode;
