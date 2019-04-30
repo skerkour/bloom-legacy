@@ -6,12 +6,13 @@ use kernel::{
 };
 use rusoto_s3::{
     GetObjectRequest,
-    util::PreSignedRequest,
+    util::{PreSignedRequest, PreSignedRequestOption},
 };
 use rusoto_core::{Region};
 use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 use drive::domain::File;
 use std::str::FromStr;
+use std::time::Duration;
 use futures::Future;
 use crate::{
     api::v1::models::FileResponse,
@@ -66,7 +67,10 @@ impl Handler<FindFiles> for DbActor {
                 ..Default::default()
             };
             // TODO: handle error
-            let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
+            let options = PreSignedRequestOption {
+                expires_in: Duration::from_secs(3600 * 24), // 24 hours
+            };
+            let presigned_url = req.get_presigned_url(&region, &credentials, &options);
             return FileResponse{
                 id: file.id,
                 name: file.name,
