@@ -10,20 +10,19 @@ use crate::{
     },
     error::KernelError,
 };
-use futures::future::Future;
-use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
-};
-use futures::future;
-use futures::future::IntoFuture;
 use rand::Rng;
 use std::time::Duration;
+use futures::{
+    future,
+    future::{Future, IntoFuture},
+};
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse,
+};
 
 
-
-pub fn post((email_data, req): (Json<models::VerifyEmailBody>, HttpRequest<api::State>))
--> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn post(email_data: web::Json<models::VerifyEmailBody>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;

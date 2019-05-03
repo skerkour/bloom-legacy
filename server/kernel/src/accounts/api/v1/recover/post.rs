@@ -12,17 +12,15 @@ use crate::{
 };
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, Json,
+    web, Error, HttpRequest, HttpResponse,
 };
 use futures::future::IntoFuture;
 use rand::Rng;
 use std::time::Duration;
 
 
-
-pub fn post((data, req): (Json<models::PasswordResetRequestBody>, HttpRequest<api::State>))
--> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn post(data: web::Json<models::PasswordResetRequestBody>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();

@@ -20,7 +20,6 @@ use rand::Rng;
 pub fn post(register_data: web::Json<models::StartRegistrationBody>, state: web::Data<api::State>, req: HttpRequest)
 -> impl Future<Item = HttpResponse, Error = Error> {
     let mut rng = rand::thread_rng();
-    let state = req.state().clone();
     let logger = req.logger();
     let request_id = req.request_id().0;
     let config = state.config.clone();

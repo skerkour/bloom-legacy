@@ -12,14 +12,13 @@ use crate::{
 };
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Json,
+    web, Error, HttpRequest, HttpResponse,
 };
 use futures::future;
 
 
-pub fn put((account_data, req): (Json<models::UpdateAccount>, HttpRequest<api::State>))
--> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;

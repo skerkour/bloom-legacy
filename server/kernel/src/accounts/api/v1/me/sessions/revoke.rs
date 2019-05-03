@@ -10,15 +10,17 @@ use crate::{
     },
     error::KernelError,
 };
-use futures::future::Future;
-use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
+use futures::{
+    future,
+    future::Future,
 };
-use futures::future;
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse,
+};
 
 
-pub fn post((session_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;

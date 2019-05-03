@@ -11,16 +11,21 @@ use crate::{
     },
     error::KernelError,
 };
-use actix_web::{
-    ResponseError, AsyncResponder, Error, HttpMessage, FutureResponse,
-    HttpRequest, HttpResponse, dev, multipart, error,
+use futures::{
+    Future,
+    Stream,
+    IntoFuture,
+    future,
 };
-use futures::{Future, Stream, IntoFuture};
-use futures::future;
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse, error,
+};
+use actix_multipart::{Field, Multipart, MultipartError};
 
 
-pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
+
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
@@ -30,7 +35,7 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         .responder();
     }
 
-    return req.multipart()
+    return multipart
         .map_err(error::ErrorInternalServerError)
         .map(handle_multipart_item)
         .flatten()
@@ -71,32 +76,18 @@ pub fn put(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
         .responder();
 }
 
-fn handle_multipart_item(
-    item: multipart::MultipartItem<dev::Payload>,
-) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
-    match item {
-        multipart::MultipartItem::Field(field) => {
-            Box::new(read_file(field).into_stream())
-        }
-        multipart::MultipartItem::Nested(mp) => {
-            Box::new(
-                mp.map_err(error::ErrorInternalServerError)
-                    .map(handle_multipart_item)
-                    .flatten(),
-            )
-        },
-    }
+fn handle_multipart_item(field: Field) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
+    return Box::new(read_file(field).into_stream());
 }
 
 fn read_file(
-    field: multipart::Field<dev::Payload>,
+    field: Field,
 ) -> Box<Future<Item = Vec<u8>, Error = Error>> {
     Box::new(
-        field
-        .fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, error::MultipartError> {
+        field.fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, MultipartError> {
             acc.extend_from_slice(&bytes);
             if acc.len() > accounts::AVATAR_MAX_SIZE {
-                return future::err(error::MultipartError::Payload(error::PayloadError::Overflow))
+                return future::err(MultipartError::Payload(error::PayloadError::Overflow))
             }
             future::ok(acc)
         })
