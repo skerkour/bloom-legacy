@@ -6,7 +6,6 @@ use actix_web::{
     HttpResponse,
     HttpRequest,
     dev,
-    dev::PathConfig,
 };
 use crate::KernelError;
 
@@ -53,23 +52,23 @@ impl<T: Serialize> Response<T> {
     }
 }
 
-pub fn index(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
+pub fn index(_req: &HttpRequest) -> ActixResult<HttpResponse> {
     let res = HelloWorld{hello: "world"};
     return Ok(HttpResponse::Ok().json(Response::data(res)));
 }
 
-pub fn route_404(_req: &HttpRequest<State>) -> ActixResult<HttpResponse> {
+pub fn route_404(_req: &HttpRequest) -> ActixResult<HttpResponse> {
     return Err(KernelError::RouteNotFound.into());
 }
 
-pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {
-    (cfg.0).0.error_handler(|err, _req| {  // <- create custom error response
-        KernelError::Validation(err.to_string()).into()
-    });
-}
+// pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {
+//     (cfg.0).0.error_handler(|err, _req| {  // <- create custom error response
+//         KernelError::Validation(err.to_string()).into()
+//     });
+// }
 
-pub fn json_default_config_path(cfg: &mut ((PathConfig<State>, dev::JsonConfig<State>, ()),)) {
-    (cfg.0).1.error_handler(|err, _req| {  // <- create custom error response
-        KernelError::Validation(err.to_string()).into()
-    });
-}
+// pub fn json_default_config_path(cfg: &mut ((PathConfig<State>, dev::JsonConfig<State>, ()),)) {
+//     (cfg.0).1.error_handler(|err, _req| {  // <- create custom error response
+//         KernelError::Validation(err.to_string()).into()
+//     });
+// }

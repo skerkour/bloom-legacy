@@ -30,11 +30,11 @@ members = [
     "crates/rust-dotenv",
 
     "server/kernel",
-    "server/drive",
     "server/api",
-    "server/notes",
-    "server/contacts",
-    "server/gallery",
-    "server/music",
-    "server/bitflow",
+    # "server/drive",
+    # "server/notes",
+    # "server/contacts",
+    # "server/gallery",
+    # "server/music",
+    # "server/bitflow",
 ]

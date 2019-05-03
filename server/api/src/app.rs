@@ -57,27 +57,27 @@ pub fn init(db: actix::Addr<DbActor>, cfg: config::Config) -> App<api::State> {
             .max_age(3600)
             .resource("/", |r| r.method(http::Method::GET).f(api::index))
 
-            // account
-            .resource("/account/v1/registration/start", |r| r.method(http::Method::POST).with_config(accountsv1::registration::start::post, api::json_default_config))
-            .resource("/account/v1/registration/verify", |r| r.method(http::Method::POST).with_config(accountsv1::registration::verify::post, api::json_default_config))
-            .resource("/account/v1/registration/complete", |r| r.method(http::Method::POST).with_config(accountsv1::registration::complete::post, api::json_default_config))
-            .resource("/account/v1/registration/new-code", |r| r.method(http::Method::POST).with_config(accountsv1::registration::new_code::post, api::json_default_config))
-            .resource("/account/v1/sign-in", |r| r.method(http::Method::POST).with_config(accountsv1::sign_in::post, api::json_default_config))
-            .resource("/account/v1/sign-out", |r| r.method(http::Method::POST).f(accountsv1::sign_out::post))
-            .resource("/account/v1/recover", |r| {
+            // myaccount
+            .resource("/myaccount/v1/registration/start", |r| r.method(http::Method::POST).with_config(accountsv1::registration::start::post, api::json_default_config))
+            .resource("/myaccount/v1/registration/verify", |r| r.method(http::Method::POST).with_config(accountsv1::registration::verify::post, api::json_default_config))
+            .resource("/myaccount/v1/registration/complete", |r| r.method(http::Method::POST).with_config(accountsv1::registration::complete::post, api::json_default_config))
+            .resource("/myaccount/v1/registration/new-code", |r| r.method(http::Method::POST).with_config(accountsv1::registration::new_code::post, api::json_default_config))
+            .resource("/myaccount/v1/sign-in", |r| r.method(http::Method::POST).with_config(accountsv1::sign_in::post, api::json_default_config))
+            .resource("/myaccount/v1/sign-out", |r| r.method(http::Method::POST).f(accountsv1::sign_out::post))
+            .resource("/myaccount/v1/recover", |r| {
                 r.method(http::Method::POST).with_config(accountsv1::recover::post, api::json_default_config);
                 r.method(http::Method::PUT).with_config(accountsv1::recover::put, api::json_default_config);
             })
-            .resource("/account/v1/me", |r| {
+            .resource("/myaccount/v1/me", |r| {
                 r.method(http::Method::GET).f(accountsv1::me::get);
                 r.method(http::Method::PUT).with_config(accountsv1::me::put, api::json_default_config);
             })
-            .resource("/account/v1/me/password", |r| r.method(http::Method::PUT).with_config(accountsv1::me::password::put, api::json_default_config))
-            .resource("/account/v1/me/avatar", |r| r.method(http::Method::PUT).f(accountsv1::me::avatar::put))
-            .resource("/account/v1/me/email", |r| r.method(http::Method::PUT).with_config(accountsv1::me::email::put, api::json_default_config))
-            .resource("/account/v1/me/email/verify", |r| r.method(http::Method::POST).with_config(accountsv1::me::email::verify::post, api::json_default_config))
-            .resource("/account/v1/me/sessions", |r| r.method(http::Method::GET).f(accountsv1::me::sessions::get))
-            .resource("/account/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountsv1::me::sessions::revoke::post))
+            .resource("/myaccount/v1/me/password", |r| r.method(http::Method::PUT).with_config(accountsv1::me::password::put, api::json_default_config))
+            .resource("/myaccount/v1/me/avatar", |r| r.method(http::Method::PUT).f(accountsv1::me::avatar::put))
+            .resource("/myaccount/v1/me/email", |r| r.method(http::Method::PUT).with_config(accountsv1::me::email::put, api::json_default_config))
+            .resource("/myaccount/v1/me/email/verify", |r| r.method(http::Method::POST).with_config(accountsv1::me::email::verify::post, api::json_default_config))
+            .resource("/myaccount/v1/me/sessions", |r| r.method(http::Method::GET).f(accountsv1::me::sessions::get))
+            .resource("/myaccount/v1/me/sessions/{session_id}/revoke", |r| r.method(http::Method::POST).with(accountsv1::me::sessions::revoke::post))
 
             // notes
             .resource("/notes/v1/notes", |r| {

@@ -12,14 +12,14 @@ use crate::{
 use std::time::Duration;
 use futures::future::Future;
 use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, Json, HttpRequest,
+    web, Error, HttpRequest, HttpResponse,
 };
 use futures::future::IntoFuture;
 use rand::Rng;
 
 
-pub fn post((registration_data, req): (Json<models::CompleteRegistrationBody>, HttpRequest<api::State>))
--> FutureResponse<HttpResponse> {
+pub fn post(registration_data: web::Json<models::CompleteRegistrationBody>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let mut rng = rand::thread_rng();
     let state = req.state().clone();
     let logger = req.logger();
