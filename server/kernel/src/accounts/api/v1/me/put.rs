@@ -10,11 +10,14 @@ use crate::{
     },
     error::KernelError,
 };
-use futures::future::Future;
-use actix_web::{
-    web, Error, HttpRequest, HttpResponse,
+use futures::{
+    future::Future,
+    future::ok,
+    future::Either,
 };
-use futures::future;
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse, ResponseError,
+};
 
 
 pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api::State>, req: HttpRequest)
@@ -25,11 +28,10 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
     let account_data = account_data.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return state.db
+    return Either::B(state.db
     .send(controllers::UpdateAccount{
         account: auth.account.expect("unwraping non none account"),
         avatar_url: account_data.avatar_url,
@@ -38,8 +40,9 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
         request_id,
         session_id: auth.session.expect("unwraping non none session").id,
     })
+    .map_err(|err| KernelError::ActixMailbox)
     .from_err()
-    .and_then(move |account| {
+    .and_then(move |account: Result<_, KernelError>| {
         match account {
             Ok(account) => {
                 let res = models::MeResponse{
@@ -52,16 +55,12 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
                     avatar_url: account.avatar_url,
                 };
                 let res = api::Response::data(res);
-                Ok(HttpResponse::Ok().json(&res))
+                ok(HttpResponse::Ok().json(&res))
             },
-            Err(err) => Err(err),
+            Err(err) => {
+                slog_error!(logger, "{}", err);
+                ok(err.error_response())
+            },
         }
-    })
-    .from_err()
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    }));
 }

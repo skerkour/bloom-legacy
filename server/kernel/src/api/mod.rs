@@ -5,7 +5,6 @@ use actix_web::{
     Result as ActixResult,
     HttpResponse,
     HttpRequest,
-    dev,
 };
 use crate::KernelError;
 

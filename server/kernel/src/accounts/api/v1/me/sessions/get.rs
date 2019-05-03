@@ -10,11 +10,12 @@ use crate::{
     error::KernelError,
 };
 use futures::{
-    future,
     future::Future,
+    future::ok,
+    future::Either,
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse,
+    web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 
 
@@ -23,38 +24,36 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest) -> impl Future<Item =
     let auth = req.request_auth();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-        .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return state.db
-    .send(controllers::FindSessionsForAccount{
-        account_id: auth.account.expect("unwrapping non none account").id,
-    })
-    .from_err()
-    .and_then(move |sessions| {
-        match sessions {
-            Ok(sessions) => {
-                let sessions: Vec<models::Session> = sessions.into_iter().map(|session| {
-                    models::Session{
-                        id: session.id,
-                        created_at: session.created_at,
-                        ip: session.ip,
-                        location: session.location,
-                        device: session.device,
-                    }
-                }).collect();
-                let res = api::Response::data(sessions);
-                Ok(HttpResponse::Ok().json(&res))
-            },
-            Err(err) => Err(err),
-        }
-    })
-    .from_err()
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    return Either::B(
+        state.db
+        .send(controllers::FindSessionsForAccount{
+            account_id: auth.account.expect("unwrapping non none account").id,
+        })
+        .map_err(|_| KernelError::ActixMailbox)
+        .from_err()
+        .and_then(move |sessions| {
+            match sessions {
+                Ok(sessions) => {
+                    let sessions: Vec<models::Session> = sessions.into_iter().map(|session| {
+                        models::Session{
+                            id: session.id,
+                            created_at: session.created_at,
+                            ip: session.ip,
+                            location: session.location,
+                            device: session.device,
+                        }
+                    }).collect();
+                    let res = api::Response::data(sessions);
+                    ok(HttpResponse::Ok().json(&res))
+                },
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
+        })
+    );
 }

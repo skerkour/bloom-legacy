@@ -1,5 +1,7 @@
 #[macro_use]
 extern crate diesel;
+#[macro_use]
+extern crate try_future;
 
 pub mod log;
 pub mod events;

@@ -4,3 +4,4 @@
 * [rust-dotenv](https://github.com/apiraino/rust-dotenv)
 * [diesel-enum-derive](https://github.com/terry90/diesel-enum-derive)
 * [diesel-derive-enum2](https://github.com/adwhit/diesel-derive-enum)
+* https://github.com/srijs/rust-try-future

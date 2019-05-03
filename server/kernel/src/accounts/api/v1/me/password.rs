@@ -11,11 +11,12 @@ use crate::{
     error::KernelError,
 };
 use futures::{
-    future,
     future::Future,
+    future::ok,
+    future::Either,
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse,
+    web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 
 
@@ -27,11 +28,10 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
     let account_data = account_data.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return state.db
+    return Either::B(state.db
     .send(controllers::UpdatePassword{
         current_session: auth.session.expect("unwraping auth session"),
         account: auth.account.expect("unwraping auth account"),
@@ -39,18 +39,15 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
         new_password: account_data.new_password,
         request_id,
     })
+    .map_err(|_| KernelError::ActixMailbox)
     .from_err()
     .and_then(move |res|
         match res {
-            Ok(_) => Ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
-            Err(err) => Err(err),
+            Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
+            Err(err) => {
+                slog_error!(logger, "{}", err);
+                ok(err.error_response())
+            },
         }
-    )
-    .from_err()
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    ));
 }

@@ -15,10 +15,12 @@ use futures::{
     Future,
     Stream,
     IntoFuture,
+    future::ok,
     future,
+    future::Either,
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse, error,
+    web, Error, HttpRequest, HttpResponse, ResponseError, error,
 };
 use actix_multipart::{Field, Multipart, MultipartError};
 
@@ -31,12 +33,13 @@ pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-        .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return multipart
-        .map_err(error::ErrorInternalServerError)
+    return Either::B(
+        multipart
+        .map_err(|err| KernelError::Internal(err.to_string()).error_response())
+        .from_err()
         .map(handle_multipart_item)
         .flatten()
         .collect()
@@ -70,10 +73,9 @@ pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
         .from_err()
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.into();
         })
-        .from_err()
-        .responder();
+    );
 }
 
 fn handle_multipart_item(field: Field) -> Box<Stream<Item = Vec<u8>, Error = Error>> {

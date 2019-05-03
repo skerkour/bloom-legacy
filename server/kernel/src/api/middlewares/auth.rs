@@ -1,7 +1,19 @@
+// use actix_web::{
+//     HttpRequest, Result, Error,
+//     middleware::{Middleware, Started},
+//     http::header,
+// };
 use actix_web::{
-    HttpRequest, Result, Error,
-    middleware::{Middleware, Started},
+    FromRequest, HttpRequest, Error, dev::Payload,
+    http::header::HeaderValue,
+    dev::{ServiceRequest, ServiceResponse},
+    web,
     http::header,
+};
+use actix_service::{Service as ActixService, Transform};
+use futures::{
+    Poll,
+    future::{ok, Either, FutureResult},
 };
 use futures::{Future};
 use actix::{Message, Handler};
@@ -32,54 +44,145 @@ pub enum Service {
 #[derive(Debug, Clone, PartialEq)]
 pub struct AuthMiddleware;
 
-impl Middleware<api::State> for AuthMiddleware {
-    fn start(&self, req: &HttpRequest<api::State>) -> Result<Started, Error> {
-        let state = req.state().clone();
+
+impl<S, B> Transform<S> for AuthMiddleware
+where
+    S: ActixService<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
+    S: 'static,
+    B: 'static,
+{
+    type Request = ServiceRequest;
+    type Response = ServiceResponse<B>;
+    type Error = Error;
+    type InitError = ();
+    type Transform = AuthMiddleware2<S>;
+    type Future = FutureResult<Self::Transform, Self::InitError>;
+
+    fn new_transform(&self, service: S) -> Self::Future {
+        ok(AuthMiddleware2 { service })
+    }
+}
+
+/// The RequestIdMiddleware. It sets a `request-id` HTTP header to the HttpResponse
+pub struct AuthMiddleware2<S> {
+    service: S,
+}
+
+impl<S, B> ActixService for AuthMiddleware2<S>
+where
+    S: ActixService<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
+    S: 'static,
+    B: 'static,
+{
+    type Request = ServiceRequest;
+    type Response = ServiceResponse<B>;
+    type Error = S::Error;
+    type Future = Box<Future<Item = Self::Response, Error = Self::Error>>;
+
+    fn poll_ready(&mut self) -> Poll<(), Self::Error> {
+        self.service.poll_ready()
+    }
+
+    fn call(&mut self, req: ServiceRequest) -> Self::Future {
+        let state: web::Data<api::State> = req.app_data().expect("error getting app_data in auth middleware");
 
         let auth_header = req.headers().get(header::AUTHORIZATION);
+        let (http_req, _) = req.into_parts();
         if auth_header.is_none() {
-            req.extensions_mut().insert(Auth{
+            http_req.extensions_mut().insert(Auth{
                 account: None,
                 session: None,
                 service: None,
             });
-            return Ok(Started::Done);
+            return Box::new(self.service.call(req));
         }
 
 
-        let auth_header = auth_header.unwrap().to_str()
-            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+        let auth_header = try_future_box!(auth_header.unwrap().to_str()
+            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())));
         let msg = if auth_header.starts_with("Basic ") {
-            extract_authorization_header(auth_header)
-                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+            try_future_box!(extract_authorization_header(auth_header)
+                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())))
         } else if auth_header.starts_with("Secret ") {
-            extract_secret_header(auth_header)
-                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+            try_future_box!(extract_secret_header(auth_header)
+                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())))
         } else {
-            return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()).into());
+            return Box::new(ok(
+                req.error_response(KernelError::Validation("Authorization HTTP header is not valid".to_string()).into())
+            ));
         };
 
         // TODO: improve...
         // the problem is: req.extensions_mut().insert(auth);
         // we can either clone req or use a sync middleware
         // the question is: what is the cost of clonning req ?
-        let req = req.clone();
 
-        let fut = state.db.send(msg)
+        return Box::new(
+            state.db.send(msg)
+            .map_err(|err| KernelError::ActixMailbox)
             .from_err()
-            .and_then(move |res| {
+            .and_then(move |res: Result<_, KernelError>| {
                 match res {
                     Ok(auth) => {
-                        req.extensions_mut().insert(auth);
-                        return Ok(None);
+                        // http_req.extensions_mut().insert(auth);
+                        return Either::A(self.service.call(req));
                     },
-                    Err(e) => Err(e.into()),
+                    Err(e) => Either::B(ok(req.error_response(e.into()))),
                 }
-            });
-
-        return Ok(Started::Future(Box::new(fut)));
+            })
+        );
     }
 }
+
+
+// impl Middleware<api::State> for AuthMiddleware {
+//     fn start(&self, req: &HttpRequest<api::State>) -> Result<Started, Error> {
+//         let state = req.state().clone();
+
+//         let auth_header = req.headers().get(header::AUTHORIZATION);
+//         if auth_header.is_none() {
+//             req.extensions_mut().insert(Auth{
+//                 account: None,
+//                 session: None,
+//                 service: None,
+//             });
+//             return Ok(Started::Done);
+//         }
+
+
+//         let auth_header = auth_header.unwrap().to_str()
+//             .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+//         let msg = if auth_header.starts_with("Basic ") {
+//             extract_authorization_header(auth_header)
+//                 .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+//         } else if auth_header.starts_with("Secret ") {
+//             extract_secret_header(auth_header)
+//                 .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+//         } else {
+//             return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()).into());
+//         };
+
+//         // TODO: improve...
+//         // the problem is: req.extensions_mut().insert(auth);
+//         // we can either clone req or use a sync middleware
+//         // the question is: what is the cost of clonning req ?
+//         let req = req.clone();
+
+//         let fut = state.db.send(msg)
+//             .from_err()
+//             .and_then(move |res| {
+//                 match res {
+//                     Ok(auth) => {
+//                         req.extensions_mut().insert(auth);
+//                         return Ok(None);
+//                     },
+//                     Err(e) => Err(e.into()),
+//                 }
+//             });
+
+//         return Ok(Started::Future(Box::new(fut)));
+//     }
+// }
 
 fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     let parts: Vec<&str> = value.split("Basic ").collect();
@@ -131,7 +234,7 @@ pub trait GetRequestAuth {
     fn request_auth(&self) -> Auth;
 }
 
-impl<S> GetRequestAuth for HttpRequest<S> {
+impl GetRequestAuth for HttpRequest {
     fn request_auth(&self) -> Auth {
         return self.extensions().get::<Auth>().expect("retrieving request auth").clone();
     }

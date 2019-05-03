@@ -12,7 +12,7 @@ use actix_web::{
 };
 
 
-pub fn get(req: &HttpRequest<api::State>) -> HttpResponse {
+pub fn get(req: HttpRequest)-> HttpResponse {
     let auth = req.request_auth();
 
     if auth.session.is_none() || auth.account.is_none() {

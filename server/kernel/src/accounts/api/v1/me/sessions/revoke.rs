@@ -11,11 +11,12 @@ use crate::{
     error::KernelError,
 };
 use futures::{
-    future,
     future::Future,
+    future::ok,
+    future::Either,
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse,
+    web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 
 
@@ -26,8 +27,7 @@ pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
     // let session_id = match uuid::Uuid::parse_str(&session_id) {
@@ -36,22 +36,19 @@ pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
     //         .responder(),
     // };
 
-    return state.db
-    .send(controllers::RevokeSession{
-        actor: auth.account.unwrap(),
-        session_id: session_id.into_inner(),
-        request_id: request_id,
-        current_session_id: auth.session.unwrap().id,
-    })
-    .and_then(move |_| {
-        let res = api::Response::data(models::NoData{});
-        Ok(HttpResponse::Ok().json(&res))
-    })
-    .from_err() // MailboxError to KernelError
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    return Either::B(
+        state.db
+        .send(controllers::RevokeSession{
+            actor: auth.account.unwrap(),
+            session_id: session_id.into_inner(),
+            request_id: request_id,
+            current_session_id: auth.session.unwrap().id,
+        })
+        .map_err(|_| KernelError::ActixMailbox)
+        .from_err()
+        .and_then(move |_| {
+            let res = api::Response::data(models::NoData{});
+            ok(HttpResponse::Ok().json(&res))
+        })
+    );
 }
