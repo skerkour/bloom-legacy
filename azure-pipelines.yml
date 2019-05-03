@@ -19,7 +19,7 @@ steps:
     displayName: 'Install rust'
   - script: |
       sudo apt-get install -y ca-certificates libssl-dev libpq-dev libsqlite3-dev mysql-client
-    displayName: 'Install dependencies'
+    displayName: 'Install system dependencies'
   - script: make test
     displayName: 'test'
 
