@@ -15,7 +15,7 @@ kernel = { path = "../kernel" }
 drive = { path = "../drive" }
 # gallery = { path = "../gallery" }
 # music = { path = "../music" }
-# bitflow = { path = "../bitflow" }
+bitflow = { path = "../bitflow" }
 
 
 actix-web = "1.0.0-beta.2"

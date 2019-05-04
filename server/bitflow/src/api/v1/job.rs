@@ -1,14 +1,3 @@
-use futures::{
-    future::{
-        IntoFuture,
-        Either,
-        ok,
-        Future,
-    },
-};
-use actix_web::{
-    web, Error, HttpRequest, HttpResponse, ResponseError,
-};
 use kernel::{
     api,
     log::macros::*,
@@ -18,6 +7,14 @@ use kernel::{
         GetRequestId
     },
     KernelError,
+};
+use futures::{
+    future::Future,
+    future::ok,
+    future::Either,
+};
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 use crate::{
     controllers,
@@ -41,13 +38,14 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest) -> impl Future<Item =
             // session_id: auth.session.expect("unwraping non none session").id,
             request_id: request_id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |res| {
             match res {
                 Ok(download) => {
                     let res = models::DownloadResponse::from(download);
                     let res = api::Response::data(res);
-                    Ok(HttpResponse::Ok().json(&res))
+                    ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {
                     slog_error!(logger, "{}", err);

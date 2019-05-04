@@ -8,12 +8,9 @@ use kernel::{
     KernelError,
 };
 use futures::{
-    future::{
-        IntoFuture,
-        Either,
-        ok,
-        Future,
-    },
+    future::Future,
+    future::ok,
+    future::Either,
 };
 use actix_web::{
     web, Error, HttpRequest, HttpResponse, ResponseError,
@@ -37,13 +34,14 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest) -> impl Future<Item =
         .send(controllers::FindHistory{
             account_id: auth.account.expect("unwrapping non none account").id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |downloads| {
             match downloads {
                 Ok(downloads) => {
                     let downloads: Vec<models::DownloadResponse> = downloads.into_iter().map(From::from).collect();
                     let res = api::Response::data(downloads);
-                    Ok(HttpResponse::Ok().json(&res))
+                    ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {
                     slog_error!(logger, "{}", err);
