@@ -21,6 +21,7 @@ use kernel::{
     accounts::api::v1 as accountsv1,
 };
 use drive::api::v1 as drivev1;
+use bitflow::api::v1 as bitflowv1;
 use std::str::FromStr;
 
 
@@ -145,6 +146,32 @@ fn main() {
         .service(web::resource("/drive/v1/trash")
             .route(web::get().data(api::json_default_config()).to_async(drivev1::trash::get))
             .route(web::post().data(api::json_default_config()).to_async(drivev1::trash::post))
+        )
+
+        // bitflow
+        .service(web::resource("/bitflow/v1/downloads")
+            .route(web::get().data(api::json_default_config()).to_async(bitflowv1::downloads::get))
+            .route(web::post().data(api::json_default_config()).to_async(bitflowv1::downloads::post))
+        )
+        .service(web::resource("/bitflow/v1/downloads/remove")
+            .route(web::post().data(api::json_default_config()).to_async(bitflowv1::downloads::remove::post))
+        )
+        .service(web::resource("/bitflow/v1/downloads/{download_id}")
+            .route(web::get().data(api::json_default_config()).to_async(bitflowv1::downloads::download::get))
+            .route(web::put().data(api::json_default_config()).to_async(bitflowv1::downloads::download::put))
+        )
+        .service(web::resource("/bitflow/v1/downloads/{download_id}/complete")
+            .route(web::post().data(api::json_default_config()).to_async(bitflowv1::downloads::download::complete::post))
+        )
+        .service(web::resource("/bitflow/v1/downloads/{download_id}/fail")
+            .route(web::post().data(api::json_default_config()).to_async(bitflowv1::downloads::download::fail::post))
+        )
+        .service(web::resource("/bitflow/v1/history")
+            .route(web::get().data(api::json_default_config()).to_async(bitflowv1::history::get))
+            .route(web::delete().data(api::json_default_config()).to_async(bitflowv1::history::delete))
+        )
+        .service(web::resource("/bitflow/v1/job")
+            .route(web::get().data(api::json_default_config()).to_async(bitflowv1::job::get))
         )
     })
     .backlog(8192)
