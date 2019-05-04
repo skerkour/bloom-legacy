@@ -33,12 +33,7 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-   if auth.session.is_none() || auth.account.is_none() {
-        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
-    }
-
-    return Either::B(
-        tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
+    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
         .from_err()
         .and_then(move |_|
             state.db
@@ -60,5 +55,4 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
             return err;
         })
         .from_err()
-    );
 }
