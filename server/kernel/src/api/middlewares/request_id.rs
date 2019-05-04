@@ -15,7 +15,7 @@ use std::ops::Deref;
 
 
 /// The header set by the middleware
-pub const REQUEST_ID_HEADER: &str = "X-Bloom-Request-ID";
+pub const REQUEST_ID_HEADER: &str = "x-bloom-request-id";
 
 /// The HTTP Request ID
 ///
