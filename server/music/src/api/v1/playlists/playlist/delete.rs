@@ -1,8 +1,3 @@
-use futures::future::Future;
-use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError, Path,
-};
-use futures::future;
 use kernel::{
     api,
     log::macros::*,
@@ -13,38 +8,51 @@ use kernel::{
     },
     KernelError,
 };
+use futures::{
+    future::{
+        Either,
+        ok,
+        Future,
+    },
+};
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse, ResponseError,
+};
 use crate::{
     controllers,
 };
 
 
-pub fn delete((playlist_id, req): (Path<(uuid::Uuid)>, HttpRequest<api::State>)) -> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn delete(playlist_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req: HttpRequest)
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-            .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return state.db
-    .send(controllers::DeletePlaylist{
-        playlist_id: playlist_id.into_inner(),
-        account_id: auth.account.expect("unwraping non none account").id,
-        session_id: auth.session.expect("unwraping non none session").id,
-        request_id: request_id,
-    })
-    .and_then(move |_| {
-        let res = api::Response::data(api::NoData{});
-        Ok(HttpResponse::Ok().json(&res))
-    })
-    .from_err()
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    return Either::B(
+        state.db.send(controllers::DeletePlaylist{
+            playlist_id: playlist_id.into_inner(),
+            account_id: auth.account.expect("unwraping non none account").id,
+            session_id: auth.session.expect("unwraping non none session").id,
+            request_id: request_id,
+        })
+        .map_err(|_| KernelError::ActixMailbox)
+        .from_err()
+        .and_then(move |playlist| {
+            match playlist {
+                Ok(_) => {
+                    let res = api::Response::data(api::NoData{});
+                    ok(HttpResponse::Ok().json(&res))
+                },
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
+        })
+    );
 }

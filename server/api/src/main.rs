@@ -20,11 +20,13 @@ use kernel::{
     api,
     accounts::api::v1 as accountsv1,
 };
+use std::str::FromStr;
+
 use drive::api::v1 as drivev1;
 use bitflow::api::v1 as bitflowv1;
 use contacts::api::v1 as contactsv1;
 use notes::api::v1 as notesv1;
-use std::str::FromStr;
+use music::api::v1 as musicv1;
 
 
 fn register_reactors() {
@@ -214,6 +216,27 @@ fn main() {
         )
         .service(web::resource("/notes/v1/trash")
             .route(web::get().data(api::json_default_config()).to_async(notesv1::trash::get))
+        )
+
+
+        // music
+        .service(web::resource("/music/v1/musics")
+            .route(web::get().data(api::json_default_config()).to_async(musicv1::musics::get))
+        )
+        .service(web::resource("/music/v1/playlists")
+            .route(web::get().data(api::json_default_config()).to_async(musicv1::playlists::get))
+            .route(web::post().data(api::json_default_config()).to_async(musicv1::playlists::post))
+        )
+        .service(web::resource("/music/v1/playlists/{playlist_id}")
+            .route(web::get().data(api::json_default_config()).to_async(musicv1::playlists::playlist::get))
+            .route(web::delete().data(api::json_default_config()).to_async(musicv1::playlists::playlist::delete))
+            .route(web::put().data(api::json_default_config()).to_async(musicv1::playlists::playlist::put))
+        )
+        .service(web::resource("/music/v1/playlists/{playlist_id}/add")
+            .route(web::post().data(api::json_default_config()).to_async(musicv1::playlists::playlist::add::post))
+        )
+        .service(web::resource("/music/v1/playlists/{playlist_id}/remove")
+            .route(web::post().data(api::json_default_config()).to_async(musicv1::playlists::playlist::remove::post))
         )
     })
     .backlog(8192)

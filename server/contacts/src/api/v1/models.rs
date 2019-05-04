@@ -35,11 +35,6 @@ pub struct ContactResponse {
     pub websites: Vec<contact::Website>,
 }
 
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct NoData {}
-
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateContactBody {
     pub addresses: Option<Vec<contact::Address>>,

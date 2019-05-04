@@ -41,8 +41,8 @@ pub fn post(verify_data: web::Json<models::VerifyPendingAccountBody>, state: web
         }).flatten()
     )
     .from_err()
-    .and_then(move |res| {
-       ok(HttpResponse::Ok().json(api::Response::data(models::NoData{})))
+    .and_then(move |_| {
+       ok(HttpResponse::Ok().json(api::Response::data(api::NoData{})))
     })
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);

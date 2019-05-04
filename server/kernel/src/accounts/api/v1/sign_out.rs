@@ -43,7 +43,7 @@ pub fn post(state: web::Data<api::State>, req: HttpRequest)
         .from_err()
         .and_then(move |res| {
             match res {
-                Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
+                Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(api::NoData{}))),
                 Err(err) => {
                     slog_error!(logger, "{}", err);
                     ok(err.error_response())

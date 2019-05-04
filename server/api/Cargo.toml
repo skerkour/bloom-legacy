@@ -14,7 +14,7 @@ notes = { path = "../notes" }
 contacts = { path = "../contacts" }
 drive = { path = "../drive" }
 # gallery = { path = "../gallery" }
-# music = { path = "../music" }
+music = { path = "../music" }
 bitflow = { path = "../bitflow" }
 
 

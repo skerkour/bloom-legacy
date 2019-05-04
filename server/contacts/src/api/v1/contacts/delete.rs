@@ -19,7 +19,6 @@ use actix_web::{
     web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 use crate::{
-    api::v1::models,
     controllers,
 };
 
@@ -35,8 +34,7 @@ pub fn delete(contact_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>,
     }
 
     return Either::B(
-        state.db
-        .send(controllers::DeleteConatct{
+        state.db.send(controllers::DeleteConatct{
             contact_id: contact_id.into_inner(),
             actor_id: auth.account.expect("unwraping non none account").id,
             session_id: auth.session.expect("unwraping non none session").id,
@@ -47,7 +45,7 @@ pub fn delete(contact_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>,
         .and_then(move |res| {
             match res {
                 Ok(_) => {
-                    let res = api::Response::data(models::NoData{});
+                    let res = api::Response::data(api::NoData{});
                     ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {

@@ -43,7 +43,7 @@ pub fn post(registration_data: web::Json<models::NewCodeBody>, state: web::Data<
     )
     .from_err()
     .and_then(move |_| {
-        let res = api::Response::data(models::NoData{});
+        let res = api::Response::data(api::NoData{});
         ok(HttpResponse::Ok().json(&res))
     })
     .map_err(move |err: KernelError| {

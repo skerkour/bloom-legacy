@@ -51,7 +51,7 @@ pub fn post(data: web::Json<models::PasswordResetRequestBody>, state: web::Data<
     )
     .from_err()
     .and_then(move |_| {
-        let res = api::Response::data(models::NoData{});
+        let res = api::Response::data(api::NoData{});
         Ok(HttpResponse::Ok().json(&res))
     })
     .map_err(move |err: KernelError| {

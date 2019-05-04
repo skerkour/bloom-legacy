@@ -44,3 +44,9 @@ pub struct UpdatePlaylistBody {
 pub struct AddToPlaylistBody {
     pub musics: Vec<uuid::Uuid>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RemoveFromPlaylistBody {
+    pub musics: Vec<uuid::Uuid>,
+}
+

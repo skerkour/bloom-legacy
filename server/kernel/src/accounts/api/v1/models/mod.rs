@@ -35,10 +35,6 @@ pub struct CompleteRegistrationResponse {
     pub token: String,
 }
 
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct NoData {}
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SignInBody {
     pub username: String,
