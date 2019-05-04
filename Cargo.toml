@@ -34,7 +34,7 @@ members = [
     "server/drive",
     "server/notes",
     "server/contacts",
-    # "server/gallery",
+    "server/gallery",
     "server/music",
     "server/bitflow",
 ]

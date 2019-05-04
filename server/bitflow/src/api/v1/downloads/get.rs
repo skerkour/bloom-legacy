@@ -31,8 +31,7 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest)
     }
 
     return Either::B(
-        state.db
-        .send(controllers::FindDownloads{
+        state.db.send(controllers::FindDownloads{
             account_id: auth.account.expect("unwrapping non none account").id,
         })
         .map_err(|_| KernelError::ActixMailbox)
