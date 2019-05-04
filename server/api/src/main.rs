@@ -20,6 +20,7 @@ use kernel::{
     api,
     accounts::api::v1 as accountsv1,
 };
+use drive::api::v1 as drivev1;
 use std::str::FromStr;
 
 
@@ -108,9 +109,42 @@ fn main() {
             .route(web::post().data(api::json_default_config()).to_async(accountsv1::me::email::verify::post))
         )
         .service(web::resource("/myaccount/v1/me/sessions")
-            .route(web::get().to_async(accountsv1::me::sessions::get)))
+            .route(web::get().to_async(accountsv1::me::sessions::get))
+        )
         .service(web::resource("/myaccount/v1/me/sessions/{session_id}/revoke")
             .route(web::post().data(api::json_default_config()).to_async(accountsv1::me::sessions::revoke::post))
+        )
+
+        // drive
+        .service(web::resource("/drive/v1/upload")
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::upload::post))
+            .route(web::put().data(api::json_default_config()).to_async(drivev1::upload::put))
+        )
+        .service(web::resource("/drive/v1/me")
+            .route(web::get().data(api::json_default_config()).to_async(drivev1::me::get))
+        )
+        .service(web::resource("/drive/v1/folders")
+            .route(web::get().data(api::json_default_config()).to_async(drivev1::folders::get))
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::folders::post))
+        )
+        .service(web::resource("/drive/v1/files/{file_id}/url")
+            .route(web::get().data(api::json_default_config()).to_async(drivev1::files::url::get))
+        )
+        .service(web::resource("/drive/v1/files/move")
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::files::move_::post))
+        )
+        .service(web::resource("/drive/v1/files/restore")
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::files::restore::post))
+        )
+        .service(web::resource("/drive/v1/files/delete")
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::files::delete::post))
+        )
+        .service(web::resource("/drive/v1/files/copy")
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::files::copy::post))
+        )
+        .service(web::resource("/drive/v1/trash")
+            .route(web::get().data(api::json_default_config()).to_async(drivev1::trash::get))
+            .route(web::post().data(api::json_default_config()).to_async(drivev1::trash::post))
         )
     })
     .backlog(8192)

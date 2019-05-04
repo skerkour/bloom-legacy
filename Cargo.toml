@@ -31,7 +31,7 @@ members = [
 
     "server/kernel",
     "server/api",
-    # "server/drive",
+    "server/drive",
     # "server/notes",
     # "server/contacts",
     # "server/gallery",

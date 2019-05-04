@@ -1,8 +1,3 @@
-use futures::future::Future;
-use actix_web::{
-    FutureResponse, AsyncResponder, HttpResponse, HttpRequest, ResponseError,
-};
-use futures::future;
 use kernel::{
     api,
     log::macros::*,
@@ -12,46 +7,50 @@ use kernel::{
     },
     KernelError,
 };
+use futures::{
+    future::Future,
+    future::ok,
+    future::Either,
+};
+use actix_web::{
+    web, Error, HttpRequest, HttpResponse, ResponseError,
+};
 use crate::{
     controllers,
     api::v1::models,
 };
 
 
-pub fn get(req: &HttpRequest<api::State>) -> FutureResponse<HttpResponse> {
-    let state = req.state().clone();
+pub fn get(state: web::Data<api::State>, req: HttpRequest) -> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
 
     if auth.session.is_none() || auth.account.is_none() {
-        return future::result(Ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()))
-        .responder();
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return state.db
-    .send(controllers::FindProfile{
-        account_id: auth.account.expect("unwrapping non none account").id,
-    })
-    .from_err()
-    .and_then(move |profile| {
-        match profile {
-            Ok(profile) => {
-                let profile = models::PorfileBody{
-                    home: profile.home_id,
-                    used_space: profile.used_space,
-                    total_space: profile.total_space,
-                };
-                let res = api::Response::data(profile);
-                Ok(HttpResponse::Ok().json(&res))
-            },
-            Err(err) => Err(err),
-        }
-    })
-    .from_err()
-    .map_err(move |err: KernelError| {
-        slog_error!(logger, "{}", err);
-        return err;
-    })
-    .from_err()
-    .responder();
+    return Either::B(
+        state.db
+        .send(controllers::FindProfile{
+            account_id: auth.account.expect("unwrapping non none account").id,
+        })
+        .from_err()
+        .and_then(move |profile| {
+            match profile {
+                Ok(profile) => {
+                    let profile = models::PorfileBody{
+                        home: profile.home_id,
+                        used_space: profile.used_space,
+                        total_space: profile.total_space,
+                    };
+                    let res = api::Response::data(profile);
+                    ok(HttpResponse::Ok().json(&res))
+                },
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
+        })
+    );
 }
