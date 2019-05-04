@@ -33,7 +33,12 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
 
-    return tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
+    if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
+        return Either::A(ok(KernelError::Unauthorized("Must not be authenticated".to_string()).error_response()));
+    }
+
+    return Either::B(
+        tokio_timer::sleep(Duration::from_millis(rng.gen_range(400, 600))).into_future()
         .from_err()
         .and_then(move |_|
             state.db
@@ -55,4 +60,5 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
             return err;
         })
         .from_err()
+    );
 }

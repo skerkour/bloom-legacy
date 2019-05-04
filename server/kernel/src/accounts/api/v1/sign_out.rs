@@ -28,7 +28,7 @@ pub fn post(state: web::Data<api::State>, req: HttpRequest)
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-   if auth.session.is_none() || auth.account.is_none() {
+    if auth.session.is_none() || auth.account.is_none() {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
