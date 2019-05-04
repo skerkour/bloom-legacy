@@ -10,7 +10,7 @@ dotenv = { path = "../../crates/rust-dotenv" }
 
 
 kernel = { path = "../kernel" }
-# notes = { path = "../notes" }
+notes = { path = "../notes" }
 contacts = { path = "../contacts" }
 drive = { path = "../drive" }
 # gallery = { path = "../gallery" }

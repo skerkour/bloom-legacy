@@ -23,6 +23,7 @@ use kernel::{
 use drive::api::v1 as drivev1;
 use bitflow::api::v1 as bitflowv1;
 use contacts::api::v1 as contactsv1;
+use notes::api::v1 as notesv1;
 use std::str::FromStr;
 
 
@@ -185,6 +186,34 @@ fn main() {
             .route(web::get().data(api::json_default_config()).to_async(contactsv1::contacts::id::get))
             .route(web::put().data(api::json_default_config()).to_async(contactsv1::contacts::put))
             .route(web::delete().data(api::json_default_config()).to_async(contactsv1::contacts::delete))
+        )
+
+        // notes
+        .service(web::resource("/notes/v1/notes")
+            .route(web::get().data(api::json_default_config()).to_async(notesv1::notes::get))
+            .route(web::post().data(api::json_default_config()).to_async(notesv1::notes::post))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}")
+            .route(web::delete().data(api::json_default_config()).to_async(notesv1::notes::delete))
+            .route(web::put().data(api::json_default_config()).to_async(notesv1::notes::put))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}/archive")
+            .route(web::post().data(api::json_default_config()).to_async(notesv1::notes::archive::post))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}/unarchive")
+            .route(web::post().data(api::json_default_config()).to_async(notesv1::notes::unarchive::post))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}/remove")
+            .route(web::post().data(api::json_default_config()).to_async(notesv1::notes::remove::post))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}/restore")
+            .route(web::post().data(api::json_default_config()).to_async(notesv1::notes::restore::post))
+        )
+        .service(web::resource("/notes/v1/archive")
+            .route(web::get().data(api::json_default_config()).to_async(notesv1::archive::get))
+        )
+        .service(web::resource("/notes/v1/trash")
+            .route(web::get().data(api::json_default_config()).to_async(notesv1::trash::get))
         )
     })
     .backlog(8192)

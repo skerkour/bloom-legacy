@@ -32,7 +32,7 @@ members = [
     "server/kernel",
     "server/api",
     "server/drive",
-    # "server/notes",
+    "server/notes",
     "server/contacts",
     # "server/gallery",
     # "server/music",

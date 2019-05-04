@@ -71,23 +71,6 @@
 //     //         .resource("/", |r| r.method(http::Method::GET).f(api::index))
 
 
-//             // // notes
-//             // .resource("/notes/v1/notes", |r| {
-//             //     r.method(http::Method::GET).f(notesv1::notes::get);
-//             //     r.method(http::Method::POST).with_config(notesv1::notes::post, api::json_default_config);
-//             // })
-//             // .resource("/notes/v1/notes/{note_id}", |r| {
-//             //     r.method(http::Method::DELETE).with(notesv1::notes::delete);
-//             //     r.method(http::Method::PUT).with_config(notesv1::notes::put, api::json_default_config_path);
-//             // })
-//             // .resource("/notes/v1/notes/{note_id}/archive", |r| r.method(http::Method::POST).with(notesv1::notes::archive::post))
-//             // .resource("/notes/v1/notes/{note_id}/unarchive", |r| r.method(http::Method::POST).with(notesv1::notes::unarchive::post))
-//             // .resource("/notes/v1/notes/{note_id}/remove", |r| r.method(http::Method::POST).with(notesv1::notes::remove::post))
-//             // .resource("/notes/v1/notes/{note_id}/restore", |r| r.method(http::Method::POST).with(notesv1::notes::restore::post))
-//             // .resource("/notes/v1/archive", |r| r.method(http::Method::GET).f(notesv1::archive::get))
-//             // .resource("/notes/v1/trash", |r| r.method(http::Method::GET).f(notesv1::trash::get))
-
-
 //             // // gallery
 //             // .resource("/gallery/v1/media", |r| r.method(http::Method::GET).f(galleryv1::media::get))
 //             // .resource("/gallery/v1/albums", |r| {
