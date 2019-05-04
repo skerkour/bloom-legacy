@@ -40,6 +40,7 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
             new_password: account_data.new_password,
             request_id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |res|
             match res {

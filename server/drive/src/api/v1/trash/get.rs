@@ -34,6 +34,7 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest) -> impl Future<Item =
         .send(controllers::FindTrashed{
             owner_id:  auth.account.expect("unwrapping non none account").id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |trash| {
             match trash {

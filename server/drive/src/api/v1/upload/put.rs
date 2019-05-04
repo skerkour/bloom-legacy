@@ -42,6 +42,7 @@ pub fn put(upload_data: web::Json<models::CompleteUploadSessionBody>, state: web
             session_id: auth.session.expect("error unwraping non none session").id,
             request_id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |file| {
             match file {

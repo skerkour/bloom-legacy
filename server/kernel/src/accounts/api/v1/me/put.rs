@@ -41,6 +41,7 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
             request_id,
             session_id: auth.session.expect("unwraping non none session").id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |account: Result<_, KernelError>| {
             match account {

@@ -38,6 +38,7 @@ pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
             request_id: request_id,
             current_session_id: auth.session.unwrap().id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |res| {
             match res {

@@ -18,7 +18,7 @@ failure = "0.1.5"
 actix-web = "1.0.0-beta.2"
 actix-multipart = "0.1.0-beta.1"
 actix-service = "0.3.6"
-actix = { version="0.8", features=["http"] }
+actix = "0.8"
 rusoto_s3 = "0.38"
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

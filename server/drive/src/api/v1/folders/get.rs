@@ -42,6 +42,7 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
             id: query_params.id.clone(),
             owner_id:  auth.account.expect("unwrapping non none account").id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |res| {
             match res {

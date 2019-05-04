@@ -42,6 +42,7 @@ pub fn get(file_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req: 
             session_id: auth.session.expect("error unwraping non none session").id,
             request_id,
         })
+        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
         .and_then(move |url| {
             match url {
