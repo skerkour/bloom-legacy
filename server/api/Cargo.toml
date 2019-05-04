@@ -13,7 +13,7 @@ kernel = { path = "../kernel" }
 notes = { path = "../notes" }
 contacts = { path = "../contacts" }
 drive = { path = "../drive" }
-# gallery = { path = "../gallery" }
+gallery = { path = "../gallery" }
 music = { path = "../music" }
 bitflow = { path = "../bitflow" }
 

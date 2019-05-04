@@ -44,3 +44,8 @@ pub struct UpdateAlbumBody {
 pub struct AddToAlbumBody {
     pub media: Vec<uuid::Uuid>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RemoveFromAlbumBody {
+    pub media: Vec<uuid::Uuid>,
+}

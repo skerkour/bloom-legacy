@@ -27,6 +27,7 @@ use bitflow::api::v1 as bitflowv1;
 use contacts::api::v1 as contactsv1;
 use notes::api::v1 as notesv1;
 use music::api::v1 as musicv1;
+use gallery::api::v1 as galleryv1;
 
 
 fn register_reactors() {
@@ -237,6 +238,26 @@ fn main() {
         )
         .service(web::resource("/music/v1/playlists/{playlist_id}/remove")
             .route(web::post().data(api::json_default_config()).to_async(musicv1::playlists::playlist::remove::post))
+        )
+
+        // gallery
+        .service(web::resource("/gallery/v1/media")
+            .route(web::get().data(api::json_default_config()).to_async(galleryv1::media::get))
+        )
+        .service(web::resource("/gallery/v1/albums")
+            .route(web::get().data(api::json_default_config()).to_async(galleryv1::albums::get))
+            .route(web::post().data(api::json_default_config()).to_async(galleryv1::albums::post))
+        )
+        .service(web::resource("/gallery/v1/albums/{album_id}")
+            .route(web::get().data(api::json_default_config()).to_async(galleryv1::albums::album::get))
+            .route(web::delete().data(api::json_default_config()).to_async(galleryv1::albums::album::delete))
+            .route(web::put().data(api::json_default_config()).to_async(galleryv1::albums::album::put))
+        )
+        .service(web::resource("/gallery/v1/albums/{album_id}/add")
+            .route(web::post().data(api::json_default_config()).to_async(galleryv1::albums::album::add::post))
+        )
+        .service(web::resource("/gallery/v1/albums/{album_id}/remove")
+            .route(web::post().data(api::json_default_config()).to_async(galleryv1::albums::album::remove::post))
         )
     })
     .backlog(8192)
