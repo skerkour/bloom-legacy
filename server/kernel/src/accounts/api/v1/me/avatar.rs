@@ -38,8 +38,7 @@ pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
 
     return Either::B(
         multipart
-        .map_err(|err| KernelError::Internal(err.to_string()).error_response())
-        .from_err()
+        .map_err(|err| KernelError::Internal(err.to_string()))
         .map(handle_multipart_item)
         .flatten()
         .collect()

@@ -2,11 +2,13 @@ use actix_web::{
     FromRequest, HttpRequest, Error, dev::Payload,
     http::header::{HeaderValue, HeaderName},
     dev::{ServiceRequest, ServiceResponse},
+    HttpMessage,
 };
 use actix_service::{Service, Transform};
 use futures::{
     Poll,
-    future::{ok, Either, FutureResult},
+    future::{ok, FutureResult, Future},
+
 };
 use std::ops::Deref;
 
@@ -31,6 +33,18 @@ pub trait GetRequestId {
 }
 
 impl GetRequestId for HttpRequest {
+    fn request_id(&self) -> RequestId {
+        if let Some(req_id) = self.extensions().get::<RequestId>() {
+            return *req_id;
+        }
+
+        let id = uuid::Uuid::new_v4();
+        self.extensions_mut().insert(RequestId(id));
+        RequestId(id)
+    }
+}
+
+impl GetRequestId for ServiceRequest {
     fn request_id(&self) -> RequestId {
         if let Some(req_id) = self.extensions().get::<RequestId>() {
             return *req_id;
@@ -94,7 +108,7 @@ where
     type Request = ServiceRequest;
     type Response = ServiceResponse<B>;
     type Error = Error;
-    type Future = Either<S::Future, FutureResult<Self::Response, Self::Error>>;
+    type Future = Box<Future<Item = Self::Response, Error = Self::Error>>;
 
     fn poll_ready(&mut self) -> Poll<(), Self::Error> {
         self.service.poll_ready()
@@ -103,12 +117,13 @@ where
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
         // We only need to hook into the `start` for this middleware.
         // TODO: handle error
-        let (http_req, _) = req.into_parts();
-        if let Ok(v) = HeaderValue::from_str(&(http_req.request_id().to_string())) {
-            req.head().headers_mut().append(HeaderName::from_static(REQUEST_ID_HEADER), v);
-        }
-
-        return Either::A(self.service.call(req));
+        let request_id = req.request_id();
+        return Box::new(self.service.call(req).map(move |mut res| {
+            if let Ok(v) = HeaderValue::from_str(&(request_id.to_string())) {
+                res.headers_mut().append(HeaderName::from_static(REQUEST_ID_HEADER), v);
+            }
+            return res;
+        }));
     }
 }
 

@@ -31,23 +31,24 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return Either::B(state.db
-    .send(controllers::UpdatePassword{
-        current_session: auth.session.expect("unwraping auth session"),
-        account: auth.account.expect("unwraping auth account"),
-        current_password: account_data.current_password,
-        new_password: account_data.new_password,
-        request_id,
-    })
-    .map_err(|_| KernelError::ActixMailbox)
-    .from_err()
-    .and_then(move |res|
-        match res {
-            Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
-            Err(err) => {
-                slog_error!(logger, "{}", err);
-                ok(err.error_response())
-            },
-        }
-    ));
+    return Either::B(
+        state.db
+        .send(controllers::UpdatePassword{
+            current_session: auth.session.expect("unwraping auth session"),
+            account: auth.account.expect("unwraping auth account"),
+            current_password: account_data.current_password,
+            new_password: account_data.new_password,
+            request_id,
+        })
+        .from_err()
+        .and_then(move |res|
+            match res {
+                Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
+        )
+    );
 }

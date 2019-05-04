@@ -30,12 +30,6 @@ pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    // let session_id = match uuid::Uuid::parse_str(&session_id) {
-    //     Ok(x) => x,
-    //     Err(_) => return future::result(Ok(apiKernelError::Validation("session_id is not valid".to_string())).error_response()))
-    //         .responder(),
-    // };
-
     return Either::B(
         state.db
         .send(controllers::RevokeSession{
@@ -44,11 +38,15 @@ pub fn post(session_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
             request_id: request_id,
             current_session_id: auth.session.unwrap().id,
         })
-        .map_err(|_| KernelError::ActixMailbox)
         .from_err()
-        .and_then(move |_| {
-            let res = api::Response::data(models::NoData{});
-            ok(HttpResponse::Ok().json(&res))
+        .and_then(move |res| {
+            match res {
+                Ok(_) => ok(HttpResponse::Ok().json(api::Response::data(models::NoData{}))),
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
         })
     );
 }

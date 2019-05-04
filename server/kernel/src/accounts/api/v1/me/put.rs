@@ -31,36 +31,37 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    return Either::B(state.db
-    .send(controllers::UpdateAccount{
-        account: auth.account.expect("unwraping non none account"),
-        avatar_url: account_data.avatar_url,
-        first_name: account_data.first_name,
-        last_name: account_data.last_name,
-        request_id,
-        session_id: auth.session.expect("unwraping non none session").id,
-    })
-    .map_err(|err| KernelError::ActixMailbox)
-    .from_err()
-    .and_then(move |account: Result<_, KernelError>| {
-        match account {
-            Ok(account) => {
-                let res = models::MeResponse{
-                    id: account.id,
-                    created_at: account.created_at,
-                    first_name: account.first_name,
-                    last_name: account.last_name,
-                    username: account.username,
-                    email: account.email,
-                    avatar_url: account.avatar_url,
-                };
-                let res = api::Response::data(res);
-                ok(HttpResponse::Ok().json(&res))
-            },
-            Err(err) => {
-                slog_error!(logger, "{}", err);
-                ok(err.error_response())
-            },
-        }
-    }));
+    return Either::B(
+        state.db
+        .send(controllers::UpdateAccount{
+            account: auth.account.expect("unwraping non none account"),
+            avatar_url: account_data.avatar_url,
+            first_name: account_data.first_name,
+            last_name: account_data.last_name,
+            request_id,
+            session_id: auth.session.expect("unwraping non none session").id,
+        })
+        .from_err()
+        .and_then(move |account: Result<_, KernelError>| {
+            match account {
+                Ok(account) => {
+                    let res = models::MeResponse{
+                        id: account.id,
+                        created_at: account.created_at,
+                        first_name: account.first_name,
+                        last_name: account.last_name,
+                        username: account.username,
+                        email: account.email,
+                        avatar_url: account.avatar_url,
+                    };
+                    let res = api::Response::data(res);
+                    ok(HttpResponse::Ok().json(&res))
+                },
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                },
+            }
+        })
+    );
 }

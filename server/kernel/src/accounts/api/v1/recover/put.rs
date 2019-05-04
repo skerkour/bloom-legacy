@@ -11,11 +11,16 @@ use crate::{
     error::KernelError,
     utils,
 };
-use futures::future::Future;
+use futures::{
+    future::{
+        IntoFuture,
+        ok,
+        Future,
+    },
+};
 use actix_web::{
     web, Error, HttpRequest, HttpResponse,
 };
-use futures::future::IntoFuture;
 use rand::Rng;
 use std::time::Duration;
 
@@ -46,17 +51,17 @@ pub fn put(password_data: web::Json<models::ResetPassowrdBody>, state: web::Data
             session_id,
         }).flatten()
     )
+    .from_err()
     .and_then(move |(session, token)| {
         let res = api::Response::data(models::SignInResponse{
             token: utils::encode_session(&session.id.to_string(), &token),
             id: session.id,
         });
-        Ok(HttpResponse::Ok().json(&res))
+        ok(HttpResponse::Ok().json(&res))
     })
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
         return err;
     })
-    .from_err()
-    .responder();
+    .from_err();
 }

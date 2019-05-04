@@ -8,13 +8,19 @@ use crate::{
     },
     accounts::controllers,
     utils,
+    KernelError,
 };
 use std::time::Duration;
-use futures::future::Future;
+use futures::{
+    future::{
+        IntoFuture,
+        Future,
+        ok,
+    },
+};
 use actix_web::{
     web, Error, HttpRequest, HttpResponse,
 };
-use futures::future::IntoFuture;
 use rand::Rng;
 
 
@@ -37,17 +43,17 @@ pub fn post(registration_data: web::Json<models::CompleteRegistrationBody>, stat
             request_id,
         }).flatten()
     )
+    .from_err()
     .and_then(|(session, token)| {
         let res = api::Response::data(models::CompleteRegistrationResponse{
             id: session.id,
             token: utils::encode_session(&session.id.to_string(), &token),
         });
-        Ok(HttpResponse::Created().json(&res))
+        ok(HttpResponse::Created().json(&res))
     })
-    .map_err(move |err| {
+    .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
         return err;
     })
-    .from_err()
-    .responder();
+    .from_err();
 }

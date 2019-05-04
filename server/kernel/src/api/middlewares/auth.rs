@@ -5,10 +5,11 @@
 // };
 use actix_web::{
     FromRequest, HttpRequest, Error, dev::Payload,
-    http::header::HeaderValue,
+    http::header::HeaderValue, HttpMessage,
     dev::{ServiceRequest, ServiceResponse},
     web,
     http::header,
+    ResponseError,
 };
 use actix_service::{Service as ActixService, Transform};
 use futures::{
@@ -24,6 +25,8 @@ use crate::{
     error::KernelError,
 };
 use std::env;
+use std::cell::RefCell;
+use std::rc::Rc;
 
 
 
@@ -59,13 +62,15 @@ where
     type Future = FutureResult<Self::Transform, Self::InitError>;
 
     fn new_transform(&self, service: S) -> Self::Future {
-        ok(AuthMiddleware2 { service })
+        ok(AuthMiddleware2 {
+            service: Rc::new(RefCell::new(service)),
+        })
     }
 }
 
 /// The RequestIdMiddleware. It sets a `request-id` HTTP header to the HttpResponse
 pub struct AuthMiddleware2<S> {
-    service: S,
+    service: Rc<RefCell<S>>,
 }
 
 impl<S, B> ActixService for AuthMiddleware2<S>
@@ -87,9 +92,8 @@ where
         let state: web::Data<api::State> = req.app_data().expect("error getting app_data in auth middleware");
 
         let auth_header = req.headers().get(header::AUTHORIZATION);
-        let (http_req, _) = req.into_parts();
         if auth_header.is_none() {
-            http_req.extensions_mut().insert(Auth{
+            req.extensions_mut().insert(Auth{
                 account: None,
                 session: None,
                 service: None,
@@ -108,7 +112,7 @@ where
                 .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())))
         } else {
             return Box::new(ok(
-                req.error_response(KernelError::Validation("Authorization HTTP header is not valid".to_string()).into())
+                req.error_response(KernelError::Validation("Authorization HTTP header is not valid".to_string()).error_response())
             ));
         };
 
@@ -116,18 +120,18 @@ where
         // the problem is: req.extensions_mut().insert(auth);
         // we can either clone req or use a sync middleware
         // the question is: what is the cost of clonning req ?
-
+        let mut service = self.service.clone();
         return Box::new(
             state.db.send(msg)
-            .map_err(|err| KernelError::ActixMailbox)
+            // .map_err(|err| KernelError::ActixMailbox)
             .from_err()
             .and_then(move |res: Result<_, KernelError>| {
                 match res {
                     Ok(auth) => {
-                        // http_req.extensions_mut().insert(auth);
-                        return Either::A(self.service.call(req));
+                        req.extensions_mut().insert(auth);
+                        return Either::A(service.call(req));
                     },
-                    Err(e) => Either::B(ok(req.error_response(e.into()))),
+                    Err(e) => Either::B(ok(req.error_response(e.error_response()))),
                 }
             })
         );

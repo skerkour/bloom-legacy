@@ -12,14 +12,14 @@ pub enum KernelError {
     #[fail(display="ActixMailboxError")]
     ActixMailbox,
 
+    #[fail(display="TokioTimerError: {}", 0)]
+    TokioTimer(String),
+
     #[fail(display="DieselError: {}", 0)]
     Diesel(String),
 
     #[fail(display="R2d2Error")]
     R2d2,
-
-    #[fail(display="TokioError")]
-    Tokio,
 
     #[fail(display="BcryptError")]
     Bcrypt,
@@ -59,6 +59,12 @@ impl std::convert::From<actix::MailboxError> for KernelError {
     }
 }
 
+impl std::convert::From<tokio_timer::Error> for KernelError {
+    fn from(err: tokio_timer::Error) -> Self {
+        KernelError::TokioTimer(format!("{:?}", err))
+    }
+}
+
 impl std::convert::From<diesel::result::Error> for KernelError {
     fn from(err: diesel::result::Error) -> Self {
         match err {
@@ -78,12 +84,6 @@ impl std::convert::From<image::ImageError> for KernelError {
 impl std::convert::From<diesel::r2d2::Error> for KernelError {
     fn from(_err: diesel::r2d2::Error) -> Self {
         KernelError::R2d2
-    }
-}
-
-impl std::convert::From<tokio_timer::Error> for KernelError {
-    fn from(_err: tokio_timer::Error) -> Self {
-        KernelError::Tokio
     }
 }
 
@@ -114,7 +114,7 @@ impl error::ResponseError for KernelError {
             // 408
             KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
             // 500
-            KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::Tokio
+            KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::TokioTimer(_)
             | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_) => {
                 let res: Response<()> = Response::error(KernelError::Internal(String::new()));
                 HttpResponse::InternalServerError().json(&res)
