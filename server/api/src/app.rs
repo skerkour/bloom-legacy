@@ -87,17 +87,6 @@
 //             // .resource("/notes/v1/archive", |r| r.method(http::Method::GET).f(notesv1::archive::get))
 //             // .resource("/notes/v1/trash", |r| r.method(http::Method::GET).f(notesv1::trash::get))
 
-//             // // contacts
-//             // .resource("/contacts/v1/contacts", |r| {
-//             //     r.method(http::Method::GET).f(contactsv1::contacts::get);
-//             //     r.method(http::Method::POST).with_config(contactsv1::contacts::post, api::json_default_config);
-//             // })
-//             // .resource("/contacts/v1/contacts/{contact_id}", |r| {
-//             //     r.method(http::Method::GET).with(contactsv1::contacts::id::get);
-//             //     r.method(http::Method::PUT).with_config(contactsv1::contacts::put, api::json_default_config_path);
-//             //     r.method(http::Method::DELETE).with(contactsv1::contacts::delete);
-//             // })
-
 
 //             // // gallery
 //             // .resource("/gallery/v1/media", |r| r.method(http::Method::GET).f(galleryv1::media::get))
@@ -135,31 +124,6 @@
 //             //     r.method(http::Method::POST).with_config(musicv1::playlists::playlist::remove::post, api::json_default_config_path);
 //             // })
 
-//             // // bitflow
-//             // .resource("/bitflow/v1/downloads", |r| {
-//             //     r.method(http::Method::GET).f(bitflowv1::downloads::get);
-//             //     r.method(http::Method::POST).with_config(bitflowv1::downloads::post, api::json_default_config);
-//             // })
-//             // .resource("/bitflow/v1/downloads/remove", |r| {
-//             //     r.method(http::Method::POST).with_config(bitflowv1::downloads::remove::post, api::json_default_config);
-//             // })
-//             // .resource("/bitflow/v1/downloads/{download_id}", |r| {
-//             //     r.method(http::Method::GET).with(bitflowv1::downloads::download::get);
-//             //     r.method(http::Method::PUT).with_config(bitflowv1::downloads::download::put, api::json_default_config_path);
-//             // })
-//             // .resource("/bitflow/v1/downloads/{download_id}/complete", |r| {
-//             //     r.method(http::Method::POST).with_config(bitflowv1::downloads::download::complete::post, api::json_default_config_path);
-//             // })
-//             // .resource("/bitflow/v1/downloads/{download_id}/fail", |r| {
-//             //     r.method(http::Method::POST).with_config(bitflowv1::downloads::download::fail::post, api::json_default_config_path);
-//             // })
-//             // .resource("/bitflow/v1/history", |r| {
-//             //     r.method(http::Method::GET).f(bitflowv1::history::get);
-//             //     r.method(http::Method::DELETE).f(bitflowv1::history::delete);
-//             // })
-//             // .resource("/bitflow/v1/job", |r| {
-//             //     r.method(http::Method::GET).f(bitflowv1::job::get);
-//             // })
 
 //     //         .register()
 //     // })

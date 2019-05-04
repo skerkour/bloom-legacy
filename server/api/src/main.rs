@@ -22,6 +22,7 @@ use kernel::{
 };
 use drive::api::v1 as drivev1;
 use bitflow::api::v1 as bitflowv1;
+use contacts::api::v1 as contactsv1;
 use std::str::FromStr;
 
 
@@ -172,6 +173,18 @@ fn main() {
         )
         .service(web::resource("/bitflow/v1/job")
             .route(web::get().data(api::json_default_config()).to_async(bitflowv1::job::get))
+        )
+
+
+        // contacts
+        .service(web::resource("/contacts/v1/contacts")
+            .route(web::get().data(api::json_default_config()).to_async(contactsv1::contacts::get))
+            .route(web::post().data(api::json_default_config()).to_async(contactsv1::contacts::post))
+        )
+        .service(web::resource("/contacts/v1/contacts/{contact_id}")
+            .route(web::get().data(api::json_default_config()).to_async(contactsv1::contacts::id::get))
+            .route(web::put().data(api::json_default_config()).to_async(contactsv1::contacts::put))
+            .route(web::delete().data(api::json_default_config()).to_async(contactsv1::contacts::delete))
         )
     })
     .backlog(8192)

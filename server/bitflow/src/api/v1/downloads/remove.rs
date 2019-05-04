@@ -23,7 +23,7 @@ use crate::{
 
 
 pub fn post(remove_data: web::Json<models::RemoveDownloadsBody>, state: web::Data<api::State>, req: HttpRequest)
--> impl Future<Item = HttpResponse, Error = Error> {    let logger = req.logger();
+-> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
