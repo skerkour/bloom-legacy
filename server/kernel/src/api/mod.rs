@@ -5,6 +5,7 @@ use actix_web::{
     Result as ActixResult,
     HttpResponse,
     HttpRequest,
+    web::JsonConfig,
 };
 use crate::KernelError;
 
@@ -51,13 +52,21 @@ impl<T: Serialize> Response<T> {
     }
 }
 
-pub fn index(_req: &HttpRequest) -> ActixResult<HttpResponse> {
+pub fn index() -> ActixResult<HttpResponse> {
     let res = HelloWorld{hello: "world"};
     return Ok(HttpResponse::Ok().json(Response::data(res)));
 }
 
-pub fn route_404(_req: &HttpRequest) -> ActixResult<HttpResponse> {
+pub fn route_404() -> ActixResult<HttpResponse> {
     return Err(KernelError::RouteNotFound.into());
+}
+
+pub fn json_default_config() -> JsonConfig {
+    return JsonConfig::default()
+        .limit(256000)
+        .error_handler(|err, _| {
+            KernelError::Validation(err.to_string()).into() // <- create custom error response
+        });
 }
 
 // pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {

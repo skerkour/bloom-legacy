@@ -1,4 +1,4 @@
-mod app;
+// mod app;
 use std::env;
 use dotenv;
 
@@ -6,21 +6,26 @@ use sentry::integrations::panic::register_panic_handler;
 
 
 use actix_web::{
-    server as actix_server,
+    http::header, middleware::cors::Cors, middleware::Logger, web, App, HttpServer,
 };
+use rusoto_core::Region;
+use rusoto_s3::S3Client;
+use actix_http;
 use actix::System;
 use kernel::{
     log,
     log::macros::{slog_info, slog_o},
     config,
     db,
-    accounts::domain::account,
+    api,
+    accounts::api::v1 as accountsv1,
 };
+use std::str::FromStr;
 
 
 fn register_reactors() {
-    eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated{}));
-    eventsourcing::subscribe::<_, account::Event, _>(Box::new(bitflow::reactors::AccountCreated{}));
+    // eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated{}));
+    // eventsourcing::subscribe::<_, account::Event, _>(Box::new(bitflow::reactors::AccountCreated{}));
 }
 
 
@@ -39,14 +44,82 @@ fn main() {
 
     register_reactors();
 
-    actix_server::new(move || app::init(db_actor_addr.clone(), cfg.clone()))
-        .backlog(8192)
-        .bind(&binding_addr)
-        .expect("error binding server")
-        .keep_alive(actix_server::KeepAlive::Timeout(60))
-        .shutdown_timeout(2)
-        .workers(num_cpus::get())
-        .start();
+    let region = Region::from_str(&cfg.aws_region()).expect("AWS region not valid");
+    let api_state = api::State{
+        db: db_actor_addr,
+        config: cfg,
+        s3_client: S3Client::new(region),
+    };
+
+    // TODO: logger middleware
+    // TODO: sentry middleware
+    HttpServer::new(move || {
+        App::new()
+        .data(api_state.clone())
+        .wrap(
+            Cors::new()
+                .send_wildcard() // TODO...
+                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+                .max_age(3600)
+        )
+        .wrap(Logger::default())
+        .wrap(api::middlewares::RequestIdMiddleware)
+        .wrap(api::middlewares::AuthMiddleware)
+        .service(web::resource("/").route(web::get().to(api::index)))
+
+        // myaccount
+        .service(web::resource("/myaccount/v1/registration/start")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::registration::start::post))
+        )
+        .service(web::resource("/myaccount/v1/registration/verify")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::registration::verify::post))
+        )
+        .service(web::resource("/myaccount/v1/registration/complete")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::registration::complete::post))
+        )
+        .service(web::resource("/myaccount/v1/registration/new-code")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::registration::new_code::post))
+        )
+        .service(web::resource("/myaccount/v1/sign-in")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::sign_in::post))
+        )
+        .service(web::resource("/myaccount/v1/sign-out")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::sign_out::post))
+        )
+        .service(web::resource("/myaccount/v1/recover")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::recover::post))
+            .route(web::put().data(api::json_default_config()).to_async(accountsv1::recover::put))
+        )
+        .service(web::resource("/myaccount/v1/me")
+            .route(web::get().data(api::json_default_config()).to(accountsv1::me::get))
+            .route(web::put().data(api::json_default_config()).to_async(accountsv1::me::put))
+        )
+        .service(web::resource("/myaccount/v1/me/password")
+            .route(web::put().data(api::json_default_config()).to_async(accountsv1::me::password::put))
+        )
+        .service(web::resource("/myaccount/v1/me/avatar")
+            .route(web::put().data(api::json_default_config()).to_async(accountsv1::me::avatar::put))
+        )
+        .service(web::resource("/myaccount/v1/me/email")
+            .route(web::put().data(api::json_default_config()).to_async(accountsv1::me::email::put))
+        )
+        .service(web::resource("/myaccount/v1/me/email/verify")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::me::email::verify::post))
+        )
+        .service(web::resource("/myaccount/v1/me/sessions")
+            .route(web::get().to_async(accountsv1::me::sessions::get)))
+        .service(web::resource("/myaccount/v1/me/sessions/{session_id}/revoke")
+            .route(web::post().data(api::json_default_config()).to_async(accountsv1::me::sessions::revoke::post))
+        )
+    })
+    .backlog(8192)
+    .keep_alive(actix_http::KeepAlive::Timeout(60))
+    .shutdown_timeout(2)
+    .workers(num_cpus::get())
+    .bind(&binding_addr)
+    .expect("error binding server")
+    .start();
 
     slog_info!(logger, "server started"; slog_o!("address" => binding_addr));
     let _ = sys.run();
