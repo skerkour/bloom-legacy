@@ -37,4 +37,5 @@ members = [
     "server/gallery",
     "server/music",
     "server/bitflow",
+    "server/phaser",
 ]
