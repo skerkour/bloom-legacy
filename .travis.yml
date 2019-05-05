@@ -13,7 +13,7 @@ script:
   - make test
   # - make lint
   # - make build
-  - travis_wait make docker_build
+  - travis_wait 50 make docker_build
 
 deploy:
   - provider: releases
