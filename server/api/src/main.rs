@@ -74,6 +74,7 @@ fn main() {
         .wrap(api::middlewares::RequestIdMiddleware)
         .wrap(api::middlewares::AuthMiddleware)
         .service(web::resource("/").route(web::get().to(api::index)))
+        .default_service(web::route().to(api::route_404))
 
         // myaccount
         .service(web::resource("/myaccount/v1/registration/start")
