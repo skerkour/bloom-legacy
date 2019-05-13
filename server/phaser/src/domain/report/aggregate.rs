@@ -23,7 +23,7 @@ pub struct Report {
 
     pub completed_at: Option<chrono::DateTime<chrono::Utc>>,
     pub error: Option<String>,
-    pub findings: Option<Findings>,
+    pub findings: Option<Vec<Finding>>,
     pub high_level_findings: i64,
     pub information_findings: i64,
     pub low_level_findings: i64,
@@ -47,7 +47,29 @@ pub enum ReportStatus {
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub struct Findings {
+pub enum Finding {
+    A,
+    B,
+}
+
+#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+pub enum ReportResult {
+    Success(ReportResultSuccess),
+    Failed(ReportResultFailed),
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ReportResultSuccess {
+    pub findings: Vec<Finding>,
+    pub high_level_findings: i64,
+    pub information_findings: i64,
+    pub low_level_findings: i64,
+    pub medium_level_findings: i64,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ReportResultFailed {
+    pub error: String,
 }
 
 

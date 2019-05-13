@@ -9,7 +9,10 @@ use crate::domain::scan::{
     ScanProfile,
     ReportTrigger,
 };
-use super::ReportStatus;
+use super::{
+    ReportStatus,
+    ReportResult,
+};
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
@@ -26,6 +29,8 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     StartedV1,
+    CompletedV1(CompletedV1),
+    StoppedV1,
 }
 
 
@@ -34,18 +39,23 @@ pub struct CreatedV1 {
     pub id: uuid::Uuid,
     pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,
-    pub profile:: ScanProfile,
+    pub profile: ScanProfile,
     pub trigger: ReportTrigger,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompletedV1 {
+    pub result: ReportResult,
 }
 
 
 impl eventsourcing::Event for Event {
-    type Aggregate = super::Scan;
+    type Aggregate = super::Report;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => self::Aggregate{
+            EventData::CreatedV1(ref data) => Self::Aggregate{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -68,10 +78,33 @@ impl eventsourcing::Event for Event {
                 scan_id: data.scan_id,
             },
             // StartedV1
-            EventData::StartedV1 => self::Aggregate{
-                started_at: self.timestamp,
+            EventData::StartedV1 => Self::Aggregate{
+                started_at: Some(self.timestamp),
                 status: ReportStatus::Scanning,
                 ..aggregate
+            },
+            // StoppedV1
+            EventData::StoppedV1 => Self::Aggregate{
+                status: ReportStatus::Stopped,
+                ..aggregate
+            },
+            // CompletedV1
+            EventData::CompletedV1(ref data) => {
+                match data.result {
+                    ReportResult::Failed(ref data) => Self::Aggregate {
+                        error: Some(data.error.clone()),
+                        status: ReportStatus::Failed,
+                        ..aggregate
+                    },
+                    ReportResult::Success(ref data) => Self::Aggregate{
+                        findings: Some(data.findings.clone()),
+                        high_level_findings: data.high_level_findings,
+                        information_findings: data.information_findings,
+                        low_level_findings: data.low_level_findings,
+                        medium_level_findings: data.medium_level_findings,
+                        ..aggregate
+                    },
+                }
             },
         }
     }
