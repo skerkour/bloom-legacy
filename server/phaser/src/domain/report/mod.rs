@@ -9,8 +9,10 @@ pub use aggregate::{
     Finding,
 };
 pub use commands::{
+    Queue,
 };
 pub use events::{
     Event,
     EventData,
+    QueuedV1,
 };

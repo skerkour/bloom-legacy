@@ -50,7 +50,7 @@ pub enum ScanState {
 #[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
 pub enum ReportTrigger {
     Manual,
-    Schedule,
+    Scheduled,
 }
 
 impl Scan {

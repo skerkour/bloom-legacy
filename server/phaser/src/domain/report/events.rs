@@ -27,7 +27,7 @@ pub struct Event {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
-    CreatedV1(CreatedV1),
+    QueuedV1(QueuedV1),
     StartedV1,
     CompletedV1(CompletedV1),
     FailedV1(FailedV1),
@@ -36,7 +36,7 @@ pub enum EventData {
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CreatedV1 {
+pub struct QueuedV1 {
     pub id: uuid::Uuid,
     pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,
@@ -64,8 +64,8 @@ impl eventsourcing::Event for Event {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
-            // CreatedV1
-            EventData::CreatedV1(ref data) => Self::Aggregate{
+            // QueuedV1
+            EventData::QueuedV1(ref data) => Self::Aggregate{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,

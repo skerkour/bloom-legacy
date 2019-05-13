@@ -12,6 +12,7 @@ pub use aggregate::{
 };
 pub use commands::{
     Create,
+    Queue,
 };
 pub use events::{
     Event,

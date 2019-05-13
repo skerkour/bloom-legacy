@@ -7,6 +7,7 @@ use kernel::{
     events::EventMetadata,
 };
 use crate::{
+    domain::report,
     domain::scan,
     validators,
 };
@@ -14,37 +15,40 @@ use crate::{
 
 #[derive(Clone, Debug)]
 pub struct Queue {
+    pub scan_id: uuid::Uuid,
+    pub targets: Vec<String>,
+    pub profile: scan::ScanProfile,
     pub trigger: scan::ReportTrigger,
-    pub report_id: uuid::Uuid,
     pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Queue {
-    type Aggregate = scan::Scan;
-    type Event = scan::Event;
+    type Aggregate = report::Report;
+    type Event = report::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        if aggregate.state != scan::ScanState::Waiting {
-            return Err(KernelError::Validation("Scan is already queued or running".to_string()));
-        }
 
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = scan::EventData::QueuedV1(scan::QueuedV1{
-            report_id: self.report_id,
+    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let id = uuid::Uuid::new_v4();
+        let data = report::EventData::QueuedV1(report::QueuedV1{
+            id: id,
+            scan_id: self.scan_id,
+            targets: self.targets.clone(),
+            profile: self.profile.clone(),
             trigger: self.trigger.clone(),
         });
 
-        return  Ok((scan::Event{
+        return  Ok((report::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: aggregate.id,
+            aggregate_id: id,
             metadata: self.metadata.clone(),
         }, ()));
     }
