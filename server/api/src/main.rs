@@ -28,6 +28,7 @@ use contacts::api::v1 as contactsv1;
 use notes::api::v1 as notesv1;
 use music::api::v1 as musicv1;
 use gallery::api::v1 as galleryv1;
+use phaser::api::v1 as phaserv1;
 
 
 fn register_reactors() {
@@ -259,6 +260,11 @@ fn main() {
         )
         .service(web::resource("/gallery/v1/albums/{album_id}/remove")
             .route(web::post().data(api::json_default_config()).to_async(galleryv1::albums::album::remove::post))
+        )
+
+        // phaser
+        .service(web::resource("/phaser/v1/scans")
+            .route(web::get().data(api::json_default_config()).to_async(phaserv1::scans::get))
         )
     })
     .backlog(8192)

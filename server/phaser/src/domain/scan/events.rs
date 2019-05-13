@@ -27,6 +27,7 @@ pub struct Event {
 pub enum EventData {
     CreatedV1(CreatedV1),
     DescriptionUpdatedV1(DescriptionUpdatedV1),
+    ScheduleUpdatedV1(ScheduleUpdatedV1),
     QueuedV1(QueuedV1),
     CompletedV1,
     StartedV1,
@@ -46,13 +47,18 @@ pub struct CreatedV1 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DescriptionUpdatedV1 {
-    description: String,
+    pub description: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ScheduleUpdatedV1 {
+    pub schedule: ScanSchedule,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueuedV1 {
-    trigger: ReportTrigger,
-    report_id: uuid::Uuid,
+    pub trigger: ReportTrigger,
+    pub report_id: uuid::Uuid,
 }
 
 
@@ -82,6 +88,11 @@ impl eventsourcing::Event for Event {
             // DescriptionUpdatedV1
             EventData::DescriptionUpdatedV1(ref data) => super::Scan{
                 description: data.description.clone(),
+                ..aggregate
+            },
+            // ScheduleUpdatedV1
+            EventData::ScheduleUpdatedV1(ref data) => super::Scan{
+                schedule: data.schedule.clone(),
                 ..aggregate
             },
             // QueuedV1
