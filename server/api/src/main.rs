@@ -265,6 +265,7 @@ fn main() {
         // phaser
         .service(web::resource("/phaser/v1/scans")
             .route(web::get().data(api::json_default_config()).to_async(phaserv1::scans::get))
+            .route(web::post().data(api::json_default_config()).to_async(phaserv1::scans::post))
         )
     })
     .backlog(8192)

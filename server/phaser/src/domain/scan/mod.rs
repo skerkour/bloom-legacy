@@ -11,8 +11,13 @@ pub use aggregate::{
     ScanSchedule,
 };
 pub use commands::{
+    Create,
 };
 pub use events::{
     Event,
     EventData,
+    CreatedV1,
+    DescriptionUpdatedV1,
+    ScheduleUpdatedV1,
+    QueuedV1,
 };
