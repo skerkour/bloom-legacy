@@ -28,7 +28,7 @@ pub fn post(download_id: web::Path<(uuid::Uuid)>, download_data: web::Json<model
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    if auth.session.is_none() || auth.account.is_none() {
+    if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Bitflow {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 

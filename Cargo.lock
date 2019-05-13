@@ -671,6 +671,24 @@ dependencies = [
 ]
 
 [[package]]
+name = "bzip2"
+version = "0.3.3"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "bzip2-sys 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.51 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bzip2-sys"
+version = "0.1.7"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "cc 1.0.32 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libc 0.2.51 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "cc"
 version = "1.0.32"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1653,6 +1671,16 @@ version = "0.2.51"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
+name = "libflate"
+version = "0.1.22"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "adler32 1.0.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "byteorder 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "crc32fast 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "libsqlite3-sys"
 version = "0.12.0"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2084,6 +2112,7 @@ name = "phaser"
 version = "0.1.0"
 dependencies = [
  "actix 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "actix-multipart 0.1.0-beta.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.0-beta.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2095,6 +2124,7 @@ dependencies = [
  "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
  "serde_json 1.0.39 (registry+https://github.com/rust-lang/crates.io-index)",
  "uuid 0.7.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "zip 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]
@@ -2147,6 +2177,11 @@ dependencies = [
  "inflate 0.4.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "num-iter 0.1.37 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
+
+[[package]]
+name = "podio"
+version = "0.1.6"
+source = "registry+https://github.com/rust-lang/crates.io-index"
 
 [[package]]
 name = "pq-sys"
@@ -3576,6 +3611,18 @@ dependencies = [
  "bitflags 1.0.4 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
+[[package]]
+name = "zip"
+version = "0.5.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+dependencies = [
+ "bzip2 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)",
+ "crc32fast 1.2.0 (registry+https://github.com/rust-lang/crates.io-index)",
+ "libflate 0.1.22 (registry+https://github.com/rust-lang/crates.io-index)",
+ "podio 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)",
+ "time 0.1.42 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
 [metadata]
 "checksum MacTypes-sys 2.1.0 (registry+https://github.com/rust-lang/crates.io-index)" = "eaf9f0d0b1cc33a4d2aee14fb4b2eac03462ef4db29c8ac4057327d8a71ad86f"
 "checksum actix 0.7.9 (registry+https://github.com/rust-lang/crates.io-index)" = "6c616db5fa4b0c40702fb75201c2af7f8aa8f3a2e2c1dda3b0655772aa949666"
@@ -3625,6 +3672,8 @@ dependencies = [
 "checksum byte-tools 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "560c32574a12a89ecd91f5e742165893f86e3ab98d21f8ea548658eb9eef5f40"
 "checksum byteorder 1.3.1 (registry+https://github.com/rust-lang/crates.io-index)" = "a019b10a2a7cdeb292db131fc8113e57ea2a908f6e7894b0c3c671893b65dbeb"
 "checksum bytes 0.4.12 (registry+https://github.com/rust-lang/crates.io-index)" = "206fdffcfa2df7cbe15601ef46c813fce0965eb3286db6b56c583b814b51c81c"
+"checksum bzip2 0.3.3 (registry+https://github.com/rust-lang/crates.io-index)" = "42b7c3cbf0fa9c1b82308d57191728ca0256cb821220f4e2fd410a72ade26e3b"
+"checksum bzip2-sys 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "6584aa36f5ad4c9247f5323b0a42f37802b37a836f0ad87084d7a33961abe25f"
 "checksum cc 1.0.32 (registry+https://github.com/rust-lang/crates.io-index)" = "ad0daef304fa0b4238f5f7ed7178774b43b06f6a9b6509f6642bef4ff1f7b9b2"
 "checksum cfg-if 0.1.7 (registry+https://github.com/rust-lang/crates.io-index)" = "11d43355396e872eefb45ce6342e4374ed7bc2b3a502d1b28e36d6e23c05d1f4"
 "checksum chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)" = "45912881121cb26fad7c38c17ba7daa18764771836b34fab7d3fbd93ed633878"
@@ -3718,6 +3767,7 @@ dependencies = [
 "checksum lettre 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "dce706506538f9ed237258b11e3e04b39a1d49b5c8a085b96a3990d14f4cc5d4"
 "checksum lettre_email 0.9.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6031fb7c5aaff1af386be7663e416e37aa2dac8ad5ac115a2d788ac349ebbf1d"
 "checksum libc 0.2.51 (registry+https://github.com/rust-lang/crates.io-index)" = "bedcc7a809076656486ffe045abeeac163da1b558e963a31e29fbfbeba916917"
+"checksum libflate 0.1.22 (registry+https://github.com/rust-lang/crates.io-index)" = "c52384aeb22d0ce82a10d8ddf35f7fb4717d1b23eac5b94cd38d2050fb53766a"
 "checksum libsqlite3-sys 0.12.0 (registry+https://github.com/rust-lang/crates.io-index)" = "fd6457c70bbff456d9fe49deaba35ec47c3e598bf8d7950ff0575ceb7a8a6ad1"
 "checksum linked-hash-map 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "ae91b68aebc4ddb91978b11a1b02ddd8602a05ec19002801c5666000e05e0f83"
 "checksum lock_api 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "62ebf1391f6acad60e5c8b43706dde4582df75c06698ab44511d15016bc2442c"
@@ -3768,6 +3818,7 @@ dependencies = [
 "checksum phf_shared 0.7.24 (registry+https://github.com/rust-lang/crates.io-index)" = "234f71a15de2288bcb7e3b6515828d22af7ec8598ee6d24c3b526fa0a80b67a0"
 "checksum pkg-config 0.3.14 (registry+https://github.com/rust-lang/crates.io-index)" = "676e8eb2b1b4c9043511a9b7bea0915320d7e502b0a079fb03f9635a5252b18c"
 "checksum png 0.14.0 (registry+https://github.com/rust-lang/crates.io-index)" = "9adebf7fb91ccf5eac9da1a8e00e83cb8ae882c3e8d8e4ad59da73cb8c82a2c9"
+"checksum podio 0.1.6 (registry+https://github.com/rust-lang/crates.io-index)" = "780fb4b6698bbf9cf2444ea5d22411cef2953f0824b98f33cf454ec5615645bd"
 "checksum pq-sys 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)" = "6ac25eee5a0582f45a67e837e350d784e7003bd29a5f460796772061ca49ffda"
 "checksum proc-macro2 0.4.27 (registry+https://github.com/rust-lang/crates.io-index)" = "4d317f9caece796be1980837fd5cb3dfec5613ebdb04ad0956deea83ce168915"
 "checksum quick-error 1.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "9274b940887ce9addde99c4eee6b5c44cc494b182b97e73dc8ffdcb3397fd3f0"
@@ -3917,3 +3968,4 @@ dependencies = [
 "checksum winutil 0.1.1 (registry+https://github.com/rust-lang/crates.io-index)" = "7daf138b6b14196e3830a588acf1e86966c694d3e8fb026fb105b8b5dca07e6e"
 "checksum ws2_32-sys 0.2.1 (registry+https://github.com/rust-lang/crates.io-index)" = "d59cefebd0c892fa2dd6de581e937301d8552cb44489cdff035c6187cb63fa5e"
 "checksum xml-rs 0.7.0 (registry+https://github.com/rust-lang/crates.io-index)" = "3c1cb601d29fe2c2ac60a2b2e5e293994d87a1f6fa9687a31a15270f909be9c2"
+"checksum zip 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "c18fc320faf909036e46ac785ea827f72e485304877faf1a3a39538d3714dbc3"

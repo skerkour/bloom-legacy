@@ -3,6 +3,7 @@ mod create_scan;
 mod queue_scan;
 mod delete_scan;
 mod cancel_scan;
+mod complete_report;
 
 
 pub use find_scans::FindScans;
@@ -10,3 +11,4 @@ pub use create_scan::CreateScan;
 pub use queue_scan::QueueScan;
 pub use delete_scan::DeleteScan;
 pub use cancel_scan::CancelScan;
+pub use complete_report::CompleteReport;
