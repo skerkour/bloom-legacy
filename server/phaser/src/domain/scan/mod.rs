@@ -8,6 +8,7 @@ pub use aggregate::{
     ScanState,
     ScanProfile,
     ReportTrigger,
+    ScanSchedule,
 };
 pub use commands::{
 };
