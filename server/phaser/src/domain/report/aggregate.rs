@@ -52,27 +52,6 @@ pub enum Finding {
     B,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub enum ReportResult {
-    Success(ReportResultSuccess),
-    Failed(ReportResultFailed),
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ReportResultSuccess {
-    pub findings: Vec<Finding>,
-    pub high_level_findings: i64,
-    pub information_findings: i64,
-    pub low_level_findings: i64,
-    pub medium_level_findings: i64,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct ReportResultFailed {
-    pub error: String,
-}
-
-
 impl Report {
     // create a new, unitialized note
     pub fn new() -> Self {

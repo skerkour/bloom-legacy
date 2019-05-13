@@ -11,7 +11,7 @@ use crate::domain::scan::{
 };
 use super::{
     ReportStatus,
-    ReportResult,
+    Finding,
 };
 
 
@@ -30,6 +30,7 @@ pub enum EventData {
     CreatedV1(CreatedV1),
     StartedV1,
     CompletedV1(CompletedV1),
+    FailedV1(FailedV1),
     StoppedV1,
 }
 
@@ -45,7 +46,16 @@ pub struct CreatedV1 {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompletedV1 {
-    pub result: ReportResult,
+    pub findings: Vec<Finding>,
+    pub high_level_findings: i64,
+    pub information_findings: i64,
+    pub low_level_findings: i64,
+    pub medium_level_findings: i64,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FailedV1 {
+    pub error: String,
 }
 
 
@@ -89,22 +99,19 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // CompletedV1
-            EventData::CompletedV1(ref data) => {
-                match data.result {
-                    ReportResult::Failed(ref data) => Self::Aggregate {
-                        error: Some(data.error.clone()),
-                        status: ReportStatus::Failed,
-                        ..aggregate
-                    },
-                    ReportResult::Success(ref data) => Self::Aggregate{
-                        findings: Some(data.findings.clone()),
-                        high_level_findings: data.high_level_findings,
-                        information_findings: data.information_findings,
-                        low_level_findings: data.low_level_findings,
-                        medium_level_findings: data.medium_level_findings,
-                        ..aggregate
-                    },
-                }
+            EventData::CompletedV1(ref data) => Self::Aggregate{
+                findings: Some(data.findings.clone()),
+                high_level_findings: data.high_level_findings,
+                information_findings: data.information_findings,
+                low_level_findings: data.low_level_findings,
+                medium_level_findings: data.medium_level_findings,
+                ..aggregate
+            },
+            // FailedV1
+            EventData::FailedV1(ref data) => Self::Aggregate{
+                status: ReportStatus::Failed,
+                error: Some(data.error.clone()),
+                ..aggregate
             },
         }
     }
