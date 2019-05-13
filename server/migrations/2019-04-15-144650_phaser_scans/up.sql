@@ -6,13 +6,13 @@ CREATE TABLE phaser_scans (
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
+    description TEXT NOT NULL,
+    last TIMESTAMP WITH TIME ZONE,
     name TEXT NOT NULL,
     profile TEXT NOT NULL,
-    targets TEXT[] NOT NULL,
-    status TEXT NOT NULL,
     schedule TEXT NOT NULL,
-    last TIMESTAMP WITH TIME ZONE,
-    description TEXT NOT NULL,
+    status TEXT NOT NULL,
+    targets TEXT[] NOT NULL,
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
