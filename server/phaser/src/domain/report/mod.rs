@@ -4,9 +4,9 @@ mod aggregate;
 
 
 pub use aggregate::{
-    Scan,
-    ScanState,
-    ScanProfile,
+    Report,
+    ReportStatus,
+    ReportTrigger,
 };
 pub use commands::{
 };
