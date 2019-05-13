@@ -1,6 +1,8 @@
 FROM rust:1.34-stretch AS builder
 
 RUN rustup target add x86_64-unknown-linux-musl
+# to fix rustc opaque typw compiler error (actix web).
+RUN rustup install nightly-2019-05-10 && rustup default nightly-2019-05-10
 RUN apt update
 RUN apt install -y git ca-certificates make libssl-dev libpq-dev \
     build-essential cmake curl file \
