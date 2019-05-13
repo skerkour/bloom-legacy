@@ -17,9 +17,9 @@ dotenv = { path = "../../crates/rust-dotenv" }
 try_future = { path = "../../crates/rust-try-future" }
 
 failure = "0.1.5"
-actix-web = "1.0.0-beta.2"
-actix-multipart = "0.1.0-beta.1"
-actix-service = "0.3.6"
+actix-web = "1.0.0-beta.4"
+actix-multipart = "0.1.0-beta.4"
+actix-service = "0.4.0"
 actix = "0.8"
 rusoto_s3 = "0.38"
 serde = { version = "1.0", features = ["derive"] }
