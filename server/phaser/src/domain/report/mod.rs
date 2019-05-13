@@ -6,7 +6,6 @@ mod aggregate;
 pub use aggregate::{
     Report,
     ReportStatus,
-    ReportTrigger,
 };
 pub use commands::{
 };

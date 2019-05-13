@@ -10,6 +10,7 @@ publish = false
 kernel = { path = "../kernel" }
 diesel_as_jsonb = { path = "../../crates/diesel_as_jsonb" }
 eventsourcing = { path = "../../crates/eventsourcing-rs" }
+diesel_enum_derive = { path = "../../crates/diesel-enum-derive" }
 
 
 serde = { version = "1.0", features = ["derive"] }

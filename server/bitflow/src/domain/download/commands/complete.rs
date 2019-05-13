@@ -42,7 +42,7 @@ impl eventsourcing::Command for Complete {
             return Err(KernelError::Validation("Download has been removed".to_string()));
         }
 
-        if aggregate.state != download::DownloadState::Downloading {
+        if aggregate.status != download::DownloadStatus::Downloading {
             return Err(KernelError::Validation("Download is not in the Downloading state".to_string()));
         }
 

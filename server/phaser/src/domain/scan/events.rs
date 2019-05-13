@@ -71,8 +71,9 @@ impl eventsourcing::Event for Event {
 
                 name: data.name.clone(),
                 description: data.description.clone(),
-                profile: data.profile,
-                schedule: data.schedule,
+                last: None,
+                profile: data.profile.clone(),
+                schedule: data.schedule.clone(),
                 state: ScanState::Waiting,
                 targets: data.targets.clone(),
 
@@ -96,6 +97,7 @@ impl eventsourcing::Event for Event {
             // CompletedV1
             EventData::CompletedV1 => super::Scan{
                 state: ScanState::Waiting,
+                last: Some(self.timestamp),
                 ..aggregate
             },
             // DeletedV1

@@ -10,7 +10,7 @@ pub struct DownloadResponse {
     pub name: String,
     pub progress: i32,
     pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
-    pub state: download::DownloadState,
+    pub status: download::DownloadStatus,
     pub url: download::DownloadUrl,
 }
 
@@ -23,7 +23,7 @@ impl From<download::Download> for DownloadResponse {
             name: download.name,
             progress: download.progress,
             removed_at: download.removed_at,
-            state: download.state,
+            status: download.status,
             url: download.url,
         }
     }

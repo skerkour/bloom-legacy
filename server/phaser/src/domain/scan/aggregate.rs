@@ -15,7 +15,7 @@ pub struct Scan {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-    pub description: String
+    pub description: String,
     pub last: Option<chrono::DateTime<chrono::Utc>>,
     pub name: String,
     pub profile: ScanProfile,

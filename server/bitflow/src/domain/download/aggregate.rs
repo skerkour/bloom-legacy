@@ -84,7 +84,7 @@ impl Download {
             name: String::new(),
             progress: 0,
             removed_at: None,
-            status: DownloadState::Queued,
+            status: DownloadStatus::Queued,
             url: DownloadUrl::Http(DownloadUrlHttp{url: "".to_string()}),
 
             owner_id: uuid::Uuid::new_v4(),

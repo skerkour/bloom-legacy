@@ -97,7 +97,7 @@ impl eventsourcing::Event for Event {
             },
             // CompletedV1
             EventData::CompletedV1(_) => super::Download{
-                status: super::DownloadStatus::Completed,
+                status: super::DownloadStatus::Success,
                 progress: 100,
                 ..aggregate
             },

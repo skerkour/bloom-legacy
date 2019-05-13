@@ -3,9 +3,11 @@ use diesel::{Queryable};
 use kernel::{
     db::schema::phaser_reports,
 };
+use diesel_as_jsonb::AsJsonb;
 use crate::domain::scan::{
     ScanProfile,
     ReportTrigger,
+    ScanSchedule,
 };
 
 
@@ -20,7 +22,7 @@ pub struct Report {
     pub version: i64,
 
     pub completed_at: Option<chrono::DateTime<chrono::Utc>>,
-    pub findings: Vec<Finding>,
+    pub findings: Findings,
     pub high_level_findings: i64,
     pub information_findings: i64,
     pub low_level_findings: i64,
@@ -42,44 +44,45 @@ pub enum ReportStatus {
     Stopped, // by user
 }
 
-#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
-pub enum ScanState {
-    Waiting,
-    Queued,
-    Scanning,
+#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+pub struct Findings {
 }
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum Finding {
-    A,
-    B,
+impl Findings {
+    pub fn new() -> Self {
+        Findings{}
+    }
 }
 
-impl Scan {
+impl Report {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Scan{
+        return Self{
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
             deleted_at: None,
             version: 0,
 
-            description: String::new(),
-            last: None,
-            name: String::new(),
+            completed_at: None,
+            findings: Findings::new(),
+            high_level_findings: 0,
+            information_findings: 0,
+            low_level_findings: 0,
+            medium_level_findings: 0,
             profile: ScanProfile::Application,
-            schedule: ScanSchedule::Never,
-            state: ScanState::Waiting,
+            started_at: None,
+            status: ReportStatus::Stopped,
             targets: Vec::new(),
+            trigger: ReportTrigger::Manual,
 
-            owner_id: uuid::Uuid::new_v4(),
+            scan_id: uuid::Uuid::new_v4(),
         };
     }
 }
 
-impl eventsourcing::Aggregate for Scan {
+impl eventsourcing::Aggregate for Report {
     fn increment_version(&mut self) {
         self.version += 1;
     }

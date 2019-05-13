@@ -5,7 +5,7 @@ mod commands;
 
 pub use aggregate::{
     Download,
-    DownloadState,
+    DownloadStatus,
     DownloadUrl,
     DownloadUrlHttp,
     DownloadUrlTorrentMagnet,

@@ -33,8 +33,8 @@ impl eventsourcing::Command for Start {
             return Err(KernelError::Validation("Download has been removed".to_string()));
         }
 
-        if aggregate.state != download::DownloadState::Queued {
-            return Err(KernelError::Validation("Download is not in the Queued state".to_string()));
+        if aggregate.status != download::DownloadStatus::Queued {
+            return Err(KernelError::Validation("Download is not in the Queued status".to_string()));
         }
 
         return Ok(());
