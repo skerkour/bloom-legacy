@@ -11,7 +11,7 @@ CREATE TABLE phaser_scans (
     name TEXT NOT NULL,
     profile TEXT NOT NULL,
     schedule TEXT NOT NULL,
-    status TEXT NOT NULL,
+    state TEXT NOT NULL,
     targets TEXT[] NOT NULL,
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts (id),

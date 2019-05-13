@@ -15,9 +15,37 @@ pub struct Scan {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
+    pub description: String
+    pub last: Option<chrono::DateTime<chrono::Utc>>,
+    pub name: String,
+    pub profile: ScanProfile,
+    pub schedule: ScanSchedule,
+    pub state: ScanState,
+    pub targets: Vec<String>,
+
     pub owner_id: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
+pub enum ScanProfile {
+    Network,
+    Application,
+}
+
+#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
+pub enum ScanSchedule {
+    Daily,
+    Weekly,
+    Monthly,
+    Never,
+}
+
+#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
+pub enum ScanState {
+    Waiting,
+    Queued,
+    Scanning,
+}
 
 impl Scan {
     // create a new, unitialized note
@@ -29,6 +57,14 @@ impl Scan {
             updated_at: now,
             deleted_at: None,
             version: 0,
+
+            description: String::new(),
+            last: None,
+            name: String::new(),
+            profile: ScanProfile::Application,
+            schedule: ScanSchedule::Never,
+            state: ScanState::Waiting,
+            targets: Vec::new(),
 
             owner_id: uuid::Uuid::new_v4(),
         };
