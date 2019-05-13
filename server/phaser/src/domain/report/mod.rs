@@ -10,7 +10,7 @@ pub use aggregate::{
 };
 pub use commands::{
     Queue,
-    Stop,
+    Cancel,
 };
 pub use events::{
     Event,

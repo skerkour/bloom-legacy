@@ -1,10 +1,10 @@
 mod create;
 mod queue;
 mod delete;
-mod stop;
+mod cancel;
 
 
 pub use create::Create;
 pub use queue::Queue;
 pub use delete::Delete;
-pub use stop::Stop;
+pub use cancel::Cancel;

@@ -43,7 +43,7 @@ pub enum ReportStatus {
     Scanning,
     Success,
     Failed,
-    Stopped, // by user
+    Canceled, // by user
 }
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
@@ -72,7 +72,7 @@ impl Report {
             medium_level_findings: 0,
             profile: ScanProfile::Application,
             started_at: None,
-            status: ReportStatus::Stopped,
+            status: ReportStatus::Canceled,
             targets: Vec::new(),
             trigger: ReportTrigger::Manual,
 

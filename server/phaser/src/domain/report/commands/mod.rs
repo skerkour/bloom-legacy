@@ -1,6 +1,6 @@
 mod queue;
-mod stop;
+mod cancel;
 
 
 pub use queue::Queue;
-pub use stop::Stop;
+pub use cancel::Cancel;

@@ -31,7 +31,7 @@ pub enum EventData {
     QueuedV1(QueuedV1),
     CompletedV1,
     StartedV1,
-    StoppedV1,
+    CanceledV1,
     DeletedV1,
 }
 
@@ -101,8 +101,8 @@ impl eventsourcing::Event for Event {
                 state: ScanState::Queued,
                 ..aggregate
             },
-            // StoppedV1
-            EventData::StoppedV1 => super::Scan{
+            // CanceledV1
+            EventData::CanceledV1 => super::Scan{
                 state: ScanState::Waiting,
                 ..aggregate
             },

@@ -7,35 +7,35 @@ use kernel::{
     events::EventMetadata,
 };
 use crate::{
-    domain::scan,
+    domain::report,
 };
 
 
 #[derive(Clone, Debug)]
-pub struct Stop {
+pub struct Cancel {
     pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for Stop {
-    type Aggregate = scan::Scan;
-    type Event = scan::Event;
+impl eventsourcing::Command for Cancel {
+    type Aggregate = report::Report;
+    type Event = report::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        if aggregate.state == scan::ScanState::Waiting {
-            return Err(KernelError::Validation("Scan is not running nor queued".to_string()));
+        if aggregate.status != report::ReportStatus::Queued && aggregate.status != report::ReportStatus::Scanning {
+            return Err(KernelError::Validation("Report is not running nor queued".to_string()));
         }
 
         return Ok(());
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return  Ok((scan::Event{
+        return  Ok((report::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            data: scan::EventData::StoppedV1,
+            data: report::EventData::CanceledV1,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));

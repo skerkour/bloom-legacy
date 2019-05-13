@@ -31,7 +31,7 @@ pub enum EventData {
     StartedV1,
     CompletedV1(CompletedV1),
     FailedV1(FailedV1),
-    StoppedV1,
+    CanceledV1,
 }
 
 
@@ -93,9 +93,9 @@ impl eventsourcing::Event for Event {
                 status: ReportStatus::Scanning,
                 ..aggregate
             },
-            // StoppedV1
-            EventData::StoppedV1 => Self::Aggregate{
-                status: ReportStatus::Stopped,
+            // CanceledV1
+            EventData::CanceledV1 => Self::Aggregate{
+                status: ReportStatus::Canceled,
                 ..aggregate
             },
             // CompletedV1

@@ -34,7 +34,7 @@ pub fn post(scan_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req:
 
     return  Either::B(
         state.db
-        .send(controllers::StopScan{
+        .send(controllers::CancelScan{
             scan_id: scan_id.into_inner(),
             account_id: auth.account.expect("error unwraping non none account").id,
             session_id: auth.session.expect("error unwraping non none session").id,
