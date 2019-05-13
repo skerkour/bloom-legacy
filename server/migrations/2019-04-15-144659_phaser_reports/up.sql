@@ -7,6 +7,7 @@ CREATE TABLE phaser_reports (
     version BIGINT NOT NULL,
 
     completed_at TIMESTAMP WITH TIME ZONE,
+    error TEXT,
     findings JSONB,
     high_level_findings BIGINT NOT NULL,
     information_findings BIGINT NOT NULL,

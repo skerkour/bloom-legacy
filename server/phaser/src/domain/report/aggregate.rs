@@ -22,7 +22,8 @@ pub struct Report {
     pub version: i64,
 
     pub completed_at: Option<chrono::DateTime<chrono::Utc>>,
-    pub findings: Findings,
+    pub error: Option<String>,
+    pub findings: Option<Findings>,
     pub high_level_findings: i64,
     pub information_findings: i64,
     pub low_level_findings: i64,
@@ -38,6 +39,7 @@ pub struct Report {
 
 #[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
 pub enum ReportStatus {
+    Queued,
     Scanning,
     Success,
     Failed,
@@ -48,11 +50,6 @@ pub enum ReportStatus {
 pub struct Findings {
 }
 
-impl Findings {
-    pub fn new() -> Self {
-        Findings{}
-    }
-}
 
 impl Report {
     // create a new, unitialized note
@@ -66,7 +63,8 @@ impl Report {
             version: 0,
 
             completed_at: None,
-            findings: Findings::new(),
+            error: None,
+            findings: None,
             high_level_findings: 0,
             information_findings: 0,
             low_level_findings: 0,
