@@ -31,6 +31,7 @@ pub enum EventData {
     QueuedV1(QueuedV1),
     CompletedV1,
     StartedV1,
+    StoppedV1,
     DeletedV1,
 }
 
@@ -98,6 +99,11 @@ impl eventsourcing::Event for Event {
             // QueuedV1
             EventData::QueuedV1(ref data) => super::Scan{
                 state: ScanState::Queued,
+                ..aggregate
+            },
+            // StoppedV1
+            EventData::StoppedV1 => super::Scan{
+                state: ScanState::Waiting,
                 ..aggregate
             },
             // StartedV1
