@@ -73,16 +73,16 @@ impl eventsourcing::Event for Event {
 
                 name: data.name.clone(),
                 url: data.url.clone(),
-                state: super::DownloadState::Queued,
+                status: super::DownloadStatus::Queued,
                 progress: 0,
                 removed_at: None,
                 error: None,
 
                 owner_id: data.owner_id,
             },
-            // CompletedV1
+            // StartedV1
             EventData::StartedV1 => super::Download{
-                state: super::DownloadState::Downloading,
+                status: super::DownloadStatus::Downloading,
                 ..aggregate
             },
             // ProgressUpdatedV1
@@ -97,32 +97,32 @@ impl eventsourcing::Event for Event {
             },
             // CompletedV1
             EventData::CompletedV1(_) => super::Download{
-                state: super::DownloadState::Completed,
+                status: super::DownloadStatus::Completed,
                 progress: 100,
                 ..aggregate
             },
              // StoppedV1
             EventData::StoppedV1 => super::Download{
-                state: super::DownloadState::Stopped,
+                status: super::DownloadStatus::Stopped,
                 ..aggregate
             },
             // FailedV1
             EventData::FailedV1(ref data) => super::Download{
                 error: Some(data.error.clone()),
-                state: super::DownloadState::Failed,
+                status: super::DownloadStatus::Failed,
                 ..aggregate
             },
             // RemovedV1
             EventData::RemovedV1 => {
-                let state = if aggregate.state == super::DownloadState::Queued
-                    || aggregate.state == super::DownloadState::Downloading {
-                    super::DownloadState::Stopped
+                let status = if aggregate.status == super::DownloadStatus::Queued
+                    || aggregate.status == super::DownloadStatus::Downloading {
+                    super::DownloadStatus::Stopped
                 } else {
-                    aggregate.state
+                    aggregate.status
                 };
                 super::Download{
                     removed_at: Some(self.timestamp),
-                    state,
+                    status,
                     ..aggregate
                 }
             },

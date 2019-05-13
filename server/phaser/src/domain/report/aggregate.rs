@@ -3,7 +3,10 @@ use diesel::{Queryable};
 use kernel::{
     db::schema::phaser_reports,
 };
-use crate::domain::scan::ScanProfile;
+use crate::domain::scan::{
+    ScanProfile,
+    ReportTrigger,
+};
 
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
@@ -29,12 +32,6 @@ pub struct Report {
     pub trigger: ReportTrigger,
 
     pub scan_id: uuid::Uuid,
-}
-
-#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
-pub enum ReportTrigger {
-    Manual,
-    Schedule,
 }
 
 #[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]

@@ -9,7 +9,7 @@ table! {
         name -> Text,
         progress -> Int4,
         removed_at -> Nullable<Timestamptz>,
-        state -> Text,
+        status -> Text,
         url -> Jsonb,
         owner_id -> Uuid,
     }
@@ -367,7 +367,6 @@ table! {
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         completed_at -> Nullable<Timestamptz>,
-        duration_s -> Int8,
         findings -> Nullable<Jsonb>,
         high_level_findings -> Int8,
         information_findings -> Int8,

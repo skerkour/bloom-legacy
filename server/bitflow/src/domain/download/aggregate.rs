@@ -23,18 +23,18 @@ pub struct Download {
     pub name: String,
     pub progress: i32,
     pub removed_at: Option<chrono::DateTime<chrono::Utc>>,
-    pub state: DownloadState,
+    pub status: DownloadStatus,
     pub url: DownloadUrl,
 
     pub owner_id: uuid::Uuid,
 }
 
 #[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
-pub enum DownloadState {
+pub enum DownloadStatus {
     Queued,
     Downloading,
     Stopped,
-    Completed,
+    Success,
     Failed,
 }
 
@@ -84,7 +84,7 @@ impl Download {
             name: String::new(),
             progress: 0,
             removed_at: None,
-            state: DownloadState::Queued,
+            status: DownloadState::Queued,
             url: DownloadUrl::Http(DownloadUrlHttp{url: "".to_string()}),
 
             owner_id: uuid::Uuid::new_v4(),

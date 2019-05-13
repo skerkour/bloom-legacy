@@ -47,6 +47,12 @@ pub enum ScanState {
     Scanning,
 }
 
+#[derive(Clone, Debug, Deserialize, DieselEnum, PartialEq, Serialize)]
+pub enum ReportTrigger {
+    Manual,
+    Schedule,
+}
+
 impl Scan {
     // create a new, unitialized note
     pub fn new() -> Self {

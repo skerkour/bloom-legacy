@@ -12,7 +12,7 @@ CREATE TABLE bitflow_downloads (
     name TEXT NOT NULL,
     progress INT NOT NULL,
     removed_at TIMESTAMP WITH TIME ZONE,
-    state TEXT NOT NULL,
+    status TEXT NOT NULL,
     url JSONB NOT NULL,
 
     owner_id UUID NOT NULL REFERENCES kernel_accounts(id),
