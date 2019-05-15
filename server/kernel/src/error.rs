@@ -54,6 +54,9 @@ pub enum KernelError {
 
     #[fail(display="Zip: {:?}", 0)]
     Zip(String),
+
+    #[fail(display="Walkdir: {:?}", 0)]
+    Walkdir(String),
 }
 
 
@@ -115,7 +118,11 @@ impl std::convert::From<zip::result::ZipError> for KernelError {
     }
 }
 
-
+impl std::convert::From<walkdir::Error> for KernelError {
+    fn from(err: walkdir::Error) -> Self {
+        KernelError::Walkdir(format!("{:?}", err))
+    }
+}
 
 
 impl error::ResponseError for KernelError {
@@ -131,8 +138,10 @@ impl error::ResponseError for KernelError {
             // 408
             KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
             // 500
-            KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::TokioTimer(_)
-            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_) | KernelError::Zip(_) => {
+            // KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::TokioTimer(_)
+            // | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_)
+            // | KernelError::Zip(_) | KernelError::Walkdir(_) => {
+            _ => {
                 let res: Response<()> = Response::error(KernelError::Internal(String::new()));
                 HttpResponse::InternalServerError().json(&res)
             },
