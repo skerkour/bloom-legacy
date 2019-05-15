@@ -48,7 +48,7 @@ impl Handler<CompleteReport> for DbActor {
             let report_zip = format!("{}/report.zip", &msg.report_dir);
             let file = fs::File::open(&report_zip)?;
             let archive = zip::ZipArchive::new(file)?;
-            extarct_zip(archive)?;
+            extarct_zip(msg.report_dir.clone(), archive)?;
 
             // send to S3
             for entry in WalkDir::new(&msg.report_dir).into_iter()
@@ -82,10 +82,11 @@ impl Handler<CompleteReport> for DbActor {
     }
 }
 
-fn extarct_zip<R: io::Read + io::Seek>(mut archive: zip::read::ZipArchive<R>) -> Result<(), KernelError> {
+fn extarct_zip<R: io::Read + io::Seek>(base_dir: String, mut archive: zip::read::ZipArchive<R>) -> Result<(), KernelError> {
     for i in 0..archive.len() {
         let mut file = archive.by_index(i).unwrap();
-        let outpath = file.sanitized_name();
+        let filepath = file.sanitized_name();
+        let outpath = format!("{}/{}", &base_dir, filepath.to_str().expect("phaser: error unwraping report file path"));
 
         // {
         //     let comment = file.comment();
@@ -99,7 +100,7 @@ fn extarct_zip<R: io::Read + io::Seek>(mut archive: zip::read::ZipArchive<R>) ->
             fs::create_dir_all(&outpath)?;
         } else {
             // println!("File {} extracted to \"{}\" ({} bytes)", i, outpath.as_path().display(), file.size());
-            if let Some(p) = outpath.parent() {
+            if let Some(p) = filepath.parent() {
                 if !p.exists() {
                     fs::create_dir_all(&p)?;
                 }
