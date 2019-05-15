@@ -3,6 +3,7 @@ use actix_web::{
     error,
     HttpResponse,
 };
+use std::io;
 use crate::{
     api::Response,
 };
@@ -98,6 +99,13 @@ impl std::convert::From<url::ParseError> for KernelError {
         KernelError::UrlParseError(err)
     }
 }
+
+impl std::convert::From<io::Error> for KernelError {
+    fn from(err: io::Error) -> Self {
+        KernelError::Io(format!("{:?}", err))
+    }
+}
+
 
 
 

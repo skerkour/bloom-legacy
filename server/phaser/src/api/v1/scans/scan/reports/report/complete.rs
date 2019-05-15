@@ -29,17 +29,23 @@ use crate::{
 };
 
 
-pub fn post(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
+pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, state: web::Data<api::State>, req: HttpRequest)
 -> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
     let request_id = req.request_id().0;
-    let report_file_path = "report.zip".to_string();
-    let report_file_path2 = report_file_path.clone();
+
+    let report_dir = format!("phaser/reports/{}", ids.1); // ids.1 -> report_id
+    match fs::create_dir_all(&report_dir) {
+        Ok(_) => {},
+        Err(err) => return Either::A(ok(KernelError::from(err).error_response())),
+    }
+    let report_file_path = format!("{}/report.zip", &report_dir);
 
     if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Phaser {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
+
 
     return Either::B(
         multipart
@@ -52,7 +58,7 @@ pub fn post(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest
         .and_then(move |_| {
             state.db
             .send(controllers::CompleteReport{
-                report_path: report_file_path2,
+                report_dir: report_dir,
                 request_id,
             }).flatten()
         })

@@ -10,7 +10,6 @@ use actix_web::{
 };
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
-use actix_http;
 use actix::System;
 use kernel::{
     log,

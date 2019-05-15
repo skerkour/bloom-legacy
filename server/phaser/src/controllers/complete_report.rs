@@ -9,7 +9,7 @@ use crate::domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteReport {
-    pub report_path: String,
+    pub report_dir: String,
     pub request_id: uuid::Uuid,
 }
 
