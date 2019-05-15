@@ -41,3 +41,4 @@ dist/
 .env.*.local
 .firebase/
 firebase-debug.log
+assets/GeoLite2-City.mmdb

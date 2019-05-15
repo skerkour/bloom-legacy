@@ -34,7 +34,7 @@ pub enum KernelError {
     #[fail(display = "Io: {}", 0)]
     Io(String),
 
-    #[fail(display = "Io: {}", 0)]
+    #[fail(display = "Image: {}", 0)]
     Image(String),
 
     #[fail(display = "NotFound: {}", 0)]
@@ -51,6 +51,9 @@ pub enum KernelError {
 
     #[fail(display="URL parse error: {}", 0)]
     UrlParseError(url::ParseError),
+
+    #[fail(display="Zip: {:?}", 0)]
+    Zip(String),
 }
 
 
@@ -106,6 +109,12 @@ impl std::convert::From<io::Error> for KernelError {
     }
 }
 
+impl std::convert::From<zip::result::ZipError> for KernelError {
+    fn from(err: zip::result::ZipError) -> Self {
+        KernelError::Zip(format!("{:?}", err))
+    }
+}
+
 
 
 
@@ -123,7 +132,7 @@ impl error::ResponseError for KernelError {
             KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
             // 500
             KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::TokioTimer(_)
-            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_) => {
+            | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_) | KernelError::Zip(_) => {
                 let res: Response<()> = Response::error(KernelError::Internal(String::new()));
                 HttpResponse::InternalServerError().json(&res)
             },
