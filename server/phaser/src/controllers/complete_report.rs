@@ -72,8 +72,10 @@ impl Handler<CompleteReport> for DbActor {
                 };
                 msg.s3_client.put_object(req).sync().expect("pahser: Couldn't PUT object");
             }
+
             // generate report
             // remove files
+            fs::remove_dir_all(&msg.report_dir)?;
 
             return Ok(());
         })?);
