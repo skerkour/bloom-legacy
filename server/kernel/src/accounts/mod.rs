@@ -15,4 +15,4 @@ pub const AVATAR_RESIZE: usize = 256;
 pub const PASSWORD_RESET_TOKEN_MIN_LENGTH: u32 = 200;
 pub const PASSWORD_RESET_TOKEN_MAX_LENGTH: u32 = 256;
 pub const PASSWORD_RESET_TOKEN_BCRYPT_COST: u32 = 5;
-pub const AVATAR_DEFAULT_PATH: &str = "/imgs/profile.jpg";
+pub const AVATAR_DEFAULT_PATH: &str = "/kernel/static/imgs/profile.jpg";
