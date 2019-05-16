@@ -40,3 +40,11 @@ pub struct CreateScanBody {
     pub schedule: scan::ScanSchedule,
     pub target: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ReportJob {
+    pub id: uuid::Uuid,
+    pub scan_id: uuid::Uuid,
+    pub targets: Vec<String>,
+    pub profile: String,
+}
