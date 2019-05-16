@@ -46,7 +46,6 @@ pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, stat
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-
     return Either::B(
         multipart
         .map_err(|err| KernelError::Internal(err.to_string()))

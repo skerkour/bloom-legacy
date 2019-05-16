@@ -26,6 +26,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
+    NameUpdatedV1(NameUpdatedV1),
     DescriptionUpdatedV1(DescriptionUpdatedV1),
     ScheduleUpdatedV1(ScheduleUpdatedV1),
     QueuedV1(QueuedV1),
@@ -44,6 +45,11 @@ pub struct CreatedV1 {
     pub profile: ScanProfile,
     pub schedule: ScanSchedule,
     pub targets: Vec<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NameUpdatedV1 {
+    pub name: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -85,6 +91,11 @@ impl eventsourcing::Event for Event {
                 targets: data.targets.clone(),
 
                 owner_id: data.owner_id,
+            },
+            // NameUpdatedV1
+            EventData::NameUpdatedV1(ref data) => super::Scan{
+                name: data.name.clone(),
+                ..aggregate
             },
             // DescriptionUpdatedV1
             EventData::DescriptionUpdatedV1(ref data) => super::Scan{
