@@ -1,5 +1,8 @@
 use serde::{Serialize, Deserialize};
-use crate::domain::scan;
+use crate::domain::{
+    scan,
+    report,
+};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -46,5 +49,16 @@ pub struct ReportJob {
     pub id: uuid::Uuid,
     pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,
-    pub profile: String,
+    pub profile: scan::ScanProfile,
+}
+
+impl From<report::Report> for ReportJob {
+    fn from(report: report::Report) -> Self {
+        Self{
+            id: report.id,
+            scan_id: report.scan_id,
+            targets: report.targets,
+            profile:report.profile,
+        }
+    }
 }

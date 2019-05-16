@@ -264,6 +264,9 @@ fn main() {
         )
 
         // phaser
+        .service(web::resource("/phaser/v1/job")
+            .route(web::post().to_async(phaserv1::job::get))
+        )
         .service(web::resource("/phaser/v1/scans")
             .route(web::get().to_async(phaserv1::scans::get))
             .route(web::post().to_async(phaserv1::scans::post))

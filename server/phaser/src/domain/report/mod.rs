@@ -11,6 +11,7 @@ pub use aggregate::{
 pub use commands::{
     Queue,
     Cancel,
+    Start,
 };
 pub use events::{
     Event,

@@ -15,6 +15,7 @@ pub use commands::{
     Queue,
     Delete,
     Cancel,
+    Start,
 };
 pub use events::{
     Event,
