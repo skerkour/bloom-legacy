@@ -9,6 +9,7 @@ use crate::domain;
 use std::fs;
 use std::io;
 use std::io::prelude::*;
+use std::path::Path;
 use zip;
 use walkdir::WalkDir;
 use rusoto_s3::{PutObjectRequest, S3};
@@ -59,12 +60,15 @@ impl Handler<CompleteReport> for DbActor {
                 let mut chunk = file.take(512);
                 chunk.read(&mut contents)?;
                 let content_type = mimesniff::detect_content_type(&contents);
-                // upload to s3
+                let path = entry.path();
+                let name = path.strip_prefix(Path::new(&msg.report_dir)).expect("phaser: error unwraping report file path");
 
+
+                // upload to s3
                 // TODO: handle error
                 let req = PutObjectRequest {
                     bucket: msg.s3_bucket.clone(),
-                    key: format!("phaser/{}/{}/{}", msg.scan_id, msg.report_id, entry.path().to_str().expect("phaser: error unwraping report file path")),
+                    key: format!("phaser/scans/{}/reports/{}/{}", msg.scan_id, msg.report_id, name.display()),
                     body: Some(contents.into()),
                     content_length: Some(entry.metadata()?.len() as i64),
                     content_type: Some(content_type.to_string()),
@@ -74,6 +78,8 @@ impl Handler<CompleteReport> for DbActor {
             }
 
             // generate report
+
+
             // remove files
             fs::remove_dir_all(&msg.report_dir)?;
 
