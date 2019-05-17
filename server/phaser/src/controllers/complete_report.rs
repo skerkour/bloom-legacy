@@ -77,7 +77,13 @@ impl Handler<CompleteReport> for DbActor {
                 msg.s3_client.put_object(req).sync().expect("pahser: Couldn't PUT object");
             }
 
+
+            // parse report.json
             // generate report
+
+
+            // complete report
+            // complete scan
 
 
             // remove files
