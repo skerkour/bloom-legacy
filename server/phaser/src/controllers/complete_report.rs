@@ -6,7 +6,10 @@ use kernel::{
     events::EventMetadata,
 };
 use crate::{
-    domain,
+    domain::{
+        scan,
+        report,
+    },
     models,
 };
 use std::fs;
@@ -36,6 +39,12 @@ impl Handler<CompleteReport> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: CompleteReport, _: &mut Self::Context) -> Self::Result {
+         use kernel::db::schema::{
+            phaser_scans,
+            phaser_scans_events,
+            phaser_reports,
+            phaser_reports_events,
+        };
         use diesel::prelude::*;
 
         let conn = self.pool.get()
@@ -84,13 +93,38 @@ impl Handler<CompleteReport> for DbActor {
             // parse report.json
             let report_path = format!("{}/report.json", &msg.report_dir);
             let report_contents = fs::read_to_string(&report_path)?;
-            let _report: models::report::Report = serde_json::from_str(&report_contents)?;
+            let parsed_report: models::report::Report = serde_json::from_str(&report_contents)?;
+            let parsed_report = match parsed_report {
+                models::report::Report::V1(parsed_report) => parsed_report,
+            };
+
             // generate report
 
 
-            // complete report
-            // complete scan
 
+            // complete report
+            // TODO
+
+            // complete scan
+            let scan_id = parsed_report.scan_id;
+            // retrieve Scan
+            let scan_to_complete: scan::Scan = phaser_scans::dsl::phaser_scans
+                .filter(phaser_scans::dsl::id.eq(scan_id))
+                .filter(phaser_scans::dsl::deleted_at.is_null())
+                .for_update()
+                .first(&conn)?;
+
+            let complete_cmd = scan::Complete{
+                metadata: metadata.clone(),
+            };
+            let (canceled_scan, event, _) = eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
+
+            diesel::update(&canceled_scan)
+                .set(&canceled_scan)
+                .execute(&conn)?;
+            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
+                .values(&event)
+                .execute(&conn)?;
 
             // remove files
             fs::remove_dir_all(&msg.report_dir)?;

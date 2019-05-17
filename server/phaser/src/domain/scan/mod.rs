@@ -16,6 +16,7 @@ pub use commands::{
     Delete,
     Cancel,
     Start,
+    Complete,
 };
 pub use events::{
     Event,
