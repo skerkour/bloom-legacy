@@ -57,6 +57,9 @@ pub enum KernelError {
 
     #[fail(display="Walkdir: {:?}", 0)]
     Walkdir(String),
+
+    #[fail(display="SerdeJson: {:?}", 0)]
+    SerdeJson(String),
 }
 
 
@@ -121,6 +124,12 @@ impl std::convert::From<zip::result::ZipError> for KernelError {
 impl std::convert::From<walkdir::Error> for KernelError {
     fn from(err: walkdir::Error) -> Self {
         KernelError::Walkdir(format!("{:?}", err))
+    }
+}
+
+impl std::convert::From<serde_json::Error> for KernelError {
+    fn from(err: serde_json::Error) -> Self {
+        KernelError::SerdeJson(format!("{:?}", err))
     }
 }
 

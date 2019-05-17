@@ -5,7 +5,10 @@ use kernel::{
     KernelError,
     events::EventMetadata,
 };
-use crate::domain;
+use crate::{
+    domain,
+    models,
+};
 use std::fs;
 use std::io;
 use std::io::prelude::*;
@@ -79,6 +82,9 @@ impl Handler<CompleteReport> for DbActor {
 
 
             // parse report.json
+            let report_path = format!("{}/report.json", &msg.report_dir);
+            let report_contents = fs::read_to_string(&report_path)?;
+            let _report: models::report::Report = serde_json::from_str(&report_contents)?;
             // generate report
 
 
