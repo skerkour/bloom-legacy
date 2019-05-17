@@ -24,7 +24,7 @@ impl eventsourcing::Command for Complete {
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        if aggregate.state == scan::ScanState::Scanning {
+        if aggregate.state != scan::ScanState::Scanning {
             return Err(KernelError::Validation("Scan is not running".to_string()));
         }
 
