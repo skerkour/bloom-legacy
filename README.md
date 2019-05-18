@@ -30,8 +30,8 @@ See the `docs` directory.
 ## Development
 
 See individuals READMEs
-* [server]()
-* [webapp]()
+* [server](https://github.com/z0mbie42/bloom/tree/master/server)
+* [webapp](https://github.com/z0mbie42/bloom/tree/master/webapp)
 
 ## Contributing
 
