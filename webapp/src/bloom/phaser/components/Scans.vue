@@ -50,6 +50,7 @@
         </td>
         <!-- <td></td>
         <td></td> -->
+        <td>{{ props.item.findings }}</td>
         <td class="justify-left layout px-0">
 
           <v-tooltip bottom>
@@ -168,7 +169,7 @@ export default class Scans extends Vue {
     { text: 'Profile', value: 'profile', sortable: true },
     { text: 'Last run', value: 'updated_at', sortable: true },
     // { text: 'Next run', value: 'updated_at', sortable: true },
-    // { text: 'Findings', value: 'findings', sortable: false },
+    { text: 'Findings', value: 'findings', sortable: false },
     { text: 'Actions', sortable: false },
   ];
 
