@@ -12,8 +12,8 @@
   "dependencies": {
     "@bloom42/astro": "0.8.2",
     "@mdi/font": "3.6.95",
-    "@sentry/browser": "5.1.2",
-    "@sentry/integrations": "^5.1.2",
+    "@sentry/browser": "5.2.1",
+    "@sentry/integrations": "5.2.0",
     "axios": "0.18.0",
     "echarts": "4.2.1",
     "howler": "^2.1.2",
@@ -21,16 +21,16 @@
     "register-service-worker": "1.6.2",
     "store": "2.0.12",
     "vue": "2.6.10",
-    "vue-class-component": "7.0.2",
-    "vue-property-decorator": "8.1.0",
+    "vue-class-component": "7.1.0",
+    "vue-property-decorator": "8.1.1",
     "vue-router": "3.0.6",
     "vuetify": "1.5.14",
-    "vuex": "3.1.0"
+    "vuex": "3.1.1"
   },
   "devDependencies": {
     "@babel/plugin-syntax-dynamic-import": "^7.2.0",
     "@types/howler": "^2.1.0",
-    "@types/jest": "^24.0.12",
+    "@types/jest": "^24.0.13",
     "@vue/cli-plugin-babel": "^3.7.0",
     "@vue/cli-plugin-pwa": "^3.7.0",
     "@vue/cli-plugin-typescript": "^3.7.0",
