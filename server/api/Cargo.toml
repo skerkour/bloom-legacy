@@ -22,6 +22,7 @@ phaser = { path = "../phaser" }
 
 actix-web = "1.0.0-beta.4"
 actix = "0.8"
+actix-files = "0.1.0-beta.4"
 rusoto_core = "0.38"
 rusoto_s3 = "0.38"
 num_cpus = "1.0"
