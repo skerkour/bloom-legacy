@@ -58,7 +58,9 @@ pub fn index() -> ActixResult<HttpResponse> {
 }
 
 pub fn route_404() -> ActixResult<HttpResponse> {
-    return Err(KernelError::RouteNotFound.into());
+    let err = KernelError::RouteNotFound;
+    let res: Response<()> = Response::error(err);
+    return Ok(HttpResponse::NotFound().json(res));
 }
 
 pub fn json_default_config() -> JsonConfig {
