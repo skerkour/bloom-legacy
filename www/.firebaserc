@@ -1,0 +1,6 @@
+{
+  "projects": {
+    "www": "bloom42-www2",
+    "staging": "bloom42-staging2"
+  }
+}

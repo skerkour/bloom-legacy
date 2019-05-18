@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>drive_icon_256</title>
+    <desc>Created with Sketch.</desc>
+    <g id="drive_icon_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="folder" transform="translate(13.000000, 13.000000)">
+            <circle id="Combined-Shape" fill="#FFE15F" cx="115" cy="115" r="115"></circle>
+            <path d="M102.8,70 L67.7,70 C61.265,70 56,75.175 56,81.5 L56,150.5 C56,156.825 61.265,162 67.7,162 L161.3,162 C167.735,162 173,156.825 173,150.5 L173,93 C173,86.675 167.735,81.5 161.3,81.5 L114.5,81.5 L102.8,70 L102.8,70 Z" id="Shape" fill="#FFFFFF"></path>
+            <rect id="Rectangle" fill="#FF5F7D" x="65" y="76" width="5" height="5" rx="2"></rect>
+            <rect id="Rectangle" fill="#FFE15F" x="74" y="76" width="5" height="5" rx="2"></rect>
+            <rect id="Rectangle" fill="#5FCDFF" x="83" y="76" width="5" height="5" rx="2"></rect>
+        </g>
+    </g>
+</svg>

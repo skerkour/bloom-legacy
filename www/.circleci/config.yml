@@ -1,0 +1,70 @@
+version: 2 # use CircleCI 2.0
+jobs: # basic units of work in a run
+  build: # runs not using Workflows must have a `build` job as entry point
+    docker: # run the steps with Docker
+      - image: node:10-alpine
+    working_directory: ~/workspace
+
+    steps: # steps that comprise the `build` job
+      - checkout
+      - run: apk add make
+      - run: make install
+      # lint
+      - run: make lint
+      # build
+      - run: make build
+
+  deploy_staging:
+    docker:
+      - image: node:10-alpine
+
+    steps:
+      - checkout
+      - run: apk add make
+      - run: make install
+      - run: npm config set unsafe-perm true
+      - run: npm install -g firebase-tools
+      - run: make build_staging
+      - run: firebase deploy -P staging --token $FIREBASE_TOKEN
+
+
+  deploy_production:
+    docker:
+      - image: node:10-alpine
+
+    steps:
+      - checkout
+      - run: apk add make
+      - run: make install
+      - run: npm config set unsafe-perm true
+      - run: npm install -g firebase-tools
+      - run: make build
+      - run: firebase deploy --token $FIREBASE_TOKEN
+
+
+workflows:
+  version: 2
+  build-deploy:
+    jobs:
+      - build:
+          filters:  # required since `deploy` has tag filters AND requires `build`
+            tags:
+              only: /.*/
+      - deploy_staging:
+          requires:
+            - build
+          filters: # runs for no branches and only for tags starting with ‘v’.
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+      - deploy_production:
+          type: approval
+          requires:
+            - deploy_staging
+          filters: # runs for no branches and only for tags starting with ‘v’.
+            tags:
+              only: /^v.*/
+            branches:
+              ignore: /.*/
+

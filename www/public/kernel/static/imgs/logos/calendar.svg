@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
+    <title>calendar_icon_256</title>
+    <desc>Created with Sketch.</desc>
+    <g id="calendar_icon_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="account-group" transform="translate(14.000000, 13.000000)">
+            <circle id="Oval-2" fill="#5FCDFF" cx="115" cy="115" r="115"></circle>
+            <path d="M153,158 L78,158 L78,99 L153,99 L153,158 Z M137.055556,61 L137.055556,71.8 L93.9444444,71.8 L93.9444444,61 L83.1666667,61 L83.1666667,71.8 L77.7777778,71.8 C71.7961111,71.8 67,76.606 67,82.6 L67,158.2 C67,164.164675 71.8253755,169 77.7777778,169 L153.222222,169 C159.174625,169 164,164.164675 164,158.2 L164,82.6 C164,76.606 159.15,71.8 153.222222,71.8 L147.833333,71.8 L147.833333,61 L137.055556,61 Z M142,120 L115,120 L115,147 L142,147 L142,120 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+        </g>
+    </g>
+</svg>
