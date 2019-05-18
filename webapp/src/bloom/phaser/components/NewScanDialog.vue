@@ -98,7 +98,7 @@ export default class NewScanDialog extends Vue {
   // data
   error = '';
   is_loading = false;
-  profiles = [Profile.Application, Profile.Application];
+  profiles = [Profile.Network, Profile.Application];
   schedule_enum = [Schedule.Daily, Schedule.Weekly, Schedule.Monthly, Schedule.Never];
   name = '';
   description = '';
