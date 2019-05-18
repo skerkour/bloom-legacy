@@ -64,3 +64,45 @@ impl From<report::Report> for ReportJob {
         }
     }
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ReportResponse {
+    pub id: uuid::Uuid,
+    pub completed_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub error: Option<String>,
+    pub findings: Option<Vec<report::Finding>>,
+    pub high_level_findings: i64,
+    pub information_findings: i64,
+    pub low_level_findings: i64,
+    pub medium_level_findings: i64,
+    pub profile: scan::ScanProfile,
+    pub started_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub status: report::ReportStatus,
+    pub targets: Vec<String>,
+    pub total_findings: i64,
+    pub trigger: scan::ReportTrigger,
+    pub scan_id: uuid::Uuid,
+}
+
+impl From<report::Report> for ReportResponse {
+    fn from(report: report::Report) -> Self {
+        Self{
+            id: report.id,
+            completed_at: report.completed_at,
+            error: report.error,
+            findings: report.findings,
+            high_level_findings: report.high_level_findings,
+            information_findings: report.information_findings,
+            low_level_findings: report.low_level_findings,
+            medium_level_findings: report.medium_level_findings,
+            profile: report.profile,
+            started_at: report.started_at,
+            status: report.status,
+            targets: report.targets,
+            total_findings: report.total_findings,
+            trigger: report.trigger,
+            scan_id: report.scan_id,
+        }
+    }
+}

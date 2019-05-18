@@ -5,6 +5,7 @@ mod delete_scan;
 mod cancel_scan;
 mod complete_report;
 mod start_scan;
+mod find_scan_reports;
 
 
 pub use find_scans::FindScans;
@@ -14,3 +15,4 @@ pub use delete_scan::DeleteScan;
 pub use cancel_scan::CancelScan;
 pub use complete_report::CompleteReport;
 pub use start_scan::StartScan;
+pub use find_scan_reports::FindScanReports;
