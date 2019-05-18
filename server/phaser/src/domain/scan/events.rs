@@ -30,7 +30,7 @@ pub enum EventData {
     DescriptionUpdatedV1(DescriptionUpdatedV1),
     ScheduleUpdatedV1(ScheduleUpdatedV1),
     QueuedV1(QueuedV1),
-    CompletedV1,
+    CompletedV1(CompletedV1),
     StartedV1,
     CanceledV1,
     DeletedV1,
@@ -68,6 +68,11 @@ pub struct QueuedV1 {
     pub report_id: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct CompletedV1 {
+    pub findings: u64,
+}
+
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::Scan;
@@ -84,6 +89,7 @@ impl eventsourcing::Event for Event {
 
                 name: data.name.clone(),
                 description: data.description.clone(),
+                findings: 0,
                 last: None,
                 profile: data.profile.clone(),
                 schedule: data.schedule.clone(),
@@ -123,9 +129,10 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // CompletedV1
-            EventData::CompletedV1 => super::Scan{
+            EventData::CompletedV1(ref data) => super::Scan{
                 state: ScanState::Waiting,
                 last: Some(self.timestamp),
+                findings: data.findings as i64,
                 ..aggregate
             },
             // DeletedV1

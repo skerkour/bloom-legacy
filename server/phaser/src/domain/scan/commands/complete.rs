@@ -13,6 +13,7 @@ use crate::{
 
 #[derive(Clone, Debug)]
 pub struct Complete {
+    pub findings: u64,
     pub metadata: EventMetadata,
 }
 
@@ -32,10 +33,14 @@ impl eventsourcing::Command for Complete {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let data = scan::EventData::CompletedV1(scan::CompletedV1{
+            findings: self.findings,
+        });
+
         return  Ok((scan::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
-            data: scan::EventData::CompletedV1,
+            data,
             aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));

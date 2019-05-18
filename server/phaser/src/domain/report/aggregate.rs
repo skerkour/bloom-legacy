@@ -35,6 +35,7 @@ pub struct Report {
     pub started_at: Option<chrono::DateTime<chrono::Utc>>,
     pub status: ReportStatus,
     pub targets: Vec<String>,
+    pub total_findings: i64,
     pub trigger: ReportTrigger,
 
     pub scan_id: uuid::Uuid,
@@ -77,6 +78,7 @@ impl Report {
             status: ReportStatus::Canceled,
             targets: Vec::new(),
             trigger: ReportTrigger::Manual,
+            total_findings: 0,
 
             scan_id: uuid::Uuid::new_v4(),
         };

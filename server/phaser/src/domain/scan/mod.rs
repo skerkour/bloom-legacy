@@ -25,4 +25,5 @@ pub use events::{
     DescriptionUpdatedV1,
     ScheduleUpdatedV1,
     QueuedV1,
+    CompletedV1,
 };

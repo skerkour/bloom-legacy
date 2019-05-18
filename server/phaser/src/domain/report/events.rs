@@ -47,10 +47,11 @@ pub struct QueuedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompletedV1 {
     pub findings: Vec<Finding>,
-    pub high_level_findings: i64,
-    pub information_findings: i64,
-    pub low_level_findings: i64,
-    pub medium_level_findings: i64,
+    pub high_level_findings: u64,
+    pub information_findings: u64,
+    pub low_level_findings: u64,
+    pub medium_level_findings: u64,
+    pub total_findings: u64,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -84,6 +85,7 @@ impl eventsourcing::Event for Event {
                 status: ReportStatus::Queued,
                 targets: data.targets.clone(),
                 trigger: data.trigger.clone(),
+                total_findings: 0,
 
                 scan_id: data.scan_id,
             },
@@ -101,10 +103,11 @@ impl eventsourcing::Event for Event {
             // CompletedV1
             EventData::CompletedV1(ref data) => Self::Aggregate{
                 findings: Some(data.findings.clone()),
-                high_level_findings: data.high_level_findings,
-                information_findings: data.information_findings,
-                low_level_findings: data.low_level_findings,
-                medium_level_findings: data.medium_level_findings,
+                high_level_findings: data.high_level_findings as i64,
+                information_findings: data.information_findings as i64,
+                low_level_findings: data.low_level_findings as i64,
+                medium_level_findings: data.medium_level_findings as i64,
+                total_findings: data.total_findings as i64,
                 ..aggregate
             },
             // FailedV1

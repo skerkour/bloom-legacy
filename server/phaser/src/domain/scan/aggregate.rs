@@ -16,6 +16,7 @@ pub struct Scan {
     pub version: i64,
 
     pub description: String,
+    pub findings: i64,
     pub last: Option<chrono::DateTime<chrono::Utc>>,
     pub name: String,
     pub profile: ScanProfile,
@@ -65,6 +66,7 @@ impl Scan {
             version: 0,
 
             description: String::new(),
+            findings: 0,
             last: None,
             name: String::new(),
             profile: ScanProfile::Application,

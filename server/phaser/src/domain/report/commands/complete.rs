@@ -14,6 +14,7 @@ use crate::{
 #[derive(Clone, Debug)]
 pub struct Complete {
     pub findings: report::Finding,
+    pub total_findings: u64,
     pub metadata: EventMetadata,
 }
 
@@ -39,6 +40,7 @@ impl eventsourcing::Command for Complete {
             information_findings: 0,
             low_level_findings: 0,
             medium_level_findings: 0,
+            total_findings: self.total_findings,
         });
 
         return  Ok((report::Event{

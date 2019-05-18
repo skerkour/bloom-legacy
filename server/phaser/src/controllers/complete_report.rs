@@ -101,6 +101,15 @@ impl Handler<CompleteReport> for DbActor {
 
             // generate report
             // TODO...
+            let total_findings = parsed_report.targets[0].findings.values().fold(0u64, |acc, x| {
+                let y = match &x.result {
+                    models::findings::ModuleResult::None | models::findings::ModuleResult::Err(_) => 0,
+                    _ => 1,
+                };
+                return acc + y;
+            });
+
+
             // complete report
             // retrieve report
             let report_to_complete: report::Report = phaser_reports::dsl::phaser_reports
@@ -111,6 +120,7 @@ impl Handler<CompleteReport> for DbActor {
 
             let complete_cmd = report::Complete{
                 findings: report::Finding::V1(parsed_report),
+                total_findings,
                 metadata: metadata.clone(),
             };
             let (completed_report, event, _) = eventsourcing::execute(&conn, report_to_complete, &complete_cmd)?;
@@ -133,6 +143,7 @@ impl Handler<CompleteReport> for DbActor {
                 .first(&conn)?;
 
             let complete_cmd = scan::Complete{
+                findings: total_findings,
                 metadata: metadata.clone(),
             };
             let (completed_scan, event, _) = eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;

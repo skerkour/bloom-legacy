@@ -377,6 +377,7 @@ table! {
         started_at -> Nullable<Timestamptz>,
         status -> Text,
         targets -> Array<Text>,
+        total_findings -> Int8,
         trigger -> Text,
         scan_id -> Uuid,
     }
@@ -400,6 +401,7 @@ table! {
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         description -> Text,
+        findings -> Int8,
         last -> Nullable<Timestamptz>,
         name -> Text,
         profile -> Text,

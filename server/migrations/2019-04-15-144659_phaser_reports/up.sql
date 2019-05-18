@@ -17,6 +17,7 @@ CREATE TABLE phaser_reports (
     started_at TIMESTAMP WITH TIME ZONE,
     status TEXT NOT NULL,
     targets TEXT[] NOT NULL,
+    total_findings BIGINT NOT NULL,
     trigger TEXT NOT NULL,
 
     scan_id UUID NOT NULL REFERENCES phaser_scans (id),

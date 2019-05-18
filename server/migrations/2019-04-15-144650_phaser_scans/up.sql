@@ -7,6 +7,7 @@ CREATE TABLE phaser_scans (
     version BIGINT NOT NULL,
 
     description TEXT NOT NULL,
+    findings BIGINT NOT NULL,
     last TIMESTAMP WITH TIME ZONE,
     name TEXT NOT NULL,
     profile TEXT NOT NULL,
