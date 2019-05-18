@@ -3,7 +3,7 @@
 .PHONY: disposable_emails
 
 DIST_DIR = dist
-NAME := $(shell cat kernel/Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
+NAME := bloom
 VERSION := $(shell cat kernel/Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
 DOCKER_IMAGE = quay.io/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
