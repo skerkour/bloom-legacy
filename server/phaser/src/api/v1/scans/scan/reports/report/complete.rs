@@ -35,7 +35,7 @@ pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, stat
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    let report_dir = format!("phaser/reports/{}", ids.1); // ids.1 -> report_id
+    let report_dir = format!("tmp/phaser/reports/{}", ids.1); // ids.1 -> report_id
     match fs::create_dir_all(&report_dir) {
         Ok(_) => {},
         Err(err) => return Either::A(ok(KernelError::from(err).error_response())),

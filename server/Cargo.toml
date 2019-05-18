@@ -1,0 +1,41 @@
+# [package]
+# name = "kernel"
+# version = "0.1.3"
+# authors = ["z0mbie42 <sylvain@kerkour.com>"]
+# edition = "2018"
+# homepage = "https://bloom.sh"
+# repository = "https://github.com/bloom42/kernel.git"
+# description = "Open internet services"
+# keywords = ["bloom"]
+# license = "MPL-2.0"
+# publish = false
+
+
+[profile.release]
+# for error tracking
+debug = true
+lto = true
+
+
+[workspace]
+members = [
+    "rust_crates/diesel_as_jsonb",
+    "rust_crates/sendgrid-rs",
+    "rust_crates/bcrypt-rs",
+    "rust_crates/hex-rs",
+    "rust_crates/eventsourcing-rs",
+    "rust_crates/mimesniff-rs",
+    "rust_crates/diesel-derive-enum",
+    "rust_crates/diesel-enum-derive",
+    "rust_crates/rust-dotenv",
+
+    "kernel",
+    "api",
+    "drive",
+    "notes",
+    "contacts",
+    "gallery",
+    "music",
+    "bitflow",
+    "phaser",
+]

@@ -29,17 +29,3 @@ yarn-error.log*
 .sourcemaps/
 .sass-cache/
 node_modules/
-
-
-
-# project
-tmp/
-.tmp/
-dist/
-.env
-.env.local
-.env.*.local
-.firebase/
-firebase-debug.log
-assets/GeoLite2-City.mmdb
-/phaser/
