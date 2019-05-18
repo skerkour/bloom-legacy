@@ -60,10 +60,10 @@ impl Handler<CancelScan> for DbActor {
             let cancel_cmd = scan::Cancel{
                 metadata: metadata.clone(),
             };
-            let (cancelped_scan, event, _) = eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
+            let (canceled_scan, event, _) = eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
 
-            diesel::update(&cancelped_scan)
-                .set(&cancelped_scan)
+            diesel::update(&canceled_scan)
+                .set(&canceled_scan)
                 .execute(&conn)?;
             diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
                 .values(&event)
