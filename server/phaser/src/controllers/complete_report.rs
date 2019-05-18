@@ -97,16 +97,34 @@ impl Handler<CompleteReport> for DbActor {
             let parsed_report = match parsed_report {
                 models::report::Report::V1(parsed_report) => parsed_report,
             };
+            let scan_id = parsed_report.scan_id;
 
             // generate report
-
-
-
+            // TODO...
             // complete report
-            // TODO
+            // retrieve report
+            let report_to_complete: report::Report = phaser_reports::dsl::phaser_reports
+                .filter(phaser_reports::dsl::id.eq(parsed_report.id))
+                .filter(phaser_reports::dsl::deleted_at.is_null())
+                .for_update()
+                .first(&conn)?;
+
+            let complete_cmd = report::Complete{
+                findings: report::Finding::V1(parsed_report),
+                metadata: metadata.clone(),
+            };
+            let (completed_report, event, _) = eventsourcing::execute(&conn, report_to_complete, &complete_cmd)?;
+
+            diesel::update(&completed_report)
+                .set(&completed_report)
+                .execute(&conn)?;
+            diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
+                .values(&event)
+                .execute(&conn)?;
+
+
 
             // complete scan
-            let scan_id = parsed_report.scan_id;
             // retrieve Scan
             let scan_to_complete: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(scan_id))
@@ -117,10 +135,10 @@ impl Handler<CompleteReport> for DbActor {
             let complete_cmd = scan::Complete{
                 metadata: metadata.clone(),
             };
-            let (canceled_scan, event, _) = eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
+            let (completed_scan, event, _) = eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
 
-            diesel::update(&canceled_scan)
-                .set(&canceled_scan)
+            diesel::update(&completed_scan)
+                .set(&completed_scan)
                 .execute(&conn)?;
             diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
                 .values(&event)

@@ -4,10 +4,13 @@ use kernel::{
     db::schema::phaser_reports,
 };
 use diesel_as_jsonb::AsJsonb;
-use crate::domain::scan::{
-    ScanProfile,
-    ReportTrigger,
-    ScanSchedule,
+use crate::{
+    domain::scan::{
+        ScanProfile,
+        ReportTrigger,
+        ScanSchedule,
+    },
+    models,
 };
 
 
@@ -48,8 +51,7 @@ pub enum ReportStatus {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum Finding {
-    A,
-    B,
+    V1(models::report::ReportV1),
 }
 
 impl Report {

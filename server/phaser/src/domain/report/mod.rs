@@ -12,9 +12,12 @@ pub use commands::{
     Queue,
     Cancel,
     Start,
+    Complete,
 };
 pub use events::{
     Event,
     EventData,
     QueuedV1,
+    CompletedV1,
+    FailedV1,
 };
