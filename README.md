@@ -11,7 +11,7 @@
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
-3. [Development](#developement)
+3. [Development](#Development)
 3. [Contributing](#contributing)
 4. [License](#license)
 
