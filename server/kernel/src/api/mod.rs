@@ -70,15 +70,3 @@ pub fn json_default_config() -> JsonConfig {
             KernelError::Validation(err.to_string()).into() // <- create custom error response
         });
 }
-
-// pub fn json_default_config(cfg: &mut ((dev::JsonConfig<State>, ()),)) {
-//     (cfg.0).0.error_handler(|err, _req| {  // <- create custom error response
-//         KernelError::Validation(err.to_string()).into()
-//     });
-// }
-
-// pub fn json_default_config_path(cfg: &mut ((PathConfig<State>, dev::JsonConfig<State>, ()),)) {
-//     (cfg.0).1.error_handler(|err, _req| {  // <- create custom error response
-//         KernelError::Validation(err.to_string()).into()
-//     });
-// }
