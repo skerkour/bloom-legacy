@@ -29,3 +29,5 @@ yarn-error.log*
 .sourcemaps/
 .sass-cache/
 node_modules/
+
+/dist

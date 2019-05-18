@@ -5,3 +5,4 @@ assets/GeoLite2-City.mmdb
 .env.local
 .env.*.local
 .tmp/
+dist/
