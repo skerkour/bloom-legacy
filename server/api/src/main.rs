@@ -208,7 +208,7 @@ fn main() {
             .route("/phaser/v1/scans/{scan_id}", web::delete().to_async(phaserv1::scans::scan::delete))
             .route("/phaser/v1/scans/{scan_id}/queue", web::post().to_async(phaserv1::scans::scan::queue::post))
             .route("/phaser/v1/scans/{scan_id}/cancel", web::post().to_async(phaserv1::scans::scan::cancel::post))
-            .route("/phaser/v1/scans/{scan_id}/reports", web::post().to_async(phaserv1::scans::scan::reports::get))
+            .route("/phaser/v1/scans/{scan_id}/reports", web::get().to_async(phaserv1::scans::scan::reports::get))
             .route("/phaser/v1/scans/{scan_id}/reports/{report_id}/complete", web::post().to_async(phaserv1::scans::scan::reports::report::complete::post))
         )
         .service(

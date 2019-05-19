@@ -108,6 +108,7 @@ impl eventsourcing::Event for Event {
                 low_level_findings: data.low_level_findings as i64,
                 medium_level_findings: data.medium_level_findings as i64,
                 total_findings: data.total_findings as i64,
+                status: ReportStatus::Success,
                 ..aggregate
             },
             // FailedV1
