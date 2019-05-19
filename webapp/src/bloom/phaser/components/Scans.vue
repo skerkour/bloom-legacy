@@ -61,7 +61,7 @@
               small
               color="grey darken-1"
               slot="activator"
-              :to="`/platform/phaser/${props.item.id}`"
+              :to="`/platform/phaser/scans/${props.item.id}/reports`"
             >
               <v-icon small>mdi-magnify</v-icon>
             </v-btn>

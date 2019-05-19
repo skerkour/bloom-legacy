@@ -25,7 +25,19 @@ export default [
       },
       service: 'platform',
     },
-    path: '/platform/phaser/:scan_id/reports/:report_id',
+    path: '/platform/phaser/scans/:scan_id/reports/:report_id',
+  },
+  {
+    component: ReportView,
+    meta: {
+      auth: {
+        layout: 'authenticated',
+        redirect: '/platform/phaser',
+        required: true,
+      },
+      service: 'platform',
+    },
+    path: '/platform/phaser/scans/:scan_id/reports',
   },
   {
     component: ProfilesView,

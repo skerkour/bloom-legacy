@@ -191,7 +191,7 @@ export default class Report extends Vue {
 
   // lifecycle
   created() {
-    this.fetch_data(this.$route);
+    this.fetch_data(this.$route.params.scan_id, this.$route.params.report_id);
   }
 
 
@@ -203,56 +203,14 @@ export default class Report extends Vue {
 
 
   // methods
-  async fetch_data(route: any) {
+  async fetch_data(scan_id: string, _report_id?: string) {
+    this.error = '';
+    this.is_loading = true;
     try {
-      this.error = '';
-      this.is_loading = true;
-      const data = await api.query(
-        api.PHASER_GRAPHQL,
-        `query ($report_id: String!, $scan_id: String!) {
-          scan(id: $scan_id) {
-            reports {
-              id
-              created_at
-              high_level_findings
-              medium_level_findings
-              low_level_findings
-            }
-          }
-          report(id: $report_id) {
-            id
-            created_at
-            started_at
-            completed_at
-            status
-            duration
-            high_level_findings
-            medium_level_findings
-            low_level_findings
-            information_findings
-            target
-            profile
-            trigger
-            findings {
-              ports {
-                level
-                ports {
-                  id
-                  state
-                  protocol
-                }
-              }
-            }
-          }
-        }
-        `,
-        {
-          report_id: route.params.report_id,
-          scan_id: route.params.scan_id,
-        },
-      );
-      this.report = data.report;
-      this.reports = data.scan.reports.reverse();
+      const reports = await api.get(`${api.PHASER}/v1/scans/${scan_id}/reports`);
+      console.log(reports);
+      // this.report = data.report;
+      // this.reports = data.scan.reports.reverse();
     } catch (err) {
       this.error = err.message;
     } finally {

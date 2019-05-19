@@ -41,6 +41,7 @@ impl Handler<FindScanReports> for DbActor {
             .filter(phaser_reports::dsl::scan_id.eq(msg.scan_id))
             .filter(phaser_reports::dsl::deleted_at.is_null())
             .filter(phaser_reports::dsl::status.ne(domain::report::ReportStatus::Canceled))
+            .order_by(phaser_reports::dsl::created_at.desc())
             .load(&conn)?;
 
         return Ok(reports);
