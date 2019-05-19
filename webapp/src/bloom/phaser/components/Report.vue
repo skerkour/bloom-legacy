@@ -82,7 +82,7 @@
 
               <v-flex xs6 sm3>
                 <v-subheader>Duration</v-subheader>
-                <span class="ml-3">{{ report.duration | duration }}</span>
+                <span class="ml-3">{{ sub_dates(report.started_at, report.completed_at) | duration }}</span>
               </v-flex>
 
               <v-flex xs6 sm3>
@@ -167,6 +167,7 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import ReportsChart from './ReportsChart.vue';
+import moment from 'moment';
 
 
 @Component({
@@ -218,6 +219,10 @@ export default class Report extends Vue {
     } finally {
       this.is_loading = false;
     }
+  }
+
+  sub_dates(a: string, b: string): number {
+    return Math.abs(new Date(a).getTime() - new Date(b).getTime()) / 1000;
   }
 }
 </script>
