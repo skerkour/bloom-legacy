@@ -38,7 +38,7 @@ impl Handler<FindScanReports> for DbActor {
             .first(&conn)?;
 
         let reports: Vec<domain::Report> = phaser_reports::dsl::phaser_reports
-            .filter(phaser_reports::dsl::id.eq(msg.scan_id))
+            .filter(phaser_reports::dsl::scan_id.eq(msg.scan_id))
             .filter(phaser_reports::dsl::deleted_at.is_null())
             .filter(phaser_reports::dsl::status.ne(domain::report::ReportStatus::Canceled))
             .load(&conn)?;
