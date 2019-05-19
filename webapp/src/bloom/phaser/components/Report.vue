@@ -28,7 +28,7 @@
         <v-divider></v-divider>
       </v-flex>
 
-      <v-flex xs12 class="mt-5 text-xs-center" v-if="report.status === 'SCANNING'">
+      <v-flex xs12 class="mt-5 text-xs-center" v-if="report.status === 'Scanning'">
         <v-progress-circular
         indeterminate
         color="primary"
@@ -39,7 +39,7 @@
       </v-flex>
 
 
-      <v-flex xs12 v-if="report.status !== 'SCANNING'">
+      <v-flex xs12 v-if="report.status !== 'Scanning'">
         <v-card class="elevation-0">
           <v-card-title>
             <h2 class="headline grey--text text--darken-2">
@@ -113,7 +113,7 @@
       </v-flex>
 
 
-      <v-flex xs12 v-if="report.status !== 'SCANNING'">
+      <v-flex xs12 v-if="report.status !== 'Scanning'">
         <v-card class="elevation-0">
           <v-card-title>
             <h2 class="headline grey--text text--darken-2">
@@ -168,6 +168,7 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import ReportsChart from './ReportsChart.vue';
 import moment from 'moment';
+import { PromiseBuffer } from '@sentry/utils';
 
 
 @Component({
@@ -207,13 +208,17 @@ export default class Report extends Vue {
 
 
   // methods
-  async fetch_data(scan_id: string, _report_id?: string) {
+  async fetch_data(scan_id: string, report_id?: string) {
     this.error = '';
     this.is_loading = true;
     try {
       const reports = await api.get(`${api.PHASER}/v1/scans/${scan_id}/reports`);
       this.reports = reports;
-      this.report = reports[0];
+      if (report_id !== undefined) {
+        this.report = reports.filter((report: any) => report.id === report_id)[0];
+      } else {
+        this.report = reports[0];
+      }
     } catch (err) {
       this.error = err.message;
     } finally {
