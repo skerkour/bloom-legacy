@@ -53,13 +53,13 @@ export default class ReportsChart extends Vue {
   goto_report() {
     const { scan_id } = this.$route.params;
     const report_id = this.reports[this.tooltip_position].id;
-    router.push({ path: `/platform/phaser/${scan_id}/reports/${report_id}` });
+    router.push({ path: `/platform/phaser/scans/${scan_id}/reports/${report_id}` });
   }
 
   render_chart() {
-    const series = this.reports.map((point: any) => point.high_level_findings);
-    const dates = this.reports.map((point) => {
-      const d = new Date(point.created_at);
+    const series = this.reports.map((report: any) => report.total_findings);
+    const dates = this.reports.map((report) => {
+      const d = new Date(report.completed_at);
       return [d.getFullYear(), d.getMonth() + 1, d.getDate()].join('/');
     });
     this.chart = echarts.init(document.getElementById('reports-chart'));

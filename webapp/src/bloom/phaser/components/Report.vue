@@ -14,7 +14,6 @@
     </v-layout>
     <v-layout v-if="report" row wrap>
 
-
       <v-flex xs12>
         <v-card class="elevation-0">
           <v-card-title class="pb-0">
@@ -50,7 +49,7 @@
           <v-card-text class="pt-0">
             <v-container>
             <v-layout row wrap>
-              <v-flex xs6 sm3 class="text-xs-center">
+              <!-- <v-flex xs6 sm3 class="text-xs-center">
                 <p class="title red--text">{{ report.high_level_findings }}</p>
                 <p class="title red--text">High</p>
               </v-flex>
@@ -65,6 +64,10 @@
               <v-flex xs6 sm3 class="text-xs-center">
                 <p class="title blue--text">{{ report.information_findings }}</p>
                 <p class="title blue--text">Information</p>
+              </v-flex> -->
+              <v-flex xs12 class="text-xs-center mb-3">
+                <p class="title blue--text">{{ report.total_findings }}</p>
+                <p class="title blue--text">Findings</p>
               </v-flex>
 
               <v-flex xs6 sm3>
@@ -117,7 +120,7 @@
               Findings
             </h2>
           </v-card-title>
-          <v-card-text class="pt-0">
+          <!-- <v-card-text class="pt-0">
             <v-layout row wrap>
               <v-flex xs12 sm10 md8 lg6>
                 <v-expansion-panel popout>
@@ -150,7 +153,7 @@
                </v-expansion-panel>
               </v-flex>
             </v-layout>
-          </v-card-text>
+          </v-card-text> -->
         </v-card>
       </v-flex>
 
@@ -198,7 +201,7 @@ export default class Report extends Vue {
   // watch
   @Watch('$route')
   on_route_change(to: any) {
-    this.fetch_data(to);
+    this.fetch_data(to.params.scan_id, to.params.report_id);
   }
 
 
@@ -208,9 +211,8 @@ export default class Report extends Vue {
     this.is_loading = true;
     try {
       const reports = await api.get(`${api.PHASER}/v1/scans/${scan_id}/reports`);
-      console.log(reports);
-      // this.report = data.report;
-      // this.reports = data.scan.reports.reverse();
+      this.reports = reports;
+      this.report = reports[0];
     } catch (err) {
       this.error = err.message;
     } finally {

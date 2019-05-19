@@ -109,6 +109,7 @@ impl eventsourcing::Event for Event {
                 medium_level_findings: data.medium_level_findings as i64,
                 total_findings: data.total_findings as i64,
                 status: ReportStatus::Success,
+                completed_at: Some(self.timestamp),
                 ..aggregate
             },
             // FailedV1
