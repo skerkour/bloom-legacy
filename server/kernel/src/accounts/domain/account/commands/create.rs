@@ -17,7 +17,7 @@ pub struct Create {
     pub email: String,
     pub password: String,
     pub username: String,
-    pub www_host: String,
+    pub host: String,
     pub metadata: EventMetadata,
 }
 
@@ -78,7 +78,7 @@ impl eventsourcing::Command for Create {
             last_name: self.last_name.clone(),
             email: self.email.clone(),
             password: self.password.clone(),
-            avatar_url: format!("{}{}", &self.www_host, accounts::AVATAR_DEFAULT_PATH),
+            avatar_url: format!("{}{}", &self.host, accounts::AVATAR_DEFAULT_PATH),
             username: self.username.clone(),
             is_admin: false,
         });

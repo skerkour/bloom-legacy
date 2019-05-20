@@ -10,7 +10,7 @@ pub struct Config {
     smtp_host: String,
     smtp_username: String,
     smtp_password: String,
-    www_host: String,
+    host: String,
     aws_access_key_id: String,
     aws_secret_access_key: String,
     aws_region: String,
@@ -41,7 +41,7 @@ pub fn init() -> Config {
         smtp_host: get_env("SMTP_HOST"),
         smtp_username: get_env("SMTP_USERNAME"),
         smtp_password: get_env("SMTP_PASSWORD"),
-        www_host: get_env("WWW_HOST"),
+        host: get_env("HOST"),
         aws_access_key_id: get_env("AWS_ACCESS_KEY_ID"),
         aws_secret_access_key: get_env("AWS_SECRET_ACCESS_KEY"),
         aws_region: get_env("AWS_REGION"),
@@ -80,8 +80,8 @@ impl Config {
         return self.smtp_password.clone();
     }
 
-    pub fn www_host(&self) -> String {
-        return self.www_host.clone();
+    pub fn host(&self) -> String {
+        return self.host.clone();
     }
 
     pub fn aws_access_key_id(&self) -> String {

@@ -24,7 +24,7 @@ pending_account_id: &str, code: &str) -> Result<(), KernelError> {
     let mut formatted_code = code.to_string();
     formatted_code.insert(4, '-');
     let handlebars = Handlebars::new();
-    let url = format!("{}/welcome/verify?id={}&code={}", config.www_host(), pending_account_id, code);
+    let url = format!("{}/welcome/verify?id={}&code={}", config.host(), pending_account_id, code);
 
     let subject = format!("Confirmation code: {}", formatted_code);
 

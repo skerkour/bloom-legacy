@@ -82,7 +82,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 email: pending_account_to_update.email.clone(),
                 password: pending_account_to_update.password.clone(),
                 username: msg.username.clone(),
-                www_host: msg.config.www_host(),
+                host: msg.config.host(),
                 metadata: metadata.clone(),
             };
             let (new_account, event, _) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
