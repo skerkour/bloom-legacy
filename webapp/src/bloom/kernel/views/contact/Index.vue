@@ -2,7 +2,7 @@
   <div>
   <v-container class="mt-4 text-xs-center">
     <v-layout row wrap justify-center>
-      <v-flex xs12 class="text-xs-center mb-3">
+      <v-flex xs12 class="text-xs-center mb-2">
         <h1 class="display-1 font-weight-medium">
           Contact
         </h1>
@@ -11,12 +11,13 @@
       <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
         <v-card class="elevation-0">
           <v-card-text>
-            <p class="font-18 font-weight-regular">
-              You can contact the Bloom's team using the chatbox at the bottom right
-              of our <a href="https://help.bloom.sh" target="_blank" rel="noopener">help website</a>
-              , using the following email address:
-              <a href="mailto:hello@bloom.sh">hello@bloom.sh</a> or on Twitter:
-               <a href="https://twitter.com/bloom_cloud" target="_blank" rel="noopener">@bloom_cloud</a>
+            <p class="font-18 font-weight-regular text-xs-left ">
+              You can contact the Bloom team using one of the following way:
+              <ul>
+                <li>Using the chatbox at the bottom right of our <a href="https://help.bloom.sh" target="_blank" rel="noopener">help website</a></li>
+                <li>Using the following email address: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>
+                <li>Or by saying <i>Hi</i> on Twitter: <a href="https://twitter.com/bloom_cloud" target="_blank" rel="noopener">@bloom_cloud</a></li>
+              </ul>
             </p>
           </v-card-text>
         </v-card>
