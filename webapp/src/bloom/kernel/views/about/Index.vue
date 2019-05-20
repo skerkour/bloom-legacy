@@ -57,7 +57,7 @@
             <h3 class="mt-3">
               Sylvain Kerkour
             </h3>
-            <p>Product design</p>
+            <p>Product design, France 🇫🇷</p>
           </a>
         </v-hover>
       </v-flex>
@@ -73,7 +73,7 @@
           <h3 class="mt-3">
             Marina Da Silva
           </h3>
-          <p>Graphic design</p>
+          <p>Graphic design, France 🇫🇷</p>
         </a>
       </v-hover>
       </v-flex>
