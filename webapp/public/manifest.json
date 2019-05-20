@@ -4,22 +4,22 @@
   "short_name": "Bloom",
   "icons": [
     {
-        "src": "/imgs/logos/bloom_64.png",
+        "src": "/kernel/static/imgs/logos/bloom_64.png",
         "sizes": "64x63",
         "type": "image/png"
       },
     {
-      "src": "/imgs/logos/bloom_128.png",
+      "src": "/kernel/static/imgs/logos/bloom_128.png",
       "sizes": "128x128",
       "type": "image/png"
     },
     {
-      "src": "/imgs/logos/bloom_256.png",
+      "src": "/kernel/static/imgs/logos/bloom_256.png",
       "sizes": "256x256",
       "type": "image/png"
     },
     {
-        "src": "/imgs/logos/bloom_512.png",
+        "src": "/kernel/static/imgs/logos/bloom_512.png",
         "sizes": "512x512",
         "type": "image/png"
       }
