@@ -14,8 +14,9 @@
             <p class="font-18 font-weight-regular">
               You can contact the Bloom's team using the chatbox at the bottom right
               of our <a href="https://help.bloom.sh" target="_blank" rel="noopener">help website</a>
-              or using the following email address:
-              <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+              , using the following email address:
+              <a href="mailto:hello@bloom.sh">hello@bloom.sh</a> or on Twitter:
+               <a href="https://twitter.com/bloom_cloud" target="_blank" rel="noopener">@bloom_cloud</a>
             </p>
           </v-card-text>
         </v-card>
