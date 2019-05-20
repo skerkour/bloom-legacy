@@ -6,7 +6,7 @@
     <router-link to="/">
       <v-toolbar-title class="mr-5 align-cente">
         <span class="blm-toolbar-title">
-          <span class="blm-toolbar-title-primary"><b>Bloom</b></span>&nbsp;<span class="blm-toolbar-title-secondary">{{ secondary_title }}</span>
+          <span class="blm-toolbar-title-primary"><b>Bloom</b></span><span class="blm-toolbar-title-secondary" v-if="secondary_title">&nbsp;{{ secondary_title }}</span>&nbsp;<span class="blm-toolbar-beta">beta</span>
         </span>
       </v-toolbar-title>
     </router-link>
@@ -235,6 +235,11 @@ export default class Toolbar extends Vue {
 }
 .blm-toolbar-title {
   font-size: larger;
+
+  .blm-toolbar-beta {
+    font-size: 12px;
+    vertical-align: top;
+  }
 }
 
 .blm-toolbar {
