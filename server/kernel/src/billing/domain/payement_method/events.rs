@@ -24,6 +24,8 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     AddedV1(AddedV1),
+    SetAsDefaultV1,
+    UnsetAsDefaultV1,
     RemovedV1,
 }
 
@@ -55,6 +57,16 @@ impl eventsourcing::Event for Event {
             // RemovedV1
             EventData::RemovedV1 => Self::Aggregate{
                 deleted_at: Some(self.timestamp),
+                ..aggregate
+            },
+            // SetAsDefaultV1
+            EventData::SetAsDefaultV1 => Self::Aggregate {
+                is_default: true,
+                ..aggregate
+            },
+            // UnsetAsDefaultV1
+            EventData::UnsetAsDefaultV1 => Self::Aggregate {
+                is_default: false,
                 ..aggregate
             },
         }
