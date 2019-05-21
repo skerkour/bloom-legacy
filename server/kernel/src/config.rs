@@ -20,7 +20,7 @@ pub struct Config {
     sentry_url: Option<String>,
     phaser_secret: String,
     bitflow_secret: String,
-    strip_secret_key: String,
+    stripe_secret_key: String,
 }
 
 pub fn init() -> Config {
