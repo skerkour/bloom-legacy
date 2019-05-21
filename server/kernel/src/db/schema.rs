@@ -1,4 +1,26 @@
 table! {
+    billing_payement_methods (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        details -> Jsonb,
+        account_id -> Uuid,
+    }
+}
+
+table! {
+    billing_payement_methods_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
     bitflow_downloads (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -422,6 +444,8 @@ table! {
     }
 }
 
+joinable!(billing_payement_methods -> kernel_accounts (account_id));
+joinable!(billing_payement_methods_events -> billing_payement_methods (aggregate_id));
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> drive_files (download_folder_id));
@@ -458,6 +482,8 @@ joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
+    billing_payement_methods,
+    billing_payement_methods_events,
     bitflow_downloads,
     bitflow_downloads_events,
     bitflow_profiles,
