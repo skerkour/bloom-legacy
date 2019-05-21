@@ -6,6 +6,7 @@ table! {
         deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         details -> Jsonb,
+        is_default -> Bool,
         account_id -> Uuid,
     }
 }

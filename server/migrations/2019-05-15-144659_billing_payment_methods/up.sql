@@ -7,6 +7,7 @@ CREATE TABLE billing_payment_methods (
     version BIGINT NOT NULL,
 
     details JSONB NOT NULL,
+    is_default BOOLEAN NOT NULL,
 
     account_id UUID NOT NULL REFERENCES kernel_accounts (id),
 

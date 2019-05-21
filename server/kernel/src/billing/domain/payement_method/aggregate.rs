@@ -16,6 +16,7 @@ pub struct PaymentMethod {
     pub version: i64,
 
     pub details: PaymentDetails,
+    pub is_default: bool,
 
     pub account_id: uuid::Uuid,
 }
@@ -33,6 +34,7 @@ impl PaymentMethod {
             version: 0,
 
             details: PaymentDetails::None,
+            is_default: false,
 
             account_id: uuid::Uuid::new_v4(),
         };

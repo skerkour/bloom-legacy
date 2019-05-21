@@ -31,6 +31,7 @@ pub enum EventData {
 pub struct AddedV1 {
     pub id: uuid::Uuid,
     pub details: PaymentDetails,
+    pub is_default: bool,
     pub account_id: uuid::Uuid,
 }
 
@@ -48,6 +49,7 @@ impl eventsourcing::Event for Event {
                 deleted_at: None,
                 version: 0,
                 details: data.details.clone(),
+                is_default: data.is_default,
                 account_id: data.account_id,
             },
             // RemovedV1
