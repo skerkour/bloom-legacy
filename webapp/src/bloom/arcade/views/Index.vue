@@ -42,8 +42,6 @@
 </template>
 
 
-
-
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import Landing from '../components/Landing.vue';

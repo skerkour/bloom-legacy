@@ -15,7 +15,7 @@ const DEFAULT_LAYOUT: string = 'default';
 @Component
 export default class App extends Vue {
   get layout(): string {
-    if (this.$store.state.session) {
+    if (this.$store.state.session && this.$route.meta.auth) {
       return `blm-layout-${this.$route.meta.auth.layout || DEFAULT_LAYOUT}`;
     }
     return `blm-layout-${this.$route.meta.layout || DEFAULT_LAYOUT}`;
