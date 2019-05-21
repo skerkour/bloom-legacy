@@ -10,6 +10,15 @@
       </v-list-tile-content>
     </v-list-tile>
 
+    <v-list-tile exact to="/myaccount/billing">
+      <v-list-tile-action>
+        <v-icon>mdi-credit-card</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Billing</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+
     <v-list-tile exact to="/myaccount/security">
       <v-list-tile-action>
         <v-icon>mdi-shield-check</v-icon>
