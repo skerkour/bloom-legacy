@@ -150,8 +150,8 @@ export default class Devices extends Vue {
     this.display_add_payment_dialog = true;
   }
 
-  payment_method_added() {
-
+  payment_method_added(payment_method: any) {
+    this.payment_methods.push(payment_method);
   }
 }
 </script>
