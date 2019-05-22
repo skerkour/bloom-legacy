@@ -28,7 +28,6 @@
             </div>
           </v-card-title>
           <v-card-text>
-
               <v-data-table
                 :headers="headers"
                 :items="payment_methods"
@@ -54,7 +53,7 @@
       </v-flex>
       <v-flex class="mb-3 mt-3" xs12>
         <v-btn color="primary" @click="add_payment_method" :loading="is_loading">
-          Add a payment method
+          Add payment method
         </v-btn>
       </v-flex>
       <v-flex xs12>
