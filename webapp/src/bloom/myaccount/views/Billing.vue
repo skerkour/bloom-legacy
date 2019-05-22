@@ -1,4 +1,5 @@
 <template>
+<div>
   <v-container>
     <v-layout row wrap justify-left>
 
@@ -52,7 +53,7 @@
         </v-card>
       </v-flex>
       <v-flex class="mb-3 mt-3" xs12>
-        <v-btn color="primary" @click="add_payment_method" :loading="is_loading">
+        <v-btn color="primary" @click="open_add_payment_dialog" :loading="is_loading">
           Add payment method
         </v-btn>
       </v-flex>
@@ -96,20 +97,31 @@
 
     </v-layout>
   </v-container>
+
+
+  <blm-billing-add-payment-method-dialog
+  :visible="display_add_payment_dialog"
+  @close="display_add_payment_dialog = false"
+  @add="payment_method_added" />
+</div>
 </template>
 
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-
+import AddPaymentMethodDialog from '../components/AddPaymentMethodDialog.vue';
 
 @Component({
+  components: {
+    'blm-billing-add-payment-method-dialog': AddPaymentMethodDialog,
+  },
 })
 export default class Devices extends Vue {
   // props
   // data
   error = '';
   is_loading = false;
+  display_add_payment_dialog = false;
   payment_methods: any[] = [];
   invoices: any[] = [];
   subscriptions: any[] = [];
@@ -134,7 +146,12 @@ export default class Devices extends Vue {
   // lifecycle
   // watch
   // methods
-  add_payment_method() {
+  open_add_payment_dialog() {
+    this.display_add_payment_dialog = true;
+  }
+
+  payment_method_added() {
+
   }
 }
 </script>
