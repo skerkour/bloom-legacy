@@ -147,6 +147,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
+const { log } = require('@bloom42/astro');
 
 
 @Component({})
@@ -187,6 +188,20 @@ export default class AddPaymentMethodDialog extends Vue {
   // watch
   // methods
   async add_payment_method() {
+    const payload = {
+      card_cvc: this.card_cvc,
+      card_expiration_date: this.card_expiration_date,
+      card_number: this.card_number,
+      city: this.city,
+      country: this.country,
+      first_name: this.first_name,
+      last_name: this.last_name,
+      postal_code: this.postal_code,
+      state: this.state,
+      street_address: this.street_address,
+    };
+    log.info(payload);
+    this.cancel();
   }
 
   cancel() {
