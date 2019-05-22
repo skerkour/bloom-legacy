@@ -38,4 +38,5 @@ members = [
     "music",
     "bitflow",
     "phaser",
+    "billing",
 ]
