@@ -1,7 +1,7 @@
 <template>
 <div>
   <v-container>
-    <v-layout row wrap justify-left>
+    <v-layout row wrap justify-center class="text-xs-center">
 
       <v-flex xs12 v-if="is_loading" justify-center>
         <v-card class="elevation-0">
