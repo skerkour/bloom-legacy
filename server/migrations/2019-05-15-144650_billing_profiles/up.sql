@@ -1,24 +1,23 @@
 -- Your SQL goes here
-CREATE TABLE billing_payment_methods (
+CREATE TABLE billing_profiles (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
     deleted_at TIMESTAMP WITH TIME ZONE,
     version BIGINT NOT NULL,
 
-    details JSONB NOT NULL,
-    is_default BOOLEAN NOT NULL,
+    stripe_customer_id TEXT,
 
-    billing_profile_id UUID NOT NULL REFERENCES billing_profiles (id),
+    account_id UUID NOT NULL REFERENCES kernel_accounts (id),
 
     PRIMARY KEY(id)
 );
 
 
-CREATE TABLE billing_payment_methods_events (
+CREATE TABLE billing_profiles_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES billing_payment_methods (id),
+    aggregate_id UUID NOT NULL REFERENCES billing_profiles (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

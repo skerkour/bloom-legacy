@@ -1,4 +1,26 @@
 table! {
+    billing_invoices (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        details -> Jsonb,
+        billing_profile_id -> Uuid,
+    }
+}
+
+table! {
+    billing_invoices_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
     billing_payment_methods (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -7,12 +29,55 @@ table! {
         version -> Int8,
         details -> Jsonb,
         is_default -> Bool,
-        account_id -> Uuid,
+        billing_profile_id -> Uuid,
     }
 }
 
 table! {
     billing_payment_methods_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    billing_profiles (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        stripe_customer_id -> Nullable<Text>,
+        account_id -> Uuid,
+    }
+}
+
+table! {
+    billing_profiles_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
+    billing_subscriptions (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        billing_profile_id -> Uuid,
+    }
+}
+
+table! {
+    billing_subscriptions_events (id) {
         id -> Uuid,
         timestamp -> Timestamptz,
         aggregate_id -> Uuid,
@@ -445,8 +510,14 @@ table! {
     }
 }
 
-joinable!(billing_payment_methods -> kernel_accounts (account_id));
+joinable!(billing_invoices -> billing_profiles (billing_profile_id));
+joinable!(billing_invoices_events -> billing_invoices (aggregate_id));
+joinable!(billing_payment_methods -> billing_profiles (billing_profile_id));
 joinable!(billing_payment_methods_events -> billing_payment_methods (aggregate_id));
+joinable!(billing_profiles -> kernel_accounts (account_id));
+joinable!(billing_profiles_events -> billing_profiles (aggregate_id));
+joinable!(billing_subscriptions -> billing_profiles (billing_profile_id));
+joinable!(billing_subscriptions_events -> billing_subscriptions (aggregate_id));
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> drive_files (download_folder_id));
@@ -483,8 +554,14 @@ joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
+    billing_invoices,
+    billing_invoices_events,
     billing_payment_methods,
     billing_payment_methods_events,
+    billing_profiles,
+    billing_profiles_events,
+    billing_subscriptions,
+    billing_subscriptions_events,
     bitflow_downloads,
     bitflow_downloads_events,
     bitflow_profiles,
