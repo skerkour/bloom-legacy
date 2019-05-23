@@ -15,6 +15,7 @@ use kernel::{
     db,
     api,
     accounts::api::v1 as accountsv1,
+    accounts::domain::account,
 };
 use std::str::FromStr;
 use actix_files;
