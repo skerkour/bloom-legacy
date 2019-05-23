@@ -34,7 +34,7 @@ pub struct AddedV1 {
     pub id: uuid::Uuid,
     pub details: PaymentDetails,
     pub is_default: bool,
-    pub account_id: uuid::Uuid,
+    pub billing_profile_id: uuid::Uuid,
 }
 
 
@@ -52,7 +52,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
                 details: data.details.clone(),
                 is_default: data.is_default,
-                account_id: data.account_id,
+                billing_profile_id: data.account_id,
             },
             // RemovedV1
             EventData::RemovedV1 => Self::Aggregate{

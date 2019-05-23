@@ -18,6 +18,7 @@ gallery = { path = "../gallery" }
 music = { path = "../music" }
 bitflow = { path = "../bitflow" }
 phaser = { path = "../phaser" }
+billing = { path = "../billing" }
 
 
 actix-web = "1.0.0-rc"
