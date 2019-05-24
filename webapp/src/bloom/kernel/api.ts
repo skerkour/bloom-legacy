@@ -10,7 +10,7 @@ class API {
   // do not use axios' baseUrl because if we need in the future to move APIs to subdomains
   api_url = process.env.VUE_APP_API_BASE_URL ?
       process.env.VUE_APP_API_BASE_URL
-      : `https://api.${process.env.VUE_APP_ROOT_DOMAIN}`;
+      : `https://${process.env.VUE_APP_HOST}/api`;
   ACCOUNT_GRAPHQL = `${this.api_url}/account/graphql`;
   MYACCOUNT = `${this.api_url}/myaccount`;
   NOTES = `${this.api_url}/notes`;
