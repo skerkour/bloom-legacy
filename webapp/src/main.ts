@@ -56,6 +56,7 @@ Sentry.init({
   'NODE_ENV',
   'VUE_APP_SENTRY_URL',
   'VUE_APP_HOST',
+  'VUE_APP_STRIPE_PUBLIC_KEY',
 ].forEach((env_var) => {
   if (!env_var) {
     throw new Error(`Missing environment variable: ${env_var}`);
