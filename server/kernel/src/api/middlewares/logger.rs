@@ -10,8 +10,8 @@ use actix_web::{
     // web,
 };
 // use actix_service::{Service as ActixService, Transform};
-use chrono::{Utc, DateTime};
-use slog::{slog_o, slog_info, slog_warn, slog_error};
+// use chrono::{Utc, DateTime};
+use slog::{slog_o}; // slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 // use futures::{
 //     Poll,
@@ -50,7 +50,7 @@ impl GetRequestLogger for HttpRequest {
 }
 
 
-struct RequestStartTime(DateTime<Utc>);
+// struct RequestStartTime(DateTime<Utc>);
 
 impl RequestLogger {
     /// Deconstruct to an inner value
@@ -75,7 +75,7 @@ impl FromRequest for RequestLogger {
     type Future = Result<RequestLogger, Error>;
 
     #[inline]
-    fn from_request(req: &HttpRequest, payload: &mut Payload) -> Self::Future {
+    fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
         // String processing because request_id.0 is private
         let req_id = req.request_id().0.clone();
 

@@ -4,7 +4,7 @@ use diesel::{
 };
 use kernel::{
     KernelError,
-    accounts::domain::account,
+    myaccount::domain::account,
 };
 use crate::{
     domain::{

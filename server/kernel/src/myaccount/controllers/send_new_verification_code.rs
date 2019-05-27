@@ -48,9 +48,9 @@ impl Handler<SendNewVerificationCode> for DbActor {
                 metadata,
             };
 
-            let pending_account: PendingAccount = kernel_pending_myaccount::dsl::kernel_pending_accounts
-                .filter(kernel_pending_myaccount::dsl::id.eq(msg.pending_account_id))
-                .filter(kernel_pending_myaccount::dsl::deleted_at.is_null())
+            let pending_account: PendingAccount = kernel_pending_accounts::dsl::kernel_pending_accounts
+                .filter(kernel_pending_accounts::dsl::id.eq(msg.pending_account_id))
+                .filter(kernel_pending_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

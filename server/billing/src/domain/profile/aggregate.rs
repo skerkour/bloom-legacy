@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kernel::{
     db::schema::billing_profiles,
 };
 

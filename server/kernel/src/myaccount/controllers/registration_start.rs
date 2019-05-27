@@ -58,7 +58,7 @@ impl Handler<StartRegistration> for DbActor {
             let (new_pending_account, event, non_persisted) = eventsourcing::execute(
                 &conn, pending_account::PendingAccount::new(), &create_cmd)?;
 
-            diesel::insert_into(kernel_pending_myaccount::dsl::kernel_pending_accounts)
+            diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)
                 .execute(&conn)?;
             diesel::insert_into(kernel_pending_accounts_events::dsl::kernel_pending_accounts_events)

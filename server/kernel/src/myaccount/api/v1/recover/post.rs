@@ -13,12 +13,12 @@ use crate::{
 use futures::{
     future::{
         IntoFuture,
-        ok,
+        // ok,
         Future,
     },
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse, ResponseError,
+    web, Error, HttpRequest, HttpResponse,
 };
 use rand::Rng;
 use std::time::Duration;

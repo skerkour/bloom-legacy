@@ -62,7 +62,7 @@ impl FromRequest for RequestId {
     type Future = Result<RequestId, Error>;
 
     #[inline]
-    fn from_request(req: &HttpRequest, payload: &mut Payload) -> Self::Future {
+    fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
         return Ok(req.request_id());
     }
 }
