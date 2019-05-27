@@ -168,7 +168,6 @@ import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import ReportsChart from './ReportsChart.vue';
 import moment from 'moment';
-import { PromiseBuffer } from '@sentry/utils';
 
 
 @Component({
