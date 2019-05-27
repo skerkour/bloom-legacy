@@ -1,13 +1,13 @@
 use crate::{
     api,
-    accounts::api::v1::models,
+    myaccount::api::v1::models,
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
         GetRequestAuth,
     },
-    accounts::controllers,
+    myaccount::controllers,
     utils,
     KernelError,
 };

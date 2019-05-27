@@ -3,11 +3,11 @@ use diesel::{
     r2d2::{PooledConnection, ConnectionManager},
 };
 use crate::{
-    accounts::domain::account,
+    myaccount::domain::account,
     events::EventMetadata,
-    accounts::validators,
+    myaccount::validators,
     error::KernelError,
-    accounts,
+    myaccount,
 };
 
 #[derive(Clone, Debug)]
@@ -78,7 +78,7 @@ impl eventsourcing::Command for Create {
             last_name: self.last_name.clone(),
             email: self.email.clone(),
             password: self.password.clone(),
-            avatar_url: format!("{}{}", &self.host, accounts::AVATAR_DEFAULT_PATH),
+            avatar_url: format!("{}{}", &self.host, myaccount::AVATAR_DEFAULT_PATH),
             username: self.username.clone(),
             is_admin: false,
         });

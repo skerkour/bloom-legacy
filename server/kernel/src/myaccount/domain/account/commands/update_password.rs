@@ -1,8 +1,8 @@
 use crate::{
-    accounts::domain::account,
+    myaccount::domain::account,
     events::EventMetadata,
-    accounts::validators,
-    accounts,
+    myaccount::validators,
+    myaccount,
     error::KernelError,
 };
 use diesel::{
@@ -44,7 +44,7 @@ impl eventsourcing::Command for UpdatePassword {
     }
 
     fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let hashed_password = bcrypt::hash(&self.new_password, accounts::PASSWORD_BCRYPT_COST)
+        let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = account::EventData::PasswordUpdatedV1(account::PasswordUpdatedV1{

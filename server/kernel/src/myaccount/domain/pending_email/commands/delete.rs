@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    accounts::domain::pending_email,
+    myaccount::domain::pending_email,
     error::KernelError,
     events::EventMetadata,
 };

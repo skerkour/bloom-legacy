@@ -1,11 +1,11 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    accounts::domain::{
+    myaccount::domain::{
         PendingAccount,
         pending_account,
     },
-    accounts::notifications::emails::send_account_verification_code,
+    myaccount::notifications::emails::send_account_verification_code,
     events::EventMetadata,
     config::Config,
 };
@@ -48,9 +48,9 @@ impl Handler<SendNewVerificationCode> for DbActor {
                 metadata,
             };
 
-            let pending_account: PendingAccount = kernel_pending_accounts::dsl::kernel_pending_accounts
-                .filter(kernel_pending_accounts::dsl::id.eq(msg.pending_account_id))
-                .filter(kernel_pending_accounts::dsl::deleted_at.is_null())
+            let pending_account: PendingAccount = kernel_pending_myaccount::dsl::kernel_pending_accounts
+                .filter(kernel_pending_myaccount::dsl::id.eq(msg.pending_account_id))
+                .filter(kernel_pending_myaccount::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

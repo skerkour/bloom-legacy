@@ -1,6 +1,6 @@
 use crate::{
     api,
-    accounts::api::v1::models,
+    myaccount::api::v1::models,
     api::middlewares::{
         GetRequestAuth,
     },

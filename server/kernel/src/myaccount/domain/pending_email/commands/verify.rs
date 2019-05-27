@@ -1,7 +1,7 @@
 use crate::{
     events::EventMetadata,
-    accounts::domain::pending_email,
-    accounts::validators,
+    myaccount::domain::pending_email,
+    myaccount::validators,
     error::KernelError,
 };
 use serde::{Serialize, Deserialize};

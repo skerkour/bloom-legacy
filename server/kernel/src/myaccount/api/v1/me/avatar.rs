@@ -1,9 +1,9 @@
 use crate::{
     api,
     log::macros::*,
-    accounts::controllers,
-    accounts::api::v1::models,
-    accounts,
+    myaccount::controllers,
+    myaccount::api::v1::models,
+    myaccount,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -87,7 +87,7 @@ fn read_file(
     Box::new(
         field.fold(Vec::new(), |mut acc, bytes| -> future::FutureResult<_, MultipartError> {
             acc.extend_from_slice(&bytes);
-            if acc.len() > accounts::AVATAR_MAX_SIZE {
+            if acc.len() > myaccount::AVATAR_MAX_SIZE {
                 return future::err(MultipartError::Payload(error::PayloadError::Overflow))
             }
             future::ok(acc)

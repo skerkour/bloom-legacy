@@ -2,7 +2,7 @@ use actix::{Message, Handler};
 use serde::{Serialize, Deserialize};
 use crate::{
     db::DbActor,
-    accounts::domain,
+    myaccount::domain,
     error::KernelError,
 };
 

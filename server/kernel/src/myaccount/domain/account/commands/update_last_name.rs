@@ -1,7 +1,7 @@
 use crate::{
-    accounts::domain::account,
+    myaccount::domain::account,
     events::EventMetadata,
-    accounts::validators,
+    myaccount::validators,
     error::KernelError,
 };
 use diesel::{

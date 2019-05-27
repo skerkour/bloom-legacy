@@ -20,7 +20,7 @@ use futures::{Future};
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    accounts::domain,
+    myaccount::domain,
     api,
     error::KernelError,
 };
