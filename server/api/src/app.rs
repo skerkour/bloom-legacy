@@ -1,113 +1,165 @@
-
-// use actix_web::{
-//     App,
-//     middleware::cors::Cors,
-//     http::{header},
-//     middleware::Logger,
-//     web,
-// };
-// use rusoto_core::Region;
-// use rusoto_s3::S3Client;
-// use std::str::FromStr;
-// // use notes::api::v1 as notesv1;
-// // use contacts::api::v1 as contactsv1;
-// // use gallery::api::v1 as galleryv1;
-// // use music::api::v1 as musicv1;
-// // use bitflow::api::v1 as bitflowv1;
-// use sentry_actix::SentryMiddleware;
-// use kernel::{
-//     db::DbActor,
-//     api,
-//     api::middlewares,
-//     config,
-//     accounts::api::v1 as accountsv1,
-// };
+use actix_web::{error, web, Result as ActixResult};
+use actix_files;
 
 
-// pub fn init<A: actix_service::NewService, B>(db: actix::Addr<DbActor>, cfg: config::Config) -> App<A, B> {
-//     let region = Region::from_str(&cfg.aws_region()).expect("AWS region not valid");
-//     let api_state = api::State{
-//         db,
-//         config: cfg,
-//         s3_client: S3Client::new(region),
-//     };
+use kernel::{
+    myaccount::api::v1 as myaccountv1,
+    myaccount::domain::account,
+};
+
+use drive::api::v1 as drivev1;
+use bitflow::api::v1 as bitflowv1;
+use contacts::api::v1 as contactsv1;
+use notes::api::v1 as notesv1;
+use music::api::v1 as musicv1;
+use gallery::api::v1 as galleryv1;
+use phaser::api::v1 as phaserv1;
 
 
-//     return App::new()
-//         .data(api_state.clone())
-//         .wrap(
-//             Cors::new()
-//                 .send_wildcard() // TODO...
-//                 .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-//                 .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-//                 .max_age(3600)
-//         )
-//         .wrap(Logger::default())
-//         .service(web::resource("/").route(web::get().to(api::index)));
+// 404
+pub fn p404() -> ActixResult<actix_files::NamedFile> {
+    Ok(actix_files::NamedFile::open("public/index.html")?.set_status_code(http::StatusCode::NOT_FOUND))
+}
 
-//     // App::with_state(api_state.clone())
-//     // .middleware(middlewares::RequestIdMiddleware)
-//     // .middleware(middlewares::LoggerMiddleware)
-//     // .middleware(middlewares::DefaultHeaders)
-//     // .middleware(
-//     //     // cors 2 times because otherwise authmiddleware doesn't works...
-//     //     Cors::build()
-//     //     .send_wildcard()
-//     //     .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-//     //     .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-//     //     .max_age(3600)
-//     //     .finish()
-//     // )
-//     // .middleware(middlewares::AuthMiddleware)
-//     // .middleware(SentryMiddleware::new())
-//     // .default_resource(|r| r.f(api::route_404))
-//     // .configure(|app| {
-//     //     Cors::for_app(app)
-//     //         // .allowed_origin("*")
-//     //         .send_wildcard()
-//     //         .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-//     //         .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-//     //         .max_age(3600)
-//     //         .resource("/", |r| r.method(http::Method::GET).f(api::index))
+pub fn config(cfg: &mut web::ServiceConfig) {
+    cfg.service(
+        web::scope("/api")
+        .route("", web::get().to(api::index))
+        .default_service(web::route().to(api::route_404))
 
+         // myaccount
+        .route("/myaccount/v1/registration/start", web::post().to_async(myaccountv1::registration::start::post))
+        .route("/myaccount/v1/registration/verify", web::post().to_async(myaccountv1::registration::verify::post))
+        .route("/myaccount/v1/registration/complete", web::post().to_async(myaccountv1::registration::complete::post))
+        .route("/myaccount/v1/registration/new-code", web::post().to_async(myaccountv1::registration::new_code::post))
+        .route("/myaccount/v1/sign-in", web::post().to_async(myaccountv1::sign_in::post))
+        .route("/myaccount/v1/sign-out", web::post().to_async(myaccountv1::sign_out::post))
+        .service(web::resource("/myaccount/v1/recover")
+            .route(web::post().to_async(myaccountv1::recover::post))
+            .route(web::put().to_async(myaccountv1::recover::put))
+        )
+        .service(web::resource("/myaccount/v1/me")
+            .route(web::get().to(myaccountv1::me::get))
+            .route(web::put().to_async(myaccountv1::me::put))
+        )
+        .route("/myaccount/v1/me/password", web::put().to_async(myaccountv1::me::password::put))
+        .route("/myaccount/v1/me/avatar", web::put().to_async(myaccountv1::me::avatar::put))
+        .route("/myaccount/v1/me/email", web::put().to_async(myaccountv1::me::email::put))
+        .route("/myaccount/v1/me/email/verify", web::post().to_async(myaccountv1::me::email::verify::post))
+        .route("/myaccount/v1/me/sessions", web::get().to_async(myaccountv1::me::sessions::get))
+        .route("/myaccount/v1/me/sessions/{session_id}/revoke", web::post().to_async(myaccountv1::me::sessions::revoke::post))
 
-//             // // gallery
-//             // .resource("/gallery/v1/media", |r| r.method(http::Method::GET).f(galleryv1::media::get))
-//             // .resource("/gallery/v1/albums", |r| {
-//             //     r.method(http::Method::GET).f(galleryv1::albums::get);
-//             //     r.method(http::Method::POST).with_config(galleryv1::albums::post, api::json_default_config);
-//             // })
-//             // .resource("/gallery/v1/albums/{album_id}", |r| {
-//             //     r.method(http::Method::GET).with(galleryv1::albums::album::get);
-//             //     r.method(http::Method::DELETE).with(galleryv1::albums::album::delete);
-//             //     r.method(http::Method::PUT).with_config(galleryv1::albums::album::put, api::json_default_config_path);
-//             // })
-//             // .resource("/gallery/v1/albums/{album_id}/add", |r| {
-//             //     r.method(http::Method::POST).with_config(galleryv1::albums::album::add::post, api::json_default_config_path);
-//             // })
-//             // .resource("/gallery/v1/albums/{album_id}/remove", |r| {
-//             //     r.method(http::Method::POST).with_config(galleryv1::albums::album::remove::post, api::json_default_config_path);
-//             // })
+        // drive
+        .service(web::resource("/drive/v1/upload")
+            .route(web::post().to_async(drivev1::upload::post))
+            .route(web::put().to_async(drivev1::upload::put))
+        )
+        .route("/drive/v1/me", web::get().to_async(drivev1::me::get))
+        .service(web::resource("/drive/v1/folders")
+            .route(web::get().to_async(drivev1::folders::get))
+            .route(web::post().to_async(drivev1::folders::post))
+        )
+        .route("/drive/v1/files/{file_id}/url", web::get().to_async(drivev1::files::url::get))
+        .route("/drive/v1/files/move", web::post().to_async(drivev1::files::move_::post))
+        .route("/drive/v1/files/restore", web::post().to_async(drivev1::files::restore::post))
+        .route("/drive/v1/files/delete", web::post().to_async(drivev1::files::delete::post))
+        .route("/drive/v1/files/copy", web::post().to_async(drivev1::files::copy::post))
+        .service(web::resource("/drive/v1/trash")
+            .route(web::get().to_async(drivev1::trash::get))
+            .route(web::post().to_async(drivev1::trash::post))
+        )
 
-//             // // music
-//             // .resource("/music/v1/musics", |r| r.method(http::Method::GET).f(musicv1::musics::get))
-//             // .resource("/music/v1/playlists", |r| {
-//             //     r.method(http::Method::GET).f(musicv1::playlists::get);
-//             //     r.method(http::Method::POST).with_config(musicv1::playlists::post, api::json_default_config);
-//             // })
-//             // .resource("/music/v1/playlists/{playlist_id}", |r| {
-//             //     r.method(http::Method::GET).with(musicv1::playlists::playlist::get);
-//             //     r.method(http::Method::DELETE).with(musicv1::playlists::playlist::delete);
-//             //     r.method(http::Method::PUT).with_config(musicv1::playlists::playlist::put, api::json_default_config_path);
-//             // })
-//             // .resource("/music/v1/playlists/{playlist_id}/add", |r| {
-//             //     r.method(http::Method::POST).with_config(musicv1::playlists::playlist::add::post, api::json_default_config_path);
-//             // })
-//             // .resource("/music/v1/playlists/{playlist_id}/remove", |r| {
-//             //     r.method(http::Method::POST).with_config(musicv1::playlists::playlist::remove::post, api::json_default_config_path);
-//             // })
+        // bitflow
+        .service(web::resource("/bitflow/v1/downloads")
+            .route(web::get().to_async(bitflowv1::downloads::get))
+            .route(web::post().to_async(bitflowv1::downloads::post))
+        )
+        .route("/bitflow/v1/downloads/remove", web::post().to_async(bitflowv1::downloads::remove::post))
+        .service(web::resource("/bitflow/v1/downloads/{download_id}")
+            .route(web::get().to_async(bitflowv1::downloads::download::get))
+            .route(web::put().to_async(bitflowv1::downloads::download::put))
+        )
+        .route("/bitflow/v1/downloads/{download_id}/complete", web::post().to_async(bitflowv1::downloads::download::complete::post))
+        .route("/bitflow/v1/downloads/{download_id}/fail", web::post().to_async(bitflowv1::downloads::download::fail::post))
+        .service(web::resource("/bitflow/v1/history")
+            .route(web::get().to_async(bitflowv1::history::get))
+            .route(web::delete().to_async(bitflowv1::history::delete))
+        )
+        .route("/bitflow/v1/job", web::get().to_async(bitflowv1::job::get))
 
 
-//     //         .register()
-//     // })
-// }
+        // contacts
+        .service(web::resource("/contacts/v1/contacts")
+            .route(web::get().to_async(contactsv1::contacts::get))
+            .route(web::post().to_async(contactsv1::contacts::post))
+        )
+        .service(web::resource("/contacts/v1/contacts/{contact_id}")
+            .route(web::get().to_async(contactsv1::contacts::id::get))
+            .route(web::put().to_async(contactsv1::contacts::put))
+            .route(web::delete().to_async(contactsv1::contacts::delete))
+        )
+
+        // notes
+        .service(web::resource("/notes/v1/notes")
+            .route(web::get().to_async(notesv1::notes::get))
+            .route(web::post().to_async(notesv1::notes::post))
+        )
+        .service(web::resource("/notes/v1/notes/{note_id}")
+            .route(web::delete().to_async(notesv1::notes::delete))
+            .route(web::put().to_async(notesv1::notes::put))
+        )
+        .route("/notes/v1/notes/{note_id}/archive", web::post().to_async(notesv1::notes::archive::post))
+        .route("/notes/v1/notes/{note_id}/unarchive", web::post().to_async(notesv1::notes::unarchive::post))
+        .route("/notes/v1/notes/{note_id}/remove", web::post().to_async(notesv1::notes::remove::post))
+        .route("/notes/v1/notes/{note_id}/restore", web::post().to_async(notesv1::notes::restore::post))
+        .route("/notes/v1/archive", web::get().to_async(notesv1::archive::get))
+        .route("/notes/v1/trash", web::get().to_async(notesv1::trash::get))
+
+
+        // music
+        .route("/music/v1/musics", web::get().to_async(musicv1::musics::get))
+        .service(web::resource("/music/v1/playlists")
+            .route(web::get().to_async(musicv1::playlists::get))
+            .route(web::post().to_async(musicv1::playlists::post))
+        )
+        .service(web::resource("/music/v1/playlists/{playlist_id}")
+            .route(web::get().to_async(musicv1::playlists::playlist::get))
+            .route(web::delete().to_async(musicv1::playlists::playlist::delete))
+            .route(web::put().to_async(musicv1::playlists::playlist::put))
+        )
+        .route("/music/v1/playlists/{playlist_id}/add", web::post().to_async(musicv1::playlists::playlist::add::post))
+        .route("/music/v1/playlists/{playlist_id}/remove", web::post().to_async(musicv1::playlists::playlist::remove::post))
+
+        // gallery
+        .route("/gallery/v1/media", web::get().to_async(galleryv1::media::get))
+        .service(web::resource("/gallery/v1/albums")
+            .route(web::get().to_async(galleryv1::albums::get))
+            .route(web::post().to_async(galleryv1::albums::post))
+        )
+        .service(web::resource("/gallery/v1/albums/{album_id}")
+            .route(web::get().to_async(galleryv1::albums::album::get))
+            .route(web::delete().to_async(galleryv1::albums::album::delete))
+            .route(web::put().to_async(galleryv1::albums::album::put))
+        )
+        .route("/gallery/v1/albums/{album_id}/add", web::post().to_async(galleryv1::albums::album::add::post))
+        .route("/gallery/v1/albums/{album_id}/remove", web::post().to_async(galleryv1::albums::album::remove::post))
+
+        // phaser
+        .route("/phaser/v1/job", web::get().to_async(phaserv1::job::get))
+        .service(web::resource("/phaser/v1/scans")
+            .route(web::get().to_async(phaserv1::scans::get))
+            .route(web::post().to_async(phaserv1::scans::post))
+        )
+        .route("/phaser/v1/scans/{scan_id}", web::delete().to_async(phaserv1::scans::scan::delete))
+        .route("/phaser/v1/scans/{scan_id}/queue", web::post().to_async(phaserv1::scans::scan::queue::post))
+        .route("/phaser/v1/scans/{scan_id}/cancel", web::post().to_async(phaserv1::scans::scan::cancel::post))
+        .route("/phaser/v1/scans/{scan_id}/reports", web::get().to_async(phaserv1::scans::scan::reports::get))
+        .route("/phaser/v1/scans/{scan_id}/reports/{report_id}/complete", web::post().to_async(phaserv1::scans::scan::reports::report::complete::post))
+    )
+    .service(
+        // serve webapp
+        actix_files::Files::new("/", "public/")
+        .index_file("index.html")
+        .default_handler(web::route().to(p404))
+    )
+}

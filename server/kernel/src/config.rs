@@ -20,7 +20,7 @@ pub struct Config {
     sentry_url: Option<String>,
     phaser_secret: String,
     bitflow_secret: String,
-    stripe_secret_key: String,
+    // stripe_secret_key: String,
 }
 
 pub fn init() -> Config {
@@ -52,7 +52,7 @@ pub fn init() -> Config {
         sentry_url: env::var("SENTRY_URL").ok(),
         phaser_secret: get_env("PHASER_SECRET"),
         bitflow_secret: get_env("BITFLOW_SECRET"),
-        stripe_secret_key: get_env("STRIPE_SECRET_KEY"),
+        // stripe_secret_key: get_env("STRIPE_SECRET_KEY"),
     };
 }
 
@@ -122,9 +122,9 @@ impl Config {
         return self.bitflow_secret.clone();
     }
 
-    pub fn stripe_secret_key(&self) -> String {
-        return self.stripe_secret_key.clone();
-    }
+    // pub fn stripe_secret_key(&self) -> String {
+    //     return self.stripe_secret_key.clone();
+    // }
 }
 
 
