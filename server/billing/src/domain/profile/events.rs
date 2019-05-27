@@ -55,7 +55,7 @@ impl eventsourcing::Event for Event {
             },
             // StripeCustomerIdUpdatedV1
             EventData::StripeCustomerIdUpdatedV1(ref data) => Self::Aggregate{
-                stripe_customer_id: data.stripe_customer_id.clone(),
+                stripe_customer_id: Some(data.stripe_customer_id.clone()),
                 ..aggregate
             }
         }

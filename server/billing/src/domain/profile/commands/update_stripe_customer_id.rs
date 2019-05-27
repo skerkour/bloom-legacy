@@ -14,6 +14,7 @@ use crate::{
 #[derive(Clone, Debug)]
 pub struct UpdateStripeCustomerId {
     pub stripe_customer_id: String,
+    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateStripeCustomerId {
