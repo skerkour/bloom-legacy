@@ -4,7 +4,7 @@ use diesel_as_jsonb::AsJsonb;
 use crate::{
     db::schema::kernel_accounts_events,
     events::EventMetadata,
-    accounts::domain::account,
+    myaccount::domain::account,
 };
 
 

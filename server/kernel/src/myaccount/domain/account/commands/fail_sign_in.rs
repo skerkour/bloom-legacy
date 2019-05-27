@@ -3,7 +3,7 @@ use diesel::{
     r2d2::{PooledConnection, ConnectionManager},
 };
 use crate::{
-    accounts::domain::account,
+    myaccount::domain::account,
     events::EventMetadata,
     error::KernelError,
 };

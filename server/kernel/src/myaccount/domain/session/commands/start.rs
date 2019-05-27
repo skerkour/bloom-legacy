@@ -1,7 +1,7 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    accounts,
-    accounts::domain::session,
+    myaccount,
+    myaccount::domain::session,
     error::KernelError,
     utils,
     events::EventMetadata,
@@ -44,9 +44,9 @@ impl eventsourcing::Command for Start {
 
     fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(accounts::SESSION_TOKEN_MIN_LENGTH, accounts::SESSION_TOKEN_MAX_LENGTH);
+        let token_length = rng.gen_range(myaccount::SESSION_TOKEN_MIN_LENGTH, myaccount::SESSION_TOKEN_MAX_LENGTH);
         let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, accounts::SESSION_TOKEN_BCRYPT_COST)
+        let hashed_token = bcrypt::hash(&token, myaccount::SESSION_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
         let timestamp = chrono::Utc::now();
 

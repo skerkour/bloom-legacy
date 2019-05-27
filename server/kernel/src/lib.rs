@@ -12,4 +12,4 @@ pub mod utils;
 pub mod notifications;
 pub mod db;
 pub mod api;
-pub mod accounts;
+pub mod myaccount;

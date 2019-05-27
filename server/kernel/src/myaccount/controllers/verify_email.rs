@@ -1,7 +1,7 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    accounts::domain::{
+    myaccount::domain::{
         PendingEmail,
         pending_email,
         Account,

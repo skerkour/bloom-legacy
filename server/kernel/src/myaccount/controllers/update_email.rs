@@ -1,9 +1,9 @@
 use actix::{Message, Handler};
 use crate::{
     db::DbActor,
-    accounts::domain,
-    accounts::domain::pending_email,
-    accounts::notifications::emails::send_email_verification_code,
+    myaccount::domain,
+    myaccount::domain::pending_email,
+    myaccount::notifications::emails::send_email_verification_code,
     events::EventMetadata,
     config::Config,
     error::KernelError,

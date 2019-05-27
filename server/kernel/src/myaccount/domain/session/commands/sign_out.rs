@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use crate::{
-    accounts::domain::session,
+    myaccount::domain::session,
     error::KernelError,
     events::EventMetadata,
 };

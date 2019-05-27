@@ -1,6 +1,6 @@
 use crate::{
     error::KernelError,
-    accounts::domain::pending_account,
+    myaccount::domain::pending_account,
     events::EventMetadata,
 };
 use serde::{Serialize, Deserialize};

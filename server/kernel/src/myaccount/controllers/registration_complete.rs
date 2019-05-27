@@ -3,7 +3,7 @@ use crate::{
     db::DbActor,
     error::KernelError,
     config::Config,
-    accounts::domain::{
+    myaccount::domain::{
         PendingAccount,
         pending_account,
         Session,
@@ -54,9 +54,9 @@ impl Handler<CompleteRegistration> for DbActor {
                 session_id: None,
             };
 
-            let pending_account_to_update: PendingAccount = kernel_pending_accounts::dsl::kernel_pending_accounts
-                .filter(kernel_pending_accounts::dsl::id.eq(msg.id))
-                .filter(kernel_pending_accounts::dsl::deleted_at.is_null())
+            let pending_account_to_update: PendingAccount = kernel_pending_myaccount::dsl::kernel_pending_accounts
+                .filter(kernel_pending_myaccount::dsl::id.eq(msg.id))
+                .filter(kernel_pending_myaccount::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

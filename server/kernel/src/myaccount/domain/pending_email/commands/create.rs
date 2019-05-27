@@ -1,8 +1,8 @@
 use crate::{
-    accounts::validators,
+    myaccount::validators,
     error::KernelError,
-    accounts::domain::pending_email,
-    accounts,
+    myaccount::domain::pending_email,
+    myaccount,
     events::EventMetadata,
     utils,
 };
@@ -56,7 +56,7 @@ impl eventsourcing::Command for Create {
         let now = chrono::Utc::now();
         let new_pending_email_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
-        let token = bcrypt::hash(&code, accounts::PENDING_EMAIL_TOKEN_BCRYPT_COST)
+        let token = bcrypt::hash(&code, myaccount::PENDING_EMAIL_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data = pending_email::EventData::CreatedV1(pending_email::CreatedV1{
