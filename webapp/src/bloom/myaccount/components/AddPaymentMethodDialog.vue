@@ -148,7 +148,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 const { log } = require('@bloom42/astro');
-
+import axios from 'axios';
 
 @Component({})
 export default class AddPaymentMethodDialog extends Vue {
@@ -188,19 +188,32 @@ export default class AddPaymentMethodDialog extends Vue {
   // watch
   // methods
   async add_payment_method() {
+    // TODO: validate
     const payload = {
-      card_cvc: this.card_cvc,
-      card_expiration_date: this.card_expiration_date,
-      card_number: this.card_number,
-      city: this.city,
-      country: this.country,
-      first_name: this.first_name,
-      last_name: this.last_name,
-      postal_code: this.postal_code,
-      state: this.state,
-      street_address: this.street_address,
+      card: {
+        address_city: this.city,
+        address_country: this.country,
+        address_line1: this.street_address,
+        address_zip: this.postal_code,
+        cvc: this.card_cvc,
+        exp_month: this.card_expiration_date.substr(0, 2),
+        exp_year: this.card_expiration_date.substr(2, 2),
+        name: `${this.first_name} ${this.last_name}`,
+        number: this.card_number,
+      },
     };
-    log.info(payload);
+    log.debug(payload);
+    try {
+      const res = await axios.post('https://api.stripe.com/v1/tokens', payload, {
+        auth: {
+          password: '',
+          username: process.env.VUE_APP_STRIPE_PUBLIC_KEY,
+        },
+      });
+      log.debug(res);
+    } catch (err) {
+      log.error(err);
+    }
     this.cancel();
   }
 
