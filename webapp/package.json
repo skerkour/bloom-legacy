@@ -10,7 +10,7 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bloom42/astro": "0.8.2",
+    "@bloom42/astro": "git+https://github.com/bloom42/astro-js.git",
     "@mdi/font": "3.6.95",
     "@sentry/browser": "5.3.0",
     "@sentry/integrations": "5.3.1",
