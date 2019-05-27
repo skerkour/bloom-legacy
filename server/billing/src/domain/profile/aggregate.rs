@@ -1,5 +1,4 @@
 use serde::{Serialize, Deserialize};
-use diesel_as_jsonb::AsJsonb;
 use kernel::{
     db::schema::billing_profiles,
 };

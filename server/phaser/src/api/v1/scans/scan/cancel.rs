@@ -18,7 +18,6 @@ use actix_web::{
 };
 use crate::{
     controllers,
-    api::v1::models,
 };
 
 

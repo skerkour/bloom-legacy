@@ -8,7 +8,6 @@ use crate::{
     domain::scan::{
         ScanProfile,
         ReportTrigger,
-        ScanSchedule,
     },
     models,
 };

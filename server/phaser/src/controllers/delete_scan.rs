@@ -6,9 +6,7 @@ use kernel::{
     db::DbActor
 };
 use crate::domain::{
-    Scan,
     scan,
-    report,
 };
 
 

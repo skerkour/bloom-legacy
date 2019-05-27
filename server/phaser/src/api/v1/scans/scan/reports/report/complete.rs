@@ -24,7 +24,6 @@ use std::fs;
 use std::io::Write;
 use crate::{
     controllers,
-    api::v1::models,
 };
 
 
@@ -102,7 +101,7 @@ fn handle_upload(report_path: &str, field: Field) -> Box<Stream<Item = (), Error
                     }
                 })
             })
-            .map(|(_)| ())
+            .map(|_| ())
             .map_err(|e| error::ErrorInternalServerError(e)),
         ).into_stream()
     );
