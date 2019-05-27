@@ -1,5 +1,4 @@
 use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
 use kernel::{
     db::DbActor,
     KernelError,

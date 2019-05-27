@@ -114,7 +114,7 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // QueuedV1
-            EventData::QueuedV1(ref data) => super::Scan{
+            EventData::QueuedV1(ref _data) => super::Scan{
                 state: ScanState::Queued,
                 ..aggregate
             },
