@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use kenrel::{
+use kernel::{
     db::schema::billing_payment_methods_events,
     events::EventMetadata,
 };
@@ -52,7 +52,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
                 details: data.details.clone(),
                 is_default: data.is_default,
-                billing_profile_id: data.account_id,
+                billing_profile_id: data.billing_profile_id,
             },
             // RemovedV1
             EventData::RemovedV1 => Self::Aggregate{

@@ -1,7 +1,6 @@
 use kernel::{
     api,
     log::macros::*,
-    accounts,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,

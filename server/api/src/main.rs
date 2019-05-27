@@ -5,7 +5,7 @@ use std::env;
 use dotenv;
 use sentry::integrations::panic::register_panic_handler;
 use actix_web::{
-    http::header, middleware::cors::Cors, middleware::Logger, middleware::NormalizePath, web, App, HttpServer, http,
+    http::header, middleware::cors::Cors, middleware::Logger, middleware::NormalizePath, web, App, HttpServer,
 };
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
@@ -16,6 +16,7 @@ use kernel::{
     config,
     db,
     api,
+    myaccount::domain::account,
 };
 use std::str::FromStr;
 

@@ -32,9 +32,9 @@ impl Profile {
             deleted_at: None,
             version: 0,
 
-            stripe_customer_id: String::new(),
+            stripe_customer_id: None,
 
-            billing_profile_id: uuid::Uuid::new_v4(),
+            account_id: uuid::Uuid::new_v4(),
         };
     }
 }

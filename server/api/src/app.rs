@@ -1,12 +1,11 @@
-use actix_web::{error, web, Result as ActixResult};
+use actix_web::{web, Result as ActixResult};
 use actix_files;
 
 
 use kernel::{
     myaccount::api::v1 as myaccountv1,
-    myaccount::domain::account,
+    api,
 };
-
 use drive::api::v1 as drivev1;
 use bitflow::api::v1 as bitflowv1;
 use contacts::api::v1 as contactsv1;
@@ -161,5 +160,5 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         actix_files::Files::new("/", "public/")
         .index_file("index.html")
         .default_handler(web::route().to(p404))
-    )
+    );
 }
