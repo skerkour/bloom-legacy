@@ -32,7 +32,7 @@
     "@types/howler": "^2.1.0",
     "@types/jest": "^24.0.13",
     "@vue/cli-plugin-babel": "^3.8.0",
-    "@vue/cli-plugin-pwa": "^3.7.0",
+    "@vue/cli-plugin-pwa": "^3.8.0",
     "@vue/cli-plugin-typescript": "^3.8.1",
     "@vue/cli-plugin-unit-jest": "^3.7.0",
     "@vue/cli-service": "^3.8.0",
