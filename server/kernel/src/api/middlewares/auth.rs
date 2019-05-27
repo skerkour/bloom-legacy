@@ -4,8 +4,8 @@
 //     http::header,
 // };
 use actix_web::{
-    FromRequest, HttpRequest, Error, dev::Payload,
-    http::header::HeaderValue, HttpMessage,
+    HttpRequest, Error,
+    HttpMessage,
     dev::{ServiceRequest, ServiceResponse},
     web,
     http::header,

@@ -5,22 +5,22 @@
 // };
 use actix_web::{
     FromRequest, HttpRequest, Error, dev::Payload,
-    http::header::HeaderValue,
-    dev::{ServiceRequest, ServiceResponse},
-    web,
+    // http::header::HeaderValue,
+    // dev::{ServiceRequest, ServiceResponse},
+    // web,
 };
-use actix_service::{Service as ActixService, Transform};
+// use actix_service::{Service as ActixService, Transform};
 use chrono::{Utc, DateTime};
-use crate::{
-    api,
-    api::middlewares::GetRequestId,
-};
 use slog::{slog_o, slog_info, slog_warn, slog_error};
 use std::ops::Deref;
-use futures::{
-    Poll,
-    future::{ok, Either, FutureResult},
-    Future,
+// use futures::{
+//     Poll,
+//     future::{ok, Either, FutureResult},
+//     Future,
+// };
+use crate::{
+    // api,
+    api::middlewares::GetRequestId,
 };
 
 

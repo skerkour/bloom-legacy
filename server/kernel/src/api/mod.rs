@@ -4,7 +4,6 @@ use serde::{Deserialize, Serialize};
 use actix_web::{
     Result as ActixResult,
     HttpResponse,
-    HttpRequest,
     web::JsonConfig,
 };
 use crate::KernelError;
