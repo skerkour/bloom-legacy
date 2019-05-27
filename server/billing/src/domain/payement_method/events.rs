@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kenrel::{
     db::schema::billing_payment_methods_events,
     events::EventMetadata,
 };

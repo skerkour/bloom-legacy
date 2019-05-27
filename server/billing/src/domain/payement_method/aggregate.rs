@@ -1,6 +1,6 @@
 use serde::{Serialize, Deserialize};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kernel::{
     db::schema::billing_payment_methods,
 };
 
@@ -54,5 +54,12 @@ impl eventsourcing::Aggregate for PaymentMethod {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum PaymentDetails {
     None,
-    StripeCard,
+    StripeCardV1(StripeCardV1),
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct StripeCardV1 {
+    pub stripe_token_card_id: String,
+    pub last4: String,
 }

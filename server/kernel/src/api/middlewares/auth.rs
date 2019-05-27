@@ -123,7 +123,7 @@ where
         let mut service = self.service.clone();
         return Box::new(
             state.db.send(msg)
-            .map_err(|err| KernelError::ActixMailbox)
+            .map_err(|_| KernelError::ActixMailbox)
             .from_err()
             .and_then(move |res: Result<_, KernelError>| {
                 match res {

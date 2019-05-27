@@ -27,7 +27,7 @@ impl eventsourcing::Command for UpdateStripeCustomerId {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let data = profile::EventData::StripeCustomerIdUpdatedV1(profile::StripeCustomerIdUpdatedV1{
             stripe_customer_id: self.stripe_customer_id.clone(),
         });
@@ -36,7 +36,7 @@ impl eventsourcing::Command for UpdateStripeCustomerId {
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data,
-            aggregate_id: id,
+            aggregate_id: aggregate.id,
             metadata: self.metadata.clone(),
         }, ()));
     }

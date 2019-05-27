@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
-use crate::{
+use kernel::{
     db::schema::billing_profiles_events,
     events::EventMetadata,
 };
