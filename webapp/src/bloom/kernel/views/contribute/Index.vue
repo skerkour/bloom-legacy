@@ -3,37 +3,67 @@
   <v-container class="mt-4 text-xs-center">
     <v-layout row wrap justify-center>
 
-      <v-flex xs12 class="title blue-grey--text text--darken-1">
-                <h1>
-                  How to contribute to Bloom
-                </h1>
-              </v-flex>
+      <v-flex xs12 class="text-xs-center mb-3">
+        <h1 class="display-1 font-weight-medium">
+          How to contribute to Bloom
+        </h1>
+      </v-flex>
 
 
-               <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
-                  Introduction
-                </h2>
-                <p>
-                  Bloom believes in a world where everyone can contribute. Our mission is to change
+      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+        <v-card class="elevation-0">
+          <v-card-text class="font-18 font-weight-regular">
+            <h2 class="text-xs-center headline mb-3">
+              Introduction
+            </h2>
+            <p>
+              Bloom believes in a world where everyone can contribute. Our mission is to change
                   all creative work from read-only to read-write. When everyone can contribute,
-                  users become contributors and we greatly increase the rate of human progress.
-                </p>
+                  users become contributors and we greatly increase the quality of global human life.
+            </p>
+            <p>
+              We want to make it as easy as possible for Bloom users to become Bloom contributors,
+              so we’ve created this guide to help you get started. We have multiple tracks to cater
+              to people of varying experience levels. <br/><br/>
 
-                <p>
-                  We want to make it as easy as possible for Bloom users to become Bloom contributors,
-                  so we’ve created this guide to help you get started. We have multiple tracks to cater
-                  to people of varying experience levels. <br/><br/>
+              If you’re uncomfortable getting into open source development right away, you may
+              want to consider the Documentation or Translation tracks. Documentation and
+              Translation are both just as important as code, and we'd be happy to have your
+              contributions. <br/><br/>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
 
-                  If you’re uncomfortable getting into open source development right away, you may
-                  want to consider the Documentation or Translation tracks. Documentation and
-                  Translation are both just as important as code, and we'd be happy to have your
-                  contributions. <br/><br/>
-                </p>
-              </v-flex>
+
+      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+        <v-card class="elevation-0">
+          <v-card-text class="font-18 font-weight-regular">
+            <h2 class="text-xs-center headline mb-3">
+              Overview
+            </h2>
+            <p>
+              Bloom believes in a world where everyone can contribute. Our mission is to change
+                  all creative work from read-only to read-write. When everyone can contribute,
+                  users become contributors and we greatly increase the quality of global human life.
+            </p>
+            <p>
+              We want to make it as easy as possible for Bloom users to become Bloom contributors,
+              so we’ve created this guide to help you get started. We have multiple tracks to cater
+              to people of varying experience levels. <br/><br/>
+
+              If you’re uncomfortable getting into open source development right away, you may
+              want to consider the Documentation or Translation tracks. Documentation and
+              Translation are both just as important as code, and we'd be happy to have your
+              contributions. <br/><br/>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
 
               <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+                <h2 class="text-xs-center text--darken-1 mt-5 mb-3">
                   Overview
                 </h2>
                 <p>
@@ -43,7 +73,7 @@
 
 
               <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+                <h2 class="text-xs-center text--darken-1 mt-5 mb-3">
                   Development
                 </h2>
                 <p>
@@ -68,7 +98,7 @@
                   </ul>
                 </p>
 
-                <h3 class="text-xs-left blue-grey--text text--darken-1 mt-5 mb-3">
+                <h3 class="text-xs-left text--darken-1 mt-5 mb-3">
                   Security notice
                 </h3>
                 <p>
@@ -80,7 +110,7 @@
 
 
               <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+                <h2 class="text-xs-center text--darken-1 mt-5 mb-3">
                   UX Design
                 </h2>
                 <p>
@@ -96,7 +126,7 @@
 
 
               <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+                <h2 class="text-xs-center text--darken-1 mt-5 mb-3">
                   Documentation
                 </h2>
                 <p>
@@ -116,28 +146,42 @@
                 </p>
               </v-flex>
 
-              <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
-                  Sponsors
-                </h2>
-                <p>
-                  Another way to contribute to the Bloom project is financially: here is our
-                  <a href="https://bloom.sh/sponsors">sponsors page</a> where you can donate.
-                </p>
-              </v-flex>
+
+      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+        <v-card class="elevation-0">
+          <v-card-text class="font-18 font-weight-regular">
+            <h2 class="text-xs-center headline mb-3">
+              Sponsors
+            </h2>
+            <p>
+              Another way to contribute to the Bloom project is financially: here is our
+                  <router-link to="/become-a-sponsor">Become a sponsor page</router-link>.
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
 
 
-              <v-flex xs12 class="mb-3 text-xs-left">
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
-                  Getting Help
-                </h2>
-                <p>
-                  If you need help while contributing to Bloom, below are some of the resources that are available.
-                  <ul>
-                    <li>Ask questions on <a href="https://discordapp.com/invite/HmDQDGv">Bloom community chat</a></li>
-                  </ul>
-                </p>
-              </v-flex>
+
+
+      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+        <v-card class="elevation-0">
+          <v-card-text class="font-18 font-weight-regular">
+            <h2 class="text-xs-center headline mb-3">
+              Getting Help
+            </h2>
+            <p>
+              If you need help while contributing to Bloom, below are some of the resources that are available.
+              <ul>
+                <li><a href="https://help.bloom.sh">Bloom Help and Documentation website</a></li>
+                <li><a href="https://forum.bloom.sh">Bloom community Forum</a></li>
+                <li><a href="https://discordapp.com/invite/HmDQDGv">Bloom Discord chat</a></li>
+                <li>Or in the last resort, by email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>
+              </ul>
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
 
     </v-layout>
   </v-container>
@@ -175,5 +219,9 @@ a {
 
 .font-18 {
   font-size: 18px;
+}
+
+.font-5 {
+  font-size: 15px;
 }
 </style>
