@@ -195,9 +195,9 @@
             <p>
               If you need help while contributing to Bloom, below are some of the resources that are available:
               <ul>
-                <li><a href="https://help.bloom.sh">Bloom Help and Documentation website</a></li>
-                <li><a href="https://forum.bloom.sh">Bloom community Forum</a></li>
-                <li><a href="https://discordapp.com/invite/HmDQDGv">Bloom Discord chat</a></li>
+                <li><a href="https://help.bloom.sh">Our Help and Documentation website</a></li>
+                <li><a href="https://forum.bloom.sh">The community Forum</a></li>
+                <li><a href="https://discordapp.com/invite/HmDQDGv">The Discord chat</a></li>
                 <li>By email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>
               </ul>
             </p>
