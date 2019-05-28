@@ -43,19 +43,22 @@
               Overview
             </h2>
             <p>
-              Bloom believes in a world where everyone can contribute. Our mission is to change
-                  all creative work from read-only to read-write. When everyone can contribute,
-                  users become contributors and we greatly increase the quality of global human life.
+              In order to coordinate our efforts we have setup 3 communication channels:
+              <ul>
+                <li><a href="https://forum.bloom.sh" target="_blank" rel="noopener">The forum</a></li>
+                <li><a href="https://gitlab.com/groups/bloom42/-/issues" target="_blank" rel="noopener">GitLab issues</a></li>
+                <li><a href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">The Discord chat</a></li>
+              </ul>
             </p>
             <p>
-              We want to make it as easy as possible for Bloom users to become Bloom contributors,
-              so we’ve created this guide to help you get started. We have multiple tracks to cater
-              to people of varying experience levels. <br/><br/>
-
-              If you’re uncomfortable getting into open source development right away, you may
-              want to consider the Documentation or Translation tracks. Documentation and
-              Translation are both just as important as code, and we'd be happy to have your
-              contributions. <br/><br/>
+              <b>The forum</b> is used to discuss about non-technical issues, ask help to the community
+            </p>
+            <p>
+              <b>GitLab issues</b> are are used to discuss about
+            </p>
+            <p>
+              <b>The Discord chat</b> is used for instant communication. It should be used in the last resort,
+              and we do not rely in long term archiving of the chat. The forum is often prefered.
             </p>
           </v-card-text>
         </v-card>
