@@ -55,7 +55,9 @@
             </p>
             <p>
               <b>GitLab issues</b> are are used to discuss about bugs and new features. They are our primary
-              project management tool (think Trello, but better).
+              project management tool (think Trello, but better). You can
+              <a href="https://www.buggycoder.com/project-management-with-gitlab" target="_blank" rel="noopener">read here</a> about how we use GitLab as our
+              project management tool.
             </p>
             <p>
               <b>The Discord chat</b> is used for instant and informal communication. It must be used in resort,
