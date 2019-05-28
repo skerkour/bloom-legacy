@@ -34,7 +34,7 @@
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://forum.bloom.sh" target="_blank" rel="noopener">Forum</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
-            <li><a class="nav-link" href="https://github.com/bloom42" target="_blank" rel="noopener">GitHub</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
           </ul>
         </v-flex>
 
