@@ -77,7 +77,7 @@
             </h2>
             <p>
               These instructions are for development of any of Bloom project.<br/>
-              <b>Merge requests won't be accepted without opening an issue first.</b>
+              <b>Except for typos, Merge requests won't be accepted without opening an issue first.</b>
               <br/><br/>
               <ul>
                 <li>Choose an issue to work on. Be sure to comment and verify no one else is

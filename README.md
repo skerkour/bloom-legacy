@@ -1,6 +1,7 @@
 <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
+  <p align="center">On a mission to empower the world with open technologies, for the people, by the people.</p>
 </p>
 
 --------
