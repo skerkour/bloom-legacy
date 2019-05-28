@@ -95,7 +95,7 @@ and the contributors please consider:
   <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="42"/>
 </a>
 
-* Donate on PayPal
+* Donate using PayPal
 
 <a href="https://paypal.me/z0mbie42" target="_blank" rel="noopener">
   <img src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" height="42"/>
