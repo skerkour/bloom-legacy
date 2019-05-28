@@ -2,35 +2,34 @@
   <div>
   <v-container class="mt-4 text-xs-center">
     <v-layout row wrap justify-center>
+
       <v-flex xs12 class="text-xs-center mb-3">
         <h1 class="display-1 font-weight-medium">
-          Values
+          Bloom
         </h1>
       </v-flex>
 
-      <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
+      <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
         <v-card class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
-              <!-- We believe in a world where everyone can contribute.We create the open infrastructure to change all
-              work from read-only to read-write. When everyone can contribute, consumers
-              become contributors and we greatly improve the quality of human life. -->
               We believe in a world of sharing and collaboration rather than greedy competition.
               We create the open infrastructure to change all
               work from read-only to read-write. When everyone can contribute, users
-              become contributors and we greatly improve the quality of human life.
+              become contributors and we greatly improve the quality of global human life.
             </p>
           </v-card-text>
         </v-card>
       </v-flex>
 
+
       <v-flex xs12 class="text-xs-center mb-3">
         <h1 class="display-1 font-weight-medium">
-          Our mission
+          Mission
         </h1>
       </v-flex>
 
-      <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
+      <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
         <v-card class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
@@ -39,6 +38,32 @@
           </v-card-text>
         </v-card>
       </v-flex>
+
+
+
+      <v-flex xs12 class="text-xs-center mb-3">
+        <h1 class="display-1 font-weight-medium">
+          Values
+        </h1>
+      </v-flex>
+
+      <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
+        <v-card class="elevation-0">
+          <v-card-text>
+            <p class="font-18 font-weight-regular">
+              <!-- We believe in a world where everyone can contribute.We create the open infrastructure to change all
+              work from read-only to read-write. When everyone can contribute, consumers
+              become contributors and we greatly improve the quality of human life. -->
+              <!-- We believe in a world of sharing and collaboration rather than greedy competition.
+              We create the open infrastructure to change all
+              work from read-only to read-write. When everyone can contribute, users
+              become contributors and we greatly improve the quality of human life. -->
+              Cooperation, Autonomy, Transparency, Simplicity (<b>CATS</b>).
+            </p>
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
 
 
       <v-flex xs12 class="text-xs-center mb-5">
