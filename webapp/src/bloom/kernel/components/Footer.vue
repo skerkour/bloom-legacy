@@ -24,7 +24,7 @@
             <li><router-link class="nav-link" to="/download-apps">Mobile Apps</router-link></li>
             <li><router-link class="nav-link" to="/contribute">Contribute</router-link></li>
             <li><a class="nav-link" href="https://help.bloom.sh">Documentation</a></li>
-            <li><a class="nav-link" href="https://trello.com/b/IacWjr3q" target="_blank" rel="noopener">Roadmap</a></li>
+            <!-- <li><a class="nav-link" href="https://trello.com/b/IacWjr3q" target="_blank" rel="noopener">Roadmap</a></li> -->
             <li><a class="nav-link" href="https://status.bloom.sh" target="_blank" rel="noopener">System Status</a></li>
           </ul>
         </v-flex>
