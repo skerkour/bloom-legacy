@@ -12,7 +12,7 @@
 2. [Docker image](#docker-image)
 3. [Build](#build)
 4. [Development](#Development)
-5. [Test](#test)
+5. [Tests](#tests)
 6. [Contributing](#contributing)
 7. [Licensing](#licensing)
 8. [Sponsoring](#sponsoring)
