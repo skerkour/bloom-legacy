@@ -10,7 +10,7 @@
       </v-flex>
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
@@ -36,7 +36,7 @@
       </v-flex>
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
@@ -66,7 +66,7 @@
 
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
@@ -94,7 +94,7 @@
               </ul>
             </p>
 
-            <h3 class="text-xs-left text--darken-1 mt-5 mb-3">
+            <h3 class="text-xs-left text--darken-1 mt-3 mb-3">
               Security notice
             </h3>
             <p>
@@ -109,7 +109,7 @@
 
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
@@ -130,7 +130,7 @@
 
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
@@ -158,14 +158,15 @@
 
 
 
-      <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
+      <v-flex xs12 sm10 md8 class="text-xs-left">
         <v-card class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
-              Sponsors
+              Sponsoring
             </h2>
             <p>
-              Another way to contribute to the Bloom project is financially: here is our
+              Another way to contribute to the Bloom project is financially: If you want to have your logo
+              on our <router-link to="/about">about page</router-link> or donate to make the world a better place, please see our
                   <router-link to="/become-a-sponsor">Become a sponsor page</router-link>.
             </p>
           </v-card-text>
