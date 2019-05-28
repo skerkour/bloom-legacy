@@ -17,6 +17,7 @@ import RegisterForm from './components/RegisterForm.vue';
 import UnauthenticatedLayout from '@/bloom/kernel/layouts/Unauthenticated.vue';
 import VerifyAccount from './components/Verify.vue';
 import SetupUsernameForm from './components/SetupUsernameForm.vue';
+import P404 from './views/404.vue';
 
 
 import MyAccountRoutes from '@/bloom/myaccount/router';
@@ -182,7 +183,16 @@ const router = new Router({
     ...ArcadeRoutes,
     ...GalleryRoutes,
     ...MusicRoutes,
-    { path: '**', redirect: '/' },
+    {
+      component: P404,
+      meta: {
+        auth: {
+          layout: 'authenticated',
+        },
+        layout: 'unauthenticated',
+      },
+      path: '**',
+    },
   ],
 });
 
