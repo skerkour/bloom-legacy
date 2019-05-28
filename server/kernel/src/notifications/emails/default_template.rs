@@ -244,7 +244,7 @@ pub const DEFAULT_TEMPLATE: &str = r##"
                 <tr>
 
                   <td style="padding: 0px 5px;">
-        <a role="social-icon-link"  href="https://twitter.com/bloom_cloud" target="_blank" alt="Twitter"
+        <a role="social-icon-link"  href="https://twitter.com/42bloom" target="_blank" alt="Twitter"
           data-nolink="false"
           title="Twitter "
           style="-webkit-border-radius:2px;-moz-border-radius:2px;border-radius:2px;display:inline-block;background-color:#7AC4F7;">
