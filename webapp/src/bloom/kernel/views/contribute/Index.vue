@@ -17,7 +17,7 @@
               Introduction
             </h2>
             <p>
-              Bloom believes in a world where everyone can contribute. Our mission is to change
+              We believes in a world where everyone can contribute. Our mission is to change
                   all creative work from read-only to read-write. When everyone can contribute,
                   users become contributors and we greatly increase the quality of global human life.
             </p>
