@@ -54,11 +54,11 @@
               <b>The forum</b> is used to discuss about non-technical issues, ask help to the community
             </p>
             <p>
-              <b>GitLab issues</b> are are used to discuss about
+              <b>GitLab issues</b> are are used to discuss about bugs and new features.
             </p>
             <p>
-              <b>The Discord chat</b> is used for instant communication. It should be used in the last resort,
-              and we do not rely in long term archiving of the chat. The forum is often prefered.
+              <b>The Discord chat</b> is used for instant and informal communication. It must be used as the last resort,
+              and users should not rely on the long term archiving of the chat. The forum is often prefered.
             </p>
           </v-card-text>
         </v-card>
