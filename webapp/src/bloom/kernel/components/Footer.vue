@@ -14,6 +14,7 @@
             <li><router-link class="nav-link" to="/company/security">Security</router-link></li>
             <li><router-link class="nav-link" to="/company/terms">Terms</router-link></li>
             <li><router-link class="nav-link" to="/company/privacy">Privacy</router-link></li>
+            <li><router-link class="nav-link" to="/become-a-sponsor">Sponsoring</router-link></li>
           </ul>
         </v-flex>
         <v-flex xs12 sm4 class="pa-4">
