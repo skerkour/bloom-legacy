@@ -58,7 +58,7 @@
               We create the open infrastructure to change all
               work from read-only to read-write. When everyone can contribute, users
               become contributors and we greatly improve the quality of human life. -->
-              Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b>).
+              Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).
             </p>
           </v-card-text>
         </v-card>
