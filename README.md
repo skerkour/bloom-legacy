@@ -68,11 +68,11 @@ and the contributors please consider:
 
 
 
-If you want to have your logo on our [about page](https://bloom.sh/company/about) please visit our
+If you want to have your logo on our [about page](https://bloom.sh/about) please visit our
 [dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
 
 
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://bloom.sh/company/security) instead. Tahnk you.
+[dedicated security page](https://bloom.sh/security) instead. Tahnk you.
