@@ -17,7 +17,7 @@
                 <li>Using the chatbox at the bottom right of our <a href="https://help.bloom.sh" target="_blank" rel="noopener">help website</a></li>
                 <li>Using email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>
                 <li>Using our Discord Chat: <a href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">https://discord.gg/HmDQDGv</a></li>
-                <li>Or by saying <i>Hi</i> on Twitter: <a href="https://twitter.com/bloom_cloud" target="_blank" rel="noopener">@bloom_cloud</a></li>
+                <li>Or by saying <i>Hi</i> on Twitter: <a href="https://twitter.com/42bloom" target="_blank" rel="noopener">@42bloom</a></li>
               </ul>
             </p>
           </v-card-text>
