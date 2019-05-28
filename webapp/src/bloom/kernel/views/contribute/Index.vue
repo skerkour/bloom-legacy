@@ -104,7 +104,7 @@
             </h3>
             <p>
               For security reasons please do not include any external dependency in a Merge request.<br/>
-              Please contact a member of the <router-link to="/company/about">core team</router-link> if
+              Please contact a member of the <router-link to="/about">core team</router-link> if
               for some reason you think you need to incldue an external dependency.
             </p>
 
@@ -112,7 +112,7 @@
               Reporting security issue
             </h3>
             <p>
-              See our <router-link to="/company/security">dedicated security page</router-link>.
+              See our <router-link to="/security">dedicated security page</router-link>.
             </p>
           </v-card-text>
         </v-card>
@@ -178,7 +178,7 @@
             </h2>
             <p>
               Another way to contribute to the Bloom project is financially: If you want to have your logo
-              on our <router-link to="/company/about">about page</router-link> or donate to make the world a better place, please see our
+              on our <router-link to="/about">about page</router-link> or donate to make the world a better place, please see our
                   <router-link to="/become-a-sponsor">Become a sponsor page</router-link>.
             </p>
           </v-card-text>
