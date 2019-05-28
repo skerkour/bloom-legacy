@@ -17,7 +17,7 @@
               the team and the contributors you can help by backing us. <br />
               Any amount would help support development on this project and is greatly appreciated.<br/>
               If you want to have your logo on our
-                <router-link to="/company/about#sponsors">about page</router-link>,
+                <router-link to="/about#sponsors">about page</router-link>,
                 feel free to email us: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
             </p>
           </v-card-text>

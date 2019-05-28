@@ -9,11 +9,11 @@
         <v-flex xs12 sm4 class="pa-4">
           <h5 class="title pb-3">Organization</h5>
           <ul>
-            <li><router-link class="nav-link" to="/company/about">About</router-link></li>
-            <li><router-link class="nav-link" to="/company/contact">Contact</router-link></li>
-            <li><router-link class="nav-link" to="/company/security">Security</router-link></li>
-            <li><router-link class="nav-link" to="/company/terms">Terms</router-link></li>
-            <li><router-link class="nav-link" to="/company/privacy">Privacy</router-link></li>
+            <li><router-link class="nav-link" to="/about">About</router-link></li>
+            <li><router-link class="nav-link" to="/contact">Contact</router-link></li>
+            <li><router-link class="nav-link" to="/security">Security</router-link></li>
+            <li><router-link class="nav-link" to="/terms">Terms</router-link></li>
+            <li><router-link class="nav-link" to="/privacy">Privacy</router-link></li>
             <li><router-link class="nav-link" to="/become-a-sponsor">Sponsoring</router-link></li>
           </ul>
         </v-flex>
@@ -21,7 +21,7 @@
           <h5 class="title pb-3">Product</h5>
           <ul>
             <li><a class="nav-link" href="https://help.bloom.sh">Help & Support</a></li>
-            <li><router-link class="nav-link" to="/company/apps">Mobile Apps</router-link></li>
+            <li><router-link class="nav-link" to="/download-apps">Mobile Apps</router-link></li>
             <li><router-link class="nav-link" to="/contribute">Contribute</router-link></li>
             <li><a class="nav-link" href="https://help.bloom.sh">Documentation</a></li>
             <li><a class="nav-link" href="https://trello.com/b/IacWjr3q" target="_blank" rel="noopener">Roadmap</a></li>

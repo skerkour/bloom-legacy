@@ -57,7 +57,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/about',
+      path: '/about',
     },
     {
       component: Contact,
@@ -67,7 +67,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/contact',
+      path: '/contact',
     },
     {
       component: Security,
@@ -77,7 +77,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/security',
+      path: '/security',
     },
     {
       component: TermsPage,
@@ -87,7 +87,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/terms',
+      path: '/terms',
     },
     {
       component: PrivacyPage,
@@ -97,7 +97,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/privacy',
+      path: '/privacy',
     },
     {
       component: AppsPage,
@@ -107,7 +107,7 @@ const router = new Router({
         },
         layout: 'unauthenticated',
       },
-      path: '/company/apps',
+      path: '/download-apps',
     },
     {
       component: Contribute,
