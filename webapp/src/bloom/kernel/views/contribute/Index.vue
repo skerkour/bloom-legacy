@@ -54,7 +54,8 @@
               <b>The forum</b> is used to discuss about non-technical issues, ask help to the community
             </p>
             <p>
-              <b>GitLab issues</b> are are used to discuss about bugs and new features.
+              <b>GitLab issues</b> are are used to discuss about bugs and new features. They are our primary
+              project management tool (think Trello, but better).
             </p>
             <p>
               <b>The Discord chat</b> is used for instant and informal communication. It must be used as the last resort,
