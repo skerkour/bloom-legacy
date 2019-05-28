@@ -1,44 +1,77 @@
 <p align="center">
-  <img alt="bloom logo" src="https://avatars0.githubusercontent.com/u/42414425?s=400&u=27c3762cbee3410a754da9a9bfccdce08e341130&v=4" height="180" />
-  <h3 align="center">kernel</h3>
-  <p align="center">Bloom kernel</p>
+  <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
+  <h3 align="center">Bloom</h3>
 </p>
 
 --------
 
-[![Build Status](https://travis-ci.com/z0mbie42/kernel.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/kernel)
-[![Build Status](https://dev.azure.com/bloom42/bloom/_apis/build/status/z0mbie42.kernel?branchName=master)](https://dev.azure.com/bloom42/bloom/_build/latest?definitionId=2&branchName=master)
+<!-- [![Build Status](https://travis-ci.com/z0mbie42/kernel.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/kernel)
+[![Build Status](https://dev.azure.com/bloom42/bloom/_apis/build/status/z0mbie42.kernel?branchName=master)](https://dev.azure.com/bloom42/bloom/_build/latest?definitionId=2&branchName=master) -->
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
-3. [Development](#Development)
-3. [Contributing](#contributing)
-4. [License](#license)
+3. [Build](#build)
+4. [Development](#Development)
+5. [Contributing](#contributing)
+6. [Licensing](#licensing)
+7. [Sponsors](#sponsors)
+8. [Security](#security)
 
 --------
 
 ## Documentations
 
-See the `docs` directory.
+See the [Wiki](https://gitlab.com/bloom42/bloom/wikis)
 
 
 ## Docker image
 
-[quay.io/helloworld/kernel](https://quay.io/repository/helloworld/kernel?tab=tags)
+[registry.gitlab.com/bloom42/bloom](https://gitlab.com/bloom42/bloom/container_registry)
+
+
+## Build
+
+```
+$ make
+```
 
 
 ## Development
 
-See individual READMEs
-* [server](https://github.com/z0mbie42/bloom/tree/master/server)
-* [webapp](https://github.com/z0mbie42/bloom/tree/master/webapp)
+
+### Server
+
+```
+$ cd server
+$ make dev
+```
+
+### WebApp
+
+
+```
+$ cd webapp
+$ make install
+$ make dev
+```
+
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://opensource.bloom.sh/contributing](https://opensource.bloom.sh/contributing) for guidance.
+[https://bloom.sh/contribute](https://bloom.sh/contribute) for guidance.
 
 
-## License
+
+## Licensing
 
 See `LICENSE.txt` and [https://opensource.bloom.sh/licensing](https://opensource.bloom.sh/licensing)
+
+
+## Sponsors
+
+
+## Security
+
+If you found a security issue affecting this project, please do not open a public issue, and refer to our
+[dedicated security page](https://bloom.sh/company/security) instead. Tahnk you.
