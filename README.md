@@ -11,13 +11,10 @@
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
-3. [Build](#build)
-4. [Development](#Development)
-5. [Tests](#tests)
-6. [Contributing](#contributing)
-7. [Licensing](#licensing)
-8. [Sponsoring](#sponsoring)
-9. [Security](#security)
+3. [Contributing](#contributing)
+4. [Licensing](#licensing)
+5. [Sponsoring](#sponsoring)
+6. [Security](#security)
 
 --------
 
@@ -29,48 +26,6 @@ See the [Wiki](https://gitlab.com/bloom42/bloom/wikis)
 ## Docker image
 
 [registry.gitlab.com/bloom42/bloom](https://gitlab.com/bloom42/bloom/container_registry)
-
-
-## Build
-
-```
-$ make
-```
-
-
-## Development
-
-### Server
-
-```
-$ cd server
-$ make dev
-```
-
-### WebApp
-
-```
-$ cd webapp
-$ make install
-$ make dev
-```
-
-
-## Tests
-
-### Server
-
-```
-$ cd server
-$ make test
-```
-
-### WebApp
-
-```
-$ cd webapp
-$ make test
-```
 
 
 ## Contributing
