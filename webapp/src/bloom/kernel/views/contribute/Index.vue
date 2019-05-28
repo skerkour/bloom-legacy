@@ -58,8 +58,8 @@
               project management tool (think Trello, but better).
             </p>
             <p>
-              <b>The Discord chat</b> is used for instant and informal communication. It must be used as the last resort,
-              and users should not rely on the long term archiving of the chat. The forum is often prefered.
+              <b>The Discord chat</b> is used for instant and informal communication. It must be used in resort,
+              and contributors should not rely on the long term archiving of the chat. The forum is often prefered.
             </p>
           </v-card-text>
         </v-card>
