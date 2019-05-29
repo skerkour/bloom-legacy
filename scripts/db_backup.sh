@@ -22,7 +22,7 @@ backup_and_stream_to_s3() {
 
 while true
   do
-    BACKUP="${BACKUP_NAME}`date +"%Y-%m-%d_%H-%M"`${EXTENSION}"
+    BACKUP="${BACKUP_NAME}_`date +"%Y-%m-%d_%H-%M"`${EXTENSION}"
     echo "Set backup file name to: $BACKUP"
     echo "Starting database backup.."
     pg_dump $DATABASE_URL | gzip | openssl enc -$ENCRYPTION_CIPHER -salt -k $ENCRYPTION_KEY | aws s3 cp - "${AWS_S3_BUCKET}${AWS_S3_PATH}/${BACKUP}"
