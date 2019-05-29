@@ -20,7 +20,10 @@
             <p class="mb-3"><i>
               We aim for transparency about how we collect data. Accordingly, we have developed this Policy in order
               for you to understand how we collect and make use of personal
-              information. The following outlines our privacy policy.
+              information. The following outlines our privacy policy.<br />
+              <b>We do not, and never will share our user data for advertising or marketing traking reasons.
+                Advertising is the disruption of aesthetics, the insults to your intelligence and the interruption of your train of thought.
+              </b>
             </i></p>
             <p>
               All user data is safely stored in France, Europe. We do not transfer data outside
@@ -33,6 +36,29 @@
               PHASER SECURITY SAS <br/>
               107 chemin des vergers, 38190 Bernin, France <br/> <br/>
               Owner contact email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+            </p>
+
+
+            <h4 class="text-xs-left text--darken-1 mt-3 mb-3">
+              Respect of Privacy
+            </h4>
+            <p>
+              Here's what we do to protect user privacy:
+              <ul>
+                <li>Before or at the time of collecting personal information, we will identify the purposes for which information is being collected.</li>
+                <li>We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.</li>
+                <li>We will only retain personal information as long as necessary for the fulfillment of those purposes.</li>
+                <li>We will collect personal information by lawful and fair means and, where appropriate, with the knowledge or consent of the individual concerned.</li>
+                <li>Personal data should be relevant to the purposes for which it is to be used, and, to the extent necessary for those purposes, should be accurate, complete, and up-to-date.</li>
+                <li>We will protect personal information by reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.</li>
+                <li>We will make readily available to customers information about our policies and practices relating to the management of personal information.</li>
+                <li>The user IP address is kept indefinitely in the event the user started a chat session with a website on Bloom. We are legally required by
+                  the law of France to log those IPs in the event of a legal request (for a minimum duration of 1 year).
+                  Though, we keep those IP address longer as we need to aggregate them to protect
+                   our services against botnets and spam attacks, which occur frequently.
+                   The Bloom service could not function at the level our customers expect from us without statistics on those collected IP.</li>
+              </ul>
+
             </p>
 
 
