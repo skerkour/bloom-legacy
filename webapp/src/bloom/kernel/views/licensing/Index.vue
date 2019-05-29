@@ -1,22 +1,27 @@
 <template>
+  <div>
   <v-container>
     <v-layout row>
       <v-flex xs12>
           <v-container fluid grid-list-md>
-            <v-layout row wrap>
+            <v-layout row wrap class="font-18">
 
-              <v-flex xs12 class="mb-5 title blue-grey--text text--darken-1">
-                <h1>
-                  Licensing
+              <v-flex xs12 sm10 offset-sm1 md8 offset-md2 class="text-xs-center mb-3">
+                <h1 class="display-1 font-weight-medium mb-4">
+                  Licensing policy
                 </h1>
+                <p class="text-xs-left text--darken-1">
+                  We are strongly committed to promote free and open source software. Here is Why? How? What?
+                </p>
               </v-flex>
+
 
                <v-flex xs12 class="mb-3 text-xs-left">
                 <p>
                   You can find the license for each project in the <code>LICENSE.txt</code> file
                   at the root of each project's repository.
                 </p>
-                <p>
+                <p class="mb-5">
                   Our software is released under the following licenses:
                   <ul>
                     <li>Apache v2.0 (Apache-2.0)</li>
@@ -24,15 +29,16 @@
                   </ul>
                 </p>
 
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+
+                <h2 class="display-1 text-xs-center  font-weight-medium mb-3">
                   Apache v2.0
                 </h2>
-                <p>
+                <p class="mb-5">
                   Used for libraries, drivers etc... you can use it freely according to the license.
                 </p>
 
 
-                <h2 class="text-xs-center blue-grey--text text--darken-1 mt-5 mb-3">
+                <h2 class="display-1 text-xs-center  font-weight-medium mb-3">
                   GNU Affero General Public License v3.0 (AGPL-3.0)
                 </h2>
                 <p>
@@ -75,6 +81,8 @@
       </v-flex>
     </v-layout>
   </v-container>
+  <blm-footer />
+  </div>
 </template>
 
 
@@ -95,7 +103,15 @@ export default class Footer extends Vue {
 
 
 <style scoped lang="scss">
-p {
-  font-size: 16px;
+a {
+  text-decoration: none;
+}
+
+.font-18 {
+  font-size: 18px;
+}
+
+.font-5 {
+  font-size: 15px;
 }
 </style>
