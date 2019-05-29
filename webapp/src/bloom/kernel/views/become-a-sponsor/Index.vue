@@ -12,7 +12,7 @@
         <v-card class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
-              Bloom is an open source project that is completely free to use (free as in beer AND as in speech).
+              Bloom is an open source project that is completely free to use (<i>free</i> as in Freedom).
               We hope you enjoy using Bloom and if you want to support
               the team and the contributors you can help by backing us. <br />
               Any amount would help support development on this project and is greatly appreciated.<br/>
