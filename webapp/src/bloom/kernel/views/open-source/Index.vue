@@ -1,4 +1,5 @@
 <template>
+  <div>
   <v-container>
     <v-layout row>
       <v-flex xs12>
@@ -11,7 +12,10 @@
               </h1>
               <p class="text-xs-left text--darken-1 font-18">
                 Openness is the DNA of Bloom. We are strongly committed to promote and improve the
-                Statu quo whether we are talking about software, science, education, research...
+                Statu quo whether we are talking about software, science, education, research...<br/>
+                <b>All our production</b> (software, design...) is and will ever be <b>free</b> (as in Freedom).
+                You can find more details about our licensing policy on our
+                <router-link to="/licensing">Licensing page</router-link>.
               </p>
             </v-flex>
 
@@ -35,6 +39,8 @@
       </v-flex>
     </v-layout>
   </v-container>
+  <blm-footer />
+  </div>
 </template>
 
 <script lang="ts">
