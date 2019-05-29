@@ -26,8 +26,8 @@
               </b>
             </i></p>
             <p>
-              All user data is safely stored in France, Europe. We do not transfer data outside
-              of the France.
+              All user data is safely stored in France, Europe on <a href="https://aws.amazon.com/" target="_blank" rel="noopener">AWS</a>. We do not transfer data outside
+              of France.
             </p>
             <h4 class="text-xs-left text--darken-1 mt-3 mb-3">
               Owner and Data Controller
