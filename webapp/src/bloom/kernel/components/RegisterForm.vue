@@ -45,10 +45,16 @@
           ></v-text-field>
       </v-flex>
 
-      <v-flex xs12 text-xs-center>
+      <v-flex xs12 text-xs-center v-if="error">
         <v-alert icon="mdi-alert-circle" :value="error.length !== 0" type="error">
           {{ error }}
         </v-alert>
+      </v-flex>
+
+      <v-flex xs12 sm8 offset-sm2 md6 offset-md3 class="text-xs-left disclaimer mb-4">
+        By creating an account, I agree to the
+        <a href="/terms" target="_blank" rel="noopener">Terms of Service</a>
+        and <a href="/privacy" target="_blank" rel="noopener">Privacy policy</a>.
       </v-flex>
 
       <v-flex xs12 text-xs-center id="flex-btn">
@@ -129,5 +135,11 @@ export default class RegisterForm extends Vue {
 <style scoped lang="scss">
 #flex-btn {
   margin-top: -28px;
+}
+
+.disclaimer {
+  a {
+    text-decoration: none;
+  }
 }
 </style>
