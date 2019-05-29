@@ -21,8 +21,9 @@
               We aim for transparency about how we collect data. Accordingly, we have developed this Policy in order
               for you to understand how we collect and make use of personal
               information. The following outlines our privacy policy.<br />
-              <b>We do not, and never will share our user data for advertising or marketing traking reasons.
-                Advertising is the disruption of aesthetics, the insults to your intelligence and the interruption of your train of thought.
+              <b>We do not, and never will share our user data, whether for advertising, marketing tracking or any other reasons.
+                Advertising is the disruption of aesthetics, the insults to your intelligence and the interruption of your train of thought. <br/>
+                We only use an external provider to secure financial data which never touch our servers.
               </b>
             </i></p>
             <p>
@@ -67,7 +68,7 @@
               Handling payments
             </h4>
             <p>
-              We do not process financial data ourself and rely on an external payment provider instead.<br/>
+              We do not process financial data ourselves and rely on an external payment provider instead.<br/>
 
               Payment processing services enable Bloom to process payments by credit card. To ensure
               greater security, Bloom shares only the information necessary to execute the transaction
