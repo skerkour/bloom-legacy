@@ -73,6 +73,13 @@ export default class Projects extends Vue {
       repository: 'https://github.com/bloom42/bitflow',
     },
     {
+      description: 'The Simple And NEeded configuration format',
+      homepage: '/sane',
+      img: '/kernel/static/imgs/img_square_3.svg',
+      name: 'SANE',
+      repository: 'https://github.com/bloom42/sane',
+    },
+    {
       description: 'Automated software delivery as fast and easy as possible',
       homepage: '/rocket',
       img: '/kernel/static/imgs/img_square_3.svg',
@@ -85,13 +92,6 @@ export default class Projects extends Vue {
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'Signal',
       repository: 'https://github.com/bloom42/signal',
-    },
-    {
-      description: 'The Simple And NEeded configuration format',
-      homepage: '/sane',
-      img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'SANE',
-      repository: 'https://github.com/bloom42/sane',
     },
     // {
     //   description: 'Automated Code Review for gO',

@@ -108,7 +108,7 @@
         <h1 class="display-1 font-weight-medium" id="sponsors">
           Sponsors
         </h1>
-        <p class="font-15 font-weight-regular">
+        <p class="font-18 font-weight-regular">
           <router-link to="/become-a-sponsor">Want to sponsor Bloom?</router-link>
         </p>
       </v-flex>
