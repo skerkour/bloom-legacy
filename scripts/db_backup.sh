@@ -19,19 +19,20 @@ AWS_S3_PATH=${AWS_S3_PATH:-"/backup/db"}
 # backup settings
 BACKUP_INTERVAL=${BACKUP_INTERVAL:-86400}
 BACKUP_NAME=${BACKUP_NAME:-backup}
+BACKUP_EXTENSION=${BACKUP_EXTENSION:-.sql.gz.env}
 
 backup_and_stream_to_s3() {
 
 while true
   do
-    BACKUP="${BACKUP_NAME}_`date +"%Y-%m-%d_%H-%M"`${EXTENSION}"
-    echo "Set backup file name to: $BACKUP"
+    BACKUP="${BACKUP_NAME}_`date +"%Y-%m-%d_%H-%M"`${BACKUP_EXTENSION}"
+    echo "Set backup file name to: $BACKUP_NAME"
     echo "Starting database backup.."
     pg_dump $DATABASE_URL | gzip | openssl enc -$ENCRYPTION_CIPHER -salt -k $ENCRYPTION_KEY | aws s3 cp - "${AWS_S3_BUCKET}${AWS_S3_PATH}/${BACKUP}"
     # use the following command to decrypt
-    # openssl enc -$ENCRYPTION_CIPHER -d -in ${IN_FILE} -out ${IN_FILE} -k $ENCRYPTION_KEY
-    echo "Backup finished! Sleeping ${TIMEOUT}s"
-    sleep $TIMEOUT
+    # cat ${BACKUP} | gzip -d | openssl enc -$ENCRYPTION_CIPHER -d -out dq.sql -k $ENCRYPTION_KEY
+    echo "Backup finished! Sleeping ${BACKUP_INTERVAL}s"
+    sleep $BACKUP_INTERVAL
   done
 
 }
