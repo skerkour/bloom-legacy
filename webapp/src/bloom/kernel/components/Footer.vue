@@ -31,7 +31,7 @@
         <v-flex xs12 sm4 class="pa-4">
           <h5 class="title pb-3">Community</h5>
           <ul>
-            <li><a class="nav-link" href="https://opensource.bloom.sh" target="_blank" rel="noopener">Open Source</a></li>
+            <li><router-link class="nav-link" to="/open-source">Open Source</router-link></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://forum.bloom.sh" target="_blank" rel="noopener">Forum</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>

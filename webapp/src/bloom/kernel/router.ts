@@ -18,6 +18,8 @@ import UnauthenticatedLayout from '@/bloom/kernel/layouts/Unauthenticated.vue';
 import VerifyAccount from './components/Verify.vue';
 import SetupUsernameForm from './components/SetupUsernameForm.vue';
 import P404 from './views/404.vue';
+import OpenSourcePage from './views/open-source/Index.vue';
+import LicensingPage from './views/licensing/Index.vue';
 
 
 import MyAccountRoutes from '@/bloom/myaccount/router';
@@ -118,6 +120,26 @@ const router = new Router({
         layout: 'unauthenticated',
       },
       path: '/contribute',
+    },
+    {
+      component: OpenSourcePage,
+      meta: {
+        auth: {
+          layout: 'authenticated',
+        },
+        layout: 'unauthenticated',
+      },
+      path: '/open-source',
+    },
+    {
+      component: LicensingPage,
+      meta: {
+        auth: {
+          layout: 'authenticated',
+        },
+        layout: 'unauthenticated',
+      },
+      path: '/licensing',
     },
     {
       component: BecomeASponsor,
