@@ -5,11 +5,11 @@ import api from './api';
 
 import Index from './views/Index.vue';
 import About from './views/about/Index.vue';
-import Contribute from './views/contribute/Index.vue';
-import BecomeASponsor from './views/become-a-sponsor/Index.vue';
-import PrivacyPage from './views/privacy/Index.vue';
+const Contribute = () => import(/* webpackChunkName: "chunk-organization" */ './views/contribute/Index.vue'); // tslint:disable-line
+const BecomeASponsor = () => import(/* webpackChunkName: "chunk-organization" */ './views/become-a-sponsor/Index.vue'); // tslint:disable-line
+const PrivacyPage = () => import(/* webpackChunkName: "chunk-organization" */ './views/privacy/Index.vue'); // tslint:disable-line
 import AppsPage from './views/apps/Index.vue';
-import TermsPage from './views/terms/Index.vue';
+const TermsPage = () => import(/* webpackChunkName: "chunk-organization" */ './views/terms/Index.vue'); // tslint:disable-line
 import Contact from './views/contact/Index.vue';
 import Security from './views/security/Index.vue';
 import SignInForm from './components/SignInForm.vue';
@@ -18,8 +18,8 @@ import UnauthenticatedLayout from '@/bloom/kernel/layouts/Unauthenticated.vue';
 import VerifyAccount from './components/Verify.vue';
 import SetupUsernameForm from './components/SetupUsernameForm.vue';
 import P404 from './views/404.vue';
-import OpenSourcePage from './views/open-source/Index.vue';
-import LicensingPage from './views/licensing/Index.vue';
+const OpenSourcePage = () => import(/* webpackChunkName: "chunk-organization" */ './views/open-source/Index.vue'); // tslint:disable-line
+const LicensingPage = () => import(/* webpackChunkName: "chunk-organization" */ './views/licensing/Index.vue'); // tslint:disable-line
 
 
 import MyAccountRoutes from '@/bloom/myaccount/router';
