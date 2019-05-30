@@ -2,7 +2,8 @@ const IndexView = () => import(/* webpackChunkName: "chunk-myaccount" */ './view
 const SecurityView = () => import(/* webpackChunkName: "chunk-myaccount" */'./views/Security.vue'); // tslint:disable-line
 const DevicesView = () => import(/* webpackChunkName: "chunk-myaccount" */'./views/Devices.vue'); // tslint:disable-line
 const AuditView = () => import(/* webpackChunkName: "chunk-myaccount" */'./views/Audit.vue'); // tslint:disable-line
-const BillingView = () => import(/* webpackChunkName: "chunk-myaccount" */'./views/Billing.vue'); // tslint:disable-line
+// const BillingView = () => import(/* webpackChunkName: "chunk-myaccount" */'./views/Billing.vue');
+import ComingSoon from '../kernel/components/ComingSoon.vue';
 import AccountRecoveryRequestForm from './components/RequestRecoveryForm.vue';
 import RecoveryForm from './components/RecoveryForm.vue';
 
@@ -45,7 +46,7 @@ export default [
     path: '/myaccount',
   },
   {
-    component: BillingView,
+    component: ComingSoon,
     meta: {
       auth: {
         layout: 'authenticated',
