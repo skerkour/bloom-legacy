@@ -131,6 +131,7 @@ const router = new Router({
       },
       path: '/open-source',
     },
+    { path: '/opensource', redirect: '/open-source' },
     {
       component: LicensingPage,
       meta: {
