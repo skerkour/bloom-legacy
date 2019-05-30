@@ -37,7 +37,7 @@ Thank you for your interest in contributing! Please refer to
 
 ## Licensing
 
-See `LICENSE.txt` and [https://opensource.bloom.sh/licensing](https://opensource.bloom.sh/licensing)
+See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 
 
 ## Sponsoring
