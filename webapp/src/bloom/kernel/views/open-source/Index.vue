@@ -93,20 +93,6 @@ export default class Projects extends Vue {
       name: 'Signal',
       repository: 'https://github.com/bloom42/signal',
     },
-    // {
-    //   description: 'Automated Code Review for gO',
-    //   homepage: '/acro',
-    //   img: '/kernel/static/imgs/img_square_3.svg',
-    //   name: 'Acro',
-    //   repository: 'https://github.com/bloom42/acro',
-    // },
-    // {
-    //   description: 'Bloom\'s open source website',
-    //   homepage: 'https://opensource.bloom.sh/',
-    //   img: '/kernel/static/imgs/img_square_3.svg',
-    //   name: 'Open Source',
-    //   repository: 'https://github.com/bloom42/opensource',
-    // },
     {
       description: 'Correct commonly misspelled English words in source files 📖',
       img: '/kernel/static/imgs/img_square_3.svg',
