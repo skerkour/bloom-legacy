@@ -158,8 +158,7 @@
                 <li>Documentation for users: <a href="https://help.bloom.sh">https://help.bloom.sh</a>,
                 you can find the repo here: <a href="https://gitlab.com/bloom42/help">https://gitlab.com/bloom42/help</a>
                 You can open an issue with a proposal or open an pull request.</li>
-                <li>Documentation for developers: <a href="https://opensource.bloom.sh">https://opensource.bloom.sh</a>,
-                you can find the repo here: <a href="https://gitlab.com/bloom42/opensource">https://gitlab.com/bloom42/opensource</a>.
+                <li>Documentation for developers: <a href="https://bloom.sh/open-source">https://bloom.sh/open-source</a>.
                 Each project documentation can be found within the project's repository in the <b>docs</b> folder.</li>
               </ul>
             </p>
