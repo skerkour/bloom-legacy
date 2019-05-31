@@ -8,6 +8,7 @@
 
 <!-- [![Build Status](https://travis-ci.com/z0mbie42/kernel.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/kernel)
 [![Build Status](https://dev.azure.com/bloom42/bloom/_apis/build/status/z0mbie42.kernel?branchName=master)](https://dev.azure.com/bloom42/bloom/_build/latest?definitionId=2&branchName=master) -->
+[![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
 
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
