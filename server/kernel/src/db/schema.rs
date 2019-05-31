@@ -136,16 +136,6 @@ table! {
 }
 
 table! {
-    bloom_contributors (github_login) {
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        github_login -> Text,
-        commits -> Int8,
-    }
-}
-
-table! {
     contacts_contacts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -566,7 +556,6 @@ allow_tables_to_appear_in_same_query!(
     bitflow_downloads_events,
     bitflow_profiles,
     bitflow_profiles_events,
-    bloom_contributors,
     contacts_contacts,
     contacts_contacts_events,
     drive_files,
