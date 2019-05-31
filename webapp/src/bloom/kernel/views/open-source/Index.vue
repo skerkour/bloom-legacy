@@ -24,12 +24,12 @@
                 <p class="headline app-name mt-3">{{ project.name }}</p>
                 <p class="subheading mt-3">{{ project.description }}</p>
                 <p class="subheading">
+                  <!-- <a :href="project.homepage" v-if="project.homepage">
+                    Homepage
+                  </a> -->
+                  <!-- <span v-if="project.homepage && project.repository"> - </span> -->
                   <a :href="project.homepage" v-if="project.homepage">
                     Homepage
-                  </a>
-                  <span v-if="project.homepage && project.repository"> - </span>
-                  <a :href="project.repository" v-if="project.repository">
-                    Git Repository
                   </a>
                 </p>
               </v-flex>
@@ -53,76 +53,88 @@ export default class Projects extends Vue {
   projects = [
     {
       description: 'The current website',
-      homepage: '/',
+      homepage: 'https://gitlab.com/bloom42/bloom',
       img: '/kernel/static/imgs/logos/bloom_256.png',
       name: 'Bloom',
-      repository: 'https://github.com/bloom42/bloom',
     },
     {
       description: 'The cloud native security scanner ☁️',
-      homepage: '/phaser',
+      homepage: 'https://gitlab.com/bloom42/phaser',
       img: '/kernel/static/imgs/logos/phaser_256.png',
       name: 'Phaser',
-      repository: 'https://github.com/bloom42/phaser',
     },
     {
       description: 'A simple piece of software that makes downloading ﬁles fast ⚡',
-      homepage: '/bitflow',
+      homepage: 'https://gitlab.com/bloom42/bitflow',
       img: '/kernel/static/imgs/logos/bitflow_256.png',
       name: 'Bitflow',
-      repository: 'https://github.com/bloom42/bitflow',
     },
     {
       description: 'The Simple And NEeded configuration format',
-      homepage: '/sane',
+      homepage: 'https://gitlab.com/bloom42/sane',
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'SANE',
-      repository: 'https://github.com/bloom42/sane',
     },
     {
-      description: 'Automated software delivery as fast and easy as possible',
-      homepage: '/rocket',
+      description: 'SANE parser for Rust',
+      homepage: 'https://gitlab.com/bloom42/sane-rs',
       img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'Rocket',
-      repository: 'https://github.com/bloom42/rocket',
+      name: 'SANE-rs',
     },
     {
-      description: 'Simple and beautiful Analytics',
-      homepage: '/signal',
+      description: 'SANE parser for Go',
+      homepage: 'https://gitlab.com/bloom42/sane-go',
       img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'Signal',
-      repository: 'https://github.com/bloom42/signal',
+      name: 'SANE-go',
+    },
+    {
+      description: 'Vim syntax for the SANE configuration format',
+      homepage: 'https://gitlab.com/bloom42/sane-vim',
+      img: '/kernel/static/imgs/img_square_3.svg',
+      name: 'SANE-vim',
     },
     {
       description: 'Correct commonly misspelled English words in source files 📖',
+      homepage: 'https://gitlab.com/bloom42/sane',
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'misspell',
-      repository: 'https://github.com/bloom42/misspell',
     },
     {
-      description: 'Automated Hacker News curation',
+      description: 'Fast, elegant, structured, pluggable and isomorphic logging for Javascript',
+      homepage: 'https://gitlab.com/bloom42/astro-js',
       img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'Newsbot',
-      repository: 'https://github.com/bloom42/newsbot',
+      name: 'Astro-js',
+    },
+    {
+      description: 'Fast and configurable filesystem (file and directory names) linter',
+      homepage: 'https://gitlab.com/bloom42/flint',
+      img: '/kernel/static/imgs/img_square_3.svg',
+      name: 'Flint',
     },
     {
       description: 'RipZap - The fastest structured, leveled JSON logger for Go ⚡️. ' +
         'Dependency free.',
+      homepage: 'https://github.com/z0mbie42/rz-go',
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'rz-go',
-      repository: 'https://github.com/bloom42/rz-go',
     },
     {
-      description: 'Fast, elegant, structured, pluggable and isomorphic logging for Javascript',
+      description: 'Automated Hacker News curation',
+      homepage: 'https://github.com/z0mbie42/newsbot',
       img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'Astro-js',
-      repository: 'https://github.com/bloom42/astro-js',
+      name: 'Newsbot',
     },
     {
-      description: 'Fast and configurable filesystem (file and directory names) linter',
+      description: 'Automated software delivery as fast and easy as possible',
+      homepage: 'https://github.com/z0mbie42/rocket',
       img: '/kernel/static/imgs/img_square_3.svg',
-      name: 'Flint',
-      repository: 'https://github.com/bloom42/flint',
+      name: 'Rocket',
+    },
+    {
+      description: 'Simple and beautiful Analytics',
+      homepage: 'https://github.com/z0mbie42/signal/',
+      img: '/kernel/static/imgs/img_square_3.svg',
+      name: 'Signal',
     },
   ];
 
