@@ -9,26 +9,50 @@ stages:
   - release
 
 
-test:
+test_server:
   stage: test
-  image: 'golang:1.11-stretch'
+  image: 'rust:1.35'
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
   script:
     - apt update && apt install -y gcc make git
-    - make test
+    - rustup default nightly-2019-05-09
+    - make -C server test
 
-build:
-  stage: build
+test_webapp:
+  stage: test
+  image: 'note:lts'
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
   script:
-    - apk update && apk add make
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    - make docker
-    - make docker_push
+    - apt update && apt install -y gcc make git
+    - make -C webapp test
+
+
+build_server:
+  stage: build
+  image: 'rust:1.35'
+  tags:
+    - docker
+    - bloom42
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default nightly-2019-05-09
+    - make -C server build
+
+build_webapp:
+  stage: build
+  image: 'note:lts'
+  tags:
+    - docker
+    - bloom42
+  script:
+     - make -C webapp build
+    # - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    # - make docker
+    # - make docker_push
 
 
 release:
