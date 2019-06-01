@@ -22,7 +22,7 @@ test_server:
 
 test_webapp:
   stage: test
-  image: 'note:lts'
+  image: 'node:lts'
   tags:
     - docker
     - bloom42
@@ -44,7 +44,7 @@ build_server:
 
 build_webapp:
   stage: build
-  image: 'note:lts'
+  image: 'node:lts'
   tags:
     - docker
     - bloom42
