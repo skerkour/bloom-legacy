@@ -27,7 +27,7 @@ test_webapp:
     - docker
     - bloom42
   script:
-    - apt update && apt install -y gcc make git
+    - make -C webapp install
     - make -C webapp test
 
 
@@ -49,7 +49,8 @@ build_webapp:
     - docker
     - bloom42
   script:
-     - make -C webapp build
+    - make -C webapp install
+    - make -C webapp build
     # - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     # - make docker
     # - make docker_push
