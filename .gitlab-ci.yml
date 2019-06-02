@@ -82,11 +82,16 @@ release:
   only:
     - tags
   stage: release
+  dependencies:
+    - build:server
+    - build:webapp
   image: docker:stable
   tags:
     - docker
     - bloom42cicd
   script:
     - apk update && apk add make
+    - make build_from_artifacts
+    - make docker_build
     - make docker_login_ci
     - make docker_release

@@ -3,7 +3,7 @@
 
 DIST_DIR = dist
 NAME := bloom
-VERSION := $(shell cat server/kernel/Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
+VERSION := $(shell cat VERSION.txt | tr -d '\n')
 DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 
