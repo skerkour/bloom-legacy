@@ -1,5 +1,5 @@
 .PHONY: all build clean re build_from_artifacts
-.PHONY: docker_build docker_login docker_push docker_release
+.PHONY: docker_build docker_login docker_release
 
 DIST_DIR = dist
 NAME := bloom
@@ -34,13 +34,7 @@ docker_build:
 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 
 docker_login:
-	echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY}
-
-docker_login_ci:
 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-
-docker_push:
-	docker push $(DOCKER_IMAGE):latest
 
 docker_release:
 	docker push $(DOCKER_IMAGE):$(VERSION)

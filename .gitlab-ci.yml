@@ -93,5 +93,5 @@ release:
     - apk update && apk add make
     - make build_from_artifacts
     - make docker_build
-    - make docker_login_ci
+    - make docker_login
     - make docker_release
