@@ -7,6 +7,16 @@ stages:
   - package
   - release
 
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+
+cache:
+  paths:
+    - apt/
+    - cargo_home/
+    - server/target/
+    - webapp/node_modules/
+
 
 test:server:
   stage: test
