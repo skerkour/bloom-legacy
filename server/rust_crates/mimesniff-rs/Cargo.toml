@@ -1,7 +1,7 @@
 [package]
 name = "mimesniff"
 version = "0.2.1"
-authors = ["z0mbie42 <sylvain@kerkour.com>"]
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 homepage = "https://gitlab.com/bloom42/bloom"
 repository = "https://gitlab.com/bloom42/bloom.git"
