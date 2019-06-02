@@ -41,7 +41,10 @@ impl Handler<AddPaymentMethod> for DbActor {
                 session_id: Some(msg.session_id),
             };
 
-            // get
+            // if profile.stripe.stripe_customer_id == null => create stripe customer with this card as default
+            //    profile.UpdateStripeCustomer
+            // Add payment method, as default
+            // if payment methods.count != 1, set last one
 
             return Ok(());
         })?);
