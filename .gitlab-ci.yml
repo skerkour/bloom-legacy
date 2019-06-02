@@ -78,7 +78,7 @@ package:docker:
 
 
 
-release:
+release:docker:
   only:
     - tags
   stage: release
