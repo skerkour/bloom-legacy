@@ -80,6 +80,7 @@ package:docker:
   tags:
     - docker
     - bloom42
+  cache: {}
   script:
     - apk update && apk add make
     - make build_from_artifacts
@@ -98,6 +99,7 @@ release:docker:
   tags:
     - docker
     - bloom42
+  cache: {}
   script:
     - apk update && apk add make
     - make build_from_artifacts
