@@ -1,4 +1,4 @@
-.PHONY: all build clean re build_from_artifacts
+.PHONY: all build clean re build_from_artifacts release
 .PHONY: docker_build docker_login docker_release
 
 DIST_DIR = dist
@@ -27,6 +27,11 @@ clean:
 	make -C webapp clean
 
 re: clean build
+
+release:
+	git tag v$(VERSION)
+	git push origin v$(VERSION)
+
 
 
 docker_build:
