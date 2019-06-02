@@ -74,7 +74,7 @@
 
       <v-flex xs12 sm3 class="text-xs-center">
         <v-hover>
-          <a slot-scope="{ hover }" href="https://kerkour.com" target="_blank" rel="noopener">
+          <a slot-scope="{ hover }" href="https://kerkour.fr" target="_blank" rel="noopener">
             <v-avatar size="100px" color="grey lighten-4">
               <img src="/kernel/static/imgs/about/sylvain.jpg" alt="Sylvain Kerkour"
               :class="`elevation-${hover ? hover_elevation : 0}`">
