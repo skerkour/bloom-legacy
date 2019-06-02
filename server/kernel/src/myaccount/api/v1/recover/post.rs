@@ -18,7 +18,7 @@ use futures::{
     },
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse,
+    web, Error, HttpRequest, HttpResponse, ResponseError,
 };
 use rand::Rng;
 use std::time::Duration;
@@ -56,7 +56,7 @@ pub fn post(data: web::Json<models::PasswordResetRequestBody>, state: web::Data<
     })
     .map_err(move |err: KernelError| {
         slog_error!(logger, "{}", err);
-        return err;
+        return err.error_response();
     })
     .from_err();
 }

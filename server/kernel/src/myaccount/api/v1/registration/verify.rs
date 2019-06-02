@@ -54,7 +54,7 @@ pub fn post(verify_data: web::Json<models::VerifyPendingAccountBody>, state: web
         })
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.error_response();
         })
         .from_err()
     );

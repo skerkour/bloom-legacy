@@ -57,7 +57,7 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
         })
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.error_response();
         })
         .from_err()
     );
