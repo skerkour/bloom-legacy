@@ -61,7 +61,7 @@ pub fn put(email_data: web::Json<models::UpdateEmailBody>, state: web::Data<api:
         })
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.error_response();
         })
         .from_err()
     );

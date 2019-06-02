@@ -66,7 +66,7 @@ pub fn post(email_data: web::Json<models::VerifyEmailBody>, state: web::Data<api
         })
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.error_response();
         })
         .from_err()
     );

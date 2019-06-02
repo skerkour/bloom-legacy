@@ -61,7 +61,7 @@ pub fn post(registration_data: web::Json<models::CompleteRegistrationBody>, stat
         })
         .map_err(move |err: KernelError| {
             slog_error!(logger, "{}", err);
-            return err;
+            return err.error_response();
         })
         .from_err()
     );
