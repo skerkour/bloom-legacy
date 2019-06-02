@@ -44,6 +44,10 @@ class API {
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        const err_msg = err.response.data.error.message;
+        throw new Error(err_msg);
+      }
       throw err;
     }
   }
@@ -54,6 +58,10 @@ class API {
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        const err_msg = err.response.data.error.message;
+        throw new Error(err_msg);
+      }
       throw err;
     }
   }
@@ -64,6 +72,10 @@ class API {
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        const err_msg = err.response.data.error.message;
+        throw new Error(err_msg);
+      }
       throw err;
     }
   }
@@ -74,6 +86,10 @@ class API {
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        const err_msg = err.response.data.error.message;
+        throw new Error(err_msg);
+      }
       throw err;
     }
   }
@@ -84,6 +100,10 @@ class API {
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
+      if (err.response && err.response.data && err.response.data.error) {
+        const err_msg = err.response.data.error.message;
+        throw new Error(err_msg);
+      }
       throw err;
     }
   }
