@@ -88,7 +88,7 @@ release:docker:
   image: docker:stable
   tags:
     - docker
-    - bloom42cicd
+    - bloom42
   script:
     - apk update && apk add make
     - make build_from_artifacts
