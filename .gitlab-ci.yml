@@ -1,15 +1,14 @@
-image: docker:stable
-
 services:
   - docker:dind
 
 stages:
   - test
   - build
+  - package
   - release
 
 
-test_server:
+test:server:
   stage: test
   image: 'rust:1.35'
   tags:
@@ -20,7 +19,7 @@ test_server:
     - rustup default nightly-2019-05-09
     - make -C server test
 
-test_webapp:
+test:webapp:
   stage: test
   image: 'node:lts'
   tags:
@@ -31,7 +30,7 @@ test_webapp:
     - make -C webapp test
 
 
-build_server:
+build:server:
   stage: build
   image: 'rust:1.35'
   tags:
@@ -41,8 +40,11 @@ build_server:
     - apt update && apt install -y gcc make git
     - rustup default nightly-2019-05-09
     - make -C server build
+  artifacts:
+    paths:
+    - server/dist
 
-build_webapp:
+build:webapp:
   stage: build
   image: 'node:lts'
   tags:
@@ -54,16 +56,37 @@ build_webapp:
     # - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
     # - make docker
     # - make docker_push
+  artifacts:
+    paths:
+    - webapp/dist
+
+
+
+package:docker:
+  stage: package
+  dependencies:
+    - build:server
+    - build:webapp
+  image: docker:stable
+  tags:
+    - docker
+    - bloom42
+  script:
+    - apk update && apk add make
+    - make build_from_artifacts
+    - make docker_build
+
 
 
 release:
   only:
     - tags
   stage: release
+  image: docker:stable
   tags:
     - docker
     - bloom42cicd
   script:
     - apk update && apk add make
-    - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
+    - make docker_login_ci
     - make docker_release

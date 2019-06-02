@@ -1,4 +1,4 @@
-.PHONY: all build clean re
+.PHONY: all build clean re build_from_artifacts
 .PHONY: docker_build docker_login docker_push docker_release
 
 DIST_DIR = dist
@@ -16,6 +16,11 @@ build:
 	make -C webapp build
 	cp -r webapp/dist $(DIST_DIR)/public
 
+build_from_artifacts:
+	mkdir -p $(DIST_DIR)
+	cp -r server/dist/* $(DIST_DIR)
+	cp -r webapp/dist $(DIST_DIR)/public
+
 clean:
 	rm -rf $(DIST_DIR)
 	make -C server clean
@@ -30,6 +35,9 @@ docker_build:
 
 docker_login:
 	echo ${DOCKER_PASSWORD} | docker login -u ${DOCKER_USERNAME} --password-stdin ${DOCKER_REGISTRY}
+
+docker_login_ci:
+	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 docker_push:
 	docker push $(DOCKER_IMAGE):latest
