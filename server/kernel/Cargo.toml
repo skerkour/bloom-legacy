@@ -18,7 +18,7 @@ try_future = { path = "../rust_crates/rust-try-future" }
 
 failure = "0.1.5"
 actix-web = "1.0.0-rc"
-actix-multipart = "0.1.0-beta.4"
+actix-multipart = "0.1.2"
 actix-service = "0.4.0"
 actix = "0.8"
 rusoto_s3 = "0.39"

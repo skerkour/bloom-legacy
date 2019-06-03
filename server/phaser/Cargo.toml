@@ -19,7 +19,7 @@ uuid = { version = "0.7", features = ["serde", "v4"] }
 diesel = { version = "1.4", features = ["postgres", "chrono", "serde_json", "r2d2", "uuidv07"] }
 chrono = { version = "0.4", features = ["serde"] }
 actix-web = "1.0.0-rc"
-actix-multipart = "0.1.0-beta.4"
+actix-multipart = "0.1.2"
 actix = "0.8"
 futures = "0.1"
 zip = "0.5"
