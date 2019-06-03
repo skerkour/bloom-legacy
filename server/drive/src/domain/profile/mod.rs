@@ -8,9 +8,11 @@ pub use aggregate::{
 };
 pub use commands::{
     Create,
+    UpdateUsedSpace,
 };
 pub use events::{
     Event,
     EventData,
     CreatedV1,
+    UsedSpaceUpdatedV1,
 };

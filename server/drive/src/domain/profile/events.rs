@@ -20,6 +20,7 @@ pub struct Event {
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
+    UsedSpaceUpdatedV1(UsedSpaceUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -30,11 +31,16 @@ pub struct CreatedV1 {
     pub account_id: uuid::Uuid,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UsedSpaceUpdatedV1 {
+    pub space: i64,
+}
+
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::Profile;
 
-    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
             EventData::CreatedV1(ref data) => super::Profile{
@@ -49,6 +55,11 @@ impl eventsourcing::Event for Event {
 
                 account_id: data.account_id,
                 home_id: data.home_id,
+            },
+            // UsedSpaceUpdatedV1
+            EventData::UsedSpaceUpdatedV1(ref data) => super::Profile{
+                used_space: aggregate.used_space + data.space,
+                ..aggregate
             },
         }
     }

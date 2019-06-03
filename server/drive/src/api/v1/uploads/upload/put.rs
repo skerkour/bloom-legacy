@@ -38,7 +38,7 @@ pub fn put(upload_id: web::Path<(uuid::Uuid)>, multipart: Multipart, state: web:
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
-    let upload_dir = format!("tmp/drive/uploads/{}/{}", request_id, upload_id.clone());
+    let upload_dir = format!("tmp/drive/uploads/{}_{}", request_id, upload_id.clone());
     match fs::create_dir_all(&upload_dir) {
         Ok(_) => {},
         Err(err) => return Either::A(ok(KernelError::from(err).error_response())),
@@ -53,7 +53,7 @@ pub fn put(upload_id: web::Path<(uuid::Uuid)>, multipart: Multipart, state: web:
         .flatten()
         .collect()
         .into_future()
-        .map_err(|_| KernelError::Validation("file too large".to_string()))
+        .map_err(|_| KernelError::Internal("Error uploading file".to_string()))
         .and_then(move |_| {
             state.db
             .send(controllers::CompleteUpload{
@@ -111,8 +111,8 @@ pub fn put(upload_id: web::Path<(uuid::Uuid)>, multipart: Multipart, state: web:
 }
 
 
-fn handle_upload(report_path: &str, field: Field) -> Box<Stream<Item = (), Error = Error>> {
-    let file = match fs::File::create(report_path) {
+fn handle_upload(upload_path: &str, field: Field) -> Box<Stream<Item = (), Error = Error>> {
+    let file = match fs::File::create(upload_path) {
         Ok(file) => file,
         Err(e) => return Box::new(future::err(error::ErrorInternalServerError(e)).into_stream()),
     };
