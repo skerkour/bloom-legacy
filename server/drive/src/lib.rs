@@ -7,7 +7,7 @@ pub mod controllers;
 pub mod validators;
 pub mod reactors;
 
-pub const DEFAULT_AVAILABLE_SPACE: i64 = 30 * 1024 * 1024 * 1024; // 30GB
+pub const DEFAULT_AVAILABLE_SPACE: i64 = 30_000_000_000; // 30GB
 pub const DEFAULT_FOLDERS: [&'static str; 8] = [
     "Books",
     "Downloads",
@@ -22,3 +22,4 @@ pub const DEFAULT_FOLDERS: [&'static str; 8] = [
 pub const BLOOM_ROOT_NAME: &str = "__BLOOM_ROOT";
 pub const BLOOM_TRASH_NAME: &str = "__BLOOM_TRASH";
 pub const FOLDER_TYPE: &str = "application/vnd.bloom.folder";
+pub const UPLOAD_MAX_SIZE: u64 = 5_000_000_000; // 5GB
