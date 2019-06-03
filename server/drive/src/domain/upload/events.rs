@@ -42,12 +42,12 @@ pub struct CompletedV1 {
 
 
 impl eventsourcing::Event for Event {
-    type Aggregate = super::UploadSession;
+    type Aggregate = super::Upload;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // StartedV1
-            EventData::StartedV1(ref data) => super::UploadSession{
+            EventData::StartedV1(ref data) => super::Upload{
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -57,14 +57,13 @@ impl eventsourcing::Event for Event {
                 file_name: data.file_name.clone(),
                 file_id: data.file_id,
                 parent_id: data.parent_id,
-                presigned_url: data.presigned_url.clone(),
                 size: 0,
                 type_: String::new(),
 
                 owner_id: data.owner_id,
             },
             // CompletedV1
-            EventData::CompletedV1(ref data) => super::UploadSession{
+            EventData::CompletedV1(ref data) => super::Upload{
                 deleted_at: Some(self.timestamp),
                 size: data.size,
                 type_: data.type_.clone(),
