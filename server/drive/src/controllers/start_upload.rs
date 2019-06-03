@@ -15,8 +15,6 @@ use crate::domain::{
 pub struct StartUpload {
     pub file_name: String,
     pub parent_id: Option<uuid::Uuid>,
-    pub s3_bucket: String,
-    pub s3_region: String,
     pub account_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
@@ -52,8 +50,6 @@ impl Handler<StartUpload> for DbActor {
                 file_name: msg.file_name.clone(),
                 parent_id: msg.parent_id,
                 owner_id: msg.account_id,
-                s3_bucket: msg.s3_bucket.clone(),
-                s3_region: msg.s3_region.clone(),
                 metadata,
             };
             let (upload, event, _) = eventsourcing::execute(&conn, Upload::new(), &start_cmd)?;

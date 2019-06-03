@@ -30,7 +30,6 @@ pub struct StartedV1 {
     pub file_id: uuid::Uuid,
     pub parent_id: Option<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub presigned_url: String,
 }
 
 
