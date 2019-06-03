@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="780px" height="690px" viewBox="0 0 780 690" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
-    <title>Group 198</title>
+    <title>hero_image</title>
     <desc>Created with Sketch.</desc>
     <defs>
         <polygon id="path-1" points="0 0.0297779214 762.494995 0.0297779214 762.494995 621.480931 0 621.480931"></polygon>
@@ -37,9 +37,8 @@
     </defs>
     <g id="illustrations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="Artboard" transform="translate(-979.000000, -1070.000000)">
-            <g id="Group-198" transform="translate(979.000000, 1070.000000)">
+            <g id="hero_image" transform="translate(979.000000, 1070.000000)">
                 <g id="Group-6">
-                    <path d="M686.330189,338.429233 C686.330189,506.398461 550.167632,642.567266 382.20349,642.567266 C214.237223,642.567266 78.0746657,506.398461 78.0746657,338.429233 C78.0746657,170.460005 214.237223,34.2912 382.20349,34.2912 C550.167632,34.2912 686.330189,170.460005 686.330189,338.429233" id="Fill-1" fill="#6EE1FF" opacity="0.9398484"></path>
                     <g id="Group-5">
                         <mask id="mask-2" fill="white">
                             <use xlink:href="#path-1"></use>
