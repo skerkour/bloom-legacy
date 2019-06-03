@@ -17,6 +17,7 @@ use serde::{Serialize, Deserialize};
 pub struct SignIn {
     pub username: String,
     pub password: String,
+    pub session_ip: String,
     pub request_id: uuid::Uuid,
 }
 
@@ -73,7 +74,7 @@ impl Handler<SignIn> for DbActor {
             };
             let start_cmd = session::Start{
                 account_id: account.id,
-                ip: "127.0.0.1".to_string(), // TODO
+                ip: msg.session_ip,
                 user_agent: "".to_string(), // TODO
                 metadata,
             };
