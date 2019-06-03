@@ -5,7 +5,7 @@ use std::env;
 use dotenv;
 use sentry::integrations::panic::register_panic_handler;
 use actix_web::{
-    http::header, middleware::cors::Cors, middleware::Logger, middleware::NormalizePath, web, App, HttpServer,
+    http::header, middleware::cors::Cors, middleware::Logger, middleware::NormalizePath, web, App, HttpServer, middleware,
 };
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
@@ -64,6 +64,13 @@ fn main() {
         .wrap(NormalizePath)
         .wrap(Logger::default())
         .wrap(api::middlewares::RequestIdMiddleware)
+        .wrap(middleware::DefaultHeaders::new()
+            .header("X-Content-Type-Options", "nosniff")
+            .header("X-Frame-Options", "Deny")
+            .header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
+            .header("X-XSS-Protection", "1; mode=block")
+            .header("Expect-CT", "max-age=86400; enforce")
+        )
         .wrap(api::middlewares::AuthMiddleware)
         .configure(app::config)
         .default_service(web::route().to(app::p404))
