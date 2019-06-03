@@ -26,7 +26,7 @@
                   >
                 </v-img>
 
-                  <p class="headline text-xs-center app-name mt-3">{{ card.name }}</p>
+                  <p class="headline text-xs-center app-name mt-1">{{ card.name }}</p>
             </router-link>
             <span>{{ card.tooltip }}</span>
           </v-tooltip>

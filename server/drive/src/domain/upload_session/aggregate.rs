@@ -20,7 +20,7 @@ pub struct UploadSession {
     pub parent_id: Option<uuid::Uuid>,
     pub presigned_url: String,
     pub size: i64,
-     #[serde(rename = "type")]
+    #[serde(rename = "type")]
     pub type_: String, // MIME type
 
     pub owner_id: uuid::Uuid,
