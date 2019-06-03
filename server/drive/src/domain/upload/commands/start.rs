@@ -36,10 +36,8 @@ impl eventsourcing::Command for Start {
 
 
     fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        // presign request
         let id = uuid::Uuid::new_v4();
         let file_id = uuid::Uuid::new_v4();
-        let key = format!("drive/{}/{}", self.owner_id, file_id);
 
         let event_data = upload::EventData::StartedV1(upload::StartedV1{
             id,

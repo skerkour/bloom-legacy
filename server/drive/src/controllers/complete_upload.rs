@@ -17,6 +17,8 @@ pub struct CompleteUpload {
     pub upload_id: uuid::Uuid,
     pub s3_bucket: String,
     pub s3_client: rusoto_s3::S3Client,
+    pub file_path: String,
+    pub directory: String,
     pub account_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
@@ -56,7 +58,7 @@ impl Handler<CompleteUpload> for DbActor {
                 session_id: Some(msg.session_id),
             };
 
-            // complete UploadSession
+            // complete Upload
             let complete_cmd = upload::Complete{
                 s3_bucket: msg.s3_bucket.clone(),
                 metadata: metadata.clone(),
@@ -89,6 +91,8 @@ impl Handler<CompleteUpload> for DbActor {
             diesel::insert_into(drive_files_events::dsl::drive_files_events)
                 .values(&event)
                 .execute(&conn)?;
+
+            // TODO: update profile
 
             return Ok(uploaded_file);
         })?);
