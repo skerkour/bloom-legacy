@@ -1,9 +1,3 @@
-use rusoto_s3::{
-    PutObjectRequest,
-    util::PreSignedRequest,
-};
-use rusoto_core::{Region};
-use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
@@ -25,8 +19,6 @@ pub struct Start {
     pub file_name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub s3_bucket: String,
-    pub s3_region: String,
     pub metadata: EventMetadata,
 }
 
@@ -51,26 +43,12 @@ impl eventsourcing::Command for Start {
         let file_id = uuid::Uuid::new_v4();
         let key = format!("drive/{}/{}", self.owner_id, file_id);
 
-        let req = PutObjectRequest {
-            bucket: self.s3_bucket.clone(),
-            key: key,
-            ..Default::default()
-        };
-        // TODO: handle error
-        let region = Region::from_str(&self.s3_region).expect("AWS region not valid");
-        let credentials = EnvironmentProvider::default()
-            .credentials()
-            .wait()
-            .expect("error getting default credentials");
-        let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
-
         let event_data = upload::EventData::StartedV1(upload::StartedV1{
             id,
             file_name: self.file_name.clone(),
             file_id,
             parent_id: self.parent_id,
             owner_id: self.owner_id,
-            presigned_url,
         });
 
         return  Ok((upload::Event{
