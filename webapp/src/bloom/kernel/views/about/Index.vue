@@ -33,7 +33,7 @@
         <v-card class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
-              Empowering the world with open technologies, by the people, for the people.
+              Empowering the world with open technologies.
             </p>
           </v-card-text>
         </v-card>
