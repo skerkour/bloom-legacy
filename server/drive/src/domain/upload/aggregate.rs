@@ -18,7 +18,6 @@ pub struct Upload {
     pub file_id: uuid::Uuid,
     pub file_name: String,
     pub parent_id: Option<uuid::Uuid>,
-    pub presigned_url: String,
     pub size: i64,
     #[serde(rename = "type")]
     pub type_: String, // MIME type
@@ -41,7 +40,6 @@ impl Upload {
             file_id: uuid::Uuid::new_v4(),
             file_name: String::new(),
             parent_id: None,
-            presigned_url: String::new(),
             size: 0,
             type_: String::new(),
 

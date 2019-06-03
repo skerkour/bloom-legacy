@@ -229,7 +229,6 @@ table! {
         file_id -> Uuid,
         file_name -> Text,
         parent_id -> Nullable<Uuid>,
-        presigned_url -> Text,
         size -> Int8,
         #[sql_name = "type"]
         type_ -> Text,

@@ -6,8 +6,6 @@ use kernel::{
     events::EventMetadata,
     KernelError,
 };
-use futures::future::Future;
-use std::str::FromStr;
 use crate::{
     domain::upload,
     validators,
