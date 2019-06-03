@@ -1,5 +1,5 @@
 -- Your SQL goes here
-CREATE TABLE drive_upload_sessions (
+CREATE TABLE drive_uploads (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -18,10 +18,10 @@ CREATE TABLE drive_upload_sessions (
     PRIMARY KEY(id)
 );
 
-CREATE TABLE drive_upload_sessions_events (
+CREATE TABLE drive_uploads_events (
     id UUID NOT NULL,
     timestamp TIMESTAMP WITH TIME ZONE NOT NULL,
-    aggregate_id UUID NOT NULL REFERENCES drive_upload_sessions (id),
+    aggregate_id UUID NOT NULL REFERENCES drive_uploads (id),
     data JSONB NOT NULL,
     metadata JSONB NOT NULL,
 

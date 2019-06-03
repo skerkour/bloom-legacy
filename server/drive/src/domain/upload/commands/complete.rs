@@ -7,7 +7,7 @@ use kernel::{
     KernelError,
 };
 use crate::{
-    domain::upload_session,
+    domain::upload,
 };
 
 
@@ -18,8 +18,8 @@ pub struct Complete {
 }
 
 impl eventsourcing::Command for Complete {
-    type Aggregate = upload_session::UploadSession;
-    type Event = upload_session::Event;
+    type Aggregate = upload::Upload;
+    type Event = upload::Event;
     type Context = rusoto_s3::S3Client;
     type Error = KernelError;
     type NonStoredData = ();
@@ -41,12 +41,12 @@ impl eventsourcing::Command for Complete {
         // TODO: handle error + improve content type detection... currently it's done by the browser
         let head_output = ctx.head_object(req).sync().expect("Couldn't PUT object");
 
-        let event_data = upload_session::EventData::CompletedV1(upload_session::CompletedV1{
+        let event_data = upload::EventData::CompletedV1(upload::CompletedV1{
             size: head_output.content_length.expect("error getting content length"),
             type_: head_output.content_type.expect("error getting content type"),
         });
 
-        return  Ok((upload_session::Event{
+        return  Ok((upload::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data: event_data,

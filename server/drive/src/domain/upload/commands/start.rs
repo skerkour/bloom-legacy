@@ -15,7 +15,7 @@ use kernel::{
 use futures::future::Future;
 use std::str::FromStr;
 use crate::{
-    domain::upload_session,
+    domain::upload,
     validators,
 };
 
@@ -31,8 +31,8 @@ pub struct Start {
 }
 
 impl eventsourcing::Command for Start {
-    type Aggregate = upload_session::UploadSession;
-    type Event = upload_session::Event;
+    type Aggregate = upload::Upload;
+    type Event = upload::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
@@ -64,7 +64,7 @@ impl eventsourcing::Command for Start {
             .expect("error getting default credentials");
         let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
 
-        let event_data = upload_session::EventData::StartedV1(upload_session::StartedV1{
+        let event_data = upload::EventData::StartedV1(upload::StartedV1{
             id,
             file_name: self.file_name.clone(),
             file_id,
@@ -73,7 +73,7 @@ impl eventsourcing::Command for Start {
             presigned_url,
         });
 
-        return  Ok((upload_session::Event{
+        return  Ok((upload::Event{
             id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             data: event_data,

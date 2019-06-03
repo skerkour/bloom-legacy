@@ -2,13 +2,13 @@ use serde::{Deserialize, Serialize};
 use diesel::{Queryable};
 use diesel_as_jsonb::AsJsonb;
 use kernel::{
-    db::schema::drive_upload_sessions_events,
+    db::schema::drive_uploads_events,
     events::EventMetadata,
 };
 
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "drive_upload_sessions_events"]
+#[table_name = "drive_uploads_events"]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
