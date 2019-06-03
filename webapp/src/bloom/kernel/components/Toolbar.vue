@@ -164,7 +164,8 @@ export default class Toolbar extends Vue {
       case 'drive':
         this.secondary_title = 'Drive';
         this.side_icon = true;
-        this.display_searchbar = true;
+        // this.display_searchbar = true;
+        this.display_searchbar = false;
         this.searchbar_label = 'Search Drive';
         break;
       case 'platform':

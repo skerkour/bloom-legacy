@@ -135,6 +135,10 @@
     :visible="new_scan_dialog"
     @close="close_new_scan_dialog"
     @create="scan_created"/>
+
+    <blm-phaser-dialog-add-payment
+    :visible="add_payment_dialog"
+    @close="close_add_payment_dialog" />
   </div>
 </template>
 
@@ -144,17 +148,20 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import router from '@/bloom/kernel/router';
 import NewScanDialog from './NewScanDialog.vue';
+import AddPaymentDialog from './AddPaymentDialog.vue';
 import { State } from '../models/Scan';
 
 
 @Component({
   components: {
+    'blm-phaser-dialog-add-payment': AddPaymentDialog,
     'blm-phaser-dialog-new-scan': NewScanDialog,
   },
 })
 export default class Scans extends Vue {
   error = '';
   new_scan_dialog = false;
+  add_payment_dialog = false;
   is_loading = false;
   scans: any[] = [];
   interval: any = null;
@@ -194,11 +201,19 @@ export default class Scans extends Vue {
 
 
   open_new_scan_dialog() {
-    this.new_scan_dialog = true;
+    if (this.scans.length !== 0) {
+      this.add_payment_dialog = true;
+    } else {
+      this.new_scan_dialog = true;
+    }
   }
 
   close_new_scan_dialog() {
     this.new_scan_dialog = false;
+  }
+
+  close_add_payment_dialog() {
+    this.add_payment_dialog = false;
   }
 
   scan_created(scan: any) {
