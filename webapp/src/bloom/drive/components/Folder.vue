@@ -38,14 +38,14 @@
             </v-list-tile-content>
           </v-list-tile>
 
-          <v-list-tile @click="upload_folder">
+          <!-- <v-list-tile @click="upload_folder">
             <v-list-tile-action>
               <v-icon>mdi-folder-upload</v-icon>
             </v-list-tile-action>
             <v-list-tile-content>
               <v-list-tile-title>Folder upload</v-list-tile-title>
             </v-list-tile-content>
-          </v-list-tile>
+          </v-list-tile> -->
 
     </v-list>
     </v-menu>
@@ -215,14 +215,14 @@ scrollable
     </v-list-tile-content>
   </v-list-tile>
 
-  <v-list-tile @click="upload_folder">
+  <!-- <v-list-tile @click="upload_folder">
     <v-list-tile-action>
       <v-icon>mdi-folder-upload</v-icon>
     </v-list-tile-action>
     <v-list-tile-content>
       <v-list-tile-title>Folder upload</v-list-tile-title>
     </v-list-tile-content>
-  </v-list-tile>
+  </v-list-tile> -->
 </v-list>
 
 </v-bottom-sheet>
@@ -498,22 +498,20 @@ export default class Folder extends Vue {
         file.uploaded_percent = 0;
         this.$set(this.files_to_upload, i, file);
 
-        // start session
+        // start upload
         const start_payload = {
           file_name: file.name,
           parent_id: this.current_folder.id,
         };
-        const res = await api.post(`${api.DRIVE}/v1/upload`, start_payload);
-        const {presigned_url} = res;
-        const upload_session_id = res.id;
+        const res = await api.post(`${api.DRIVE}/v1/uploads`, start_payload);
+        const upload_id = res.id;
 
-
-        // upload using presigned_url
+        // upload options
         this.axios_cancel_source = axios.CancelToken.source();
         const options = {
           cancelToken: this.axios_cancel_source.token,
           headers: {
-            'Content-Type': file.type,
+            'Content-Type': 'multipart/form-data',
           },
           onUploadProgress: (progressEvent: ProgressEvent) => {
             file.uploaded_percent = Math.ceil(
@@ -521,12 +519,23 @@ export default class Folder extends Vue {
             );
             this.$set(this.files_to_upload, i, file);
           },
-          transformRequest: [(data: any, headers: any) => {
-            delete headers.common.Authorization;
-            return data;
-          }],
+          // transformRequest: [(data: any, headers: any) => {
+          //   delete headers.common.Authorization;
+          //   return data;
+          // }],
         };
-        await axios.put(presigned_url, file, options);
+        const formData = new FormData();
+        formData.append('file', file);
+
+        // complete upload
+        const new_file = await api.put(`${api.DRIVE}/v1/uploads/${upload_id}`, formData, options);
+
+        this.files.push(new_file);
+        const profile = Object.assign({}, this.$store.state.drive_profile);
+        profile.used_space += new_file.size;
+        this.$store.commit('set_drive_profile', profile);
+        file.state = 'uploaded';
+        this.$set(this.files_to_upload, i, file);
 
         // const formData = new FormData();
         // formData.append('file', this.files_to_upload[i]);
@@ -538,19 +547,6 @@ export default class Folder extends Vue {
         //     headers: { 'Content-Type': 'multipart/form-data' },
         //
         //   });
-
-        // complete session
-        const complete_payload = {
-          upload_session_id,
-        };
-        const new_file = await api.put(`${api.DRIVE}/v1/upload`, complete_payload);
-
-        this.files.push(new_file);
-        const profile = Object.assign({}, this.$store.state.drive_profile);
-        profile.used_space += new_file.size;
-        this.$store.commit('set_drive_profile', profile);
-        file.state = 'uploaded';
-        this.$set(this.files_to_upload, i, file);
       }
 
       this.$toast.success('Success', { icon: 'mdi-check-circle' });
