@@ -37,14 +37,14 @@
       </v-list-tile-content>
     </v-list-tile>
 
-    <v-list-tile exact to="/myaccount/audit">
+    <!-- <v-list-tile exact to="/myaccount/audit">
       <v-list-tile-action>
         <v-icon>mdi-format-list-bulleted</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>Audit log</v-list-tile-title>
       </v-list-tile-content>
-    </v-list-tile>
+    </v-list-tile> -->
 
   </v-list>
 </template>
