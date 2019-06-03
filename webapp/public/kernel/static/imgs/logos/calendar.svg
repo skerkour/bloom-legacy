@@ -1,12 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
-    <title>calendar_icon_256</title>
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>calendar_256</title>
     <desc>Created with Sketch.</desc>
-    <g id="calendar_icon_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="account-group" transform="translate(14.000000, 13.000000)">
-            <circle id="Oval-2" fill="#5FCDFF" cx="115" cy="115" r="115"></circle>
-            <path d="M153,158 L78,158 L78,99 L153,99 L153,158 Z M137.055556,61 L137.055556,71.8 L93.9444444,71.8 L93.9444444,61 L83.1666667,61 L83.1666667,71.8 L77.7777778,71.8 C71.7961111,71.8 67,76.606 67,82.6 L67,158.2 C67,164.164675 71.8253755,169 77.7777778,169 L153.222222,169 C159.174625,169 164,164.164675 164,158.2 L164,82.6 C164,76.606 159.15,71.8 153.222222,71.8 L147.833333,71.8 L147.833333,61 L137.055556,61 Z M142,120 L115,120 L115,147 L142,147 L142,120 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#4285F4" offset="0%"></stop>
+            <stop stop-color="#40B0FF" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="calendar_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(28.000000, 28.000000)">
+            <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="200" height="200" rx="40"></rect>
+            <path d="M138,143 L63,143 L63,84 L138,84 L138,143 Z M122.055556,46 L122.055556,56.8 L78.9444444,56.8 L78.9444444,46 L68.1666667,46 L68.1666667,56.8 L62.7777778,56.8 C56.7961111,56.8 52,61.606 52,67.6 L52,143.2 C52,149.164675 56.8253755,154 62.7777778,154 L138.222222,154 C144.174625,154 149,149.164675 149,143.2 L149,67.6 C149,61.606 144.15,56.8 138.222222,56.8 L132.833333,56.8 L132.833333,46 L122.055556,46 Z M127,105 L100,105 L100,132 L127,132 L127,105 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
         </g>
     </g>
 </svg>

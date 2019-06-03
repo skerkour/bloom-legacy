@@ -73,18 +73,18 @@ export default class Index extends Vue {
       tooltip: 'Download manager in the cloud',
     },
     {
-      name: 'Gallery',
-      src: '/kernel/static/imgs/logos/gallery.svg',
-      to: '/gallery',
-      tooltip: 'Bloom Gallery is the home for all your photos and videos, \
-        organized and easy to share.',
-    },
-    {
       name: 'Music',
       src: '/kernel/static/imgs/logos/music.svg',
       to: '/music',
       tooltip: 'Bloom Music is the home for all your music. \
         Play music without interruption, online or off.',
+    },
+    {
+      name: 'Gallery',
+      src: '/kernel/static/imgs/logos/gallery.svg',
+      to: '/gallery',
+      tooltip: 'Bloom Gallery is the home for all your photos and videos, \
+        organized and easy to share.',
     },
     {
       name: 'Contacts',
