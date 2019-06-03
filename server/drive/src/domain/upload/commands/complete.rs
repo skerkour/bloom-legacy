@@ -1,26 +1,34 @@
 use rusoto_s3::{
-    HeadObjectRequest,
-    S3,
+    PutObjectRequest, StreamingBody, S3,
+};
+use diesel::{
+    PgConnection,
+    r2d2::{PooledConnection, ConnectionManager},
 };
 use kernel::{
     events::EventMetadata,
     KernelError,
 };
+use std::fs;
+use futures_fs::FsPool;
+use std::io::Read;
 use crate::{
     domain::upload,
 };
 
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Complete {
     pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
+    pub file_path: String,
     pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Complete {
     type Aggregate = upload::Upload;
     type Event = upload::Event;
-    type Context = rusoto_s3::S3Client;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
     type NonStoredData = ();
 
@@ -30,20 +38,33 @@ impl eventsourcing::Command for Complete {
     }
 
 
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        // TODO: HEAD request
+    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        // get file metadata
 
-        let req = HeadObjectRequest {
+        let file_metadata = fs::metadata(&self.file_path)?;
+        let content_type = {
+            // read first 512 bytes to detect content type
+            let mut contents: Vec<u8> = Vec::new();
+            let file = fs::File::open(&self.file_path)?;
+            let mut chunk = file.take(512);
+            chunk.read(&mut contents)?;
+            mimesniff::detect_content_type(&contents)
+        };
+        let fspool = FsPool::default();
+        let file_stream = fspool.read(self.file_path.clone());
+        let req = PutObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: format!("drive/{}/{}", aggregate.owner_id, aggregate.file_id),
+            content_length: Some(file_metadata.len() as i64),
+            content_type: Some(content_type.to_string()),
+            body: Some(StreamingBody::new(file_stream)),
             ..Default::default()
         };
-        // TODO: handle error + improve content type detection... currently it's done by the browser
-        let head_output = ctx.head_object(req).sync().expect("Couldn't PUT object");
+        self.s3_client.put_object(req).sync().expect("pahser: Couldn't PUT object");
 
         let event_data = upload::EventData::CompletedV1(upload::CompletedV1{
-            size: head_output.content_length.expect("error getting content length"),
-            type_: head_output.content_type.expect("error getting content type"),
+            size: file_metadata.len() as i64,
+            type_: content_type.to_string(),
         });
 
         return  Ok((upload::Event{
