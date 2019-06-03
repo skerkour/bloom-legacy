@@ -49,6 +49,19 @@ impl Handler<CreateScan> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
+
+            // check the number of scans
+            let number_of_scan: i64 = phaser_scans::dsl::phaser_scans
+                .filter(phaser_scans::dsl::owner_id.eq(msg.account_id))
+                .filter(phaser_scans::dsl::deleted_at.is_null())
+                .count()
+                .get_result(&conn)?;
+
+            if number_of_scan > 0 {
+                return Err(KernelError::Validation("Please enable billing to create more scan".to_string()));
+            }
+
+
             let create_cmd = scan::Create{
                 name: msg.name.clone(),
                 description: msg.description.clone(),

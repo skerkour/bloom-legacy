@@ -75,8 +75,7 @@ impl Handler<CompleteUpload> for DbActor {
                 file_path: msg.file_path.clone(),
                 metadata: metadata.clone(),
             };
-            let (upload_to_update, event, _) = eventsourcing::execute(
-                &conn, upload_to_update, &complete_cmd)?;
+            let (upload_to_update, event, _) = eventsourcing::execute(&conn, upload_to_update, &complete_cmd)?;
 
             diesel::update(&upload_to_update)
                 .set(&upload_to_update)
