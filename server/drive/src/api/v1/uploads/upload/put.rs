@@ -9,14 +9,19 @@ use kernel::{
     KernelError,
 };
 use futures::{
-    future::Future,
+    Future,
+    Stream,
+    IntoFuture,
     future::ok,
+    future,
     future::Either,
 };
 use actix_web::{
-    web, Error, HttpRequest, HttpResponse, ResponseError,
+    web, Error, HttpRequest, HttpResponse, ResponseError, error,
 };
 use actix_multipart::{Field, Multipart, MultipartError};
+use std::fs;
+use std::io::Write;
 use crate::{
     api::v1::models,
     controllers,
@@ -29,32 +34,33 @@ pub fn put(upload_id: web::Path<(uuid::Uuid)>, multipart: Multipart, state: web:
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
-    let upload_dir = format!("tmp/drive/uploads/{}", request_id);
-    match fs::create_dir_all(&report_dir) {
-        Ok(_) => {},
-        Err(err) => return Either::A(ok(KernelError::from(err).error_response())),
-    }
-    let uplaod_file_path = format!("{}/{}", &report_dir, upload_id.into_inner());
-
     if auth.session.is_none() || auth.account.is_none() {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
     }
 
+    let upload_dir = format!("tmp/drive/uploads/{}/{}", request_id, upload_id.clone());
+    match fs::create_dir_all(&upload_dir) {
+        Ok(_) => {},
+        Err(err) => return Either::A(ok(KernelError::from(err).error_response())),
+    }
+    let upload_file_path = format!("{}/upload", &upload_dir);
+    let upload_file_path2 = upload_file_path.clone();
+
     return Either::B(
         multipart
         .map_err(|err| KernelError::Internal(err.to_string()))
-        .map(move |field| handle_upload(&report_file_path, field))
+        .map(move |field| handle_upload(&upload_file_path, field))
         .flatten()
         .collect()
         .into_future()
         .map_err(|_| KernelError::Validation("file too large".to_string()))
-        and_then(move |_| {
+        .and_then(move |_| {
             state.db
             .send(controllers::CompleteUpload{
                 upload_id: upload_id.into_inner(),
                 s3_bucket: state.config.s3_bucket(),
                 s3_client: state.s3_client.clone(),
-                file_path: uplod_file_path,
+                file_path: upload_file_path2,
                 directory: upload_dir,
                 account_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,

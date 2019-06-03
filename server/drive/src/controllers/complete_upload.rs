@@ -4,6 +4,7 @@ use kernel::{
     events::EventMetadata,
     db::DbActor
 };
+use std::fs;
 use crate::domain::{
     Upload,
     upload,
@@ -61,10 +62,12 @@ impl Handler<CompleteUpload> for DbActor {
             // complete Upload
             let complete_cmd = upload::Complete{
                 s3_bucket: msg.s3_bucket.clone(),
+                s3_client: msg.s3_client.clone(),
+                file_path: msg.file_path.clone(),
                 metadata: metadata.clone(),
             };
             let (upload_to_update, event, _) = eventsourcing::execute(
-                &msg.s3_client, upload_to_update, &complete_cmd)?;
+                &conn, upload_to_update, &complete_cmd)?;
 
             diesel::update(&upload_to_update)
                 .set(&upload_to_update)
@@ -93,6 +96,10 @@ impl Handler<CompleteUpload> for DbActor {
                 .execute(&conn)?;
 
             // TODO: update profile
+
+
+            // remove upload directory
+            fs::remove_dir_all(&msg.directory)?;
 
             return Ok(uploaded_file);
         })?);

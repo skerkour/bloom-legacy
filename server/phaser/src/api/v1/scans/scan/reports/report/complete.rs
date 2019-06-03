@@ -33,6 +33,10 @@ pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, stat
     let auth = req.request_auth();
     let request_id = req.request_id().0;
 
+    if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Phaser {
+        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
+    }
+
     let report_dir = format!("tmp/phaser/reports/{}", ids.1); // ids.1 -> report_id
     match fs::create_dir_all(&report_dir) {
         Ok(_) => {},
@@ -40,9 +44,6 @@ pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, stat
     }
     let report_file_path = format!("{}/report.zip", &report_dir);
 
-    if auth.service.is_none() || auth.service.unwrap() != api::middlewares::Service::Phaser {
-        return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
-    }
 
     return Either::B(
         multipart
