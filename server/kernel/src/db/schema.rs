@@ -220,7 +220,7 @@ table! {
 }
 
 table! {
-    drive_upload_sessions (id) {
+    drive_uploads (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -238,7 +238,7 @@ table! {
 }
 
 table! {
-    drive_upload_sessions_events (id) {
+    drive_uploads_events (id) {
         id -> Uuid,
         timestamp -> Timestamptz,
         aggregate_id -> Uuid,
@@ -520,9 +520,9 @@ joinable!(drive_files_events -> drive_files (aggregate_id));
 joinable!(drive_profiles -> drive_files (home_id));
 joinable!(drive_profiles -> kernel_accounts (account_id));
 joinable!(drive_profiles_events -> drive_profiles (aggregate_id));
-joinable!(drive_upload_sessions -> drive_files (parent_id));
-joinable!(drive_upload_sessions -> kernel_accounts (owner_id));
-joinable!(drive_upload_sessions_events -> drive_upload_sessions (aggregate_id));
+joinable!(drive_uploads -> drive_files (parent_id));
+joinable!(drive_uploads -> kernel_accounts (owner_id));
+joinable!(drive_uploads_events -> drive_uploads (aggregate_id));
 joinable!(gallery_albums -> kernel_accounts (owner_id));
 joinable!(gallery_albums_events -> gallery_albums (aggregate_id));
 joinable!(gallery_albums_files -> drive_files (file_id));
@@ -562,8 +562,8 @@ allow_tables_to_appear_in_same_query!(
     drive_files_events,
     drive_profiles,
     drive_profiles_events,
-    drive_upload_sessions,
-    drive_upload_sessions_events,
+    drive_uploads,
+    drive_uploads_events,
     gallery_albums,
     gallery_albums_events,
     gallery_albums_files,

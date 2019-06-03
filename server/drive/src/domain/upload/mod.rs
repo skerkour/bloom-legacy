@@ -4,7 +4,7 @@ mod commands;
 
 
 pub use aggregate::{
-    UploadSession,
+    Upload,
 };
 pub use commands::{
     Start,

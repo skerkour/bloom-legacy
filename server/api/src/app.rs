@@ -49,10 +49,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/myaccount/v1/me/sessions/{session_id}/revoke", web::post().to_async(myaccountv1::me::sessions::revoke::post))
 
         // drive
-        .service(web::resource("/drive/v1/upload")
-            .route(web::post().to_async(drivev1::upload::post))
-            .route(web::put().to_async(drivev1::upload::put))
-        )
+        .route("/drive/v1/uploads", web::post().to_async(drivev1::uploads::post))
+        .route("/drive/v1/uploads/{upload_id}", web::put().to_async(drivev1::uploads::upload::put))
         .route("/drive/v1/me", web::get().to_async(drivev1::me::get))
         .service(web::resource("/drive/v1/folders")
             .route(web::get().to_async(drivev1::folders::get))

@@ -1,14 +1,14 @@
 use serde::{Serialize, Deserialize};
 use diesel::{Queryable};
 use kernel::{
-    db::schema::drive_upload_sessions,
+    db::schema::drive_uploads,
 };
 
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
-#[table_name = "drive_upload_sessions"]
+#[table_name = "drive_uploads"]
 #[changeset_options(treat_none_as_null = "true")]
-pub struct UploadSession {
+pub struct Upload {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
@@ -27,11 +27,11 @@ pub struct UploadSession {
 }
 
 
-impl UploadSession {
-    // create a new, unitialized UploadSession
+impl Upload {
+    // create a new, unitialized Upload
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return UploadSession{
+        return Upload{
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -50,7 +50,7 @@ impl UploadSession {
     }
 }
 
-impl eventsourcing::Aggregate for UploadSession {
+impl eventsourcing::Aggregate for Upload {
     fn increment_version(&mut self) {
         self.version += 1;
     }

@@ -4,21 +4,20 @@ use crate::domain;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct StartUploadSessionBody {
+pub struct StartUploadBody {
     pub file_name: String,
     pub parent_id: Option<Uuid>,
 }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct StartUploadSessionResponse {
+pub struct StartUploadResponse {
     pub id: Uuid,
-    pub presigned_url: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CompleteUploadSessionBody {
-    pub upload_session_id: Uuid,
+pub struct CompleteUploadBody {
+    pub upload_id: Uuid,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

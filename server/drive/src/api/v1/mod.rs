@@ -1,4 +1,4 @@
-pub mod upload;
+pub mod uploads;
 pub mod models;
 pub mod me;
 pub mod folders;
