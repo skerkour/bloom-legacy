@@ -7,7 +7,7 @@
     disable-initial-sort
     >
     <template slot="items" slot-scope="props">
-      <td class="text-xs-center">
+      <!-- <td class="text-xs-center">
         <div>
           <span>
           <v-icon small v-if="props.item.device.type === 'computer'">mdi-laptop</v-icon>
@@ -24,14 +24,14 @@
             {{ props.item.device.os.version }}
           </span>
         </div>
-      </td>
+      </td> -->
       <td class="text-xs-center">{{ props.item.created_at | date }}</td>
-      <td class="text-xs-center">
+      <!-- <td class="text-xs-center">
         <div v-if="props.item.location
         && props.item.location.city_name && props.item.location.country_name">
           {{ props.item.location.city_name }}, {{ props.item.location.country_name }}
         </div>
-      </td>
+      </td> -->
       <td class="text-xs-center">{{ props.item.ip }}</td>
       <td class="justify-center layout px-0">
         <v-btn
@@ -67,24 +67,24 @@ export default class SessionList extends Vue {
   @Prop({ type: Object, default: null })  current!: object | null;
 
   headers = [
-    {
-      align: 'center',
-      sortable: false,
-      text: 'Device',
-      value: 'device',
-    },
+    // {
+    //   align: 'center',
+    //   sortable: false,
+    //   text: 'Device',
+    //   value: 'device',
+    // },
     {
       align: 'center',
       sortable: false,
       text: 'Signed In',
       value: 'created_at',
     },
-    {
-      align: 'center',
-      sortable: false,
-      text: 'Location',
-      value: 'location',
-    },
+    // {
+    //   align: 'center',
+    //   sortable: false,
+    //   text: 'Location',
+    //   value: 'location',
+    // },
     {
       align: 'center',
       sortable: false,
