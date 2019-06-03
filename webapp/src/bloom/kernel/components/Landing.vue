@@ -49,7 +49,7 @@
       <v-layout row wrap align-center justify-center>
         <v-flex xs8>
           <h2 class="blm-mission font-weight-regular">
-            Bloom is on a mission to empower the world with open technologies, by the people, for the people
+            Bloom is on a mission to empower the world with open technologies
           </h2>
         </v-flex>
       </v-layout>
