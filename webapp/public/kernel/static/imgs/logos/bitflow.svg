@@ -1,23 +1,31 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <!-- Generator: Sketch 54.1 (76490) - https://sketchapp.com -->
-    <title>bitflow_icon_256</title>
+    <!-- Generator: Sketch 55.1 (78136) - https://sketchapp.com -->
+    <title>bitflow_256</title>
     <desc>Created with Sketch.</desc>
-    <g id="bitflow_icon_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="cloud-outline" transform="translate(13.000000, 51.000000)">
-            <path d="M182.083333,134.166667 L57.5,134.166667 C36.3290846,134.166667 19.1666667,117.004249 19.1666667,95.8333333 C19.1666667,74.6624179 36.3290846,57.5 57.5,57.5 L64.3041667,57.5 C70.6291667,35.3625 91.0416667,19.1666667 115,19.1666667 C144.110009,19.1666667 167.708333,42.7649913 167.708333,71.875 L167.708333,76.6666667 L182.083333,76.6666667 C197.96152,76.6666667 210.833333,89.5384801 210.833333,105.416667 C210.833333,121.294853 197.96152,134.166667 182.083333,134.166667 L182.083333,134.166667 Z M185.4375,57.7875 C178.920833,24.8208333 149.883333,0 115,0 C87.3041667,0 63.25,15.7166667 51.2708333,38.6208333 C22.425,41.7833333 0,66.125 0,95.8333333 C3.88903407e-15,127.589706 25.7436269,153.333333 57.5,153.333333 L182.083333,153.333333 C194.791623,153.333333 206.979415,148.284985 215.965533,139.298867 C224.951651,130.312748 230,118.124957 230,105.416667 C230,80.1166667 210.354167,59.6083333 185.4375,57.7875 Z" id="Shape" fill="#5FCDFF" fill-rule="nonzero"></path>
-            <g id="arrow-down-bold" transform="translate(96.000000, 62.000000)">
-                <polygon id="Path" fill="#FFE15F" points="12.0382653 15.5 26.9617347 15.5 26.9617347 35.7020202 39 35.7020202 19.5 55.5 0 35.7020202 12.0382653 35.7020202"></polygon>
-                <rect id="Rectangle" fill="#FEE98F" x="22" y="10.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FEE98F" x="12" y="10.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FFE15F" x="12" y="15.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FCF4D2" x="12" y="0.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FFE15F" x="17" y="15.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FFF1B7" x="17" y="5.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FFF1B7" x="12" y="5.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FFE15F" x="22" y="15.5" width="5" height="5"></rect>
-                <rect id="Rectangle" fill="#FEE98F" x="17" y="10.5" width="5" height="5"></rect>
-            </g>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#68D0FF" offset="0%"></stop>
+            <stop stop-color="#9BE0FF" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="bitflow_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(28.000000, 28.000000)">
+            <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="200" height="200" rx="40"></rect>
+            <path d="M54.4,146 C37.6105436,146 24,132.419304 24,115.666667 C24,98.9140293 37.6105436,85.3333333 54.4,85.3333333 L59.796,85.3333333 C64.812,67.8158333 81,55 100,55 C123.085503,55 141.8,73.6734569 141.8,96.7083333 L141.8,100.5 L153.2,100.5 C165.792092,100.5 176,110.685522 176,123.25 C176,135.814478 165.792092,146 153.2,146 L54.4,146 Z" id="Path" fill="#FFFFFF"></path>
+        </g>
+        <g id="arrow-down-bold" transform="translate(109.000000, 107.000000)">
+            <polygon id="Path" fill="#FFE15F" points="12.0382653 15.5 26.9617347 15.5 26.9617347 35.7020202 39 35.7020202 19.5 55.5 0 35.7020202 12.0382653 35.7020202"></polygon>
+            <rect id="Rectangle" fill="#FEE98F" x="22" y="10.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FEE98F" x="12" y="10.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FFE15F" x="12" y="15.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FCF4D2" x="12" y="0.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FFE15F" x="17" y="15.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FFF1B7" x="17" y="5.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FFF1B7" x="12" y="5.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FFE15F" x="22" y="15.5" width="5" height="5"></rect>
+            <rect id="Rectangle" fill="#FEE98F" x="17" y="10.5" width="5" height="5"></rect>
         </g>
     </g>
 </svg>
