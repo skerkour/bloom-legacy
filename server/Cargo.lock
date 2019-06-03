@@ -161,7 +161,7 @@ dependencies = [
 
 [[package]]
 name = "actix-multipart"
-version = "0.1.0-beta.4"
+version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 dependencies = [
  "actix-service 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1081,7 +1081,7 @@ name = "drive"
 version = "0.1.0"
 dependencies = [
  "actix 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "actix-multipart 0.1.0-beta.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "actix-multipart 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.0-rc (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1628,7 +1628,7 @@ name = "kernel"
 version = "0.1.3"
 dependencies = [
  "actix 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "actix-multipart 0.1.0-beta.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "actix-multipart 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-service 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.0-rc (registry+https://github.com/rust-lang/crates.io-index)",
  "base64 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -2209,7 +2209,7 @@ name = "phaser"
 version = "0.1.0"
 dependencies = [
  "actix 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "actix-multipart 0.1.0-beta.4 (registry+https://github.com/rust-lang/crates.io-index)",
+ "actix-multipart 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.0-rc (registry+https://github.com/rust-lang/crates.io-index)",
  "chrono 0.4.6 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -3736,7 +3736,7 @@ dependencies = [
 "checksum actix-connect 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "d7fbab0d79b2f3415a79570e3db12eaa75c26239541e613b832655145a5e9488"
 "checksum actix-files 0.1.0-beta.4 (registry+https://github.com/rust-lang/crates.io-index)" = "7adc6afca5dba863451729d4cb20f65a6a1581cc31768f2c00cbde13eb47be41"
 "checksum actix-http 0.2.0 (registry+https://github.com/rust-lang/crates.io-index)" = "6ab58d432b77f8a4e02ab9a4e56e60d0bfbb6bed371a17d6602cd72f86d72c07"
-"checksum actix-multipart 0.1.0-beta.4 (registry+https://github.com/rust-lang/crates.io-index)" = "7faae94f2d52d0f956e4a86c50aea8aa12f14fcf55790b912ee31f04c2842a0c"
+"checksum actix-multipart 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "bf3cc84406506d76ecb5572f020ee1e529f411c95b579b6ba515f0a52fee0343"
 "checksum actix-net 0.2.6 (registry+https://github.com/rust-lang/crates.io-index)" = "8bebfbe6629e0131730746718c9e032b58f02c6ce06ed7c982b9fef6c8545acd"
 "checksum actix-router 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)" = "23224bb527e204261d0291102cb9b52713084def67d94f7874923baefe04ccf7"
 "checksum actix-rt 0.2.2 (registry+https://github.com/rust-lang/crates.io-index)" = "ed0424cdf6542a43b32a8885c7c5099bf4110fad9b50d7fb220ab9c038ecf5ec"
