@@ -39,9 +39,8 @@ pub fn post(sign_in_data: web::Json<models::SignInBody>, state: web::Data<api::S
         return Either::A(ok(KernelError::Unauthorized("Must not be authenticated".to_string()).error_response()));
     }
 
-    println!("CONNNNNECTIOOOON INFO: {:?}", remote);
     let session_ip = match remote {
-        Some(ref remote) => remote.split(":").into_iter().nth(0).expect("Erro accessing ip").to_string(),
+        Some(ref remote) => remote.split(":").into_iter().nth(0).expect("Error accessing session ip").to_string(),
         _ => "".to_string(),
     };
 
