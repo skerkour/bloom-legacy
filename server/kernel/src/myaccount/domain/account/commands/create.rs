@@ -38,6 +38,7 @@ impl eventsourcing::Command for Create {
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
         validators::email(&self.email)?;
+        validators::username(&self.username)?;
 
         if self.email == self.password {
             return Err(KernelError::Validation("Password cannot be your email address".to_string()));
