@@ -1,5 +1,4 @@
 use crate::error::KernelError;
-use std::collections::HashSet;
 
 
 pub fn first_name(first_name: &str) -> Result<(), KernelError> {
@@ -54,15 +53,31 @@ pub fn username(username: &str) -> Result<(), KernelError> {
         return Err(KernelError::Validation("username must be lowercase".to_string()));
     }
 
-    let mut invalid_usernames = HashSet::new();
-    invalid_usernames.insert("admin");
-    invalid_usernames.insert("sysy");
-    invalid_usernames.insert("asministrator");
-    invalid_usernames.insert("bloom");
-    invalid_usernames.insert("bloom42");
+    let invalid_usernames = vec![
+        "admin",
+        "sysy",
+        "asministrator",
+        "bloom",
+        "bloom42",
+        "support",
+        "help",
+        "settings",
+        "admin1",
+        "security",
+        "profile",
+        "42bloom",
+    ];
 
-    if invalid_usernames.contains(username) {
+    if invalid_usernames.contains(&username) {
         return Err(KernelError::Validation("username is not valid".to_string()));
+    }
+
+    if username.contains("administrator") {
+        return Err(KernelError::Validation("username is not valid".to_string()));
+    }
+
+    if !username.chars().all(char::is_alphanumeric) {
+        return Err(KernelError::Validation("username must contains only alphanumeric characters".to_string()));
     }
 
     return Ok(());
