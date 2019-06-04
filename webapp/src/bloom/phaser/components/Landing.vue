@@ -59,6 +59,9 @@
           </h2>
           <br />
           <p class="body-2" v-html="service.description"></p>
+          <v-btn v-if="service.learn_more" :to="service.learn_more" flat color="primary">
+            Learn more
+          </v-btn>
           <v-btn to="/register" color="blue" dark>
             <span v-if="service.button">{{ service.button }}</span>
             <span v-else>Try it Free</span>
@@ -75,6 +78,9 @@
           </h1>
           <br />
           <p class="body-2" v-html="service.description"></p>
+          <v-btn v-if="service.learn_more" :to="service.learn_more" flat color="primary">
+            Learn more
+          </v-btn>
           <v-btn to="/register" color="blue" dark>
             <span v-if="service.button">{{ service.button }}</span>
             <span v-else>Try it Free</span>
@@ -132,6 +138,7 @@ export default class Landing extends Vue {
       description: 'By being open source, integrating security tests in your CI pipeline has ' +
         ' never been so easy.<br />' +
         '<b>With Phaser, security becomes part of your normal workflow.</b>',
+      learn_more: '/open-source',
       logo: '/phaser/static/imgs/landing/open_source.svg',
       name: 'Open Source',
     },
