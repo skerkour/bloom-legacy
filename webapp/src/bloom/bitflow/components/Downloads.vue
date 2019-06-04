@@ -40,9 +40,9 @@
       <span>{{ props.item.name | truncate }}</span>
     </td>
     <td class="text-xs-left">
-      <v-progress-linear v-if="props.item.state === DownloadStatus.Downloading" :indeterminate="true" />
-      <v-progress-linear color="success" value="100" v-else-if="props.item.state === DownloadStatus.Completed" />
-      <span v-else>{{ props.item.state }}</span>
+      <v-progress-linear v-if="props.item.status === DownloadStatus.Downloading" :indeterminate="true" />
+      <v-progress-linear color="success" value="100" v-else-if="props.item.status === DownloadStatus.Completed" />
+      <span v-else>{{ props.item.status }}</span>
     </td>
   </tr>
 </template>
