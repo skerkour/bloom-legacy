@@ -1845,7 +1845,6 @@ name = "mimesniff"
 version = "0.3.0"
 dependencies = [
  "mime 0.3.13 (registry+https://github.com/rust-lang/crates.io-index)",
- "url 1.7.2 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

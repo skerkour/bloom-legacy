@@ -139,4 +139,5 @@
 mod magic;
 mod api;
 
-pub use api::{HttpRequest, MimeTypeSniffable, MimeTypeSniffer, MimeTypeSnifferExt};
+// pub use api::{HttpRequest, MimeTypeSniffable, MimeTypeSniffer, MimeTypeSnifferExt};
+pub use api::{MimeTypeSniffable, MimeTypeSniffer, MimeTypeSnifferExt};
