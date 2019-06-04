@@ -69,8 +69,7 @@ impl Handler<CompleteReport> for DbActor {
                 .filter(|e| e.file_type().is_file()) {
 
 
-                let path = entry.path();
-                let name = path.strip_prefix(Path::new(&msg.report_dir)).expect("phaser: error unwraping report file path");
+                let name = entry.path().strip_prefix(Path::new(&msg.report_dir)).expect("phaser: error unwraping report file path");
                 let content_type = {
                     // read first 512 bytes to detect content type
                     let mut contents = [0u8;512];
@@ -80,7 +79,7 @@ impl Handler<CompleteReport> for DbActor {
                 };
 
                 let fspool = FsPool::default();
-                let file_stream = fspool.read(path, Default::default());
+                let file_stream = fspool.read(entry.path().to_str().expect("error getting path").to_string(), Default::default());
 
                 // upload to s3
                 // TODO: handle error
