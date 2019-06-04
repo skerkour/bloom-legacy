@@ -96,6 +96,8 @@ pub fn username(username: &str) -> Result<(), KernelError> {
         "security",
         "profile",
         "42bloom",
+        "sylvain.kerkour",
+        "kerkour.sylvain",
     ];
 
     if invalid_usernames.contains(&username) {
