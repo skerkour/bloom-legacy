@@ -1,7 +1,6 @@
 use crate::{
     events::EventMetadata,
     myaccount::domain::pending_email,
-    myaccount::validators,
     error::KernelError,
 };
 use serde::{Serialize, Deserialize};
@@ -34,7 +33,7 @@ impl eventsourcing::Command for Verify {
         };
         use diesel::prelude::*;
 
-        validators::email(&self.email)?;
+        // validators::email(&self.email)?; already done ine pending email create
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts

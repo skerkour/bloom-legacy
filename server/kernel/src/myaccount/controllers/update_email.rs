@@ -48,6 +48,7 @@ impl Handler<UpdateEmail> for DbActor {
             let create_cmd = pending_email::Create{
                 email: msg.email.clone(),
                 account_id: msg.account.id,
+                config: msg.config.clone(),
                 metadata,
             };
             let (new_pending_email, event, non_persisted) = eventsourcing::execute(

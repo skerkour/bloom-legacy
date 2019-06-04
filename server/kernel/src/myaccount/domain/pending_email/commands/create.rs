@@ -5,6 +5,7 @@ use crate::{
     myaccount,
     events::EventMetadata,
     utils,
+    config,
 };
 use diesel::{
     PgConnection,
@@ -16,6 +17,7 @@ use diesel::{
 pub struct Create {
     pub email: String,
     pub account_id: uuid::Uuid,
+    pub config: config::Config,
     pub metadata: EventMetadata,
 }
 
@@ -37,7 +39,7 @@ impl eventsourcing::Command for Create {
         };
         use diesel::prelude::*;
 
-        validators::email(&self.email)?;
+        validators::email(self.config.disposable_email_domains(), &self.email)?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts

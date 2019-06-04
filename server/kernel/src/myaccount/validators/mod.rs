@@ -32,7 +32,25 @@ pub fn password(password: &str) -> Result<(), KernelError> {
 
 
 // TODO
-pub fn email(_email: &str) -> Result<(), KernelError> {
+pub fn email(disposable_emails: Vec<String>, email: &str) -> Result<(), KernelError> {
+    let parts: Vec<&str> = email.split("@").collect();
+
+    if parts.len() != 2 {
+        return Err(KernelError::Validation("email is not valid".to_string()));
+    }
+
+    if parts[0].is_empty() || parts[1].is_empty() {
+        return Err(KernelError::Validation("email is not valid".to_string()));
+    }
+
+    if email.trim() != email {
+        return Err(KernelError::Validation("email must not contains whitesapces".to_string()));
+    }
+
+    if disposable_emails.contains(&parts[1].to_string()) {
+        return Err(KernelError::Validation("email domain is not valid".to_string()));
+    }
+
     return Ok(());
 }
 

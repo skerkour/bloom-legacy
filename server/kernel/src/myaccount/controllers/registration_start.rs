@@ -53,6 +53,7 @@ impl Handler<StartRegistration> for DbActor {
                 last_name: msg.last_name.clone(),
                 email: msg.email.clone(),
                 password: msg.password.clone(),
+                config: msg.config.clone(),
                 metadata,
             };
             let (new_pending_account, event, non_persisted) = eventsourcing::execute(

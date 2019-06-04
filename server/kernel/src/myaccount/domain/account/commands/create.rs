@@ -37,7 +37,7 @@ impl eventsourcing::Command for Create {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
-        validators::email(&self.email)?;
+        // validators::email(self.config.disposable_email_domains(), &self.email)?; already done on create pending account
         validators::username(&self.username)?;
 
         if self.email == self.password {

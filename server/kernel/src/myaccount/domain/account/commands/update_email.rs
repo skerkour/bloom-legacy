@@ -1,7 +1,6 @@
 use crate::{
     myaccount::domain::account,
     events::EventMetadata,
-    myaccount::validators,
     error::KernelError,
 };
 use diesel::{
@@ -25,7 +24,7 @@ impl eventsourcing::Command for UpdateEmail {
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
 
-        validators::email(&self.email)?;
+        // validators::email(self.config.disposable_email_domains(), &self.email)?;
 
         // verify that an email isn't already in use
         // already done in pending emial verify
