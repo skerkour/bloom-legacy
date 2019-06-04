@@ -32,6 +32,7 @@ impl eventsourcing::Command for Create {
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::scan_name(&self.name)?;
+        validators::target(&self.target)?;
 
         return Ok(());
     }
