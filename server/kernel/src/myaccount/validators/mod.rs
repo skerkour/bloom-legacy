@@ -59,6 +59,10 @@ pub fn email(disposable_emails: Vec<String>, email: &str) -> Result<(), KernelEr
         return Err(KernelError::Validation("email domain is not valid".to_string()));
     }
 
+    if email.len() > 128 {
+        return Err(KernelError::Validation("email is too long".to_string()));
+    }
+
     return Ok(());
 }
 
