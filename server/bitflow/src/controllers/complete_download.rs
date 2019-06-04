@@ -30,6 +30,8 @@ impl Handler<CompleteDownload> for DbActor {
             bitflow_downloads,
             bitflow_downloads_events,
             bitflow_profiles,
+            drive_profiles,
+            drive_profiles_events,
         };
         use diesel::prelude::*;
 
@@ -57,8 +59,8 @@ impl Handler<CompleteDownload> for DbActor {
                 s3_bucket: msg.s3_bucket,
                 s3_client: msg.s3_client,
                 profile,
-                data: msg.complete_data,
-                metadata,
+                data: msg.complete_data.clone(),
+                metadata: metadata.clone(),
             };
 
             let (download, event, _) = eventsourcing::execute(&conn, download, &complete_cmd)?;
@@ -67,6 +69,29 @@ impl Handler<CompleteDownload> for DbActor {
                 .execute(&conn)?;
             diesel::update(&download)
                 .set(&download)
+                .execute(&conn)?;
+
+            let total_size = msg.complete_data.files.iter().fold(0i64, |acc, x| {
+                return acc + x.size as i64;
+            });
+
+            // update drive profile: Add all uploaded data size
+            let drive_profile: drive::domain::Profile = drive_profiles::dsl::drive_profiles
+                .filter(drive_profiles::dsl::account_id.eq(download.owner_id))
+                .filter(drive_profiles::dsl::deleted_at.is_null())
+                .first(&conn)?;
+
+            let space_cmd = drive::domain::profile::UpdateUsedSpace{
+                space: total_size,
+                metadata: metadata.clone(),
+            };
+            let (drive_profile, event, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+
+            diesel::update(&drive_profile)
+                .set(&drive_profile)
+                .execute(&conn)?;
+            diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
+                .values(&event)
                 .execute(&conn)?;
 
             return Ok(download);

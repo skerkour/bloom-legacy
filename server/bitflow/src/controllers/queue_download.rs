@@ -30,6 +30,7 @@ impl Handler<QueueDownload> for DbActor {
         use kernel::db::schema::{
             bitflow_downloads,
             bitflow_downloads_events,
+            drive_profiles,
         };
         use diesel::prelude::*;
 
@@ -45,6 +46,16 @@ impl Handler<QueueDownload> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
+
+            let profile: drive::domain::Profile = drive_profiles::dsl::drive_profiles
+                .filter(drive_profiles::dsl::account_id.eq(msg.account_id))
+                .filter(drive_profiles::dsl::deleted_at.is_null())
+                .first(&conn)?;
+
+            if profile.used_space >= profile.total_space {
+                return Err(KernelError::Validation("No space available in your drive".to_string()));
+            }
+
             let queue_cmd = download::Queue{
                 url: msg.url,
                 owner_id: msg.account_id,

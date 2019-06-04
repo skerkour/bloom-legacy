@@ -4,6 +4,7 @@
     <v-card-title class="indigo white--text headline">
       User Directory
     </v-card-title>
+
     <v-card-text style="height: 400px;">
       <v-alert icon="mdi-alert-circle" :value="error" type="error" dismissible>
         {{ error }}
@@ -24,25 +25,25 @@
           indeterminate-icon="mdi-loading"
           item-children="files"
         >
-          <v-icon
+          <!-- <v-icon
             v-if="!item.files"
             slot="prepend"
             slot-scope="{ item, active }"
             :color="active ? 'primary' : ''"
-          >mdi-file</v-icon>
+          >mdi-folder</v-icon> -->
         </v-treeview>
       </v-flex>
     </v-layout>
   </v-card-text>
+
   <v-card-actions>
     <v-spacer></v-spacer>
     <v-btn flat @click="close" :disabled="is_loading">Cancel</v-btn>
     <v-btn
-    @click="move"
-    color="primary"
-    :loading="is_loading"
-    :disabled="!can_move"
-    >
+      @click="move"
+      color="primary"
+      :loading="is_loading"
+      :disabled="!can_move">
     Move
   </v-btn>
 </v-card-actions>
@@ -67,9 +68,7 @@ export default class MoveDialog extends Vue {
   error = '';
   is_loading = false;
   to = [];
-  avatar = null;
   open = [];
-  users = [];
 
 
   // computed
@@ -114,12 +113,12 @@ export default class MoveDialog extends Vue {
       const folder = await api.get(`${api.DRIVE}/v1/folders`, {
         params: { id },
       });
-      const files = folder.files.map((child: any) => {
-        if (child.type === 'application/vnd.bloom.folder') {
+      const files = folder.files
+        .filter((child: any) => child.type === 'application/vnd.bloom.folder')
+        .map((child: any) => {
           child.files = [];
-        }
-        return child;
-      });
+          return child;
+        });
       if (file) {
         file.files.push(...files);
       }
