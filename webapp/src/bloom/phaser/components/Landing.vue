@@ -58,14 +58,10 @@
             {{ service.name }}
           </h2>
           <br />
-          <p class="body-2">
-            {{ service.description }}
-          </p>
-          <v-btn v-if="service.learn_more" :to="service.learn_more" flat color="primary">
-            Learn more
-          </v-btn>
+          <p class="body-2" v-html="service.description"></p>
           <v-btn to="/register" color="blue" dark>
-            Try it Free
+            <span v-if="service.button">{{ service.button }}</span>
+            <span v-else>Try it Free</span>
           </v-btn>
         </v-flex>
       </v-layout>
@@ -78,14 +74,10 @@
             {{ service.name }}
           </h1>
           <br />
-          <p>
-            {{ service.description }}
-          </p>
-          <v-btn v-if="service.learn_more" :to="service.learn_more" flat color="primary">
-            Learn more
-          </v-btn>
+          <p class="body-2" v-html="service.description"></p>
           <v-btn to="/register" color="blue" dark>
-            Try it Free
+            <span v-if="service.button">{{ service.button }}</span>
+            <span v-else>Try it Free</span>
           </v-btn>
         </v-flex>
       </v-layout>
@@ -123,7 +115,36 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class Landing extends Vue {
   // props
   // data
-  services = [];
+  services = [
+    {
+      button: 'First scan is FREE',
+      description: 'Check for vulnerabilities in your network and applications',
+      logo: '/phaser/static/imgs/landing/data.svg',
+      name: 'How are my assets exposed to risk?',
+    },
+    {
+      description: 'Today\'s game is not Large vs small companies but <b>Fast</b> vs <b>Slow</b>.' +
+      '<br /> Staying secure while being fast-paced is <b>Hard</b>.',
+      logo: '/phaser/static/imgs/landing/finish_line.svg',
+      name: 'Enter the Continuous Security Era.',
+    },
+    {
+      description: 'By being open source, integrating security tests in your CI pipeline has ' +
+        ' never been so easy.<br />' +
+        '<b>With Phaser, security becomes part of your normal workflow.</b>',
+      logo: '/phaser/static/imgs/landing/open_source.svg',
+      name: 'Open Source',
+    },
+    {
+      description: 'Phaser security scanner performs fully automated tests to identify security' +
+      ' issues on your web application. It checks for: <strong>SQL injections</strong>, ' +
+      '<strong>XSS</strong>, <strong>SSL Errors</strong>, <strong>Heartbleed</strong> ' +
+      ' and a lot of other vulnerabilities. <br /> PaaS/Serverless apps ready.' +
+      '<br /> <b>Let us detect vulnerabilities for you before hackers.</b>',
+      logo: '/phaser/static/imgs/landing/safe.svg',
+      name: 'Network & Application Scanner',
+    },
+  ];
 
 
   // computed
@@ -176,5 +197,9 @@ export default class Landing extends Vue {
   background-size: fill; /* version standardisée */
   height: calc(70vh - 64px);
   padding-top: 52vh;
+}
+
+.headline {
+  width: 100%;
 }
 </style>
