@@ -133,13 +133,11 @@ export default class Trash extends Vue {
     };
     this.is_loading = true;
     try {
-      await api.post(`${api.DRIVE}/v1/files/delete`, payload);
+      const res = await api.post(`${api.DRIVE}/v1/files/delete`, payload);
       const deleted = this.files.filter((f: any) => files.indexOf(f.id) !== -1);
       this.files = this.files.filter((f: any) => files.indexOf(f.id) === -1);
       const profile = Object.assign({}, this.$store.state.drive_profile);
-      deleted.forEach((f: any) => {
-        profile.used_space -= f.size;
-      });
+      profile.used_space -= res.space_freed;
       this.$store.commit('set_drive_profile', profile);
       this.selected = [];
     } catch (err) {

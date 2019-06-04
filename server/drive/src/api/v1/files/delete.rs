@@ -44,8 +44,11 @@ pub fn post(delete_data: web::Json<models::DeleteFilesBody>, state: web::Data<ap
         .from_err()
         .and_then(move |res| {
             match res {
-                Ok(_) => {
-                    let res = api::Response::data(api::NoData{});
+                Ok(space_freed) => {
+                    let res = models::DeleteFilesResponse{
+                        space_freed,
+                    };
+                    let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {

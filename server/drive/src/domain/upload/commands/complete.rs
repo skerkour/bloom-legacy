@@ -51,7 +51,7 @@ impl eventsourcing::Command for Complete {
             mimesniff::detect_content_type(&contents)
         };
         let fspool = FsPool::default();
-        let file_stream = fspool.read(self.file_path.clone());
+        let file_stream = fspool.read(self.file_path.clone(), Default::default());
         let req = PutObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: format!("drive/{}/{}", aggregate.owner_id, aggregate.file_id),

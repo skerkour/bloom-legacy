@@ -20,7 +20,7 @@ pub struct File {
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
     pub trashed_at: Option<chrono::DateTime<chrono::Utc>>,
-     #[serde(rename = "type")]
+    #[serde(rename = "type")]
     pub type_: String, // MIME type
 
     pub owner_id: uuid::Uuid,
@@ -31,6 +31,15 @@ pub struct File {
 pub struct FolderPath {
     pub id: uuid::Uuid,
     pub name: String,
+}
+
+#[derive(Clone, Debug, Deserialize, QueryableByName, Serialize)]
+#[table_name = "drive_files"]
+pub struct FolderChild {
+    pub id: uuid::Uuid,
+    pub size: i64,
+    #[serde(rename = "type")]
+    pub type_: String,
 }
 
 impl File {
