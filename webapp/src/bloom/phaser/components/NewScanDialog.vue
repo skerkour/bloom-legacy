@@ -43,14 +43,14 @@
               />
             </v-flex>
 
-            <v-flex xs12 class="pt-3">
+            <!-- <v-flex xs12 class="pt-3">
               <v-select
                 :items="schedule_enum"
                 box
                 label="Schedule"
                 v-model="schedule"
               />
-            </v-flex>
+            </v-flex> -->
 
             <v-flex xs12>
               <v-text-field
