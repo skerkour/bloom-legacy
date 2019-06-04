@@ -1,13 +1,11 @@
 <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
-  <p align="center">On a mission to empower the world with open technologies, for the people, by the people.</p>
+  <p align="center">Empowering the world with open technologies</p>
 </p>
 
 --------
 
-<!-- [![Build Status](https://travis-ci.com/z0mbie42/kernel.svg?token=8WFNhu6wffpdLjmEs8Fi&branch=master)](https://travis-ci.com/z0mbie42/kernel)
-[![Build Status](https://dev.azure.com/bloom42/bloom/_apis/build/status/z0mbie42.kernel?branchName=master)](https://dev.azure.com/bloom42/bloom/_build/latest?definitionId=2&branchName=master) -->
 [![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
 
 1. [Documentation](#documentation)
