@@ -6,6 +6,10 @@ pub fn first_name(first_name: &str) -> Result<(), KernelError> {
         return Err(KernelError::Validation("first_name cannot be empty".to_string()));
     }
 
+    if first_name.len() > 64 {
+        return Err(KernelError::Validation("first_name is too long".to_string()));
+    }
+
     return Ok(());
 }
 
@@ -13,6 +17,10 @@ pub fn first_name(first_name: &str) -> Result<(), KernelError> {
 pub fn last_name(last_name: &str) -> Result<(), KernelError> {
     if last_name.is_empty() {
         return Err(KernelError::Validation("last_name cannot be empty".to_string()));
+    }
+
+    if last_name.len() > 64 {
+        return Err(KernelError::Validation("last_name is too long".to_string()));
     }
 
     return Ok(());
