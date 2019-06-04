@@ -51,10 +51,16 @@
         </v-alert>
       </v-flex>
 
-      <v-flex xs12 sm8 offset-sm2 md6 offset-md3 class="text-xs-left disclaimer mb-4">
+      <v-flex xs12 sm8 offset-sm2 md6 offset-md3 class="text-xs-left disclaimer">
         By creating an account, I agree to the
         <a href="/terms" target="_blank" rel="noopener">Terms of Service</a>
         and <a href="/privacy" target="_blank" rel="noopener">Privacy policy</a>.
+      </v-flex>
+
+      <v-flex xs12 sm8 offset-sm2 md6 offset-md3 class="text-xs-left datalose mb-4">
+        <b>
+          I acknowledge that I may LOSE ALL my data during the beta
+        </b>
       </v-flex>
 
       <v-flex xs12 text-xs-center id="flex-btn">
@@ -141,5 +147,9 @@ export default class RegisterForm extends Vue {
   a {
     text-decoration: none;
   }
+}
+
+.datalose {
+  margin-top: -10px;
 }
 </style>
