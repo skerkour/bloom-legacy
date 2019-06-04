@@ -77,4 +77,4 @@ If you want to have your logo on our [about page](https://bloom.sh/about) please
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://bloom.sh/security) instead. Tahnk you.
+[dedicated security page](https://bloom.sh/security) instead. Thank you.
