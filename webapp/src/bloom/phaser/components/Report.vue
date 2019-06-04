@@ -120,40 +120,31 @@
               Findings
             </h2>
           </v-card-title>
-          <!-- <v-card-text class="pt-0">
+
+          <v-card-text class="pt-0" v-for="finding in findings" :key="finding.module_name">
             <v-layout row wrap>
               <v-flex xs12 sm10 md8 lg6>
                 <v-expansion-panel popout>
-                <v-expansion-panel-content :class="report.findings.ports.level.toLowerCase()">
+                <v-expansion-panel-content>
                   <div slot="header" class="subheading">
                     <v-layout justify-space-between align-center row>
-                      Ports
-                      <v-btn outline color="blue" small :ripple="false">
+                      {{ finding.module_name }}
+                      <!-- <v-btn outline color="blue" small :ripple="false">
                         {{ report.findings.ports.level.toLowerCase() }}
-                      </v-btn>
+                      </v-btn> -->
                     </v-layout>
                   </div>
                   <v-card>
                     <v-divider />
                     <v-card-text>
-                      <v-data-table
-                      :headers="ports_headers"
-                      :items="report.findings.ports.ports"
-                      hide-actions
-                      >
-                        <template slot="items" slot-scope="props">
-                          <td>{{ props.item.id }}</td>
-                          <td>{{ props.item.protocol }}</td>
-                          <td>{{ props.item.state }}</td>
-                        </template>
-                      </v-data-table>
+                      <pre>{{ finding.result }}</pre>
                     </v-card-text>
                   </v-card>
                 </v-expansion-panel-content>
                </v-expansion-panel>
               </v-flex>
             </v-layout>
-          </v-card-text> -->
+          </v-card-text>
         </v-card>
       </v-flex>
 
@@ -182,6 +173,7 @@ export default class Report extends Vue {
   is_loading = false;
   report: any = null;
   reports: any[] = [];
+  findings: any[] = [];
   ports_headers = [
     {
       align: 'left',
@@ -218,6 +210,19 @@ export default class Report extends Vue {
       } else {
         this.report = reports[0];
       }
+      if (this.report && this.report.findings.length !== 0
+        && this.report.findings[0].V1.targets.length !== 0) {
+          this.findings = [];
+          const findings = this.report.findings[0].V1.targets[0].findings;
+          const found = Object.keys(findings).filter((x: string) => {
+            return findings[x].result && findings[x].result !== 'None' && !findings[x].result.Err;
+          });
+          found.forEach((key: string) => {
+            const finding = findings[key];
+            finding.module_name = key;
+            this.findings.push(findings[key]);
+          });
+      }
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -237,13 +242,13 @@ export default class Report extends Vue {
   border-top:1px solid #CFD8DC !important;
 }
 
-.v-expansion-panel__container.information {
-  border-color: #CFD8DC #CFD8DC #CFD8DC #2196F3;
-}
+// .v-expansion-panel__container.information {
+//   border-color: #CFD8DC #CFD8DC #CFD8DC #2196F3;
+// }
 .v-expansion-panel__container {
   border-style: solid solid solid solid;
   border-width: 1px 1px 1px 4px;
   border-radius: 5px;
-  border-color: #CFD8DC;
+  border-color: #CFD8DC #CFD8DC #CFD8DC #2196F3;
 }
 </style>
