@@ -1,8 +1,8 @@
 <template>
 <div class="fill-height">
-  <v-layout row wrap class="blm-calendar-controls">
+  <v-layout row wrap class="blm-calendar-controls mb-2 mt-2">
     <v-flex xs4 class="text-xs-right pr-4">
-      <v-btn @click="$refs.calendar.prev()">
+      <v-btn outline color="primary" @click="$refs.calendar.prev()">
         <v-icon dark left>
           mdi-chevron-left
         </v-icon>
@@ -17,7 +17,7 @@
       ></v-select>
     </v-flex>
     <v-flex xs4 class="text-xs-left pl-4">
-      <v-btn @click="$refs.calendar.next()">
+      <v-btn outline color="primary" @click="$refs.calendar.next()">
         Next
         <v-icon right dark>
           mdi-chevron-right
