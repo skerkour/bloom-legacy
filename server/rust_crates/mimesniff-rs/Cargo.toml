@@ -1,6 +1,6 @@
 [package]
 name = "mimesniff"
-version = "0.2.1"
+version = "0.3.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 homepage = "https://gitlab.com/bloom42/bloom"
@@ -11,3 +11,4 @@ license = "Apache-2.0"
 
 [dependencies]
 mime = "0.3"
+url = "^1.2"
