@@ -243,10 +243,6 @@ export default class Toolbar extends Vue {
   }
 }
 
-.blm-toolbar {
-  // background-color: #5FCDFF !important
-}
-
 .v-toolbar a {
   color: white;
   text-decoration: none;
