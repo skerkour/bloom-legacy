@@ -5,6 +5,7 @@ use crate::{
     myaccount,
     events::EventMetadata,
     utils,
+    config::Config,
 };
 use diesel::{
     PgConnection,
@@ -19,6 +20,7 @@ pub struct Create {
     pub email: String,
     pub password: String,
     pub metadata: EventMetadata,
+    pub config: Config,
 }
 
 #[derive(Clone, Debug)]
@@ -44,7 +46,7 @@ impl eventsourcing::Command for Create {
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
         validators::password(&self.password)?;
-        validators::email(&self.email)?;
+        validators::email(self.config.disposable_email_domains(), &self.email)?;
 
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));

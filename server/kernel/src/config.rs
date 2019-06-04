@@ -1,6 +1,8 @@
 use std::env;
 use serde::{Serialize, Deserialize};
 use dotenv;
+use std::fs::File;
+use std::io::{BufRead, BufReader};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
@@ -20,6 +22,7 @@ pub struct Config {
     sentry_url: Option<String>,
     phaser_secret: String,
     bitflow_secret: String,
+    disposable_email_domains: Vec<String>,
     // stripe_secret_key: String,
 }
 
@@ -34,6 +37,12 @@ pub fn init() -> Config {
     if env::var("RUST_ENV").is_err() {
         env::set_var("RUST_ENV", "development")
     }
+
+    let disposable_emails_file = File::open("assets/disposable_email_domains.txt").expect("Error opening disposable email file");
+    let disposable_email_domains: Vec<String> = BufReader::new(disposable_emails_file)
+        .lines()
+        .filter_map(Result::ok)
+        .collect();
 
     return Config{
         port: get_env("PORT"),
@@ -52,6 +61,7 @@ pub fn init() -> Config {
         sentry_url: env::var("SENTRY_URL").ok(),
         phaser_secret: get_env("PHASER_SECRET"),
         bitflow_secret: get_env("BITFLOW_SECRET"),
+        disposable_email_domains,
         // stripe_secret_key: get_env("STRIPE_SECRET_KEY"),
     };
 }
@@ -120,6 +130,10 @@ impl Config {
 
     pub fn bitflow_secret(&self) -> String {
         return self.bitflow_secret.clone();
+    }
+
+    pub fn disposable_email_domains(&self) -> Vec<String> {
+        return self.disposable_email_domains.clone();
     }
 
     // pub fn stripe_secret_key(&self) -> String {
