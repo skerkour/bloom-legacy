@@ -8,6 +8,9 @@
 
 [![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
 
+[Try it online for free](https://bloom.sh)
+
+
 1. [Documentation](#documentation)
 2. [Docker image](#docker-image)
 3. [Contributing](#contributing)
