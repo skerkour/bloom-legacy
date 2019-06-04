@@ -90,3 +90,7 @@ pub struct CopyFilesBody {
     pub files: Vec<Uuid>,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DeleteFilesResponse {
+    pub space_freed: i64,
+}
