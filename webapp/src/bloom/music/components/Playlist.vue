@@ -108,6 +108,7 @@ import router from '@/bloom/kernel/router';
 import DialogAddSongsToPlaylist from './DialogAddSongsToPlaylist.vue';
 import DialogRenamePlaylist from './DialogRenamePlaylist.vue';
 import DialogRemoveSongsFromPlaylist from './DialogRemoveSongsFromPlaylist.vue';
+import Player from './Player.vue';
 
 
 @Component({
@@ -115,6 +116,7 @@ import DialogRemoveSongsFromPlaylist from './DialogRemoveSongsFromPlaylist.vue';
     'blm-music-dialog-add-songs-to-playlist': DialogAddSongsToPlaylist,
     'blm-music-dialog-remove-songs-from-playlist': DialogRemoveSongsFromPlaylist,
     'blm-music-dialog-rename-playlist': DialogRenamePlaylist,
+    'blm-music-player': Player,
   },
 })
 export default class Index extends Vue {
