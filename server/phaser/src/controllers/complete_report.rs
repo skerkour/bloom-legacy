@@ -13,11 +13,12 @@ use crate::{
 };
 use std::fs;
 use std::io;
-use std::io::prelude::*;
+use futures_fs::FsPool;
+use std::io::Read;
 use std::path::Path;
 use zip;
 use walkdir::WalkDir;
-use rusoto_s3::{PutObjectRequest, S3};
+use rusoto_s3::{PutObjectRequest, S3, StreamingBody};
 
 
 #[derive(Clone)]
@@ -66,21 +67,27 @@ impl Handler<CompleteReport> for DbActor {
             for entry in WalkDir::new(&msg.report_dir).into_iter()
                 .filter_map(|e| e.ok())
                 .filter(|e| e.file_type().is_file()) {
-                let mut contents: Vec<u8> = Vec::new();
-                let file = fs::File::open(entry.path())?;
-                let mut chunk = file.take(512);
-                chunk.read(&mut contents)?;
-                let content_type = mimesniff::detect_content_type(&contents);
+
+
                 let path = entry.path();
                 let name = path.strip_prefix(Path::new(&msg.report_dir)).expect("phaser: error unwraping report file path");
+                let content_type = {
+                    // read first 512 bytes to detect content type
+                    let mut contents = [0u8;512];
+                    let mut file = fs::File::open(entry.path())?;
+                    file.read(&mut contents)?;
+                    mimesniff::detect_content_type(&contents)
+                };
 
+                let fspool = FsPool::default();
+                let file_stream = fspool.read(path, Default::default());
 
                 // upload to s3
                 // TODO: handle error
                 let req = PutObjectRequest {
                     bucket: msg.s3_bucket.clone(),
                     key: format!("phaser/scans/{}/reports/{}/{}", msg.scan_id, msg.report_id, name.display()),
-                    body: Some(contents.into()),
+                    body: Some(StreamingBody::new(file_stream)),
                     content_length: Some(entry.metadata()?.len() as i64),
                     content_type: Some(content_type.to_string()),
                     ..Default::default()
