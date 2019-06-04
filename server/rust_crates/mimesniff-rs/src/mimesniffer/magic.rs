@@ -749,5 +749,11 @@ mod tests {
         v.extend_from_slice(&[b'\x00'; 40]);
 
         assert_eq!(Some("image/jpeg"), sniff_mime_type_from_local_data(&v));
+
+         v.clear();
+        v.extend_from_slice(b"\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\xFF");
+        v.extend_from_slice(&[b'\x00'; 40]);
+
+        assert_eq!(Some("image/png"), sniff_mime_type_from_local_data(&v));
     }
 }

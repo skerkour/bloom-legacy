@@ -44,12 +44,12 @@ impl eventsourcing::Command for Complete {
         let file_metadata = fs::metadata(&self.file_path)?;
         let content_type = {
             // read first 512 bytes to detect content type
-            let mut contents: Vec<u8> = Vec::new();
-            let file = fs::File::open(&self.file_path)?;
-            let mut chunk = file.take(512);
-            chunk.read(&mut contents)?;
+            let mut contents = [0u8;512];
+            let mut file = fs::File::open(&self.file_path)?;
+            file.read(&mut contents)?;
             mimesniff::detect_content_type(&contents)
         };
+        println!("CONTENT TYEP: :::: {}", content_type.to_string());
         let fspool = FsPool::default();
         let file_stream = fspool.read(self.file_path.clone(), Default::default());
         let req = PutObjectRequest {

@@ -37,9 +37,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
+import DialogCarousel from './CarouselDialog.vue';
 
-
-@Component
+@Component({
+  components: {
+    'blm-gallery-dialog-carousel': DialogCarousel,
+  },
+})
 export default class Index extends Vue {
   // props
   // data
