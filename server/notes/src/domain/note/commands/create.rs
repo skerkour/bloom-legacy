@@ -29,6 +29,7 @@ impl eventsourcing::Command for Create {
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         validators::title(&self.title)?;
+        validators::body(&self.body)?;
 
         return Ok(());
     }
