@@ -69,21 +69,14 @@ export default class MoveDialog extends Vue {
   is_loading = false;
   to = [];
   open = [];
+  items: any = [{
+    files: [],
+    id: this.$store.state.drive_profile.home,
+    name: 'My Drive',
+  }];
 
 
   // computed
-  get items() {
-    if (this.$store.state.drive_profile) {
-      return [{
-        files: [],
-        id: this.$store.state.drive_profile.home,
-        name: 'My Drive',
-      }];
-    }
-    return [];
-  }
-
-
   get can_move() {
     if (this.to.length === 1 && this.to) {
       return true;

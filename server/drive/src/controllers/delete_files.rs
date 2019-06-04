@@ -23,7 +23,7 @@ impl Message for DeleteFiles {
     type Result = Result<(), KernelError>;
 }
 
-// TODO: recursively restore
+// TODO: recursively delete
 impl Handler<DeleteFiles> for DbActor {
     type Result = Result<(), KernelError>;
 
@@ -63,6 +63,8 @@ impl Handler<DeleteFiles> for DbActor {
                 diesel::insert_into(drive_files_events::dsl::drive_files_events)
                     .values(&event)
                     .execute(&conn)?;
+
+                // TODO: delete children, and free used space of profile
             }
 
             return Ok(());
