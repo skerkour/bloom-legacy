@@ -1,4 +1,4 @@
-use url::Url;
+// use url::Url;
 use mime::Mime;
 
 use super::magic::{is_unknown_mime_type, sniff_mime_type, sniff_mime_type_from_local_data};
@@ -38,18 +38,18 @@ impl<T: AsRef<[u8]>> MimeTypeSniffable for T {
     }
 }
 
-/// HTTP request with content, URL and MIME type hint.
-pub struct HttpRequest<'a, T: 'a + AsRef<[u8]>, U: 'a + AsRef<str>> {
-    pub content: &'a T,
-    pub url: &'a U,
-    pub type_hint: &'a str,
-}
+// /// HTTP request with content, URL and MIME type hint.
+// pub struct HttpRequest<'a, T: 'a + AsRef<[u8]>, U: 'a + AsRef<str>> {
+//     pub content: &'a T,
+//     pub url: &'a U,
+//     pub type_hint: &'a str,
+// }
 
-impl<'a, T: 'a + AsRef<[u8]>, U: 'a + AsRef<str>> MimeTypeSniffer for HttpRequest<'a, T, U> {
-    fn sniff_mime_type(&self) -> Option<&str> {
-        sniff_mime_type(self.content.as_ref(), self.url.as_ref(), self.type_hint)
-    }
-}
+// impl<'a, T: 'a + AsRef<[u8]>, U: 'a + AsRef<str>> MimeTypeSniffer for HttpRequest<'a, T, U> {
+//     fn sniff_mime_type(&self) -> Option<&str> {
+//         sniff_mime_type(self.content.as_ref(), self.url.as_ref(), self.type_hint)
+//     }
+// }
 
 const SNIFFABLE_TYPES: &'static [&'static str] = &[
     // Many web servers are misconfigured to send text/plain for many
@@ -79,23 +79,23 @@ const SNIFFABLE_TYPES: &'static [&'static str] = &[
     "application/vnd.msword",
 ];
 
-impl<'a, T: 'a + AsRef<[u8]>> MimeTypeSniffable for HttpRequest<'a, T, Url> {
-    fn should_sniff_mime_type(&self) -> bool {
-        match self.url.scheme() {
-            "" | "http" | "https" | "ftp" | "content" | "file" => {
-                SNIFFABLE_TYPES
-                    .iter()
-                    .any(|&mime_type| mime_type == self.type_hint)
-                    || is_unknown_mime_type(self.type_hint)
-            }
-            _ => false,
-        }
-    }
-}
+// impl<'a, T: 'a + AsRef<[u8]>> MimeTypeSniffable for HttpRequest<'a, T, Url> {
+//     fn should_sniff_mime_type(&self) -> bool {
+//         match self.url.scheme() {
+//             "" | "http" | "https" | "ftp" | "content" | "file" => {
+//                 SNIFFABLE_TYPES
+//                     .iter()
+//                     .any(|&mime_type| mime_type == self.type_hint)
+//                     || is_unknown_mime_type(self.type_hint)
+//             }
+//             _ => false,
+//         }
+//     }
+// }
 
 #[cfg(test)]
 mod tests {
-    use url::Url;
+    // use url::Url;
 
     use super::*;
 
@@ -104,20 +104,20 @@ mod tests {
         assert_eq!(b"%PDF-1.5".sniff_mime_type(), Some("application/pdf"));
     }
 
-    #[test]
-    fn test_request_sniffer() {
-        let url = Url::parse("http://localhost/notes.ppt").unwrap();
-        let req = HttpRequest {
-            content: b"\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1",
-            url: &url,
-            type_hint: "text/plain",
-        };
+    // #[test]
+    // fn test_request_sniffer() {
+    //     let url = Url::parse("http://localhost/notes.ppt").unwrap();
+    //     let req = HttpRequest {
+    //         content: b"\xD0\xCF\x11\xE0\xA1\xB1\x1A\xE1",
+    //         url: &url,
+    //         type_hint: "text/plain",
+    //     };
 
-        assert!(req.should_sniff_mime_type());
-        assert_eq!(req.sniff_mime_type(), Some("application/vnd.ms-powerpoint"));
-        assert_eq!(
-            req.sniff_mime_type_ext().unwrap(),
-            "application/vnd.ms-powerpoint".parse::<Mime>().unwrap()
-        );
-    }
+    //     assert!(req.should_sniff_mime_type());
+    //     assert_eq!(req.sniff_mime_type(), Some("application/vnd.ms-powerpoint"));
+    //     assert_eq!(
+    //         req.sniff_mime_type_ext().unwrap(),
+    //         "application/vnd.ms-powerpoint".parse::<Mime>().unwrap()
+    //     );
+    // }
 }
