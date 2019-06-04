@@ -251,4 +251,9 @@ export default class Report extends Vue {
   border-radius: 5px;
   border-color: #CFD8DC #CFD8DC #CFD8DC #2196F3;
 }
+
+pre {
+  background-color: #f0f0f0;
+  border-radius: 5px;
+}
 </style>
