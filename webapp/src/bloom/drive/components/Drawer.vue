@@ -24,8 +24,8 @@
     </v-list>
 
 
-    <v-list three-line v-if="$store.state.drive_profile">
-      <v-list-tile>
+    <v-list three-line v-if="$store.state.drive_profile" class="pointer">
+      <v-list-tile @click="open_add_payment_dialog">
         <v-list-tile-action>
           <v-icon>mdi-cloud-outline</v-icon>
         </v-list-tile-action>
@@ -41,18 +41,30 @@
         </v-list-tile-content>
       </v-list-tile>
     </v-list>
+
+    <blm-drive-dialog-add-payment
+      :visible="add_payment_dialog"
+      @close="close_add_payment_dialog" />
   </div>
 </template>
 
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import AddPaymentDialog from './AddPaymentDialog.vue';
 
 
-@Component
+@Component({
+  components: {
+    'blm-drive-dialog-add-payment': AddPaymentDialog,
+  },
+})
 export default class Drawer extends Vue {
   // props
   // data
+  add_payment_dialog = false;
+
+
   // computed
   get used_percent() {
     const profile = this.$store.state.drive_profile;
@@ -61,9 +73,18 @@ export default class Drawer extends Vue {
     }
     return 0;
   }
+
+
   // lifecycle
   // watch
   // methods
+  open_add_payment_dialog() {
+    this.add_payment_dialog = true;
+  }
+
+  close_add_payment_dialog() {
+    this.add_payment_dialog = false;
+  }
 }
 </script>
 
