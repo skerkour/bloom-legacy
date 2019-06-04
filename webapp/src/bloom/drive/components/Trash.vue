@@ -43,7 +43,7 @@
     @click="props.selected = !props.selected">
       <td class="text-xs-left">
       <v-layout align-center row fill-height>
-        <v-icon v-if="props.item.type === 'folder'">mdi-folder</v-icon>
+        <v-icon v-if="props.item.type === 'application/vnd.bloom.folder'">mdi-folder</v-icon>
         <v-icon v-else>mdi-file</v-icon>
         <span>{{ props.item.name }}</span>
       </v-layout>
