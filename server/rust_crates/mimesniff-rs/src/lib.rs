@@ -1,3 +1,7 @@
+mod mimesniffer;
+
+use crate::mimesniffer::MimeTypeSnifferExt;
+
 pub const SNIFF_LENGTH: usize = 512;
 
 
@@ -20,12 +24,16 @@ pub fn is_png(buf: &[u8]) -> bool {
 /// it returns "application/octet-stream".
 /// It currently supports only JPEG and PNG.
 pub fn detect_content_type(data: &[u8]) -> mime::Mime {
-    if is_jpeg(data) {
-        return mime::IMAGE_JPEG;
-    } else if is_png(data) {
-        return mime::IMAGE_PNG;
-    }
-    return mime::APPLICATION_OCTET_STREAM;
+    // if is_jpeg(data) {
+    //     return mime::IMAGE_JPEG;
+    // } else if is_png(data) {
+    //     return mime::IMAGE_PNG;
+    // }
+    return match data.sniff_mime_type_ext() {
+        Some(typ) => typ,
+        None => mime::APPLICATION_OCTET_STREAM,
+    };
+    // return mime::APPLICATION_OCTET_STREAM;
 }
 
 
