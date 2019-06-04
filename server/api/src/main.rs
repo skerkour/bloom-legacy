@@ -56,7 +56,9 @@ fn main() {
         .data(api_state.clone())
         .wrap(
             Cors::new()
-                .send_wildcard() // TODO...
+                .allowed_origin("https://bloom.sh")
+                .allowed_origin("http://localhost:8080")
+                .allowed_origin("http://127.0.0.1:8080")
                 .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
                 .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
                 .max_age(3600)
