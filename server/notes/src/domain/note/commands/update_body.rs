@@ -9,6 +9,7 @@ use kernel::{
 };
 use crate::{
     domain::note,
+    validators,
 };
 
 
@@ -29,6 +30,7 @@ impl eventsourcing::Command for UpdateBody {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Note not found".to_string()));
         }
+        validators::body(&self.body)?;
 
         return Ok(());
     }
