@@ -98,7 +98,7 @@ export default class RegisterForm extends Vue {
   password = '';
   password_rules = [
     (v: string) => !!v || 'Password is required',
-    (v: string) => (v && v.length > 7) || 'Password must be at leat 8 characters',
+    (v: string) => (v && v.length > 7) || 'Password must be at least 8 characters',
   ];
   is_loading = false;
   is_valid = false;
