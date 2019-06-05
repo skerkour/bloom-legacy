@@ -57,6 +57,7 @@ fn main() {
         .wrap(
             Cors::new()
                 .allowed_origin("https://bloom.sh")
+                .allowed_origin("https://www.bloom.sh")
                 .allowed_origin("http://localhost:8080")
                 .allowed_origin("http://127.0.0.1:8080")
                 .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
