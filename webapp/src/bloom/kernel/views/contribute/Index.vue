@@ -105,7 +105,7 @@
             <p>
               For security reasons please do not include any external dependency in a Merge request.<br/>
               Please contact a member of the <router-link to="/about">core team</router-link> if
-              for some reason you think you need to incldue an external dependency.
+              for some reason you think you need to include an external dependency.
             </p>
 
             <h3 class="text-xs-left text--darken-1 mt-3 mb-3">
