@@ -4,12 +4,10 @@
       <v-card class="elevation-0">
         <v-container fluid fill-height>
           <v-layout row wrap text-xs-center>
-            <v-flex xs12>
+            <v-flex xs12 class="mb-2">
               <p>
                 Your username is unique and cannot be changed. <br/>
-                <br />
-                We recommend to use the pattern <b>firstname.lastname</b> <br/>
-                e.g. sylvain.kerkour
+                It must be composed of only alphanumeric characters
               </p>
             </v-flex>
             <v-flex xs12 sm8 offset-sm2>
