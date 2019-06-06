@@ -82,7 +82,7 @@
 <script lang="ts">
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
-import Contact from './Contacts.vue';
+import Contact from './Contact.vue';
 
 
 @Component({
