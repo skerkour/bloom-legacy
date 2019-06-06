@@ -15,7 +15,7 @@ This link will expire in 30 minutes.
 pub fn send_password_reset(config: &Config, email: &str, recipient_name: &str,
 password_reset_id: &str, token: &str) -> Result<(), KernelError> {
 
-    let password_reset_url = format!("{}/account/recovery?id={}&token={}", config.host(), password_reset_id, token);
+    let password_reset_url = format!("{}/myaccount/recovery?id={}&token={}", config.host(), password_reset_id, token);
     let handlebars = Handlebars::new();
 
     let subject = "Your password reset link";
