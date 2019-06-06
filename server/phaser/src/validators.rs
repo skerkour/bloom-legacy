@@ -1,5 +1,6 @@
 use kernel::KernelError;
 use std::net;
+use url::Host;
 
 
 pub fn scan_name(name: &str) -> Result<(), KernelError> {
@@ -38,6 +39,11 @@ pub fn target(target: &str) -> Result<(), KernelError> {
         if !ip_address.is_global() {
             return Err(KernelError::Validation("private IP addresses are not valid".to_string()));
         }
+    }
+
+    match Host::parse(target) {
+        Ok(_) => {},
+        Err(_) => return Err(KernelError::Validation("Target is not valid. it must be a domain or an IP address".to_string())),
     }
 
     return Ok(());
