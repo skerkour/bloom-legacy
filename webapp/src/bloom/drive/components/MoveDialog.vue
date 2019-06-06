@@ -57,7 +57,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 
 
-@Component
+@Component({})
 export default class MoveDialog extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
@@ -69,12 +69,7 @@ export default class MoveDialog extends Vue {
   is_loading = false;
   to = [];
   open = [];
-  items: any = [{
-    files: [],
-    id: this.$store.state.drive_profile.home,
-    name: 'My Drive',
-  }];
-
+  items2: any[] = [];
 
   // computed
   get can_move() {
@@ -82,6 +77,21 @@ export default class MoveDialog extends Vue {
       return true;
     }
     return false;
+  }
+
+  get items() {
+    if (this.items2.length === 0) {
+      this.items2 = [{
+        files: [],
+        id: this.$store.state.drive_profile.home,
+        name: 'My Drive',
+      }];
+    }
+    return this.items2;
+  }
+
+  set items(items: any) {
+    this.items2 = items;
   }
 
   get show() {
