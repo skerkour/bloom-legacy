@@ -14,7 +14,7 @@
           <v-layout row wrap>
             <v-flex xs12>
               <p class="subheading">
-                Please add a payment mehtod and enable billing to increase your storage
+                Please add a payment method and enable billing to increase your storage
               </p>
               <div class="text-xs-center mt-2">
                 <v-btn to="/myaccount/billing" color="primary">Go to Billing</v-btn>
