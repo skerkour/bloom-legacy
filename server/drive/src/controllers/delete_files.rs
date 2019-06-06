@@ -120,27 +120,27 @@ impl Handler<DeleteFiles> for DbActor {
                         }
 
                     }
-                    if file_to_delete.type_ != crate::FOLDER_TYPE {
-                        // update profile
-                        let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
-                            .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
-                            .filter(drive_profiles::dsl::deleted_at.is_null())
-                            .for_update()
-                            .first(&conn)?;
-                        let space_cmd = profile::UpdateUsedSpace{
-                            space: -file_to_delete.size,
-                            metadata: metadata.clone(),
-                        };
-                        space_freed += file_to_delete.size;
-                        let (drive_profile, event, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+                }
+                if file_to_delete.type_ != crate::FOLDER_TYPE {
+                    // update profile
+                    let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
+                        .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
+                        .filter(drive_profiles::dsl::deleted_at.is_null())
+                        .for_update()
+                        .first(&conn)?;
+                    let space_cmd = profile::UpdateUsedSpace{
+                        space: -file_to_delete.size,
+                        metadata: metadata.clone(),
+                    };
+                    space_freed += file_to_delete.size;
+                    let (drive_profile, event, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
-                        diesel::update(&drive_profile)
-                            .set(&drive_profile)
-                            .execute(&conn)?;
-                        diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
-                            .values(&event)
-                            .execute(&conn)?;
-                    }
+                    diesel::update(&drive_profile)
+                        .set(&drive_profile)
+                        .execute(&conn)?;
+                    diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
+                        .values(&event)
+                        .execute(&conn)?;
                 }
 
             }
