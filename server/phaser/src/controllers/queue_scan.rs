@@ -5,10 +5,13 @@ use kernel::{
     events::EventMetadata,
     db::DbActor
 };
-use crate::domain::{
-    Scan,
-    scan,
-    report,
+use crate::{
+    validators,
+    domain::{
+        Scan,
+        scan,
+        report,
+    },
 };
 
 
@@ -54,6 +57,8 @@ impl Handler<QueueScan> for DbActor {
                 .filter(phaser_scans::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
+
+            validators::target(&scan_to_queue.targets[0].clone())?;
 
             // queue report
             let trigger = scan::ReportTrigger::Manual;
