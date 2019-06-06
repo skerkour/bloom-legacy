@@ -109,7 +109,7 @@
                 Built for humans, loved by developers
               </h2>
               <div class="mt-5 justify-content-center">
-              <a target="_blank" rel="noopener" href="https://crisp.im/"
+              <a target="_blank" rel="noopener" href="https://crisp.chat/"
                 class="ml-3 mr-3 mb-2 mt-2">
                   <img alt="crisp" title="crisp" src="/kernel/static/imgs/friends/crisp_blue.svg"
                     height="38">
