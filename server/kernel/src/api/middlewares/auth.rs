@@ -287,7 +287,8 @@ impl Handler<CheckAuth> for DbActor {
                     .filter(kernel_sessions::dsl::id.eq(msg.session_id))
                     .filter(kernel_sessions::dsl::deleted_at.is_null())
                     .inner_join(kernel_accounts::table)
-                    .first(&conn)?;
+                    .first(&conn)
+                    .map_err(|_| KernelError::Unauthorized("Session is not valid".to_string()))?;
 
                 // verify session token
                 if !bcrypt::verify(&msg.token, &session.token)

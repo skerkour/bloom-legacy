@@ -46,6 +46,10 @@ class API {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
+        if (err.response.status === 401
+          && err.response.error.message.contains('ession is not valid')) {
+            this.sign_out();
+        }
         throw new Error(err_msg);
       }
       throw err;
@@ -60,6 +64,10 @@ class API {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
+        if (err.response.status === 401
+          && err.response.error.message.contains('ession is not valid')) {
+            this.sign_out();
+        }
         throw new Error(err_msg);
       }
       throw err;
@@ -74,6 +82,10 @@ class API {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
+        if (err.response.status === 401
+          && err.response.error.message.contains('ession is not valid')) {
+            this.sign_out();
+        }
         throw new Error(err_msg);
       }
       throw err;
@@ -88,6 +100,10 @@ class API {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
+        if (err.response.status === 401
+          && err.response.error.message.contains('ession is not valid')) {
+            this.sign_out();
+        }
         throw new Error(err_msg);
       }
       throw err;
@@ -102,6 +118,10 @@ class API {
     } catch (err) {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
+        if (err.response.status === 401
+          && err.response.error.message.contains('ession is not valid')) {
+            this.sign_out();
+        }
         throw new Error(err_msg);
       }
       throw err;
