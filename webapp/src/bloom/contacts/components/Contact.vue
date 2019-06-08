@@ -548,7 +548,7 @@ export default class Contact extends Vue {
 
     const payload = {
       addresses: this.addresses,
-      birthday: this.birthday,
+      birthday: new Date(this.birthday),
       emails,
       first_name: this.first_name,
       last_name: this.last_name,
@@ -582,7 +582,7 @@ export default class Contact extends Vue {
 
     const payload = {
       addresses: this.addresses,
-      birthday: this.birthday,
+      birthday: new Date(this.birthday),
       emails,
       first_name: this.first_name,
       last_name: this.last_name,
