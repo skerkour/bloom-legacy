@@ -22,7 +22,6 @@ test:server:
   image: 'rust:1.35'
   tags:
     - docker
-    - bloom42
   script:
     - apt update && apt install -y gcc make git
     - rustup default nightly-2019-05-09
@@ -33,7 +32,6 @@ test:webapp:
   image: 'node:lts'
   tags:
     - docker
-    - bloom42
   script:
     - make -C webapp install
     - make -C webapp test
@@ -44,7 +42,6 @@ build:server:
   image: 'rust:1.35'
   tags:
     - docker
-    - bloom42
   script:
     - apt update && apt install -y gcc make git
     - rustup default nightly-2019-05-09
@@ -58,7 +55,6 @@ build:webapp:
   image: 'node:lts'
   tags:
     - docker
-    - bloom42
   script:
     - make -C webapp install
     - make -C webapp build
@@ -79,7 +75,6 @@ package:docker:
   image: docker:stable
   tags:
     - docker
-    - bloom42
   cache: {}
   script:
     - apk update && apk add make
@@ -98,7 +93,6 @@ release:docker:
   image: docker:stable
   tags:
     - docker
-    - bloom42
   cache: {}
   script:
     - apk update && apk add make
