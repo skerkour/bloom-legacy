@@ -3,4 +3,5 @@ export enum DownloadStatus {
   Downloading = 'Downloading',
   Failed = 'Failed',
   Completed = 'Completed',
+  Success = 'Success',
 }

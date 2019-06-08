@@ -44,6 +44,22 @@
       <v-progress-linear color="success" value="100" v-else-if="props.item.status === DownloadStatus.Completed" />
       <span v-else>{{ props.item.status }}</span>
     </td>
+    <td class="justify-left layout px-0">
+      <v-tooltip bottom>
+        <v-btn
+          flat
+          icon
+          small
+          color="grey darken-1"
+          slot="activator"
+          to="/drive"
+          :disabled="props.item.status !== DownloadStatus.Success"
+        >
+          <v-icon small>mdi-folder</v-icon>
+        </v-btn>
+        <span>Open in Drive</span>
+      </v-tooltip>
+    </td>
   </tr>
 </template>
 </v-data-table>
@@ -135,6 +151,7 @@ export default class Downloads extends Vue {
       text: 'Progress',
       value: 'progress',
     },
+    { text: 'Actions', sortable: false },
   ];
   interval: any | null = null;
 
