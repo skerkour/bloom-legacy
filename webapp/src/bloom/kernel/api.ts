@@ -24,6 +24,7 @@ class API {
   PHASER = `${this.api_url}/phaser`;
   SESSION_KEY = '__bloom_session';
   private static get MESSAGE_SESSION_EXPIRED() { return 'session expired'; }
+  private MESSAGE_SESSION_NOT_VALID = 'ession is not valid';
 
   private _client: AxiosInstance = axios;
 
@@ -47,7 +48,7 @@ class API {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
         if (err.response.status === 401
-          && err.response.error.message.contains('ession is not valid')) {
+          && err.response.data.error.message.includes(this.MESSAGE_SESSION_NOT_VALID)) {
             this.sign_out();
         }
         throw new Error(err_msg);
@@ -65,7 +66,7 @@ class API {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
         if (err.response.status === 401
-          && err.response.error.message.contains('ession is not valid')) {
+          && err.response.data.error.message.includes(this.MESSAGE_SESSION_NOT_VALID)) {
             this.sign_out();
         }
         throw new Error(err_msg);
@@ -83,7 +84,7 @@ class API {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
         if (err.response.status === 401
-          && err.response.error.message.contains('ession is not valid')) {
+          && err.response.data.error.message.includes(this.MESSAGE_SESSION_NOT_VALID)) {
             this.sign_out();
         }
         throw new Error(err_msg);
@@ -101,7 +102,7 @@ class API {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
         if (err.response.status === 401
-          && err.response.error.message.contains('ession is not valid')) {
+          && err.response.data.error.message.includes(this.MESSAGE_SESSION_NOT_VALID)) {
             this.sign_out();
         }
         throw new Error(err_msg);
@@ -119,7 +120,7 @@ class API {
       if (err.response && err.response.data && err.response.data.error) {
         const err_msg = err.response.data.error.message;
         if (err.response.status === 401
-          && err.response.error.message.contains('ession is not valid')) {
+          && err.response.data.error.message.includes(this.MESSAGE_SESSION_NOT_VALID)) {
             this.sign_out();
         }
         throw new Error(err_msg);

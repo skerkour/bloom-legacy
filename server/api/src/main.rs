@@ -54,6 +54,7 @@ fn main() {
     HttpServer::new(move || {
         App::new()
         .data(api_state.clone())
+        .wrap(api::middlewares::AuthMiddleware)
         .wrap(
             Cors::new()
                 .allowed_origin("https://bloom.sh")
@@ -74,7 +75,7 @@ fn main() {
             .header("X-XSS-Protection", "1; mode=block")
             .header("Expect-CT", "max-age=86400; enforce")
         )
-        .wrap(api::middlewares::AuthMiddleware)
+
         .configure(app::config)
         .default_service(web::route().to(app::p404))
     })
