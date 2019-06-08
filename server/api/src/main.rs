@@ -74,6 +74,7 @@ fn main() {
             .header("Strict-Transport-Security", "max-age=63072000; includeSubDomains; preload")
             .header("X-XSS-Protection", "1; mode=block")
             .header("Expect-CT", "max-age=86400; enforce")
+            .header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data:; connect-src 'self' https://sentry.io/api/1316998; report-uri https://sentry.io/api/1316998/security/?sentry_key=db4dde9412754e5988de21c84d5337d4")
         )
 
         .configure(app::config)
