@@ -1,4 +1,6 @@
 use crate::error::KernelError;
+use regex::Regex;
+
 
 
 pub fn first_name(first_name: &str) -> Result<(), KernelError> {
@@ -61,6 +63,15 @@ pub fn email(disposable_emails: Vec<String>, email: &str) -> Result<(), KernelEr
 
     if email.len() > 128 {
         return Err(KernelError::Validation("email is too long".to_string()));
+    }
+
+    let re = Regex::new(r"(?x)
+        ^(?P<login>[^@\s]+)@
+        ([[:word:]]+\.)*
+        [[:word:]]+$
+    ").expect("error compiling email regex");
+    if !re.is_match(email) {
+        return Err(KernelError::Validation("email is not valid".to_string()));
     }
 
     return Ok(());
