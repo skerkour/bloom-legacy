@@ -292,11 +292,11 @@ export default class Folder extends Vue {
 
 
   // lifecycle
-  created() {
-    this.fetch_data(this.$route.params.folder_id);
+  async created() {
     if (!this.$store.state.drive_profile) {
-      this.fetch_profile();
+      await this.fetch_profile();
     }
+    this.fetch_data(this.$route.params.folder_id);
     window.addEventListener('resize', this.check_window_size);
     if (this.$vuetify.breakpoint.smAndDown) {
       this.fab = true;
