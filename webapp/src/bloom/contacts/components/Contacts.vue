@@ -150,7 +150,11 @@ export default class Contacts extends Vue {
     this.error = '';
     this.is_loading = true;
     try {
-      this.contacts = await api.get(`${api.CONTACTS}/v1/contacts`);
+      const contacts = await api.get(`${api.CONTACTS}/v1/contacts`);
+      this.contacts = contacts.map((c: any) => {
+        c.birthday = c.birthday ? new Date(c.birthday).toISOString().slice(0, -14) : c.birthday;
+        return c;
+      });
     } catch (err) {
       // this.error = err.message;
     } finally {
