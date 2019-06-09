@@ -180,9 +180,7 @@ scrollable
 </v-card>
 </v-dialog>
 
-<v-bottom-sheet v-model="bottom_sheet">
   <v-btn
-  slot="activator"
   color="red"
   dark
   fab
@@ -190,9 +188,13 @@ scrollable
   bottom
   right
   v-if="fab"
+  @click="bottom_sheet = true"
   >
   <v-icon>mdi-plus</v-icon>
 </v-btn>
+
+<v-bottom-sheet v-model="bottom_sheet">
+
 
 <v-list>
   <v-list-tile @click="open_new_folder_dialog">
