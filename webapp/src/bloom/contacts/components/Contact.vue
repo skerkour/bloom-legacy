@@ -284,10 +284,12 @@
               >
                 <v-text-field
                   slot="activator"
-                  v-model="birthday"
+                  v-model="birthday_formatted"
                   label="Birthday"
                   prepend-icon="mdi-calendar"
+                  @blur="birthday = parse_date(birthday_formatted)"
                   readonly
+                  :disabled="viewing"
                 ></v-text-field>
                 <v-date-picker
                   ref="birthday_picker"
@@ -296,6 +298,7 @@
                   min="1900-01-01"
                   @change="save_birthday"
                   :readonly="viewing"
+                  :disabled="viewing"
                 ></v-date-picker>
               </v-menu>
             </v-flex>
@@ -360,6 +363,7 @@ export default class Contact extends Vue {
   last_name: string | null = null;
   notes: string | null = null;
   birthday: any | null = null;
+  birthday_formatted: any | null = null;
   birthday_menu = false;
   organizations: any[] = [Object.assign({}, DEFAULT_ORGANIZATION)];
   phones: any[] = [Object.assign({}, DEFAULT_PHONE)];
@@ -416,9 +420,18 @@ export default class Contact extends Vue {
      return this.visible && this.contact && this.editing === false;
   }
 
+  get computed_birthday_dormatted() {
+    return this.format_date(this.birthday);
+  }
+
 
   // lifecycle
   // watch
+  @Watch('birthday')
+  on_birthday_updated(_val: any) {
+    this.birthday_formatted = this.format_date(this.birthday);
+  }
+
   @Watch('contact')
   on_contact_changed(contact: any) {
     if (contact !== null) {
@@ -426,6 +439,7 @@ export default class Contact extends Vue {
       this.last_name = contact.last_name;
       this.notes = contact.notes;
       this.birthday = contact.birthday;
+      this.birthday_formatted = this.format_date(this.birthday);
       this.emails = contact.emails.length > 0
         ? contact.emails
         : [Object.assign({}, DEFAULT_EMAIL)];
@@ -545,10 +559,11 @@ export default class Contact extends Vue {
     const organizations = this.organizations.filter((o) => {
       return o.name !== null || o.title !== null;
     });
+    const birthday = this.birthday ? new Date(this.birthday) : this.birthday;
 
     const payload = {
       addresses: this.addresses,
-      birthday: new Date(this.birthday),
+      birthday,
       emails,
       first_name: this.first_name,
       last_name: this.last_name,
@@ -560,6 +575,8 @@ export default class Contact extends Vue {
 
     try {
       const res = await api.post(`${api.CONTACTS}/v1/contacts`, payload);
+      res.birthday = res.birthday
+        ? new Date(res.birthday).toISOString().slice(0, -14) : res.birthday;
       this.$emit('create', res);
       this.close();
     } catch (err) {
@@ -579,10 +596,11 @@ export default class Contact extends Vue {
       return o.name !== null || o.title !== null;
     });
     const contact_id = this.contact ? this.contact.id : undefined;
+    const birthday = this.birthday ? new Date(this.birthday) : this.birthday;
 
     const payload = {
       addresses: this.addresses,
-      birthday: new Date(this.birthday),
+      birthday,
       emails,
       first_name: this.first_name,
       last_name: this.last_name,
@@ -594,6 +612,8 @@ export default class Contact extends Vue {
 
     try {
       const res = await api.put(`${api.CONTACTS}/v1/contacts/${contact_id}`, payload);
+      res.birthday = res.birthday
+        ? new Date(res.birthday).toISOString().slice(0, -14) : res.birthday;
       this.$emit('update', res);
       this.close();
     } catch (err) {
@@ -601,6 +621,24 @@ export default class Contact extends Vue {
     } finally {
       this.is_loading = false;
     }
+  }
+
+  format_date(date: any) {
+    if (!date) {
+      return null;
+    }
+
+    const [year, month, day] = date.split('-');
+    return `${year}/${month}/${day}`;
+  }
+
+  parse_date(date: any) {
+    if (!date) {
+      return null;
+    }
+
+    const [year, month, day] = date.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 }
 </script>
