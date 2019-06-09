@@ -195,7 +195,6 @@ scrollable
 
 <v-bottom-sheet v-model="bottom_sheet">
 
-
 <v-list>
   <v-list-tile @click="open_new_folder_dialog">
     <v-list-tile-avatar>
