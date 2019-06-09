@@ -42,6 +42,11 @@ impl eventsourcing::Command for Move {
         if new_parent.type_ != FOLDER_TYPE {
             return Err(KernelError::Validation("Destination must be a file".to_string()))
         }
+
+         if new_parent.id == aggregate.id {
+            return Err(KernelError::Validation("Destination can't be source".to_string()))
+        }
+
         return Ok(());
     }
 
