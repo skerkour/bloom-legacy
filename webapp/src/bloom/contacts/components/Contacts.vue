@@ -37,7 +37,9 @@
           <span>{{ props.item.first_name }} {{ props.item.last_name}}</span>
         </td>
         <td class="text-xs-left">
-          <span>{{ props.item.email }}</span>
+          <span v-if="props.item.emails.length >= 1">
+            {{ props.item.emails[0].email }}
+          </span>
         </td>
         <td class="text-xs-left">
           <span v-if="props.item.phones.length >= 1">
