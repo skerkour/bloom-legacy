@@ -31,6 +31,9 @@ pub enum KernelError {
     #[fail(display = "Unauthorized: {}", 0)]
     Unauthorized(String),
 
+    #[fail(display = "Forbidden: {}", 0)]
+    Forbidden(String),
+
     #[fail(display = "Io: {}", 0)]
     Io(String),
 
@@ -142,6 +145,8 @@ impl error::ResponseError for KernelError {
             KernelError::Validation(_) | KernelError::UrlParseError(_) => HttpResponse::BadRequest().json(&res),
             // 401
             KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
+            // 403
+            KernelError::Forbidden(_) => HttpResponse::Forbidden().json(&res),
             // 404
             KernelError::NotFound(_) | KernelError::RouteNotFound => HttpResponse::NotFound().json(&res),
             // 408
