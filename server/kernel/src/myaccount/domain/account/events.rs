@@ -100,6 +100,7 @@ impl eventsourcing::Event for Event {
                 password_reset_id: None,
                 password_reset_token: None,
                 username: data.username.clone(),
+                is_disabled: false,
             },
             // FirstNameUpdatedV1
             EventData::FirstNameUpdatedV1(ref data) => account::Account {
