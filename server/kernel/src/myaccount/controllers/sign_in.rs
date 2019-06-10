@@ -66,6 +66,10 @@ impl Handler<SignIn> for DbActor {
                 return Err(KernelError::Unauthorized("Invalid username/password combination".to_string()));
             }
 
+            if account.is_disabled {
+                return Err(KernelError::Unauthorized("Account is disabled. Please contact support.".to_string()))?;
+            }
+
             // start Session
             let metadata = EventMetadata{
                 actor_id: Some(account.id),
