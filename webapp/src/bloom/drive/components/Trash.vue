@@ -88,7 +88,10 @@ export default class Trash extends Vue {
 
   // computed
   // lifecycle
-  created() {
+  async created() {
+    if (!this.$store.state.drive_profile) {
+      await this.fetch_profile();
+    }
     this.fetch_data();
   }
 
@@ -140,6 +143,20 @@ export default class Trash extends Vue {
       profile.used_space -= res.space_freed;
       this.$store.commit('set_drive_profile', profile);
       this.selected = [];
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.is_loading = false;
+    }
+  }
+
+
+  async fetch_profile() {
+    this.error = '';
+    this.is_loading = true;
+    try {
+      const res = await api.get(`${api.DRIVE}/v1/me`);
+      this.$store.commit('set_drive_profile', res);
     } catch (err) {
       this.error = err.message;
     } finally {
