@@ -29,6 +29,8 @@ pub enum EventData {
     AvatarUpdatedV1(AvatarUpdatedV1),
     PasswordResetRequestedV1(PasswordResetRequestedV1),
     PasswordResetedV1(PasswordResetedV1),
+    DisabledV1,
+    EnabledV1,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -142,6 +144,16 @@ impl eventsourcing::Event for Event {
                 password: data.password.clone(),
                 password_reset_id: None,
                 password_reset_token: None,
+                ..aggregate
+            },
+            // DisabledV1
+            EventData::DisabledV1 => account::Account {
+                is_disabled: true,
+                ..aggregate
+            },
+            // EnabledV1
+            EventData::EnabledV1 => account::Account {
+                is_disabled: false,
                 ..aggregate
             },
         }

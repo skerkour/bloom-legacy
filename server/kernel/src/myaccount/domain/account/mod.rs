@@ -14,6 +14,8 @@ pub use commands::{
     UpdateAvatar,
     ResetPassword,
     RequestPasswordReset,
+    Disable,
+    Enable,
 };
 pub use events::{
     Event,

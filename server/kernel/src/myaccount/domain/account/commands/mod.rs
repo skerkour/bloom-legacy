@@ -7,6 +7,8 @@ mod fail_sign_in;
 mod update_avatar;
 mod reset_password;
 mod request_password_reset;
+mod disable;
+mod enable;
 
 pub use create::Create;
 pub use update_first_name::UpdateFirstName;
@@ -17,3 +19,5 @@ pub use fail_sign_in::FailSignIn;
 pub use update_avatar::UpdateAvatar;
 pub use reset_password::ResetPassword;
 pub use request_password_reset::RequestPasswordReset;
+pub use disable::Disable;
+pub use enable::Enable;

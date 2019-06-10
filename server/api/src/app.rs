@@ -47,6 +47,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/myaccount/v1/me/email/verify", web::post().to_async(myaccountv1::me::email::verify::post))
         .route("/myaccount/v1/me/sessions", web::get().to_async(myaccountv1::me::sessions::get))
         .route("/myaccount/v1/me/sessions/{session_id}/revoke", web::post().to_async(myaccountv1::me::sessions::revoke::post))
+        .route("/myaccount/v1/accounts/{account_id}/disable", web::post().to_async(myaccountv1::accounts::account::disable::post))
+        .route("/myaccount/v1/accounts/{account_id}/enable", web::post().to_async(myaccountv1::accounts::account::enable::post))
 
         // drive
         .route("/drive/v1/uploads", web::post().to_async(drivev1::uploads::post))
