@@ -21,9 +21,9 @@ phaser = { path = "../phaser" }
 billing = { path = "../billing" }
 
 
-actix-web = "1.0.0-rc"
+actix-web = "1.0.0"
 actix = "0.8"
-actix-files = "0.1.0-beta.4"
+actix-files = "0.1.1"
 rusoto_core = "0.39"
 rusoto_s3 = "0.39"
 num_cpus = "1.0"
