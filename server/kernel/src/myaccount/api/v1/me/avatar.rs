@@ -65,6 +65,7 @@ pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
                 username: account.username,
                 email: account.email,
                 avatar_url: account.avatar_url,
+                is_admin: account.is_admin,
             };
             let res = api::Response::data(res);
             Ok(HttpResponse::Ok().json(&res))

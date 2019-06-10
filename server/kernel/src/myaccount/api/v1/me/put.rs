@@ -54,6 +54,7 @@ pub fn put(account_data: web::Json<models::UpdateAccount>, state: web::Data<api:
                         username: account.username,
                         email: account.email,
                         avatar_url: account.avatar_url,
+                        is_admin: account.is_admin,
                     };
                     let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))

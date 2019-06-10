@@ -72,10 +72,12 @@ import PlatformDrawer from '@/bloom/platform/components/Drawer.vue';
 import MusicDrawer from '@/bloom/music/components/Drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import GalleryDrawer from '@/bloom/gallery/components/Drawer.vue';
+import AdminDrawer from '@/bloom/admin/components/Drawer.vue';
 
 
 @Component({
   components: {
+    'blm-admin-drawer': AdminDrawer,
     'blm-bitflow-drawer': BitflowDrawer,
     'blm-drive-drawer': DriveDrawer,
     'blm-gallery-drawer': GalleryDrawer,
@@ -156,6 +158,9 @@ export default class Authenticated extends Vue {
         this.drawer = true;
         break;
       case 'music':
+        this.drawer = true;
+        break;
+      case 'admin':
         this.drawer = true;
         break;
       default:

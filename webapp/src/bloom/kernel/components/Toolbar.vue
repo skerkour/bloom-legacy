@@ -209,6 +209,11 @@ export default class Toolbar extends Vue {
         this.side_icon = true;
         this.display_searchbar = false;
         break;
+      case 'admin':
+        this.secondary_title = 'Admin';
+        this.side_icon = true;
+        this.display_searchbar = false;
+        break;
       default:
         this.secondary_title = '';
         this.side_icon = false;

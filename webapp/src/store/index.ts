@@ -57,6 +57,9 @@ export default new Vuex.Store<AppState>({
       if (account.avatar_url) {
         state.account.avatar_url = account.avatar_url;
       }
+      if (account.is_admin !== undefined && account.is_admin !== null) {
+        state.account.is_admin = account.is_admin;
+      }
     },
   },
   actions: {
