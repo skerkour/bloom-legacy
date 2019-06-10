@@ -24,6 +24,7 @@ pub struct Account {
     pub password_reset_id: Option<uuid::Uuid>,
     pub password_reset_token: Option<String>,
     pub username: String,
+    pub is_disabled: bool,
 }
 
 
@@ -47,6 +48,7 @@ impl Account {
             password_reset_id: None,
             password_reset_token: None,
             username: String::new(),
+            is_disabled: false,
         };
     }
 }

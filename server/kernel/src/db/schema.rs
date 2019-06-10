@@ -292,6 +292,7 @@ table! {
         password_reset_id -> Nullable<Uuid>,
         password_reset_token -> Nullable<Text>,
         username -> Text,
+        is_disabled -> Bool,
     }
 }
 
