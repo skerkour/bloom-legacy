@@ -28,6 +28,7 @@ pub fn get(req: HttpRequest)-> HttpResponse {
         username: account.username,
         email: account.email,
         avatar_url: account.avatar_url,
+        is_admin: account.is_admin,
     };
     let res = api::Response::data(res);
     return HttpResponse::Ok().json(&res);

@@ -31,6 +31,18 @@
             <span>{{ card.tooltip }}</span>
           </v-tooltip>
         </v-flex>
+
+
+        <v-flex v-if="$store.state.account && $store.state.account.is_admin" xs4 sm3 lg2>
+            <v-tooltip bottom>
+              <router-link to="/admin" slot="activator">
+                  <v-img src="/admin/static/imgs/admin.svg" height="150px" contain class="app-icon">
+                </v-img>
+                  <p class="headline text-xs-center app-name mt-1">Admin</p>
+            </router-link>
+            <span>Administrator dashboard</span>
+          </v-tooltip>
+        </v-flex>
       </v-layout>
     </v-container>
   </v-card>

@@ -32,6 +32,8 @@ import CalendarRoutes from '@/bloom/calendar/router';
 import ArcadeRoutes from '@/bloom/arcade/router';
 import GalleryRoutes from '@/bloom/gallery/router';
 import MusicRoutes from '@/bloom/music/router';
+import AdminRoutes from '@/bloom/admin/router';
+
 
 Vue.use(Router);
 
@@ -206,6 +208,7 @@ const router = new Router({
     ...ArcadeRoutes,
     ...GalleryRoutes,
     ...MusicRoutes,
+    ...AdminRoutes,
     {
       component: P404,
       meta: {

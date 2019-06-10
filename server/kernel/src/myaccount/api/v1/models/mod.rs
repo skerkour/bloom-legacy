@@ -56,6 +56,7 @@ pub struct MeResponse {
     pub username: String,
     pub email: String,
     pub avatar_url: String,
+    pub is_admin: bool,
 }
 
 

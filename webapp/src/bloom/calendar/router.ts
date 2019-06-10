@@ -1,8 +1,9 @@
-import Index from './views/Index.vue';
+const IndexView = () => import(/* webpackChunkName: "chunk-calendar" */ './views/Index.vue'); // tslint:disable-line
+
 
 export default [
   {
-    component: Index,
+    component: IndexView,
     meta: {
       auth: {
         layout: 'authenticated',
@@ -10,6 +11,7 @@ export default [
       layout: 'unauthenticated',
       service: 'calendar',
     },
+    name: 'calendar/index',
     path: '/calendar',
   },
 ];
