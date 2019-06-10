@@ -12,6 +12,7 @@ export default [
       service: 'admin',
     },
     name: 'admin/index',
-    path: '/admin',
+    path: '/admin/accounts',
   },
+  { path: '/admin', redirect: '/admin/accounts' },
 ];

@@ -37,6 +37,7 @@
       <blm-notes-drawer v-else-if="$route.meta.service === 'notes'" />
       <blm-gallery-drawer v-else-if="$route.meta.service === 'gallery'" />
       <blm-music-drawer v-else-if="$route.meta.service === 'music'" />
+      <blm-admin-drawer v-else-if="$route.meta.service === 'admin'" />
 
       <v-list-tile class="drawer-help hidden-sm-and-up" target="_blank" rel="noopener" href="https://help.bloom.sh">
           <v-list-tile-action>
