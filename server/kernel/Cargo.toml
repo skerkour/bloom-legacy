@@ -18,9 +18,9 @@ try_future = { path = "../rust_crates/rust-try-future" }
 
 regex = "1"
 failure = "0.1.5"
-actix-web = "1.0.0-rc"
+actix-web = "1.0.0"
 actix-multipart = "0.1.2"
-actix-service = "0.4.0"
+actix-service = "0.4.1"
 actix = "0.8"
 rusoto_s3 = "0.39"
 serde = { version = "1.0", features = ["derive"] }
