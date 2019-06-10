@@ -3,6 +3,7 @@ use serde::{Serialize, Deserialize};
 use dotenv;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
+use std::collections::HashSet;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
@@ -22,7 +23,7 @@ pub struct Config {
     sentry_url: Option<String>,
     phaser_secret: String,
     bitflow_secret: String,
-    disposable_email_domains: Vec<String>,
+    disposable_email_domains: HashSet<String>,
     // stripe_secret_key: String,
 }
 
@@ -43,6 +44,10 @@ pub fn init() -> Config {
         .lines()
         .filter_map(Result::ok)
         .collect();
+    let disposable_email_domains = disposable_email_domains.iter().fold(HashSet::new(), |mut acc, x| {
+        acc.insert(x.to_string());
+        return acc;
+    });
 
     return Config{
         port: get_env("PORT"),
@@ -132,7 +137,7 @@ impl Config {
         return self.bitflow_secret.clone();
     }
 
-    pub fn disposable_email_domains(&self) -> Vec<String> {
+    pub fn disposable_email_domains(&self) -> HashSet<String> {
         return self.disposable_email_domains.clone();
     }
 
