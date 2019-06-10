@@ -1,6 +1,6 @@
 use crate::error::KernelError;
 use regex::Regex;
-
+use std::collections::HashSet;
 
 
 pub fn first_name(first_name: &str) -> Result<(), KernelError> {
@@ -41,8 +41,7 @@ pub fn password(password: &str) -> Result<(), KernelError> {
 }
 
 
-// TODO
-pub fn email(disposable_emails: Vec<String>, email: &str) -> Result<(), KernelError> {
+pub fn email(disposable_emails: HashSet<String>, email: &str) -> Result<(), KernelError> {
     let parts: Vec<&str> = email.split("@").collect();
 
     if parts.len() != 2 {
