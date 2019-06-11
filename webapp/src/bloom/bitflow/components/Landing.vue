@@ -125,8 +125,8 @@ export default class Landing extends Vue {
       name: 'Download anywhere, anytime',
     },
     {
-      description: 'With Bitflow you don’t need to download any program, all you need is a common \
-      browser. Bitflow currently supports torrent and HTTP(S) protocols.',
+      description: 'With Bitflow you don’t need to download any program, all you need is a \
+      browser. Bitflow currently supports Torrent and HTTP(S) protocols.',
       logo: '/bitflow/static/imgs/landing/protocols.svg',
       name: 'No need to install a torrent client',
     },
