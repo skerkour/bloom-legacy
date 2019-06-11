@@ -49,7 +49,7 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
         .and_then(move |res| {
             match res {
                 Ok(accounts) => {
-                    let accounts: Vec<models::MeResponse> = accounts.into_iter().map(From::from).collect();
+                    let accounts: Vec<models::AccountResponse> = accounts.into_iter().map(From::from).collect();
                     let res = api::Response::data(accounts);
                     ok(HttpResponse::Ok().json(&res))
                 },
