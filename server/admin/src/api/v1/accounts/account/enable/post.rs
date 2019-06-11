@@ -1,7 +1,6 @@
-use crate::{
+use kernel::{
     api,
     log::macros::*,
-    myaccount::controllers,
     api::middlewares::{
         GetRequestLogger,
         GetRequestId,
@@ -16,6 +15,9 @@ use futures::{
 };
 use actix_web::{
     web, Error, HttpRequest, HttpResponse, ResponseError,
+};
+use crate::{
+    controllers,
 };
 
 

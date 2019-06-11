@@ -39,4 +39,5 @@ members = [
     "bitflow",
     "phaser",
     "billing",
+    "admin",
 ]

@@ -1,16 +1,11 @@
-use crate::{
+use kernel::{
     api,
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
-        GetRequestId,
         GetRequestAuth,
     },
     error::KernelError,
-    myaccount::{
-        controllers,
-        api::v1::models,
-    },
 };
 use futures::{
     future::Future,
@@ -19,6 +14,10 @@ use futures::{
 };
 use actix_web::{
     web, Error, HttpRequest, HttpResponse, ResponseError,
+};
+use crate::{
+    controllers,
+    api::v1::models,
 };
 
 
@@ -33,7 +32,7 @@ pub fn get(account_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, re
 
     return Either::B(
         state.db
-        .send(controllers::FindAccountAdmin{
+        .send(controllers::FindAccount{
             actor: auth.account.expect("unwraping non none account"),
             account_id: account_id.into_inner(),
         })

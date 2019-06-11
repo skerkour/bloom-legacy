@@ -22,6 +22,7 @@ class API {
   DRIVE_UPLOAD = `${this.api_url}/drive/v1/upload`;
   PHASER_GRAPHQL = `${this.api_url}/phaser/graphql`;
   PHASER = `${this.api_url}/phaser`;
+  ADMIN = `${this.api_url}/admin`;
   SESSION_KEY = '__bloom_session';
   private static get MESSAGE_SESSION_EXPIRED() { return 'session expired'; }
   private MESSAGE_SESSION_NOT_VALID = 'ession is not valid';

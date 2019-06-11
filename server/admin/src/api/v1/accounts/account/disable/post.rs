@@ -1,15 +1,12 @@
-use crate::{
+use kernel::{
     api,
     log::macros::*,
     api::middlewares::{
         GetRequestLogger,
+        GetRequestId,
         GetRequestAuth,
     },
-    KernelError,
-    myaccount::{
-        controllers,
-        api::v1::models,
-    },
+    error::KernelError,
 };
 use futures::{
     future::Future,
@@ -19,19 +16,16 @@ use futures::{
 use actix_web::{
     web, Error, HttpRequest, HttpResponse, ResponseError,
 };
-use serde::{Deserialize};
+use crate::{
+    controllers,
+};
 
 
-#[derive(Deserialize)]
-pub struct QueryParams {
-   pub offset: Option<i64>,
-   pub limit: Option<i64>,
-}
-
-pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, req: HttpRequest)
+pub fn post(account_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req: HttpRequest)
 -> impl Future<Item = HttpResponse, Error = Error> {
     let logger = req.logger();
     let auth = req.request_auth();
+    let request_id = req.request_id().0;
 
     if auth.session.is_none() || auth.account.is_none() {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
@@ -39,18 +33,18 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
 
     return Either::B(
         state.db
-        .send(controllers::FindAccounts{
+        .send(controllers::DisableAccount{
             actor: auth.account.expect("unwraping non none account"),
-            offset: query_params.offset,
-            limit: query_params.limit,
+            account_id: account_id.into_inner(),
+            request_id,
+            session_id: auth.session.expect("unwraping non none session").id,
         })
         .map_err(|_| KernelError::ActixMailbox)
         .from_err()
-        .and_then(move |res| {
+        .and_then(move |res: Result<(), KernelError>| {
             match res {
-                Ok(accounts) => {
-                    let accounts: Vec<models::AccountResponse> = accounts.into_iter().map(From::from).collect();
-                    let res = api::Response::data(accounts);
+                Ok(_) => {
+                    let res = api::Response::data(api::NoData{});
                     ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {

@@ -1,0 +1,22 @@
+[package]
+name = "admin"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+license = "AGPL-3.0"
+publish = false
+
+[dependencies]
+kernel = { path = "../kernel" }
+diesel_as_jsonb = { path = "../rust_crates/diesel_as_jsonb" }
+eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
+
+
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+uuid = { version = "0.7", features = ["serde", "v4"] }
+diesel = { version = "1.4", features = ["postgres", "chrono", "serde_json", "r2d2", "uuidv07"] }
+chrono = { version = "0.4", features = ["serde"] }
+actix-web = "1.0.0"
+actix = "0.8"
+futures = "0.1"
