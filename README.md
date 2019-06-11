@@ -22,7 +22,7 @@
 
 ## Documentation
 
-See the [Wiki](https://gitlab.com/bloom42/bloom/wikis)
+See the `[docs](docs)` folder.
 
 
 ## Docker image
