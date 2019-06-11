@@ -7,7 +7,6 @@ license = "AGPL-3.0"
 
 [dependencies]
 eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
-dotenv = { path = "../rust_crates/rust-dotenv" }
 
 
 kernel = { path = "../kernel" }

@@ -27,7 +27,6 @@ members = [
     "rust_crates/mimesniff-rs",
     "rust_crates/diesel-derive-enum",
     "rust_crates/diesel-enum-derive",
-    "rust_crates/rust-dotenv",
 
     "kernel",
     "api",

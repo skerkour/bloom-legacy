@@ -13,7 +13,6 @@ bcrypt = { path = "../rust_crates/bcrypt-rs" }
 eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
 mimesniff = { path = "../rust_crates/mimesniff-rs" }
 hex = { path = "../rust_crates/hex-rs" }
-dotenv = { path = "../rust_crates/rust-dotenv" }
 try_future = { path = "../rust_crates/rust-try-future" }
 
 regex = "1"
@@ -48,3 +47,4 @@ slog = "2.4"
 slog-json = "2.3"
 log = { version = "0.4", features = ["std"] }
 slog-scope = "4.1"
+sane = "0.2.1"

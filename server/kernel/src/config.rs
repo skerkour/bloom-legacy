@@ -1,42 +1,76 @@
 use std::env;
 use serde::{Serialize, Deserialize};
-use dotenv;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::collections::HashSet;
+use std::fs;
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
-    port: String,
-    database_url: String,
+    port: u16,
+    database: DatabaseConfig,
     rust_env: String,
-    smtp_host: String,
-    smtp_username: String,
-    smtp_password: String,
+    smtp: SmtpConfig,
     host: String,
-    aws_access_key_id: String,
-    aws_secret_access_key: String,
-    aws_region: String,
-    s3_bucket: String,
-    s3_base_url: String,
-    sentry_url: Option<String>,
-    phaser_secret: String,
-    bitflow_secret: String,
+    aws: AwsConfig,
+    s3: S3Config,
+    sentry: SentryConfig,
+    phaser: PhaserConfig,
+    bitflow: BitflowConfig,
+    #[serde(skip)]
     disposable_email_domains: HashSet<String>,
     // stripe_secret_key: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct AwsConfig {
+    access_key_id: String,
+    secret_access_key: String,
+    region: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct S3Config {
+    bucket: String,
+    base_url: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct PhaserConfig {
+    secret: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct BitflowConfig {
+    secret: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct SmtpConfig {
+    host: String,
+    username: String,
+    password: String,
+    port: u16,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct SentryConfig {
+    url: Option<String>,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct DatabaseConfig {
+    url: String,
+}
+
 pub fn init() -> Config {
-    dotenv::dotenv().ok();
+    let config_file_contents = fs::read_to_string("bloom.sane")
+        .expect("Error reading bloom.sane");
 
-    // set default env vars
-    if env::var("PORT").is_err() {
-        env::set_var("PORT", "8000")
-    }
+    let mut decoded: Config = sane::from_str(&config_file_contents)
+        .expect("Error parsing config file");
 
-    if env::var("RUST_ENV").is_err() {
-        env::set_var("RUST_ENV", "development")
-    }
 
     let disposable_emails_file = File::open("assets/disposable_email_domains.txt").expect("Error opening disposable email file");
     let disposable_email_domains: Vec<String> = BufReader::new(disposable_emails_file)
@@ -48,35 +82,19 @@ pub fn init() -> Config {
         return acc;
     });
 
-    return Config{
-        port: get_env("PORT"),
-        database_url: get_env("DATABASE_URL"),
-        rust_env: get_env("RUST_ENV"),
-        smtp_host: get_env("SMTP_HOST"),
-        smtp_username: get_env("SMTP_USERNAME"),
-        smtp_password: get_env("SMTP_PASSWORD"),
-        host: get_env("HOST"),
-        aws_access_key_id: get_env("AWS_ACCESS_KEY_ID"),
-        aws_secret_access_key: get_env("AWS_SECRET_ACCESS_KEY"),
-        aws_region: get_env("AWS_REGION"),
-        s3_bucket: get_env("S3_BUCKET"),
-        s3_base_url: get_env("S3_BASE_URL"),
-        sentry_url: env::var("SENTRY_URL").ok(),
-        phaser_secret: get_env("PHASER_SECRET"),
-        bitflow_secret: get_env("BITFLOW_SECRET"),
-        disposable_email_domains,
-        // stripe_secret_key: get_env("STRIPE_SECRET_KEY"),
-    };
+    decoded.disposable_email_domains = disposable_email_domains;
+
+    return decoded;
 }
 
 
 impl Config {
     pub fn port(&self) -> String {
-        return self.port.clone();
+        return self.port.to_string();
     }
 
     pub fn database_url(&self) -> String {
-        return self.database_url.clone();
+        return self.database.url.clone();
     }
 
     pub fn rust_env(&self) -> String {
@@ -84,15 +102,19 @@ impl Config {
     }
 
     pub fn smtp_host(&self) -> String {
-        return self.smtp_host.clone();
+        return self.smtp.host.clone();
     }
 
     pub fn smtp_username(&self) -> String {
-        return self.smtp_username.clone();
+        return self.smtp.username.clone();
     }
 
     pub fn smtp_password(&self) -> String {
-        return self.smtp_password.clone();
+        return self.smtp.password.clone();
+    }
+
+    pub fn smtp_port(&self) -> u16 {
+        return self.smtp.port;
     }
 
     pub fn host(&self) -> String {
@@ -100,35 +122,35 @@ impl Config {
     }
 
     pub fn aws_access_key_id(&self) -> String {
-        return self.aws_access_key_id.clone();
+        return self.aws.access_key_id.clone();
     }
 
     pub fn aws_secret_access_key(&self) -> String {
-        return self.aws_secret_access_key.clone();
+        return self.aws.secret_access_key.clone();
     }
 
     pub fn aws_region(&self) -> String {
-        return self.aws_region.clone();
+        return self.aws.region.clone();
     }
 
     pub fn s3_bucket(&self) -> String {
-        return self.s3_bucket.clone();
+        return self.s3.bucket.clone();
     }
 
     pub fn s3_base_url(&self) -> String {
-        return self.s3_base_url.clone();
+        return self.s3.base_url.clone();
     }
 
     pub fn sentry_url(&self) -> Option<String> {
-        return self.sentry_url.clone();
+        return self.sentry.url.clone();
     }
 
     pub fn phaser_secret(&self) -> String {
-        return self.phaser_secret.clone();
+        return self.phaser.secret.clone();
     }
 
     pub fn bitflow_secret(&self) -> String {
-        return self.bitflow_secret.clone();
+        return self.bitflow.secret.clone();
     }
 
     pub fn disposable_email_domains(&self) -> HashSet<String> {

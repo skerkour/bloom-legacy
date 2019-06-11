@@ -1,0 +1,30 @@
+rust_env = "development"
+host = "http://localhost:8080"
+port = 8000
+database = {
+    url = "postgres://USER:PASSWORD@127.0.0.1:5432/DATABASE?sslmode=disable"
+}
+aws = {
+    secret_access_key = "XXX",
+    access_key_id = "XXX",
+    region = "XXX",
+}
+s3 = {
+    bucket = "XXX",
+    base_url = "https://s3.REGION.amazonaws.com",
+}
+sentry = {
+    url = "XXX" # optional
+}
+phaser = {
+    secret = "XXX",
+}
+bitflow = {
+    secret = "XXX",
+}
+smtp = {
+    port = 587,
+    host = "XXX",
+    username = "XXX",
+    password = "XXX",
+}
