@@ -52,6 +52,19 @@ impl Handler<QueueDownload> for DbActor {
                 .filter(drive_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
+            let active_downloads: i64 = bitflow_downloads::dsl::bitflow_downloads
+                .filter(bitflow_downloads::dsl::owner_id.eq(msg.account_id))
+                .filter(bitflow_downloads::dsl::deleted_at.is_null())
+                .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Stopped))
+                .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Success))
+                .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Failed))
+                .count()
+                .get_result(&conn)?;
+
+            if active_downloads > 4 {
+                return Err(KernelError::Validation("Please update your subscription to create more parallel downloads".to_string()));
+            }
+
             if profile.used_space >= profile.total_space {
                 return Err(KernelError::Validation("No space available in your drive".to_string()));
             }
