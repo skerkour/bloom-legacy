@@ -159,7 +159,7 @@ export default class Landing extends Vue {
   // data
   services = [
     {
-      description: 'The global cloud platform. Security scanner, serverless and much more...',
+      description: 'The global cloud platform. Security scanner and much more to come.',
       learn_more: '/platform',
       logo: '/kernel/static/imgs/logos/platform.svg',
       name: 'Platform',
