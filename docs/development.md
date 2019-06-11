@@ -22,7 +22,12 @@ $ rustup default nightly-2019-05-09
 $ cargo install --force cargo-watch
 ```
 
-4. Launch a PostgreSQL database
+4. Install `diesel`
+```sh
+$ cargo install diesel_cli --no-default-features --features postgres
+```
+
+5. Launch a PostgreSQL database
 ```sh
 $ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 postgres:11
 ```
