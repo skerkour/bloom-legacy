@@ -93,10 +93,13 @@
           New download
         </v-card-title>
 
-        <v-card-text>
+        <v-card-text class="text-xs-center">
           <v-alert icon="mdi-alert-circle" :value="error" type="error" dismissible>
             {{ error }}
           </v-alert>
+          <p>
+            Download size is limited to 8GB.
+          </p>
           <v-text-field
           placeholder="Paste your link or your magnet link here."
           outline
