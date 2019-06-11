@@ -52,7 +52,7 @@ import api from '@/bloom/kernel/api';
 import router from '@/bloom/kernel/router';
 
 
-const LIMIT = 2;
+const LIMIT = 25;
 
 @Component
 export default class Accounts extends Vue {
@@ -61,7 +61,7 @@ export default class Accounts extends Vue {
   error = '';
   is_loading = false;
   offset = 0;
-  total = 3;
+  total = 0;
   accounts: any[] = [];
   pagination: any = {};
   headers = [
