@@ -1,7 +1,7 @@
 # Summary
 
-1. [Architecture](architecture)
-2. [Self hosting](self_hosting)
+1. [Architecture](architecture.md)
+2. [Self hosting](self_hosting.md)
 
 
 # Build
