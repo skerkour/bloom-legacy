@@ -57,6 +57,18 @@ impl Handler<DisableAccount> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
+            if account_to_disable.is_admin {
+                let remaining_admins: i64 = kernel_accounts::dsl::kernel_accounts
+                    .filter(kernel_accounts::dsl::is_admin.eq(true))
+                    .filter(kernel_accounts::dsl::deleted_at.is_null())
+                    .filter(kernel_accounts::dsl::is_disabled.eq(false))
+                    .count()
+                    .get_result(&conn)?;
+                if remaining_admins < 2 {
+                    return Err(KernelError::Validation("You can't disable last admin's account".to_string()));
+                }
+            }
+
             let disable_cmd = account::Disable{
                 actor: msg.actor,
                 metadata: metadata.clone(),
