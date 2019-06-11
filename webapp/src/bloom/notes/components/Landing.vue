@@ -119,7 +119,7 @@ export default class Landing extends Vue {
   // data
   services = [
     {
-      description: 'Bloom Notes helps you capture and prioritize ideas, projects, and to-do lists, \
+      description: 'Bloom Notes helps you capture and prioritize ideas, projects, \
             so nothing falls through the cracks.',
       logo: '/notes/static/imgs/landing/organized.svg',
       name: 'Feel organized without the effort',
@@ -130,12 +130,12 @@ export default class Landing extends Vue {
       logo: '/notes/static/imgs/landing/devices.svg',
       name: 'Access from anywhere',
     },
-    {
-      description: 'Quickly filter and search for notes. Find what you\'re looking \
-        for even faster, and let Bloom notes do the remembering for you.',
-      logo: '/notes/static/imgs/landing/search.svg',
-      name: 'Find what you need, fast ',
-    },
+    // {
+    //   description: 'Quickly filter and search for notes. Find what you\'re looking \
+    //     for even faster, and let Bloom notes do the remembering for you.',
+    //   logo: '/notes/static/imgs/landing/search.svg',
+    //   name: 'Find what you need, fast ',
+    // },
   ];
 
 

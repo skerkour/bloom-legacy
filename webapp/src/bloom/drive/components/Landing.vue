@@ -120,19 +120,19 @@ export default class Landing extends Vue {
   services = [
     {
       description: 'Keep photos, stories, designs, drawings, recordings, videos, and more. \
-            Your first <b>30 GB</b> of storage are free.',
+        Your first <b>30 GB</b> of storage are free.',
       logo: '/drive/static/imgs/landing/drive_files.svg',
       name: 'Store any file',
     },
     {
       description: 'Your files in Drive can be reached from any smartphone, tablet, or computer. \
-            So wherever you go, your files follow.',
+        So wherever you go, your files follow.',
       logo: '/drive/static/imgs/landing/drive_devices.svg',
       name: 'See your stuff anywhere',
     },
     {
       description: 'If something happens to your device, you don\'t have to worry about losing \
-      your files or photos – they\'re in your Bloom Drive. And Bloom Drive is encrypted using SSL.',
+        your files or photos – they\'re in your Bloom Drive.',
       logo: '/drive/static/imgs/landing/drive_security.svg',
       name: 'Keep your files safe',
     },
