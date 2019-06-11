@@ -17,6 +17,7 @@ mod send_new_verification_code;
 mod disable_account;
 mod enable_account;
 mod find_accounts;
+mod find_account_admin;
 
 
 pub use registration_start::StartRegistration;
@@ -38,3 +39,4 @@ pub use send_new_verification_code::SendNewVerificationCode;
 pub use disable_account::DisableAccount;
 pub use enable_account::EnableAccount;
 pub use find_accounts::FindAccounts;
+pub use find_account_admin::FindAccountAdmin;
