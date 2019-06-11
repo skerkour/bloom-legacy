@@ -3,6 +3,46 @@
     <v-alert icon="mdi-alert-circle" :value="error" type="error" dismissible>
       {{ error }}
     </v-alert>
+
+    <v-data-table
+      :headers="headers"
+      :items="accounts"
+      item-key="id"
+      hide-actions
+      :loading="is_loading"
+      v-model="selected">
+      <template slot="no-data">
+        <p class="text-xs-center">
+          No accounts.
+        </p>
+      </template>
+      <template v-slot:items="props">
+         <!-- class="pointer"
+        :active="props.selected"
+        @click="props.selected = !props.selected"> -->
+
+        <td class="text-xs-left">
+          <span>{{ props.item.username }}</span>
+        </td>
+        <!-- <td class="justify-left layout px-0">
+          <v-btn outline small color="success" :ripple="false" v-if="!props.item.is_disabled">
+            active
+          </v-btn>
+          <v-btn v-else small :ripple="false" color="error">
+            disabled
+          </v-btn>
+        </td> -->
+        <td class="justify-left layout px-0">
+          <v-tooltip bottom>
+            <v-btn flat icon small color="grey darken-1" slot="activator"
+              :to="`/admin/accounts/${props.item.id}`">
+              <v-icon small>mdi-magnify</v-icon>
+            </v-btn>
+            <span>View account</span>
+          </v-tooltip>
+        </td>
+      </template>
+    </v-data-table>
   </div>
 </template>
 
@@ -24,15 +64,14 @@ export default class Accounts extends Vue {
     {
       align: 'left',
       sortable: true,
-      text: 'Name',
-      value: 'name',
-      width: '50%',
+      text: 'Username',
+      value: 'username',
     },
     {
       align: 'left',
-      sortable: true,
-      text: 'Progress',
-      value: 'progress',
+      sortable: false,
+      text: 'Active',
+      value: 'is_disabled',
     },
     { text: 'Actions', sortable: false },
   ];
