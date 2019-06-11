@@ -24,7 +24,7 @@ $ cargo install --force cargo-watch
 
 4. Launch a PostgreSQL database
 ```sh
-$ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD=PASSWORD postgres:11
+$ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 postgres:11
 ```
 
 6. Edit `.env` with correct values
@@ -32,6 +32,23 @@ $ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD
 $ cd server
 $ cp .env.example .env
 # edit .env
+$ cat .env
+RUST_ENV=development
+DATABASE_URL=postgres://bloom:PASSWORD_REDACTED@127.0.0.1:5432/bloom?sslmode=disable
+HOST=http://localhost:8080
+AWS_SECRET_ACCESS_KEY=XXX
+AWS_ACCESS_KEY_ID=XXX
+AWS_REGION=XXX
+S3_BUCKET=XXX
+S3_BASE_URL=https://s3.REGION.amazonaws.com
+GITHUB_TOKEN=XXX
+SENTRY_URL=XXX
+PHASER_SECRET=XXX # Random passphrase
+BITFLOW_SECRET=XXX # Random passphrase
+SMTP_PORT=587
+SMTP_HOST=XXX
+SMTP_USERNAME=XXX
+SMTP_PASSWORD=XXX
 ```
 
 7. Run migrations
