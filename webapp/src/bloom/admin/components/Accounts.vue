@@ -24,7 +24,7 @@
           <v-btn outline small color="success" :ripple="false" v-if="!props.item.is_disabled">
             active
           </v-btn>
-          <v-btn v-else small :ripple="false" color="error">
+          <v-btn v-else outline small :ripple="false" color="error">
             disabled
           </v-btn>
         </td>

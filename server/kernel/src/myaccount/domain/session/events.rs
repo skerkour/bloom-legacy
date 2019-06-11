@@ -42,6 +42,7 @@ pub enum RevokedReason {
     Manually,
     PasswordUpdated,
     PasswordReseted,
+    AccountDisabled,
 }
 
 impl eventsourcing::Event for Event {
