@@ -7,11 +7,10 @@
     <v-data-table
       :headers="headers"
       :items="accounts"
-      item-key="id"
       hide-actions
       :loading="is_loading"
       :pagination.sync="pagination"
-      v-model="selected">
+      :total-items="total">
       <template slot="no-data">
         <p class="text-xs-center">
           No accounts.
@@ -41,18 +40,19 @@
       </template>
     </v-data-table>
     <div class="text-xs-center pt-2">
-      <v-pagination v-model="pagination.page" :length="pages" :total-visible="8"
-       @input="fetch_data"></v-pagination>
+      <v-pagination v-model="pagination.page" :length="pages" :total-visible="8" @input="paginate"></v-pagination>
     </div>
   </div>
 </template>
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
+import router from '@/bloom/kernel/router';
 
-const LIMIT = 1;
+
+const LIMIT = 2;
 
 @Component
 export default class Accounts extends Vue {
@@ -61,9 +61,8 @@ export default class Accounts extends Vue {
   error = '';
   is_loading = false;
   offset = 0;
-  pages = 0;
+  total = 3;
   accounts: any[] = [];
-  selected: any[] = [];
   pagination: any = {};
   headers = [
     {
@@ -83,13 +82,37 @@ export default class Accounts extends Vue {
 
 
   // computed
+  get pages() {
+    if (!this.total) {
+      return 0;
+    }
+
+    return Math.ceil(this.total / LIMIT);
+  }
+
+
   // lifecycle
   created() {
+    this.pagination.rowsPerPage = -1;
+    const page = this.$route.query.page;
+    if (page) {
+      const parsed_page = Number(page);
+      if (!isNaN(parsed_page)) {
+        this.pagination.page = parsed_page;
+      }
+    }
     this.fetch_data();
   }
 
 
   // watch
+  // @Watch('pagination', { deep: true })
+  async paginate() {
+    router.push({ query: { page: this.pagination.page }});
+    return this.fetch_data();
+  }
+
+
   // methods
   async fetch_data() {
     this.error = '';
@@ -103,17 +126,12 @@ export default class Accounts extends Vue {
         },
       });
       this.accounts = res.hits;
-      this.set_total(res.total);
+      this.total = res.total;
     } catch (err) {
       this.error = err.message;
     } finally {
       this.is_loading = false;
     }
-  }
-
-  set_total(value: number) {
-    this.pagination.totalItems = value;
-    this.pages = Math.ceil(value / LIMIT);
   }
 }
 </script>
