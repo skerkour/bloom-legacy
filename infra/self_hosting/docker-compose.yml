@@ -1,0 +1,47 @@
+version: "3"
+
+services:
+  bloom:
+    image: registry.gitlab.com/bloom42/bloom:${BLOOM_VERSION}
+    restart: unless-stopped
+    env_file:
+      - bloom.env
+    networks:
+      - web
+      - workers
+    depends_on:
+      - db
+
+
+  db:
+    image: postgres:${POSTGRES_VERSION}
+    restart: unless-stopped
+    env_file:
+      - db.env
+    volumes:
+      - "./pg_data:/var/lib/postgresql/data"
+    networks:
+      - backend
+
+
+  phaser:
+    image: registry.gitlab.com/bloom42/phaser:${PHASER_VERSION}
+    restart: unless-stopped
+    env_file:
+      - phaser.env
+    networks:
+      - workers
+
+
+  bitflow:
+    image: registry.gitlab.com/bloom42/bitflow:${BITFLOW_VERSION}
+    restart: unless-stopped
+    env_file:
+      - bitflow.env
+    networks:
+      - workers
+
+
+networks:
+  web:
+  workers:
