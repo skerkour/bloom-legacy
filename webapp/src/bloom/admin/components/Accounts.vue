@@ -17,22 +17,18 @@
         </p>
       </template>
       <template v-slot:items="props">
-         <!-- class="pointer"
-        :active="props.selected"
-        @click="props.selected = !props.selected"> -->
-
         <td class="text-xs-left">
           <span>{{ props.item.username }}</span>
         </td>
-        <!-- <td class="justify-left layout px-0">
+        <td class="text-xs-left">
           <v-btn outline small color="success" :ripple="false" v-if="!props.item.is_disabled">
             active
           </v-btn>
           <v-btn v-else small :ripple="false" color="error">
             disabled
           </v-btn>
-        </td> -->
-        <td class="justify-left layout px-0">
+        </td>
+        <td class="justify-left">
           <v-tooltip bottom>
             <v-btn flat icon small color="grey darken-1" slot="activator"
               :to="`/admin/accounts/${props.item.id}`">
