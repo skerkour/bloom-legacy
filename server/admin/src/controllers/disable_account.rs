@@ -4,6 +4,7 @@ use kernel::{
     myaccount::domain::{
         Account,
         account,
+        session,
     },
     error::KernelError,
     events::EventMetadata,
@@ -30,6 +31,8 @@ impl Handler<DisableAccount> for DbActor {
         use kernel::db::schema::{
             kernel_accounts,
             kernel_accounts_events,
+            kernel_sessions,
+            kernel_sessions_events,
         };
         use diesel::prelude::*;
 
@@ -56,7 +59,7 @@ impl Handler<DisableAccount> for DbActor {
 
             let disable_cmd = account::Disable{
                 actor: msg.actor,
-                metadata,
+                metadata: metadata.clone(),
             };
 
             let (account_to_disable, event, _) = eventsourcing::execute(&conn, account_to_disable, &disable_cmd)?;
@@ -67,7 +70,29 @@ impl Handler<DisableAccount> for DbActor {
                 .values(&event)
                 .execute(&conn)?;
 
-            // TODO: revoke all sessions
+            // revoke all sessions
+            let sessions: Vec<session::Session> = kernel_sessions::dsl::kernel_sessions
+                .filter(kernel_sessions::dsl::account_id.eq(account_to_disable.id))
+                .filter(kernel_sessions::dsl::deleted_at.is_null())
+                .for_update()
+                .load(&conn)?;
+
+            let revoke_cmd = session::Revoke{
+                current_session_id: None,
+                reason: session::RevokedReason::AccountDisabled,
+                metadata: metadata.clone(),
+            };
+
+            for session in sessions {
+                let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+                // update session
+                diesel::update(&session)
+                    .set(&session)
+                    .execute(&conn)?;
+                diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
+                    .values(&event)
+                    .execute(&conn)?;
+            }
 
             return Ok(());
         })?);
