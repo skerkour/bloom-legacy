@@ -17,12 +17,12 @@ $ make dev
 $ rustup default nightly-2019-05-09
 ```
 
-3. Install `cargo-watch`
+3. Install [cargo-watch](https://github.com/passcod/cargo-watch)
 ```sh
 $ cargo install --force cargo-watch
 ```
 
-4. Install `diesel`
+4. Install [diesel](http://diesel.rs/)
 ```sh
 $ cargo install diesel_cli --no-default-features --features postgres
 ```
@@ -57,11 +57,12 @@ SMTP_PASSWORD=XXX
 
 7. Run migrations
 ```sh
-# still in server
+# still in server/
 $ diesel migration run
 ```
 
-8. Run server
+8. Run development server
 ```sh
+# still in server/
 $ make dev
 ```
