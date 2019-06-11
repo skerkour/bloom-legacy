@@ -1,5 +1,10 @@
 use serde::{Serialize, Deserialize};
-use crate::myaccount::domain::session;
+use crate::{
+    myaccount::domain::{
+        session,
+        account,
+    },
+};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -57,6 +62,21 @@ pub struct MeResponse {
     pub email: String,
     pub avatar_url: String,
     pub is_admin: bool,
+}
+
+impl From<account::Account> for MeResponse {
+    fn from(account: account::Account) -> Self {
+        MeResponse{
+            id: account.id,
+            created_at: account.created_at,
+            first_name: account.first_name,
+            last_name: account.last_name,
+            username: account.username,
+            email: account.email,
+            avatar_url: account.avatar_url,
+            is_admin: account.is_admin,
+        }
+    }
 }
 
 
