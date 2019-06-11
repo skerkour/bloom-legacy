@@ -15,11 +15,11 @@ pub struct FindAccounts {
 }
 
 impl Message for FindAccounts {
-    type Result = Result<Vec<domain::Account>, KernelError>;
+    type Result = Result<(Vec<domain::Account>, i64), KernelError>;
 }
 
 impl Handler<FindAccounts> for DbActor {
-    type Result = Result<Vec<domain::Account>, KernelError>;
+    type Result = Result<(Vec<domain::Account>, i64), KernelError>;
 
     fn handle(&mut self, msg: FindAccounts, _: &mut Self::Context) -> Self::Result {
         use kernel::db::schema::{
@@ -47,12 +47,18 @@ impl Handler<FindAccounts> for DbActor {
         };
         let offset = msg.offset.unwrap_or(0);
 
+        let total: i64 = kernel_accounts::dsl::kernel_accounts
+            .filter(kernel_accounts::dsl::deleted_at.is_null())
+            .count()
+            .get_result(&conn)?;
+
         let account: Vec<domain::Account> = kernel_accounts::dsl::kernel_accounts
+            .filter(kernel_accounts::dsl::deleted_at.is_null())
             .order_by(kernel_accounts::dsl::created_at.desc())
             .limit(limit)
             .offset(offset)
             .load(&conn)?;
 
-        return Ok(account);
+        return Ok((account, total));
     }
 }

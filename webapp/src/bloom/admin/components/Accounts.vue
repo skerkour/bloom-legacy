@@ -10,6 +10,7 @@
       item-key="id"
       hide-actions
       :loading="is_loading"
+      :pagination.sync="pagination"
       v-model="selected">
       <template slot="no-data">
         <p class="text-xs-center">
@@ -39,6 +40,10 @@
         </td>
       </template>
     </v-data-table>
+    <div class="text-xs-center pt-2">
+      <v-pagination v-model="pagination.page" :length="pages" :total-visible="8"
+       @input="fetch_data"></v-pagination>
+    </div>
   </div>
 </template>
 
@@ -47,6 +52,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 
+const LIMIT = 1;
 
 @Component
 export default class Accounts extends Vue {
@@ -54,8 +60,11 @@ export default class Accounts extends Vue {
   // data
   error = '';
   is_loading = false;
+  offset = 0;
+  pages = 0;
   accounts: any[] = [];
   selected: any[] = [];
+  pagination: any = {};
   headers = [
     {
       align: 'left',
@@ -82,18 +91,29 @@ export default class Accounts extends Vue {
 
   // watch
   // methods
-  async fetch_data(loading?: boolean) {
-    if (loading !== false) {
-      this.error = '';
-      this.is_loading = true;
-    }
+  async fetch_data() {
+    this.error = '';
+    this.is_loading = true;
+    const offset = this.pagination.page ? (this.pagination.page - 1) * LIMIT : 0;
     try {
-      this.accounts = await api.get(`${api.ADMIN}/v1/accounts`);
+      const res = await api.get(`${api.ADMIN}/v1/accounts`, {
+        params: {
+          limit: LIMIT,
+          offset,
+        },
+      });
+      this.accounts = res.hits;
+      this.set_total(res.total);
     } catch (err) {
       this.error = err.message;
     } finally {
       this.is_loading = false;
     }
+  }
+
+  set_total(value: number) {
+    this.pagination.totalItems = value;
+    this.pages = Math.ceil(value / LIMIT);
   }
 }
 </script>

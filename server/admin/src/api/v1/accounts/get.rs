@@ -48,9 +48,13 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
         .from_err()
         .and_then(move |res| {
             match res {
-                Ok(accounts) => {
+                Ok((accounts, total)) => {
                     let accounts: Vec<models::AccountResponse> = accounts.into_iter().map(From::from).collect();
-                    let res = api::Response::data(accounts);
+                    let res = models::AccountsResponse{
+                        hits: accounts,
+                        total: total as u64,
+                    };
+                    let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))
                 },
                 Err(err) => {

@@ -34,3 +34,10 @@ impl From<account::Account> for AccountResponse {
         }
     }
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct AccountsResponse {
+    pub hits: Vec<AccountResponse>,
+    pub total: u64,
+}
