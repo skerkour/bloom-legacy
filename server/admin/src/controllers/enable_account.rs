@@ -1,13 +1,13 @@
 use actix::{Message, Handler};
-use crate::{
+use kernel::{
     db::DbActor,
     myaccount::domain::{
         Account,
         account,
     },
     events::EventMetadata,
+    error::KernelError,
 };
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 
 
@@ -27,7 +27,7 @@ impl Handler<EnableAccount> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: EnableAccount, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             kernel_accounts,
             kernel_accounts_events,
         };
@@ -43,6 +43,10 @@ impl Handler<EnableAccount> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
+
+            if !msg.actor.is_admin {
+                return Err(KernelError::Forbidden("Admin role is required".to_string()));
+            }
 
             let account_to_disable: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::id.eq(msg.account_id))

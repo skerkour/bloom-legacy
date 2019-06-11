@@ -37,7 +37,7 @@ export default class Account extends Vue {
       this.is_loading = true;
     }
     try {
-      this.account = await api.get(`${api.MYACCOUNT}/v1/accounts/${this.$route.params.account_id}`);
+      this.account = await api.get(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}`);
     } catch (err) {
       this.error = err.message;
     } finally {

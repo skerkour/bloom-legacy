@@ -1,6 +1,6 @@
 use actix::{Message, Handler};
 use serde::{Serialize, Deserialize};
-use crate::{
+use kernel::{
     db::DbActor,
     myaccount::domain,
     error::KernelError,
@@ -8,20 +8,20 @@ use crate::{
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct FindAccountAdmin {
+pub struct FindAccount {
     pub actor: domain::Account,
     pub account_id: uuid::Uuid,
 }
 
-impl Message for FindAccountAdmin {
+impl Message for FindAccount {
     type Result = Result<domain::Account, KernelError>;
 }
 
-impl Handler<FindAccountAdmin> for DbActor {
+impl Handler<FindAccount> for DbActor {
     type Result = Result<domain::Account, KernelError>;
 
-    fn handle(&mut self, msg: FindAccountAdmin, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+    fn handle(&mut self, msg: FindAccount, _: &mut Self::Context) -> Self::Result {
+        use kernel::db::schema::{
             kernel_accounts,
         };
         use diesel::prelude::*;

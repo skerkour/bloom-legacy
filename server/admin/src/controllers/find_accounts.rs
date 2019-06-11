@@ -1,6 +1,6 @@
 use actix::{Message, Handler};
 use serde::{Serialize, Deserialize};
-use crate::{
+use kernel::{
     db::DbActor,
     myaccount::domain,
     error::KernelError,
@@ -22,7 +22,7 @@ impl Handler<FindAccounts> for DbActor {
     type Result = Result<Vec<domain::Account>, KernelError>;
 
     fn handle(&mut self, msg: FindAccounts, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
+        use kernel::db::schema::{
             kernel_accounts,
         };
         use diesel::prelude::*;

@@ -13,6 +13,7 @@ use notes::api::v1 as notesv1;
 use music::api::v1 as musicv1;
 use gallery::api::v1 as galleryv1;
 use phaser::api::v1 as phaserv1;
+use admin::api::v1 as adminv1;
 
 
 // 404
@@ -47,10 +48,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/myaccount/v1/me/email/verify", web::post().to_async(myaccountv1::me::email::verify::post))
         .route("/myaccount/v1/me/sessions", web::get().to_async(myaccountv1::me::sessions::get))
         .route("/myaccount/v1/me/sessions/{session_id}/revoke", web::post().to_async(myaccountv1::me::sessions::revoke::post))
-        .route("/myaccount/v1/accounts/{account_id}/disable", web::post().to_async(myaccountv1::accounts::account::disable::post))
-        .route("/myaccount/v1/accounts/{account_id}/enable", web::post().to_async(myaccountv1::accounts::account::enable::post))
-        .route("/myaccount/v1/accounts", web::get().to_async(myaccountv1::accounts::get))
-        .route("/myaccount/v1/accounts/{account_id}", web::get().to_async(myaccountv1::accounts::account::get))
 
         // drive
         .route("/drive/v1/uploads", web::post().to_async(drivev1::uploads::post))
@@ -131,6 +128,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/music/v1/playlists/{playlist_id}/add", web::post().to_async(musicv1::playlists::playlist::add::post))
         .route("/music/v1/playlists/{playlist_id}/remove", web::post().to_async(musicv1::playlists::playlist::remove::post))
 
+
         // gallery
         .route("/gallery/v1/media", web::get().to_async(galleryv1::media::get))
         .service(web::resource("/gallery/v1/albums")
@@ -145,6 +143,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/gallery/v1/albums/{album_id}/add", web::post().to_async(galleryv1::albums::album::add::post))
         .route("/gallery/v1/albums/{album_id}/remove", web::post().to_async(galleryv1::albums::album::remove::post))
 
+
         // phaser
         .route("/phaser/v1/job", web::get().to_async(phaserv1::job::get))
         .service(web::resource("/phaser/v1/scans")
@@ -156,6 +155,13 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/phaser/v1/scans/{scan_id}/cancel", web::post().to_async(phaserv1::scans::scan::cancel::post))
         .route("/phaser/v1/scans/{scan_id}/reports", web::get().to_async(phaserv1::scans::scan::reports::get))
         .route("/phaser/v1/scans/{scan_id}/reports/{report_id}/complete", web::post().to_async(phaserv1::scans::scan::reports::report::complete::post))
+
+
+        // admin
+        .route("/admin/v1/accounts/{account_id}/disable", web::post().to_async(adminv1::accounts::account::disable::post))
+        .route("/admin/v1/accounts/{account_id}/enable", web::post().to_async(adminv1::accounts::account::enable::post))
+        .route("/admin/v1/accounts", web::get().to_async(adminv1::accounts::get))
+        .route("/admin/v1/accounts/{account_id}", web::get().to_async(adminv1::accounts::account::get))
     )
     .service(
         // serve webapp
