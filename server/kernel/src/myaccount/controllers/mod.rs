@@ -16,6 +16,7 @@ mod request_password_reset;
 mod send_new_verification_code;
 mod disable_account;
 mod enable_account;
+mod find_accounts;
 
 
 pub use registration_start::StartRegistration;
@@ -36,3 +37,4 @@ pub use request_password_reset::RequestPasswordReset;
 pub use send_new_verification_code::SendNewVerificationCode;
 pub use disable_account::DisableAccount;
 pub use enable_account::EnableAccount;
+pub use find_accounts::FindAccounts;

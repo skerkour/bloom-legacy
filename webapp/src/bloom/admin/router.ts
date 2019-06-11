@@ -1,9 +1,9 @@
-const IndexView = () => import(/* webpackChunkName: "chunk-admin" */ '../kernel/components/ComingSoon.vue'); // tslint:disable-line
+const AccountsIndexView = () => import(/* webpackChunkName: "chunk-admin" */ './views/accounts/Index.vue'); // tslint:disable-line
 
 
 export default [
   {
-    component: IndexView,
+    component: AccountsIndexView,
     meta: {
       auth: {
         layout: 'authenticated',

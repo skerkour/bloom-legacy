@@ -28,7 +28,7 @@ impl eventsourcing::Command for Disable {
         }
 
         if !self.actor.is_admin {
-            return Err(KernelError::Forbidden("Admin rile is required".to_string()));
+            return Err(KernelError::Forbidden("Admin role is required".to_string()));
         }
 
         return Ok(());
