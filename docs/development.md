@@ -32,32 +32,48 @@ $ cargo install diesel_cli --no-default-features --features postgres
 $ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 postgres:11
 ```
 
-6. Edit `.env` with correct values
+6. Edit `bloom.sane` with correct values
 ```sh
 $ cd server
-$ cp .env.example .env
-# edit .env
-$ cat .env
-RUST_ENV=development
-DATABASE_URL=postgres://bloom:PASSWORD_REDACTED@127.0.0.1:5432/bloom?sslmode=disable
-HOST=http://localhost:8080
-AWS_SECRET_ACCESS_KEY=XXX
-AWS_ACCESS_KEY_ID=XXX
-AWS_REGION=XXX
-S3_BUCKET=XXX
-S3_BASE_URL=https://s3.REGION.amazonaws.com
-SENTRY_URL=XXX
-PHASER_SECRET=XXX # Random passphrase
-BITFLOW_SECRET=XXX # Random passphrase
-SMTP_PORT=587
-SMTP_HOST=XXX
-SMTP_USERNAME=XXX
-SMTP_PASSWORD=XXX
+$ cp bloom.sane.template bloom.sane
+# edit bloom.sane
+$ cat bloom.sane
+rust_env = "development"
+host = "http://localhost:8080"
+port = 8000
+database = {
+    url = "postgres://USER:PASSWORD@127.0.0.1:5432/DATABASE?sslmode=disable"
+}
+aws = {
+    secret_access_key = "XXX",
+    access_key_id = "XXX",
+    region = "XXX",
+}
+s3 = {
+    bucket = "XXX",
+    base_url = "https://s3.REGION.amazonaws.com",
+}
+sentry = {
+    url = "XXX" # optional
+}
+phaser = {
+    secret = "XXX",
+}
+bitflow = {
+    secret = "XXX",
+}
+smtp = {
+    port = 587,
+    host = "XXX",
+    username = "XXX",
+    password = "XXX",
+}
 ```
 
 7. Run migrations
 ```sh
 # still in server/
+$ export DATABASE_URL=XXX # previously set in bloom.sane
 $ diesel migration run
 ```
 

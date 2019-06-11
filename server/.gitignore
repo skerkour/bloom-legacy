@@ -6,3 +6,4 @@ assets/GeoLite2-City.mmdb
 .env.*.local
 .tmp/
 dist/
+bloom.sane
