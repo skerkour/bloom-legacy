@@ -50,6 +50,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/myaccount/v1/accounts/{account_id}/disable", web::post().to_async(myaccountv1::accounts::account::disable::post))
         .route("/myaccount/v1/accounts/{account_id}/enable", web::post().to_async(myaccountv1::accounts::account::enable::post))
         .route("/myaccount/v1/accounts", web::get().to_async(myaccountv1::accounts::get))
+        .route("/myaccount/v1/accounts/{account_id}", web::get().to_async(myaccountv1::accounts::account::get))
 
         // drive
         .route("/drive/v1/uploads", web::post().to_async(drivev1::uploads::post))
