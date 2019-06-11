@@ -22,7 +22,7 @@
 
 ## Documentation
 
-See the `[docs](docs)` folder.
+See the [docs](docs) folder.
 
 
 ## Docker image
