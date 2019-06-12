@@ -42,6 +42,7 @@ pub struct Config {
 impl From<ConfigFile> for Config {
     fn from(config: ConfigFile) -> Self {
         let mut blacklisted_email_domains = HashSet::new();
+        let mut blacklisted_passwords = HashSet::new();
 
         for email_domains_file_path in config.blacklists.email_domains {
             let email_domains_file = File::open(&email_domains_file_path).expect("Error opening blacklist email domains file");
@@ -56,15 +57,18 @@ impl From<ConfigFile> for Config {
             });
         }
 
-        let basic_passwords_file = File::open("assets/basic_passwords.txt").expect("Error opening basic passwords file");
-        let basic_passwords: Vec<String> = BufReader::new(basic_passwords_file)
-            .lines()
-            .filter_map(Result::ok)
-            .collect();
-        let basic_passwords = basic_passwords.iter().fold(HashSet::new(), |mut acc, x| {
-            acc.insert(x.to_string());
-            return acc;
-        });
+        for common_passwords_file_path in config.blacklists.passwords {
+            let common_passwords_file = File::open(&common_passwords_file_path).expect("Error opening password email domains file");
+
+            let common_passwords_lines: Vec<String> = BufReader::new(common_passwords_file)
+                .lines()
+                .filter_map(Result::ok)
+                .collect();
+
+            common_passwords_lines.iter().for_each(|password| {
+                blacklisted_passwords.insert(password.to_string());
+            });
+        }
 
         return Config {
             rust_env: config.rust_env,
@@ -78,7 +82,7 @@ impl From<ConfigFile> for Config {
             phaser: config.phaser,
             bitflow: config.bitflow,
             disposable_email_domains: blacklisted_email_domains,
-            basic_passwords
+            basic_passwords: blacklisted_passwords,
         };
     }
 }
@@ -129,6 +133,7 @@ struct DatabaseConfig {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct BlacklistsConfig {
     email_domains: Vec<String>,
+    passwords: Vec<String>,
 }
 
 pub fn init() -> Config {
