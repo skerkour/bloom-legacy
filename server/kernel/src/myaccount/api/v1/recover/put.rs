@@ -31,6 +31,7 @@ pub fn put(password_data: web::Json<models::ResetPassowrdBody>, state: web::Data
     let auth = req.request_auth();
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
+    let config = state.config.clone();
 
 
     let session_id = match auth.session {
@@ -47,6 +48,7 @@ pub fn put(password_data: web::Json<models::ResetPassowrdBody>, state: web::Data
             reset_password_id: password_data.id,
             token: password_data.token.clone(),
             new_password: password_data.new_password.clone(),
+            config,
             request_id,
             session_id,
         }).flatten()

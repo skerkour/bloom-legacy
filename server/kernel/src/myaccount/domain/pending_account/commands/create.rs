@@ -45,7 +45,7 @@ impl eventsourcing::Command for Create {
 
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
-        validators::password((self.config.basic_passwords(), &self.password)?;
+        validators::password(self.config.basic_passwords(), &self.password)?;
         validators::email(self.config.disposable_email_domains(), &self.email)?;
 
         if self.password == self.email {

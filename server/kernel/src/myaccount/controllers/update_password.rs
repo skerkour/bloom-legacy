@@ -8,8 +8,9 @@ use crate::{
         session,
     },
     events::EventMetadata,
+    error::KernelError,
+    config::Config,
 };
-use crate::error::KernelError;
 use serde::{Serialize, Deserialize};
 
 
@@ -19,6 +20,7 @@ pub struct UpdatePassword {
     pub current_session: Session,
     pub current_password: String,
     pub new_password: String,
+    pub config: Config,
     pub request_id: uuid::Uuid,
 }
 
@@ -53,6 +55,7 @@ impl Handler<UpdatePassword> for DbActor {
             let update_last_name_cmd = account::UpdatePassword{
                 current_password: msg.current_password,
                 new_password: msg.new_password,
+                config: msg.config,
                 metadata: metadata.clone(),
             };
 
