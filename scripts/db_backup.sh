@@ -30,7 +30,7 @@ while true
     echo "Starting database backup.."
     pg_dump $DATABASE_URL | gzip | openssl enc -$ENCRYPTION_CIPHER -salt -k $ENCRYPTION_KEY | aws s3 cp - s3://"${AWS_S3_BUCKET}${AWS_S3_PATH}/${BACKUP}"
     # use the following command to decrypt
-    # cat ${BACKUP} | openssl enc -$ENCRYPTION_CIPHER -d -k $ENCRYPTION_KEY | gzip -d |
+    # cat ${BACKUP} | openssl enc -$ENCRYPTION_CIPHER -d -k $ENCRYPTION_KEY | gzip -d > db.sql
     echo "Backup finished! Sleeping ${BACKUP_INTERVAL}s"
     sleep $BACKUP_INTERVAL
   done
