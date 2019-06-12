@@ -34,6 +34,7 @@ impl Handler<FindAccountTrash> for DbActor {
                 .filter(notes_notes::dsl::deleted_at.is_null())
                 .filter(notes_notes::dsl::archived_at.is_null())
                 .filter(notes_notes::dsl::removed_at.is_not_null())
+                .order_by(notes_notes::dsl::updated_at.desc())
                 .load(&conn)?;
 
         return Ok(notes);
