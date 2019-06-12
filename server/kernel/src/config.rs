@@ -7,21 +7,70 @@ use std::fs;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Config {
-    port: u16,
-    database: DatabaseConfig,
+pub struct ConfigFile {
     rust_env: String,
-    smtp: SmtpConfig,
     host: String,
+    port: u16,
+    smtp: SmtpConfig,
+    database: DatabaseConfig,
     aws: AwsConfig,
     s3: S3Config,
     sentry: SentryConfig,
     phaser: PhaserConfig,
     bitflow: BitflowConfig,
-    #[serde(skip)]
+    blacklists: BlacklistsConfig,
+    // stripe_secret_key: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Config {
+    rust_env: String,
+    host: String,
+    port: u16,
+    smtp: SmtpConfig,
+    database: DatabaseConfig,
+    aws: AwsConfig,
+    s3: S3Config,
+    sentry: SentryConfig,
+    phaser: PhaserConfig,
+    bitflow: BitflowConfig,
     disposable_email_domains: HashSet<String>,
     // stripe_secret_key: String,
 }
+
+impl From<ConfigFile> for Config {
+    fn from(config: ConfigFile) -> Self {
+        let mut blacklisted_email_domains = HashSet::new();
+
+        for email_domains_file_path in config.blacklists.email_domains {
+            let email_domains_file = File::open(&email_domains_file_path).expect("Error opening blacklist email domains file");
+
+            let blacklisted_email_domain_lines: Vec<String> = BufReader::new(email_domains_file)
+                .lines()
+                .filter_map(Result::ok)
+                .collect();
+
+            blacklisted_email_domain_lines.iter().for_each(|domain| {
+                blacklisted_email_domains.insert(domain.to_string());
+            });
+        }
+
+        return Config{
+            rust_env: config.rust_env,
+            host: config.host,
+            port: config.port,
+            smtp: config.smtp,
+            database: config.database,
+            aws: config.aws,
+            s3: config.s3,
+            sentry: config.sentry,
+            phaser: config.phaser,
+            bitflow: config.bitflow,
+            disposable_email_domains: blacklisted_email_domains,
+        };
+    }
+}
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct AwsConfig {
@@ -62,6 +111,12 @@ struct SentryConfig {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct DatabaseConfig {
     url: String,
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct BlacklistsConfig {
+    email_domains: Vec<String>,
 }
 
 pub fn init() -> Config {
