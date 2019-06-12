@@ -19,7 +19,7 @@ AWS_S3_PATH=${AWS_S3_PATH:-"/backup/db"}
 # backup settings
 BACKUP_INTERVAL=${BACKUP_INTERVAL:-86400}
 BACKUP_NAME=${BACKUP_NAME:-backup}
-BACKUP_EXTENSION=${BACKUP_EXTENSION:-.sql.gz.env}
+BACKUP_EXTENSION=${BACKUP_EXTENSION:-.sql.gz.enc}
 
 backup_and_stream_to_s3() {
 
