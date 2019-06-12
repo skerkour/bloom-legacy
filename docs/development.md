@@ -29,7 +29,7 @@ $ cargo install diesel_cli --no-default-features --features postgres
 
 5. Launch a PostgreSQL database
 ```sh
-$ docker run -d -e POSTGRES_USER=bloom -e POSTGRES_DB=bloom -e POSTGRES_PASSWORD=PASSWORD -p 5432:5432 postgres:11
+$ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] -e POSTGRES_PASSWORD=[PASSWORD_TO_CHANGE] -p 5432:5432 postgres:11
 ```
 
 6. Edit `bloom.sane` with correct values
@@ -67,6 +67,15 @@ smtp = {
     host = "XXX",
     username = "XXX",
     password = "XXX",
+}
+
+blacklists = {
+    email_domains = [
+        "assets/disposable_email_domains.txt",
+    ],
+    passwords = [
+        "assets/common_passwords_200.txt",
+    ]
 }
 ```
 
