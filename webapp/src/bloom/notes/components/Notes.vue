@@ -33,6 +33,7 @@
     :visible="note_dialog"
     @close="note_dialog_closed"
     @create="note_created"
+    @update="note_updated"
   />
   </div>
 </template>
@@ -93,12 +94,9 @@ export default class Notes extends Vue {
   }
 
   note_updated(updated_note: any) {
-    this.notes = this.notes.map((note: any) => {
-      if (note.id === updated_note.id) {
-        return updated_note;
-      }
-      return note;
-    });
+    const pos = this.notes.map((note: any) =>  note.id).indexOf(updated_note.id);
+    this.notes.splice(pos, 1);
+    this.notes = [updated_note, ...this.notes];
   }
 
   note_archived(archived_note: any) {
