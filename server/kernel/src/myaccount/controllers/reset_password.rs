@@ -8,9 +8,10 @@ use crate::{
         session,
     },
     events::EventMetadata,
+    error::KernelError,
+    config::Config,
 };
-use crate::error::KernelError;
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -18,6 +19,7 @@ pub struct ResetPassword {
     pub reset_password_id: uuid::Uuid,
     pub token: String,
     pub new_password: String,
+    pub config: Config,
     pub request_id: uuid::Uuid,
     pub session_id: Option<uuid::Uuid>,
 }
@@ -58,6 +60,7 @@ impl Handler<ResetPassword> for DbActor {
             let update_last_name_cmd = account::ResetPassword{
                 new_password: msg.new_password,
                 token: msg.token,
+                config: msg.config,
                 metadata: metadata.clone(),
             };
 

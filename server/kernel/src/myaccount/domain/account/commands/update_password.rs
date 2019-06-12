@@ -4,6 +4,7 @@ use crate::{
     myaccount::validators,
     myaccount,
     error::KernelError,
+    config::Config,
 };
 use diesel::{
     PgConnection,
@@ -15,6 +16,7 @@ use diesel::{
 pub struct UpdatePassword {
     pub current_password: String,
     pub new_password: String,
+    pub config: Config,
     pub metadata: EventMetadata,
 }
 

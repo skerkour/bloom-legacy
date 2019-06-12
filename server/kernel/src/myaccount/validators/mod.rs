@@ -32,11 +32,11 @@ pub fn password(basic_passwords: HashSet<String>, password: &str) -> Result<(), 
     let length = password.len();
 
     if length < 8 {
-        return Err(KernelError::Validation("password must be longer than 7 characters".to_string()));
+        return Err(KernelError::Validation("Password must be longer than 7 characters".to_string()));
     } else if length > 128 {
-        return Err(KernelError::Validation("password must be shorter than 128 characters".to_string()));
+        return Err(KernelError::Validation("Password must be shorter than 128 characters".to_string()));
     } else if basic_passwords.iter().any(|basic_password| basic_password == password) {
-        return Err(KernelError::Validation("password is too common".to_string()));
+        return Err(KernelError::Validation("Password is too weak".to_string()));
     }
 
     return Ok(());

@@ -34,16 +34,7 @@ impl eventsourcing::Command for Create {
         };
         use diesel::prelude::*;
 
-        validators::first_name(&self.first_name)?;
-        validators::last_name(&self.last_name)?;
-        validators::password(self.config.basic_passwords(), &self.password)?;
-        // validators::email(self.config.disposable_email_domains(), &self.email)?; already done on create pending account
         validators::username(&self.username)?;
-
-        if self.email == self.password {
-            return Err(KernelError::Validation("Password cannot be your email address".to_string()));
-        }
-
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts

@@ -26,6 +26,7 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
     let auth = req.request_auth();
     let request_id = req.request_id().0;
     let account_data = account_data.clone();
+    let config = state.config.clone();
 
     if auth.session.is_none() || auth.account.is_none() {
         return Either::A(ok(KernelError::Unauthorized("Authentication required".to_string()).error_response()));
@@ -38,6 +39,7 @@ pub fn put(account_data: web::Json<models::UpdatePassword>, state: web::Data<api
             account: auth.account.expect("unwraping auth account"),
             current_password: account_data.current_password,
             new_password: account_data.new_password,
+            config,
             request_id,
         })
         .map_err(|_| KernelError::ActixMailbox)

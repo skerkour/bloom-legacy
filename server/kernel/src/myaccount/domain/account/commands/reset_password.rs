@@ -4,6 +4,7 @@ use crate::{
     myaccount::validators,
     myaccount,
     error::KernelError,
+    config::Config,
 };
 use diesel::{
     PgConnection,
@@ -16,6 +17,7 @@ use chrono::Utc;
 pub struct ResetPassword {
     pub new_password: String,
     pub token: String,
+    pub config: Config,
     pub metadata: EventMetadata,
 }
 
@@ -27,7 +29,7 @@ impl eventsourcing::Command for ResetPassword {
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        validators::password((self.config.basic_passwords(), &self.new_password)?;
+        validators::password(self.config.basic_passwords(), &self.new_password)?;
         let timestamp = Utc::now();
         let duration = aggregate.updated_at.signed_duration_since(timestamp);
 
