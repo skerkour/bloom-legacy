@@ -123,23 +123,10 @@ pub fn init() -> Config {
     let config_file_contents = fs::read_to_string("bloom.sane")
         .expect("Error reading bloom.sane");
 
-    let mut decoded: Config = sane::from_str(&config_file_contents)
+    let decoded: ConfigFile = sane::from_str(&config_file_contents)
         .expect("Error parsing config file");
 
-
-    let disposable_emails_file = File::open("assets/disposable_email_domains.txt").expect("Error opening disposable email file");
-    let disposable_email_domains: Vec<String> = BufReader::new(disposable_emails_file)
-        .lines()
-        .filter_map(Result::ok)
-        .collect();
-    let disposable_email_domains = disposable_email_domains.iter().fold(HashSet::new(), |mut acc, x| {
-        acc.insert(x.to_string());
-        return acc;
-    });
-
-    decoded.disposable_email_domains = disposable_email_domains;
-
-    return decoded;
+    return decoded.into();
 }
 
 
