@@ -35,6 +35,7 @@ pub struct Config {
     phaser: PhaserConfig,
     bitflow: BitflowConfig,
     disposable_email_domains: HashSet<String>,
+    basic_passwords: HashSet<String>,
     // stripe_secret_key: String,
 }
 
@@ -55,7 +56,17 @@ impl From<ConfigFile> for Config {
             });
         }
 
-        return Config{
+        let basic_passwords_file = File::open("assets/basic_passwords.txt").expect("Error opening basic passwords file");
+        let basic_passwords: Vec<String> = BufReader::new(basic_passwords_file)
+            .lines()
+            .filter_map(Result::ok)
+            .collect();
+        let basic_passwords = basic_passwords.iter().fold(HashSet::new(), |mut acc, x| {
+            acc.insert(x.to_string());
+            return acc;
+        });
+
+        return Config {
             rust_env: config.rust_env,
             host: config.host,
             port: config.port,
@@ -67,6 +78,7 @@ impl From<ConfigFile> for Config {
             phaser: config.phaser,
             bitflow: config.bitflow,
             disposable_email_domains: blacklisted_email_domains,
+            basic_passwords
         };
     }
 }
@@ -127,6 +139,7 @@ pub fn init() -> Config {
         .expect("Error parsing config file");
 
     return decoded.into();
+
 }
 
 
@@ -197,6 +210,10 @@ impl Config {
 
     pub fn disposable_email_domains(&self) -> HashSet<String> {
         return self.disposable_email_domains.clone();
+    }
+
+    pub fn basic_passwords(&self) -> HashSet<String> {
+        return self.basic_passwords.clone();
     }
 
     // pub fn stripe_secret_key(&self) -> String {

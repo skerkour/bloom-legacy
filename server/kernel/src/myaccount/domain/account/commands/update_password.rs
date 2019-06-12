@@ -26,7 +26,7 @@ impl eventsourcing::Command for UpdatePassword {
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        validators::password(&self.new_password)?;
+        validators::password(self.config.basic_passwords(), &self.new_password)?;
 
         if aggregate.email == self.new_password {
             return Err(KernelError::Validation("Password cannot be your email address".to_string()));
