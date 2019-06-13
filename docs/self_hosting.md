@@ -39,3 +39,47 @@ $ docker pull registry.gitlab.com/bloom42/bloom:latest
 ```sh
 $ docker run -d -p 8080:8000 -v `pwd`/bloom.sane:/bloom/bloom.sane:ro registry.gitlab.com/bloom42/bloom:latest
 ```
+
+
+## Run Phaser worker
+
+
+1. Pull latest Docker image
+```sh
+$ docker pull registry.gitlab.com/bloom42/phaser:latest
+```
+
+2. Get the latest `.env.template` file and move it to `.env`
+```sh
+$ wget https://gitlab.com/bloom42/phaser/raw/dev/.env.template?inline=false
+$ mv .env.template .env
+```
+
+3. Edit `.env` with correct values
+
+4. Launch Docker container
+```sh
+$ docker run -d -v `pwd`/.env:/phaser/.env:ro registry.gitlab.com/bloom42/phaser:latest
+```
+
+
+## Run Bitflow worker
+
+
+1. Pull latest Docker image
+```sh
+$ docker pull registry.gitlab.com/bloom42/bitflow:latest
+```
+
+2. Get the latest `.env.template` file and move it to `.env`
+```sh
+$ wget https://gitlab.com/bloom42/bitflow/raw/dev/.env.template?inline=false
+$ mv .env.template .env
+```
+
+3. Edit `.env` with correct values
+
+4. Launch Docker container
+```sh
+$ docker run -d -v `pwd`/.env:/bitflow/.env:ro registry.gitlab.com/bloom42/bitflow:latest
+```
