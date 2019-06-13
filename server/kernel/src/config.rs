@@ -235,7 +235,7 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
 
     for match_ in re.find_iter(&config.host.clone()) {
         let match_str = match_.as_str();
-        config.host = config.host.replace(match_str, match_str.trim_matches(patterns));
+        config.host = config.host.replace(match_str, &get_env(match_str.trim_matches(patterns)));
     }
 
     return config;
