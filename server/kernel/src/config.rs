@@ -4,6 +4,7 @@ use std::fs::File;
 use std::io::{BufRead, BufReader};
 use std::collections::HashSet;
 use std::fs;
+use regex::Regex;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -143,8 +144,9 @@ pub fn init() -> Config {
     let decoded: ConfigFile = sane::from_str(&config_file_contents)
         .expect("Error parsing config file");
 
-    return decoded.into();
+    let decoded = replace_env(decoded);
 
+    return decoded.into();
 }
 
 
@@ -227,6 +229,18 @@ impl Config {
 }
 
 
+fn replace_env(config: ConfigFile) -> ConfigFile {
+    let re = Regex::new(r"\$\{[A-Z_0-9]*\}").expect("error compiling env regex");
+
+    for match_ in re.find_iter(&config.host) {
+        println!("{}", match_.as_str());
+    }
+
+    return config;
+}
+
+
 pub fn get_env(var: &str) -> String {
     env::var(var).expect(&format!("Missing environment variable: {}", var)).to_string()
 }
+
