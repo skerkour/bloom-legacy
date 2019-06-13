@@ -229,14 +229,108 @@ impl Config {
 }
 
 
+// pub struct ConfigFile {
+//     blacklists: BlacklistsConfig,
+//     // stripe_secret_key: String,
+// }
+
 fn replace_env(mut config: ConfigFile) -> ConfigFile {
     let re = Regex::new(r"\$\{[A-Z_0-9]*\}").expect("error compiling env regex");
     let patterns : &[_] = &['$', '{', '}'];
 
+    // host
     for match_ in re.find_iter(&config.host.clone()) {
         let match_str = match_.as_str();
         config.host = config.host.replace(match_str, &get_env(match_str.trim_matches(patterns)));
     }
+
+    // rust_env
+    for match_ in re.find_iter(&config.rust_env.clone()) {
+        let match_str = match_.as_str();
+        config.rust_env = config.rust_env.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // smpt
+    for match_ in re.find_iter(&config.smtp.host.clone()) {
+        let match_str = match_.as_str();
+        config.smtp.host = config.smtp.host.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.smtp.username.clone()) {
+        let match_str = match_.as_str();
+        config.smtp.username = config.smtp.username.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.smtp.password.clone()) {
+        let match_str = match_.as_str();
+        config.smtp.password = config.smtp.password.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // database
+    for match_ in re.find_iter(&config.database.url.clone()) {
+        let match_str = match_.as_str();
+        config.database.url = config.database.url.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // aws
+    for match_ in re.find_iter(&config.aws.access_key_id.clone()) {
+        let match_str = match_.as_str();
+        config.aws.access_key_id = config.aws.access_key_id.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.aws.secret_access_key.clone()) {
+        let match_str = match_.as_str();
+        config.aws.secret_access_key = config.aws.secret_access_key.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.aws.region.clone()) {
+        let match_str = match_.as_str();
+        config.aws.region = config.aws.region.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // s3
+    for match_ in re.find_iter(&config.s3.bucket.clone()) {
+        let match_str = match_.as_str();
+        config.s3.bucket = config.s3.bucket.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.s3.base_url.clone()) {
+        let match_str = match_.as_str();
+        config.s3.base_url = config.s3.base_url.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // sentry
+    if let Some(ref url) = config.sentry.url {
+        let url = url.clone();
+        for match_ in re.find_iter(&url) {
+            let match_str = match_.as_str();
+            config.sentry.url = Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
+        }
+    }
+
+
+    // phaser
+    for match_ in re.find_iter(&config.phaser.secret.clone()) {
+        let match_str = match_.as_str();
+        config.phaser.secret = config.phaser.secret.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // bitflow
+    for match_ in re.find_iter(&config.bitflow.secret.clone()) {
+        let match_str = match_.as_str();
+        config.bitflow.secret = config.bitflow.secret.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // blacklists
+    config.blacklists.email_domains = config.blacklists.email_domains.into_iter().map(|mut item| {
+        for match_ in re.find_iter(&item.clone()) {
+            let match_str = match_.as_str();
+            item = item.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+        }
+        return item;
+    }).collect();
+    config.blacklists.passwords = config.blacklists.passwords.into_iter().map(|mut item| {
+        for match_ in re.find_iter(&item.clone()) {
+            let match_str = match_.as_str();
+            item = item.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+        }
+        return item;
+    }).collect();
 
     return config;
 }
