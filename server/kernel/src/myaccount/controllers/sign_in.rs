@@ -42,6 +42,10 @@ impl Handler<SignIn> for DbActor {
             .map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
+            if msg.username.contains('@') {
+                return Err(KernelError::Validation("You need to sign in with your username, not your email.".to_string()))?;
+            }
+
             let account: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::username.eq(&msg.username))
                 .filter(kernel_accounts::dsl::deleted_at.is_null())
