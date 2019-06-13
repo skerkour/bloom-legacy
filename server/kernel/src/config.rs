@@ -229,11 +229,13 @@ impl Config {
 }
 
 
-fn replace_env(config: ConfigFile) -> ConfigFile {
+fn replace_env(mut config: ConfigFile) -> ConfigFile {
     let re = Regex::new(r"\$\{[A-Z_0-9]*\}").expect("error compiling env regex");
+    let patterns : &[_] = &['$', '{', '}'];
 
-    for match_ in re.find_iter(&config.host) {
-        println!("{}", match_.as_str());
+    for match_ in re.find_iter(&config.host.clone()) {
+        let match_str = match_.as_str();
+        config.host = config.host.replace(match_str, match_str.trim_matches(patterns));
     }
 
     return config;
