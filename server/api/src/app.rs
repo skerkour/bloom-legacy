@@ -39,7 +39,6 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .route(web::put().to_async(myaccountv1::recover::put))
         )
         .service(web::resource("/myaccount/v1/me")
-            .route(web::delete().to_async(myaccountv1::me::delete))
             .route(web::get().to(myaccountv1::me::get))
             .route(web::put().to_async(myaccountv1::me::put))
         )
@@ -162,7 +161,10 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/admin/v1/accounts/{account_id}/disable", web::post().to_async(adminv1::accounts::account::disable::post))
         .route("/admin/v1/accounts/{account_id}/enable", web::post().to_async(adminv1::accounts::account::enable::post))
         .route("/admin/v1/accounts", web::get().to_async(adminv1::accounts::get))
-        .route("/admin/v1/accounts/{account_id}", web::get().to_async(adminv1::accounts::account::get))
+        .service(web::resource("/admin/v1/accounts/{account_id}")
+            .route(web::get().to_async(adminv1::accounts::account::get))
+            .route(web::delete().to_async(adminv1::accounts::account::delete))
+        )
     )
     .service(
         // serve webapp
