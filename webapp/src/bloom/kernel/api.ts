@@ -239,6 +239,7 @@ class API {
 
   store_dark_mode(dark_mode: boolean) {
     store.set(this.DARK_MODE_KEY, dark_mode);
+    vueStore.commit('set_dark_mode', dark_mode);
   }
 
   client(): AxiosInstance {

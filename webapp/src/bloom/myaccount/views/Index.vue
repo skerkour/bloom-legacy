@@ -230,7 +230,6 @@ export default class Index extends Vue {
   }
 
   on_dark_mode_changed(value: boolean) {
-    this.$store.commit('set_dark_mode', value as boolean);
     api.store_dark_mode(value);
   }
 }
