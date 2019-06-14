@@ -9,12 +9,14 @@ mod reset_password;
 mod request_password_reset;
 mod disable;
 mod enable;
+mod delete_account;
 
 pub use create::Create;
 pub use update_first_name::UpdateFirstName;
 pub use update_last_name::UpdateLastName;
 pub use update_password::UpdatePassword;
 pub use update_email::UpdateEmail;
+pub use delete_account::DeleteAccount;
 pub use fail_sign_in::FailSignIn;
 pub use update_avatar::UpdateAvatar;
 pub use reset_password::ResetPassword;

@@ -39,6 +39,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .route(web::put().to_async(myaccountv1::recover::put))
         )
         .service(web::resource("/myaccount/v1/me")
+            .route(web::delete().to_async(myaccountv1::me::delete))
             .route(web::get().to(myaccountv1::me::get))
             .route(web::put().to_async(myaccountv1::me::put))
         )

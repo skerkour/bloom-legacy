@@ -16,6 +16,7 @@ pub use commands::{
     RequestPasswordReset,
     Disable,
     Enable,
+    DeleteAccount,
 };
 pub use events::{
     Event,

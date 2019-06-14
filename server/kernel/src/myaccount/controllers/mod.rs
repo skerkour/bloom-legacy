@@ -14,6 +14,7 @@ mod verify_email;
 mod reset_password;
 mod request_password_reset;
 mod send_new_verification_code;
+mod delete_account;
 
 
 pub use registration_start::StartRegistration;
@@ -25,6 +26,7 @@ pub use find_account::FindAccount;
 pub use find_sessions_for_account::FindSessionsForAccount;
 pub use revoke_session::RevokeSession;
 pub use update_account::UpdateAccount;
+pub use delete_account::DeleteAccount;
 pub use update_password::UpdatePassword;
 pub use update_avatar::UpdateAvatar;
 pub use update_email::UpdateEmail;
