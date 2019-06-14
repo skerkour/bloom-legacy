@@ -77,7 +77,8 @@
             </h2>
             <p>
               These instructions are for development of any of Bloom project.<br/>
-              <b>Except for typos, Merge requests won't be accepted without opening an issue first.</b>
+              <b>Except for typos, Merge requests won't be accepted without opening an issue first.</b><br/>
+              Merge requests must target the <i>dev</i> branch, therefore <b>merge requests targeting master won't be accepted</b>.
               <br/><br/>
               <ul>
                 <li>Choose an issue to work on. Be sure to comment and verify no one else is
@@ -87,10 +88,10 @@
                   We’re more than happy to help!</li>
                 <li>Add the feature or fix the bug you’ve chosen to work on.</li>
                 <li>If it's a feature change that impacts users or admins, update the documentation.</li>
-                <li>Open a pull request to merge your code and its documentation. The earlier you
+                <li>Open a merge request to merge your code and its documentation. The earlier you
                   open a merge request, the sooner you can get feedback. You can mark it as a
                   Work in Progress to signal that you’re not done yet.</li>
-                <li>Add tests if needed, as well as a changelog entry.</li>
+                <li>Add tests if needed</li>
                 <li>Make sure the test suite is passing.</li>
                 <li>Wait for a reviewer. You’ll likely need to change some things once the reviewer
                   has completed a code review for your merge request. You may also need
@@ -157,7 +158,7 @@
               <ul>
                 <li>Documentation for users: <a href="https://help.bloom.sh">https://help.bloom.sh</a>,
                 you can find the repo here: <a href="https://gitlab.com/bloom42/help">https://gitlab.com/bloom42/help</a>
-                You can open an issue with a proposal or open an pull request.</li>
+                You can open an issue with a proposal or open an merge request.</li>
                 <li>Documentation for developers: <a href="https://bloom.sh/open-source">https://bloom.sh/open-source</a>.
                 Each project documentation can be found within the project's repository in the <b>docs</b> folder.</li>
               </ul>
