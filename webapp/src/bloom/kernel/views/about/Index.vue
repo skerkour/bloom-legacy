@@ -13,7 +13,7 @@
         <v-card class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
-              We believe in a world of sharing and collaboration rather than greedy competition.
+              We believe that a world of sharing and collaboration is the only way to build a sustainable future.
               We create the open infrastructure to change all
               work from read-only to read-write. When everyone can contribute, users
               become contributors and we greatly improve the quality of global human life.
