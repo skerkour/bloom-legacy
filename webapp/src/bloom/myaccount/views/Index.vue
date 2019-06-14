@@ -90,7 +90,18 @@
             ></v-text-field>
           </v-flex>
 
+          <v-flex xs12><v-divider></v-divider></v-flex>
 
+          <v-flex hidden-xs-only sm3>
+            <v-subheader>Color Scheme</v-subheader>
+          </v-flex>
+          <v-flex xs12 sm9>
+            <v-switch
+              :input-value="dark_mode"
+              :label="`Dark Mode: ${dark_mode ? 'On' : 'Off'}`"
+              v-on:change="on_dark_mode_changed"
+            ></v-switch>
+          </v-flex>
         </v-layout>
       </v-container>
     </v-card>
@@ -134,85 +145,94 @@ export default class Index extends Vue {
     this.fetch_data();
   }
 
+  get dark_mode() {
+    return this.$store.state.dark_mode;
+  }
+
 
   async fetch_data() {
-      this.error = '';
-      try {
-        this.initial_loading = true;
-        const res = await api.get(`${api.MYACCOUNT}/v1/me`);
-        this.me = res;
-      } catch (err) {
-        this.error = err.message;
-      } finally {
-        this.initial_loading = false;
-      }
+    this.error = '';
+    try {
+      this.initial_loading = true;
+      const res = await api.get(`${api.MYACCOUNT}/v1/me`);
+      this.me = res;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.initial_loading = false;
     }
+  }
 
-    update_name(name: Name) {
-      this.me.first_name = name.first_name;
-      this.me.last_name = name.last_name;
+  update_name(name: Name) {
+    this.me.first_name = name.first_name;
+    this.me.last_name = name.last_name;
+  }
+
+  update_email(email: string) {
+    this.me.email = email;
+  }
+
+  open_avatar_upload() {
+    const upload = this.$refs.avatarupload as HTMLElement;
+    upload.click();
+  }
+
+  async upload_avatar() {
+    const upload = this.$refs.avatarupload as any; // ugly
+
+    if (upload.files.length < 1) {
+      return;
     }
+    const file = upload.files[0];
 
-    update_email(email: string) {
-      this.me.email = email;
+    this.error = '';
+    const too_large = file.size > (3 * 1024 * 1024);
+    if (too_large) {
+      this.error = 'File size must be less or equal to 2MB';
+      return;
     }
-
-    open_avatar_upload() {
-      const upload = this.$refs.avatarupload as HTMLElement;
-      upload.click();
+    const good_format = file.type === 'image/jpeg' || file.type === 'image/png';
+    if (good_format !== true) {
+      this.error = 'Image format must be png, jpg or jpeg';
+      return;
     }
-
-    async upload_avatar() {
-      const upload = this.$refs.avatarupload as any; // ugly
-
-      if (upload.files.length < 1) {
-        return;
-      }
-      const file = upload.files[0];
-
-      this.error = '';
-      const too_large = file.size > (3 * 1024 * 1024);
-      if (too_large) {
-        this.error = 'File size must be less or equal to 2MB';
-        return;
-      }
-      const good_format = file.type === 'image/jpeg' || file.type === 'image/png';
-      if (good_format !== true) {
-        this.error = 'Image format must be png, jpg or jpeg';
-        return;
-      }
-      try {
-        this.is_loading = true;
-        const formData = new FormData();
-        formData.append('file', file);
-        const res = await api.put(`${api.MYACCOUNT}/v1/me/avatar`, formData,
-          {
-            headers: { 'Content-Type': 'multipart/form-data' },
-          });
-        this.me.avatar_url = res.avatar_url;
-        this.$store.commit('set_account', res);
-        this.$toast.success('Success', { icon: 'mdi-check-circle' });
-      } catch (err) {
-        this.error = err.message;
-      } finally {
-        this.is_loading = false;
-      }
+    try {
+      this.is_loading = true;
+      const formData = new FormData();
+      formData.append('file', file);
+      const res = await api.put(`${api.MYACCOUNT}/v1/me/avatar`, formData,
+        {
+          headers: { 'Content-Type': 'multipart/form-data' },
+        });
+      this.me.avatar_url = res.avatar_url;
+      this.$store.commit('set_account', res);
+      this.$toast.success('Success', { icon: 'mdi-check-circle' });
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.is_loading = false;
     }
+  }
 
-    encodeFileBase64(file: any) {
-      return new Promise((resolve, reject) => {
-        const reader = new FileReader();
-        reader.readAsDataURL(file);
-        reader.onload = () => {
-          if ((reader.result as string).indexOf('data:image/jpeg;base64,') !== -1) {
-            resolve((reader.result as string).substring(23));
-          } else {
-            resolve((reader.result as string).substring(22));
-          }
-        };
-        reader.onerror = (error) => reject(error);
-      });
-    }
+  encodeFileBase64(file: any) {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => {
+        if ((reader.result as string).indexOf('data:image/jpeg;base64,') !== -1) {
+          resolve((reader.result as string).substring(23));
+        } else {
+          resolve((reader.result as string).substring(22));
+        }
+      };
+      reader.onerror = (error) => reject(error);
+    });
+  }
+
+  on_dark_mode_changed(value: boolean) {
+    this.$store.commit('set_dark_mode', value as boolean);
+    api.store_dark_mode(value);
+  }
 }
 </script>
 

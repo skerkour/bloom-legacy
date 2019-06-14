@@ -10,6 +10,7 @@ interface AppState {
   account: any;
   drive_profile: any;
   search: string;
+  dark_mode: boolean;
 }
 
 /* tslint:disable:object-literal-sort-keys */
@@ -21,6 +22,7 @@ export default new Vuex.Store<AppState>({
     pending_account: null,
     search: '',
     session: null,
+    dark_mode: false,
   },
   mutations: {
     set_drive_profile(state, profile) {
@@ -60,6 +62,9 @@ export default new Vuex.Store<AppState>({
       if (account.is_admin !== undefined && account.is_admin !== null) {
         state.account.is_admin = account.is_admin;
       }
+    },
+    set_dark_mode(state, dark_mode: boolean) {
+      state.dark_mode = dark_mode;
     },
   },
   actions: {
