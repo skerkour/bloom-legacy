@@ -1,5 +1,5 @@
 <template>
-  <v-app>
+  <v-app :dark="dark_mode">
     <component :is="layout">
       <router-view/>
     </component>
@@ -19,6 +19,9 @@ export default class App extends Vue {
       return `blm-layout-${this.$route.meta.auth.layout || DEFAULT_LAYOUT}`;
     }
     return `blm-layout-${this.$route.meta.layout || DEFAULT_LAYOUT}`;
+  }
+  get dark_mode() {
+    return this.$store.state.dark_mode;
   }
 }
 </script>
@@ -46,8 +49,6 @@ $danger: #F56C6C;
   /* -moz-osx-font-smoothing: grayscale; */
   font-family: proxima-nova,-apple-system,BlinkMacSystemFont,avenir next,avenir,
   helvetica neue,helvetica,ubuntu,roboto,noto,segoe ui,arial,sans-serif;
-  color: #2c3e50;
-  background-color: $white;
 }
 
 .v-btn {

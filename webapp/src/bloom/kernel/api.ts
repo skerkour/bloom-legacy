@@ -24,6 +24,7 @@ class API {
   PHASER = `${this.api_url}/phaser`;
   ADMIN = `${this.api_url}/admin`;
   SESSION_KEY = '__bloom_session';
+  DARK_MODE_KEY = '__bloom_dark_mode';
   private static get MESSAGE_SESSION_EXPIRED() { return 'session expired'; }
   private MESSAGE_SESSION_NOT_VALID = 'ession is not valid';
 
@@ -34,6 +35,9 @@ class API {
 
     const session = store.get(this.SESSION_KEY);
     vueStore.commit('set_session', session);
+
+    const dark_mode = store.get(this.DARK_MODE_KEY);
+    vueStore.commit('set_dark_mode', dark_mode);
     if (session) {
       this.set_auth_header(vueStore.state.session!.token);
       this.fetch_me();
@@ -231,6 +235,10 @@ class API {
     } catch (err) {
       log.error(err);
     }
+  }
+
+  store_dark_mode(dark_mode: boolean) {
+    store.set(this.DARK_MODE_KEY, dark_mode);
   }
 
   client(): AxiosInstance {
