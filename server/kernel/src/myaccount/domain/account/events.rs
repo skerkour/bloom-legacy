@@ -5,6 +5,7 @@ use crate::{
     db::schema::kernel_accounts_events,
     events::EventMetadata,
     myaccount::domain::account,
+    utils,
 };
 
 
@@ -25,6 +26,7 @@ pub enum EventData {
     LastNameUpdatedV1(LastNameUpdatedV1),
     PasswordUpdatedV1(PasswordUpdatedV1),
     EmailUpdatedV1(EmailUpdatedV1),
+    AccountDeletedV1,
     SignInFailedV1,
     AvatarUpdatedV1(AvatarUpdatedV1),
     PasswordResetRequestedV1(PasswordResetRequestedV1),
@@ -155,6 +157,18 @@ impl eventsourcing::Event for Event {
             EventData::EnabledV1 => account::Account {
                 is_disabled: false,
                 ..aggregate
+            },
+            // AccountDeletedV1
+            EventData::AccountDeletedV1 => {
+                let random_string = utils::random_hex_string(10);
+                account::Account {
+                    deleted_at: Some(self.timestamp),
+                    first_name: random_string.clone(),
+                    last_name: random_string.clone(),
+                    email: random_string.clone(),
+                    avatar_url: random_string,
+                    ..aggregate
+                }
             },
         }
     }

@@ -20,12 +20,3 @@ pub fn random_hex_string(n: usize) -> String {
 pub fn encode_session(session_id: &str, token: &str) -> String {
     return base64::encode(format!("{}:{}", session_id, token).as_str());
 }
-
-
-// func RandomHex(n uint) (string, error) {
-// 	b, err := RandomBytes(n)
-// 	if err != nil {
-// 		log.Error("generating random hex", rz.Err(err), rz.Uint("n", n))
-// 	}
-// 	return hex.EncodeToString(b), err
-// }
