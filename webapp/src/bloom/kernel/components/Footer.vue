@@ -1,9 +1,5 @@
 <template>
-  <v-footer
-  color="white"
-      height="auto"
-      class="text-xs-left"
-    >
+  <v-footer height="auto" class="text-xs-left">
     <v-container>
       <v-layout row wrap class="text-xs-center text-sm-left">
         <v-flex xs12 sm4 class="pa-4">
@@ -70,9 +66,25 @@ export default class Footer extends Vue {
 
 
 <style scoped lang="scss">
+
+.theme--dark.v-footer {
+  background-color: #303030;
+
+  a {
+    color: white;
+  }
+}
+
+.theme--light.v-footer {
+  background-color: #fafafa;
+
+  a {
+    color: black;
+  }
+}
+
 a {
   text-decoration: none;
-  color: black;
 }
 
 ul li {
