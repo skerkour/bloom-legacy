@@ -1,6 +1,6 @@
 <template>
   <div>
-    <v-container>
+    <v-container fluid grid-list-xs>
       <v-layout row wrap justify-left>
 
         <v-flex xs12>
@@ -22,23 +22,52 @@
         </v-flex>
 
         <v-flex xs12 v-if="account">
-          <p>
-            {{ account.id }}
-          </p>
-          <p>
-            {{ account.username }}
-          </p>
-          <v-btn color="success" v-if="account.is_disabled" @click="enable_account">
-            Activate
-          </v-btn>
-          <v-btn v-else color="error" @click="disable_account">
-            Disable
-          </v-btn>
-        </v-flex>
-        <v-flex xs12 v-if="account" class="text-xs-center">
-          <v-btn color="error" @click="delete_account(account)">
-            Delete
-          </v-btn>
+          <v-layout row wrap gri>
+            <v-flex xs12 class="text-xs-center">
+              <v-text-field
+                label="Id"
+                :value="account.id"
+                readonly
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <v-text-field
+                label="Username"
+                :value="account.username"
+                readonly
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12 sm6>
+              <v-text-field
+                label="Email"
+                :value="account.email"
+                readonly
+              ></v-text-field>
+            </v-flex>
+            <v-flex xs12>
+              <v-chip color="success" outline v-if="account.is_admin">Admin</v-chip>
+              <v-chip v-else outline>Not Admin</v-chip>
+            </v-flex>
+            <v-flex xs12>
+              <v-divider></v-divider>
+            </v-flex>
+            <v-flex xs12>
+              <v-btn color="success" outline v-if="account.is_disabled" @click="enable_account">
+                Activate
+              </v-btn>
+              <v-btn v-else color="error" outline @click="disable_account">
+                Disable
+              </v-btn>
+            </v-flex>
+            <v-flex xs12>
+              <v-divider></v-divider>
+            </v-flex>
+            <v-flex xs12 v-if="account">
+              <v-btn color="error" @click="delete_account(account)">
+                Delete
+              </v-btn>
+            </v-flex>
+          </v-layout>
         </v-flex>
       </v-layout>
     </v-container>

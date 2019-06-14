@@ -21,12 +21,8 @@
           <span>{{ props.item.username }}</span>
         </td>
         <td class="text-xs-left">
-          <v-btn outline small color="success" :ripple="false" v-if="!props.item.is_disabled">
-            active
-          </v-btn>
-          <v-btn v-else outline small :ripple="false" color="error">
-            disabled
-          </v-btn>
+          <v-chip color="success" outline v-if="!props.item.is_disabled">Active</v-chip>
+          <v-chip v-else outline>Disabled</v-chip>
         </td>
         <td class="justify-left">
           <v-tooltip bottom>
