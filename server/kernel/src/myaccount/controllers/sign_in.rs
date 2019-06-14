@@ -48,7 +48,6 @@ impl Handler<SignIn> for DbActor {
 
             let account: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::username.eq(&msg.username))
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)
                 .map_err(|_| KernelError::Unauthorized("Invalid username/password combination".to_string()))?;
@@ -70,6 +69,9 @@ impl Handler<SignIn> for DbActor {
                 return Err(KernelError::Unauthorized("Invalid username/password combination".to_string()));
             }
 
+            if account.deleted_at.is_some() {
+                return Err(KernelError::Unauthorized("Account has been permanently deleted.".to_string()))?;
+            }
             if account.is_disabled {
                 return Err(KernelError::Unauthorized("Account is disabled. Please contact support.".to_string()))?;
             }
