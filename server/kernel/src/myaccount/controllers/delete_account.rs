@@ -40,19 +40,19 @@ impl Handler<DeleteAccount> for DbActor {
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let delete_account_cmd = account::DeleteAccount{
+            let delete_account_cmd = account::Delete{
                 account: msg.account.clone(),
                 metadata: metadata.clone(),
             };
 
             // just pass uuid
             let (account_to_delete, event, _) = eventsourcing::execute(&conn, msg.account, &delete_account_cmd)?;
-            
+
             // update just deleted_at = chrono::Utc::now() or check that eventsourcing done that
             diesel::update(&account_to_delete)
                 .set(&account_to_delete)
                 .execute(&conn)?;
-            
+
             diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
                 .values(&event)
                 .execute(&conn)?;
