@@ -28,11 +28,16 @@
           <p>
             {{ account.username }}
           </p>
-          <v-btn color="success" :ripple="false" v-if="account.is_disabled" @click="enable_account">
+          <v-btn color="success" v-if="account.is_disabled" @click="enable_account">
             Activate
           </v-btn>
-          <v-btn v-else :ripple="false" color="error" @click="disable_account">
+          <v-btn v-else color="error" @click="disable_account">
             Disable
+          </v-btn>
+        </v-flex>
+        <v-flex xs12 v-if="account" class="text-xs-center">
+          <v-btn color="error" @click="delete_account(account)">
+            Delete
           </v-btn>
         </v-flex>
       </v-layout>
@@ -44,6 +49,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
+import router from '@/bloom/kernel/router';
 
 
 @Component
@@ -95,6 +101,25 @@ export default class Account extends Vue {
     try {
       await api.post(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}/enable`);
       this.account.is_disabled = false;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.is_loading = false;
+    }
+  }
+
+  async delete_account(account: any) {
+    if (!confirm(`Are you sure you want to delete ${account.username} (${account.id})`)) {
+      return;
+    }
+    if (!confirm(`Are you REALLY SURE you want to DELETE ${account.username} (${account.id})`)) {
+      return;
+    }
+    this.error = '';
+    this.is_loading = true;
+    try {
+      await api.delete(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}`);
+      router.push({ path: '/admin' });
     } catch (err) {
       this.error = err.message;
     } finally {
