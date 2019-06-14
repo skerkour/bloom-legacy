@@ -49,7 +49,6 @@ impl eventsourcing::Command for Create {
         // verify that username isn't already in use
         let existing_username: i64 = kernel_accounts
             .filter(username.eq(&self.username))
-            .filter(deleted_at.is_null())
             .count()
             .get_result(ctx)?;
         if existing_username != 0 {
