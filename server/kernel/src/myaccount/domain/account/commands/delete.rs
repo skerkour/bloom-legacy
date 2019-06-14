@@ -11,7 +11,6 @@ use diesel::{
 
 #[derive(Clone, Debug)]
 pub struct Delete {
-    pub account: account::Account,
     pub metadata: EventMetadata,
 }
 
