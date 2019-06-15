@@ -14,7 +14,7 @@ $ make dev
 
 2. Use our pinned Rust version
 ```sh
-$ rustup default nightly-2019-05-09
+$ rustup default nightly-2019-06-14
 ```
 
 3. Install [cargo-watch](https://github.com/passcod/cargo-watch)
