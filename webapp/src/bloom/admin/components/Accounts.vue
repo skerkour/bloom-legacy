@@ -10,7 +10,6 @@
         <v-text-field
           label="Username"
           v-model="username"
-          clearable
         ></v-text-field>
       </v-flex>
 
@@ -18,13 +17,13 @@
         <v-text-field
           label="Email"
           v-model="email"
-          clearable
         ></v-text-field>
       </v-flex>
 
       <v-flex xs12 sm2>
-        <v-btn @click="fetch_data">
-          Seach
+        <v-btn @click="fetch_data" color="primary">
+        <v-icon left dark>mdi-magnify</v-icon>
+        Seach
         </v-btn>
       </v-flex>
 
@@ -143,13 +142,15 @@ export default class Accounts extends Vue {
     this.error = '';
     this.is_loading = true;
     const offset = this.pagination.page ? (this.pagination.page - 1) * LIMIT : 0;
+    const username = this.username.trim() === '' ? undefined : this.username.trim();
+    const email = this.email.trim() === '' ? undefined : this.email.trim();
     try {
       const res = await api.get(`${api.ADMIN}/v1/accounts`, {
         params: {
-          email: this.email,
+          email,
           limit: LIMIT,
           offset,
-          username: this.username,
+          username,
         },
       });
       this.accounts = res.hits;
