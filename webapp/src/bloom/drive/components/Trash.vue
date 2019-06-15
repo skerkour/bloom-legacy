@@ -4,7 +4,7 @@
       {{ error }}
     </v-alert>
 
-  <v-toolbar flat dense color="white">
+  <v-toolbar flat dense>
     <v-spacer></v-spacer>
     <v-toolbar-items>
 

@@ -4,7 +4,7 @@
       {{ error }}
     </v-alert>
 
-  <v-toolbar flat dense color="white">
+  <v-toolbar flat dense>
     <v-breadcrumbs :items="current_folder.clean_path" v-if="current_folder" class="text-truncate">
       <v-icon slot="divider">mdi-chevron-right</v-icon>
     </v-breadcrumbs>

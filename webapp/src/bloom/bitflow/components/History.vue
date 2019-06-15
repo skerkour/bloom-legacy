@@ -4,7 +4,7 @@
       {{ error }}
     </v-alert>
 
-    <v-toolbar flat dense color="white" class=" hidden-sm-and-down">
+    <v-toolbar flat dense class=" hidden-sm-and-down">
       <v-spacer></v-spacer>
       <v-toolbar-items>
         <v-tooltip bottom>

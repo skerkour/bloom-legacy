@@ -9,7 +9,7 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               Keeping our customer data safe and secure is our top priority. We take threats very
@@ -24,7 +24,7 @@
               and we will get back to you faster than the light.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
     </v-layout>
