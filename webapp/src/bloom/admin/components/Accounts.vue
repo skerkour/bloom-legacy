@@ -6,25 +6,31 @@
         </v-alert>
       </v-flex>
 
-      <v-flex xs12 sm5>
-        <v-text-field
-          label="Username"
-          v-model="username"
-        ></v-text-field>
-      </v-flex>
+      <v-flex xs12>
+        <v-container>
+          <v-layout row wrap>
+            <v-flex xs12 sm5>
+              <v-text-field
+                label="Username"
+                v-model="username"
+              ></v-text-field>
+            </v-flex>
 
-      <v-flex xs12 sm5>
-        <v-text-field
-          label="Email"
-          v-model="email"
-        ></v-text-field>
-      </v-flex>
+            <v-flex xs12 sm5>
+              <v-text-field
+                label="Email"
+                v-model="email"
+              ></v-text-field>
+            </v-flex>
 
-      <v-flex xs12 sm2>
-        <v-btn @click="fetch_data" color="primary">
-        <v-icon left dark>mdi-magnify</v-icon>
-        Seach
-        </v-btn>
+            <v-flex xs12 sm2>
+              <v-btn @click="fetch_data" color="primary">
+              <v-icon left dark>mdi-magnify</v-icon>
+              Search
+              </v-btn>
+            </v-flex>
+          </v-layout>
+        </v-container>
       </v-flex>
 
       <v-flex xs12>
