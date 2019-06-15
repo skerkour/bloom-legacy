@@ -79,7 +79,7 @@ $danger: #F56C6C;
   background-color: #fefefe;
 }
 .theme--light {
-  .v-toolbar, .v-table, .v-footer, .v-tabs__bar {
+  .v-toolbar, .v-table, .v-footer, .v-tabs__bar, .application {
     background-color: #fefefe;
   }
 
