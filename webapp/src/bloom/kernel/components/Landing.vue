@@ -102,7 +102,7 @@
     </section>
 
 
-        <v-card id="card-customers" class="elevation-0">
+        <div id="card-customers" class="elevation-0">
           <v-layout row wrap class="text-xs-center">
             <v-flex xs12>
               <h2 class="display-2 font-weight-regular">
@@ -140,7 +140,7 @@
               </div>
             </v-flex>
           </v-layout>
-        </v-card>
+        </div>
 
     </v-container>
 
@@ -237,7 +237,6 @@ export default class Landing extends Vue {
 }
 .blm-mission {
   font-size: 32px;
-  color: #000;
 }
 
 #hero-image {

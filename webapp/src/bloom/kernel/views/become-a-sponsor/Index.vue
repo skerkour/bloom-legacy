@@ -9,7 +9,7 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-3">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               Bloom is an open source project that is completely free to use (<i>free</i> as in Freedom).
@@ -21,7 +21,7 @@
                 feel free to email us: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center mb-4">

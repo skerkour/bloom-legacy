@@ -11,7 +11,7 @@
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Introduction
@@ -32,12 +32,12 @@
               contributions. <br/><br/>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Overview
@@ -64,13 +64,13 @@
               and contributors should not rely on the long term archiving of the chat. The forum is often prefered.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Development
@@ -116,14 +116,14 @@
               See our <router-link to="/security">dedicated security page</router-link>.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               UX / Design
@@ -138,13 +138,13 @@
                   You can refer to the Development worflow to propose new features / fix bugs.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Documentation
@@ -164,14 +164,14 @@
               </ul>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Sponsoring
@@ -182,12 +182,12 @@
                   <router-link to="/become-a-sponsor">Become a sponsor page</router-link>.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <h2 class="text-xs-center headline mb-3">
               Getting Help
@@ -202,7 +202,7 @@
               </ul>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
     </v-layout>

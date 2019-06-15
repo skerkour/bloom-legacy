@@ -4,7 +4,7 @@
   <v-layout row wrap justify-left>
 
     <v-flex xs12 v-if="initial_loading">
-      <v-card class="elevation-0">
+      <div class="elevation-0">
         <v-layout row wrap justify-center>
         <v-progress-circular
           :size="50"
@@ -12,7 +12,7 @@
           indeterminate
         ></v-progress-circular>
       </v-layout>
-      </v-card>
+      </div>
     </v-flex>
 
     <v-flex xs12 text-xs-center v-if="error">
@@ -22,7 +22,7 @@
     </v-flex>
 
     <v-flex xs12 sm10 md8 xl7 v-if="me">
-      <v-card class="elevation-0">
+      <div class="elevation-0">
         <v-card-title>
           <div class="headline text-xs-left">
             Profile
@@ -93,18 +93,18 @@
           <v-flex xs12><v-divider></v-divider></v-flex>
 
           <v-flex hidden-xs-only sm3>
-            <v-subheader>Color Scheme</v-subheader>
+            <v-subheader>Theme</v-subheader>
           </v-flex>
           <v-flex xs12 sm9>
             <v-switch
               :input-value="dark_mode"
-              :label="`Dark Mode: ${dark_mode ? 'On' : 'Off'}`"
+              :label="`${dark_mode ? 'Dark' : 'Light'}`"
               v-on:change="on_dark_mode_changed"
             ></v-switch>
           </v-flex>
         </v-layout>
       </v-container>
-    </v-card>
+    </div>
   </v-flex>
 
 <input type="file" class="avatar-upload" ref="avatarupload" v-on:change="upload_avatar()"/>

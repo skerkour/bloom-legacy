@@ -9,7 +9,7 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular text-xs-left ">
               You can contact the Bloom team using one of the following way:
@@ -21,7 +21,7 @@
               </ul>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
     </v-layout>

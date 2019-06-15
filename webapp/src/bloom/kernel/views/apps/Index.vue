@@ -9,7 +9,7 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               Currently only the Android app is available:
@@ -20,7 +20,7 @@
               </a>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
       <v-flex xs12 class="text-xs-center mb-3 mt-3">
@@ -30,14 +30,14 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-5">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               If you have the skills and the will to build the Open source IOS App please contact us:
               <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span>
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
     </v-layout>
