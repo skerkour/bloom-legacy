@@ -49,7 +49,7 @@ impl eventsourcing::Command for Complete {
             file.read(&mut contents)?;
             mimesniff::detect_content_type(&contents)
         };
-        println!("CONTENT TYEP: :::: {}", content_type.to_string());
+
         let fspool = FsPool::default();
         let file_stream = fspool.read(self.file_path.clone(), Default::default());
         let req = PutObjectRequest {
