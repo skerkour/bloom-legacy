@@ -146,6 +146,10 @@ pub fn init() -> Config {
 
     let decoded = replace_env(decoded);
 
+    env::set_var("AWS_ACCESS_KEY_ID", decoded.aws.access_key_id.clone());
+    env::set_var("AWS_SECRET_ACCESS_KEY", decoded.aws.secret_access_key.clone());
+    env::set_var("AWS_REGION", decoded.aws.region.clone());
+
     return decoded.into();
 }
 
