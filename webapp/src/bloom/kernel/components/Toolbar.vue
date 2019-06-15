@@ -186,7 +186,7 @@ export default class Toolbar extends Vue {
       case 'contacts':
         this.secondary_title = 'Contacts';
         this.side_icon = false;
-        this.display_searchbar = true;
+        this.display_searchbar = false;
         this.searchbar_label = 'Search Contacts';
         break;
       case 'calendar':
