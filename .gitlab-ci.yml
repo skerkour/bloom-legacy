@@ -24,7 +24,7 @@ test:server:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-06-14
+    - rustup default nightly-2019-05-10
     - make -C server test
 
 test:webapp:
