@@ -12,7 +12,7 @@
         <router-link to="/admin/accounts">
         <v-hover>
         <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 4 : 1}`">
-          <v-card-title class="grey--text text--darken-2 headline">
+          <v-card-title class="headline">
             Accounts
           </v-card-title>
           <v-divider />
