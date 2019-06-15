@@ -1,16 +1,16 @@
 <template>
-  <blm-admin-accounts />
+  <blm-admin-dashboard />
 </template>
 
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import Accounts from '../../components/Accounts.vue';
+import Dashboard from '../../components/Dashboard.vue';
 
 
 @Component({
   components: {
-    'blm-admin-accounts': Accounts,
+    'blm-admin-dashboard': Dashboard,
   },
 })
 export default class Index extends Vue {

@@ -1,7 +1,16 @@
 <template>
   <v-list>
 
-        <v-list-tile exact to="/admin/accounts">
+    <v-list-tile exact to="/admin">
+      <v-list-tile-action>
+        <v-icon>mdi-view-dashboard</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Dashboard</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+
+    <v-list-tile exact to="/admin/accounts">
       <v-list-tile-action>
         <v-icon>mdi-account</v-icon>
       </v-list-tile-action>
