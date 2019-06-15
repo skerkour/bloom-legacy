@@ -60,7 +60,7 @@ export default class Projects extends Vue {
     {
       description: 'The cloud native security scanner ☁️',
       homepage: 'https://gitlab.com/bloom42/phaser',
-      img: '/kernel/static/imgs/logos/phaser_256.png',
+      img: '/phaser/static/imgs/phaser_rounded_256.png',
       name: 'Phaser',
     },
     {

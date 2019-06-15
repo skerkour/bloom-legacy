@@ -125,7 +125,7 @@ export default class Landing extends Vue {
       description: 'Cloud security scanner: automatically identify security issues on your \
         website and in your infrastructure',
       learn_more: '/platform/phaser',
-      logo: '/kernel/static/imgs/logos/phaser_256.png',
+      logo: '/phaser/static/imgs/phaser_rounded_256.png',
       name: 'Phaser',
     },
   ];
