@@ -17,7 +17,7 @@
       <v-flex xs12>
         <v-card class="elevation-0">
           <v-card-title class="pb-0">
-            <h2 class="headline grey--text text--darken-2">
+            <h2 class="headline">
               Reports
             </h2>
           </v-card-title>
@@ -42,7 +42,7 @@
       <v-flex xs12 v-if="report.status !== 'Scanning'">
         <v-card class="elevation-0">
           <v-card-title>
-            <h2 class="headline grey--text text--darken-2">
+            <h2 class="headline">
               Overview
             </h2>
           </v-card-title>
@@ -116,7 +116,7 @@
       <v-flex xs12 v-if="report.status !== 'Scanning'">
         <v-card class="elevation-0">
           <v-card-title>
-            <h2 class="headline grey--text text--darken-2">
+            <h2 class="headline">
               Findings
             </h2>
           </v-card-title>
@@ -253,7 +253,6 @@ export default class Report extends Vue {
 }
 
 pre {
-  background-color: #f0f0f0;
   border-radius: 5px;
 }
 </style>

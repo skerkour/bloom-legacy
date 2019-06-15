@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-toolbar flat dense color="white" class="hidden-sm-and-down">
+  <v-toolbar flat dense class="hidden-sm-and-down">
     <v-spacer></v-spacer>
     <v-btn outline color="primary" class="add-btn" @click="open_dialog">
       <v-icon left>mdi-plus</v-icon>Create Contact

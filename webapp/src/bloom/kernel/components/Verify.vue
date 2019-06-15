@@ -1,7 +1,7 @@
 <template>
   <v-layout row wrap text-xs-center>
     <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main" class="text-xs-center">
-      <v-card class="elevation-0">
+      <div class="elevation-0">
         <v-container fluid fill-height>
           <v-layout row wrap text-xs-center>
             <v-flex xs12 v-if="!email">
@@ -53,7 +53,7 @@
             </v-flex>
           </v-layout>
         </v-container>
-      </v-card>
+      </div>
     </v-flex>
   </v-layout>
 </template>

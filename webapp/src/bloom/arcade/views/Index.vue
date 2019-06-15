@@ -3,7 +3,7 @@
   <v-container >
     <v-layout row>
       <v-flex xs12>
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-container
           fluid
           grid-list-md
@@ -33,7 +33,7 @@
         </v-flex>
       </v-layout>
     </v-container>
-  </v-card>
+  </div>
 </v-flex>
 </v-layout>
 </v-container>

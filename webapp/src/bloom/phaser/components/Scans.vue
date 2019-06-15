@@ -4,7 +4,7 @@
       {{ error }}
     </v-alert>
 
-    <v-toolbar flat dense color="white">
+    <v-toolbar flat dense>
       <v-spacer />
       <v-toolbar-items>
         <v-btn outline color="primary" class="new-btn" @click="open_new_scan_dialog">

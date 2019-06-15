@@ -10,9 +10,9 @@
         <router-link to="/platform/phaser">
         <v-hover>
         <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 4 : 1}`">
-          <v-card-title class="grey--text text--darken-2 headline">
-            <img src="/kernel/static/imgs/logos/phaser.svg" height="32"/>&nbsp;
-            Phaser
+          <v-card-title class="headline">
+            <v-avatar :size="32"><img src="/phaser/static/imgs/phaser_filled_64.png" /></v-avatar>
+            &nbsp;Phaser
           </v-card-title>
           <v-divider />
 

@@ -90,7 +90,7 @@
     </section>
 
     <section class="text-xs-center">
-        <v-card class="mb-5 mt-5 elevation-0">
+      <div class="mb-5 mt-5 elevation-0">
         <v-container>
           <v-layout row wrap>
             <v-flex xs12>
@@ -100,10 +100,10 @@
               <v-btn to="/register" color="blue" dark>
                 Go to Phaser
               </v-btn>
-              </v-flex>
-            </v-layout>
-          </v-container>
-        </v-card>
+            </v-flex>
+          </v-layout>
+        </v-container>
+      </div>
     </section>
 
     </v-container>

@@ -21,7 +21,7 @@
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <p>
               The following Terms of Services ("ToS") govern your relationship ("Customer", "User" or "You")
@@ -373,7 +373,7 @@
 
 
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
     </v-layout>

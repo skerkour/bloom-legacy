@@ -3,7 +3,7 @@
   <v-layout row wrap>
 
     <v-flex v-if="album" xs12 justify-center class="text-xs-center">
-      <v-toolbar flat dense color="white">
+      <v-toolbar flat dense>
         <v-toolbar-title>{{ album.name }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>
@@ -60,7 +60,7 @@
     </v-flex>
 
     <v-flex xs12 sm9 offset-sm1>
-      <v-card class="elevation-0">
+      <div class="elevation-0">
         <v-container grid-list-sm fluid>
           <v-layout row wrap>
 
@@ -78,7 +78,7 @@
             </v-flex>
           </v-layout>
         </v-container>
-      </v-card>
+      </div>
     </v-flex>
   </v-layout>
 

@@ -2,7 +2,7 @@
 <div>
   <v-layout row wrap>
     <v-flex v-if="playlist" xs12 justify-center class="text-xs-center">
-      <v-toolbar flat dense color="white">
+      <v-toolbar flat dense>
         <v-toolbar-title>{{ playlist.name }}</v-toolbar-title>
         <v-spacer></v-spacer>
         <v-toolbar-items>

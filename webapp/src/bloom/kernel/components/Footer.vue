@@ -68,16 +68,12 @@ export default class Footer extends Vue {
 <style scoped lang="scss">
 
 .theme--dark.v-footer {
-  background-color: #303030;
-
   a {
     color: white;
   }
 }
 
 .theme--light.v-footer {
-  background-color: #fafafa;
-
   a {
     color: black;
   }

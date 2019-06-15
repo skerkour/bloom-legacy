@@ -2,7 +2,7 @@
 <div>
   <v-layout>
     <v-flex xs12 sm9 offset-sm1>
-      <v-card class="elevation-0">
+      <div class="elevation-0">
         <v-container grid-list-sm fluid>
           <v-layout row wrap>
              <v-flex v-if="media.length === 0" xs12>
@@ -24,7 +24,7 @@
             </v-flex>
           </v-layout>
         </v-container>
-      </v-card>
+      </div>
     </v-flex>
   </v-layout>
   <blm-gallery-dialog-carousel

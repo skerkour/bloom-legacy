@@ -1,7 +1,7 @@
 <template>
   <v-container grid-list-xl text-xs-center>
     <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
-      <v-card id="main-card" class="elevation-0">
+      <div id="main-card" class="elevation-0">
 
         <v-tabs fixed-tabs>
           <v-tab ripple to="/sign-in">Sign in</v-tab>
@@ -16,7 +16,7 @@
         <a href="https://help.bloom.sh" target="_blank" rel="noopener">Help</a>
       </div>
 
-      </v-card>
+      </div>
     </v-flex>
   </v-container>
 </template>

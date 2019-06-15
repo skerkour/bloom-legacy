@@ -60,6 +60,35 @@ $danger: #F56C6C;
   border-radius: 50%;
 }
 
+// not sure why it does not work in block below
+.theme--dark.application {
+  background-color: #303030;
+}
+.theme--dark {
+  .v-toolbar, .v-table, .v-footer, .v-tabs__bar, .application {
+    background-color: #303030;
+  }
+
+  pre {
+    background-color: #212121;
+  }
+}
+
+// not sure why it does not work in block below
+.theme--light.application {
+  background-color: #fefefe;
+}
+.theme--light {
+  .v-toolbar, .v-table, .v-footer, .v-tabs__bar {
+    background-color: #fefefe;
+  }
+
+  pre {
+    background-color: #f0f0f0;
+  }
+}
+
+
 
 .pointer {
   cursor: pointer;

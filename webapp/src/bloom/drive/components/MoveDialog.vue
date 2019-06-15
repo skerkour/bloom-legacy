@@ -21,7 +21,6 @@
           :load-children="fetch_folder"
           :open.sync="open"
           activatable
-          class="grey lighten-5"
           indeterminate-icon="mdi-loading"
           item-children="files"
         >
