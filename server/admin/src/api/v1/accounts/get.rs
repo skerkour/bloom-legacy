@@ -26,6 +26,8 @@ use serde::{Deserialize};
 pub struct QueryParams {
    pub offset: Option<i64>,
    pub limit: Option<i64>,
+   pub username: Option<String>,
+   pub email: Option<String>,
 }
 
 pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, req: HttpRequest)
@@ -43,6 +45,8 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
             actor: auth.account.expect("unwraping non none account"),
             offset: query_params.offset,
             limit: query_params.limit,
+            email: query_params.email.clone(),
+            username: query_params.username.clone(),
         })
         .map_err(|_| KernelError::ActixMailbox)
         .from_err()
