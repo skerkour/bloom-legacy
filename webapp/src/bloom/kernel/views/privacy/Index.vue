@@ -15,7 +15,7 @@
 
 
       <v-flex xs12 sm10 md8 class="text-xs-left mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text class="font-18 font-weight-regular">
             <p class="mb-3"><i>
               We aim for transparency about how we collect data. Accordingly, we have developed this Policy in order
@@ -93,7 +93,7 @@
             </i></p>
 
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 

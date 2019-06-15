@@ -1,5 +1,5 @@
 <template>
-  <v-card class="elevation-0">
+  <div class="elevation-0">
     <v-card-title>
       <div class="headline text-xs-left">
         Change password
@@ -70,7 +70,7 @@
 
         </v-layout>
       </v-container>
-</v-card>
+</div>
 </template>
 
 

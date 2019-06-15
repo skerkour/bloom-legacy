@@ -5,7 +5,7 @@
 
     <v-list-tile exact to="/platform/phaser">
       <v-list-tile-action>
-        <img src="/kernel/static/imgs/logos/phaser.svg" height="32"/>
+        <v-avatar :size="32"><img src="/phaser/static/imgs/phaser_filled_64.png" /></v-avatar>
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>Phaser</v-list-tile-title>

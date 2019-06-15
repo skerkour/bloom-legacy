@@ -3,7 +3,7 @@
   <v-container >
     <v-layout row>
       <v-flex xs12>
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-container fluid grid-list-md>
             <v-layout row wrap justify-left>
               <v-flex xs4 sm3 lg2 justify-center class="pointer" @click="open_new_album_dialog">
@@ -19,7 +19,7 @@
               </v-flex>
             </v-layout>
           </v-container>
-        </v-card>
+        </div>
       </v-flex>
     </v-layout>
   </v-container>

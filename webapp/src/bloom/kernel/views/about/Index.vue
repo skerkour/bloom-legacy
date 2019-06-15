@@ -10,7 +10,7 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               We believe that sharing and collaboration is the only way to build a sustainable future in a finite world.
@@ -19,7 +19,7 @@
               become contributors and we greatly improve the quality of global human life.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
@@ -30,13 +30,13 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               Empowering the world with open technologies.
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
@@ -48,13 +48,13 @@
       </v-flex>
 
       <v-flex xs12 sm10 md8 class="text-xs-center mb-4">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
 
@@ -107,13 +107,13 @@
       </v-flex>
 
       <v-flex xs12 class="text-xs-center mb-5">
-        <v-card class="elevation-0">
+        <div class="elevation-0">
           <v-card-text>
             <p class="font-18 font-weight-regular">
               -
             </p>
           </v-card-text>
-        </v-card>
+        </div>
       </v-flex>
 
       <!-- <v-flex xs12 class="text-xs-center mb-5">
