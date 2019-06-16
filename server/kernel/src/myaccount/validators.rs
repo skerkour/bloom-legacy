@@ -122,7 +122,7 @@ pub fn username(username: &str) -> Result<(), KernelError> {
         return Err(KernelError::Validation("username is not valid".to_string()));
     }
 
-    if !username.chars().all(char::is_alphanumeric) {
+    if !username.chars().all(char::is_alphanumeric) || !username.is_ascii() {
         return Err(KernelError::Validation("username must contains only alphanumeric characters".to_string()));
     }
 
