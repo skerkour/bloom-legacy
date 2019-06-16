@@ -29,4 +29,5 @@ pub use events::{
     AvatarUpdatedV1,
     PasswordResetRequestedV1,
     PasswordResetedV1,
+    DeletedV1,
 };
