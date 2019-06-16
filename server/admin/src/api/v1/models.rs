@@ -17,6 +17,7 @@ pub struct AccountResponse {
     pub avatar_url: String,
     pub is_admin: bool,
     pub is_disabled: bool,
+    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 impl From<account::Account> for AccountResponse {
@@ -31,6 +32,7 @@ impl From<account::Account> for AccountResponse {
             avatar_url: account.avatar_url,
             is_admin: account.is_admin,
             is_disabled: account.is_disabled,
+            deleted_at: account.deleted_at,
         }
     }
 }
