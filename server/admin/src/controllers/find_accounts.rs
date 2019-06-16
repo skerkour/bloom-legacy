@@ -90,12 +90,10 @@ impl Handler<FindAccounts> for DbActor {
             },
             (None, None) => {
                 let total: i64 = kernel_accounts::dsl::kernel_accounts
-                    .filter(kernel_accounts::dsl::deleted_at.is_null())
                     .count()
                     .get_result(&conn)?;
 
                 let accounts: Vec<domain::Account> = kernel_accounts::dsl::kernel_accounts
-                    .filter(kernel_accounts::dsl::deleted_at.is_null())
                     .order_by(kernel_accounts::dsl::created_at.desc())
                     .limit(limit)
                     .offset(offset)

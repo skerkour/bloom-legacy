@@ -50,10 +50,14 @@
             <td class="text-xs-left">
               <span>{{ props.item.username }}</span>
             </td>
+
             <td class="text-xs-left">
               <v-chip color="success" outline v-if="!props.item.is_disabled">Active</v-chip>
               <v-chip v-else outline>Disabled</v-chip>
+
+              <v-chip color="error" dark v-if="props.item.deleted_at">Deleted</v-chip>
             </td>
+
             <td class="justify-left">
               <v-tooltip bottom>
                 <v-btn flat icon small color="grey darken-1" slot="activator"
