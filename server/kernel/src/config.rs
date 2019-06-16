@@ -149,6 +149,8 @@ pub fn init() -> Config {
     env::set_var("AWS_ACCESS_KEY_ID", decoded.aws.access_key_id.clone());
     env::set_var("AWS_SECRET_ACCESS_KEY", decoded.aws.secret_access_key.clone());
     env::set_var("AWS_REGION", decoded.aws.region.clone());
+    env::set_var("PHASER_SECRET", decoded.phaser.secret.clone());
+    env::set_var("BITFLOW_SECRET", decoded.bitflow.secret.clone());
 
     return decoded.into();
 }
