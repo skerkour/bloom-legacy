@@ -33,6 +33,7 @@ pub enum EventData {
     PasswordResetedV1(PasswordResetedV1),
     DisabledV1,
     EnabledV1,
+    DeletedV1(DeletedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -81,6 +82,12 @@ pub struct PasswordResetRequestedV1 {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct PasswordResetedV1 {
     pub password: String, // hashed password
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DeletedV1 {
+    pub password: String,
+    pub random_string: String,
 }
 
 impl eventsourcing::Event for Event {
@@ -169,6 +176,16 @@ impl eventsourcing::Event for Event {
                     avatar_url: random_string,
                     ..aggregate
                 }
+            },
+            // DeletedV1
+            EventData::DeletedV1(ref data) => account::Account {
+                deleted_at: Some(self.timestamp),
+                is_disabled: true,
+                first_name: data.random_string.clone(),
+                last_name: data.random_string.clone(),
+                email: data.random_string.clone(),
+                password: data.password.clone(),
+                ..aggregate
             },
         }
     }
