@@ -52,6 +52,11 @@ impl Handler<SignIn> for DbActor {
                 .first(&conn)
                 .map_err(|_| KernelError::Unauthorized("Invalid username/password combination".to_string()))?;
 
+
+            if account.deleted_at.is_some() {
+                return Err(KernelError::Unauthorized("Account has been permanently deleted.".to_string()))?;
+            }
+
             // verify password
             if !bcrypt::verify(&msg.password, &account.password)
                 .map_err(|_| KernelError::Bcrypt)? {
@@ -69,9 +74,6 @@ impl Handler<SignIn> for DbActor {
                 return Err(KernelError::Unauthorized("Invalid username/password combination".to_string()));
             }
 
-            if account.deleted_at.is_some() {
-                return Err(KernelError::Unauthorized("Account has been permanently deleted.".to_string()))?;
-            }
             if account.is_disabled {
                 return Err(KernelError::Unauthorized("Account is disabled. Please contact support.".to_string()))?;
             }
