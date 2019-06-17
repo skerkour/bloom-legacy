@@ -35,6 +35,8 @@ RUN mkdir /bloom && chown -R bloom:bloom /bloom && chmod 700 /bloom
 # COPY --from=builder /kernel/dist/kernel /kernel/kernel
 # COPY --from=builder /kernel/dist/assets /kernel/assets
 COPY ./dist/ /bloom/
+COPY ./bloom.default.sane /bloom/bloom.sane
+
 # RUN chown -R bloom:bloom /bloom && chmod 700 /bloom
 
 WORKDIR /bloom
