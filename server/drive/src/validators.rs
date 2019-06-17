@@ -1,7 +1,10 @@
 use kernel::KernelError;
 
 // TODO
-pub fn file_name(_file_name: &str) -> Result<(), KernelError> {
+pub fn file_name(file_name: &str) -> Result<(), KernelError> {
+    if file_name.len() > 128 {
+        return Err(KernelError::Validation("file name is too long".to_string()));
+    }
 
     return Ok(());
 }

@@ -6,6 +6,7 @@ mod trash;
 mod restore;
 mod delete;
 mod copy;
+mod rename;
 
 
 pub use upload::Upload;
@@ -16,3 +17,4 @@ pub use trash::Trash;
 pub use restore::Restore;
 pub use delete::Delete;
 pub use copy::Copy_;
+pub use rename::Rename;

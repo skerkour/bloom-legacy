@@ -38,6 +38,31 @@ pub struct FileBody {
     pub size: i64,
 }
 
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct FileResponse {
+    pub id: Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub updated_at: chrono::DateTime<chrono::Utc>,
+    pub name: String,
+    #[serde(rename = "type")]
+    pub type_: String,
+    pub size: i64,
+}
+
+impl From<domain::file::File> for FileResponse {
+    fn from(file: domain::file::File) -> Self {
+        FileResponse{
+            id: file.id,
+            created_at: file.created_at,
+            updated_at: file.updated_at,
+            name: file.name,
+            type_: file.type_,
+            size: file.size,
+        }
+    }
+}
+
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FolderBody {
     pub id: Uuid,
@@ -50,6 +75,12 @@ pub struct FolderBody {
     pub size: i64,
     pub files: Vec<FileBody>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct UpdateFileBody {
+    pub name: Option<String>,
+}
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileUrl {
