@@ -58,6 +58,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .route(web::post().to_async(drivev1::folders::post))
         )
         .route("/drive/v1/files/{file_id}/url", web::get().to_async(drivev1::files::url::get))
+        .route("/drive/v1/files/{file_id}", web::put().to_async(drivev1::files::file::put))
         .route("/drive/v1/files/move", web::post().to_async(drivev1::files::move_::post))
         .route("/drive/v1/files/restore", web::post().to_async(drivev1::files::restore::post))
         .route("/drive/v1/files/delete", web::post().to_async(drivev1::files::delete::post))

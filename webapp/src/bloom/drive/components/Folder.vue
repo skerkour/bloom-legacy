@@ -52,6 +52,13 @@
 
 
       <v-tooltip bottom>
+        <v-btn slot="activator" icon :disabled="selected.length !== 1" @click="open_rename_dialog(selected[0])">
+          <v-icon color="grey darken-1">mdi-alphabetical</v-icon>
+        </v-btn>
+        <span>Rename File</span>
+      </v-tooltip>
+
+      <v-tooltip bottom>
         <v-btn slot="activator" icon :disabled="selected.length === 0" @click="move">
           <v-icon color="grey darken-1">mdi-folder-move</v-icon>
         </v-btn>
@@ -134,6 +141,12 @@
 @close="move_dialog = false"
 :selected="selected"
 @move="moved" />
+
+<blm-drive-dialog-rename-file
+:visible="display_rename_file_dialog"
+:file="file_to_rename"
+@close="display_rename_file_dialog = false"
+@rename="renamed" />
 
 <v-dialog
 v-model="uploading_dialog"
@@ -241,12 +254,14 @@ import api from '@/bloom/kernel/api';
 import util from '@/bloom/kernel/util';
 import CreateFolderDialog from './CreateFolderDialog.vue';
 import MoveDialog from './MoveDialog.vue';
+import RenameFileDialog from './RenameFileDialog.vue';
 
 
 @Component({
   components: {
     'blm-drive-dialog-create-folder': CreateFolderDialog,
     'blm-drive-dialog-move': MoveDialog,
+    'blm-drive-dialog-rename-file': RenameFileDialog,
   },
 })
 export default class Folder extends Vue {
@@ -256,6 +271,7 @@ export default class Folder extends Vue {
   is_loading = false;
   files: any[] = [];
   files_to_upload: any[] = [];
+  file_to_rename: any = null;
   uploading_dialog = false;
   selected: any[] = [];
   current_folder: any = null;
@@ -263,6 +279,7 @@ export default class Folder extends Vue {
   bottom_sheet = false;
   fab = false;
   display_create_folder_dialog = false;
+  display_rename_file_dialog = false;
   move_dialog = false;
   headers = [
     {
@@ -617,6 +634,16 @@ export default class Folder extends Vue {
       this.files = this.files.filter((f: any) => files.indexOf(f.id) === -1);
     }
     this.selected = [];
+  }
+
+  open_rename_dialog(file_to_rename: any) {
+    this.file_to_rename = file_to_rename;
+    this.display_rename_file_dialog = true;
+  }
+
+  renamed(file: any) {
+    const index = this.files.map((s: any) => s.id).indexOf(file.id);
+    this.$set(this.files, index, file);
   }
 }
 </script>
