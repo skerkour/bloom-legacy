@@ -5,8 +5,11 @@ use actix_web::{
     Result as ActixResult,
     HttpResponse,
     web::JsonConfig,
+    web,
 };
 use crate::KernelError;
+use handlebars::Handlebars;
+use std::collections::BTreeMap;
 
 
 pub mod middlewares;
@@ -68,4 +71,32 @@ pub fn json_default_config() -> JsonConfig {
         .error_handler(|err, _| {
             KernelError::Validation(err.to_string()).into() // <- create custom error response
         });
+}
+
+static ENV_TEMPLATE: &str = r#"
+window.__bloom.env = {
+    NODE_ENV: "{{node_env}}",
+    VUE_APP_SENTRY_URL: "{{sentry_url}}",
+    VUE_APP_HOST: "{{host}}",
+    VUE_APP_STRIPE_PUBLIC_KEY: "{{stripe_public_key}}",
+};
+"#;
+
+pub fn webapp_env(state: web::Data<State>) -> ActixResult<HttpResponse> {
+    let config = state.config.clone();
+    let handlebars = Handlebars::new();
+
+    let mut data = BTreeMap::new();
+    data.insert("node_env".to_string(), config.rust_env());
+    data.insert("sentry_url".to_string(), config.sentry_webapp_url().unwrap_or("".to_string()));
+    data.insert("host".to_string(), config.host());
+    data.insert("stripe_public_key".to_string(), config.stripe_public_key());
+
+    let res = handlebars.render_template(ENV_TEMPLATE, &data)
+            .expect("error rendering env template").as_str().to_string();
+
+    return Ok(HttpResponse::Ok()
+        .content_type("application/javascript; charset=UTF-8")
+        .body(res)
+    );
 }
