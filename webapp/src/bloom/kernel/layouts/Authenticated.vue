@@ -39,12 +39,22 @@
       <blm-music-drawer v-else-if="$route.meta.service === 'music'" />
       <blm-admin-drawer v-else-if="$route.meta.service === 'admin'" />
 
-      <v-list-tile class="drawer-help hidden-sm-and-up" target="_blank" rel="noopener" href="https://help.bloom.sh">
-          <v-list-tile-action>
-            <v-icon color="grey darken-1">mdi-help-circle</v-icon>
-          </v-list-tile-action>
-          <v-list-tile-title class="grey--text text--darken-1">help</v-list-tile-title>
-        </v-list-tile>
+      <v-divider class="hidden-sm-and-up"></v-divider>
+
+      <v-list-tile class="hidden-sm-and-up" target="_blank" rel="noopener" href="https://help.bloom.sh">
+        <v-list-tile-action>
+          <v-icon color="grey darken-1">mdi-help-circle</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title class="grey--text text--darken-1">help</v-list-tile-title>
+      </v-list-tile>
+
+
+      <v-list-tile class="drawer-sign-out hidden-sm-and-up" target="_blank" rel="noopener" @click="sign_out">
+        <v-list-tile-action>
+          <v-icon color="grey darken-1">mdi-power</v-icon>
+        </v-list-tile-action>
+        <v-list-tile-title class="grey--text text--darken-1">Sign out</v-list-tile-title>
+      </v-list-tile>
 
 
     </v-navigation-drawer>
@@ -63,6 +73,7 @@
 </template>
 
 <script lang="ts">
+import api from '@/bloom/kernel/api';
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import router from '@/bloom/kernel/router';
 import { Route } from 'vue-router';
@@ -169,6 +180,10 @@ export default class Authenticated extends Vue {
         break;
     }
   }
+
+  sign_out() {
+    api.sign_out();
+  }
 }
 </script>
 
@@ -196,7 +211,7 @@ export default class Authenticated extends Vue {
   background-image: linear-gradient(to top, rgba(0, 0, 0, 0.4) 0%, transparent 72px);
 }
 
-.drawer-help {
+.drawer-sign-out {
   position: absolute;
   bottom: 0;
 }
