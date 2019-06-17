@@ -38,7 +38,7 @@ pub struct Config {
     stripe: StripeConfig,
     disposable_email_domains: HashSet<String>,
     basic_passwords: HashSet<String>,
-    // stripe_secret_key: String,
+    version: String,
 }
 
 impl From<ConfigFile> for Config {
@@ -72,6 +72,8 @@ impl From<ConfigFile> for Config {
             });
         }
 
+        let version_file = include_str!("../../../VERSION.txt");
+
         return Config {
             rust_env: config.rust_env,
             host: config.host,
@@ -86,6 +88,7 @@ impl From<ConfigFile> for Config {
             stripe: config.stripe,
             disposable_email_domains: blacklisted_email_domains,
             basic_passwords: blacklisted_passwords,
+            version: version_file.trim().to_string(),
         };
     }
 }
@@ -248,6 +251,10 @@ impl Config {
 
     pub fn stripe_public_key(&self) -> String {
         return self.stripe.public_key.clone();
+    }
+
+    pub fn version(&self) -> String {
+        return self.version.clone();
     }
 }
 
