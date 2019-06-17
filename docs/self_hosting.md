@@ -15,11 +15,11 @@ $ cargo install diesel_cli --no-default-features --features postgres
 $ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] -e POSTGRES_PASSWORD=[PASSWORD_TO_CHANGE] -p 5432:5432 postgres:11
 ```
 
-4. Clone Bloom's Git repository, go to the `server` directory, and copy `bloom.sane.template` to `bloom.sane`
+4. Clone Bloom's Git repository, go to the `server` directory, and copy `bloom.template.sane` to `bloom.sane`
 ```sh
 $ git clone https://gitlab.com/bloom42/bloom.git
 $ cd bloom/server
-$ cp bloom.sane.template bloom.sane
+$ cp bloom.template.sane bloom.sane
 ```
 
 5. Edit `bloom.sane` with correct values

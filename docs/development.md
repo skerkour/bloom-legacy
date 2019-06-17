@@ -35,7 +35,7 @@ $ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] 
 6. Edit `bloom.sane` with correct values
 ```sh
 $ cd server
-$ cp bloom.sane.template bloom.sane
+$ cp bloom.template.sane bloom.sane
 # edit bloom.sane
 $ cat bloom.sane
 rust_env = "development"
