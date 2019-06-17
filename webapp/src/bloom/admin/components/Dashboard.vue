@@ -10,18 +10,16 @@
 
 
       <v-flex xs12 sm4 lg3>
-        <v-hover>
-          <v-card slot-scope="{ hover }" :class="`elevation-${hover ? 4 : 1}`">
-            <v-card-title class="headline">
-              Bloom
-            </v-card-title>
-            <v-divider />
+        <v-card>
+          <v-card-title class="headline">
+            Bloom
+          </v-card-title>
+          <v-divider />
 
-            <v-card-text class="text-xs-center">
-              {{ config.VERSION }}
-            </v-card-text>
-          </v-card>
-        </v-hover>
+          <v-card-text class="text-xs-center">
+            {{ config.VERSION }}
+          </v-card-text>
+        </v-card>
       </v-flex>
 
       <v-flex xs12 sm4 lg3>
