@@ -27,6 +27,7 @@ pub enum EventData {
     RestoredV1,
     DeletedV1,
     CopiedV1(CopiedV1),
+    RenamedV1(RenamedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -70,6 +71,11 @@ pub struct TrashedV1 {
 pub struct CopiedV1 {
     pub to: uuid::Uuid, // new parent
     pub new_file: uuid::Uuid,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RenamedV1 {
+    pub name: String,
 }
 
 
@@ -142,6 +148,11 @@ impl eventsourcing::Event for Event {
             },
             // CopiedV1
             EventData::CopiedV1(_) => super::File{
+                ..aggregate
+            },
+            // RenamedV1
+            EventData::RenamedV1(ref data) => super::File{
+                name: data.name.clone(),
                 ..aggregate
             },
         }

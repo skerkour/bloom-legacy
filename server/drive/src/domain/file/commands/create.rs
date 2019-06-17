@@ -8,6 +8,7 @@ use kernel::{
 };
 use crate::{
     domain::file,
+    validators,
 };
 
 
@@ -36,6 +37,7 @@ impl eventsourcing::Command for Create {
     // check name is not already taken by another parent's children
     // check that ownerID == parent.OwnerID
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+        validators::file_name(&self.name)?;
         return Ok(());
     }
 

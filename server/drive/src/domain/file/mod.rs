@@ -17,6 +17,7 @@ pub use commands::{
     Restore,
     Delete,
     Copy_,
+    Rename,
 };
 pub use events::{
     Event,
@@ -27,4 +28,5 @@ pub use events::{
     MovedV1,
     TrashedV1,
     CopiedV1,
+    RenamedV1,
 };
