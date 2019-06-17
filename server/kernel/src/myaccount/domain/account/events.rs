@@ -195,4 +195,35 @@ impl eventsourcing::Event for Event {
     }
 }
 
+#[cfg(test)]
+mod test {
+    use super::*;
+
+    #[test]
+    fn test_account_deleted_v1() {
+        let cfg = crate::config::init_for_test();
+        let db_actor_addr = crate::db::get_pool_db_conn(&cfg);
+
+        let conn = db_actor_addr.get().unwrap();
+        let mut fake_account = account::Account::new();
+        fake_account.username = utils::random_hex_string(10);
+        let fake_request_id = uuid::Uuid::new_v4();
+        let fake_session_id = uuid::Uuid::new_v4();
+        let metadata = EventMetadata{
+            actor_id: Some(fake_account.id),
+            request_id: Some(fake_request_id.clone()),
+            session_id: Some(fake_session_id.clone()),
+        };
+        let delete_account_cmd = account::DeleteAccount{
+            account: fake_account.clone(),
+            metadata: metadata.clone(),
+        };
+        assert!(fake_account.deleted_at.is_none());
+
+        let (account_to_delete, _event, _) = eventsourcing::execute(&conn, fake_account.clone(), &delete_account_cmd).unwrap();
+
+        assert_eq!(fake_account.id, account_to_delete.id);
+        assert!(account_to_delete.deleted_at.is_some());
+    }
+}
 
