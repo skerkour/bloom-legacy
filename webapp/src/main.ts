@@ -48,18 +48,18 @@ log.with({ config }).debug('config loaded');
 
 // init sentry for bug tracking
 Sentry.init({
-  dsn: config.VUE_APP_SENTRY_URL,
-  environment: config.NODE_ENV,
+  dsn: config.SENTRY_URL,
+  environment: config.ENV,
   integrations: [new Integrations.Vue({ Vue })],
 });
 
 // init stage dependant stuff
-if (config.NODE_ENV === 'development') {
+if (config.ENV === 'development') {
   Vue.config.productionTip = true;
 } else {
   Vue.config.productionTip = false;
 
-  if (config.NODE_ENV === 'production') {
+  if (config.ENV === 'production') {
     log.config({ level: Level.INFO });
   }
 }
