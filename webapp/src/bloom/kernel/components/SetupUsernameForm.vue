@@ -54,7 +54,7 @@ export default class SetupUsernameForm extends Vue {
   username = '';
   username_rules = [
     (v: string) => !!v || 'Username is required',
-    (v: string) => (v && v.length > 3) || 'Username must be at leat 4 characters',
+    (v: string) => (v && v.length > 3) || 'Username must be at least 4 characters',
   ];
 
 
