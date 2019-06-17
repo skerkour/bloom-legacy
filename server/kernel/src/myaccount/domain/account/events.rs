@@ -5,7 +5,6 @@ use crate::{
     db::schema::kernel_accounts_events,
     events::EventMetadata,
     myaccount::domain::account,
-    utils,
 };
 
 
@@ -26,7 +25,6 @@ pub enum EventData {
     LastNameUpdatedV1(LastNameUpdatedV1),
     PasswordUpdatedV1(PasswordUpdatedV1),
     EmailUpdatedV1(EmailUpdatedV1),
-    AccountDeletedV1,
     SignInFailedV1,
     AvatarUpdatedV1(AvatarUpdatedV1),
     PasswordResetRequestedV1(PasswordResetRequestedV1),
@@ -165,18 +163,6 @@ impl eventsourcing::Event for Event {
                 is_disabled: false,
                 ..aggregate
             },
-            // AccountDeletedV1
-            EventData::AccountDeletedV1 => {
-                let random_string = utils::random_hex_string(10);
-                account::Account {
-                    deleted_at: Some(self.timestamp),
-                    first_name: random_string.clone(),
-                    last_name: random_string.clone(),
-                    email: random_string.clone(),
-                    avatar_url: random_string,
-                    ..aggregate
-                }
-            },
             // DeletedV1
             EventData::DeletedV1(ref data) => account::Account {
                 deleted_at: Some(self.timestamp),
@@ -206,7 +192,7 @@ mod test {
 
         let conn = db_actor_addr.get().unwrap();
         let mut fake_account = account::Account::new();
-        fake_account.username = utils::random_hex_string(10);
+        fake_account.username = crate::utils::random_hex_string(10);
         let fake_request_id = uuid::Uuid::new_v4();
         let fake_session_id = uuid::Uuid::new_v4();
         let metadata = EventMetadata{
@@ -214,8 +200,7 @@ mod test {
             request_id: Some(fake_request_id.clone()),
             session_id: Some(fake_session_id.clone()),
         };
-        let delete_account_cmd = account::DeleteAccount{
-            account: fake_account.clone(),
+        let delete_account_cmd = account::Delete{
             metadata: metadata.clone(),
         };
         assert!(fake_account.deleted_at.is_none());
