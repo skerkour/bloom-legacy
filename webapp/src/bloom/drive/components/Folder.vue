@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="dropzone">
     <v-alert icon="mdi-alert-circle" :value="error" type="error" dismissible>
       {{ error }}
     </v-alert>
@@ -97,7 +97,8 @@
   item-key="id"
   hide-actions
   :loading="is_loading"
-  v-model="selected">
+  v-model="selected"
+  >
   <template slot="no-data">
       <p class="text-xs-center">
         Folder is empty.
@@ -327,6 +328,35 @@ export default class Folder extends Vue {
     window.removeEventListener('resize', this.check_window_size);
   }
 
+  mounted() {
+    if (this.is_drag_and_drop_capable()) {
+      const dropzone = document.querySelector('#dropzone')!;
+      ['drag', 'dragstart', 'dragend', 'dragover', 'dragenter', 'dragleave', 'drop']
+        .forEach((evt) => {
+          /*
+            For each event add an event listener that prevents the default action
+            (opening the file in the browser) and stop the propagation of the event (so
+            no other elements open the file in the browser)
+          */
+          dropzone.addEventListener(evt, (e) => {
+            e.preventDefault();
+            e.stopPropagation();
+          }, false);
+        });
+      // Add an event listener for drop to the form
+      dropzone.addEventListener('drop', (e: any) => {
+        if (!e.dataTransfer || !e.dataTransfer.files) {
+          return;
+        }
+        // Capture the files from the drop event and add them to our local files array.
+        for (const file of e.dataTransfer.files) {
+          this.files_to_upload.push(file);
+        }
+        this.submit_files();
+      });
+    }
+  }
+
 
   // watch
   @Watch('$route')
@@ -506,6 +536,9 @@ export default class Folder extends Vue {
   }
 
   async submit_files() {
+    if (this.files_to_upload.length === 0) {
+      return;
+    }
     this.uploading_dialog = true;
 
     try {
@@ -645,6 +678,14 @@ export default class Folder extends Vue {
     const index = this.files.map((s: any) => s.id).indexOf(file.id);
     this.$set(this.files, index, file);
   }
+
+  is_drag_and_drop_capable() {
+    const div = document.createElement('div');
+    return (( 'draggable' in div)
+      || ('ondragstart' in div && 'ondrop' in div ))
+      && 'FormData' in window
+      && 'FileReader' in window;
+  }
 }
 </script>
 
@@ -660,5 +701,9 @@ td span {
 
 .upload-files, .upload-folder {
   display: none;
+}
+
+#dropzone {
+  height: 100%;
 }
 </style>

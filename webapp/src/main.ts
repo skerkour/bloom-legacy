@@ -9,6 +9,7 @@ import 'vuetify/dist/vuetify.min.css';
 import '@mdi/font/css/materialdesignicons.css';
 
 import App from '@/App.vue';
+import config from './config';
 import router from '@/bloom/kernel/router';
 import store from '@/store';
 import api from '@/bloom/kernel/api';
@@ -43,38 +44,25 @@ Vue.component('blm-layout-unauthenticated', UnauthenticatedLayout);
 
 // import './registerServiceWorker';
 
+log.with({ config }).debug('config loaded');
 
 // init sentry for bug tracking
 Sentry.init({
-  dsn: process.env.VUE_APP_SENTRY_URL,
-  environment: process.env.NODE_ENV,
+  dsn: config.SENTRY_URL,
+  environment: config.ENV,
   integrations: [new Integrations.Vue({ Vue })],
 });
 
-// Check environement
-[
-  'NODE_ENV',
-  'VUE_APP_SENTRY_URL',
-  'VUE_APP_HOST',
-  'VUE_APP_STRIPE_PUBLIC_KEY',
-].forEach((env_var) => {
-  if (!env_var) {
-    throw new Error(`Missing environment variable: ${env_var}`);
-  }
-});
-
 // init stage dependant stuff
-if (process.env.NODE_ENV === 'development') {
+if (config.ENV === 'development') {
   Vue.config.productionTip = true;
 } else {
   Vue.config.productionTip = false;
 
-  if (process.env.NODE_ENV === 'production') {
+  if (config.ENV === 'production') {
     log.config({ level: Level.INFO });
   }
 }
-
-log.with({ env: process.env }).debug('env loaded');
 
 // init libraries and components
 Vue.use(Vuetify, {

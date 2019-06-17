@@ -28,7 +28,7 @@ fn register_reactors() {
 
 fn main() {
     let cfg = config::init();
-    let _sentry_guard = sentry::init(cfg.sentry_url());
+    let _sentry_guard = sentry::init(cfg.sentry_server_url());
     env::set_var("RUST_BACKTRACE", "1");
     register_panic_handler();
 

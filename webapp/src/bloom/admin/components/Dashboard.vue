@@ -8,6 +8,20 @@
         </v-alert>
       </v-flex>
 
+
+      <v-flex xs12 sm4 lg3>
+        <v-card>
+          <v-card-title class="headline">
+            Bloom
+          </v-card-title>
+          <v-divider />
+
+          <v-card-text class="text-xs-center">
+            {{ config.VERSION }}
+          </v-card-text>
+        </v-card>
+      </v-flex>
+
       <v-flex xs12 sm4 lg3>
         <router-link to="/admin/accounts">
         <v-hover>
@@ -34,6 +48,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import router from '@/bloom/kernel/router';
+import config from '@/config';
 
 
 @Component
@@ -43,6 +58,7 @@ export default class Account extends Vue {
   error = '';
   is_loading = false;
   total = 0;
+  config = config;
 
   // computed
   // lifecycle
