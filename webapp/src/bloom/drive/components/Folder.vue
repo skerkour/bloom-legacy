@@ -1,5 +1,5 @@
 <template>
-  <div>
+  <div id="dropzone">
     <v-alert icon="mdi-alert-circle" :value="error" type="error" dismissible>
       {{ error }}
     </v-alert>
@@ -97,7 +97,8 @@
   item-key="id"
   hide-actions
   :loading="is_loading"
-  v-model="selected">
+  v-model="selected"
+  >
   <template slot="no-data">
       <p class="text-xs-center">
         Folder is empty.
@@ -660,5 +661,9 @@ td span {
 
 .upload-files, .upload-folder {
   display: none;
+}
+
+#dropzone {
+  height: 100%;
 }
 </style>

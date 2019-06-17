@@ -149,6 +149,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 const { log } = require('@bloom42/astro');
 import axios from 'axios';
+import config from '@/config';
 
 @Component({})
 export default class AddPaymentMethodDialog extends Vue {
@@ -207,7 +208,7 @@ export default class AddPaymentMethodDialog extends Vue {
       const res = await axios.post('https://api.stripe.com/v1/tokens', payload, {
         auth: {
           password: '',
-          username: process.env.VUE_APP_STRIPE_PUBLIC_KEY,
+          username: config.VUE_APP_STRIPE_PUBLIC_KEY,
         },
       });
       log.debug(res);
