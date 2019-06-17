@@ -75,10 +75,10 @@ pub fn json_default_config() -> JsonConfig {
 
 static ENV_TEMPLATE: &str = r#"
 window.__bloom.env = {
-    NODE_ENV: "{{node_env}}",
-    VUE_APP_SENTRY_URL: "{{sentry_url}}",
-    VUE_APP_HOST: "{{host}}",
-    VUE_APP_STRIPE_PUBLIC_KEY: "{{stripe_public_key}}",
+    ENV: "{{node_env}}",
+    SENTRY_URL: "{{sentry_url}}",
+    HOST: "{{host}}",
+    STRIPE_PUBLIC_KEY: "{{stripe_public_key}}",
 };
 "#;
 

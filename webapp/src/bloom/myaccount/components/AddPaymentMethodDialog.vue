@@ -208,7 +208,7 @@ export default class AddPaymentMethodDialog extends Vue {
       const res = await axios.post('https://api.stripe.com/v1/tokens', payload, {
         auth: {
           password: '',
-          username: config.VUE_APP_STRIPE_PUBLIC_KEY,
+          username: config.STRIPE_PUBLIC_KEY,
         },
       });
       log.debug(res);

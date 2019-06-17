@@ -9,9 +9,7 @@ import router from './router';
 
 class API {
   // do not use axios' baseUrl because if we need in the future to move APIs to subdomains
-  api_url = config.VUE_APP_API_BASE_URL ?
-      config.VUE_APP_API_BASE_URL
-      : `${config.VUE_APP_HOST}/api`;
+  api_url = config.API_BASE_URL ? config.API_BASE_URL : `${config.HOST}/api`;
   ACCOUNT_GRAPHQL = `${this.api_url}/account/graphql`;
   MYACCOUNT = `${this.api_url}/myaccount`;
   NOTES = `${this.api_url}/notes`;

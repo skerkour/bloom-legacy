@@ -16,7 +16,7 @@ interface AppState {
 
 /* tslint:disable:object-literal-sort-keys */
 export default new Vuex.Store<AppState>({
-  strict: config.NODE_ENV !== 'production',
+  strict: config.ENV !== 'production',
   state: {
     account: null,
     drive_profile: null,
