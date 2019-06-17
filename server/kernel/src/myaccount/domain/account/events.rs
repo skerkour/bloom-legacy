@@ -26,7 +26,7 @@ pub enum EventData {
     LastNameUpdatedV1(LastNameUpdatedV1),
     PasswordUpdatedV1(PasswordUpdatedV1),
     EmailUpdatedV1(EmailUpdatedV1),
-    AccountDeletedV1,
+    AccountDeletedV1, // DO NOT USE, use DeletedV1 instead
     SignInFailedV1,
     AvatarUpdatedV1(AvatarUpdatedV1),
     PasswordResetRequestedV1(PasswordResetRequestedV1),
