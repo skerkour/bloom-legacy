@@ -1,5 +1,6 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
+import config from '@/config';
 
 Vue.use(Vuex);
 
@@ -15,7 +16,7 @@ interface AppState {
 
 /* tslint:disable:object-literal-sort-keys */
 export default new Vuex.Store<AppState>({
-  strict: process.env.NODE_ENV !== 'production',
+  strict: config.ENV !== 'production',
   state: {
     account: null,
     drive_profile: null,

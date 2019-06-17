@@ -1,5 +1,6 @@
 import axios from 'axios';
 import { AxiosInstance, AxiosRequestConfig } from 'axios';
+import config from '@/config';
 const { log } = require('@bloom42/astro');
 const store = require('store');
 
@@ -8,9 +9,7 @@ import router from './router';
 
 class API {
   // do not use axios' baseUrl because if we need in the future to move APIs to subdomains
-  api_url = process.env.VUE_APP_API_BASE_URL ?
-      process.env.VUE_APP_API_BASE_URL
-      : `https://${process.env.VUE_APP_HOST}/api`;
+  api_url = config.API_BASE_URL ? config.API_BASE_URL : `${config.HOST}/api`;
   ACCOUNT_GRAPHQL = `${this.api_url}/account/graphql`;
   MYACCOUNT = `${this.api_url}/myaccount`;
   NOTES = `${this.api_url}/notes`;
@@ -44,9 +43,9 @@ class API {
     }
   }
 
-  async request(config: AxiosRequestConfig): Promise<any> {
+  async request(req_config: AxiosRequestConfig): Promise<any> {
     try {
-      const res = await this._client.request(config);
+      const res = await this._client.request(req_config);
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
@@ -62,9 +61,9 @@ class API {
     }
   }
 
-  async get(url: string, config?: AxiosRequestConfig): Promise<any> {
+  async get(url: string, req_config?: AxiosRequestConfig): Promise<any> {
     try {
-      const res = await this._client.get(url, config);
+      const res = await this._client.get(url, req_config);
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
@@ -80,9 +79,9 @@ class API {
     }
   }
 
-  async delete(url: string, config?: AxiosRequestConfig): Promise<any> {
+  async delete(url: string, req_config?: AxiosRequestConfig): Promise<any> {
     try {
-      const res = await this._client.delete(url, config);
+      const res = await this._client.delete(url, req_config);
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
@@ -98,9 +97,9 @@ class API {
     }
   }
 
-  async put(url: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
+  async put(url: string, data?: any, req_config?: AxiosRequestConfig): Promise<any> {
     try {
-      const res = await this._client.put(url, data, config);
+      const res = await this._client.put(url, data, req_config);
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {
@@ -116,9 +115,9 @@ class API {
     }
   }
 
-  async post(url: string, data?: any, config?: AxiosRequestConfig): Promise<any> {
+  async post(url: string, data?: any, req_config?: AxiosRequestConfig): Promise<any> {
     try {
-      const res = await this._client.post(url, data, config);
+      const res = await this._client.post(url, data, req_config);
       log.with({ data: res.data.data }).debug();
       return res.data.data;
     } catch (err) {

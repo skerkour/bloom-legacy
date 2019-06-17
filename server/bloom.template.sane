@@ -18,7 +18,8 @@ s3 = {
 }
 
 sentry = {
-    url = "XXX" # optional
+    server_url = "XXX" # optional
+    webapp_url = "XXX" # optional
 }
 
 phaser = {
@@ -34,6 +35,11 @@ smtp = {
     host = "XXX",
     username = "XXX",
     password = "XXX",
+}
+
+stripe = {
+    public_key = "XXX",
+    secret_key = "XXX",
 }
 
 blacklists = {

@@ -20,7 +20,7 @@ pub struct ConfigFile {
     phaser: PhaserConfig,
     bitflow: BitflowConfig,
     blacklists: BlacklistsConfig,
-    // stripe_secret_key: String,
+    stripe: StripeConfig,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -35,9 +35,10 @@ pub struct Config {
     sentry: SentryConfig,
     phaser: PhaserConfig,
     bitflow: BitflowConfig,
+    stripe: StripeConfig,
     disposable_email_domains: HashSet<String>,
     basic_passwords: HashSet<String>,
-    // stripe_secret_key: String,
+    version: String,
 }
 
 impl From<ConfigFile> for Config {
@@ -71,6 +72,8 @@ impl From<ConfigFile> for Config {
             });
         }
 
+        let version_file = include_str!("../../../VERSION.txt");
+
         return Config {
             rust_env: config.rust_env,
             host: config.host,
@@ -82,8 +85,10 @@ impl From<ConfigFile> for Config {
             sentry: config.sentry,
             phaser: config.phaser,
             bitflow: config.bitflow,
+            stripe: config.stripe,
             disposable_email_domains: blacklisted_email_domains,
             basic_passwords: blacklisted_passwords,
+            version: version_file.trim().to_string(),
         };
     }
 }
@@ -122,7 +127,8 @@ struct SmtpConfig {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct SentryConfig {
-    url: Option<String>,
+    server_url: Option<String>,
+    webapp_url: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -130,12 +136,18 @@ struct DatabaseConfig {
     url: String,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct BlacklistsConfig {
     email_domains: Vec<String>,
     passwords: Vec<String>,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+struct StripeConfig {
+    public_key: String,
+    secret_key: String,
+}
+
 
 pub fn init() -> Config {
     let config_file_contents = fs::read_to_string("bloom.sane")
@@ -220,8 +232,12 @@ impl Config {
         return self.s3.base_url.clone();
     }
 
-    pub fn sentry_url(&self) -> Option<String> {
-        return self.sentry.url.clone();
+    pub fn sentry_server_url(&self) -> Option<String> {
+        return self.sentry.server_url.clone();
+    }
+
+    pub fn sentry_webapp_url(&self) -> Option<String> {
+        return self.sentry.webapp_url.clone();
     }
 
     pub fn phaser_secret(&self) -> String {
@@ -240,16 +256,19 @@ impl Config {
         return self.basic_passwords.clone();
     }
 
-    // pub fn stripe_secret_key(&self) -> String {
-    //     return self.stripe_secret_key.clone();
-    // }
+    pub fn stripe_secret_key(&self) -> String {
+        return self.stripe.secret_key.clone();
+    }
+
+    pub fn stripe_public_key(&self) -> String {
+        return self.stripe.public_key.clone();
+    }
+
+    pub fn version(&self) -> String {
+        return self.version.clone();
+    }
 }
 
-
-// pub struct ConfigFile {
-//     blacklists: BlacklistsConfig,
-//     // stripe_secret_key: String,
-// }
 
 fn replace_env(mut config: ConfigFile) -> ConfigFile {
     let re = Regex::new(r"\$\{[A-Z_0-9]*\}").expect("error compiling env regex");
@@ -312,11 +331,18 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
     }
 
     // sentry
-    if let Some(ref url) = config.sentry.url {
+    if let Some(ref url) = config.sentry.server_url {
         let url = url.clone();
         for match_ in re.find_iter(&url) {
             let match_str = match_.as_str();
-            config.sentry.url = Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
+            config.sentry.server_url = Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
+        }
+    }
+    if let Some(ref url) = config.sentry.webapp_url {
+        let url = url.clone();
+        for match_ in re.find_iter(&url) {
+            let match_str = match_.as_str();
+            config.sentry.webapp_url = Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
         }
     }
 
@@ -331,6 +357,16 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
     for match_ in re.find_iter(&config.bitflow.secret.clone()) {
         let match_str = match_.as_str();
         config.bitflow.secret = config.bitflow.secret.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
+    // stripe
+    for match_ in re.find_iter(&config.stripe.public_key.clone()) {
+        let match_str = match_.as_str();
+        config.stripe.public_key = config.stripe.public_key.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+    for match_ in re.find_iter(&config.stripe.secret_key.clone()) {
+        let match_str = match_.as_str();
+        config.stripe.secret_key = config.stripe.secret_key.replace(match_str, &get_env(match_str.trim_matches(patterns)));
     }
 
     // blacklists

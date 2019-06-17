@@ -1,0 +1,45 @@
+rust_env = "${RUST_ENV}"
+host = "${HOST}"
+port = 8000
+database = {
+    url = "${DATABASE_URL}"
+}
+aws = {
+    secret_access_key = "${AWS_SECRET_ACCESS_KEY}",
+    access_key_id = "${AWS_ACCESS_KEY_ID}",
+    region = "${AWS_REGION}",
+}
+s3 = {
+    bucket = "${S3_BUCKET}",
+    base_url = "${S3_BASE_URL}",
+}
+sentry = {
+    server_url = "${SENTRY_SERVER_URL}",
+    webapp_url = "${SENTRY_WEBAPP_URL}",
+}
+phaser = {
+    secret =  "${PHASER_SECRET}",
+}
+bitflow = {
+    secret = "${BITFLOW_SECRET}",
+}
+smtp = {
+    port = 587,
+    host = "${SMTP_HOST}",
+    username = "${SMTP_USERNAME}",
+    password = "${SMTP_PASSWORD}",
+}
+
+stripe = {
+    public_key = "${STRIPE_PUBLIC_KEY}",
+    secret_key = "${STRIPE_SECRET_KEY}",
+}
+
+blacklists = {
+    email_domains = [
+        "assets/disposable_email_domains.txt",
+    ],
+    passwords = [
+        "assets/common_passwords_200.txt",
+    ]
+}

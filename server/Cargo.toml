@@ -39,4 +39,5 @@ members = [
     "phaser",
     "billing",
     "admin",
+    "calendar",
 ]
