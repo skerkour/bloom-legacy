@@ -48,21 +48,4 @@ See [Phaser repository](https://gitlab.com/bloom42/phaser/tree/dev/docs).
 
 ## Run Bitflow worker
 
-
-1. Pull latest Docker image
-```sh
-$ docker pull registry.gitlab.com/bloom42/bitflow:latest
-```
-
-2. Get the latest `.env.template` file and move it to `.env`
-```sh
-$ wget https://gitlab.com/bloom42/bitflow/raw/dev/.env.template?inline=false
-$ mv .env.template .env
-```
-
-3. Edit `.env` with correct values
-
-4. Launch Docker container
-```sh
-$ docker run -d -v `pwd`/.env:/bitflow/.env:ro registry.gitlab.com/bloom42/bitflow:latest
-```
+See [Bitflow repository](https://gitlab.com/bloom42/bitflow/tree/dev/docs).
