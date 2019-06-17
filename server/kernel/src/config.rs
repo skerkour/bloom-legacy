@@ -155,6 +155,17 @@ pub fn init() -> Config {
     return decoded.into();
 }
 
+#[cfg(test)]
+pub fn init_for_test() -> Config {
+    let config_file_contents = fs::read_to_string("bloom.test.sane")
+        .expect("Error reading bloom.test.sane");
+
+    let decoded: ConfigFile = sane::from_str(&config_file_contents)
+        .expect("Error parsing config file");
+
+    return decoded.into();
+}
+
 
 impl Config {
     pub fn port(&self) -> String {
