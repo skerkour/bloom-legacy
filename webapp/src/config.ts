@@ -4,6 +4,7 @@ class Config {
   HOST: string = '';
   STRIPE_PUBLIC_KEY: string = '';
   API_BASE_URL: string = '';
+  VERSION: string = '';
 
   constructor() {
     if ((window as any).__bloom_env) {
@@ -13,6 +14,7 @@ class Config {
       this.HOST = env.HOST;
       this.STRIPE_PUBLIC_KEY = env.STRIPE_PUBLIC_KEY;
       this.API_BASE_URL = env.API_BASE_URL;
+      this.VERSION = env.VERSION;
     } else {
       // Check environement
       [
@@ -30,6 +32,7 @@ class Config {
       this.HOST = process.env.VUE_APP_HOST;
       this.STRIPE_PUBLIC_KEY = process.env.VUE_APP_STRIPE_PUBLIC_KEY;
       this.API_BASE_URL = process.env.VUE_APP_API_BASE_URL;
+      this.VERSION = process.env.VERSION;
     }
   }
 }
