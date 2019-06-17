@@ -28,7 +28,7 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .default_service(web::route().to(api::route_404))
 
         // kernel
-        .route("/api/kernel/env.js", web::get().to(api::webapp_env))
+        .route("/kernel/env.js", web::get().to(api::webapp_env))
 
          // myaccount
         .route("/myaccount/v1/registration/start", web::post().to_async(myaccountv1::registration::start::post))
