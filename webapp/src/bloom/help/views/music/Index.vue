@@ -3,7 +3,26 @@
     <v-layout row wrap>
 
       <v-flex xs12>
-        <h1>Music</h1>
+        <h1 class="display-1 font-weight-medium">
+          Music
+        </h1>
+        <p class="font-18 font-weight-regular">
+          A world of emotion. Available wherever you are.
+        </p>
+      </v-flex>
+
+      <v-flex xs12 class="mt-4">
+        <p class="font-18 font-weight-regular">
+          Bloom music allows you to play any music in your Bloom drive on any device.
+        </p>
+      </v-flex>
+
+      <v-flex xs12 class="mt-4">
+        <h3 class="headline">How to add musics to your Bloom Music library?</h3>
+        <p class="font-18 font-weight-regular">
+          To add musics to your Bloom Music library, you need to uplaod your musics to any folders of your
+          Bloom Drive.
+        </p>
       </v-flex>
 
     </v-layout>
@@ -27,4 +46,11 @@ export default class Index extends Vue {
 
 
 <style scoped lang="scss">
+a {
+  text-decoration: none;
+}
+
+.font-18 {
+  font-size: 18px;
+}
 </style>

@@ -6,6 +6,14 @@
         <h1 class="display-1 font-weight-medium">
           Mobile Apps
         </h1>
+        <p class="font-18 font-weight-regular mt-4">
+          Currently only the Android app is available:
+          <br/>
+          <br/>
+          <a href="https://play.google.com/store/apps/details?id=com.bloom42.bloomx" target="_blank" rel="noopener">
+            <img alt="Get it on Google Play" src="/kernel/static/imgs/android_badge_generic.png" height="84"/>
+          </a>
+        </p>
       </v-flex>
 
     </v-layout>
