@@ -83,7 +83,23 @@ package:docker:
 
 
 
-release:docker:
+release:docker:next:
+  stage: release
+  dependencies:
+    - build:server
+    - build:webapp
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make build_from_artifacts
+    - make docker_build
+    - make docker_login
+    - make docker_release_next
+
+release:docker:stable:
   only:
     - tags
   stage: release
