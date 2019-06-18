@@ -10,6 +10,7 @@ const MyAccountIndexView = () => import(/* webpackChunkName: "chunk-help" */ './
 const NotesIndexView = () => import(/* webpackChunkName: "chunk-help" */ './views/notes/Index.vue'); // tslint:disable-line
 const PhaserIndexView = () => import(/* webpackChunkName: "chunk-help" */ './views/phaser/Index.vue'); // tslint:disable-line
 const PlatformIndexView = () => import(/* webpackChunkName: "chunk-help" */ './views/platform/Index.vue'); // tslint:disable-line
+const MobileIndexView = () => import(/* webpackChunkName: "chunk-help" */ './views/mobile/Index.vue'); // tslint:disable-line
 
 
 export default [
@@ -120,5 +121,14 @@ export default [
       service: 'help',
     },
     path: '/help/platform',
+  },
+  {
+    component: MobileIndexView,
+    meta: {
+      auth: { layout: 'authenticated' },
+      layout: 'unauthenticated',
+      service: 'help',
+    },
+    path: '/help/mobile',
   },
 ];
