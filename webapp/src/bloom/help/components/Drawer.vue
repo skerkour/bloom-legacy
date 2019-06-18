@@ -110,6 +110,15 @@
       </v-list-tile-content>
     </v-list-tile>
 
+    <v-list-tile exact to="/help/notes">
+      <v-list-tile-action>
+        <v-avatar :size="32"><img src="/kernel/static/imgs/logos/notes_128.png" /></v-avatar>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Notes</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+
   </v-list>
   </div>
 </template>
