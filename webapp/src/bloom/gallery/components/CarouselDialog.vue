@@ -1,8 +1,5 @@
 <template>
-  <v-dialog
-  v-model="show"
-  fullscreen hide-overlay
-  @keydown.esc="show = false">
+  <v-dialog v-model="show" fullscreen hide-overlay @keydown.esc="show = false">
   <v-card>
     <v-toolbar dark color="black">
       <v-btn icon dark @click="show = false">
@@ -11,13 +8,10 @@
     </v-toolbar>
 
     <v-card-text class="text-xs-center">
-     <v-carousel>
-      <v-carousel-item
-        v-for="file in media"
-        :key="file.id"
-        :src="file.url"
-        cycle="false"
-      ></v-carousel-item>
+      <v-carousel :cycle="false" height="100%">
+        <v-carousel-item v-for="file in media" :key="file.id" lazy>
+          <v-img :src="file.url" contain height="100%" />
+        </v-carousel-item>
       </v-carousel>
     </v-card-text>
   </v-card>
@@ -60,5 +54,9 @@ export default class CreateAlbumDialog extends Vue {
 <style scoped lang="scss">
 .v-card {
   background-color: black;
+}
+
+.blm-carousel-image {
+  height: 100%;
 }
 </style>
