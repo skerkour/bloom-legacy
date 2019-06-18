@@ -43,9 +43,9 @@ $ docker run -d -p 8080:8000 -v `pwd`/bloom.sane:/bloom/bloom.sane:ro registry.g
 
 ## Run Phaser worker
 
-See [Phaser repository](https://gitlab.com/bloom42/phaser/tree/dev/docs).
+See the [Phaser repository](https://gitlab.com/bloom42/phaser/tree/dev/docs).
 
 
 ## Run Bitflow worker
 
-See [Bitflow repository](https://gitlab.com/bloom42/bitflow/tree/dev/docs).
+See the [Bitflow repository](https://gitlab.com/bloom42/bitflow/tree/dev/docs).
