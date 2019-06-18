@@ -51,7 +51,7 @@
             </v-flex>
 
             <v-flex xs12 id="support-link">
-              <a href="https://help.bloom.sh" target="_blank" rel="noopener">Support</a>
+              <a href="https://bloom.sh/help" target="_blank" rel="noopener">Support</a>
             </v-flex>
           </v-layout>
         </v-form>

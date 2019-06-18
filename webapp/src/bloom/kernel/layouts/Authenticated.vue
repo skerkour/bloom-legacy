@@ -38,10 +38,12 @@
       <blm-gallery-drawer v-else-if="$route.meta.service === 'gallery'" />
       <blm-music-drawer v-else-if="$route.meta.service === 'music'" />
       <blm-admin-drawer v-else-if="$route.meta.service === 'admin'" />
+      <blm-help-drawer v-else-if="$route.meta.service === 'help'" />
+
 
       <v-divider class="hidden-sm-and-up"></v-divider>
 
-      <v-list-tile class="hidden-sm-and-up" target="_blank" rel="noopener" href="https://help.bloom.sh">
+      <v-list-tile class="hidden-sm-and-up" target="_blank" rel="noopener" to="/help">
         <v-list-tile-action>
           <v-icon color="grey darken-1">mdi-help-circle</v-icon>
         </v-list-tile-action>
@@ -49,7 +51,7 @@
       </v-list-tile>
 
 
-      <v-list-tile class="drawer-sign-out hidden-sm-and-up" target="_blank" rel="noopener" @click="sign_out">
+      <v-list-tile class="drawer-sign-out hidden-sm-and-up" @click="sign_out">
         <v-list-tile-action>
           <v-icon color="grey darken-1">mdi-power</v-icon>
         </v-list-tile-action>
@@ -85,6 +87,7 @@ import MusicDrawer from '@/bloom/music/components/Drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import GalleryDrawer from '@/bloom/gallery/components/Drawer.vue';
 import AdminDrawer from '@/bloom/admin/components/Drawer.vue';
+import HelpDrawer from '@/bloom/help/components/Drawer.vue';
 
 
 @Component({
@@ -93,6 +96,7 @@ import AdminDrawer from '@/bloom/admin/components/Drawer.vue';
     'blm-bitflow-drawer': BitflowDrawer,
     'blm-drive-drawer': DriveDrawer,
     'blm-gallery-drawer': GalleryDrawer,
+    'blm-help-drawer': HelpDrawer,
     'blm-music-drawer': MusicDrawer,
     'blm-myaccount-drawer': MyAccountDrawer,
     'blm-notes-drawer': NotesDrawer,

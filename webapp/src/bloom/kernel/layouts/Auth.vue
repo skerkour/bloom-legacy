@@ -13,7 +13,7 @@
         <router-link to="/myaccount/recovery/request">Forgot account?</router-link>
       </div>
       <div id="help-link">
-        <a href="https://help.bloom.sh" target="_blank" rel="noopener">Help</a>
+        <router-link to="/help">Help</router-link>
       </div>
 
       </div>
