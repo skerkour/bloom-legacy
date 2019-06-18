@@ -35,7 +35,7 @@
       <span>Bloom apps</span>
     </v-tooltip>
     <v-tooltip bottom>
-      <v-btn slot="activator" icon href="https://help.bloom.sh" target="_blank" rel="noopener" class="hidden-xs-only">
+      <v-btn slot="activator" icon href="/help" target="_blank" rel="noopener" class="hidden-xs-only">
         <v-icon>mdi-help-circle</v-icon>
       </v-btn>
       <span>Help</span>
@@ -211,6 +211,11 @@ export default class Toolbar extends Vue {
         break;
       case 'admin':
         this.secondary_title = 'Admin';
+        this.side_icon = true;
+        this.display_searchbar = false;
+        break;
+      case 'help':
+        this.secondary_title = 'Help';
         this.side_icon = true;
         this.display_searchbar = false;
         break;

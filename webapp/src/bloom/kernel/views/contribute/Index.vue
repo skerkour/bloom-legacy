@@ -156,8 +156,8 @@
 
               Bloom's documentation is splitted in 2 parts:
               <ul>
-                <li>Documentation for users: <a href="https://help.bloom.sh">https://help.bloom.sh</a>,
-                you can find the repo here: <a href="https://gitlab.com/bloom42/help">https://gitlab.com/bloom42/help</a>
+                <li>Documentation for users: <router-link to="/help">Help</router-link>,
+                you can find the repo here: <a href="https://gitlab.com/bloom42/bloom">https://gitlab.com/bloom42/bloom</a>
                 You can open an issue with a proposal or open an merge request.</li>
                 <li>Documentation for developers: <a href="https://bloom.sh/open-source">https://bloom.sh/open-source</a>.
                 Each project documentation can be found within the project's repository in the <b>docs</b> folder.</li>
@@ -195,7 +195,7 @@
             <p>
               If you need help while contributing to Bloom, below are some of the resources that are available:
               <ul>
-                <li><a href="https://help.bloom.sh">Our Help and Documentation website</a></li>
+                <li><router-link to="/help">Our Help and Documentation website</router-link></li>
                 <li><a href="https://forum.bloom.sh">The community Forum</a></li>
                 <li><a href="https://discordapp.com/invite/HmDQDGv">The Discord chat</a></li>
                 <li>By email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>

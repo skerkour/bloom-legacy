@@ -43,7 +43,7 @@
           </v-flex>
 
           <v-flex xs12 id="help-link">
-            <a href="https://help.bloom.sh" target="_blank" rel="noopener">Help</a>
+            <a href="https://bloom.sh/help" target="_blank" rel="noopener">Help</a>
           </v-flex>
         </v-layout>
       </v-card>
