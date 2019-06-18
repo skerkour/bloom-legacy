@@ -17,6 +17,15 @@
         </p>
       </v-flex>
 
+
+
+      <v-flex xs12 class="mt-4">
+        <h3 class="headline">What is the max size for a file to upload?</h3>
+        <p class="font-18 font-weight-regular">
+          Currently, the max size for a file to upload is 5GB.
+        </p>
+      </v-flex>
+
     </v-layout>
   </v-container>
 </template>
