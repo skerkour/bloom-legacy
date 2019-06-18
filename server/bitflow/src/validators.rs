@@ -1,6 +1,10 @@
 use kernel::KernelError;
 use regex::Regex;
-use url::Url;
+use url::{
+    Url,
+};
+use std::net;
+
 
 pub fn download_url(download_url: &str) -> Result<(), KernelError> {
     // TODO: valdiate url...
@@ -26,6 +30,11 @@ pub fn download_url(download_url: &str) -> Result<(), KernelError> {
             ];
             if invalid_hosts.contains(&host.to_string().as_str()) {
                 return Err(KernelError::Validation("host is not valid".to_string()));
+            }
+            if let Ok(ip_address) = host.to_string().parse::<net::IpAddr>() {
+                if !ip_address.is_global() {
+                    return Err(KernelError::Validation("private IP addresses are not valid".to_string()));
+                }
             }
         },
         None => return Err(KernelError::Validation("Url is not valid.".to_string())),
