@@ -46,5 +46,5 @@ docker_release:
 	docker push $(DOCKER_IMAGE):latest
 
 docker_release_next:
-	docker tag $(DOCKER_IMAGE):next $(DOCKER_IMAGE):latest
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):next
 	docker push $(DOCKER_IMAGE):next
