@@ -4,7 +4,7 @@
 
     <v-list-tile exact to="/help">
       <v-list-tile-action>
-        <v-icon color="grey darken-1">mdi-home</v-icon>
+        <v-icon color="grey darken-1">mdi-book-open-variant</v-icon>
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>Home</v-list-tile-title>
@@ -109,8 +109,6 @@
         <v-list-tile-title>Calendar</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile>
-
-
 
   </v-list>
   </div>

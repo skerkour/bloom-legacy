@@ -179,6 +179,9 @@ export default class Authenticated extends Vue {
       case 'admin':
         this.drawer = true;
         break;
+      case 'help':
+        this.drawer = true;
+        break;
       default:
         this.drawer = false;
         break;
