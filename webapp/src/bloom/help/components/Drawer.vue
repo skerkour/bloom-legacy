@@ -11,6 +11,15 @@
       </v-list-tile-content>
     </v-list-tile>
 
+    <v-list-tile exact to="/help/mobile">
+      <v-list-tile-action>
+        <v-icon color="grey darken-1">mdi-cellphone</v-icon>
+      </v-list-tile-action>
+      <v-list-tile-content>
+        <v-list-tile-title>Mobile Apps</v-list-tile-title>
+      </v-list-tile-content>
+    </v-list-tile>
+
     <v-list-tile exact to="/help/drive">
       <v-list-tile-action>
         <v-avatar :size="32"><img src="/kernel/static/imgs/logos/drive_64.png" /></v-avatar>
@@ -116,16 +125,6 @@
       </v-list-tile-action>
       <v-list-tile-content>
         <v-list-tile-title>Notes</v-list-tile-title>
-      </v-list-tile-content>
-    </v-list-tile>
-
-
-    <v-list-tile exact to="/help/mobile">
-      <v-list-tile-action>
-        <v-icon color="grey darken-1">mdi-cellphone</v-icon>
-      </v-list-tile-action>
-      <v-list-tile-content>
-        <v-list-tile-title>Mobile Apps</v-list-tile-title>
       </v-list-tile-content>
     </v-list-tile>
 
