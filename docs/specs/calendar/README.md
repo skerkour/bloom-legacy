@@ -37,11 +37,12 @@ pub struct Event {
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
-
     pub title: String,
     pub description: String,
     pub start_at: chrono::DateTime<chrono::Utc>,
     pub end_at: chrono::DateTime<chrono::Utc>,
+
+    pub owner_id: uuid::Uuid,
 }
 ```
 
