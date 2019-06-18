@@ -3,7 +3,18 @@
     <v-layout row wrap>
 
       <v-flex xs12>
-        <h1>Drive</h1>
+        <h1 class="display-1 font-weight-medium">
+          Drive
+        </h1>
+        <p class="font-18 font-weight-regular">
+          A safe place for all your files
+        </p>
+      </v-flex>
+
+      <v-flex xs12 class="mt-5">
+        <p class="font-18 font-weight-regular">
+          Bloom Drive allows you to store your files in the cloud and to sync them across all your devices.
+        </p>
       </v-flex>
 
     </v-layout>
@@ -27,4 +38,11 @@ export default class Index extends Vue {
 
 
 <style scoped lang="scss">
+a {
+  text-decoration: none;
+}
+
+.font-18 {
+  font-size: 18px;
+}
 </style>

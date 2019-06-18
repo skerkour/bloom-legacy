@@ -13,7 +13,7 @@
             <v-flex v-for="file in media" :key="file.id" xs4 sm3 md2 d-flex
              @click="open_dialog_caroussel" class="pointer">
               <v-card flat tile class="d-flex">
-                <v-img :src="file.url" class="grey lighten-2">
+                <v-img :src="file.url" class="grey lighten-2" contain>
                   <template v-slot:placeholder>
                     <v-layout fill-height align-center justify-center ma-0>
                       <v-progress-circular indeterminate color="grey lighten-5"></v-progress-circular>
