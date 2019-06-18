@@ -11,7 +11,7 @@
         </p>
       </v-flex>
 
-      <v-flex xs12 class="mt-5">
+      <v-flex xs12 class="mt-4">
         <p class="font-18 font-weight-regular">
           The Bloom Calendar app helps you spend less time managing your schedule and more time enjoying it.
         </p>

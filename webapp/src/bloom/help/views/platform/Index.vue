@@ -11,7 +11,7 @@
         </p>
       </v-flex>
 
-      <v-flex xs12 class="mt-5">
+      <v-flex xs12 class="mt-4">
         <p class="font-18 font-weight-regular">
           Bloom platform provides the services you need to build, innovate, and scale your business.
         </p>
