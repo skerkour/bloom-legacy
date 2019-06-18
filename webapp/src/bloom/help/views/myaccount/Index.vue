@@ -6,6 +6,10 @@
         <h1 class="display-1 font-weight-medium">
           MyAccount
         </h1>
+        <p class="font-18 mt-2">
+          The <router-link to="/myaccount">MyAccount app</router-link> allows you to manage your bloom account,
+          whether it be to update your profile or change your password.
+        </p>
       </v-flex>
 
 
@@ -13,8 +17,7 @@
         <h2 class="headline font-weight-medium">
           Dark theme
         </h2>
-
-        <p class="font-18">
+        <p class="font-18 mt-2">
           The switch to activate / deactivate the dark theme can be found at the bottom of your profile page, in
           the <router-link to="/myaccount">MyAccount app</router-link>.
         </p>
