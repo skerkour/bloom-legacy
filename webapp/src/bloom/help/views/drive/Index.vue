@@ -11,7 +11,7 @@
         </p>
       </v-flex>
 
-      <v-flex xs12 class="mt-5">
+      <v-flex xs12 class="mt-4">
         <p class="font-18 font-weight-regular">
           Bloom Drive allows you to store your files in the cloud and to sync them across all your devices.
         </p>

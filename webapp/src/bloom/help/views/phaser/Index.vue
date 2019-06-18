@@ -11,7 +11,7 @@
         </p>
       </v-flex>
 
-      <v-flex xs12 class="mt-5">
+      <v-flex xs12 class="mt-4">
         <p class="font-18 font-weight-regular">
           Phaser is a cloud (and open source) security scanner for networks and websites.
         </p>
