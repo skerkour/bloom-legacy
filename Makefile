@@ -44,3 +44,7 @@ docker_login:
 docker_release:
 	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
+
+docker_release_next:
+	docker tag $(DOCKER_IMAGE):next $(DOCKER_IMAGE):latest
+	docker push $(DOCKER_IMAGE):next
