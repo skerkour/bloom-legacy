@@ -1,6 +1,7 @@
 # Summary
 
-1. [Architecture](architecture.md)
-2. [Development](development.md)
-3. [Build](build.md)
-4. [Self hosting](self_hosting.md)
+1. [Specifications](specs)
+2. [Architecture](architecture.md)
+3. [Development](development.md)
+4. [Build](build.md)
+5. [Self hosting](self_hosting.md)
