@@ -3,7 +3,6 @@ use diesel::{
     PgConnection,
     r2d2::{PooledConnection, ConnectionManager},
 };
-use regex::Regex;
 use url::Url;
 use kernel::{
     KernelError,
@@ -11,6 +10,7 @@ use kernel::{
 };
 use crate::{
     domain::download,
+    validators,
 };
 
 
@@ -29,23 +29,7 @@ impl eventsourcing::Command for Queue {
     type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        // TODO: valdiate url...
-        let parsed_url = Url::parse(&self.url)?;
-        let scheme = parsed_url.scheme();
-        if scheme != "http" && scheme != "https" && scheme != "magnet" {
-            return Err(KernelError::Validation("Url is not valid. It must be a Http(s) or magnet url.".to_string()));
-        }
-
-        match scheme {
-            "magnet" => {
-                let re = Regex::new(r"magnet:\?xt=urn:btih:[a-zA-Z0-9]*").expect("error compiling magnet regex");
-                if !re.is_match(&self.url) {
-                    return Err(KernelError::Validation("magnet Url is not valid".to_string()));
-                }
-            },
-            _ => {},
-        }
-
+        validators::download_url(&self.url)?;
 
         return Ok(());
     }
