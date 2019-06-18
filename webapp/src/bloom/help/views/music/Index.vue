@@ -13,14 +13,14 @@
 
       <v-flex xs12 class="mt-4">
         <p class="font-18 font-weight-regular">
-          Bloom music allows you to play any music in your Bloom drive on any device.
+          Bloom music allows you to play any music in your Bloom drive from any device.
         </p>
       </v-flex>
 
       <v-flex xs12 class="mt-4">
         <h3 class="headline">How to add musics to your Bloom Music library?</h3>
         <p class="font-18 font-weight-regular">
-          To add musics to your Bloom Music library, you need to uplaod your musics to any folders of your
+          To add musics to your Bloom Music library, you need to upload your musics to any folder of your
           Bloom Drive.
         </p>
       </v-flex>
