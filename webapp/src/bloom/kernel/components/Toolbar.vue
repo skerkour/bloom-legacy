@@ -28,12 +28,41 @@
 
     <v-spacer></v-spacer>
 
-    <v-tooltip bottom v-if="$store.state.session">
-      <v-btn slot="activator" icon to="/" class="hidden-xs-only">
-        <v-icon>mdi-apps</v-icon>
-      </v-btn>
-      <span>Bloom apps</span>
-    </v-tooltip>
+      <v-menu v-model="menu_apps" :close-on-content-click="false" transition="slide-y-transition"
+        class="hidden-xs-only" v-if="$store.state.session" left>
+        <template #activator="{ on: menu_activator }">
+          <v-tooltip bottom>
+            <template #activator="{ on: tooltip_activator }">
+              <v-btn class="hidden-xs-only" icon v-on="{ ...tooltip_activator, ...menu_activator }">
+                <v-icon>mdi-apps</v-icon>
+              </v-btn>
+            </template>
+            <span>Bloom apps</span>
+          </v-tooltip>
+        </template>
+
+        <v-card class="text-xs-center">
+          <v-card-text class="text-xs-center">
+            <v-layout row wrap justify-left>
+              <v-flex v-for="app in apps" xs4 :key="app.title" justify-center class="text-xs-center">
+                <v-tooltip bottom>
+                  <router-link :to="app.to" slot="activator">
+                    <v-img :src="app.logo" height="60px" width="60px" contain />
+                  </router-link>
+                  <span>{{ app.name }}</span>
+                </v-tooltip>
+              </v-flex>
+            </v-layout>
+          </v-card-text>
+
+          <v-card-actions class="justify-center">
+            <v-btn color="primary" flat to="/" @click="menu_apps = false">More</v-btn>
+          </v-card-actions>
+
+      </v-card>
+    </v-menu>
+
+
     <v-tooltip bottom>
       <v-btn slot="activator" icon href="/help" target="_blank" rel="noopener" class="hidden-xs-only">
         <v-icon>mdi-help-circle</v-icon>
@@ -125,10 +154,33 @@ export default class Toolbar extends Vue {
   // props
   // data
   menu = false;
+  menu_apps = false;
   side_icon = true;
   display_searchbar = false;
   searchbar_label = 'Search';
   secondary_title = '';
+  apps = [
+    {
+      logo: '/kernel/static/imgs/logos/platform.svg',
+      name: 'Platform',
+      to: '/platform',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/drive.svg',
+      name: 'Drive',
+      to: '/drive',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/bitflow.svg',
+      name: 'Bitflow',
+      to: '/bitflow',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/music.svg',
+      name: 'Music',
+      to: '/music',
+    },
+  ];
 
 
   // computed
@@ -251,6 +303,10 @@ export default class Toolbar extends Vue {
     font-size: 12px;
     vertical-align: top;
   }
+}
+
+.v-card {
+  border-radius: 6px;
 }
 
 .v-toolbar a {
