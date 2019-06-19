@@ -41,10 +41,10 @@
           </v-tooltip>
         </template>
 
-        <v-card class="text-xs-center">
+        <v-card id="blm-toolbar-apps-card">
           <v-card-text class="text-xs-center">
             <v-layout row wrap justify-left>
-              <v-flex v-for="app in apps" xs4 :key="app.title" justify-center class="text-xs-center">
+              <v-flex v-for="app in apps" xs4 :key="app.title" justify-center class="text-xs-center" @click="menu_apps = false">
                 <v-tooltip bottom>
                   <router-link :to="app.to" slot="activator">
                     <img :src="app.logo" height="60px" width="60px" />
@@ -337,6 +337,10 @@ export default class Toolbar extends Vue {
 
 .v-card {
   border-radius: 6px;
+}
+
+#blm-toolbar-apps-card {
+  width: 300px;
 }
 
 .v-toolbar a {
