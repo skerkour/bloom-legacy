@@ -47,7 +47,7 @@
               <v-flex v-for="app in apps" xs4 :key="app.title" justify-center class="text-xs-center">
                 <v-tooltip bottom>
                   <router-link :to="app.to" slot="activator">
-                    <v-img :src="app.logo" height="60px" width="60px" contain />
+                    <img :src="app.logo" height="60px" width="60px" />
                   </router-link>
                   <span>{{ app.name }}</span>
                 </v-tooltip>
@@ -179,6 +179,36 @@ export default class Toolbar extends Vue {
       logo: '/kernel/static/imgs/logos/music.svg',
       name: 'Music',
       to: '/music',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/gallery.svg',
+      name: 'Gallery',
+      to: '/gallery',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/contacts.svg',
+      name: 'Contacts',
+      to: '/contacts',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/arcade.svg',
+      name: 'Arcade',
+      to: '/arcade',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/calendar.svg',
+      name: 'Calendar',
+      to: '/calendar',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/notes.svg',
+      name: 'Notes',
+      to: '/notes',
+    },
+    {
+      logo: '/kernel/static/imgs/logos/myaccount.svg',
+      name: 'MyAccount',
+      to: '/myaccount',
     },
   ];
 
