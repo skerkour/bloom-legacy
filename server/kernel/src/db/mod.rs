@@ -15,7 +15,7 @@ pub static ACTOR_POOL_SIZE: u32 = PG_POOL_SIZE * 3;
 
 
 pub fn init(cfg: &config::Config) -> Addr<DbActor> {
-    let manager = ConnectionManager::<PgConnection>::new(cfg.database_url().as_str());
+    let manager = ConnectionManager::<PgConnection>::new(cfg.database.url.as_str());
     let conn = Pool::builder().max_size(PG_POOL_SIZE).build(manager).expect("Failed to create pool.");
     // Start POOL_SIZE `DbActor ` actors, each with its own database
     // connection, and each in its own thread

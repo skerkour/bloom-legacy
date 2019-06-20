@@ -30,7 +30,7 @@ new_email: &str, code: &str) -> Result<(), KernelError> {
 
     emails::send_email(
         config,
-        (emails::NOTIFY_ADDRESS, "Bloom"),
+        (crate::ADDRESS_NOTIFY, "Bloom"),
         (email, recipient_name),
         &subject,
         handlebars.render_template(TEMPLATE, &data).expect("error rendering template").as_str(),

@@ -10,10 +10,6 @@ use lettre_email::EmailBuilder;
 
 
 pub use default_template::DEFAULT_TEMPLATE;
-pub static HELLO_ADDRESS: &str = "hello@bloom.sh";
-pub static WELCOME_ADDRESS: &str = "welcome@bloom.sh";
-pub static NOTIFY_ADDRESS: &str = "notify@bloom.sh";
-pub static SECURITY_ADDRESS: &str = "security@bloom.sh";
 
 
 pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject: &str, content: &str) {
@@ -28,9 +24,9 @@ pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject
         .build()
         .expect("error building email");
 
-    let mut mailer = SmtpClient::new_simple(config.smtp_host().as_str()).expect("error building emai ltransport")
+    let mut mailer = SmtpClient::new_simple(config.smtp.host.as_str()).expect("error building email transport")
         // Add credentials for authentication
-        .credentials(Credentials::new(config.smtp_username(), config.smtp_password()))
+        .credentials(Credentials::new(config.smtp.username.clone(), config.smtp.password.clone()))
         // Enable SMTPUTF8 if the server supports it
         .smtp_utf8(true)
         .transport();
