@@ -7,6 +7,9 @@ stages:
   - package
   - release
 
+include:
+  template: Dependency-Scanning.gitlab-ci.yml
+
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
 
