@@ -59,7 +59,7 @@ pub fn post(multipart: Multipart, ids: web::Path<(uuid::Uuid, uuid::Uuid)>, stat
                 report_dir: report_dir,
                 scan_id: ids.0,
                 report_id: ids.1,
-                s3_bucket: state.config.s3_bucket(),
+                s3_bucket: state.config.s3.bucket.clone(),
                 s3_client: state.s3_client.clone(),
                 request_id,
             }).flatten()

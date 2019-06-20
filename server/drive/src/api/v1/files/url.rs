@@ -36,8 +36,8 @@ pub fn get(file_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req: 
         state.db
         .send(controllers::DownloadFile{
             file_id: file_id.into_inner(),
-            s3_bucket: state.config.s3_bucket(),
-            s3_region: state.config.aws_region(),
+            s3_bucket: state.config.s3.bucket.clone(),
+            s3_region: state.config.aws.region.clone(),
             owner_id: auth.account.expect("error unwraping non none account").id,
             session_id: auth.session.expect("error unwraping non none session").id,
             request_id,
