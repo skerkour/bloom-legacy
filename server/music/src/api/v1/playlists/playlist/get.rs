@@ -35,8 +35,8 @@ pub fn get(playlist_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, r
     return Either::B(
         state.db.send(controllers::FindPlaylist{
             playlist_id: playlist_id.into_inner(),
-            s3_bucket: state.config.s3_bucket(),
-            s3_region: state.config.aws_region(),
+            s3_bucket: state.config.s3.bucket.clone(),
+            s3_region: state.config.aws.region.clone(),
             account_id: auth.account.expect("unwrapping non none account").id,
         })
         .map_err(|_| KernelError::ActixMailbox)

@@ -58,7 +58,7 @@ pub fn put(upload_id: web::Path<(uuid::Uuid)>, multipart: Multipart, state: web:
             state.db
             .send(controllers::CompleteUpload{
                 upload_id: upload_id.into_inner(),
-                s3_bucket: state.config.s3_bucket(),
+                s3_bucket: state.config.s3.bucket.clone(),
                 s3_client: state.s3_client.clone(),
                 file_path: upload_file_path2,
                 directory: upload_dir,

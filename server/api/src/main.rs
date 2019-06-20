@@ -28,7 +28,7 @@ fn register_reactors() {
 
 fn main() {
     let cfg = config::init();
-    let _sentry_guard = sentry::init(cfg.sentry_server_url());
+    let _sentry_guard = sentry::init(cfg.sentry.server_url.clone());
     env::set_var("RUST_BACKTRACE", "1");
     register_panic_handler();
 
@@ -36,11 +36,11 @@ fn main() {
 
     let sys = System::new("kernel");
     let db_actor_addr = db::init(&cfg);
-    let binding_addr = format!("0.0.0.0:{}", cfg.port());
+    let binding_addr = format!("0.0.0.0:{}", &cfg.port);
 
     register_reactors();
 
-    let region = Region::from_str(&cfg.aws_region()).expect("AWS region not valid");
+    let region = Region::from_str(&cfg.aws.region).expect("AWS region not valid");
     let api_state = api::State{
         db: db_actor_addr,
         config: cfg,

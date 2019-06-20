@@ -34,8 +34,8 @@ pub fn get(state: web::Data<api::State>, req: HttpRequest)
 
     return Either::B(
         state.db.send(controllers::FindFiles{
-            s3_bucket: state.config.s3_bucket(),
-            s3_region: state.config.aws_region(),
+            s3_bucket: state.config.s3.bucket.clone(),
+            s3_region: state.config.aws.region.clone(),
             account_id: auth.account.expect("unwrapping non none account").id,
         })
         .map_err(|_| KernelError::ActixMailbox)

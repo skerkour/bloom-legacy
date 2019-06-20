@@ -37,7 +37,7 @@ pub fn post(download_id: web::Path<(uuid::Uuid)>, download_data: web::Json<downl
         .send(controllers::CompleteDownload{
             download_id: download_id.into_inner(),
             complete_data: download_data.clone(),
-            s3_bucket: state.config.s3_bucket(),
+            s3_bucket: state.config.s3.bucket.clone(),
             s3_client: state.s3_client.clone(),
             // actor_id: auth.account.expect("error unwraping non none account").id,
             // session_id: auth.session.expect("error unwraping non none session").id,

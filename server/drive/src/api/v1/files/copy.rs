@@ -37,7 +37,7 @@ pub fn post(copy_data: web::Json<models::CopyFilesBody>, state: web::Data<api::S
         .send(controllers::CopyFiles{
             to: copy_data.to,
             files: copy_data.files.clone(),
-            s3_bucket: state.config.s3_bucket(),
+            s3_bucket: state.config.s3.bucket.clone(),
             s3_client: state.s3_client.clone(),
             owner_id: auth.account.expect("error unwraping non none account").id,
             session_id: auth.session.expect("error unwraping non none session").id,

@@ -35,8 +35,8 @@ pub fn get(album_id: web::Path<(uuid::Uuid)>, state: web::Data<api::State>, req:
     return Either::B(
         state.db.send(controllers::FindAlbum{
             album_id: album_id.into_inner(),
-            s3_bucket: state.config.s3_bucket(),
-            s3_region: state.config.aws_region(),
+            s3_bucket: state.config.s3.bucket.clone(),
+            s3_region: state.config.aws.region.clone(),
             account_id: auth.account.expect("unwrapping non none account").id,
         })
         .map_err(|_| KernelError::ActixMailbox)
