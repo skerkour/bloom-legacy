@@ -88,11 +88,11 @@ pub fn webapp_env(state: web::Data<State>) -> ActixResult<HttpResponse> {
     let handlebars = Handlebars::new();
 
     let mut data = BTreeMap::new();
-    data.insert("node_env".to_string(), config.rust_env());
-    data.insert("sentry_url".to_string(), config.sentry_webapp_url().unwrap_or("".to_string()));
-    data.insert("host".to_string(), config.host());
-    data.insert("stripe_public_key".to_string(), config.stripe_public_key());
-    data.insert("version".to_string(), config.version());
+    data.insert("node_env".to_string(), config.rust_env);
+    data.insert("sentry_url".to_string(), config.sentry.webapp_url.unwrap_or("".to_string()));
+    data.insert("host".to_string(), config.host);
+    data.insert("stripe_public_key".to_string(), config.stripe.public_key);
+    data.insert("version".to_string(), config.version);
 
     let res = handlebars.render_template(ENV_TEMPLATE, &data)
             .expect("error rendering env template").as_str().to_string();

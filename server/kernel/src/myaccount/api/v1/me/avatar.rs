@@ -49,8 +49,8 @@ pub fn put(multipart: Multipart, state: web::Data<api::State>, req: HttpRequest)
             .send(controllers::UpdateAvatar{
                 account: auth.account.expect("unwrapping non none account"),
                 avatar: avatar.get(0).expect("processing file").to_vec(),
-                s3_bucket: state.config.s3_bucket(),
-                s3_base_url: state.config.s3_base_url(),
+                s3_bucket: state.config.s3.bucket.clone(),
+                s3_base_url: state.config.s3.base_url.clone(),
                 s3_client: state.s3_client.clone(),
                 request_id,
                 session_id: auth.session.expect("unwraping non none session").id,

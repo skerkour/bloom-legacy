@@ -45,8 +45,8 @@ impl eventsourcing::Command for Create {
 
         validators::first_name(&self.first_name)?;
         validators::last_name(&self.last_name)?;
-        validators::password(self.config.basic_passwords(), &self.password)?;
-        validators::email(self.config.disposable_email_domains(), &self.email)?;
+        validators::password(self.config.basic_passwords.clone(), &self.password)?;
+        validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
 
         if self.password == self.email {
             return Err(KernelError::Validation("password must be different than your email address".to_string()));

@@ -39,7 +39,7 @@ impl eventsourcing::Command for Create {
         };
         use diesel::prelude::*;
 
-        validators::email(self.config.disposable_email_domains(), &self.email)?;
+        validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts
