@@ -19,6 +19,7 @@ bitflow = { path = "../bitflow" }
 phaser = { path = "../phaser" }
 billing = { path = "../billing" }
 admin = { path = "../admin" }
+calendar = { path = "../calendar" }
 
 
 actix-web = "1.0.0"

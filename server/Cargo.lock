@@ -452,6 +452,7 @@ dependencies = [
  "admin 0.1.0",
  "billing 0.1.0",
  "bitflow 0.1.0",
+ "calendar 0.1.0",
  "contacts 0.1.0",
  "drive 0.1.0",
  "eventsourcing 0.1.0",

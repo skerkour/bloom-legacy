@@ -1,6 +1,8 @@
 mod default_template;
 
-use crate::config::Config;
+use crate::{
+    config::Config,
+};
 use lettre::{
     SmtpClient,
     Transport,
@@ -13,7 +15,11 @@ pub use default_template::DEFAULT_TEMPLATE;
 
 
 pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject: &str, content: &str) {
-
+    // Useful in development mode when you haven't a smtp configured
+    if config.smtp_host() == "" {
+        println!("=============\n{}\n=============", content);
+        return;
+    }
     let email = EmailBuilder::new()
         // Addresses can be specified by the tuple (email, alias)
         .to(to)
