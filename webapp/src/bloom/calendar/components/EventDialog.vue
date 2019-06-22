@@ -133,9 +133,9 @@
         </div>
         <div v-else-if="viewing">
           <v-btn flat @click="close" :disabled="is_loading">Close</v-btn>
-          <v-btn color="primary" :loading="is_loading" @click="editing = true">
+          <!-- <v-btn color="primary" :loading="is_loading" @click="editing = true">
             Edit
-          </v-btn>
+          </v-btn> -->
         </div>
       </v-card-actions>
     </v-card>
