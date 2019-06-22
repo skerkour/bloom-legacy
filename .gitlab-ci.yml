@@ -86,7 +86,9 @@ package:docker:
 
 
 
-release:docker:next:
+release:docker:nightly:
+  only:
+    - schedules
   stage: release
   dependencies:
     - build:server
@@ -100,7 +102,7 @@ release:docker:next:
     - make build_from_artifacts
     - make docker_build
     - make docker_login
-    - make docker_release_next
+    - make docker_release_nightly
 
 release:docker:stable:
   only:
