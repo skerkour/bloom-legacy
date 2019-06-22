@@ -9,7 +9,7 @@ use regex::Regex;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct ConfigFile {
-    rust_env: String,
+    rust_env: Environment,
     host: String,
     port: u16,
     smtp: SmtpConfig,
@@ -25,7 +25,7 @@ struct ConfigFile {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Config {
-    pub rust_env: String,
+    pub rust_env: Environment,
     pub host: String,
     pub port: u16,
     pub smtp: SmtpConfig,
@@ -90,6 +90,39 @@ impl From<ConfigFile> for Config {
             basic_passwords: blacklisted_passwords,
             version: version_file.trim().to_string(),
         };
+    }
+}
+
+impl Config {
+    pub fn validate(&self) -> Result<(), crate::KernelError> {
+        // TODO: pahser and bitflow secret
+        // host have scheme
+        // other are not empty
+        return Ok(());
+    }
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum Environment {
+    #[serde(rename = "development")]
+    Development,
+    #[serde(rename = "test")]
+    Test,
+    #[serde(rename = "staging")]
+    Staging,
+    #[serde(rename = "production")]
+    Production,
+}
+
+impl std::fmt::Display for Environment {
+    fn fmt(&self, f: &mut std::fmt::Formatter) -> std::fmt::Result {
+        match self {
+            Environment::Development => write!(f, "development"),
+            Environment::Test => write!(f, "test"),
+            Environment::Staging => write!(f, "staging"),
+            Environment::Production => write!(f, "production"),
+        }
     }
 }
 
@@ -175,12 +208,6 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
     for match_ in re.find_iter(&config.host.clone()) {
         let match_str = match_.as_str();
         config.host = config.host.replace(match_str, &get_env(match_str.trim_matches(patterns)));
-    }
-
-    // rust_env
-    for match_ in re.find_iter(&config.rust_env.clone()) {
-        let match_str = match_.as_str();
-        config.rust_env = config.rust_env.replace(match_str, &get_env(match_str.trim_matches(patterns)));
     }
 
     // smpt
