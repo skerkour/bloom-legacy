@@ -500,6 +500,31 @@ table! {
     }
 }
 
+table! {
+    calendar_events (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        title -> Text,
+        description -> Text,
+        start_at -> Timestamptz,
+        end_at -> Timestamptz,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    calendar_events_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
 joinable!(billing_invoices -> billing_profiles (billing_profile_id));
 joinable!(billing_invoices_events -> billing_invoices (aggregate_id));
 joinable!(billing_payment_methods -> billing_profiles (billing_profile_id));
@@ -542,6 +567,8 @@ joinable!(phaser_reports -> phaser_scans (scan_id));
 joinable!(phaser_reports_events -> phaser_reports (aggregate_id));
 joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
+joinable!(calendar_events -> kernel_accounts (owner_id));
+joinable!(calendar_events_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
     billing_invoices,
@@ -584,4 +611,6 @@ allow_tables_to_appear_in_same_query!(
     phaser_reports_events,
     phaser_scans,
     phaser_scans_events,
+    calendar_events,
+    calendar_events_events,
 );
