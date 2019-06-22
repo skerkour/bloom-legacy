@@ -45,31 +45,8 @@ See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 ## Sponsoring
 
 Bloom is a free and open source project. If you are interested in supporting this project, the core team
-and the contributors please consider:
-
-* Becoming a patron
-
-<a href="https://www.patreon.com/bloom42" target="_blank" rel="noopener">
-  <img src="https://c5.patreon.com/external/logo/become_a_patron_button.png" height="42"/>
-</a>
-
-* Donate using PayPal
-
-<a href="https://paypal.me/z0mbie42" target="_blank" rel="noopener">
-  <img src="https://www.paypalobjects.com/en_US/FR/i/btn/btn_donateCC_LG.gif" height="42"/>
-</a>
-
-
-* Donate using crypto currencies
-
-**ETH**: `0x5121FE2A1014C4d57FCD2E8C4134A179851aFe6F`
-
-**XMR**: `4GdoN7NCTi8a5gZug7PrwZNKjvHFmKeV11L6pNJPgj5QNEHsN6eeX3DaAQFwZ1ufD4LYCZKArktt113W7QjWvQ7CW7fRk3auob6QWFSgYJ`
-
-
-
-If you want to have your logo on our [about page](https://bloom.sh/about) please visit our
-[dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
+and the contributors please visit our
+[sponsoring page](https://bloom.sh/become-a-sponsor) ✌️
 
 
 ## Security
