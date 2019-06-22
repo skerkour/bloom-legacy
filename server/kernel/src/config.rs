@@ -5,6 +5,8 @@ use std::io::{BufRead, BufReader};
 use std::collections::HashSet;
 use std::fs;
 use regex::Regex;
+use url::Url;
+use crate::KernelError;
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -72,7 +74,7 @@ impl From<ConfigFile> for Config {
             });
         }
 
-        let version_file = include_str!("../../../VERSION.txt");
+        let version = include_str!("../../../VERSION.txt").trim().to_string();
 
         return Config {
             rust_env: config.rust_env,
@@ -88,16 +90,28 @@ impl From<ConfigFile> for Config {
             stripe: config.stripe,
             disposable_email_domains: blacklisted_email_domains,
             basic_passwords: blacklisted_passwords,
-            version: version_file.trim().to_string(),
+            version,
         };
     }
 }
 
 impl Config {
-    pub fn validate(&self) -> Result<(), crate::KernelError> {
-        // TODO: pahser and bitflow secret
+    pub fn validate(&self) -> Result<(), KernelError> {
+        // phaser and bitflow secret length
+        if self.phaser.secret.len() < 64 {
+            return Err(KernelError::Validation("Phaser secret length must be at least 64.".to_string()));
+        }
+        if self.bitflow.secret.len() < 64 {
+            return Err(KernelError::Validation("Bitflow secret length must be at least 64.".to_string()));
+        }
+
         // host have scheme
-        // other are not empty
+        let parsed_host = Url::parse(&self.host)?;
+        if parsed_host.scheme().is_empty() {
+            return Err(KernelError::Validation("Host musht have a URL scheme. eg. http://localhost:8080.".to_string()));
+        }
+
+        // others are not empty
         return Ok(());
     }
 }
