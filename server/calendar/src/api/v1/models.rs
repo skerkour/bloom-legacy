@@ -1,8 +1,9 @@
 use serde::{Serialize, Deserialize};
 use uuid::Uuid;
+use crate::domain::CalendarEvent;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct EventBody {
+pub struct EventResponse {
     pub id: Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
@@ -11,6 +12,20 @@ pub struct EventBody {
     pub description: String,
     pub start_at: chrono::DateTime<chrono::Utc>,
     pub end_at: chrono::DateTime<chrono::Utc>,
+}
+
+impl From<CalendarEvent> for EventResponse {
+    fn from(event: CalendarEvent) -> Self {
+        EventResponse{
+            id: event.id,
+            created_at: event.created_at,
+            updated_at: event.updated_at,
+            title: event.title,
+            description: event.description,
+            start_at: event.start_at,
+            end_at: event.end_at,
+        }
+    }
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

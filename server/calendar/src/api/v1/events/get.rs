@@ -57,17 +57,7 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
         .and_then(move |events_resp| {
             match events_resp {
                 Ok(events) => {
-                    let res: Vec<models::EventBody> = events.into_iter().map(|event|
-                        models::EventBody{
-                            id: event.id,
-                            created_at: event.created_at,
-                            updated_at: event.updated_at,
-                            title: event.title,
-                            description: event.description,
-                            start_at: event.start_at,
-                            end_at: event.end_at,
-                        }
-                    ).collect();
+                    let res: Vec<models::EventResponse> = events.into_iter().map(From::from).collect();
                     let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))
                 },
