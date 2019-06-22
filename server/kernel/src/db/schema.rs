@@ -136,6 +136,31 @@ table! {
 }
 
 table! {
+    calendar_events (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        deleted_at -> Nullable<Timestamptz>,
+        version -> Int8,
+        title -> Text,
+        description -> Text,
+        start_at -> Timestamptz,
+        end_at -> Timestamptz,
+        owner_id -> Uuid,
+    }
+}
+
+table! {
+    calendar_events_events (id) {
+        id -> Uuid,
+        timestamp -> Timestamptz,
+        aggregate_id -> Uuid,
+        data -> Jsonb,
+        metadata -> Jsonb,
+    }
+}
+
+table! {
     contacts_contacts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -500,31 +525,6 @@ table! {
     }
 }
 
-table! {
-    calendar_events (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        title -> Text,
-        description -> Text,
-        start_at -> Timestamptz,
-        end_at -> Timestamptz,
-        owner_id -> Uuid,
-    }
-}
-
-table! {
-    calendar_events_events (id) {
-        id -> Uuid,
-        timestamp -> Timestamptz,
-        aggregate_id -> Uuid,
-        data -> Jsonb,
-        metadata -> Jsonb,
-    }
-}
-
 joinable!(billing_invoices -> billing_profiles (billing_profile_id));
 joinable!(billing_invoices_events -> billing_invoices (aggregate_id));
 joinable!(billing_payment_methods -> billing_profiles (billing_profile_id));
@@ -538,6 +538,8 @@ joinable!(bitflow_downloads_events -> bitflow_downloads (aggregate_id));
 joinable!(bitflow_profiles -> drive_files (download_folder_id));
 joinable!(bitflow_profiles -> kernel_accounts (account_id));
 joinable!(bitflow_profiles_events -> bitflow_profiles (aggregate_id));
+joinable!(calendar_events -> kernel_accounts (owner_id));
+joinable!(calendar_events_events -> calendar_events (aggregate_id));
 joinable!(contacts_contacts -> kernel_accounts (owner_id));
 joinable!(contacts_contacts_events -> contacts_contacts (aggregate_id));
 joinable!(drive_files -> kernel_accounts (owner_id));
@@ -567,8 +569,6 @@ joinable!(phaser_reports -> phaser_scans (scan_id));
 joinable!(phaser_reports_events -> phaser_reports (aggregate_id));
 joinable!(phaser_scans -> kernel_accounts (owner_id));
 joinable!(phaser_scans_events -> phaser_scans (aggregate_id));
-joinable!(calendar_events -> kernel_accounts (owner_id));
-joinable!(calendar_events_events -> phaser_scans (aggregate_id));
 
 allow_tables_to_appear_in_same_query!(
     billing_invoices,
@@ -583,6 +583,8 @@ allow_tables_to_appear_in_same_query!(
     bitflow_downloads_events,
     bitflow_profiles,
     bitflow_profiles_events,
+    calendar_events,
+    calendar_events_events,
     contacts_contacts,
     contacts_contacts_events,
     drive_files,
@@ -611,6 +613,4 @@ allow_tables_to_appear_in_same_query!(
     phaser_reports_events,
     phaser_scans,
     phaser_scans_events,
-    calendar_events,
-    calendar_events_events,
 );

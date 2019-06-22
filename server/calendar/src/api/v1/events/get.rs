@@ -41,7 +41,7 @@ pub fn get(query_params: web::Query<QueryParams>, state: web::Data<api::State>, 
     let start_at = query_params.start_at.unwrap_or_else(|| now.with_day(1).unwrap());
     let end_at = query_params.end_at.unwrap_or_else(|| start_at + chrono::Duration::days(31));
 
-    if let Err(err) = validators::date(start_at, end_at) {
+    if let Err(err) = validators::event_dates(start_at, end_at) {
         return Either::A(ok(err.error_response()));
     }
 

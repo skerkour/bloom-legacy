@@ -16,7 +16,7 @@ pub use default_template::DEFAULT_TEMPLATE;
 
 pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject: &str, content: &str) {
     // Useful in development mode when you haven't a smtp configured
-    if config.smtp_host() == "" {
+    if config.smtp.host == "" {
         println!("=============\n{}\n=============", content);
         return;
     }
