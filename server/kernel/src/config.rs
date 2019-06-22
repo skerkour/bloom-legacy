@@ -112,7 +112,6 @@ impl Config {
         }
 
         // others are not empty
-
         if self.database.url.is_empty() {
             return Err(KernelError::Validation("Database URL must not be empty.".to_string()));
         }
