@@ -6,6 +6,7 @@ NAME := bloom
 VERSION := $(shell cat VERSION.txt | tr -d '\n')
 DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
+DATE := $(shell date +"%Y-%m-%d")
 
 all: build
 
@@ -45,6 +46,6 @@ docker_release:
 	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
 
-docker_release_next:
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):next
-	docker push $(DOCKER_IMAGE):next
+docker_release_nightly:
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
+	docker push $(DOCKER_IMAGE):nightly-$(DATE)
