@@ -48,15 +48,7 @@ pub fn post(create_data: web::Json<models::CreateEventBody>, state: web::Data<ap
         .and_then(move |new_event| {
             match new_event {
                 Ok(new_event) => {
-                    let res = models::EventBody{
-                        id: new_event.id,
-                        created_at: new_event.created_at,
-                        updated_at: new_event.updated_at,
-                        title: new_event.title,
-                        description: new_event.description,
-                        start_at: new_event.start_at,
-                        end_at: new_event.end_at,
-                    };
+                    let res: models::EventResponse = new_event.into();
                     let res = api::Response::data(res);
                     ok(HttpResponse::Created().json(&res))
                 },
