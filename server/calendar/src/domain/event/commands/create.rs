@@ -31,7 +31,9 @@ impl eventsourcing::Command for Create {
 
     // Validate to implement the goes.Command interface
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        validators::date(self.start_at, self.end_at)?;
+        validators::event_dates(self.start_at, self.end_at)?;
+        validators::event_title(&self.title)?;
+        validators::event_description(&self.description)?;
         Ok(())
     }
 

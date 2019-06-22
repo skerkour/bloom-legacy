@@ -1,8 +1,8 @@
 mod create;
-mod update_title;
-mod update_description;
-mod update_start_at;
-mod update_end_at;
+// mod update_title;
+// mod update_description;
+// mod update_start_at;
+// mod update_end_at;
 mod delete;
 
 pub use create::Create;
