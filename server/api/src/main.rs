@@ -16,6 +16,7 @@ use kernel::{
     db,
     api,
     myaccount::domain::account,
+    config::Environment,
 };
 use std::str::FromStr;
 
@@ -43,7 +44,7 @@ fn main() {
     let region = Region::from_str(&cfg.aws.region).expect("AWS region not valid");
     let api_state = api::State{
         db: db_actor_addr,
-        config: cfg,
+        config: cfg.clone(),
         s3_client: S3Client::new(region),
     };
 
@@ -53,18 +54,22 @@ fn main() {
         App::new()
         .data(api_state.clone())
         .wrap(api::middlewares::AuthMiddleware)
-        .wrap(
-            Cors::new()
-                .allowed_origin("https://bloom.sh")
-                .allowed_origin("https://www.bloom.sh")
-                .allowed_origin("http://localhost:8085")
-                .allowed_origin("http://localhost:8080")
-                .allowed_origin("http://127.0.0.1:8085")
-                .allowed_origin("http://127.0.0.1:8080")
-                .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-                .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-                .max_age(3600)
-        )
+        .wrap(match cfg.rust_env {
+            Environment::Development | Environment::Test | Environment::Staging => {
+                Cors::new()
+                    .send_wildcard()
+                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                    .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+                    .max_age(3600)
+            },
+            Environment::Production => {
+                Cors::new()
+                    .allowed_origin("https://bloom.sh")
+                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+                    .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+                    .max_age(3600)
+            },
+        })
         .wrap(NormalizePath)
         .wrap(Logger::default())
         .wrap(api::middlewares::RequestIdMiddleware)
