@@ -14,6 +14,7 @@ use music::api::v1 as musicv1;
 use gallery::api::v1 as galleryv1;
 use phaser::api::v1 as phaserv1;
 use admin::api::v1 as adminv1;
+use calendar::api::v1 as calendarv1;
 
 
 // 404
@@ -159,7 +160,15 @@ pub fn config(cfg: &mut web::ServiceConfig) {
         .route("/phaser/v1/scans/{scan_id}/cancel", web::post().to_async(phaserv1::scans::scan::cancel::post))
         .route("/phaser/v1/scans/{scan_id}/reports", web::get().to_async(phaserv1::scans::scan::reports::get))
         .route("/phaser/v1/scans/{scan_id}/reports/{report_id}/complete", web::post().to_async(phaserv1::scans::scan::reports::report::complete::post))
-
+        
+        // calendar
+        .service(web::resource("/calendar/v1/events")
+            .route(web::get().to_async(calendarv1::events::get))
+            .route(web::post().to_async(calendarv1::events::post))
+        )
+        .service(web::resource("/calendar/v1/events/{event_id}")
+            .route(web::delete().to_async(calendarv1::events::delete))
+        )
 
         // admin
         .route("/admin/v1/accounts/{account_id}/disable", web::post().to_async(adminv1::accounts::account::disable::post))
