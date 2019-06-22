@@ -10,14 +10,14 @@
       <v-card-title class="blue darken-1 white--text headline" v-if="event === null">
          <h3 class="headline mb-0">Create new event</h3>
       </v-card-title>
-      <v-card-title primary-title v-else>
+      <v-card-title dark class="blue darken-1 white--text headline" v-else>
         <h3 class="headline mb-0">
           <h3 class="headline mb-0">{{ event.title }}</h3>
         </h3>
         <v-spacer />
         <v-tooltip bottom>
           <v-menu slot="activator">
-            <v-btn slot="activator" flat color="blue-grey" icon>
+            <v-btn slot="activator" flat color="white" icon>
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
 

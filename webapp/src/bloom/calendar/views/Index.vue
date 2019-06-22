@@ -16,7 +16,7 @@
       <v-btn outline fab small right color="primary" @click="$refs.calendar.next()" class="ml-4">
         <v-icon dark>mdi-chevron-right</v-icon>
       </v-btn>
-      <v-btn outline right absolute color="primary" class="hidden-sm-and-down" @click="open_dialog">
+      <v-btn outline right absolute color="primary" class="hidden-xs-only" @click="open_dialog">
         <v-icon left>mdi-plus</v-icon>Add
       </v-btn>
     </v-flex>
@@ -32,7 +32,21 @@
         :weekdays="weekdays"
         v-model="current_day"
         :end="end"
-      ></v-calendar>
+      >
+      <template v-slot:day="{ date }">
+        <template v-for="event in eventsMap[date]">
+          <div
+            v-ripple
+            class="blm-event"
+            v-html="event.title || '&nbsp;'"
+            :key="event.id"
+            @click="edit_event(event)"
+            ></div>
+
+        </template>
+      </template>
+
+      </v-calendar>
     </v-flex>
   </v-layout>
 
@@ -46,7 +60,7 @@
       @delete="event_deleted"
     />
 
-  <v-btn @click="open_dialog" color="red" dark fab fixed bottom right class="hidden-md-and-up">
+  <v-btn @click="open_dialog" color="red" dark fab fixed bottom right class="hidden-sm-and-up">
     <v-icon>mdi-plus</v-icon>
   </v-btn>
 </div>
@@ -56,6 +70,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import moment from 'moment';
+import api from '@/bloom/kernel/api';
 import EventDialog from '../components/EventDialog.vue';
 
 
@@ -67,6 +82,8 @@ import EventDialog from '../components/EventDialog.vue';
 export default class Calendar extends Vue {
   // props
   // data
+  error = '';
+  is_loading = false;
   type = 'month';
   event_dialog = false;
   current_event: any | null = null;
@@ -82,10 +99,38 @@ export default class Calendar extends Vue {
 
 
   // computed
+  get eventsMap() {
+    const map: any = {};
+    this.events.forEach((e: any) => {
+      e.date = new Date(e.start_at).toISOString().substr(0, 10);
+      (map[e.date] = map[e.date] || []).push(e);
+    });
+    return map;
+  }
+
+
   // lifecycle
+  created() {
+    this.fetch_data();
+  }
+
+
   // watch
   // methods
-    open_dialog() {
+  async fetch_data() {
+    this.error = '';
+    this.is_loading = true;
+    try {
+      this.events = await api.get(`${api.CALENDAR}/v1/events`);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.is_loading = false;
+    }
+  }
+
+
+  open_dialog() {
     this.event_dialog = true;
   }
 
@@ -107,6 +152,11 @@ export default class Calendar extends Vue {
   event_deleted(deleted_event: any) {
     this.events = this.events.filter((c) => c.id !== deleted_event.id);
   }
+
+  edit_event(event: any) {
+    this.current_event = event;
+    this.open_dialog();
+  }
 }
 </script>
 
@@ -121,5 +171,20 @@ export default class Calendar extends Vue {
 
 .v-select {
   display: inline-block !important;
+}
+
+.blm-event {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 2px;
+  background-color: #1867c0;
+  color: #ffffff;
+  border: 1px solid #1867c0;
+  width: 100%;
+  font-size: 12px;
+  padding: 3px;
+  cursor: pointer;
+  margin-bottom: 1px;
 }
 </style>
