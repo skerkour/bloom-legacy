@@ -22,6 +22,7 @@ class API {
   PHASER_GRAPHQL = `${this.api_url}/phaser/graphql`;
   PHASER = `${this.api_url}/phaser`;
   ADMIN = `${this.api_url}/admin`;
+  CALENDAR = `${this.api_url}/calendar`;
   SESSION_KEY = '__bloom_session';
   DARK_MODE_KEY = '__bloom_dark_mode';
   private static get MESSAGE_SESSION_EXPIRED() { return 'session expired'; }
