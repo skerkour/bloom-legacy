@@ -67,6 +67,7 @@
                     prepend-icon="mdi-calendar"
                     readonly
                     v-on="on"
+                    :disabled="viewing"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="start_at" no-title scrollable>
@@ -99,6 +100,7 @@
                     prepend-icon="mdi-calendar"
                     readonly
                     v-on="on"
+                    :disabled="viewing"
                   ></v-text-field>
                 </template>
                 <v-date-picker v-model="end_at" no-title scrollable>

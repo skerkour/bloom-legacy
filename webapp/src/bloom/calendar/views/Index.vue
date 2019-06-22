@@ -38,7 +38,7 @@
           <div
             v-ripple
             class="blm-event"
-            v-html="event.title || '&nbsp;'"
+            v-html="event.title || '(No title)'"
             :key="event.id"
             @click="edit_event(event)"
             ></div>
@@ -102,8 +102,9 @@ export default class Calendar extends Vue {
   get eventsMap() {
     const map: any = {};
     this.events.forEach((e: any) => {
-      e.date = new Date(e.start_at).toISOString().substr(0, 10);
-      (map[e.date] = map[e.date] || []).push(e);
+      e.start_at = new Date(e.start_at).toISOString().substr(0, 10);
+      e.end_at = new Date(e.start_at).toISOString().substr(0, 10);
+      (map[e.start_at] = map[e.start_at] || []).push(e);
     });
     return map;
   }
