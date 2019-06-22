@@ -16,7 +16,6 @@ use kernel::{
     db,
     api,
     myaccount::domain::account,
-    config::Environment,
 };
 use std::str::FromStr;
 
@@ -54,22 +53,12 @@ fn main() {
         App::new()
         .data(api_state.clone())
         .wrap(api::middlewares::AuthMiddleware)
-        .wrap(match cfg.rust_env {
-            Environment::Development | Environment::Test | Environment::Staging => {
-                Cors::new()
-                    .send_wildcard()
-                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-                    .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-                    .max_age(3600)
-            },
-            Environment::Production => {
-                Cors::new()
-                    .allowed_origin("https://bloom.sh")
-                    .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
-                    .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
-                    .max_age(3600)
-            },
-        })
+        .wrap(Cors::new()
+            .allowed_origin(&cfg.host)
+            .allowed_methods(vec!["GET", "POST", "PUT", "DELETE"])
+            .allowed_headers(vec![header::ORIGIN, header::AUTHORIZATION, header::ACCEPT, header::CONTENT_TYPE])
+            .max_age(3600)
+        )
         .wrap(NormalizePath)
         .wrap(Logger::default())
         .wrap(api::middlewares::RequestIdMiddleware)
