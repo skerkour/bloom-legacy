@@ -74,12 +74,14 @@ pub fn json_default_config() -> JsonConfig {
 }
 
 static ENV_TEMPLATE: &str = r#"
-window.__bloom.env = {
+window.__bloom = {
+  env = {
     ENV: "{{node_env}}",
     SENTRY_URL: "{{sentry_url}}",
     HOST: "{{host}}",
     STRIPE_PUBLIC_KEY: "{{stripe_public_key}}",
     VERSION: "{{version}}",
+  },
 };
 "#;
 
