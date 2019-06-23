@@ -38,6 +38,7 @@ impl Handler<StartDownload> for DbActor {
                 .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .filter(bitflow_downloads::dsl::removed_at.is_null())
                 .filter(bitflow_downloads::dsl::status.eq(domain::download::DownloadStatus::Queued))
+                .for_update()
                 .first(&conn)?;
 
             let metadata = EventMetadata{
