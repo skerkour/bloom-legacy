@@ -168,10 +168,8 @@ export default class EventDialog extends Vue {
   // event data
   title = '';
   description = '';
-
   start_at = new Date().toISOString().substr(0, 10);
   start_at_menu = false;
-
   end_at = new Date().toISOString().substr(0, 10);
   end_at_menu = false;
 
@@ -274,9 +272,6 @@ export default class EventDialog extends Vue {
     this.error = '';
     this.is_loading = true;
 
-    const start_at  = new Date(this.start_at);
-
-
     const payload = {
       description: this.description,
       end_at: new Date(this.end_at),
@@ -286,8 +281,6 @@ export default class EventDialog extends Vue {
 
     try {
       const res = await api.post(`${api.CALENDAR}/v1/events`, payload);
-      res.birthday = res.birthday
-        ? new Date(res.birthday).toISOString().slice(0, -14) : res.birthday;
       this.$emit('create', res);
       this.close();
     } catch (err) {
