@@ -168,7 +168,8 @@ pub fn config(cfg: &mut web::ServiceConfig) {
             .route(web::post().to_async(calendarv1::events::post))
         )
         .service(web::resource("/calendar/v1/events/{event_id}")
-            .route(web::delete().to_async(calendarv1::events::delete))
+            .route(web::delete().to_async(calendarv1::events::event::delete))
+            .route(web::put().to_async(calendarv1::events::event::put))
         )
 
 
