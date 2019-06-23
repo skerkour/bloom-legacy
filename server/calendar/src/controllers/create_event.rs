@@ -16,8 +16,8 @@ pub struct CreateEvent {
     pub description: String,
     pub start_at: chrono::DateTime<chrono::Utc>,
     pub end_at: chrono::DateTime<chrono::Utc>,
+
     pub owner_id: uuid::Uuid,
-    
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }

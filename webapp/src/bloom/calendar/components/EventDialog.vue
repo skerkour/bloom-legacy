@@ -130,14 +130,14 @@
         <div v-if="creating || updating">
           <v-btn flat @click="cancel" :disabled="is_loading">Cancel</v-btn>
           <v-btn color="primary" :loading="is_loading" @click="save_event">
-            Create
+            Save
           </v-btn>
         </div>
         <div v-else-if="viewing">
           <v-btn flat @click="close" :disabled="is_loading">Close</v-btn>
-          <!-- <v-btn color="primary" :loading="is_loading" @click="editing = true">
+          <v-btn color="primary" :loading="is_loading" @click="editing = true">
             Edit
-          </v-btn> -->
+          </v-btn>
         </div>
       </v-card-actions>
     </v-card>
@@ -247,7 +247,11 @@ export default class EventDialog extends Vue {
   }
 
   save_event() {
-    this.create_event();
+    if (this.event) {
+      this.update_event();
+    } else {
+      this.create_event();
+    }
   }
 
   save_birthday(date: any) {
@@ -282,6 +286,28 @@ export default class EventDialog extends Vue {
     try {
       const res = await api.post(`${api.CALENDAR}/v1/events`, payload);
       this.$emit('create', res);
+      this.close();
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.is_loading = false;
+    }
+  }
+
+  async update_event() {
+    this.error = '';
+    this.is_loading = true;
+
+    const payload = {
+      description: this.description,
+      end_at: new Date(this.end_at),
+      start_at: new Date(this.start_at),
+      title: this.title,
+    };
+
+    try {
+      const res = await api.put(`${api.CALENDAR}/v1/events/${this.event.id}`, payload);
+      this.$emit('update', res);
       this.close();
     } catch (err) {
       this.error = err.message;

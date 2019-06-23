@@ -8,10 +8,10 @@ pub use aggregate::{
 };
 pub use commands::{
     Create,
-    // UpdateTitle,
-    // UpdateDescription,
-    // UpdateStartAt,
-    // UpdateEndAt,
+    UpdateTitle,
+    UpdateDescription,
+    UpdateStartAt,
+    UpdateEndAt,
     Delete,
 };
 pub use events::{

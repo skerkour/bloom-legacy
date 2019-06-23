@@ -38,9 +38,8 @@ pub struct CreateEventBody {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateEventBody {
-    pub id: Uuid,
-    pub title: String,
-    pub description: String,
-    pub start_at: chrono::DateTime<chrono::Utc>,
-    pub end_at: chrono::DateTime<chrono::Utc>,
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub start_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub end_at: Option<chrono::DateTime<chrono::Utc>>,
 }
