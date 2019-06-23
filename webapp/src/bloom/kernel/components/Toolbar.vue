@@ -64,7 +64,7 @@
 
 
     <v-tooltip bottom>
-      <v-btn slot="activator" icon href="/help" target="_blank" rel="noopener" class="hidden-xs-only">
+      <v-btn slot="activator" icon to="/help">
         <v-icon>mdi-help-circle</v-icon>
       </v-btn>
       <span>Help</span>
