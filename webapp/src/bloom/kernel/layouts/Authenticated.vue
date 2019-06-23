@@ -43,7 +43,7 @@
 
       <v-divider class="hidden-sm-and-up"></v-divider>
 
-      <v-list-tile class="hidden-sm-and-up" target="_blank" rel="noopener" to="/help">
+      <v-list-tile class="hidden-sm-and-up" to="/help">
         <v-list-tile-action>
           <v-icon color="grey darken-1">mdi-help-circle</v-icon>
         </v-list-tile-action>
