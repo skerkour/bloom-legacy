@@ -1,1 +1,0 @@
-SELECT calendar_events.* FROM calendar_events WHERE (start_at BETWEEN $1 AND $2) AND deleted_at IS NULL;
