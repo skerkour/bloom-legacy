@@ -7,8 +7,8 @@ class Config {
   VERSION: string = '';
 
   constructor() {
-    if ((window as any).__bloom_env) {
-      const env = (window as any).__bloom_env;
+    if ((window as any).__bloom) {
+      const env = (window as any).__bloom.env;
       this.ENV = env.ENV;
       this.SENTRY_URL = env.SENTRY_URL;
       this.HOST = env.HOST;
