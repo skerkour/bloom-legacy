@@ -39,10 +39,9 @@
           <div
             v-ripple
             class="blm-event"
-            v-html="event.title || '(No title)'"
             :key="`${event.id}${event.date}`"
             @click="edit_event(event)"
-            ></div>
+            >{{ event.title || '(No title)' }}</div>
 
         </template>
       </template>
