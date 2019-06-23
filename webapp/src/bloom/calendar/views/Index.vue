@@ -39,7 +39,7 @@
             v-ripple
             class="blm-event"
             v-html="event.title || '(No title)'"
-            :key="event.id"
+            :key="`${event.id}${event.date}`"
             @click="edit_event(event)"
             ></div>
 
@@ -103,8 +103,18 @@ export default class Calendar extends Vue {
     const map: any = {};
     this.events.forEach((e: any) => {
       e.start_at = new Date(e.start_at).toISOString().substr(0, 10);
-      e.end_at = new Date(e.start_at).toISOString().substr(0, 10);
-      (map[e.start_at] = map[e.start_at] || []).push(e);
+      e.end_at = new Date(e.end_at).toISOString().substr(0, 10);
+      e.date = new Date(e.start_at).toISOString().substr(0, 10);
+      (map[e.date] = map[e.date] || []).push(e);
+
+      // because vuetify does not support multi day events
+      const diff = moment(e.end_at).diff(e.start_at, 'days');
+      for (let i = 1; i <= diff; i++) {
+        const e2 = Object.assign({}, e);
+        e2.date = new Date(new Date(e2.start_at).setDate(new Date(e2.start_at).getDate() + i))
+          .toISOString().substr(0, 10);
+        (map[e2.date] = map[e2.date] || []).push(e);
+      }
     });
     return map;
   }
