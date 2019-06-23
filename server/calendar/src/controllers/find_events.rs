@@ -35,7 +35,10 @@ impl Handler<FindEvents> for DbActor {
         let cal_events: Vec<domain::CalendarEvent> = calendar_events::dsl::calendar_events
             .filter(calendar_events::dsl::owner_id.eq(msg.owner_id))
             .filter(calendar_events::dsl::deleted_at.is_null())
-            .filter(calendar_events::dsl::start_at.between(msg.start_at, msg.end_at))
+            .filter(
+                calendar_events::dsl::start_at.between(msg.start_at, msg.end_at)
+                .or(calendar_events::dsl::end_at.between(msg.start_at, msg.end_at))
+            )
             .load(&conn)?;
 
         return Ok(cal_events);
