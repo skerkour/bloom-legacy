@@ -1,5 +1,13 @@
 <template>
   <div id="layout-wrapper">
+    <v-navigation-drawer
+      fixed
+      clipped
+      app
+      width="250"
+      v-if="$route.meta.service === 'help'">
+      <blm-help-drawer />
+    </v-navigation-drawer>
     <blm-toolbar />
     <v-content>
       <router-view></router-view>
@@ -10,9 +18,14 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import HelpDrawer from '@/bloom/help/components/Drawer.vue';
 
 
-@Component
+@Component({
+  components: {
+    'blm-help-drawer': HelpDrawer,
+  },
+})
 export default class Unauthenticated extends Vue {
   // props
   // data

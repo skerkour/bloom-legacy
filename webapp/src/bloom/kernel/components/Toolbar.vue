@@ -1,6 +1,6 @@
 <template>
   <v-toolbar color="primary" dark flat fixed clipped-left app class="blm-toolbar">
-    <v-toolbar-side-icon v-if="side_icon && $store.state.session" @click.stop="side_icon_clicked">
+    <v-toolbar-side-icon v-if="(side_icon && $store.state.session) || (secondary_title === 'Help')" @click.stop="side_icon_clicked">
       <v-icon>mdi-menu</v-icon>
     </v-toolbar-side-icon>
     <router-link to="/">
