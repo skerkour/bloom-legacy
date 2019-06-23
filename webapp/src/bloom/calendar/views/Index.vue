@@ -2,8 +2,8 @@
 <div class="fill-height">
   <v-layout row wrap class="blm-calendar-controls mt-2" align-center>
 
-    <v-flex xs12 d-inline-block class="pr-4">
-      <v-btn outline fab small color="primary" @click="$refs.calendar.prev()" class="mr-2">
+    <v-flex xs12 class="pr-4 text-xs-center text-sm-left">
+      <v-btn  outline fab small color="primary" @click="$refs.calendar.prev()" class="mr-2">
         <v-icon dark>mdi-chevron-left</v-icon>
       </v-btn>
       <v-select
@@ -11,6 +11,7 @@
         :items="type_options"
         label="Type"
         dense
+        d-inline-block
         :full-width="false"
       ></v-select>
       <v-btn outline fab small right color="primary" @click="$refs.calendar.next()" class="ml-4">
@@ -182,6 +183,7 @@ export default class Calendar extends Vue {
 
 .v-select {
   display: inline-block !important;
+  max-width: 250px;
 }
 
 .blm-event {
