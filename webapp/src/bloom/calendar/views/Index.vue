@@ -3,18 +3,18 @@
   <v-layout row wrap class="blm-calendar-controls mt-2" align-center>
 
     <v-flex xs12 class="pr-4 text-xs-center text-sm-left">
-      <v-btn  outline fab small color="primary" @click="$refs.calendar.prev()" class="mr-2">
+      <v-btn  outline color="primary" @click="$refs.calendar.prev()" class="mr-2">
         <v-icon dark>mdi-chevron-left</v-icon>
       </v-btn>
-      <v-select
+      <!-- <v-select
         v-model="type"
         :items="type_options"
         label="Type"
         dense
         d-inline-block
         :full-width="false"
-      ></v-select>
-      <v-btn outline fab small right color="primary" @click="$refs.calendar.next()" class="ml-4">
+      ></v-select> -->
+      <v-btn outline right color="primary" @click="$refs.calendar.next()" class="ml-4">
         <v-icon dark>mdi-chevron-right</v-icon>
       </v-btn>
       <v-btn outline right absolute color="primary" class="hidden-xs-only" @click="open_dialog">
@@ -33,6 +33,7 @@
         :weekdays="weekdays"
         v-model="current_day"
         :end="end"
+        @change="calendar_changed"
       >
       <template v-slot:day="{ date }">
         <template v-for="event in eventsMap[date]">
@@ -68,7 +69,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import moment from 'moment';
 import api from '@/bloom/kernel/api';
 import EventDialog from '../components/EventDialog.vue';
@@ -128,11 +129,17 @@ export default class Calendar extends Vue {
 
   // watch
   // methods
-  async fetch_data() {
+  async fetch_data(start_at?: string, end_at?: string) {
     this.error = '';
     this.is_loading = true;
+
     try {
-      this.events = await api.get(`${api.CALENDAR}/v1/events`);
+      this.events = await api.get(`${api.CALENDAR}/v1/events`, {
+        params: {
+          end_at,
+          start_at,
+        },
+      });
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -167,6 +174,10 @@ export default class Calendar extends Vue {
   edit_event(event: any) {
     this.current_event = event;
     this.open_dialog();
+  }
+
+  calendar_changed(to: any) {
+    this.fetch_data(new Date(to.start.date).toISOString(), new Date(to.end.date).toISOString());
   }
 }
 </script>
