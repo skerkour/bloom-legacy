@@ -12,6 +12,11 @@ include:
 
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  POSTGRES_HOST: postgres
+  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB?sslmode=disable
+  RUST_ENV: test
+  HOST: http://localhost:9000
+
 
 cache:
   paths:
@@ -28,7 +33,10 @@ test:server:
   script:
     - apt update && apt install -y gcc make git
     - rustup default nightly-2019-05-10
+    - cp bloom.default.sane server/bloom.sane
     - make -C server test
+  services:
+    - postgres:11
 
 test:webapp:
   stage: test
