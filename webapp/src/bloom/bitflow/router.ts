@@ -6,10 +6,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'bitflow',
     },
     path: '/bitflow',
@@ -18,7 +14,6 @@ export default [
     component: HistoryView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/bitflow',
         required: true,
       },

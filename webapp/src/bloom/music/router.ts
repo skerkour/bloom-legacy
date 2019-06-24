@@ -7,10 +7,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'music',
     },
     path: '/music',
@@ -19,7 +15,6 @@ export default [
     component: PlaylistsView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/music',
         required: true,
       },
@@ -31,7 +26,6 @@ export default [
     component: PlaylistView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/music',
         required: true,
       },

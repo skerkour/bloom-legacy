@@ -5,10 +5,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'arcade',
     },
     name: 'arcade/index',

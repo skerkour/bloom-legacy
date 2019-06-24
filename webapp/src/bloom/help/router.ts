@@ -17,8 +17,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help',
@@ -26,8 +24,6 @@ export default [
   {
     component: ArcadeIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/arcade',
@@ -35,8 +31,6 @@ export default [
   {
     component: BitflowIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/bitflow',
@@ -44,8 +38,6 @@ export default [
   {
     component: CalendarIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/calendar',
@@ -53,8 +45,6 @@ export default [
   {
     component: ContactsIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/contacts',
@@ -62,8 +52,6 @@ export default [
   {
     component: DriveIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/drive',
@@ -71,8 +59,6 @@ export default [
   {
     component: GalleryIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/gallery',
@@ -80,8 +66,6 @@ export default [
   {
     component: MusicIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/music',
@@ -89,8 +73,6 @@ export default [
   {
     component: MyAccountIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/myaccount',
@@ -98,8 +80,6 @@ export default [
   {
     component: NotesIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/notes',
@@ -107,8 +87,6 @@ export default [
   {
     component: PhaserIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/phaser',
@@ -116,8 +94,6 @@ export default [
   {
     component: PlatformIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/platform',
@@ -125,8 +101,6 @@ export default [
   {
     component: MobileIndexView,
     meta: {
-      auth: { layout: 'authenticated' },
-      layout: 'unauthenticated',
       service: 'help',
     },
     path: '/help/mobile',

@@ -8,7 +8,6 @@ export default [
     component: DashboardView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'admin',
@@ -20,7 +19,6 @@ export default [
     component: AccountsIndexView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'admin',
@@ -32,7 +30,6 @@ export default [
     component: AccountIndexView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'admin',

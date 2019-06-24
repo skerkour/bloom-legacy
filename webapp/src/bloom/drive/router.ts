@@ -5,10 +5,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'drive',
     },
     path: '/drive',
@@ -17,7 +13,6 @@ export default [
     component: IndexView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/drive',
         required: true,
       },
@@ -29,7 +24,6 @@ export default [
     component: TrashView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/drive',
         required: true,
       },

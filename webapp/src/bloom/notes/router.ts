@@ -7,10 +7,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'notes',
     },
     path: '/notes',
@@ -19,7 +15,6 @@ export default [
     component: ArchiveView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/notes',
         required: true,
       },
@@ -31,7 +26,6 @@ export default [
     component: TrashView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/notes',
         required: true,
       },

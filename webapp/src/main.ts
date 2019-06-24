@@ -31,17 +31,6 @@ import Footer from '@/bloom/kernel/components/Footer.vue';
 Vue.component('blm-toolbar', Toolbar);
 Vue.component('blm-footer', Footer);
 
-// Layouts
-import DefaultLayout from '@/bloom/kernel/layouts/Default.vue';
-import AuthLayout from '@/bloom/kernel/layouts/Auth.vue';
-import UnauthenticatedLayout from '@/bloom/kernel/layouts/Unauthenticated.vue';
-import AuthenticatedLayout from '@/bloom/kernel/layouts/Authenticated.vue';
-
-Vue.component('blm-layout-default', DefaultLayout);
-Vue.component('blm-layout-auth', AuthLayout);
-Vue.component('blm-layout-authenticated', AuthenticatedLayout);
-Vue.component('blm-layout-unauthenticated', UnauthenticatedLayout);
-
 // import './registerServiceWorker';
 
 log.with({ config }).debug('config loaded');
