@@ -1,5 +1,6 @@
 <template>
-  <v-container >
+<div>
+  <v-container class="main-container">
     <v-layout row wrap>
 
       <v-flex xs12 class="mb-5 mt-3">
@@ -29,6 +30,8 @@
 
     </v-layout>
   </v-container>
+  <blm-footer />
+</div>
 </template>
 
 
@@ -134,5 +137,9 @@ a {
   .app-name {
     color: #fafafa;
   }
+}
+
+.main-container {
+  min-height: calc(100vh - 465px);
 }
 </style>
