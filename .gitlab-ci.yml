@@ -12,10 +12,25 @@ include:
 
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
-  DATABASE_URL: postgres://$POSTGRES_USER:$POSTGRES_PASSWORD@$POSTGRES_HOST:5432/$POSTGRES_DB?sslmode=disable
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   RUST_ENV: test
-  HOST: http://localhost:9000
+  HOST: http://localhost:8000
+  AWS_SECRET_ACCESS_KEY: test
+  AWS_ACCESS_KEY_ID: test
+  AWS_REGION: test
+  S3_BUCKET: test
+  S3_BASE_URL: test
+  SENTRY_SERVER_URL: test
+  SENTRY_WEBAPP_URL: test
+  SMTP_HOST: test
+  SMTP_USERNAME: test
+  SMTP_PASSWORD: test
+  STRIPE_PUBLIC_KEY: test
+  STRIPE_SECRET_KEY: test
 
 
 cache:
