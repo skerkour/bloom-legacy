@@ -1,4 +1,4 @@
-rust_env = "${RUST_ENV}"
+rust_env = "test"
 host = "${HOST}"
 port = 8000
 database = {
