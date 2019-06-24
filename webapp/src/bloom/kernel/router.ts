@@ -14,7 +14,7 @@ import Contact from './views/contact/Index.vue';
 import Security from './views/security/Index.vue';
 import SignInForm from './components/SignInForm.vue';
 import RegisterForm from './components/RegisterForm.vue';
-import UnauthenticatedLayout from '@/bloom/kernel/layouts/Unauthenticated.vue';
+import DefaultLayout from '@/bloom/kernel/layouts/Default.vue';
 import VerifyAccount from './components/Verify.vue';
 import SetupUsernameForm from './components/SetupUsernameForm.vue';
 import P404 from './views/404.vue';
@@ -46,113 +46,47 @@ const router = new Router({
   routes: [
     {
       component: Index,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/',
     },
     {
       component: About,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/about',
     },
     {
       component: Contact,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/contact',
     },
     {
       component: Security,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/security',
     },
     {
       component: TermsPage,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/terms',
     },
     {
       component: PrivacyPage,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/privacy',
     },
     {
       component: AppsPage,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/download-apps',
     },
     {
       component: Contribute,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/contribute',
     },
     {
       component: OpenSourcePage,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/open-source',
     },
     { path: '/opensource', redirect: '/open-source' },
     {
       component: LicensingPage,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/licensing',
     },
     {
       component: BecomeASponsor,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '/become-a-sponsor',
     },
     {
@@ -190,7 +124,7 @@ const router = new Router({
         { path: 'verify', component: VerifyAccount },
         { path: 'username', component: SetupUsernameForm },
       ],
-      component: UnauthenticatedLayout,
+      component: DefaultLayout,
       meta: {
         auth: {
           forbidden: true,
@@ -213,12 +147,6 @@ const router = new Router({
     ...HelpRoutes,
     {
       component: P404,
-      meta: {
-        auth: {
-          layout: 'authenticated',
-        },
-        layout: 'unauthenticated',
-      },
       path: '**',
     },
   ],

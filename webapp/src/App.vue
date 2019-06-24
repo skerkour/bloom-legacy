@@ -9,16 +9,20 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import DefaultLayout from '@/bloom/kernel/layouts/Default.vue';
+import AuthLayout from '@/bloom/kernel/layouts/Auth.vue';
 
-const DEFAULT_LAYOUT: string = 'default';
-
-@Component
+@Component({
+  components: {
+    'blm-layout-auth': AuthLayout,
+    'blm-layout-default': DefaultLayout,
+  },
+})
 export default class App extends Vue {
   get layout(): string {
-    if (this.$store.state.session && this.$route.meta.auth) {
-      return `blm-layout-${this.$route.meta.auth.layout || DEFAULT_LAYOUT}`;
-    }
-    return `blm-layout-${this.$route.meta.layout || DEFAULT_LAYOUT}`;
+    const layout = this.$route.meta.layout
+      ? `blm-layout-${this.$route.meta.layout}` : 'blm-layout-default';
+    return  layout;
   }
   get dark_mode() {
     return this.$store.state.dark_mode;

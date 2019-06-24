@@ -7,10 +7,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'gallery',
     },
     path: '/gallery',
@@ -19,7 +15,6 @@ export default [
     component: AlbumsView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/gallery',
         required: true,
       },
@@ -31,7 +26,6 @@ export default [
     component: AlbumView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/gallery',
         required: true,
       },

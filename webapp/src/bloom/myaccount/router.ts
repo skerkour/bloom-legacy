@@ -12,10 +12,6 @@ export default [
   {
     component: RecoveryForm,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'myaccount',
     },
     name: 'myaccount/recovery',
@@ -24,10 +20,6 @@ export default [
   {
     component: AccountRecoveryRequestForm,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'myaccount',
     },
     name: 'myaccount/request_recovery',
@@ -37,7 +29,6 @@ export default [
     component: IndexView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'myaccount',
@@ -49,7 +40,6 @@ export default [
     component: ComingSoon,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'myaccount',
@@ -61,7 +51,6 @@ export default [
     component: SecurityView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'myaccount',
@@ -73,7 +62,6 @@ export default [
     component: DevicesView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'myaccount',
@@ -85,7 +73,6 @@ export default [
     component: AuditView,
     meta: {
       auth: {
-        layout: 'authenticated',
         required: true,
       },
       service: 'myaccount',

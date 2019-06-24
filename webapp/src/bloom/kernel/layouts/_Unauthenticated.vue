@@ -1,11 +1,6 @@
 <template>
   <div id="layout-wrapper">
-    <v-navigation-drawer
-      v-model="drawer"
-      fixed
-      clipped
-      app
-      width="250"
+    <v-navigation-drawer v-model="drawer" fixed clipped app width="250"
       v-if="$route.meta.service === 'help'">
 
       <v-toolbar color="primary" class="hidden-md-and-up">

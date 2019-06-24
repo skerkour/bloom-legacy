@@ -7,10 +7,6 @@ export default [
   {
     component: IndexView,
     meta: {
-      auth: {
-        layout: 'authenticated',
-      },
-      layout: 'unauthenticated',
       service: 'platform',
     },
     path: '/platform/phaser',
@@ -19,7 +15,6 @@ export default [
     component: ReportView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/platform/phaser',
         required: true,
       },
@@ -31,7 +26,6 @@ export default [
     component: ReportView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/platform/phaser',
         required: true,
       },
@@ -43,7 +37,6 @@ export default [
     component: ProfilesView,
     meta: {
       auth: {
-        layout: 'authenticated',
         redirect: '/platform/phaser',
         required: true,
       },
