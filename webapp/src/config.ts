@@ -8,13 +8,13 @@ class Config {
 
   constructor() {
     if ((window as any).__bloom) {
-      const env = (window as any).__bloom.env;
-      this.ENV = env.ENV;
-      this.SENTRY_URL = env.SENTRY_URL;
-      this.HOST = env.HOST;
-      this.STRIPE_PUBLIC_KEY = env.STRIPE_PUBLIC_KEY;
-      this.API_BASE_URL = env.API_BASE_URL;
-      this.VERSION = env.VERSION;
+      const config = (window as any).__bloom.config;
+      this.ENV = config.ENV;
+      this.SENTRY_URL = config.SENTRY_URL;
+      this.HOST = config.HOST;
+      this.STRIPE_PUBLIC_KEY = config.STRIPE_PUBLIC_KEY;
+      this.API_BASE_URL = config.API_BASE_URL;
+      this.VERSION = config.VERSION;
     } else {
       // Check environement
       [

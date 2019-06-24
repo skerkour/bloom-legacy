@@ -75,7 +75,7 @@ pub fn json_default_config() -> JsonConfig {
 
 static ENV_TEMPLATE: &str = r#"
 window.__bloom = {
-  env: {
+  config: {
     ENV: "{{node_env}}",
     SENTRY_URL: "{{sentry_url}}",
     HOST: "{{host}}",
