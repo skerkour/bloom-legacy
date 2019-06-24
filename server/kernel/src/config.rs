@@ -224,6 +224,12 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
     let re = Regex::new(r"\$\{[A-Z_0-9]*\}").expect("error compiling env regex");
     let patterns : &[_] = &['$', '{', '}'];
 
+    // rust_env
+    for match_ in re.find_iter(&config.rust_env.clone()) {
+        let match_str = match_.as_str();
+        config.rust_env = config.rust_env.replace(match_str, &get_env(match_str.trim_matches(patterns)));
+    }
+
     // host
     for match_ in re.find_iter(&config.host.clone()) {
         let match_str = match_.as_str();
