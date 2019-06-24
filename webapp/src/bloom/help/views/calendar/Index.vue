@@ -1,24 +1,27 @@
 <template>
-  <v-container >
-    <v-layout row wrap>
+  <div>
+    <v-container class="main-container">
+      <v-layout row wrap>
 
-      <v-flex xs12>
-        <h1 class="display-1 font-weight-medium">
-          Calendar
-        </h1>
-        <p class="font-18 font-weight-regular">
-          Manage all your events in Calendar
-        </p>
-      </v-flex>
+        <v-flex xs12>
+          <h1 class="display-1 font-weight-medium">
+            Calendar
+          </h1>
+          <p class="font-18 font-weight-regular">
+            Manage all your events in Calendar
+          </p>
+        </v-flex>
 
-      <v-flex xs12 class="mt-4">
-        <p class="font-18 font-weight-regular">
-          The Bloom Calendar app helps you spend less time managing your schedule and more time enjoying it.
-        </p>
-      </v-flex>
+        <v-flex xs12 class="mt-4">
+          <p class="font-18 font-weight-regular">
+            The Bloom Calendar app helps you spend less time managing your schedule and more time enjoying it.
+          </p>
+        </v-flex>
 
-    </v-layout>
-  </v-container>
+      </v-layout>
+    </v-container>
+    <blm-footer />
+  </div>
 </template>
 
 
@@ -44,5 +47,9 @@ a {
 
 .font-18 {
   font-size: 18px;
+}
+
+.main-container {
+  min-height: calc(100vh - 465px);
 }
 </style>

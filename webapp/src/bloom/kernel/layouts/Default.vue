@@ -6,7 +6,7 @@
       clipped
       app
       width="250"
-      v-if="this.$store.state.session || $route.meta.service === 'help'">
+      v-if="display_drawer">
 
       <v-img class="hidden-lg-and-up pointer" :aspect-ratio="16/6"
       @click="goto('/myaccount'); drawer = false"
@@ -59,17 +59,12 @@
         <v-list-tile-title class="grey--text text--darken-1">Sign out</v-list-tile-title>
       </v-list-tile>
 
-
     </v-navigation-drawer>
-
 
     <blm-toolbar @click:side-icon="drawer = !drawer" />
 
-
     <v-content>
-      <!-- <v-container> -->
-        <router-view></router-view>
-      <!-- </v-container> -->
+      <router-view></router-view>
     </v-content>
 
   </div>
@@ -112,6 +107,10 @@ export default class Authenticated extends Vue {
 
 
   // computed
+  get display_drawer() {
+    return this.$store.state.session || this.$route.meta.service === 'help';
+  }
+
   // lifecycle
   created() {
     this.setup(false);
