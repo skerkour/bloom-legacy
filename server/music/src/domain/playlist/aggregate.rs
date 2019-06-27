@@ -1,12 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::{
-        music_playlists,
-        music_playlists_files,
-    },
-};
-
+use diesel::Queryable;
+use kernel::db::schema::{music_playlists, music_playlists_files};
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "music_playlists"]
@@ -27,7 +21,7 @@ impl Playlist {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Playlist{
+        return Playlist {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
-use crate::domain::{
-    note,
-    Note,
-};
-
+use crate::domain::{note, Note};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DeleteNote {
@@ -27,25 +19,18 @@ impl Handler<DeleteNote> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: DeleteNote, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            notes_notes,
-            notes_notes_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{notes_notes, notes_notes_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let delete_cmd = note::Delete{
-                metadata,
-            };
+            let delete_cmd = note::Delete { metadata };
 
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
@@ -54,7 +39,8 @@ impl Handler<DeleteNote> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (note_to_update, event, _) = eventsourcing::execute(&conn, note_to_update, &delete_cmd)?;
+            let (note_to_update, event, _) =
+                eventsourcing::execute(&conn, note_to_update, &delete_cmd)?;
 
             // update note
             diesel::update(&note_to_update)

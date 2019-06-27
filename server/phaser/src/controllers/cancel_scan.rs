@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor
-};
-use crate::domain::{
-    scan,
-    report,
-};
-
+use crate::domain::{report, scan};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 // TODO: delete all associated reports
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -28,21 +20,15 @@ impl Handler<CancelScan> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: CancelScan, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            phaser_scans,
-            phaser_scans_events,
-            phaser_reports,
-            phaser_reports_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{
+            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
+        };
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -56,10 +42,11 @@ impl Handler<CancelScan> for DbActor {
                 .first(&conn)?;
 
             // cancel Scan
-            let cancel_cmd = scan::Cancel{
+            let cancel_cmd = scan::Cancel {
                 metadata: metadata.clone(),
             };
-            let (canceled_scan, event, _) = eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
+            let (canceled_scan, event, _) =
+                eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
 
             diesel::update(&canceled_scan)
                 .set(&canceled_scan)
@@ -76,10 +63,9 @@ impl Handler<CancelScan> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let cancel_cmd = report::Cancel{
-                metadata,
-            };
-            let (cancelped_report, event, _) = eventsourcing::execute(&conn, report_to_cancel, &cancel_cmd)?;
+            let cancel_cmd = report::Cancel { metadata };
+            let (cancelped_report, event, _) =
+                eventsourcing::execute(&conn, report_to_cancel, &cancel_cmd)?;
 
             diesel::update(&cancelped_report)
                 .set(&cancelped_report)

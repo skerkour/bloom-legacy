@@ -1,14 +1,10 @@
-use serde::{Serialize, Deserialize};
-use diesel::{
-    PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
 use crate::domain::event;
-
+use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
+    PgConnection,
+};
+use kernel::{events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Delete {
@@ -22,7 +18,11 @@ impl eventsourcing::Command for Delete {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Event not found".to_string()));
         }
@@ -30,13 +30,20 @@ impl eventsourcing::Command for Delete {
         Ok(())
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        Ok((event::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event::EventData::DeletedV1,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()))
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        Ok((
+            event::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event::EventData::DeletedV1,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ))
     }
 }

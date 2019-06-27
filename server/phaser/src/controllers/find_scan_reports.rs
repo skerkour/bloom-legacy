@@ -1,11 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    db::DbActor,
-    KernelError,
-};
 use crate::domain;
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindScanReports {
@@ -21,15 +17,10 @@ impl Handler<FindScanReports> for DbActor {
     type Result = Result<Vec<domain::Report>, KernelError>;
 
     fn handle(&mut self, msg: FindScanReports, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            phaser_reports,
-            phaser_scans,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{phaser_reports, phaser_scans};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         let _: domain::Scan = phaser_scans::dsl::phaser_scans
             .filter(phaser_scans::dsl::id.eq(msg.scan_id))

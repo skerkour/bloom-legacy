@@ -1,12 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::{
-        gallery_albums,
-        gallery_albums_files,
-    },
-};
-
+use diesel::Queryable;
+use kernel::db::schema::{gallery_albums, gallery_albums_files};
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "gallery_albums"]
@@ -27,7 +21,7 @@ impl Album {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Album{
+        return Album {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

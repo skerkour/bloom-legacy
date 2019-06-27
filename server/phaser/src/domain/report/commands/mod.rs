@@ -1,10 +1,9 @@
-mod queue;
 mod cancel;
-mod start;
 mod complete;
+mod queue;
+mod start;
 
-
-pub use queue::Queue;
 pub use cancel::Cancel;
-pub use start::Start;
 pub use complete::Complete;
+pub use queue::Queue;
+pub use start::Start;

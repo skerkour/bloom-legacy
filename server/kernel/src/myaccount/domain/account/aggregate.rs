@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use crate::{
-    db::schema::kernel_accounts,
-};
-
+use crate::db::schema::kernel_accounts;
+use diesel::Queryable;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_accounts"]
@@ -27,12 +24,11 @@ pub struct Account {
     pub is_disabled: bool,
 }
 
-
 impl Account {
     // create a new, unitialized Account
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Account{
+        return Account {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -40,7 +36,7 @@ impl Account {
             version: 0,
 
             avatar_url: String::new(),
-            email:String::new(),
+            email: String::new(),
             first_name: String::new(),
             is_admin: false,
             last_name: String::new(),

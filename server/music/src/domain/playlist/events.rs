@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::music_playlists_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::music_playlists_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "music_playlists_events"]
@@ -48,14 +44,13 @@ pub struct FilesRemovedV1 {
     pub files: Vec<uuid::Uuid>,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Playlist;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Playlist{
+            EventData::CreatedV1(ref data) => super::Playlist {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -67,20 +62,16 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // RenamedV1
-            EventData::RenamedV1(ref data) => super::Playlist{
+            EventData::RenamedV1(ref data) => super::Playlist {
                 name: data.name.clone(),
                 ..aggregate
             },
             // FilesAddedV1
-            EventData::FilesAddedV1(_) => super::Playlist{
-                ..aggregate
-            },
+            EventData::FilesAddedV1(_) => super::Playlist { ..aggregate },
             // FilesRemovedV1
-            EventData::FilesRemovedV1(_) => super::Playlist{
-                ..aggregate
-            },
+            EventData::FilesRemovedV1(_) => super::Playlist { ..aggregate },
             // DeletedV1
-            EventData::DeletedV1 => super::Playlist{
+            EventData::DeletedV1 => super::Playlist {
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

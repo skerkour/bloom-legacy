@@ -1,11 +1,6 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    db::DbActor,
-    myaccount::domain,
-    error::KernelError,
-};
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, error::KernelError, myaccount::domain};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindAccounts {
@@ -24,14 +19,10 @@ impl Handler<FindAccounts> for DbActor {
     type Result = Result<(Vec<domain::Account>, i64), KernelError>;
 
     fn handle(&mut self, msg: FindAccounts, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            kernel_accounts,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::kernel_accounts;
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         if !msg.actor.is_admin {
             return Err(KernelError::Forbidden("Admin role is required".to_string()));
@@ -44,7 +35,7 @@ impl Handler<FindAccounts> for DbActor {
                 } else {
                     limit
                 }
-            },
+            }
             None => 25,
         };
         let offset = msg.offset.unwrap_or(0);
@@ -63,7 +54,7 @@ impl Handler<FindAccounts> for DbActor {
                     .offset(offset)
                     .load(&conn)?;
                 Ok((accounts, total))
-            },
+            }
             (Some(ref email), None) => {
                 let total: i64 = kernel_accounts::dsl::kernel_accounts
                     .filter(kernel_accounts::dsl::email.eq(email))
@@ -75,7 +66,7 @@ impl Handler<FindAccounts> for DbActor {
                     .offset(offset)
                     .load(&conn)?;
                 Ok((accounts, total))
-            },
+            }
             (None, Some(ref username)) => {
                 let total: i64 = kernel_accounts::dsl::kernel_accounts
                     .filter(kernel_accounts::dsl::username.eq(username))
@@ -87,7 +78,7 @@ impl Handler<FindAccounts> for DbActor {
                     .offset(offset)
                     .load(&conn)?;
                 Ok((accounts, total))
-            },
+            }
             (None, None) => {
                 let total: i64 = kernel_accounts::dsl::kernel_accounts
                     .count()
@@ -99,7 +90,7 @@ impl Handler<FindAccounts> for DbActor {
                     .offset(offset)
                     .load(&conn)?;
                 Ok((accounts, total))
-            },
+            }
         };
     }
 }

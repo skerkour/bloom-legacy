@@ -1,17 +1,7 @@
+mod aggregate;
 mod commands;
 mod events;
-mod aggregate;
-
 
 pub use aggregate::PendingEmail;
-pub use commands::{
-    Create,
-    Verify,
-    Delete,
-};
-pub use events::{
-    Event,
-    EventData,
-    CreatedV1,
-    VerificationFailedReason,
-};
+pub use commands::{Create, Delete, Verify};
+pub use events::{CreatedV1, Event, EventData, VerificationFailedReason};

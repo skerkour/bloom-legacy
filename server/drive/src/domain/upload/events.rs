@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::drive_uploads_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::drive_uploads_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "drive_uploads_events"]
@@ -32,7 +28,6 @@ pub struct StartedV1 {
     pub owner_id: uuid::Uuid,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompletedV1 {
     pub size: i64,
@@ -40,14 +35,13 @@ pub struct CompletedV1 {
     pub type_: String,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Upload;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // StartedV1
-            EventData::StartedV1(ref data) => super::Upload{
+            EventData::StartedV1(ref data) => super::Upload {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -63,7 +57,7 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // CompletedV1
-            EventData::CompletedV1(ref data) => super::Upload{
+            EventData::CompletedV1(ref data) => super::Upload {
                 deleted_at: Some(self.timestamp),
                 size: data.size,
                 type_: data.type_.clone(),

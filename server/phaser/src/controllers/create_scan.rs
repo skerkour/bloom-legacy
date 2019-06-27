@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor
-};
-use crate::domain::{
-    Scan,
-    scan,
-};
-
+use crate::domain::{scan, Scan};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateScan {
@@ -31,20 +23,14 @@ impl Handler<CreateScan> for DbActor {
     type Result = Result<Scan, KernelError>;
 
     fn handle(&mut self, msg: CreateScan, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            phaser_scans,
-            phaser_scans_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{phaser_scans, phaser_scans_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
             // create Scan
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -58,11 +44,12 @@ impl Handler<CreateScan> for DbActor {
                 .get_result(&conn)?;
 
             if number_of_scan > 0 {
-                return Err(KernelError::Validation("Please enable billing to create more scan".to_string()));
+                return Err(KernelError::Validation(
+                    "Please enable billing to create more scan".to_string(),
+                ));
             }
 
-
-            let create_cmd = scan::Create{
+            let create_cmd = scan::Create {
                 name: msg.name.clone(),
                 description: msg.description.clone(),
                 profile: msg.profile.clone(),

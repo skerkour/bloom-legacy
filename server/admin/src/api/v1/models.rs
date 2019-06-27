@@ -1,10 +1,5 @@
-use serde::{Serialize, Deserialize};
-use kernel::{
-    myaccount::domain::{
-        account,
-    },
-};
-
+use kernel::myaccount::domain::account;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AccountResponse {
@@ -22,7 +17,7 @@ pub struct AccountResponse {
 
 impl From<account::Account> for AccountResponse {
     fn from(account: account::Account) -> Self {
-        AccountResponse{
+        AccountResponse {
             id: account.id,
             created_at: account.created_at,
             first_name: account.first_name,
@@ -36,7 +31,6 @@ impl From<account::Account> for AccountResponse {
         }
     }
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AccountsResponse {

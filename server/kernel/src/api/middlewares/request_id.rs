@@ -1,18 +1,15 @@
-use actix_web::{
-    FromRequest, HttpRequest, Error, dev::Payload,
-    http::header::{HeaderValue, HeaderName},
-    dev::{ServiceRequest, ServiceResponse},
-    HttpMessage,
-};
 use actix_service::{Service, Transform};
+use actix_web::{
+    dev::Payload,
+    dev::{ServiceRequest, ServiceResponse},
+    http::header::{HeaderName, HeaderValue},
+    Error, FromRequest, HttpMessage, HttpRequest,
+};
 use futures::{
+    future::{ok, Future, FutureResult},
     Poll,
-    future::{ok, FutureResult, Future},
-
 };
 use std::ops::Deref;
-
-
 
 /// The header set by the middleware
 pub const REQUEST_ID_HEADER: &str = "x-bloom-request-id";
@@ -120,13 +117,13 @@ where
         let request_id = req.request_id();
         return Box::new(self.service.call(req).map(move |mut res| {
             if let Ok(v) = HeaderValue::from_str(&(request_id.to_string())) {
-                res.headers_mut().append(HeaderName::from_static(REQUEST_ID_HEADER), v);
+                res.headers_mut()
+                    .append(HeaderName::from_static(REQUEST_ID_HEADER), v);
             }
             return res;
         }));
     }
 }
-
 
 // #[cfg(test)]
 // mod tests {

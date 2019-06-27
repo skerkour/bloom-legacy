@@ -1,15 +1,10 @@
-use serde::{Serialize, Deserialize};
+use crate::domain::file;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    events::EventMetadata,
-    KernelError,
-};
-use crate::{
-    domain::file,
-};
+use kernel::{events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Upload {
@@ -17,7 +12,7 @@ pub struct Upload {
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
-     #[serde(rename = "type")]
+    #[serde(rename = "type")]
     pub type_: String, // MIME type
     pub owner_id: uuid::Uuid,
     pub metadata: EventMetadata,
@@ -30,13 +25,21 @@ impl eventsourcing::Command for Upload {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         // TODO
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = file::EventData::UploadedV1(file::UploadedV1{
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let event_data = file::EventData::UploadedV1(file::UploadedV1 {
             id: self.id,
             parent_id: self.parent_id,
             name: self.name.clone(),
@@ -45,12 +48,15 @@ impl eventsourcing::Command for Upload {
             owner_id: self.owner_id,
         });
 
-        return  Ok((file::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: self.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            file::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: self.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

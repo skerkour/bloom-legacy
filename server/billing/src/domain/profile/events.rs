@@ -1,14 +1,8 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use super::Profile;
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::billing_profiles_events,
-    events::EventMetadata,
-};
-use super::{
-    Profile,
-};
-
+use kernel::{db::schema::billing_profiles_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "billing_profiles_events"]
@@ -37,14 +31,13 @@ pub struct StripeCustomerIdUpdatedV1 {
     pub stripe_customer_id: String,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = Profile;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => Self::Aggregate{
+            EventData::CreatedV1(ref data) => Self::Aggregate {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -54,10 +47,10 @@ impl eventsourcing::Event for Event {
                 stripe_customer_id: None,
             },
             // StripeCustomerIdUpdatedV1
-            EventData::StripeCustomerIdUpdatedV1(ref data) => Self::Aggregate{
+            EventData::StripeCustomerIdUpdatedV1(ref data) => Self::Aggregate {
                 stripe_customer_id: Some(data.stripe_customer_id.clone()),
                 ..aggregate
-            }
+            },
         }
     }
 

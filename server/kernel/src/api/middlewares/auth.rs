@@ -3,32 +3,22 @@
 //     middleware::{Middleware, Started},
 //     http::header,
 // };
-use actix_web::{
-    HttpRequest, Error,
-    HttpMessage,
-    dev::{ServiceRequest, ServiceResponse},
-    web,
-    http::header,
-    ResponseError,
-};
+use crate::{api, db::DbActor, error::KernelError, myaccount::domain};
+use actix::{Handler, Message};
 use actix_service::{Service as ActixService, Transform};
+use actix_web::{
+    dev::{ServiceRequest, ServiceResponse},
+    http::header,
+    web, Error, HttpMessage, HttpRequest, ResponseError,
+};
+use futures::Future;
 use futures::{
-    Poll,
     future::{ok, Either, FutureResult},
+    Poll,
 };
-use futures::{Future};
-use actix::{Message, Handler};
-use crate::{
-    db::DbActor,
-    myaccount::domain,
-    api,
-    error::KernelError,
-};
-use std::env;
 use std::cell::RefCell;
+use std::env;
 use std::rc::Rc;
-
-
 
 #[derive(Debug, Clone)]
 pub struct Auth {
@@ -46,7 +36,6 @@ pub enum Service {
 /// AuthMiddleware
 #[derive(Debug, Clone, PartialEq)]
 pub struct AuthMiddleware;
-
 
 impl<S, B> Transform<S> for AuthMiddleware
 where
@@ -89,11 +78,13 @@ where
     }
 
     fn call(&mut self, req: ServiceRequest) -> Self::Future {
-        let state: web::Data<api::State> = req.app_data().expect("error getting app_data in auth middleware");
+        let state: web::Data<api::State> = req
+            .app_data()
+            .expect("error getting app_data in auth middleware");
 
         let auth_header = req.headers().get(header::AUTHORIZATION);
         if auth_header.is_none() {
-            req.extensions_mut().insert(Auth{
+            req.extensions_mut().insert(Auth {
                 account: None,
                 session: None,
                 service: None,
@@ -101,19 +92,26 @@ where
             return Box::new(self.service.call(req));
         }
 
-
-        let auth_header = try_future_box!(auth_header.unwrap().to_str()
-            .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())));
+        let auth_header =
+            try_future_box!(auth_header
+                .unwrap()
+                .to_str()
+                .map_err(|_| KernelError::Validation(
+                    "Authorization HTTP header is not valid".to_string()
+                )));
         let msg = if auth_header.starts_with("Basic ") {
-            try_future_box!(extract_authorization_header(auth_header)
-                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())))
+            try_future_box!(extract_authorization_header(auth_header).map_err(|_| {
+                KernelError::Validation("Authorization HTTP header is not valid".to_string())
+            }))
         } else if auth_header.starts_with("Secret ") {
-            try_future_box!(extract_secret_header(auth_header)
-                .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string())))
+            try_future_box!(extract_secret_header(auth_header).map_err(
+                |_| KernelError::Validation("Authorization HTTP header is not valid".to_string())
+            ))
         } else {
-            return Box::new(ok(
-                req.error_response(KernelError::Validation("Authorization HTTP header is not valid".to_string()).error_response())
-            ));
+            return Box::new(ok(req.error_response(
+                KernelError::Validation("Authorization HTTP header is not valid".to_string())
+                    .error_response(),
+            )));
         };
 
         // TODO: improve...
@@ -122,22 +120,21 @@ where
         // the question is: what is the cost of clonning req ?
         let mut service = self.service.clone();
         return Box::new(
-            state.db.send(msg)
-            .map_err(|_| KernelError::ActixMailbox)
-            .from_err()
-            .and_then(move |res: Result<_, KernelError>| {
-                match res {
+            state
+                .db
+                .send(msg)
+                .map_err(|_| KernelError::ActixMailbox)
+                .from_err()
+                .and_then(move |res: Result<_, KernelError>| match res {
                     Ok(auth) => {
                         req.extensions_mut().insert(auth);
                         return Either::A(service.call(req));
-                    },
+                    }
                     Err(e) => Either::B(ok(req.error_response(e.error_response()))),
-                }
-            })
+                }),
         );
     }
 }
-
 
 // impl Middleware<api::State> for AuthMiddleware {
 //     fn start(&self, req: &HttpRequest<api::State>) -> Result<Started, Error> {
@@ -152,7 +149,6 @@ where
 //             });
 //             return Ok(Started::Done);
 //         }
-
 
 //         let auth_header = auth_header.unwrap().to_str()
 //             .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
@@ -191,22 +187,29 @@ where
 fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     let parts: Vec<&str> = value.split("Basic ").collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+        return Err(KernelError::Validation(
+            "Authorization HTTP header is not valid".to_string(),
+        ));
     }
 
-    let decoded = base64::decode(parts[1].trim())
-        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
-    let decoded = String::from_utf8(decoded)
-        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+    let decoded = base64::decode(parts[1].trim()).map_err(|_| {
+        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+    })?;
+    let decoded = String::from_utf8(decoded).map_err(|_| {
+        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+    })?;
     let parts: Vec<String> = decoded.split(":").map(String::from).collect();
 
     if parts.len() != 2 {
-        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+        return Err(KernelError::Validation(
+            "Authorization HTTP header is not valid".to_string(),
+        ));
     }
 
-    let session_id = uuid::Uuid::parse_str(&parts[0])
-        .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
-    return Ok(CheckAuth::Account(CheckAuthAccount{
+    let session_id = uuid::Uuid::parse_str(&parts[0]).map_err(|_| {
+        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+    })?;
+    return Ok(CheckAuth::Account(CheckAuthAccount {
         session_id,
         token: parts[1].clone(),
     }));
@@ -215,20 +218,28 @@ fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
 fn extract_secret_header(value: &str) -> Result<CheckAuth, KernelError> {
     let parts: Vec<&str> = value.split("Secret ").collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+        return Err(KernelError::Validation(
+            "Authorization HTTP header is not valid".to_string(),
+        ));
     }
     let parts: Vec<&str> = parts[1].split(":").collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()));
+        return Err(KernelError::Validation(
+            "Authorization HTTP header is not valid".to_string(),
+        ));
     }
 
     let service = match parts[0] {
         "phaser" => Service::Phaser,
         "bitflow" => Service::Bitflow,
-        _ => return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string())),
+        _ => {
+            return Err(KernelError::Validation(
+                "Authorization HTTP header is not valid".to_string(),
+            ))
+        }
     };
 
-    return Ok(CheckAuth::Service(CheckAuthService{
+    return Ok(CheckAuth::Service(CheckAuthService {
         service,
         secret: parts[1].to_string(),
     }));
@@ -240,10 +251,13 @@ pub trait GetRequestAuth {
 
 impl GetRequestAuth for HttpRequest {
     fn request_auth(&self) -> Auth {
-        return self.extensions().get::<Auth>().expect("retrieving request auth").clone();
+        return self
+            .extensions()
+            .get::<Auth>()
+            .expect("retrieving request auth")
+            .clone();
     }
 }
-
 
 #[derive(Clone, Debug)]
 enum CheckAuth {
@@ -271,56 +285,60 @@ impl Handler<CheckAuth> for DbActor {
     type Result = Result<Auth, KernelError>;
 
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            kernel_sessions,
-            kernel_accounts,
-        };
+        use crate::db::schema::{kernel_accounts, kernel_sessions};
         use diesel::prelude::*;
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         let auth = match msg {
             CheckAuth::Account(msg) => {
                 // find session + account
-                let (session, account): (domain::Session, domain::Account) = kernel_sessions::dsl::kernel_sessions
-                    .filter(kernel_sessions::dsl::id.eq(msg.session_id))
-                    .filter(kernel_sessions::dsl::deleted_at.is_null())
-                    .inner_join(kernel_accounts::table)
-                    .first(&conn)
-                    .map_err(|_| KernelError::Unauthorized("Session is not valid".to_string()))?;
+                let (session, account): (domain::Session, domain::Account) =
+                    kernel_sessions::dsl::kernel_sessions
+                        .filter(kernel_sessions::dsl::id.eq(msg.session_id))
+                        .filter(kernel_sessions::dsl::deleted_at.is_null())
+                        .inner_join(kernel_accounts::table)
+                        .first(&conn)
+                        .map_err(|_| {
+                            KernelError::Unauthorized("Session is not valid".to_string())
+                        })?;
 
                 // verify session token
-                if !bcrypt::verify(&msg.token, &session.token)
-                    .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))? {
-                    return Err(KernelError::Validation("Authorization token is not valid".to_string()));
+                if !bcrypt::verify(&msg.token, &session.token).map_err(|_| {
+                    KernelError::Validation("Authorization HTTP header is not valid".to_string())
+                })? {
+                    return Err(KernelError::Validation(
+                        "Authorization token is not valid".to_string(),
+                    ));
                 }
 
-                Auth{
+                Auth {
                     account: Some(account),
                     session: Some(session),
                     service: None,
                 }
-            },
+            }
             CheckAuth::Service(msg) => {
-                let phaser_secret = env::var("PHASER_SECRET").expect("error retrieving phaser secret");
-                let bitflow_secret = env::var("BITFLOW_SECRET").expect("error retrieving phaser secret");
+                let phaser_secret =
+                    env::var("PHASER_SECRET").expect("error retrieving phaser secret");
+                let bitflow_secret =
+                    env::var("BITFLOW_SECRET").expect("error retrieving phaser secret");
                 match (msg.service, msg.secret) {
-                    (Service::Phaser, ref secret) if secret == &phaser_secret => {
-                        Auth{
-                            account: None,
-                            session: None,
-                            service: Some(Service::Phaser),
-                        }
+                    (Service::Phaser, ref secret) if secret == &phaser_secret => Auth {
+                        account: None,
+                        session: None,
+                        service: Some(Service::Phaser),
                     },
-                    (Service::Bitflow, ref secret) if secret == &bitflow_secret => {
-                        Auth{
-                            account: None,
-                            session: None,
-                            service: Some(Service::Bitflow),
-                        }
+                    (Service::Bitflow, ref secret) if secret == &bitflow_secret => Auth {
+                        account: None,
+                        session: None,
+                        service: Some(Service::Bitflow),
+                    },
+                    _ => {
+                        return Err(KernelError::Validation(
+                            "Authorization secret is not valid".to_string(),
+                        ))
                     }
-                    _ => return Err(KernelError::Validation("Authorization secret is not valid".to_string())),
                 }
             }
         };

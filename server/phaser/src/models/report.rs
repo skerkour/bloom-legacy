@@ -1,4 +1,4 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 use std::collections::HashMap;
 
 use super::findings::Finding;
@@ -28,19 +28,19 @@ pub struct Target {
     pub host: String,
     pub kind: TargetKind,
     pub ip_version: Option<IpVersion>,
-    pub findings:  HashMap<ModuleName, Finding>,
+    pub findings: HashMap<ModuleName, Finding>,
     // pub errors: Vec<TargetError>,
     pub subdomains: Vec<Target>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum TargetKind{
+pub enum TargetKind {
     Domain,
     Ip,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum IpVersion{
+pub enum IpVersion {
     V4,
     V6,
 }

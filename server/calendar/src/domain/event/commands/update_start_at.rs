@@ -1,17 +1,10 @@
-use serde::{Serialize, Deserialize};
+use crate::{domain::event, validators};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::event,
-    validators,
-};
-
+use kernel::{events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateStartAt {
@@ -26,7 +19,11 @@ impl eventsourcing::Command for UpdateStartAt {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Event not found".to_string()));
         }
@@ -36,17 +33,24 @@ impl eventsourcing::Command for UpdateStartAt {
         Ok(())
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = event::EventData::StartAtUpdatedV1(event::StartAtUpdatedV1{
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let event_data = event::EventData::StartAtUpdatedV1(event::StartAtUpdatedV1 {
             start_at: self.start_at,
         });
 
-        Ok((event::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()))
+        Ok((
+            event::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ))
     }
 }

@@ -1,9 +1,7 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use crate::{
-    db::schema::kernel_sessions,
-};
+use crate::db::schema::kernel_sessions;
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_sessions"]
@@ -27,14 +25,14 @@ impl Session {
     pub fn new() -> Self {
         let uuid = uuid::Uuid::new_v4();
         let now = chrono::Utc::now();
-        return Session{
+        return Session {
             id: uuid,
             created_at: now,
             updated_at: now,
             deleted_at: None,
             version: 0,
 
-            device: Device{},
+            device: Device {},
             ip: "".to_string(),
             location: None,
             token: "".to_string(),
@@ -53,7 +51,6 @@ impl eventsourcing::Aggregate for Session {
         self.updated_at = timestamp;
     }
 }
-
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub struct Device {}

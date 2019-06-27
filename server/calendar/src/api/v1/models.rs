@@ -1,6 +1,6 @@
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
 use crate::domain::CalendarEvent;
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct EventResponse {
@@ -16,7 +16,7 @@ pub struct EventResponse {
 
 impl From<CalendarEvent> for EventResponse {
     fn from(event: CalendarEvent) -> Self {
-        EventResponse{
+        EventResponse {
             id: event.id,
             created_at: event.created_at,
             updated_at: event.updated_at,

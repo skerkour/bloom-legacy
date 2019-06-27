@@ -1,21 +1,7 @@
-mod events;
-mod commands;
 mod aggregate;
+mod commands;
+mod events;
 
-
-pub use aggregate::{
-    Session,
-    Device,
-    Location,
-};
-pub use commands::{
-    Start,
-    SignOut,
-    Revoke,
-};
-pub use events::{
-    Event,
-    EventData,
-    StartedV1,
-    RevokedReason,
-};
+pub use aggregate::{Device, Location, Session};
+pub use commands::{Revoke, SignOut, Start};
+pub use events::{Event, EventData, RevokedReason, StartedV1};

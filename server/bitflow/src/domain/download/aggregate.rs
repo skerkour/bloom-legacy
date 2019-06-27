@@ -1,12 +1,7 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::{
-        bitflow_downloads,
-    },
-};
-
+use kernel::db::schema::bitflow_downloads;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "bitflow_downloads"]
@@ -17,7 +12,6 @@ pub struct Download {
     pub updated_at: chrono::DateTime<chrono::Utc>,
     pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
-
 
     pub error: Option<String>,
     pub name: String,
@@ -73,7 +67,7 @@ impl Download {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Download{
+        return Download {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -85,7 +79,9 @@ impl Download {
             progress: 0,
             removed_at: None,
             status: DownloadStatus::Queued,
-            url: DownloadUrl::Http(DownloadUrlHttp{url: "".to_string()}),
+            url: DownloadUrl::Http(DownloadUrlHttp {
+                url: "".to_string(),
+            }),
 
             owner_id: uuid::Uuid::new_v4(),
         };

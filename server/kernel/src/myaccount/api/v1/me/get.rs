@@ -1,18 +1,9 @@
 use crate::{
-    api,
-    myaccount::api::v1::models,
-    api::middlewares::{
-        GetRequestAuth,
-    },
-    error::KernelError,
+    api, api::middlewares::GetRequestAuth, error::KernelError, myaccount::api::v1::models,
 };
-use actix_web::{
-    HttpResponse, HttpRequest,
-    error::ResponseError,
-};
+use actix_web::{error::ResponseError, HttpRequest, HttpResponse};
 
-
-pub fn get(req: HttpRequest)-> HttpResponse {
+pub fn get(req: HttpRequest) -> HttpResponse {
     let auth = req.request_auth();
 
     if auth.session.is_none() || auth.account.is_none() {
@@ -20,7 +11,7 @@ pub fn get(req: HttpRequest)-> HttpResponse {
     }
 
     let account = auth.account.unwrap();
-    let res = models::MeResponse{
+    let res = models::MeResponse {
         id: account.id,
         created_at: account.created_at,
         first_name: account.first_name,

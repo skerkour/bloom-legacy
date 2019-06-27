@@ -1,17 +1,11 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::phaser_reports,
-};
-use diesel_as_jsonb::AsJsonb;
 use crate::{
-    domain::scan::{
-        ScanProfile,
-        ReportTrigger,
-    },
+    domain::scan::{ReportTrigger, ScanProfile},
     models,
 };
-
+use diesel::Queryable;
+use diesel_as_jsonb::AsJsonb;
+use kernel::db::schema::phaser_reports;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "phaser_reports"]
@@ -58,7 +52,7 @@ impl Report {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Self{
+        return Self {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

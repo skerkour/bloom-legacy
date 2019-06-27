@@ -10,7 +10,6 @@ mod update_organizations;
 mod update_phones;
 mod update_websites;
 
-
 pub use create::Create;
 pub use delete::Delete;
 pub use update_addresses::UpdateAddresses;

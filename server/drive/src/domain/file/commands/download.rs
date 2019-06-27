@@ -1,24 +1,14 @@
+use crate::{domain::file, FOLDER_TYPE};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use rusoto_s3::{
-    GetObjectRequest,
-    util::PreSignedRequest,
-};
-use rusoto_core::{Region};
-use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
-use std::str::FromStr;
 use futures::future::Future;
-use crate::{
-    domain::file,
-    FOLDER_TYPE,
-};
-
+use kernel::{events::EventMetadata, KernelError};
+use rusoto_core::Region;
+use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
+use rusoto_s3::{util::PreSignedRequest, GetObjectRequest};
+use std::str::FromStr;
 
 #[derive(Clone, Debug)]
 pub struct Download {
@@ -36,20 +26,32 @@ impl eventsourcing::Command for Download {
     type Error = KernelError;
     type NonStoredData = String;
 
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.type_ == FOLDER_TYPE {
-            return Err(KernelError::Validation("You can't download a folder".to_string()))
+            return Err(KernelError::Validation(
+                "You can't download a folder".to_string(),
+            ));
         }
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let key = format!("drive/{}/{}", self.owner_id, self.file_id);
         let req = GetObjectRequest {
             bucket: self.s3_bucket.clone(),
             key: key,
-            response_content_disposition: Some(format!(r#"attachment; filename="{}""#, &aggregate.name)),
+            response_content_disposition: Some(format!(
+                r#"attachment; filename="{}""#,
+                &aggregate.name
+            )),
             response_content_type: Some(aggregate.type_.clone()),
             ..Default::default()
         };
@@ -61,17 +63,19 @@ impl eventsourcing::Command for Download {
             .expect("error getting default credentials");
         let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
 
-
-        let event_data = file::EventData::DownloadedV1(file::DownloadedV1{
+        let event_data = file::EventData::DownloadedV1(file::DownloadedV1 {
             presigned_url: presigned_url.clone(),
         });;
 
-        return  Ok((file::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, presigned_url));
+        return Ok((
+            file::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            presigned_url,
+        ));
     }
 }

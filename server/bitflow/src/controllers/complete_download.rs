@@ -1,11 +1,6 @@
-use actix::{Message, Handler};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
 use crate::domain;
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
 
 #[derive(Clone)]
 pub struct CompleteDownload {
@@ -26,20 +21,15 @@ impl Handler<CompleteDownload> for DbActor {
     type Result = Result<domain::Download, KernelError>;
 
     fn handle(&mut self, msg: CompleteDownload, _: &mut Self::Context) -> Self::Result {
+        use diesel::prelude::*;
         use kernel::db::schema::{
-            bitflow_downloads,
-            bitflow_downloads_events,
-            bitflow_profiles,
-            drive_profiles,
+            bitflow_downloads, bitflow_downloads_events, bitflow_profiles, drive_profiles,
             drive_profiles_events,
         };
-        use diesel::prelude::*;
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
             let download: domain::Download = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(msg.download_id))
                 .filter(bitflow_downloads::dsl::deleted_at.is_null())
@@ -50,12 +40,12 @@ impl Handler<CompleteDownload> for DbActor {
                 .filter(bitflow_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: None, // Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: None, // Some(msg.session_id),
             };
-            let complete_cmd = domain::download::Complete{
+            let complete_cmd = domain::download::Complete {
                 s3_bucket: msg.s3_bucket,
                 s3_client: msg.s3_client,
                 profile,
@@ -67,9 +57,7 @@ impl Handler<CompleteDownload> for DbActor {
             diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
                 .values(&event)
                 .execute(&conn)?;
-            diesel::update(&download)
-                .set(&download)
-                .execute(&conn)?;
+            diesel::update(&download).set(&download).execute(&conn)?;
 
             let total_size = msg.complete_data.files.iter().fold(0i64, |acc, x| {
                 return acc + x.size as i64;
@@ -81,11 +69,12 @@ impl Handler<CompleteDownload> for DbActor {
                 .filter(drive_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let space_cmd = drive::domain::profile::UpdateUsedSpace{
+            let space_cmd = drive::domain::profile::UpdateUsedSpace {
                 space: total_size,
                 metadata: metadata.clone(),
             };
-            let (drive_profile, event, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+            let (drive_profile, event, _) =
+                eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
             diesel::update(&drive_profile)
                 .set(&drive_profile)

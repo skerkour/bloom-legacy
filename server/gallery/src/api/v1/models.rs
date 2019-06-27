@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use crate::domain::album;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileResponse {
@@ -22,7 +22,7 @@ pub struct AlbumResponse {
 
 impl From<album::Album> for AlbumResponse {
     fn from(album: album::Album) -> Self {
-        AlbumResponse{
+        AlbumResponse {
             id: album.id,
             name: album.name,
         }

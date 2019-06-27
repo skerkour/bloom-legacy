@@ -1,13 +1,12 @@
-mod logs;
-mod get;
-mod put;
 mod delete;
+mod get;
+mod logs;
+mod put;
 
-
-pub mod email;
-pub mod sessions;
-pub mod password;
 pub mod avatar;
+pub mod email;
+pub mod password;
+pub mod sessions;
+pub use delete::delete;
 pub use get::get;
 pub use put::put;
-pub use delete::delete;

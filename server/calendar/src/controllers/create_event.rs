@@ -1,14 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    db::DbActor,
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::event,
-};
-
+use crate::domain::event;
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateEvent {
@@ -30,23 +23,19 @@ impl Handler<CreateEvent> for DbActor {
     type Result = Result<event::CalendarEvent, KernelError>;
 
     fn handle(&mut self, msg: CreateEvent, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            calendar_events,
-            calendar_events_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{calendar_events, calendar_events_events};
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.owner_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 
-            let create_cmd = event::Create{
+            let create_cmd = event::Create {
                 title: msg.title,
                 description: msg.description,
                 start_at: msg.start_at,
@@ -54,7 +43,8 @@ impl Handler<CreateEvent> for DbActor {
                 owner_id: msg.owner_id,
                 metadata: metadata.clone(),
             };
-            let (new_calendar_event, event, _) = eventsourcing::execute(&conn, event::CalendarEvent::new(), &create_cmd)?;
+            let (new_calendar_event, event, _) =
+                eventsourcing::execute(&conn, event::CalendarEvent::new(), &create_cmd)?;
             diesel::insert_into(calendar_events::dsl::calendar_events)
                 .values(&new_calendar_event)
                 .execute(&conn)?;

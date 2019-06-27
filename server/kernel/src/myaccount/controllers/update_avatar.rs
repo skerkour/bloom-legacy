@@ -1,14 +1,10 @@
-use actix::{Message, Handler};
+use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    myaccount::domain::{
-        Account,
-        account,
-    },
     events::EventMetadata,
+    myaccount::domain::{account, Account},
 };
-use crate::error::KernelError;
-
+use actix::{Handler, Message};
 
 #[derive(Clone)]
 pub struct UpdateAvatar {
@@ -29,17 +25,13 @@ impl Handler<UpdateAvatar> for DbActor {
     type Result = Result<Account, KernelError>;
 
     fn handle(&mut self, msg: UpdateAvatar, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            kernel_accounts_events,
-        };
+        use crate::db::schema::kernel_accounts_events;
         use diesel::prelude::*;
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -47,14 +39,15 @@ impl Handler<UpdateAvatar> for DbActor {
 
             let account_to_update = msg.account;
 
-            let update_first_name_cmd = account::UpdateAvatar{
+            let update_first_name_cmd = account::UpdateAvatar {
                 avatar: msg.avatar,
                 s3_bucket: msg.s3_bucket,
                 s3_base_url: msg.s3_base_url,
                 metadata: metadata.clone(),
             };
 
-            let (account_to_update, event, _) = eventsourcing::execute(&msg.s3_client, account_to_update, &update_first_name_cmd)?;
+            let (account_to_update, event, _) =
+                eventsourcing::execute(&msg.s3_client, account_to_update, &update_first_name_cmd)?;
 
             // update account
             diesel::update(&account_to_update)

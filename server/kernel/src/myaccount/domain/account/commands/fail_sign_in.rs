@@ -1,13 +1,8 @@
+use crate::{error::KernelError, events::EventMetadata, myaccount::domain::account};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use crate::{
-    myaccount::domain::account,
-    events::EventMetadata,
-    error::KernelError,
-};
-
 
 #[derive(Clone, Debug)]
 pub struct FailSignIn {
@@ -21,17 +16,28 @@ impl eventsourcing::Command for FailSignIn {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return  Ok((account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: account::EventData::SignInFailedV1,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        return Ok((
+            account::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: account::EventData::SignInFailedV1,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

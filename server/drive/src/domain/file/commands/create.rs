@@ -1,16 +1,9 @@
+use crate::{domain::file, validators};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::file,
-    validators,
-};
-
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -36,15 +29,23 @@ impl eventsourcing::Command for Create {
     // check name is valid
     // check name is not already taken by another parent's children
     // check that ownerID == parent.OwnerID
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         validators::file_name(&self.name)?;
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
 
-        let event_data = file::EventData::CreatedV1(file::CreatedV1{
+        let event_data = file::EventData::CreatedV1(file::CreatedV1 {
             id,
             parent_id: self.parent_id,
             name: self.name.clone(),
@@ -53,12 +54,15 @@ impl eventsourcing::Command for Create {
             owner_id: self.owner_id,
         });
 
-        return  Ok((file::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            file::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

@@ -1,16 +1,10 @@
-use serde::{Serialize, Deserialize};
+use crate::domain::note;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::note,
-};
-
+use kernel::{events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Remove {
@@ -24,25 +18,38 @@ impl eventsourcing::Command for Remove {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Note not found".to_string()));
         }
 
         if aggregate.removed_at.is_some() {
-            return Err(KernelError::NotFound("Note is already in trash".to_string()));
+            return Err(KernelError::NotFound(
+                "Note is already in trash".to_string(),
+            ));
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return  Ok((note::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: note::EventData::RemovedV1,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        return Ok((
+            note::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: note::EventData::RemovedV1,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

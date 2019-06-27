@@ -1,12 +1,6 @@
+use crate::{error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account};
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
-use crate::{
-    myaccount::domain::account,
-    myaccount,
-    events::EventMetadata,
-    error::KernelError,
-};
-
 
 #[derive(Clone, Debug)]
 pub struct UpdateAvatar {
@@ -23,26 +17,39 @@ impl eventsourcing::Command for UpdateAvatar {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if self.avatar.len() > myaccount::AVATAR_MAX_SIZE {
-            return Err(KernelError::Validation("Image size must be inferior or equal to 3MB.".to_string()));
+            return Err(KernelError::Validation(
+                "Image size must be inferior or equal to 3MB.".to_string(),
+            ));
         }
 
         let content_type = mimesniff::detect_content_type(&self.avatar);
         if content_type != mime::IMAGE_PNG && content_type != mime::IMAGE_JPEG {
-            return Err(KernelError::Validation("Image format must be png, jpg or jpeg.".to_string()));
+            return Err(KernelError::Validation(
+                "Image format must be png, jpg or jpeg.".to_string(),
+            ));
         }
 
         return Ok(());
     }
 
-
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-
-
+    fn build_event(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         // resize image to account::AVATAR_RESIZE
         let img = image::load_from_memory(&self.avatar)?;
-        let scaled = img.resize(myaccount::AVATAR_RESIZE as u32, myaccount::AVATAR_RESIZE as u32, FilterType::Lanczos3);
+        let scaled = img.resize(
+            myaccount::AVATAR_RESIZE as u32,
+            myaccount::AVATAR_RESIZE as u32,
+            FilterType::Lanczos3,
+        );
         let mut result = Vec::new();
         // encode to jpeg
         scaled.write_to(&mut result, ImageFormat::JPEG)?;
@@ -60,16 +67,18 @@ impl eventsourcing::Command for UpdateAvatar {
         // TODO: handle error
         ctx.put_object(req).sync().expect("Couldn't PUT object");
 
-        let event_data = account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1{
-            avatar_url,
-        });
+        let event_data =
+            account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1 { avatar_url });
 
-        return  Ok((account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            account::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

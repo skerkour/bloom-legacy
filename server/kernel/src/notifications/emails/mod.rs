@@ -1,20 +1,18 @@
 mod default_template;
 
-use crate::{
-    config::Config,
-};
-use lettre::{
-    SmtpClient,
-    Transport,
-    smtp::authentication::Credentials,
-};
+use crate::config::Config;
+use lettre::{smtp::authentication::Credentials, SmtpClient, Transport};
 use lettre_email::EmailBuilder;
-
 
 pub use default_template::DEFAULT_TEMPLATE;
 
-
-pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject: &str, content: &str) {
+pub fn send_email(
+    config: &Config,
+    from: (&str, &str),
+    to: (&str, &str),
+    subject: &str,
+    content: &str,
+) {
     // Useful in development mode when you haven't a smtp configured
     if config.smtp.host == "" {
         println!("=============\n{}\n=============", content);
@@ -30,9 +28,13 @@ pub fn send_email(config: &Config, from: (&str, &str), to: (&str, &str), subject
         .build()
         .expect("error building email");
 
-    let mut mailer = SmtpClient::new_simple(config.smtp.host.as_str()).expect("error building email transport")
+    let mut mailer = SmtpClient::new_simple(config.smtp.host.as_str())
+        .expect("error building email transport")
         // Add credentials for authentication
-        .credentials(Credentials::new(config.smtp.username.clone(), config.smtp.password.clone()))
+        .credentials(Credentials::new(
+            config.smtp.username.clone(),
+            config.smtp.password.clone(),
+        ))
         // Enable SMTPUTF8 if the server supports it
         .smtp_utf8(true)
         .transport();

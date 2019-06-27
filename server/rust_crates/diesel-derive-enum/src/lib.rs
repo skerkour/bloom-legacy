@@ -76,17 +76,17 @@ fn generate_derive_enum_impls(
     let pg_impl = if cfg!(feature = "postgres") {
         generate_postgres_impl(db_type, diesel_mapping, enum_ty, variants_rs, variants_db)
     } else {
-        quote!{}
+        quote! {}
     };
     let mysql_impl = if cfg!(feature = "mysql") {
         generate_mysql_impl(diesel_mapping, enum_ty, variants_rs, variants_db)
     } else {
-        quote!{}
+        quote! {}
     };
     let sqlite_impl = if cfg!(feature = "sqlite") {
         generate_sqlite_impl(diesel_mapping, enum_ty, variants_rs, variants_db)
     } else {
-        quote!{}
+        quote! {}
     };
     quote! {
         pub use self::#modname::#diesel_mapping;

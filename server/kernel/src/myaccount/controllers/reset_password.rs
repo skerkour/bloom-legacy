@@ -1,18 +1,12 @@
-use actix::{Message, Handler};
 use crate::{
-    db::DbActor,
-    myaccount::domain::{
-        Account,
-        account,
-        Session,
-        session,
-    },
-    events::EventMetadata,
-    error::KernelError,
     config::Config,
+    db::DbActor,
+    error::KernelError,
+    events::EventMetadata,
+    myaccount::domain::{account, session, Account, Session},
 };
+use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ResetPassword {
@@ -33,16 +27,11 @@ impl Handler<ResetPassword> for DbActor {
 
     fn handle(&mut self, msg: ResetPassword, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            kernel_accounts,
-            kernel_accounts_events,
-            kernel_sessions,
-            kernel_sessions_events,
+            kernel_accounts, kernel_accounts_events, kernel_sessions, kernel_sessions_events,
         };
         use diesel::prelude::*;
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let account: Account = kernel_accounts::dsl::kernel_accounts
@@ -51,25 +40,24 @@ impl Handler<ResetPassword> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(account.id),
                 request_id: Some(msg.request_id),
                 session_id: msg.session_id,
             };
 
-            let update_last_name_cmd = account::ResetPassword{
+            let update_last_name_cmd = account::ResetPassword {
                 new_password: msg.new_password,
                 token: msg.token,
                 config: msg.config,
                 metadata: metadata.clone(),
             };
 
-            let (account, event, _) = eventsourcing::execute(&conn, account, &update_last_name_cmd)?;
+            let (account, event, _) =
+                eventsourcing::execute(&conn, account, &update_last_name_cmd)?;
 
             // update account
-            diesel::update(&account)
-                .set(&account)
-                .execute(&conn)?;
+            diesel::update(&account).set(&account).execute(&conn)?;
             diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
                 .values(&event)
                 .execute(&conn)?;
@@ -81,7 +69,7 @@ impl Handler<ResetPassword> for DbActor {
                 .for_update()
                 .load(&conn)?;
 
-            let revoke_cmd = session::Revoke{
+            let revoke_cmd = session::Revoke {
                 current_session_id: None,
                 reason: session::RevokedReason::PasswordReseted,
                 metadata: metadata.clone(),
@@ -90,22 +78,21 @@ impl Handler<ResetPassword> for DbActor {
             for session in sessions {
                 let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
-                diesel::update(&session)
-                    .set(&session)
-                    .execute(&conn)?;
+                diesel::update(&session).set(&session).execute(&conn)?;
                 diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                     .values(&event)
                     .execute(&conn)?;
             }
 
             // start new session
-            let start_cmd = session::Start{
+            let start_cmd = session::Start {
                 account_id: account.id,
                 ip: "127.0.0.1".to_string(), // TODO
-                user_agent: "".to_string(), // TODO
+                user_agent: "".to_string(),  // TODO
                 metadata,
             };
-            let (new_session, event, non_stored) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
+            let (new_session, event, non_stored) =
+                eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)

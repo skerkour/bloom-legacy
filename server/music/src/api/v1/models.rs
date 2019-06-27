@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use crate::domain::playlist;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileResponse {
@@ -22,7 +22,7 @@ pub struct PlaylistResponse {
 
 impl From<playlist::Playlist> for PlaylistResponse {
     fn from(playlist: playlist::Playlist) -> Self {
-        PlaylistResponse{
+        PlaylistResponse {
             id: playlist.id,
             name: playlist.name,
         }
@@ -49,4 +49,3 @@ pub struct AddToPlaylistBody {
 pub struct RemoveFromPlaylistBody {
     pub musics: Vec<uuid::Uuid>,
 }
-

@@ -1,17 +1,9 @@
+use crate::domain::profile;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    myaccount::domain::account,
-};
-use crate::{
-    domain::{
-        profile,
-    },
-};
-
+use kernel::{myaccount::domain::account, KernelError};
 
 pub struct AccountCreated;
 impl eventsourcing::Subscription for AccountCreated {
@@ -20,12 +12,8 @@ impl eventsourcing::Subscription for AccountCreated {
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
 
     fn handle(&self, ctx: &Self::Context, msg: &Self::Message) -> Result<(), Self::Error> {
-        use kernel::db::schema::{
-            drive_profiles,
-            bitflow_profiles,
-            bitflow_profiles_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{bitflow_profiles, bitflow_profiles_events, drive_profiles};
 
         if let account::EventData::CreatedV1(ref data) = msg.data {
             let metadata = msg.metadata.clone();
@@ -35,12 +23,13 @@ impl eventsourcing::Subscription for AccountCreated {
                 .first(ctx)?;
 
             // create drive profile
-            let create_cmd = profile::Create{
+            let create_cmd = profile::Create {
                 account_id: msg.aggregate_id,
                 download_folder_id: drive_profile.home_id,
                 metadata: metadata.clone(),
             };
-            let (new_profile, event, _) = eventsourcing::execute(ctx, profile::Profile::new(), &create_cmd)?;
+            let (new_profile, event, _) =
+                eventsourcing::execute(ctx, profile::Profile::new(), &create_cmd)?;
 
             diesel::insert_into(bitflow_profiles::dsl::bitflow_profiles)
                 .values(&new_profile)
@@ -49,7 +38,6 @@ impl eventsourcing::Subscription for AccountCreated {
                 .values(&event)
                 .execute(ctx)?;
         }
-
 
         return Ok(());
     }

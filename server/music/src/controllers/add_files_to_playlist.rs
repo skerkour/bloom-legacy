@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
-use crate::domain::{
-    playlist,
-    Playlist,
-};
-
+use crate::domain::{playlist, Playlist};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct AddFilesToPlaylist {
@@ -28,23 +20,18 @@ impl Handler<AddFilesToPlaylist> for DbActor {
     type Result = Result<Playlist, KernelError>;
 
     fn handle(&mut self, msg: AddFilesToPlaylist, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            music_playlists,
-            music_playlists_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{music_playlists, music_playlists_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let add_cmd = playlist::AddFiles{
+            let add_cmd = playlist::AddFiles {
                 files: msg.files.clone(),
                 owner_id: msg.account_id,
                 metadata,
@@ -57,7 +44,8 @@ impl Handler<AddFilesToPlaylist> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (playlist_to_update, event, _) = eventsourcing::execute(&conn, playlist_to_update, &add_cmd)?;
+            let (playlist_to_update, event, _) =
+                eventsourcing::execute(&conn, playlist_to_update, &add_cmd)?;
             // update playlist
             diesel::update(&playlist_to_update)
                 .set(&playlist_to_update)

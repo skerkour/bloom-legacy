@@ -1,16 +1,9 @@
+use crate::{domain::note, validators};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::note,
-    validators,
-};
-
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -27,28 +20,39 @@ impl eventsourcing::Command for Create {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         validators::title(&self.title)?;
         validators::body(&self.body)?;
 
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
-        let data = note::EventData::CreatedV1(note::CreatedV1{
+        let data = note::EventData::CreatedV1(note::CreatedV1 {
             id,
             title: self.title.clone(),
             body: self.body.clone(),
             owner_id: self.owner_id,
         });
 
-        return  Ok((note::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            note::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

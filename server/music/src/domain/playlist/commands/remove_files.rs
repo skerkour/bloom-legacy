@@ -1,16 +1,10 @@
+use crate::domain::playlist;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::playlist,
 };
 use drive::domain::File;
-
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct RemoveFiles {
@@ -26,13 +20,14 @@ impl eventsourcing::Command for RemoveFiles {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use kernel::db::schema::{
-            drive_files,
-            music_playlists_files,
-        };
-        use diesel::prelude::*;
+    fn validate(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::{drive_files, music_playlists_files};
 
         // check that file is owned by same owner
         let files: Vec<File> = drive_files::dsl::drive_files
@@ -53,36 +48,43 @@ impl eventsourcing::Command for RemoveFiles {
             .count()
             .get_result(ctx)?;
 
-        if already_in_playlist as usize!= self.files.len() {
-            return Err(KernelError::Validation("File is not in in playlist.".to_string()));
+        if already_in_playlist as usize != self.files.len() {
+            return Err(KernelError::Validation(
+                "File is not in in playlist.".to_string(),
+            ));
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        use kernel::db::schema::{
-            music_playlists_files,
-        };
-        use diesel::prelude::*;
+    fn build_event(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::music_playlists_files;
 
-
-        diesel::delete(music_playlists_files::dsl::music_playlists_files
-            .filter(music_playlists_files::dsl::file_id.eq(any(&self.files)))
+        diesel::delete(
+            music_playlists_files::dsl::music_playlists_files
+                .filter(music_playlists_files::dsl::file_id.eq(any(&self.files))),
         )
-            .execute(ctx)?;
+        .execute(ctx)?;
 
-        let data = playlist::EventData::FilesRemovedV1(playlist::FilesRemovedV1{
+        let data = playlist::EventData::FilesRemovedV1(playlist::FilesRemovedV1 {
             files: self.files.clone(),
         });
 
-        return  Ok((playlist::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            playlist::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

@@ -1,11 +1,10 @@
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateNoteBody {
     pub title: String,
     pub body: String,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NoteResponse {

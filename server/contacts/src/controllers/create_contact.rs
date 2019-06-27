@@ -1,13 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
 use crate::domain::contact;
-
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateContact {
@@ -35,25 +29,19 @@ impl Handler<CreateContact> for DbActor {
     type Result = Result<contact::Contact, KernelError>;
 
     fn handle(&mut self, msg: CreateContact, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            contacts_contacts,
-            contacts_contacts_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{contacts_contacts, contacts_contacts_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
             // create Contact
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let create_cmd = contact::Create{
+            let create_cmd = contact::Create {
                 addresses: msg.addresses,
                 birthday: msg.birthday,
                 company: msg.company,
@@ -68,7 +56,8 @@ impl Handler<CreateContact> for DbActor {
                 owner_id: msg.account_id,
                 metadata,
             };
-            let (note, event, _) = eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
+            let (note, event, _) =
+                eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
 
             diesel::insert_into(contacts_contacts::dsl::contacts_contacts)
                 .values(&note)

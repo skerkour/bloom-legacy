@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
-use crate::domain::{
-    album,
-    Album,
-};
-
+use crate::domain::{album, Album};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RemoveFilesFromAlbum {
@@ -28,23 +20,18 @@ impl Handler<RemoveFilesFromAlbum> for DbActor {
     type Result = Result<Album, KernelError>;
 
     fn handle(&mut self, msg: RemoveFilesFromAlbum, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            gallery_albums,
-            gallery_albums_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{gallery_albums, gallery_albums_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let remove_cmd = album::RemoveFiles{
+            let remove_cmd = album::RemoveFiles {
                 files: msg.files.clone(),
                 owner_id: msg.account_id,
                 metadata,
@@ -57,7 +44,8 @@ impl Handler<RemoveFilesFromAlbum> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (album_to_update, event, _) = eventsourcing::execute(&conn, album_to_update, &remove_cmd)?;
+            let (album_to_update, event, _) =
+                eventsourcing::execute(&conn, album_to_update, &remove_cmd)?;
             // update album
             diesel::update(&album_to_update)
                 .set(&album_to_update)

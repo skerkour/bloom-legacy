@@ -1,10 +1,7 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::contacts_contacts,
-};
-
+use kernel::db::schema::contacts_contacts;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "contacts_contacts"]
@@ -30,7 +27,6 @@ pub struct Contact {
 
     pub owner_id: uuid::Uuid,
 }
-
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, PartialEq, Serialize)]
 pub struct Address {
@@ -118,12 +114,11 @@ pub enum WebsiteLabel {
     Other,
 }
 
-
 impl Contact {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Contact{
+        return Contact {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

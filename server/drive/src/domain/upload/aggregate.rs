@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::drive_uploads,
-};
-
+use diesel::Queryable;
+use kernel::db::schema::drive_uploads;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "drive_uploads"]
@@ -25,12 +22,11 @@ pub struct Upload {
     pub owner_id: uuid::Uuid,
 }
 
-
 impl Upload {
     // create a new, unitialized Upload
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Upload{
+        return Upload {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

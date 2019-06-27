@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{
-    Queryable,
-};
 use crate::db::schema::kernel_pending_accounts;
-
+use diesel::Queryable;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_pending_accounts"]
@@ -19,7 +16,7 @@ pub struct PendingAccount {
     pub first_name: String,
     pub last_name: String,
     pub password: String, // hashed password
-    pub token: String, // hashed verification code
+    pub token: String,    // hashed verification code
     pub trials: i64,
     pub verified: bool,
 }
@@ -28,7 +25,7 @@ impl PendingAccount {
     // create a new, unitialized PendingAccount
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return PendingAccount{
+        return PendingAccount {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -55,7 +52,6 @@ impl eventsourcing::Aggregate for PendingAccount {
         self.updated_at = timestamp;
     }
 }
-
 
 // #[derive(Clone, Debug)]
 // pub enum Command {

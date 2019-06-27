@@ -136,8 +136,8 @@
 /////!     assert_eq!(req.sniff_mime_type_ext().unwrap().type_(), mime::APPLICATION);
 /////! }
 /////! ```
-mod magic;
 mod api;
+mod magic;
 
 // pub use api::{HttpRequest, MimeTypeSniffable, MimeTypeSniffer, MimeTypeSnifferExt};
 pub use api::{MimeTypeSniffable, MimeTypeSniffer, MimeTypeSnifferExt};

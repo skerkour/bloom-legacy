@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::notes_notes_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::notes_notes_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "notes_notes_events"]
@@ -47,14 +43,13 @@ pub struct TitleUpdatedV1 {
     pub title: String,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Note;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Note{
+            EventData::CreatedV1(ref data) => super::Note {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -69,38 +64,38 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // ArchivedV1
-            EventData::ArchivedV1 => super::Note{
+            EventData::ArchivedV1 => super::Note {
                 archived_at: Some(self.timestamp),
                 ..aggregate.clone()
             },
             // DeletedV1
-            EventData::DeletedV1 => super::Note{
+            EventData::DeletedV1 => super::Note {
                 deleted_at: Some(self.timestamp),
                 removed_at: None,
                 ..aggregate.clone()
             },
             // RemovedV1
-            EventData::RemovedV1 => super::Note{
+            EventData::RemovedV1 => super::Note {
                 removed_at: Some(self.timestamp),
                 ..aggregate.clone()
             },
             // RestoredV1
-            EventData::RestoredV1 => super::Note{
+            EventData::RestoredV1 => super::Note {
                 removed_at: None,
                 ..aggregate.clone()
             },
             // UnarchivedV1
-            EventData::UnarchivedV1 => super::Note{
+            EventData::UnarchivedV1 => super::Note {
                 archived_at: None,
                 ..aggregate.clone()
             },
             // BodyUpdatedV1
-            EventData::BodyUpdatedV1(ref data) => super::Note{
+            EventData::BodyUpdatedV1(ref data) => super::Note {
                 body: data.body.clone(),
                 ..aggregate.clone()
             },
             // TitleUpdatedV1
-            EventData::TitleUpdatedV1(ref data) => super::Note{
+            EventData::TitleUpdatedV1(ref data) => super::Note {
                 title: data.title.clone(),
                 ..aggregate.clone()
             },

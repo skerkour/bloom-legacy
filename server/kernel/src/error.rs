@@ -1,28 +1,23 @@
+use crate::api::Response;
+use actix_web::{error, HttpResponse};
 use failure::Fail;
-use actix_web::{
-    error,
-    HttpResponse,
-};
 use std::io;
-use crate::{
-    api::Response,
-};
 
 #[derive(Clone, Debug, Fail)]
 pub enum KernelError {
-    #[fail(display="ActixMailboxError")]
+    #[fail(display = "ActixMailboxError")]
     ActixMailbox,
 
-    #[fail(display="TokioTimerError: {}", 0)]
+    #[fail(display = "TokioTimerError: {}", 0)]
     TokioTimer(String),
 
-    #[fail(display="DieselError: {}", 0)]
+    #[fail(display = "DieselError: {}", 0)]
     Diesel(String),
 
-    #[fail(display="R2d2Error")]
+    #[fail(display = "R2d2Error")]
     R2d2,
 
-    #[fail(display="BcryptError")]
+    #[fail(display = "BcryptError")]
     Bcrypt,
 
     #[fail(display = "Not valid: {}", 0)]
@@ -43,28 +38,27 @@ pub enum KernelError {
     #[fail(display = "NotFound: {}", 0)]
     NotFound(String),
 
-    #[fail(display="Route not found")]
+    #[fail(display = "Route not found")]
     RouteNotFound,
 
-    #[fail(display="Timeout")]
+    #[fail(display = "Timeout")]
     Timeout,
 
-    #[fail(display="Internal error")]
+    #[fail(display = "Internal error")]
     Internal(String),
 
-    #[fail(display="URL parse error: {}", 0)]
+    #[fail(display = "URL parse error: {}", 0)]
     UrlParseError(url::ParseError),
 
-    #[fail(display="Zip: {:?}", 0)]
+    #[fail(display = "Zip: {:?}", 0)]
     Zip(String),
 
-    #[fail(display="Walkdir: {:?}", 0)]
+    #[fail(display = "Walkdir: {:?}", 0)]
     Walkdir(String),
 
-    #[fail(display="SerdeJson: {:?}", 0)]
+    #[fail(display = "SerdeJson: {:?}", 0)]
     SerdeJson(String),
 }
-
 
 impl std::convert::From<actix::MailboxError> for KernelError {
     fn from(_e: actix::MailboxError) -> Self {
@@ -92,7 +86,6 @@ impl std::convert::From<image::ImageError> for KernelError {
         KernelError::Image(format!("{:?}", err))
     }
 }
-
 
 impl std::convert::From<diesel::r2d2::Error> for KernelError {
     fn from(_err: diesel::r2d2::Error) -> Self {
@@ -136,19 +129,22 @@ impl std::convert::From<serde_json::Error> for KernelError {
     }
 }
 
-
 impl error::ResponseError for KernelError {
     fn error_response(&self) -> HttpResponse {
         let res: Response<()> = Response::error(self.clone());
         match *self {
             // 400
-            KernelError::Validation(_) | KernelError::UrlParseError(_) => HttpResponse::BadRequest().json(&res),
+            KernelError::Validation(_) | KernelError::UrlParseError(_) => {
+                HttpResponse::BadRequest().json(&res)
+            }
             // 401
             KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
             // 403
             KernelError::Forbidden(_) => HttpResponse::Forbidden().json(&res),
             // 404
-            KernelError::NotFound(_) | KernelError::RouteNotFound => HttpResponse::NotFound().json(&res),
+            KernelError::NotFound(_) | KernelError::RouteNotFound => {
+                HttpResponse::NotFound().json(&res)
+            }
             // 408
             KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
             // 500
@@ -158,7 +154,7 @@ impl error::ResponseError for KernelError {
             _ => {
                 let res: Response<()> = Response::error(KernelError::Internal(String::new()));
                 HttpResponse::InternalServerError().json(&res)
-            },
+            }
         }
     }
 }

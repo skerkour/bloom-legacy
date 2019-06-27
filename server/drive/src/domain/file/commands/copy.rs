@@ -1,21 +1,10 @@
+use crate::{domain::file, FOLDER_TYPE};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use rusoto_s3::{
-    CopyObjectRequest,
-    S3Client,
-    S3,
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::file,
-    FOLDER_TYPE,
-};
-
+use kernel::{events::EventMetadata, KernelError};
+use rusoto_s3::{CopyObjectRequest, S3Client, S3};
 
 #[derive(Clone)]
 pub struct Copy_ {
@@ -33,25 +22,36 @@ impl eventsourcing::Command for Copy_ {
     type Error = KernelError;
     type NonStoredData = ();
 
-
     // TODO: check that to is owned by owner
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("File not found".to_string()))
+            return Err(KernelError::NotFound("File not found".to_string()));
         }
 
         if aggregate.trashed_at.is_some() {
-           return Err(KernelError::Validation("File cannot be copied while in Trash".to_string()))
+            return Err(KernelError::Validation(
+                "File cannot be copied while in Trash".to_string(),
+            ));
         }
 
         if aggregate.type_ == FOLDER_TYPE {
-            return Err(KernelError::Validation("Folders cannot be copied".to_string()))
+            return Err(KernelError::Validation(
+                "Folders cannot be copied".to_string(),
+            ));
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let source_key = format!("drive/{}/{}", aggregate.owner_id, aggregate.id);
         let dest_key = format!("drive/{}/{}", aggregate.owner_id, self.new_file);
         let req = CopyObjectRequest {
@@ -62,20 +62,26 @@ impl eventsourcing::Command for Copy_ {
             ..Default::default()
         };
         // TODO: handle error
-        self.s3_client.copy_object(req).sync().expect("Couldn't PUT object");
+        self.s3_client
+            .copy_object(req)
+            .sync()
+            .expect("Couldn't PUT object");
 
-        let event_data = file::EventData::CopiedV1(file::CopiedV1{
+        let event_data = file::EventData::CopiedV1(file::CopiedV1 {
             to: self.to, // new parent
             new_file: self.new_file,
         });
 
-        return  Ok((file::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            file::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }
 
@@ -100,7 +106,6 @@ impl eventsourcing::Command for Copy_ {
 //     validators,
 // };
 
-
 // #[derive(Clone, Debug)]
 // pub struct Start {
 //     pub file_name: String,
@@ -124,7 +129,6 @@ impl eventsourcing::Command for Copy_ {
 
 //         return Ok(());
 //     }
-
 
 //     fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
 //         // presign request

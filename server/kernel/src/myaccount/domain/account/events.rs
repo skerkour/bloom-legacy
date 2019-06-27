@@ -1,13 +1,9 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use diesel_as_jsonb::AsJsonb;
 use crate::{
-    db::schema::kernel_accounts_events,
-    events::EventMetadata,
-    myaccount::domain::account,
-    utils,
+    db::schema::kernel_accounts_events, events::EventMetadata, myaccount::domain::account, utils,
 };
-
+use diesel::Queryable;
+use diesel_as_jsonb::AsJsonb;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_accounts_events"]
@@ -134,9 +130,7 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // SignInFailedV1
-            EventData::SignInFailedV1 => account::Account {
-                ..aggregate
-            },
+            EventData::SignInFailedV1 => account::Account { ..aggregate },
             // AvatarUpdatedV1
             EventData::AvatarUpdatedV1(ref data) => account::Account {
                 avatar_url: data.avatar_url.clone(),
@@ -176,7 +170,7 @@ impl eventsourcing::Event for Event {
                     avatar_url: random_string,
                     ..aggregate
                 }
-            },
+            }
             // DeletedV1
             EventData::DeletedV1(ref data) => account::Account {
                 deleted_at: Some(self.timestamp),
@@ -203,7 +197,8 @@ mod test {
 
     #[test]
     fn test_account_deleted_v1() {
-        env::set_current_dir(Path::new("..")).expect("changing directory for correct config file path");
+        env::set_current_dir(Path::new(".."))
+            .expect("changing directory for correct config file path");
         let cfg = crate::config::init();
         let db_actor_addr = crate::db::get_pool_db_conn(&cfg);
 
@@ -212,21 +207,21 @@ mod test {
         fake_account.username = crate::utils::random_hex_string(10);
         let fake_request_id = uuid::Uuid::new_v4();
         let fake_session_id = uuid::Uuid::new_v4();
-        let metadata = EventMetadata{
+        let metadata = EventMetadata {
             actor_id: Some(fake_account.id),
             request_id: Some(fake_request_id.clone()),
             session_id: Some(fake_session_id.clone()),
         };
-        let delete_account_cmd = account::Delete{
+        let delete_account_cmd = account::Delete {
             metadata: metadata.clone(),
         };
         assert!(fake_account.deleted_at.is_none());
 
-        let (account_to_delete, _event, _) = eventsourcing::execute(&conn, fake_account.clone(), &delete_account_cmd)
-            .expect("error executing delete account command");
+        let (account_to_delete, _event, _) =
+            eventsourcing::execute(&conn, fake_account.clone(), &delete_account_cmd)
+                .expect("error executing delete account command");
 
         assert_eq!(fake_account.id, account_to_delete.id);
         assert!(account_to_delete.deleted_at.is_some());
     }
 }
-

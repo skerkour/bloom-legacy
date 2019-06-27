@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use crate::{
-    db::schema::kernel_pending_emails,
-};
-
+use crate::db::schema::kernel_pending_emails;
+use diesel::Queryable;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_pending_emails"]
@@ -22,12 +19,11 @@ pub struct PendingEmail {
     pub account_id: uuid::Uuid,
 }
 
-
 impl PendingEmail {
     // create a new, unitialized PendingAccount
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return PendingEmail{
+        return PendingEmail {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

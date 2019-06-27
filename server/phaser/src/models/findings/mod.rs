@@ -1,13 +1,12 @@
-mod ports;
 mod file;
+mod ports;
 mod url;
 
+use serde::{Deserialize, Serialize};
 
-use serde::{Serialize, Deserialize};
-
-pub use ports::{Port, PortState};
-pub use file::File;
 pub use self::url::Url;
+pub use file::File;
+pub use ports::{Port, PortState};
 pub mod domain;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

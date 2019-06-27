@@ -1,12 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
 use crate::domain;
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RemoveDownloads {
@@ -24,18 +19,13 @@ impl Handler<RemoveDownloads> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: RemoveDownloads, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            bitflow_downloads,
-            bitflow_downloads_events,
-        };
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
+        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events};
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
             let downloads: Vec<domain::Download> = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(any(&msg.downloads)))
                 .filter(bitflow_downloads::dsl::owner_id.eq(msg.actor_id))
@@ -47,23 +37,19 @@ impl Handler<RemoveDownloads> for DbActor {
                 return Err(KernelError::NotFound("downloads not found".to_string()));
             }
 
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let remove_cmd = domain::download::Remove{
-                metadata,
-            };
+            let remove_cmd = domain::download::Remove { metadata };
 
             for download in downloads {
                 let (download, event, _) = eventsourcing::execute(&conn, download, &remove_cmd)?;
                 diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
                     .values(&event)
                     .execute(&conn)?;
-                diesel::update(&download)
-                    .set(&download)
-                    .execute(&conn)?;
+                diesel::update(&download).set(&download).execute(&conn)?;
             }
 
             return Ok(());

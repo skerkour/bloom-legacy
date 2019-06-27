@@ -1,7 +1,7 @@
 mod create;
-mod verify;
 mod delete;
+mod verify;
 
 pub use create::Create;
-pub use verify::Verify;
 pub use delete::Delete;
+pub use verify::Verify;

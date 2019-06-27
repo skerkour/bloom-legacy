@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::calendar_events_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::calendar_events_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "calendar_events_events"]
@@ -63,7 +59,7 @@ impl eventsourcing::Event for Event {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::CalendarEvent{
+            EventData::CreatedV1(ref data) => super::CalendarEvent {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -77,27 +73,27 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // TitleUpdatedV1
-            EventData::TitleUpdatedV1(ref data) => super::CalendarEvent{
+            EventData::TitleUpdatedV1(ref data) => super::CalendarEvent {
                 title: data.title.clone(),
                 ..aggregate
             },
             // DescriptionUpdatedV1
-            EventData::DescriptionUpdatedV1(ref data) => super::CalendarEvent{
+            EventData::DescriptionUpdatedV1(ref data) => super::CalendarEvent {
                 description: data.description.clone(),
                 ..aggregate
             },
             // StartAtUpdatedV1
-            EventData::StartAtUpdatedV1(ref data) => super::CalendarEvent{
+            EventData::StartAtUpdatedV1(ref data) => super::CalendarEvent {
                 start_at: data.start_at,
                 ..aggregate
             },
             // EndAtUpdatedV1
-            EventData::EndAtUpdatedV1(ref data) => super::CalendarEvent{
+            EventData::EndAtUpdatedV1(ref data) => super::CalendarEvent {
                 end_at: data.end_at,
                 ..aggregate
             },
             // DeletedV1
-            EventData::DeletedV1 => super::CalendarEvent{
+            EventData::DeletedV1 => super::CalendarEvent {
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

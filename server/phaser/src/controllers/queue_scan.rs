@@ -1,19 +1,10 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor
-};
 use crate::{
+    domain::{report, scan, Scan},
     validators,
-    domain::{
-        Scan,
-        scan,
-        report,
-    },
 };
-
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueueScan {
@@ -31,21 +22,15 @@ impl Handler<QueueScan> for DbActor {
     type Result = Result<Scan, KernelError>;
 
     fn handle(&mut self, msg: QueueScan, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            phaser_scans,
-            phaser_scans_events,
-            phaser_reports,
-            phaser_reports_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{
+            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
+        };
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -63,14 +48,15 @@ impl Handler<QueueScan> for DbActor {
             // queue report
             let trigger = scan::ReportTrigger::Manual;
 
-            let queue_cmd = report::Queue{
+            let queue_cmd = report::Queue {
                 scan_id: scan_to_queue.id,
                 targets: scan_to_queue.targets.clone(),
                 profile: scan_to_queue.profile.clone(),
                 trigger: trigger.clone(),
                 metadata: metadata.clone(),
             };
-            let (queued_report, event, _) = eventsourcing::execute(&conn, report::Report::new(), &queue_cmd)?;
+            let (queued_report, event, _) =
+                eventsourcing::execute(&conn, report::Report::new(), &queue_cmd)?;
 
             diesel::insert_into(phaser_reports::dsl::phaser_reports)
                 .values(&queued_report)
@@ -80,7 +66,7 @@ impl Handler<QueueScan> for DbActor {
                 .execute(&conn)?;
 
             // queue Scan
-            let queue_cmd = scan::Queue{
+            let queue_cmd = scan::Queue {
                 report_id: queued_report.id,
                 trigger: trigger.clone(),
                 metadata,

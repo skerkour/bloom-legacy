@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::bitflow_profiles_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::bitflow_profiles_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "bitflow_profiles_events"]
@@ -29,14 +25,13 @@ pub struct CreatedV1 {
     pub account_id: uuid::Uuid,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Profile;
 
     fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Profile{
+            EventData::CreatedV1(ref data) => super::Profile {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,

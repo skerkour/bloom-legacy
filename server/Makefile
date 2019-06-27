@@ -1,5 +1,5 @@
 .PHONY: build clean re dev test build_static
-.PHONY: disposable_emails
+.PHONY: disposable_emails lint fmt fmt_check
 
 DIST_DIR = dist
 NAME := bloom
@@ -35,8 +35,13 @@ re: clean build
 test:
 	cargo test
 
-lint:
+fmt:
 	cargo +nightly fmt
+
+fmt_check:
+	cargo +nightly fmt --all -- --check
+
+lint:
 	cargo clippy
 
 audit:

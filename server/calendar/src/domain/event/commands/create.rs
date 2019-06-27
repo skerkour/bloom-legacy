@@ -1,16 +1,9 @@
+use crate::{domain::event, validators};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::event,
-    validators,
-};
-
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -30,16 +23,24 @@ impl eventsourcing::Command for Create {
     type NonStoredData = ();
 
     // Validate to implement the goes.Command interface
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         validators::event_dates(self.start_at, self.end_at)?;
         validators::event_title(&self.title)?;
         validators::event_description(&self.description)?;
         Ok(())
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
-        let event_data = event::EventData::CreatedV1(event::CreatedV1{
+        let event_data = event::EventData::CreatedV1(event::CreatedV1 {
             id,
             title: self.title.clone(),
             description: self.description.clone(),
@@ -48,12 +49,15 @@ impl eventsourcing::Command for Create {
             owner_id: self.owner_id,
         });
 
-        return  Ok((event::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            event::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

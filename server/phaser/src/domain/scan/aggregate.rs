@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::phaser_scans,
-};
-
+use diesel::Queryable;
+use kernel::db::schema::phaser_scans;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "phaser_scans"]
@@ -58,7 +55,7 @@ impl Scan {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Scan{
+        return Scan {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
