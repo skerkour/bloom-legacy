@@ -1,9 +1,5 @@
-use serde::{Serialize, Deserialize};
-use crate::domain::{
-    scan,
-    report,
-};
-
+use crate::domain::{report, scan};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ScanResponse {
@@ -21,7 +17,7 @@ pub struct ScanResponse {
 
 impl From<scan::Scan> for ScanResponse {
     fn from(scan: scan::Scan) -> Self {
-        Self{
+        Self {
             id: scan.id,
             created_at: scan.created_at,
             description: scan.description,
@@ -35,7 +31,6 @@ impl From<scan::Scan> for ScanResponse {
         }
     }
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateScanBody {
@@ -56,15 +51,14 @@ pub struct ReportJob {
 
 impl From<report::Report> for ReportJob {
     fn from(report: report::Report) -> Self {
-        Self{
+        Self {
             id: report.id,
             scan_id: report.scan_id,
             targets: report.targets,
-            profile:report.profile,
+            profile: report.profile,
         }
     }
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ReportResponse {
@@ -87,7 +81,7 @@ pub struct ReportResponse {
 
 impl From<report::Report> for ReportResponse {
     fn from(report: report::Report) -> Self {
-        Self{
+        Self {
             id: report.id,
             completed_at: report.completed_at,
             error: report.error,

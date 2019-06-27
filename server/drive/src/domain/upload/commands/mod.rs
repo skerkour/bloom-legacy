@@ -1,6 +1,5 @@
-mod start;
 mod complete;
+mod start;
 
-
-pub use start::Start;
 pub use complete::Complete;
+pub use start::Start;

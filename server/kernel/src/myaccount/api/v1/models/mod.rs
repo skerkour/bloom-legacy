@@ -1,11 +1,5 @@
-use serde::{Serialize, Deserialize};
-use crate::{
-    myaccount::domain::{
-        session,
-        account,
-    },
-};
-
+use crate::myaccount::domain::{account, session};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StartRegistrationBody {
@@ -20,17 +14,15 @@ pub struct StartRegistrationResponse {
     pub id: uuid::Uuid,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct VerifyPendingAccountBody {
     pub id: uuid::Uuid,
     pub code: String,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistrationBody {
-    pub id:  uuid::Uuid,
+    pub id: uuid::Uuid,
     pub username: String,
 }
 
@@ -66,7 +58,7 @@ pub struct MeResponse {
 
 impl From<account::Account> for MeResponse {
     fn from(account: account::Account) -> Self {
-        MeResponse{
+        MeResponse {
             id: account.id,
             created_at: account.created_at,
             first_name: account.first_name,
@@ -78,7 +70,6 @@ impl From<account::Account> for MeResponse {
         }
     }
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Session {

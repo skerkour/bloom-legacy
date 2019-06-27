@@ -1,18 +1,7 @@
-mod events;
-mod commands;
 mod aggregate;
+mod commands;
+mod events;
 
-
-pub use aggregate::{
-    Profile,
-};
-pub use commands::{
-    Create,
-    UpdateStripeCustomerId,
-};
-pub use events::{
-    Event,
-    EventData,
-    CreatedV1,
-    StripeCustomerIdUpdatedV1,
-};
+pub use aggregate::Profile;
+pub use commands::{Create, UpdateStripeCustomerId};
+pub use events::{CreatedV1, Event, EventData, StripeCustomerIdUpdatedV1};

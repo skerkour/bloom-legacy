@@ -1,18 +1,7 @@
-use actix::{Message, Handler};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor
-};
+use crate::domain::{file, profile, upload, File, Upload};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
 use std::fs;
-use crate::domain::{
-    Upload,
-    upload,
-    file,
-    File,
-    profile,
-};
-
 
 #[derive(Clone)]
 pub struct CompleteUpload {
@@ -34,19 +23,13 @@ impl Handler<CompleteUpload> for DbActor {
     type Result = Result<File, KernelError>;
 
     fn handle(&mut self, msg: CompleteUpload, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            drive_uploads,
-            drive_uploads_events,
-            drive_files,
-            drive_files_events,
-            drive_profiles,
-            drive_profiles_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{
+            drive_files, drive_files_events, drive_profiles, drive_profiles_events, drive_uploads,
+            drive_uploads_events,
+        };
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let upload_to_update: Upload = drive_uploads::dsl::drive_uploads
@@ -62,20 +45,21 @@ impl Handler<CompleteUpload> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
 
             // complete Upload
-            let complete_cmd = upload::Complete{
+            let complete_cmd = upload::Complete {
                 s3_bucket: msg.s3_bucket.clone(),
                 s3_client: msg.s3_client.clone(),
                 file_path: msg.file_path.clone(),
                 metadata: metadata.clone(),
             };
-            let (upload_to_update, event, _) = eventsourcing::execute(&conn, upload_to_update, &complete_cmd)?;
+            let (upload_to_update, event, _) =
+                eventsourcing::execute(&conn, upload_to_update, &complete_cmd)?;
 
             diesel::update(&upload_to_update)
                 .set(&upload_to_update)
@@ -85,7 +69,7 @@ impl Handler<CompleteUpload> for DbActor {
                 .execute(&conn)?;
 
             // create file
-            let upload_cmd = file::Upload{
+            let upload_cmd = file::Upload {
                 id: upload_to_update.file_id,
                 name: upload_to_update.file_name.clone(),
                 parent_id: upload_to_update.parent_id,
@@ -94,7 +78,8 @@ impl Handler<CompleteUpload> for DbActor {
                 owner_id: upload_to_update.owner_id,
                 metadata: metadata.clone(),
             };
-            let (uploaded_file, event, _) = eventsourcing::execute(&conn, File::new(), &upload_cmd)?;
+            let (uploaded_file, event, _) =
+                eventsourcing::execute(&conn, File::new(), &upload_cmd)?;
 
             diesel::insert_into(drive_files::dsl::drive_files)
                 .values(&uploaded_file)
@@ -104,11 +89,12 @@ impl Handler<CompleteUpload> for DbActor {
                 .execute(&conn)?;
 
             // update profile
-            let space_cmd = profile::UpdateUsedSpace{
+            let space_cmd = profile::UpdateUsedSpace {
                 space: upload_to_update.size,
                 metadata: metadata.clone(),
             };
-            let (drive_profile, event, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+            let (drive_profile, event, _) =
+                eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
             diesel::update(&drive_profile)
                 .set(&drive_profile)

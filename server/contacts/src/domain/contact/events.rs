@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::contacts_contacts_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::contacts_contacts_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "contacts_contacts_events"]
@@ -94,14 +90,13 @@ pub struct WebsitesUpdatedV1 {
     pub websites: Vec<super::Website>,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Contact;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Contact{
+            EventData::CreatedV1(ref data) => super::Contact {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -123,52 +118,52 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // DeletedV1
-            EventData::DeletedV1 => super::Contact{
+            EventData::DeletedV1 => super::Contact {
                 deleted_at: Some(self.timestamp),
                 ..aggregate.clone()
             },
             // AddressesUpdatedV1
-            EventData::AddressesUpdatedV1(ref data) => super::Contact{
+            EventData::AddressesUpdatedV1(ref data) => super::Contact {
                 addresses: data.addresses.clone(),
                 ..aggregate.clone()
             },
             // BirthdayUpdatedV1
-            EventData::BirthdayUpdatedV1(ref data) => super::Contact{
+            EventData::BirthdayUpdatedV1(ref data) => super::Contact {
                 birthday: data.birthday.clone(),
                 ..aggregate.clone()
             },
             // EmailsUpdatedV1
-            EventData::EmailsUpdatedV1(ref data) => super::Contact{
+            EventData::EmailsUpdatedV1(ref data) => super::Contact {
                 emails: data.emails.clone(),
                 ..aggregate.clone()
             },
             // FirstNameUpdatedV1
-            EventData::FirstNameUpdatedV1(ref data) => super::Contact{
+            EventData::FirstNameUpdatedV1(ref data) => super::Contact {
                 first_name: data.first_name.clone(),
                 ..aggregate.clone()
             },
             // LastNameUpdatedV1
-            EventData::LastNameUpdatedV1(ref data) => super::Contact{
+            EventData::LastNameUpdatedV1(ref data) => super::Contact {
                 last_name: data.last_name.clone(),
                 ..aggregate.clone()
             },
             // NotesUpdatedV1
-            EventData::NotesUpdatedV1(ref data) => super::Contact{
+            EventData::NotesUpdatedV1(ref data) => super::Contact {
                 notes: data.notes.clone(),
                 ..aggregate.clone()
             },
             // OrganizationsUpdatedV1
-            EventData::OrganizationsUpdatedV1(ref data) => super::Contact{
+            EventData::OrganizationsUpdatedV1(ref data) => super::Contact {
                 organizations: data.organizations.clone(),
                 ..aggregate.clone()
             },
             // PhonesUpdatedV1
-            EventData::PhonesUpdatedV1(ref data) => super::Contact{
+            EventData::PhonesUpdatedV1(ref data) => super::Contact {
                 phones: data.phones.clone(),
                 ..aggregate.clone()
             },
             // WebsitesUpdatedV1
-            EventData::WebsitesUpdatedV1(ref data) => super::Contact{
+            EventData::WebsitesUpdatedV1(ref data) => super::Contact {
                 websites: data.websites.clone(),
                 ..aggregate.clone()
             },

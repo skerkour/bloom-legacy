@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::bitflow_downloads_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::bitflow_downloads_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "bitflow_downloads_events"]
@@ -58,13 +54,12 @@ pub struct CompletedV1 {
     pub files: Vec<uuid::Uuid>,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Download;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
-            EventData::QueuedV1(ref data) => super::Download{
+            EventData::QueuedV1(ref data) => super::Download {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -81,33 +76,33 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // StartedV1
-            EventData::StartedV1 => super::Download{
+            EventData::StartedV1 => super::Download {
                 status: super::DownloadStatus::Downloading,
                 ..aggregate
             },
             // ProgressUpdatedV1
-            EventData::ProgressUpdatedV1(ref data) => super::Download{
+            EventData::ProgressUpdatedV1(ref data) => super::Download {
                 progress: data.progress as i32,
                 ..aggregate
             },
             // NameUpdatedV1
-            EventData::NameUpdatedV1(ref data) => super::Download{
+            EventData::NameUpdatedV1(ref data) => super::Download {
                 name: data.name.clone(),
                 ..aggregate
             },
             // CompletedV1
-            EventData::CompletedV1(_) => super::Download{
+            EventData::CompletedV1(_) => super::Download {
                 status: super::DownloadStatus::Success,
                 progress: 100,
                 ..aggregate
             },
-             // StoppedV1
-            EventData::StoppedV1 => super::Download{
+            // StoppedV1
+            EventData::StoppedV1 => super::Download {
                 status: super::DownloadStatus::Stopped,
                 ..aggregate
             },
             // FailedV1
-            EventData::FailedV1(ref data) => super::Download{
+            EventData::FailedV1(ref data) => super::Download {
                 error: Some(data.error.clone()),
                 status: super::DownloadStatus::Failed,
                 ..aggregate
@@ -115,19 +110,20 @@ impl eventsourcing::Event for Event {
             // RemovedV1
             EventData::RemovedV1 => {
                 let status = if aggregate.status == super::DownloadStatus::Queued
-                    || aggregate.status == super::DownloadStatus::Downloading {
+                    || aggregate.status == super::DownloadStatus::Downloading
+                {
                     super::DownloadStatus::Stopped
                 } else {
                     aggregate.status
                 };
-                super::Download{
+                super::Download {
                     removed_at: Some(self.timestamp),
                     status,
                     ..aggregate
                 }
-            },
+            }
             // DeletedV1
-            EventData::DeletedV1 => super::Download{
+            EventData::DeletedV1 => super::Download {
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

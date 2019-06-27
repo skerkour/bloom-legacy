@@ -10,11 +10,8 @@ impl eventsourcing::Aggregate for Account {
         self.version += 1;
     }
 
-    fn update_updated_at(&mut self, _timestamp: chrono::DateTime<chrono::Utc>) {
-    }
+    fn update_updated_at(&mut self, _timestamp: chrono::DateTime<chrono::Utc>) {}
 }
-
-
 
 #[derive(Clone, Debug)]
 struct WithdrawFunds {
@@ -29,24 +26,34 @@ impl eventsourcing::Command for WithdrawFunds {
     type Error = String;
     type NonStoredData = ();
 
-    fn build_event(&self, _conn: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = AccountEventData::FundsWithdrawn(FundsWithdrawn{
+    fn build_event(
+        &self,
+        _conn: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let data = AccountEventData::FundsWithdrawn(FundsWithdrawn {
             account: self.account.clone(),
             amount: self.amount,
         });
-        return  Ok((AccountEvent{
-            id: 1, // random
-            timestamp: 123,
-            data,
-            aggregate_id: aggregate.id,
-        }, ()));
+        return Ok((
+            AccountEvent {
+                id: 1, // random
+                timestamp: 123,
+                data,
+                aggregate_id: aggregate.id,
+            },
+            (),
+        ));
     }
 
-    fn validate(&self, _conn: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _conn: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         return Ok(());
     }
 }
-
 
 #[derive(Clone, Debug)]
 pub struct AccountEvent {
@@ -99,12 +106,10 @@ impl eventsourcing::Event for AccountEvent {
     }
 }
 
-
 // fn create_profile(_ctx: &Ctx, event: &AccountEvent) -> Result<(), String> {
 //     println!("event received: {:?}", event.data);
 //     return Ok(());
 // }
-
 
 struct CreateProfile;
 impl eventsourcing::Subscription for CreateProfile {
@@ -118,11 +123,10 @@ impl eventsourcing::Subscription for CreateProfile {
     }
 }
 
-
 fn main() {
-    eventsourcing::subscribe::<_, AccountEvent, _>(Box::new(CreateProfile{}));
+    eventsourcing::subscribe::<_, AccountEvent, _>(Box::new(CreateProfile {}));
 
-    let withdraw_cmd = WithdrawFunds{
+    let withdraw_cmd = WithdrawFunds {
         account: "SAVINGS100".to_string(),
         amount: 500,
     };
@@ -135,10 +139,10 @@ fn main() {
     let initial_state2 = initial_state.clone();
 
     let x = 42;
-    let ctx = Ctx{x: x};
+    let ctx = Ctx { x: x };
 
-    let (current_state, event, _) = eventsourcing::execute(&ctx, initial_state, &withdraw_cmd)
-        .expect("error execurting");
+    let (current_state, event, _) =
+        eventsourcing::execute(&ctx, initial_state, &withdraw_cmd).expect("error execurting");
 
     println!("initial state: {:#?}", &initial_state2);
     println!("current state: {:#?}", &current_state);

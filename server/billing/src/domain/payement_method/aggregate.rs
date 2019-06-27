@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::billing_payment_methods,
-};
-
+use kernel::db::schema::billing_payment_methods;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "billing_payment_methods"]
@@ -21,12 +18,11 @@ pub struct PaymentMethod {
     pub billing_profile_id: uuid::Uuid,
 }
 
-
 impl PaymentMethod {
     // create a new, unitialized PaymentMethod
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Self{
+        return Self {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
@@ -56,7 +52,6 @@ pub enum PaymentDetails {
     None,
     StripeCardV1(StripeCardV1),
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StripeCardV1 {

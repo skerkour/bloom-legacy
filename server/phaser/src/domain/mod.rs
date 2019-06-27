@@ -1,5 +1,5 @@
-pub mod scan;
 pub mod report;
+pub mod scan;
 
-pub use scan::Scan;
 pub use report::Report;
+pub use scan::Scan;

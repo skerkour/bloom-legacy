@@ -1,5 +1,5 @@
-use serde::{Serialize, Deserialize};
 use crate::domain::contact;
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateContactBody {
@@ -15,7 +15,6 @@ pub struct CreateContactBody {
     pub phones: Vec<contact::Phone>,
     pub websites: Vec<contact::Website>,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct ContactResponse {

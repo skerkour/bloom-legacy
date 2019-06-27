@@ -1,6 +1,5 @@
-use serde::{Serialize, Deserialize};
 use diesel_as_jsonb::AsJsonb;
-
+use serde::{Deserialize, Serialize};
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub struct EventMetadata {

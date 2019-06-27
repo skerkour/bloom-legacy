@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    db::DbActor,
-    events::EventMetadata,
-};
-use crate::domain::{
-    download,
-    Download,
-};
-
+use crate::domain::{download, Download};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateDownload {
@@ -29,18 +21,13 @@ impl Handler<UpdateDownload> for DbActor {
     type Result = Result<Download, KernelError>;
 
     fn handle(&mut self, msg: UpdateDownload, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            bitflow_downloads,
-            bitflow_downloads_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: None, // Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: None, //Some(msg.session_id),
@@ -56,12 +43,13 @@ impl Handler<UpdateDownload> for DbActor {
             // name
             let download_to_update = match &msg.name {
                 Some(name) if name != &download_to_update.name => {
-                    let update_name_cmd = download::UpdateName{
+                    let update_name_cmd = download::UpdateName {
                         name: name.to_string(),
                         metadata: metadata.clone(),
                     };
 
-                    let (download_to_update, event, _) = eventsourcing::execute(&conn, download_to_update, &update_name_cmd)?;
+                    let (download_to_update, event, _) =
+                        eventsourcing::execute(&conn, download_to_update, &update_name_cmd)?;
 
                     // update download
                     diesel::update(&download_to_update)
@@ -71,19 +59,20 @@ impl Handler<UpdateDownload> for DbActor {
                         .values(&event)
                         .execute(&conn)?;
                     download_to_update
-                },
+                }
                 _ => download_to_update,
             };
 
             // progress
             let download_to_update = match msg.progress {
                 Some(progress) if (progress as i32) != download_to_update.progress => {
-                    let update_progress_cmd = download::UpdateProgress{
+                    let update_progress_cmd = download::UpdateProgress {
                         progress: progress,
                         metadata: metadata.clone(),
                     };
 
-                    let (download_to_update, event, _) = eventsourcing::execute(&conn, download_to_update, &update_progress_cmd)?;
+                    let (download_to_update, event, _) =
+                        eventsourcing::execute(&conn, download_to_update, &update_progress_cmd)?;
 
                     // update download
                     diesel::update(&download_to_update)
@@ -93,7 +82,7 @@ impl Handler<UpdateDownload> for DbActor {
                         .values(&event)
                         .execute(&conn)?;
                     download_to_update
-                },
+                }
                 _ => download_to_update,
             };
 

@@ -7,12 +7,12 @@ extern crate blowfish;
 extern crate byteorder;
 extern crate rand;
 
+use rand::{rngs::OsRng, RngCore};
 use std::convert::AsRef;
-use rand::{RngCore, rngs::OsRng};
 
 mod b64;
-mod errors;
 mod bcrypt;
+mod errors;
 
 pub use errors::{BcryptError, BcryptResult};
 
@@ -127,8 +127,8 @@ pub fn verify<P: AsRef<[u8]>>(password: P, hash: &str) -> BcryptResult<bool> {
 
 #[cfg(test)]
 mod tests {
+    use super::{hash, split_hash, verify, BcryptError, HashParts, DEFAULT_COST};
     use std::iter;
-    use super::{hash, split_hash, verify, HashParts, DEFAULT_COST, BcryptError};
 
     #[test]
     fn can_split_hash() {
@@ -197,21 +197,22 @@ mod tests {
     fn long_passwords_truncate_correctly() {
         // produced with python -c 'import bcrypt; bcrypt.hashpw(b"x"*100, b"$2a$05$...............................")'
         let hash = "$2a$05$......................YgIDy4hFBdVlc/6LHnD9mX488r9cLd2";
-        assert!(
-            verify(
-                iter::repeat("x").take(100).collect::<String>(),
-                hash
-            ).unwrap()
-        );
+        assert!(verify(iter::repeat("x").take(100).collect::<String>(), hash).unwrap());
     }
 
     #[test]
     fn forbid_null_bytes() {
         fn assert_invalid_password(password: &[u8]) {
             match hash(password, DEFAULT_COST) {
-                Ok(_) => panic!(format!("NULL bytes must be forbidden, but {:?} is allowed.", password)),
-                Err(BcryptError::InvalidPassword) => {},
-                Err(e) => panic!(format!("NULL bytes are forbidden but error differs: {} for {:?}.", e, password)),
+                Ok(_) => panic!(format!(
+                    "NULL bytes must be forbidden, but {:?} is allowed.",
+                    password
+                )),
+                Err(BcryptError::InvalidPassword) => {}
+                Err(e) => panic!(format!(
+                    "NULL bytes are forbidden but error differs: {} for {:?}.",
+                    e, password
+                )),
             }
         }
         assert_invalid_password("\0".as_bytes());

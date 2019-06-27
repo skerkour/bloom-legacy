@@ -1,16 +1,6 @@
-mod events;
-mod commands;
 mod aggregate;
+mod commands;
+mod events;
 
-
-pub use aggregate::{
-    PaymentMethod,
-    PaymentDetails,
-};
-pub use commands::{
-};
-pub use events::{
-    Event,
-    EventData,
-    AddedV1,
-};
+pub use aggregate::{PaymentDetails, PaymentMethod};
+pub use events::{AddedV1, Event, EventData};

@@ -74,7 +74,7 @@ pub use futures::future::err;
 ///
 /// The [`From`](From) impl on `TryFuture` can be used to wrap another future.
 pub struct TryFuture<F: Future> {
-    inner: TryFutureInner<F>
+    inner: TryFutureInner<F>,
 }
 
 impl<F: Future + Debug> Debug for TryFuture<F> {
@@ -85,14 +85,14 @@ impl<F: Future + Debug> Debug for TryFuture<F> {
 
 #[derive(Debug)]
 enum TryFutureInner<F: Future> {
-   Result(::futures::future::FutureResult<F::Item, F::Error>),
-   Future(F)
+    Result(::futures::future::FutureResult<F::Item, F::Error>),
+    Future(F),
 }
 
 impl<F: Future> TryFuture<F> {
     fn from_result(res: Result<F::Item, F::Error>) -> TryFuture<F> {
         TryFuture {
-            inner: TryFutureInner::Result(res.into_future())
+            inner: TryFutureInner::Result(res.into_future()),
         }
     }
 
@@ -112,7 +112,7 @@ impl<F: Future> TryFuture<F> {
 impl<F: IntoFuture> From<F> for TryFuture<F::Future> {
     fn from(future: F) -> TryFuture<F::Future> {
         TryFuture {
-            inner: TryFutureInner::Future(future.into_future())
+            inner: TryFutureInner::Future(future.into_future()),
         }
     }
 }
@@ -124,7 +124,7 @@ impl<F: Future> Future for TryFuture<F> {
     fn poll(&mut self) -> Poll<F::Item, F::Error> {
         match self.inner {
             TryFutureInner::Result(ref mut future) => future.poll(),
-            TryFutureInner::Future(ref mut future) => future.poll()
+            TryFutureInner::Future(ref mut future) => future.poll(),
         }
     }
 }
@@ -132,27 +132,27 @@ impl<F: Future> Future for TryFuture<F> {
 /// Equivalent of `try! returning a [`TryFuture`](TryFuture).
 #[macro_export]
 macro_rules! try_future {
-    ($expression:expr) => (
+    ($expression:expr) => {
         match $expression {
             Err(err) => {
                 return $crate::TryFuture::from_error(err.into());
-            },
-            Ok(value) => value
+            }
+            Ok(value) => value,
         }
-    )
+    };
 }
 
 /// Equivalent of `try!` returning a `Box<Future<_>>`.
 #[macro_export]
 macro_rules! try_future_box {
-    ($expression:expr) => (
+    ($expression:expr) => {
         match $expression {
             Err(err) => {
                 return Box::new($crate::err(err.into()));
-            },
-            Ok(value) => value
+            }
+            Ok(value) => value,
         }
-    )
+    };
 }
 
 #[cfg(test)]

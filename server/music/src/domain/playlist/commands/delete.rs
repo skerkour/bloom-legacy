@@ -1,22 +1,15 @@
-use serde::{Serialize, Deserialize};
+use crate::domain::playlist;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::playlist,
-};
-
+use kernel::{events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Delete {
     pub metadata: EventMetadata,
 }
-
 
 impl eventsourcing::Command for Delete {
     type Aggregate = playlist::Playlist;
@@ -25,7 +18,11 @@ impl eventsourcing::Command for Delete {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Playlist not found".to_string()));
         }
@@ -34,13 +31,14 @@ impl eventsourcing::Command for Delete {
     }
 
     // TODO: improve
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        use kernel::db::schema::{
-            drive_files,
-            music_playlists_files,
-        };
-        use diesel::prelude::*;
+    fn build_event(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::{drive_files, music_playlists_files};
 
         let files: Vec<uuid::Uuid> = drive_files::dsl::drive_files
             .inner_join(music_playlists_files::table)
@@ -50,17 +48,21 @@ impl eventsourcing::Command for Delete {
             .select(drive_files::id)
             .load(ctx)?;
 
-        diesel::delete(music_playlists_files::dsl::music_playlists_files
-            .filter(music_playlists_files::dsl::file_id.eq(any(&files)))
+        diesel::delete(
+            music_playlists_files::dsl::music_playlists_files
+                .filter(music_playlists_files::dsl::file_id.eq(any(&files))),
         )
-            .execute(ctx)?;
+        .execute(ctx)?;
 
-        return  Ok((playlist::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: playlist::EventData::DeletedV1,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            playlist::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: playlist::EventData::DeletedV1,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

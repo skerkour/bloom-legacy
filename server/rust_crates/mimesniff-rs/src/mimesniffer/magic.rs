@@ -80,24 +80,24 @@ const MAGIC_NUMBERS: &'static [Magic] = &[
     Magic::Number("application/x-rar-compressed", b"Rar!\x1A\x07\x00"),
     Magic::Number("application/x-msmetafile", b"\xD7\xCD\xC6\x9A"),
     Magic::Number("application/octet-stream", b"MZ"),
-      // Sniffing for Flash
-      //
-      // Including these magic number for Flash is a trade off.
-      //
-      // Pros:
-      //   * Flash is an important and popular file format
-      //
-      // Cons:
-      //   * These patterns are fairly weak
-      //   * If we mistakenly decide something is Flash, we will execute it
-      //     in the origin of an unsuspecting site.  This could be a security
-      //     vulnerability if the site allows users to upload content.
-      //
-      // On balance, we do not include these patterns.
-      //
-      // Magic::Number("application/x-shockwave-flash", b"CWS"),
-      // Magic::Number("application/x-shockwave-flash", b"FLV"),
-      // Magic::Number("application/x-shockwave-flash", b"FWS"),
+    // Sniffing for Flash
+    //
+    // Including these magic number for Flash is a trade off.
+    //
+    // Pros:
+    //   * Flash is an important and popular file format
+    //
+    // Cons:
+    //   * These patterns are fairly weak
+    //   * If we mistakenly decide something is Flash, we will execute it
+    //     in the origin of an unsuspecting site.  This could be a security
+    //     vulnerability if the site allows users to upload content.
+    //
+    // On balance, we do not include these patterns.
+    //
+    // Magic::Number("application/x-shockwave-flash", b"CWS"),
+    // Magic::Number("application/x-shockwave-flash", b"FLV"),
+    // Magic::Number("application/x-shockwave-flash", b"FWS"),
 ];
 
 // The number of content bytes we need to use all our magic numbers.  Feel free
@@ -283,7 +283,9 @@ pub fn truncate_size(content: &[u8], max_size: usize) -> (&[u8], bool) {
 // decide that a document that begins "<!DOCTYPE SOAP-ENV:Envelope PUBLIC " is
 // HTML, but we will not.
 macro_rules! html_tag {
-    ($tag:expr) => (Magic::String("text/html", concat!("<", $tag)))
+    ($tag:expr) => {
+        Magic::String("text/html", concat!("<", $tag))
+    };
 }
 
 #[cfg_attr(rustfmt, rustfmt_skip)]
@@ -750,7 +752,7 @@ mod tests {
 
         assert_eq!(Some("image/jpeg"), sniff_mime_type_from_local_data(&v));
 
-         v.clear();
+        v.clear();
         v.extend_from_slice(b"\x89\x50\x4E\x47\x0D\x0A\x1A\x0A\xFF");
         v.extend_from_slice(&[b'\x00'; 40]);
 

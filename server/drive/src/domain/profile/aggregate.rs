@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::drive_profiles,
-};
-
+use diesel::Queryable;
+use kernel::db::schema::drive_profiles;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "drive_profiles"]
@@ -22,12 +19,11 @@ pub struct Profile {
     pub home_id: uuid::Uuid,
 }
 
-
 impl Profile {
     // create a new, unitialized Profile
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Profile{
+        return Profile {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

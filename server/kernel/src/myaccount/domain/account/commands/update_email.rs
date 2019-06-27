@@ -1,13 +1,8 @@
-use crate::{
-    myaccount::domain::account,
-    events::EventMetadata,
-    error::KernelError,
-};
+use crate::{error::KernelError, events::EventMetadata, myaccount::domain::account};
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-
 
 #[derive(Clone, Debug)]
 pub struct UpdateEmail {
@@ -22,8 +17,11 @@ impl eventsourcing::Command for UpdateEmail {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         // validators::email(self.config.disposable_email_domains(), &self.email)?;
 
         // verify that an email isn't already in use
@@ -32,17 +30,24 @@ impl eventsourcing::Command for UpdateEmail {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = account::EventData::EmailUpdatedV1(account::EmailUpdatedV1{
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+        let data = account::EventData::EmailUpdatedV1(account::EmailUpdatedV1 {
             email: self.email.clone(),
         });
 
-        return  Ok((account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            account::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

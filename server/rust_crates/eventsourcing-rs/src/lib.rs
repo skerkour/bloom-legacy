@@ -1,7 +1,6 @@
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 
-
 pub trait Aggregate {
     fn increment_version(&mut self);
     fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>);
@@ -22,10 +21,17 @@ pub trait Command {
     type Error;
     type NonStoredData;
 
-    fn validate(&self, conn: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error>;
-    fn build_event(&self, conn: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error>;
+    fn validate(
+        &self,
+        conn: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error>;
+    fn build_event(
+        &self,
+        conn: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error>;
 }
-
 
 pub trait Subscription {
     type Error;
@@ -35,16 +41,17 @@ pub trait Subscription {
     fn handle(&self, ctx: &Self::Context, msg: &Self::Message) -> Result<(), Self::Error>;
 }
 
-
 impl EventBus {
     fn new() -> Self {
-        return EventBus{
+        return EventBus {
             subscriptions: HashMap::new(),
         };
     }
 
-    fn subscribe<C: Any, M: Any, E: Any>(&mut self, subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>)
-     {
+    fn subscribe<C: Any, M: Any, E: Any>(
+        &mut self,
+        subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>,
+    ) {
         let msg_id = TypeId::of::<M>();
         let boxed = Box::new(subscription);
         // let boxed = Box::new(subscription) as Box<dyn Subscription<Context = C, Message = M, Error = E>>;
@@ -61,7 +68,8 @@ impl EventBus {
         if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
             for subscription in subscriptions {
                 // println!("{:?}", subscription.get_type_id());
-                let subscription: &Box<Subscription<Context = C, Message = M, Error = E>> = subscription.downcast_ref().expect("error downcasting");
+                let subscription: &Box<Subscription<Context = C, Message = M, Error = E>> =
+                    subscription.downcast_ref().expect("error downcasting");
                 subscription.handle(ctx, message)?;
             }
         }
@@ -95,7 +103,6 @@ struct EventBus {
 //         self.subscriptions.insert(msg_id, vec![boxed]);
 //     }
 
-
 //     fn publish<C: Any, M: Any, E: Any>(&mut self, ctx: &C, message: &M) -> Result<(), E> {
 //         let msg_id = TypeId::of::<M>();
 //         if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
@@ -128,9 +135,9 @@ fn event_bus() -> &'static mut EventBus {
 //     return event_bus().publish(ctx, message);
 // }
 
-
-pub fn subscribe<C: Any, M: Any, E: Any>(subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>)
-{
+pub fn subscribe<C: Any, M: Any, E: Any>(
+    subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>,
+) {
     event_bus().subscribe(subscription);
 }
 
@@ -138,17 +145,18 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-
-
-
-pub fn execute<A, CTX, CMD, Ev, Err, D>(ctx: &CTX, aggregate: A, cmd: &CMD)
-    -> Result<(A, Ev, D), Err>
-    where A: Aggregate,
+pub fn execute<A, CTX, CMD, Ev, Err, D>(
+    ctx: &CTX,
+    aggregate: A,
+    cmd: &CMD,
+) -> Result<(A, Ev, D), Err>
+where
+    A: Aggregate,
     CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err, NonStoredData = D>,
     Ev: Event<Aggregate = A> + Any,
     Err: Any,
-    CTX: Any {
-
+    CTX: Any,
+{
     cmd.validate(ctx, &aggregate)?;
     let (event, non_stored_data) = cmd.build_event(ctx, &aggregate)?;
     let mut aggregate = event.apply(aggregate);

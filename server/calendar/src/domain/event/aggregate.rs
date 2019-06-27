@@ -1,11 +1,19 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
+use diesel::Queryable;
+use kernel::db::schema::calendar_events;
+use serde::{Deserialize, Serialize};
 use uuid::Uuid;
-use kernel::{
-    db::schema::calendar_events,
-};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, QueryableByName, Serialize)]
+#[derive(
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    QueryableByName,
+    Serialize,
+)]
 #[table_name = "calendar_events"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct CalendarEvent {
@@ -19,7 +27,7 @@ pub struct CalendarEvent {
     pub description: String,
     pub start_at: chrono::DateTime<chrono::Utc>,
     pub end_at: chrono::DateTime<chrono::Utc>,
-    
+
     pub owner_id: Uuid,
 }
 
@@ -27,7 +35,7 @@ impl CalendarEvent {
     // create a new, unitialized CalendarEvent
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return CalendarEvent{
+        return CalendarEvent {
             id: Uuid::new_v4(),
             created_at: now,
             updated_at: now,

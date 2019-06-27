@@ -1,23 +1,7 @@
+mod aggregate;
 mod commands;
 mod events;
-mod aggregate;
 
-
-pub use aggregate::{
-    Report,
-    ReportStatus,
-    Finding,
-};
-pub use commands::{
-    Queue,
-    Cancel,
-    Start,
-    Complete,
-};
-pub use events::{
-    Event,
-    EventData,
-    QueuedV1,
-    CompletedV1,
-    FailedV1,
-};
+pub use aggregate::{Finding, Report, ReportStatus};
+pub use commands::{Cancel, Complete, Queue, Start};
+pub use events::{CompletedV1, Event, EventData, FailedV1, QueuedV1};

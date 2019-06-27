@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::drive_profiles_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::drive_profiles_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "drive_profiles_events"]
@@ -36,14 +32,13 @@ pub struct UsedSpaceUpdatedV1 {
     pub space: i64,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Profile;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::Profile{
+            EventData::CreatedV1(ref data) => super::Profile {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -57,7 +52,7 @@ impl eventsourcing::Event for Event {
                 home_id: data.home_id,
             },
             // UsedSpaceUpdatedV1
-            EventData::UsedSpaceUpdatedV1(ref data) => super::Profile{
+            EventData::UsedSpaceUpdatedV1(ref data) => super::Profile {
                 used_space: aggregate.used_space + data.space,
                 ..aggregate
             },

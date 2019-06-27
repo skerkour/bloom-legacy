@@ -1,16 +1,11 @@
-use actix::{Message, Handler};
+use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    myaccount::domain::{
-        Account,
-        session,
-        Session,
-    },
     events::EventMetadata,
+    myaccount::domain::{session, Account, Session},
 };
-use crate::error::KernelError;
-use serde::{Serialize, Deserialize};
-
+use actix::{Handler, Message};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RevokeSession {
@@ -28,18 +23,13 @@ impl Handler<RevokeSession> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: RevokeSession, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            kernel_sessions,
-            kernel_sessions_events,
-        };
+        use crate::db::schema::{kernel_sessions, kernel_sessions_events};
         use diesel::prelude::*;
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.actor.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.current_session_id),
@@ -52,7 +42,7 @@ impl Handler<RevokeSession> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let revoke_cmd = session::Revoke{
+            let revoke_cmd = session::Revoke {
                 current_session_id: Some(msg.current_session_id),
                 reason: session::RevokedReason::Manually,
                 metadata,
@@ -61,9 +51,7 @@ impl Handler<RevokeSession> for DbActor {
             let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
 
             // update session
-            diesel::update(&session)
-                .set(&session)
-                .execute(&conn)?;
+            diesel::update(&session).set(&session).execute(&conn)?;
             diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                 .values(&event)
                 .execute(&conn)?;

@@ -1,15 +1,10 @@
-use crate::{
-    events::EventMetadata,
-    myaccount::domain::pending_email,
-    error::KernelError,
-};
-use serde::{Serialize, Deserialize};
+use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
 use chrono::Utc;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
@@ -19,7 +14,6 @@ pub struct Verify {
     pub metadata: EventMetadata,
 }
 
-
 impl eventsourcing::Command for Verify {
     type Aggregate = pending_email::PendingEmail;
     type Event = pending_email::Event;
@@ -27,10 +21,12 @@ impl eventsourcing::Command for Verify {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use crate::db::schema::{
-            kernel_accounts::dsl::*,
-        };
+    fn validate(
+        &self,
+        ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
+        use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
         // validators::email(&self.email)?; already done ine pending email create
@@ -42,35 +38,50 @@ impl eventsourcing::Command for Verify {
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
-            return Err(KernelError::Validation(format!("Email: {} is already in use.", &self.email)));
+            return Err(KernelError::Validation(format!(
+                "Email: {} is already in use.",
+                &self.email
+            )));
         }
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let metadata = self.metadata.clone();
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         let data = if aggregate.trials + 1 >= 8 {
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::TooManyTrials)
+            pending_email::EventData::VerificationFailedV1(
+                pending_email::VerificationFailedReason::TooManyTrials,
+            )
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeNotValid)
+            pending_email::EventData::VerificationFailedV1(
+                pending_email::VerificationFailedReason::CodeNotValid,
+            )
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_email::EventData::VerificationFailedV1(pending_email::VerificationFailedReason::CodeExpired)
+            pending_email::EventData::VerificationFailedV1(
+                pending_email::VerificationFailedReason::CodeExpired,
+            )
         } else {
             pending_email::EventData::VerificationSucceededV1
         };
 
-        return  Ok((pending_email::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp,
-            data,
-            aggregate_id: aggregate.id,
-            metadata,
-        }, ()));
+        return Ok((
+            pending_email::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp,
+                data,
+                aggregate_id: aggregate.id,
+                metadata,
+            },
+            (),
+        ));
     }
 }
-

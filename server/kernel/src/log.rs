@@ -9,10 +9,12 @@ use std::sync::Mutex;
 pub mod macros {
     // Since slog also defines log's macros, we can't blindly import "slog::*" but always repeating
     // these imports is a pain. So just `use logs::macros::*` and you're all set.
-    pub use log::{debug, info, warn, error};
-    pub use slog::{slog_crit, slog_debug, slog_error, slog_info, slog_log, slog_o, slog_trace, slog_warn, slog_kv};
+    pub use log::{debug, error, info, warn};
+    pub use slog::{
+        slog_crit, slog_debug, slog_error, slog_info, slog_kv, slog_log, slog_o, slog_trace,
+        slog_warn,
+    };
 }
-
 
 // lazy_static::lazy_static! {
 //   pub static ref LOGGER: Mutex<slog::Logger> = Mutex::new(SlogStdLogger::new());
@@ -151,7 +153,8 @@ impl log::Log for SlogStdLogger {
             tag: r.target(),
         };
 
-        self.0.log(&slog::Record::new(&s, r.args(), slog::BorrowedKV(&())));
+        self.0
+            .log(&slog::Record::new(&s, r.args(), slog::BorrowedKV(&())));
     }
 
     fn flush(&self) {}

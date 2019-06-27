@@ -1,11 +1,7 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::drive_files_events,
-    events::EventMetadata,
-};
-
+use kernel::{db::schema::drive_files_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "drive_files_events"]
@@ -36,7 +32,7 @@ pub struct UploadedV1 {
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
-     #[serde(rename = "type")]
+    #[serde(rename = "type")]
     pub type_: String, // MIME type
     pub owner_id: uuid::Uuid,
 }
@@ -47,7 +43,7 @@ pub struct CreatedV1 {
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
-     #[serde(rename = "type")]
+    #[serde(rename = "type")]
     pub type_: String, // MIME type
     pub owner_id: uuid::Uuid,
 }
@@ -78,14 +74,13 @@ pub struct RenamedV1 {
     pub name: String,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::File;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // UploadedV1
-            EventData::UploadedV1(ref data) => super::File{
+            EventData::UploadedV1(ref data) => super::File {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -102,7 +97,7 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::File{
+            EventData::CreatedV1(ref data) => super::File {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -119,39 +114,35 @@ impl eventsourcing::Event for Event {
                 owner_id: data.owner_id,
             },
             // DownloadedV1
-            EventData::DownloadedV1(_) => super::File{
-                ..aggregate
-            },
+            EventData::DownloadedV1(_) => super::File { ..aggregate },
             // MovedV1
-            EventData::MovedV1(ref data) => super::File{
+            EventData::MovedV1(ref data) => super::File {
                 parent_id: Some(data.to),
                 ..aggregate
             },
             // TrashedV1
-            EventData::TrashedV1(ref data) => super::File{
+            EventData::TrashedV1(ref data) => super::File {
                 explicitly_trashed: data.explicitly_trashed,
                 trashed_at: Some(self.timestamp),
                 ..aggregate
             },
             // RestoredV1
-            EventData::RestoredV1 => super::File{
+            EventData::RestoredV1 => super::File {
                 explicitly_trashed: false,
                 trashed_at: None,
                 ..aggregate
             },
             // DeletedV1
-            EventData::DeletedV1 => super::File{
+            EventData::DeletedV1 => super::File {
                 explicitly_trashed: false,
                 trashed_at: None,
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },
             // CopiedV1
-            EventData::CopiedV1(_) => super::File{
-                ..aggregate
-            },
+            EventData::CopiedV1(_) => super::File { ..aggregate },
             // RenamedV1
-            EventData::RenamedV1(ref data) => super::File{
+            EventData::RenamedV1(ref data) => super::File {
                 name: data.name.clone(),
                 ..aggregate
             },

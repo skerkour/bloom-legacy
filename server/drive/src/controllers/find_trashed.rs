@@ -1,13 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    db::DbActor,
-    KernelError,
-};
-use crate::{
-    domain,
-};
-
+use crate::domain;
+use actix::{Handler, Message};
+use kernel::{db::DbActor, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindTrashed {
@@ -22,13 +16,10 @@ impl Handler<FindTrashed> for DbActor {
     type Result = Result<Vec<domain::File>, KernelError>;
 
     fn handle(&mut self, msg: FindTrashed, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            drive_files,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::drive_files;
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         // find children
         let trashed: Vec<domain::File> = drive_files::dsl::drive_files

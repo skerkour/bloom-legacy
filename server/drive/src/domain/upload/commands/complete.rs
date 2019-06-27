@@ -1,21 +1,13 @@
-use rusoto_s3::{
-    PutObjectRequest, StreamingBody, S3,
-};
+use crate::domain::upload;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
 };
-use kernel::{
-    events::EventMetadata,
-    KernelError,
-};
-use std::fs;
 use futures_fs::FsPool;
+use kernel::{events::EventMetadata, KernelError};
+use rusoto_s3::{PutObjectRequest, StreamingBody, S3};
+use std::fs;
 use std::io::Read;
-use crate::{
-    domain::upload,
-};
-
 
 #[derive(Clone)]
 pub struct Complete {
@@ -32,19 +24,25 @@ impl eventsourcing::Command for Complete {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         return Ok(());
     }
 
-
-    fn build_event(&self, _ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         // get file metadata
 
         let file_metadata = fs::metadata(&self.file_path)?;
         let content_type = {
             // read first 512 bytes to detect content type
-            let mut contents = [0u8;512];
+            let mut contents = [0u8; 512];
             let mut file = fs::File::open(&self.file_path)?;
             file.read(&mut contents)?;
             mimesniff::detect_content_type(&contents)
@@ -60,19 +58,25 @@ impl eventsourcing::Command for Complete {
             body: Some(StreamingBody::new(file_stream)),
             ..Default::default()
         };
-        self.s3_client.put_object(req).sync().expect("pahser: Couldn't PUT object");
+        self.s3_client
+            .put_object(req)
+            .sync()
+            .expect("pahser: Couldn't PUT object");
 
-        let event_data = upload::EventData::CompletedV1(upload::CompletedV1{
+        let event_data = upload::EventData::CompletedV1(upload::CompletedV1 {
             size: file_metadata.len() as i64,
             type_: content_type.to_string(),
         });
 
-        return  Ok((upload::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data: event_data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            upload::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data: event_data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

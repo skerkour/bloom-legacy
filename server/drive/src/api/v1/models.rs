@@ -1,14 +1,12 @@
-use serde::{Serialize, Deserialize};
-use uuid::Uuid;
 use crate::domain;
-
+use serde::{Deserialize, Serialize};
+use uuid::Uuid;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StartUploadBody {
     pub file_name: String,
     pub parent_id: Option<Uuid>,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct StartUploadResponse {
@@ -38,7 +36,6 @@ pub struct FileBody {
     pub size: i64,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileResponse {
     pub id: Uuid,
@@ -52,7 +49,7 @@ pub struct FileResponse {
 
 impl From<domain::file::File> for FileResponse {
     fn from(file: domain::file::File) -> Self {
-        FileResponse{
+        FileResponse {
             id: file.id,
             created_at: file.created_at,
             updated_at: file.updated_at,
@@ -81,12 +78,10 @@ pub struct UpdateFileBody {
     pub name: Option<String>,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FileUrl {
     pub url: String,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreateFolderBody {

@@ -1,18 +1,7 @@
 mod aggregate;
-mod events;
 mod commands;
+mod events;
 
-
-pub use aggregate::{
-    Upload,
-};
-pub use commands::{
-    Start,
-    Complete,
-};
-pub use events::{
-    Event,
-    EventData,
-    StartedV1,
-    CompletedV1,
-};
+pub use aggregate::Upload;
+pub use commands::{Complete, Start};
+pub use events::{CompletedV1, Event, EventData, StartedV1};

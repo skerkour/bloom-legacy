@@ -1,16 +1,11 @@
-use actix::{Message, Handler};
+use actix::{Handler, Message};
 use kernel::{
     db::DbActor,
-    myaccount::domain::{
-        Account,
-        account,
-        session,
-    },
     error::KernelError,
     events::EventMetadata,
+    myaccount::domain::{account, session, Account},
 };
-use serde::{Serialize, Deserialize};
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DisableAccount {
@@ -28,20 +23,15 @@ impl Handler<DisableAccount> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: DisableAccount, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            kernel_accounts,
-            kernel_accounts_events,
-            kernel_sessions,
-            kernel_sessions_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{
+            kernel_accounts, kernel_accounts_events, kernel_sessions, kernel_sessions_events,
+        };
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.actor.id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -65,16 +55,19 @@ impl Handler<DisableAccount> for DbActor {
                     .count()
                     .get_result(&conn)?;
                 if remaining_admins < 2 {
-                    return Err(KernelError::Validation("You can't disable last admin's account".to_string()));
+                    return Err(KernelError::Validation(
+                        "You can't disable last admin's account".to_string(),
+                    ));
                 }
             }
 
-            let disable_cmd = account::Disable{
+            let disable_cmd = account::Disable {
                 actor: msg.actor,
                 metadata: metadata.clone(),
             };
 
-            let (account_to_disable, event, _) = eventsourcing::execute(&conn, account_to_disable, &disable_cmd)?;
+            let (account_to_disable, event, _) =
+                eventsourcing::execute(&conn, account_to_disable, &disable_cmd)?;
             diesel::update(&account_to_disable)
                 .set(&account_to_disable)
                 .execute(&conn)?;
@@ -89,7 +82,7 @@ impl Handler<DisableAccount> for DbActor {
                 .for_update()
                 .load(&conn)?;
 
-            let revoke_cmd = session::Revoke{
+            let revoke_cmd = session::Revoke {
                 current_session_id: None,
                 reason: session::RevokedReason::AccountDisabled,
                 metadata: metadata.clone(),
@@ -98,9 +91,7 @@ impl Handler<DisableAccount> for DbActor {
             for session in sessions {
                 let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
-                diesel::update(&session)
-                    .set(&session)
-                    .execute(&conn)?;
+                diesel::update(&session).set(&session).execute(&conn)?;
                 diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
                     .values(&event)
                     .execute(&conn)?;

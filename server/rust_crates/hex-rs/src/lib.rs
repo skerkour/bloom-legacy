@@ -1,5 +1,4 @@
 #![cfg_attr(feature = "benchmarks", feature(test))]
-
 // Copyright (c) 2013-2014 The Rust Project Developers.
 // Copyright (c) 2015-2018 The rust-hex Developers.
 //
@@ -84,10 +83,7 @@ impl<T: AsRef<[u8]>> ToHex for T {
 pub enum FromHexError {
     /// An invalid character was found. Valid ones are: `0...9`, `a...f`
     /// or `A...F`.
-    InvalidHexCharacter {
-        c: char,
-        index: usize,
-    },
+    InvalidHexCharacter { c: char, index: usize },
 
     /// A hex string's length needs to be even, as two digits correspond to
     /// one byte.
@@ -105,7 +101,6 @@ impl error::Error for FromHexError {
             FromHexError::InvalidHexCharacter { .. } => "invalid character",
             FromHexError::OddLength => "odd number of digits",
             FromHexError::InvalidStringLength => "invalid string length",
-
         }
     }
 }
@@ -113,12 +108,11 @@ impl error::Error for FromHexError {
 impl fmt::Display for FromHexError {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match *self {
-            FromHexError::InvalidHexCharacter { c, index } =>
-                write!(f, "Invalid character '{}' at position {}", c, index),
-            FromHexError::OddLength =>
-                write!(f, "Odd number of digits"),
-            FromHexError::InvalidStringLength =>
-                write!(f, "Invalid string length"),
+            FromHexError::InvalidHexCharacter { c, index } => {
+                write!(f, "Invalid character '{}' at position {}", c, index)
+            }
+            FromHexError::OddLength => write!(f, "Odd number of digits"),
+            FromHexError::InvalidStringLength => write!(f, "Invalid string length"),
         }
     }
 }
@@ -159,12 +153,10 @@ fn val(c: u8, idx: usize) -> Result<u8, FromHexError> {
         b'A'...b'F' => Ok(c - b'A' + 10),
         b'a'...b'f' => Ok(c - b'a' + 10),
         b'0'...b'9' => Ok(c - b'0'),
-        _ => {
-            Err(FromHexError::InvalidHexCharacter {
-                c: c as char,
-                index: idx,
-            })
-        }
+        _ => Err(FromHexError::InvalidHexCharacter {
+            c: c as char,
+            index: idx,
+        }),
     }
 }
 
@@ -177,9 +169,10 @@ impl FromHex for Vec<u8> {
             return Err(FromHexError::OddLength);
         }
 
-        hex.chunks(2).enumerate().map(|(i, pair)| {
-            Ok(val(pair[0], 2 * i)? << 4 | val(pair[1], 2 * i + 1)?)
-        }).collect()
+        hex.chunks(2)
+            .enumerate()
+            .map(|(i, pair)| Ok(val(pair[0], 2 * i)? << 4 | val(pair[1], 2 * i + 1)?))
+            .collect()
     }
 }
 
@@ -303,17 +296,15 @@ pub fn decode_to_slice<T: AsRef<[u8]>>(data: T, out: &mut [u8]) -> Result<(), Fr
     }
 
     for (i, byte) in out.iter_mut().enumerate() {
-        *byte = val(data[2 * i], 2 * i)? << 4
-            | val(data[2 * i + 1], 2 * i + 1)?;
+        *byte = val(data[2 * i], 2 * i)? << 4 | val(data[2 * i + 1], 2 * i + 1)?;
     }
 
     Ok(())
 }
 
-
 #[cfg(test)]
 mod test {
-    use super::{encode, decode, FromHex, FromHexError};
+    use super::{decode, encode, FromHex, FromHexError};
 
     #[test]
     fn test_encode() {
@@ -327,34 +318,19 @@ mod test {
 
     #[test]
     pub fn test_from_hex_okay_str() {
-        assert_eq!(
-            Vec::from_hex("666f6f626172").unwrap(),
-            b"foobar"
-        );
-        assert_eq!(
-            Vec::from_hex("666F6F626172").unwrap(),
-            b"foobar"
-        );
+        assert_eq!(Vec::from_hex("666f6f626172").unwrap(), b"foobar");
+        assert_eq!(Vec::from_hex("666F6F626172").unwrap(), b"foobar");
     }
 
     #[test]
     pub fn test_from_hex_okay_bytes() {
-        assert_eq!(
-            Vec::from_hex(b"666f6f626172").unwrap(),
-            b"foobar"
-        );
-        assert_eq!(
-            Vec::from_hex(b"666F6F626172").unwrap(),
-            b"foobar"
-        );
+        assert_eq!(Vec::from_hex(b"666f6f626172").unwrap(), b"foobar");
+        assert_eq!(Vec::from_hex(b"666F6F626172").unwrap(), b"foobar");
     }
 
     #[test]
     pub fn test_invalid_length() {
-        assert_eq!(
-            Vec::from_hex("1").unwrap_err(),
-            FromHexError::OddLength
-        );
+        assert_eq!(Vec::from_hex("1").unwrap_err(), FromHexError::OddLength);
         assert_eq!(
             Vec::from_hex("666f6f6261721").unwrap_err(),
             FromHexError::OddLength
@@ -365,10 +341,7 @@ mod test {
     pub fn test_invalid_char() {
         assert_eq!(
             Vec::from_hex("66ag").unwrap_err(),
-            FromHexError::InvalidHexCharacter {
-                c: 'g',
-                index: 3
-            }
+            FromHexError::InvalidHexCharacter { c: 'g', index: 3 }
         );
     }
 
@@ -381,10 +354,7 @@ mod test {
     pub fn test_from_hex_whitespace() {
         assert_eq!(
             Vec::from_hex("666f 6f62617").unwrap_err(),
-            FromHexError::InvalidHexCharacter {
-                c: ' ',
-                index: 4
-            }
+            FromHexError::InvalidHexCharacter { c: ' ', index: 4 }
         );
     }
 
@@ -402,7 +372,6 @@ mod test {
     }
 }
 
-
 #[cfg(all(feature = "benchmarks", test))]
 mod bench {
     extern crate test;
@@ -416,8 +385,6 @@ mod bench {
     fn a_bench(b: &mut Bencher) {
         b.bytes = MY_OWN_SOURCE.len() as u64;
 
-        b.iter(|| {
-            encode(MY_OWN_SOURCE)
-        });
+        b.iter(|| encode(MY_OWN_SOURCE));
     }
 }

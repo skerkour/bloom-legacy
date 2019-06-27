@@ -1,12 +1,11 @@
+mod add_files;
 mod create;
 mod delete;
-mod rename;
-mod add_files;
 mod remove_files;
+mod rename;
 
-
+pub use add_files::AddFiles;
 pub use create::Create;
 pub use delete::Delete;
-pub use rename::Rename;
-pub use add_files::AddFiles;
 pub use remove_files::RemoveFiles;
+pub use rename::Rename;

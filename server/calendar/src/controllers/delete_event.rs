@@ -1,11 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor,
-};
 use crate::domain::event;
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DeleteEvent {
@@ -23,24 +19,18 @@ impl Handler<DeleteEvent> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: DeleteEvent, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            calendar_events,
-            calendar_events_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{calendar_events, calendar_events_events};
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.actor_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
             };
-            let delete_cmd = event::Delete{
-                metadata,
-            };
+            let delete_cmd = event::Delete { metadata };
 
             let event_to_delete: event::CalendarEvent = calendar_events::dsl::calendar_events
                 .filter(calendar_events::dsl::id.eq(msg.event_id))
@@ -49,7 +39,8 @@ impl Handler<DeleteEvent> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (event_to_delete, event, _) = eventsourcing::execute(&conn, event_to_delete, &delete_cmd)?;
+            let (event_to_delete, event, _) =
+                eventsourcing::execute(&conn, event_to_delete, &delete_cmd)?;
 
             // update event
             diesel::update(&event_to_delete)

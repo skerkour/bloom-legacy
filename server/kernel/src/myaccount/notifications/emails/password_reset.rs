@@ -1,21 +1,23 @@
-use crate::{
-    config::Config,
-    error::KernelError,
-    notifications::emails,
-};
-use std::collections::BTreeMap;
+use crate::{config::Config, error::KernelError, notifications::emails};
 use handlebars::Handlebars;
+use std::collections::BTreeMap;
 
 static TEMPLATE: &str = r#"
 <a href="{{url}}">Click here to reset your password</a>.<br/>
 This link will expire in 30 minutes.
 "#;
 
-
-pub fn send_password_reset(config: &Config, email: &str, recipient_name: &str,
-password_reset_id: &str, token: &str) -> Result<(), KernelError> {
-
-    let password_reset_url = format!("{}/myaccount/recovery?id={}&token={}", config.host, password_reset_id, token);
+pub fn send_password_reset(
+    config: &Config,
+    email: &str,
+    recipient_name: &str,
+    password_reset_id: &str,
+    token: &str,
+) -> Result<(), KernelError> {
+    let password_reset_url = format!(
+        "{}/myaccount/recovery?id={}&token={}",
+        config.host, password_reset_id, token
+    );
     let handlebars = Handlebars::new();
 
     let subject = "Your password reset link";
@@ -28,12 +30,14 @@ password_reset_id: &str, token: &str) -> Result<(), KernelError> {
         (crate::ADDRESS_NOTIFY, "Bloom"),
         (email, recipient_name),
         subject,
-        handlebars.render_template(TEMPLATE, &data).expect("error rendering template").as_str(),
+        handlebars
+            .render_template(TEMPLATE, &data)
+            .expect("error rendering template")
+            .as_str(),
     );
 
     return Ok(());
 }
-
 
 // func SendAccountRecovery(email, firstName, lastName, id, token string) error {
 // 	escapedID := url.QueryEscape(id)

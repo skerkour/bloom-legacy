@@ -1,15 +1,7 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-    db::DbActor
-};
-use crate::domain::{
-    Download,
-    download,
-};
-
+use crate::domain::{download, Download};
+use actix::{Handler, Message};
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueueDownload {
@@ -27,21 +19,14 @@ impl Handler<QueueDownload> for DbActor {
     type Result = Result<Download, KernelError>;
 
     fn handle(&mut self, msg: QueueDownload, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            bitflow_downloads,
-            bitflow_downloads_events,
-            drive_profiles,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events, drive_profiles};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-
             // create Download
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: Some(msg.account_id),
                 request_id: Some(msg.request_id),
                 session_id: Some(msg.session_id),
@@ -62,14 +47,18 @@ impl Handler<QueueDownload> for DbActor {
                 .get_result(&conn)?;
 
             if active_downloads > 4 {
-                return Err(KernelError::Validation("Please update your subscription to create more parallel downloads".to_string()));
+                return Err(KernelError::Validation(
+                    "Please update your subscription to create more parallel downloads".to_string(),
+                ));
             }
 
             if profile.used_space >= profile.total_space {
-                return Err(KernelError::Validation("No space available in your drive".to_string()));
+                return Err(KernelError::Validation(
+                    "No space available in your drive".to_string(),
+                ));
             }
 
-            let queue_cmd = download::Queue{
+            let queue_cmd = download::Queue {
                 url: msg.url,
                 owner_id: msg.account_id,
                 metadata,

@@ -1,19 +1,9 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use super::{Finding, ReportStatus};
+use crate::domain::scan::{ReportTrigger, ScanProfile};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::phaser_reports_events,
-    events::EventMetadata,
-};
-use crate::domain::scan::{
-    ScanProfile,
-    ReportTrigger,
-};
-use super::{
-    ReportStatus,
-    Finding,
-};
-
+use kernel::{db::schema::phaser_reports_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "phaser_reports_events"]
@@ -33,7 +23,6 @@ pub enum EventData {
     FailedV1(FailedV1),
     CanceledV1,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueuedV1 {
@@ -59,14 +48,13 @@ pub struct FailedV1 {
     pub error: String,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = super::Report;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // QueuedV1
-            EventData::QueuedV1(ref data) => Self::Aggregate{
+            EventData::QueuedV1(ref data) => Self::Aggregate {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -90,18 +78,18 @@ impl eventsourcing::Event for Event {
                 scan_id: data.scan_id,
             },
             // StartedV1
-            EventData::StartedV1 => Self::Aggregate{
+            EventData::StartedV1 => Self::Aggregate {
                 started_at: Some(self.timestamp),
                 status: ReportStatus::Scanning,
                 ..aggregate
             },
             // CanceledV1
-            EventData::CanceledV1 => Self::Aggregate{
+            EventData::CanceledV1 => Self::Aggregate {
                 status: ReportStatus::Canceled,
                 ..aggregate
             },
             // CompletedV1
-            EventData::CompletedV1(ref data) => Self::Aggregate{
+            EventData::CompletedV1(ref data) => Self::Aggregate {
                 findings: Some(data.findings.clone()),
                 high_level_findings: data.high_level_findings as i64,
                 information_findings: data.information_findings as i64,
@@ -113,7 +101,7 @@ impl eventsourcing::Event for Event {
                 ..aggregate
             },
             // FailedV1
-            EventData::FailedV1(ref data) => Self::Aggregate{
+            EventData::FailedV1(ref data) => Self::Aggregate {
                 status: ReportStatus::Failed,
                 error: Some(data.error.clone()),
                 ..aggregate

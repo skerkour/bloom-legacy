@@ -1,16 +1,10 @@
+use crate::domain::album;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use crate::{
-    domain::album,
 };
 use drive::domain::File;
-
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct RemoveFiles {
@@ -26,13 +20,14 @@ impl eventsourcing::Command for RemoveFiles {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use kernel::db::schema::{
-            drive_files,
-            gallery_albums_files,
-        };
-        use diesel::prelude::*;
+    fn validate(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::{drive_files, gallery_albums_files};
 
         // check that file is owned by same owner
         let files: Vec<File> = drive_files::dsl::drive_files
@@ -53,36 +48,43 @@ impl eventsourcing::Command for RemoveFiles {
             .count()
             .get_result(ctx)?;
 
-        if already_in_album as usize!= self.files.len() {
-            return Err(KernelError::Validation("File is not in in album.".to_string()));
+        if already_in_album as usize != self.files.len() {
+            return Err(KernelError::Validation(
+                "File is not in in album.".to_string(),
+            ));
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        use kernel::db::schema::{
-            gallery_albums_files,
-        };
-        use diesel::prelude::*;
+    fn build_event(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::gallery_albums_files;
 
-
-        diesel::delete(gallery_albums_files::dsl::gallery_albums_files
-            .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files)))
+        diesel::delete(
+            gallery_albums_files::dsl::gallery_albums_files
+                .filter(gallery_albums_files::dsl::file_id.eq(any(&self.files))),
         )
-            .execute(ctx)?;
+        .execute(ctx)?;
 
-        let data = album::EventData::FilesRemovedV1(album::FilesRemovedV1{
+        let data = album::EventData::FilesRemovedV1(album::FilesRemovedV1 {
             files: self.files.clone(),
         });
 
-        return  Ok((album::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            album::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

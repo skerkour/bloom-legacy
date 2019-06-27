@@ -4,25 +4,24 @@
 //     http::header,
 // };
 use actix_web::{
-    FromRequest, HttpRequest, Error, dev::Payload,
+    dev::Payload,
     // http::header::HeaderValue,
     // dev::{ServiceRequest, ServiceResponse},
     // web,
+    Error,
+    FromRequest,
+    HttpRequest,
 };
 // use actix_service::{Service as ActixService, Transform};
 // use chrono::{Utc, DateTime};
-use slog::{slog_o}; // slog_info, slog_warn, slog_error};
+use slog::slog_o; // slog_info, slog_warn, slog_error};
 use std::ops::Deref;
 // use futures::{
 //     Poll,
 //     future::{ok, Either, FutureResult},
 //     Future,
 // };
-use crate::{
-    // api,
-    api::middlewares::GetRequestId,
-};
-
+use crate::api::middlewares::GetRequestId;
 
 #[derive(Clone, Debug)]
 pub struct RequestLogger(slog::Logger);
@@ -35,8 +34,7 @@ pub trait GetRequestLogger {
 
 impl GetRequestLogger for HttpRequest {
     fn logger(&self) -> RequestLogger {
-
-        let req_id =  self.request_id().0.clone();
+        let req_id = self.request_id().0.clone();
 
         // Return the current logger augmented with the request_id
         let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id.to_string()));
@@ -48,7 +46,6 @@ impl GetRequestLogger for HttpRequest {
         RequestLogger(new_log)
     }
 }
-
 
 // struct RequestStartTime(DateTime<Utc>);
 
@@ -67,7 +64,6 @@ impl RequestLogger {
         slog_scope::scope(&self.0, f)
     }
 }
-
 
 impl FromRequest for RequestLogger {
     type Config = ();
@@ -95,11 +91,9 @@ impl Deref for RequestLogger {
     }
 }
 
-
 // /// LoggerMiddleware
 // #[derive(Debug, Clone, PartialEq)]
 // pub struct LoggerMiddleware;
-
 
 // impl<S, B> Transform<S> for LoggerMiddleware
 // where
@@ -139,7 +133,7 @@ impl Deref for RequestLogger {
 //     fn call(&mut self, req: ServiceRequest) -> Self::Future {
 //         let state: web::Data<api::State> = req.app_data().expect("error getting app_data in auth middleware");
 
-        //     fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
+//     fn start(&self, req: &HttpRequest<S>) -> Result<Started> {
 //         req.extensions_mut().insert(RequestStartTime(Utc::now()));
 //         return Ok(Started::Done);
 //     }
@@ -190,7 +184,6 @@ impl Deref for RequestLogger {
 //             });
 //             return Box::new(self.service.call(req));
 //         }
-
 
 //         let auth_header = auth_header.unwrap().to_str()
 //             .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
@@ -272,7 +265,6 @@ impl Deref for RequestLogger {
 //         return Finished::Done;
 //     }
 // }
-
 
 // #[cfg(test)]
 // mod tests {

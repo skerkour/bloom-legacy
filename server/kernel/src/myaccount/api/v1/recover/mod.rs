@@ -1,5 +1,5 @@
-mod put;
 mod post;
+mod put;
 
-pub use put::put;
 pub use post::post;
+pub use put::put;

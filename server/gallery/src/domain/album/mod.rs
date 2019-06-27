@@ -1,24 +1,7 @@
 mod aggregate;
-mod events;
 mod commands;
+mod events;
 
-
-pub use aggregate::{
-    Album,
-    AlbumFile,
-};
-pub use commands::{
-    Create,
-    Delete,
-    Rename,
-    AddFiles,
-    RemoveFiles,
-};
-pub use events::{
-    Event,
-    EventData,
-    CreatedV1,
-    RenamedV1,
-    FilesAddedV1,
-    FilesRemovedV1,
-};
+pub use aggregate::{Album, AlbumFile};
+pub use commands::{AddFiles, Create, Delete, RemoveFiles, Rename};
+pub use events::{CreatedV1, Event, EventData, FilesAddedV1, FilesRemovedV1, RenamedV1};

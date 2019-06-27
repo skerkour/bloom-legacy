@@ -1,17 +1,11 @@
+use crate::domain::album;
 use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
-use std::collections::HashSet;
-use crate::{
-    domain::album,
 };
 use drive::domain::File;
-
+use kernel::{events::EventMetadata, KernelError};
+use std::collections::HashSet;
 
 #[derive(Clone, Debug)]
 pub struct AddFiles {
@@ -27,13 +21,14 @@ impl eventsourcing::Command for AddFiles {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use kernel::db::schema::{
-            drive_files,
-            gallery_albums_files,
-        };
-        use diesel::prelude::*;
+    fn validate(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         use diesel::pg::expression::dsl::any;
+        use diesel::prelude::*;
+        use kernel::db::schema::{drive_files, gallery_albums_files};
 
         let mut valid_types = HashSet::new();
         valid_types.insert("image/gif".to_string());
@@ -60,47 +55,58 @@ impl eventsourcing::Command for AddFiles {
             .get_result(ctx)?;
 
         if already_in_album >= 1 {
-            return Err(KernelError::Validation("File is already in album.".to_string()));
+            return Err(KernelError::Validation(
+                "File is already in album.".to_string(),
+            ));
         }
 
         // check that file is good mimetype: TODO
         for file in files {
             if !valid_types.contains(&file.type_) {
-                return Err(KernelError::Validation("File type is not valid.".to_string()));
+                return Err(KernelError::Validation(
+                    "File type is not valid.".to_string(),
+                ));
             }
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, ctx: &Self::Context, aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        use kernel::db::schema::{
-            gallery_albums_files::dsl::gallery_albums_files,
-        };
+    fn build_event(
+        &self,
+        ctx: &Self::Context,
+        aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         use diesel::prelude::*;
+        use kernel::db::schema::gallery_albums_files::dsl::gallery_albums_files;
 
-        let files: Vec<album::AlbumFile> = self.files.iter().map(|file_id|
-            album::AlbumFile{
+        let files: Vec<album::AlbumFile> = self
+            .files
+            .iter()
+            .map(|file_id| album::AlbumFile {
                 id: uuid::Uuid::new_v4(),
                 album_id: aggregate.id,
                 file_id: *file_id,
-            }
-        ).collect();
+            })
+            .collect();
 
         diesel::insert_into(gallery_albums_files)
             .values(&files)
             .execute(ctx)?;
 
-        let data = album::EventData::FilesAddedV1(album::FilesAddedV1{
+        let data = album::EventData::FilesAddedV1(album::FilesAddedV1 {
             files: self.files.clone(),
         });
 
-        return  Ok((album::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            album::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: aggregate.id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

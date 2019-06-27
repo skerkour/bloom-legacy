@@ -1,6 +1,5 @@
-use serde::{Serialize, Deserialize};
 use crate::domain::download;
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct DownloadResponse {
@@ -16,7 +15,7 @@ pub struct DownloadResponse {
 
 impl From<download::Download> for DownloadResponse {
     fn from(download: download::Download) -> Self {
-        DownloadResponse{
+        DownloadResponse {
             id: download.id,
             created_at: download.created_at,
             error: download.error,
@@ -29,7 +28,6 @@ impl From<download::Download> for DownloadResponse {
     }
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct QueueDownloadBody {
     pub url: String,
@@ -40,13 +38,11 @@ pub struct RemoveDownloadsBody {
     pub downloads: Vec<uuid::Uuid>,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateDownloadBody {
     pub name: Option<String>,
     pub progress: Option<u32>,
 }
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FailDownloadBody {

@@ -1,9 +1,6 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::notes_notes,
-};
-
+use diesel::Queryable;
+use kernel::db::schema::notes_notes;
+use serde::{Deserialize, Serialize};
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "notes_notes"]
@@ -23,12 +20,11 @@ pub struct Note {
     pub owner_id: uuid::Uuid,
 }
 
-
 impl Note {
     // create a new, unitialized note
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return Note{
+        return Note {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

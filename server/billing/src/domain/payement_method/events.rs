@@ -1,15 +1,8 @@
-use serde::{Deserialize, Serialize};
-use diesel::{Queryable};
+use super::{PaymentDetails, PaymentMethod};
+use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
-use kernel::{
-    db::schema::billing_payment_methods_events,
-    events::EventMetadata,
-};
-use super::{
-    PaymentDetails,
-    PaymentMethod,
-};
-
+use kernel::{db::schema::billing_payment_methods_events, events::EventMetadata};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
 #[table_name = "billing_payment_methods_events"]
@@ -37,14 +30,13 @@ pub struct AddedV1 {
     pub billing_profile_id: uuid::Uuid,
 }
 
-
 impl eventsourcing::Event for Event {
     type Aggregate = PaymentMethod;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // AddedV1
-            EventData::AddedV1(ref data) => Self::Aggregate{
+            EventData::AddedV1(ref data) => Self::Aggregate {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
@@ -55,7 +47,7 @@ impl eventsourcing::Event for Event {
                 billing_profile_id: data.billing_profile_id,
             },
             // RemovedV1
-            EventData::RemovedV1 => Self::Aggregate{
+            EventData::RemovedV1 => Self::Aggregate {
                 deleted_at: Some(self.timestamp),
                 ..aggregate
             },

@@ -1,24 +1,17 @@
-use actix::{Message, Handler};
-use serde::{Serialize, Deserialize};
-use kernel::{
-    db::DbActor,
-    KernelError,
-};
-use rusoto_s3::{
-    GetObjectRequest,
-    util::{PreSignedRequest, PreSignedRequestOption},
-};
-use rusoto_core::{Region};
-use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
+use crate::{api::v1::models::FileResponse, domain::album};
+use actix::{Handler, Message};
 use drive::domain::File;
-use std::str::FromStr;
 use futures::Future;
-use std::time::Duration;
-use crate::{
-    api::v1::models::FileResponse,
-    domain::album,
+use kernel::{db::DbActor, KernelError};
+use rusoto_core::Region;
+use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
+use rusoto_s3::{
+    util::{PreSignedRequest, PreSignedRequestOption},
+    GetObjectRequest,
 };
-
+use serde::{Deserialize, Serialize};
+use std::str::FromStr;
+use std::time::Duration;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FindAlbum {
@@ -36,20 +29,10 @@ impl Handler<FindAlbum> for DbActor {
     type Result = Result<(album::Album, Vec<FileResponse>), KernelError>;
 
     fn handle(&mut self, msg: FindAlbum, _: &mut Self::Context) -> Self::Result {
-        use kernel::db::schema::{
-            gallery_albums,
-            gallery_albums_files,
-            drive_files,
-        };
-        use diesel::{
-            // sql_query,
-            // pg::types::sql_types,
-            prelude::*,
-        };
+        use diesel::prelude::*;
+        use kernel::db::schema::{drive_files, gallery_albums, gallery_albums_files};
 
-
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         // join avec gallery_albums_files
         // il nous faut l'album + les files
@@ -79,27 +62,30 @@ impl Handler<FindAlbum> for DbActor {
             .wait()
             .expect("error getting default credentials");
 
-        let files: Vec<FileResponse> = files.into_iter().map(|file| {
-            let key = format!("drive/{}/{}", file.owner_id, file.id);
-            let req = GetObjectRequest {
-                bucket: msg.s3_bucket.clone(),
-                key: key,
-                // response_content_disposition: Some(format!(r#"attachment; filename="{}""#, &aggregate.name)),
-                response_content_type: Some(file.type_.clone()),
-                ..Default::default()
-            };
-            // TODO: handle error
-            let options = PreSignedRequestOption {
-                expires_in: Duration::from_secs(3600 * 24), // 24 hours
-            };
-            let presigned_url = req.get_presigned_url(&region, &credentials, &options);
-            return FileResponse{
-                id: file.id,
-                name: file.name,
-                parent_id: file.parent_id.unwrap(),
-                url: presigned_url,
-            };
-        }).collect();
+        let files: Vec<FileResponse> = files
+            .into_iter()
+            .map(|file| {
+                let key = format!("drive/{}/{}", file.owner_id, file.id);
+                let req = GetObjectRequest {
+                    bucket: msg.s3_bucket.clone(),
+                    key: key,
+                    // response_content_disposition: Some(format!(r#"attachment; filename="{}""#, &aggregate.name)),
+                    response_content_type: Some(file.type_.clone()),
+                    ..Default::default()
+                };
+                // TODO: handle error
+                let options = PreSignedRequestOption {
+                    expires_in: Duration::from_secs(3600 * 24), // 24 hours
+                };
+                let presigned_url = req.get_presigned_url(&region, &credentials, &options);
+                return FileResponse {
+                    id: file.id,
+                    name: file.name,
+                    parent_id: file.parent_id.unwrap(),
+                    url: presigned_url,
+                };
+            })
+            .collect();
 
         return Ok((album, files));
     }

@@ -1,32 +1,9 @@
 mod aggregate;
-mod events;
 mod commands;
+mod events;
 
-
-pub use aggregate::{
-    File,
-    FolderPath,
-    FolderChild,
-};
-pub use commands::{
-    Upload,
-    Create,
-    Download,
-    Move,
-    Trash,
-    Restore,
-    Delete,
-    Copy_,
-    Rename,
-};
+pub use aggregate::{File, FolderChild, FolderPath};
+pub use commands::{Copy_, Create, Delete, Download, Move, Rename, Restore, Trash, Upload};
 pub use events::{
-    Event,
-    EventData,
-    UploadedV1,
-    CreatedV1,
-    DownloadedV1,
-    MovedV1,
-    TrashedV1,
-    CopiedV1,
-    RenamedV1,
+    CopiedV1, CreatedV1, DownloadedV1, Event, EventData, MovedV1, RenamedV1, TrashedV1, UploadedV1,
 };

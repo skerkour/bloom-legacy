@@ -1,11 +1,18 @@
-use serde::{Serialize, Deserialize};
-use diesel::{Queryable};
-use kernel::{
-    db::schema::drive_files,
-};
+use diesel::Queryable;
+use kernel::db::schema::drive_files;
+use serde::{Deserialize, Serialize};
 
-
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, QueryableByName, Serialize)]
+#[derive(
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    QueryableByName,
+    Serialize,
+)]
 #[table_name = "drive_files"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct File {
@@ -46,7 +53,7 @@ impl File {
     // create a new, unitialized File
     pub fn new() -> Self {
         let now = chrono::Utc::now();
-        return File{
+        return File {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,

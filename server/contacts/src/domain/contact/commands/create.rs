@@ -1,12 +1,9 @@
-use diesel::{
-    PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
-use kernel::{
-    KernelError,
-    events::EventMetadata,
-};
 use crate::domain::contact;
+use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
+    PgConnection,
+};
+use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -32,14 +29,21 @@ impl eventsourcing::Command for Create {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-
+    fn validate(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
-        let data = contact::EventData::CreatedV1(contact::CreatedV1{
+        let data = contact::EventData::CreatedV1(contact::CreatedV1 {
             id,
             addresses: self.addresses.clone(),
             birthday: self.birthday.clone(),
@@ -55,12 +59,15 @@ impl eventsourcing::Command for Create {
             owner_id: self.owner_id,
         });
 
-        return  Ok((contact::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: id,
-            metadata: self.metadata.clone(),
-        }, ()));
+        return Ok((
+            contact::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: chrono::Utc::now(),
+                data,
+                aggregate_id: id,
+                metadata: self.metadata.clone(),
+            },
+            (),
+        ));
     }
 }

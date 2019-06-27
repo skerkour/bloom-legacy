@@ -1,13 +1,10 @@
-use diesel::{
-    PgConnection,
-    r2d2::{PooledConnection, ConnectionManager},
-};
 use crate::{
-    myaccount::domain::account,
-    events::EventMetadata,
+    error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account,
     myaccount::validators,
-    error::KernelError,
-    myaccount,
+};
+use diesel::{
+    r2d2::{ConnectionManager, PooledConnection},
+    PgConnection,
 };
 
 #[derive(Clone, Debug)]
@@ -28,10 +25,12 @@ impl eventsourcing::Command for Create {
     type Error = KernelError;
     type NonStoredData = ();
 
-    fn validate(&self, ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
-        use crate::db::schema::{
-            kernel_accounts::dsl::*,
-        };
+    fn validate(
+        &self,
+        ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(), Self::Error> {
+        use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
         validators::username(&self.username)?;
@@ -43,7 +42,10 @@ impl eventsourcing::Command for Create {
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
-            return Err(KernelError::Validation(format!("Email: {} is already in use.", &self.email)));
+            return Err(KernelError::Validation(format!(
+                "Email: {} is already in use.",
+                &self.email
+            )));
         }
 
         // verify that username isn't already in use
@@ -52,18 +54,25 @@ impl eventsourcing::Command for Create {
             .count()
             .get_result(ctx)?;
         if existing_username != 0 {
-            return Err(KernelError::Validation(format!("Username: {} is already in use.", &self.username)));
+            return Err(KernelError::Validation(format!(
+                "Username: {} is already in use.",
+                &self.username
+            )));
         }
 
         return Ok(());
     }
 
-    fn build_event(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    fn build_event(
+        &self,
+        _ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
+    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let now = chrono::Utc::now();
         let id = uuid::Uuid::new_v4();
         let mut metadata = self.metadata.clone();
         metadata.actor_id = Some(id);
-        let data = account::EventData::CreatedV1(account::CreatedV1{
+        let data = account::EventData::CreatedV1(account::CreatedV1 {
             id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
@@ -74,12 +83,15 @@ impl eventsourcing::Command for Create {
             is_admin: false,
         });
 
-        return  Ok((account::Event{
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data,
-            aggregate_id: id,
-            metadata,
-        }, ()));
+        return Ok((
+            account::Event {
+                id: uuid::Uuid::new_v4(),
+                timestamp: now,
+                data,
+                aggregate_id: id,
+                metadata,
+            },
+            (),
+        ));
     }
 }

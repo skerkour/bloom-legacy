@@ -1,25 +1,17 @@
-use actix::{Message, Handler};
-use kernel::{
-    db::DbActor,
-    KernelError,
-    events::EventMetadata,
-};
 use crate::{
-    domain::{
-        scan,
-        report,
-    },
+    domain::{report, scan},
     models,
 };
+use actix::{Handler, Message};
+use futures_fs::FsPool;
+use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use rusoto_s3::{PutObjectRequest, StreamingBody, S3};
 use std::fs;
 use std::io;
-use futures_fs::FsPool;
 use std::io::Read;
 use std::path::Path;
-use zip;
 use walkdir::WalkDir;
-use rusoto_s3::{PutObjectRequest, S3, StreamingBody};
-
+use zip;
 
 #[derive(Clone)]
 pub struct CompleteReport {
@@ -39,19 +31,15 @@ impl Handler<CompleteReport> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: CompleteReport, _: &mut Self::Context) -> Self::Result {
-         use kernel::db::schema::{
-            phaser_scans,
-            phaser_scans_events,
-            phaser_reports,
-            phaser_reports_events,
-        };
         use diesel::prelude::*;
+        use kernel::db::schema::{
+            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
+        };
 
-        let conn = self.pool.get()
-            .map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata{
+            let metadata = EventMetadata {
                 actor_id: None,
                 request_id: Some(msg.request_id),
                 session_id: None,
@@ -64,36 +52,53 @@ impl Handler<CompleteReport> for DbActor {
             extarct_zip(msg.report_dir.clone(), archive)?;
 
             // send to S3
-            for entry in WalkDir::new(&msg.report_dir).into_iter()
+            for entry in WalkDir::new(&msg.report_dir)
+                .into_iter()
                 .filter_map(|e| e.ok())
-                .filter(|e| e.file_type().is_file()) {
-
-
-                let name = entry.path().strip_prefix(Path::new(&msg.report_dir)).expect("phaser: error unwraping report file path");
+                .filter(|e| e.file_type().is_file())
+            {
+                let name = entry
+                    .path()
+                    .strip_prefix(Path::new(&msg.report_dir))
+                    .expect("phaser: error unwraping report file path");
                 let content_type = {
                     // read first 512 bytes to detect content type
-                    let mut contents = [0u8;512];
+                    let mut contents = [0u8; 512];
                     let mut file = fs::File::open(entry.path())?;
                     file.read(&mut contents)?;
                     mimesniff::detect_content_type(&contents)
                 };
 
                 let fspool = FsPool::default();
-                let file_stream = fspool.read(entry.path().to_str().expect("error getting path").to_string(), Default::default());
+                let file_stream = fspool.read(
+                    entry
+                        .path()
+                        .to_str()
+                        .expect("error getting path")
+                        .to_string(),
+                    Default::default(),
+                );
 
                 // upload to s3
                 // TODO: handle error
                 let req = PutObjectRequest {
                     bucket: msg.s3_bucket.clone(),
-                    key: format!("phaser/scans/{}/reports/{}/{}", msg.scan_id, msg.report_id, name.display()),
+                    key: format!(
+                        "phaser/scans/{}/reports/{}/{}",
+                        msg.scan_id,
+                        msg.report_id,
+                        name.display()
+                    ),
                     body: Some(StreamingBody::new(file_stream)),
                     content_length: Some(entry.metadata()?.len() as i64),
                     content_type: Some(content_type.to_string()),
                     ..Default::default()
                 };
-                msg.s3_client.put_object(req).sync().expect("pahser: Couldn't PUT object");
+                msg.s3_client
+                    .put_object(req)
+                    .sync()
+                    .expect("pahser: Couldn't PUT object");
             }
-
 
             // parse report.json
             let report_path = format!("{}/report.json", &msg.report_dir);
@@ -106,14 +111,17 @@ impl Handler<CompleteReport> for DbActor {
 
             // generate report
             // TODO...
-            let total_findings = parsed_report.targets[0].findings.values().fold(0u64, |acc, x| {
-                let y = match &x.result {
-                    models::findings::ModuleResult::None | models::findings::ModuleResult::Err(_) => 0,
-                    _ => 1,
-                };
-                return acc + y;
-            });
-
+            let total_findings = parsed_report.targets[0]
+                .findings
+                .values()
+                .fold(0u64, |acc, x| {
+                    let y = match &x.result {
+                        models::findings::ModuleResult::None
+                        | models::findings::ModuleResult::Err(_) => 0,
+                        _ => 1,
+                    };
+                    return acc + y;
+                });
 
             // complete report
             // retrieve report
@@ -123,12 +131,13 @@ impl Handler<CompleteReport> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let complete_cmd = report::Complete{
+            let complete_cmd = report::Complete {
                 findings: report::Finding::V1(parsed_report),
                 total_findings,
                 metadata: metadata.clone(),
             };
-            let (completed_report, event, _) = eventsourcing::execute(&conn, report_to_complete, &complete_cmd)?;
+            let (completed_report, event, _) =
+                eventsourcing::execute(&conn, report_to_complete, &complete_cmd)?;
 
             diesel::update(&completed_report)
                 .set(&completed_report)
@@ -136,8 +145,6 @@ impl Handler<CompleteReport> for DbActor {
             diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
                 .values(&event)
                 .execute(&conn)?;
-
-
 
             // complete scan
             // retrieve Scan
@@ -147,11 +154,12 @@ impl Handler<CompleteReport> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let complete_cmd = scan::Complete{
+            let complete_cmd = scan::Complete {
                 findings: total_findings,
                 metadata: metadata.clone(),
             };
-            let (completed_scan, event, _) = eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
+            let (completed_scan, event, _) =
+                eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
 
             diesel::update(&completed_scan)
                 .set(&completed_scan)
@@ -168,11 +176,20 @@ impl Handler<CompleteReport> for DbActor {
     }
 }
 
-fn extarct_zip<R: io::Read + io::Seek>(base_dir: String, mut archive: zip::read::ZipArchive<R>) -> Result<(), KernelError> {
+fn extarct_zip<R: io::Read + io::Seek>(
+    base_dir: String,
+    mut archive: zip::read::ZipArchive<R>,
+) -> Result<(), KernelError> {
     for i in 0..archive.len() {
         let mut file = archive.by_index(i).unwrap();
         let filepath = file.sanitized_name();
-        let outpath = format!("{}/{}", &base_dir, filepath.to_str().expect("phaser: error unwraping report file path"));
+        let outpath = format!(
+            "{}/{}",
+            &base_dir,
+            filepath
+                .to_str()
+                .expect("phaser: error unwraping report file path")
+        );
 
         // {
         //     let comment = file.comment();

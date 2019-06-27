@@ -1,29 +1,29 @@
 mod app;
 
-
-use std::env;
-use sentry::integrations::panic::register_panic_handler;
+use actix::System;
 use actix_web::{
-    http::header, middleware::cors::Cors, middleware::Logger, middleware::NormalizePath, web, App, HttpServer, middleware,
+    http::header, middleware, middleware::cors::Cors, middleware::Logger,
+    middleware::NormalizePath, web, App, HttpServer,
+};
+use kernel::{
+    api, config, db, log,
+    log::macros::{slog_info, slog_o},
+    myaccount::domain::account,
 };
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
-use actix::System;
-use kernel::{
-    log,
-    log::macros::{slog_info, slog_o},
-    config,
-    db,
-    api,
-    myaccount::domain::account,
-};
+use sentry::integrations::panic::register_panic_handler;
+use std::env;
 use std::str::FromStr;
 
-
 fn register_reactors() {
-    eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated{}));
-    eventsourcing::subscribe::<_, account::Event, _>(Box::new(bitflow::reactors::AccountCreated{}));
-    eventsourcing::subscribe::<_, account::Event, _>(Box::new(billing::reactors::AccountCreated{}));
+    eventsourcing::subscribe::<_, account::Event, _>(Box::new(drive::reactors::AccountCreated {}));
+    eventsourcing::subscribe::<_, account::Event, _>(Box::new(
+        bitflow::reactors::AccountCreated {},
+    ));
+    eventsourcing::subscribe::<_, account::Event, _>(Box::new(
+        billing::reactors::AccountCreated {},
+    ));
 }
 
 fn main() {
@@ -41,7 +41,7 @@ fn main() {
     register_reactors();
 
     let region = Region::from_str(&cfg.aws.region).expect("AWS region not valid");
-    let api_state = api::State{
+    let api_state = api::State {
         db: db_actor_addr,
         config: cfg.clone(),
         s3_client: S3Client::new(region),
