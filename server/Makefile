@@ -36,10 +36,10 @@ test:
 	cargo test
 
 fmt:
-	cargo +nightly fmt
+	cargo fmt
 
 fmt_check:
-	cargo +nightly fmt --all -- --check
+	cargo fmt --all -- --check
 
 lint:
 	cargo clippy -- -D warnings
