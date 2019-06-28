@@ -48,7 +48,8 @@ test:server:
   script:
     - apt update && apt install -y gcc make git
     - rustup default nightly-2019-05-10
-    - rustup toolchain install nightly && rustup component add rustfmt --toolchain nightly
+    - rustup toolchain install nightly
+    - rustup component add rustfmt --toolchain nightly
     - cp bloom.default.sane server/bloom.sane
     - make -C server fmt_check
     - make -C server test
