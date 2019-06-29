@@ -2,15 +2,15 @@
   <v-layout row wrap>
 
     <v-flex hidden-xs-only sm3>
-      <v-subheader>Display Name</v-subheader>
+      <v-subheader>Bio</v-subheader>
     </v-flex>
     <v-flex xs12 sm9>
-      <v-text-field
-      v-model="display_name"
-      label="Display name"
+      <v-textarea
+      v-model="bio_data"
+      label="Bio"
+      counter="200"
       :disabled="is_loading"
-      counter="42"
-      ></v-text-field>
+      ></v-textarea>
     </v-flex>
 
     <v-flex xs12 text-xs-center v-if="error">
@@ -21,7 +21,7 @@
 
     <v-flex class="text-xs-right" xs12>
       <v-btn flat @click="cancel" :disabled="is_loading || !updatable">Cancel</v-btn>
-      <v-btn color="primary" @click="update_display_name" :loading="is_loading" :disabled="!updatable">
+      <v-btn color="primary" @click="update_bio" :loading="is_loading" :disabled="!updatable">
         Update
       </v-btn>
     </v-flex>
@@ -36,20 +36,20 @@ import api from '@/bloom/kernel/api';
 
 
 @Component
-export default class DisplayNameForm extends Vue {
+export default class BioForm extends Vue {
   // props
-  @Prop({ type: String, default: '' }) displayname!: string;
+  @Prop({ type: String, default: '' }) bio!: string;
 
 
   // data
   is_loading = false;
-  display_name = '';
+  bio_data = '';
   error = '';
 
 
   // computed
   get updatable() {
-    return this.displayname !== this.display_name;
+    return this.bio !== this.bio_data;
   }
 
 
@@ -61,11 +61,11 @@ export default class DisplayNameForm extends Vue {
 
   // watch
   // methods
-  async update_display_name() {
+  async update_bio() {
     try {
       this.is_loading = true;
       const payload = {
-        display_name: this.display_name,
+        bio: this.bio_data,
       };
       const res = await api.put(`${api.MYACCOUNT}/v1/me`, payload);
       this.$toast.success('Success', { icon: 'mdi-check-circle' });
@@ -78,7 +78,7 @@ export default class DisplayNameForm extends Vue {
   }
 
   cancel() {
-    this.display_name = this.displayname;
+    this.bio_data = this.bio;
   }
 }
 </script>
