@@ -54,6 +54,8 @@ pub struct MeResponse {
     pub email: String,
     pub avatar_url: String,
     pub is_admin: bool,
+    pub bio: String,
+    pub display_name: String,
 }
 
 impl From<account::Account> for MeResponse {
@@ -67,6 +69,8 @@ impl From<account::Account> for MeResponse {
             email: account.email,
             avatar_url: account.avatar_url,
             is_admin: account.is_admin,
+            bio: account.bio,
+            display_name: account.display_name,
         }
     }
 }

@@ -318,6 +318,8 @@ table! {
         password_reset_token -> Nullable<Text>,
         username -> Text,
         is_disabled -> Bool,
+        bio -> Text,
+        display_name -> Text,
     }
 }
 
