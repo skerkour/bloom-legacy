@@ -16,3 +16,5 @@ pub const PASSWORD_RESET_TOKEN_MIN_LENGTH: u32 = 200;
 pub const PASSWORD_RESET_TOKEN_MAX_LENGTH: u32 = 256;
 pub const PASSWORD_RESET_TOKEN_BCRYPT_COST: u32 = 5;
 pub const AVATAR_DEFAULT_PATH: &str = "/kernel/static/imgs/profile.jpg";
+pub const BIO_MAX_LENGTH: usize = 256;
+pub const DISPLAY_NAME_MAX_LENGTH: usize = 42;

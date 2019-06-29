@@ -89,6 +89,8 @@ pub struct UpdateAccount {
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
+    pub bio: Option<String>,
+    pub display_name: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

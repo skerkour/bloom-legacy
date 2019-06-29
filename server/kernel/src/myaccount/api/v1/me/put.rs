@@ -34,6 +34,8 @@ pub fn put(
                 avatar_url: account_data.avatar_url,
                 first_name: account_data.first_name,
                 last_name: account_data.last_name,
+                bio: account_data.bio,
+                display_name: account_data.display_name,
                 request_id,
                 session_id: auth.session.expect("unwraping non none session").id,
             })

@@ -1,4 +1,7 @@
-use crate::error::KernelError;
+use crate::{
+    error::KernelError,
+    myaccount,
+};
 use regex::Regex;
 use std::collections::HashSet;
 
@@ -146,6 +149,40 @@ pub fn username(username: &str) -> Result<(), KernelError> {
     if !username.chars().all(char::is_alphanumeric) || !username.is_ascii() {
         return Err(KernelError::Validation(
             "username must contains only alphanumeric characters".to_string(),
+        ));
+    }
+
+    return Ok(());
+}
+
+
+pub fn bio(bio: &str) -> Result<(), KernelError> {
+    if bio.is_empty() {
+        return Err(KernelError::Validation(
+            "bio cannot be empty".to_string(),
+        ));
+    }
+
+    if bio.len() > myaccount::BIO_MAX_LENGTH {
+        return Err(KernelError::Validation(
+            "bio is too long".to_string(),
+        ));
+    }
+
+    return Ok(());
+}
+
+
+pub fn display_name(display_name: &str) -> Result<(), KernelError> {
+    if display_name.is_empty() {
+        return Err(KernelError::Validation(
+            "display_name cannot be empty".to_string(),
+        ));
+    }
+
+    if display_name.len() > myaccount::DISPLAY_NAME_MAX_LENGTH {
+        return Err(KernelError::Validation(
+            "display_name is too long".to_string(),
         ));
     }
 
