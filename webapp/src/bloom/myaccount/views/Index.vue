@@ -80,17 +80,10 @@
             @update="update_display_name" />
           </v-flex>
 
-
-          <v-flex hidden-xs-only sm3>
-            <v-subheader>Bio</v-subheader>
-          </v-flex>
-          <v-flex xs12 sm9>
-            <v-textarea
-              v-model="me.bio"
-              label="Bio"
-
-              counter="256"
-            ></v-textarea>
+          <v-flex xs12>
+            <blm-myaccount-form-bio
+            :bio="me.bio"
+            @update="update_bio" />
           </v-flex>
 
 
@@ -157,6 +150,7 @@ import api from '@/bloom/kernel/api';
 import FormEmail from '../components/EmailForm.vue';
 import FormName from '../components/NameForm.vue';
 import DisplayNameForm from '../components/DisplayNameForm.vue';
+import BioForm from '../components/BioForm.vue';
 const { log } = require('@bloom42/astro');
 
 interface Name {
@@ -167,6 +161,7 @@ interface Name {
 
 @Component({
   components: {
+    'blm-myaccount-form-bio': BioForm,
     'blm-myaccount-form-display-name': DisplayNameForm,
     'blm-myaccount-form-email': FormEmail,
     'blm-myaccount-form-name': FormName,
@@ -209,6 +204,10 @@ export default class Index extends Vue {
   update_display_name(me: any) {
     this.me.display_name = me.display_name;
     this.$store.commit('set_account', { display_name: me.display_name });
+  }
+
+  update_bio(me: any) {
+    this.me.bio = me.bio;
   }
 
   update_email(email: string) {
