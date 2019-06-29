@@ -31,7 +31,6 @@ pub fn put(
             .db
             .send(controllers::UpdateAccount {
                 account: auth.account.expect("unwraping non none account"),
-                avatar_url: account_data.avatar_url,
                 first_name: account_data.first_name,
                 last_name: account_data.last_name,
                 bio: account_data.bio,

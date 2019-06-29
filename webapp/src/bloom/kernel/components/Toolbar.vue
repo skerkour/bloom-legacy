@@ -98,9 +98,9 @@
             <v-list-tile-content>
               <v-list-tile-title>
                 <span v-if="$store.state.account">
-                  {{ $store.state.account.first_name }} {{ $store.state.account.last_name }}
+                  {{ $store.state.account.display_name }}
                 </span>
-                <span v-else>Name</span>
+                <span v-else>Display Name</span>
               </v-list-tile-title>
               <v-list-tile-sub-title >
                 <span v-if="$store.state.account">{{ $store.state.account.username }}</span>

@@ -74,15 +74,10 @@
           </v-flex>
 
 
-          <v-flex hidden-xs-only sm3>
-            <v-subheader>Display name</v-subheader>
-          </v-flex>
-          <v-flex xs12 sm9>
-            <v-text-field
-              v-model="me.display_name"
-              label="Display name"
-              readonly
-            ></v-text-field>
+          <v-flex xs12>
+            <blm-myaccount-form-display-name
+            :displayname="me.display_name"
+            @update="update_display_name" />
           </v-flex>
 
 
@@ -161,6 +156,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 import FormEmail from '../components/EmailForm.vue';
 import FormName from '../components/NameForm.vue';
+import DisplayNameForm from '../components/DisplayNameForm.vue';
 const { log } = require('@bloom42/astro');
 
 interface Name {
@@ -171,6 +167,7 @@ interface Name {
 
 @Component({
   components: {
+    'blm-myaccount-form-display-name': DisplayNameForm,
     'blm-myaccount-form-email': FormEmail,
     'blm-myaccount-form-name': FormName,
   },
@@ -207,6 +204,11 @@ export default class Index extends Vue {
   update_name(name: Name) {
     this.me.first_name = name.first_name;
     this.me.last_name = name.last_name;
+  }
+
+  update_display_name(me: any) {
+    this.me.display_name = me.display_name;
+    this.$store.commit('set_account', { display_name: me.display_name });
   }
 
   update_email(email: string) {
