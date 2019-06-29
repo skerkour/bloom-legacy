@@ -22,6 +22,8 @@ pub struct Account {
     pub password_reset_token: Option<String>,
     pub username: String,
     pub is_disabled: bool,
+    pub bio: String,
+    pub display_name: String,
 }
 
 impl Account {
@@ -45,6 +47,8 @@ impl Account {
             password_reset_token: None,
             username: String::new(),
             is_disabled: false,
+            bio: String::new(),
+            display_name: String::new(),
         };
     }
 }

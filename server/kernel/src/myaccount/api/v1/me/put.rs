@@ -41,16 +41,7 @@ pub fn put(
             .from_err()
             .and_then(move |account: Result<_, KernelError>| match account {
                 Ok(account) => {
-                    let res = models::MeResponse {
-                        id: account.id,
-                        created_at: account.created_at,
-                        first_name: account.first_name,
-                        last_name: account.last_name,
-                        username: account.username,
-                        email: account.email,
-                        avatar_url: account.avatar_url,
-                        is_admin: account.is_admin,
-                    };
+                    let res: models::MeResponse = account.into();
                     let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))
                 }

@@ -11,16 +11,7 @@ pub fn get(req: HttpRequest) -> HttpResponse {
     }
 
     let account = auth.account.unwrap();
-    let res = models::MeResponse {
-        id: account.id,
-        created_at: account.created_at,
-        first_name: account.first_name,
-        last_name: account.last_name,
-        username: account.username,
-        email: account.email,
-        avatar_url: account.avatar_url,
-        is_admin: account.is_admin,
-    };
+    let res: models::MeResponse = account.into();
     let res = api::Response::data(res);
     return HttpResponse::Ok().json(&res);
 }

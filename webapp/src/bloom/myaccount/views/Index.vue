@@ -21,15 +21,19 @@
       </v-alert>
     </v-flex>
 
+
+
     <v-flex xs12 sm10 md8 xl7 v-if="me">
       <div class="elevation-0">
-        <v-card-title>
-          <div class="headline text-xs-left">
-            Profile
-          </div>
-        </v-card-title>
         <v-container grid-list-xl text-xs-left>
           <v-layout row wrap>
+
+            <v-flex xs12>
+              <div class="headline text-xs-left">
+                Public Profile
+              </div>
+            </v-flex>
+
             <v-flex xs12 sm3>
               <v-subheader>Avatar</v-subheader>
             </v-flex>
@@ -57,27 +61,6 @@
             ></v-progress-circular>
           </v-flex>
 
-          <v-flex xs12>
-            <v-divider></v-divider>
-          </v-flex>
-
-          <v-flex xs12>
-            <blm-myaccount-form-name
-            :firstname="me.first_name"
-            :lastname="me.last_name"
-            @update="update_name" />
-          </v-flex>
-
-
-          <v-flex xs12><v-divider></v-divider></v-flex>
-
-          <v-flex xs12>
-            <blm-myaccount-form-email :email="me.email" @update="update_email" />
-          </v-flex>
-
-
-          <v-flex xs12><v-divider></v-divider></v-flex>
-
           <v-flex hidden-xs-only sm3>
             <v-subheader>Username</v-subheader>
           </v-flex>
@@ -90,18 +73,76 @@
             ></v-text-field>
           </v-flex>
 
-          <v-flex xs12><v-divider></v-divider></v-flex>
 
           <v-flex hidden-xs-only sm3>
-            <v-subheader>Theme</v-subheader>
+            <v-subheader>Display name</v-subheader>
           </v-flex>
           <v-flex xs12 sm9>
+            <v-text-field
+              v-model="me.display_name"
+              label="Display name"
+              readonly
+            ></v-text-field>
+          </v-flex>
+
+
+          <v-flex hidden-xs-only sm3>
+            <v-subheader>Bio</v-subheader>
+          </v-flex>
+          <v-flex xs12 sm9>
+            <v-textarea
+              v-model="me.bio"
+              label="Bio"
+
+              counter="256"
+            ></v-textarea>
+          </v-flex>
+
+
+          <v-flex xs12>
+            <v-divider></v-divider>
+          </v-flex>
+
+          <v-flex xs12>
+            <div class="headline text-xs-left">
+              Personal Information
+            </div>
+          </v-flex>
+
+          <v-flex xs12>
+            <blm-myaccount-form-name
+            :firstname="me.first_name"
+            :lastname="me.last_name"
+            @update="update_name" />
+          </v-flex>
+
+
+          <v-flex xs12>
+            <blm-myaccount-form-email :email="me.email" @update="update_email" />
+          </v-flex>
+
+
+          <v-flex xs12><v-divider></v-divider></v-flex>
+
+          <v-flex xs12>
+            <div class="headline text-xs-left">
+              Settings
+            </div>
+          </v-flex>
+
+
+          <v-flex xs3>
+            <v-subheader>Theme</v-subheader>
+          </v-flex>
+          <v-flex xs9>
             <v-switch
               :input-value="dark_mode"
               :label="`${dark_mode ? 'Dark' : 'Light'}`"
               v-on:change="on_dark_mode_changed"
             ></v-switch>
           </v-flex>
+
+
         </v-layout>
       </v-container>
     </div>

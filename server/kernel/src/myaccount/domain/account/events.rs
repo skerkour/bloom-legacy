@@ -30,6 +30,8 @@ pub enum EventData {
     EnabledV1,
     AccountDeletedV1, // DO NOT USE, use DeletedV1 instead
     DeletedV1(DeletedV1),
+    BioUpdatedV1(BioUpdatedV1),
+    DisplayNameUpdatedV1(DisplayNameUpdatedV1),
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -86,6 +88,16 @@ pub struct DeletedV1 {
     pub random_string: String,
 }
 
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct BioUpdatedV1 {
+    pub bio: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DisplayNameUpdatedV1 {
+    pub display_name: String,
+}
+
 impl eventsourcing::Event for Event {
     type Aggregate = super::Account;
 
@@ -108,6 +120,8 @@ impl eventsourcing::Event for Event {
                 password_reset_token: None,
                 username: data.username.clone(),
                 is_disabled: false,
+                bio: String::new(),
+                display_name: data.username.clone(),
             },
             // FirstNameUpdatedV1
             EventData::FirstNameUpdatedV1(ref data) => account::Account {
@@ -179,6 +193,18 @@ impl eventsourcing::Event for Event {
                 last_name: data.random_string.clone(),
                 email: data.random_string.clone(),
                 password: data.password.clone(),
+                bio: data.random_string.clone(),
+                display_name: data.random_string.clone(),
+                ..aggregate
+            },
+            // BioUpdatedV1
+            EventData::BioUpdatedV1(ref data) => account::Account {
+                bio: data.bio.clone(),
+                ..aggregate
+            },
+            // DisplayNameUpdatedV1
+            EventData::DisplayNameUpdatedV1(ref data) => account::Account {
+                display_name: data.display_name.clone(),
                 ..aggregate
             },
         }
