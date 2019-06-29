@@ -120,18 +120,24 @@ const router = new Router({
 
     // onboarding
     {
-      children: [
-        { path: 'verify', component: VerifyAccount },
-        { path: 'username', component: SetupUsernameForm },
-      ],
-      component: DefaultLayout,
+      component: VerifyAccount,
       meta: {
         auth: {
           forbidden: true,
         },
         onboarding: true,
       },
-      path: '/welcome',
+      path: '/welcome/verify',
+    },
+    {
+      component: SetupUsernameForm,
+      meta: {
+        auth: {
+          forbidden: true,
+        },
+        onboarding: true,
+      },
+      path: '/welcome/username',
     },
     ...MyAccountRoutes,
     ...DriveRoutes,
