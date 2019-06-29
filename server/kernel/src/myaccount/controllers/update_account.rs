@@ -9,6 +9,8 @@ pub struct UpdateAccount {
     pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
+    pub bio: Option<String>,
+    pub display_name: Option<String>,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
 }
@@ -68,6 +70,52 @@ impl Handler<UpdateAccount> for DbActor {
 
                     let (account_to_update, event, _) =
                         eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
+
+                    // update account
+                    diesel::update(&account_to_update)
+                        .set(&account_to_update)
+                        .execute(&conn)?;
+                    diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
+                        .values(&event)
+                        .execute(&conn)?;
+                    account_to_update
+                }
+                _ => account_to_update,
+            };
+
+            // bio
+            let account_to_update = match &msg.bio {
+                Some(bio) if bio != &account_to_update.bio => {
+                    let update_bio_cmd = account::UpdateBio {
+                        bio: bio.to_string(),
+                        metadata: metadata.clone(),
+                    };
+
+                    let (account_to_update, event, _) =
+                        eventsourcing::execute(&conn, account_to_update, &update_bio_cmd)?;
+
+                    // update account
+                    diesel::update(&account_to_update)
+                        .set(&account_to_update)
+                        .execute(&conn)?;
+                    diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
+                        .values(&event)
+                        .execute(&conn)?;
+                    account_to_update
+                }
+                _ => account_to_update,
+            };
+
+            // display_name
+            let account_to_update = match &msg.display_name {
+                Some(display_name) if display_name != &account_to_update.display_name => {
+                    let update_display_name_cmd = account::UpdateDisplayName {
+                        display_name: display_name.to_string(),
+                        metadata: metadata.clone(),
+                    };
+
+                    let (account_to_update, event, _) =
+                        eventsourcing::execute(&conn, account_to_update, &update_display_name_cmd)?;
 
                     // update account
                     diesel::update(&account_to_update)

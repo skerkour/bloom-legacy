@@ -10,6 +10,8 @@ mod update_email;
 mod update_first_name;
 mod update_last_name;
 mod update_password;
+mod update_bio;
+mod update_display_name;
 
 pub use create::Create;
 pub use delete::Delete;
@@ -23,3 +25,5 @@ pub use update_email::UpdateEmail;
 pub use update_first_name::UpdateFirstName;
 pub use update_last_name::UpdateLastName;
 pub use update_password::UpdatePassword;
+pub use update_bio::UpdateBio;
+pub use update_display_name::UpdateDisplayName;
