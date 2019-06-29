@@ -6,7 +6,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateAccount {
     pub account: account::Account,
-    pub avatar_url: Option<String>,
     pub first_name: Option<String>,
     pub last_name: Option<String>,
     pub bio: Option<String>,

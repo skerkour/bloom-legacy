@@ -5,10 +5,10 @@ mod events;
 pub use aggregate::Account;
 pub use commands::{
     Create, Delete, Disable, Enable, FailSignIn, RequestPasswordReset, ResetPassword, UpdateAvatar,
-    UpdateEmail, UpdateFirstName, UpdateLastName, UpdatePassword, UpdateBio, UpdateDisplayName,
+    UpdateBio, UpdateDisplayName, UpdateEmail, UpdateFirstName, UpdateLastName, UpdatePassword,
 };
 pub use events::{
-    AvatarUpdatedV1, CreatedV1, DeletedV1, EmailUpdatedV1, Event, EventData, FirstNameUpdatedV1,
-    LastNameUpdatedV1, PasswordResetRequestedV1, PasswordResetedV1, PasswordUpdatedV1, BioUpdatedV1,
-    DisplayNameUpdatedV1,
+    AvatarUpdatedV1, BioUpdatedV1, CreatedV1, DeletedV1, DisplayNameUpdatedV1, EmailUpdatedV1,
+    Event, EventData, FirstNameUpdatedV1, LastNameUpdatedV1, PasswordResetRequestedV1,
+    PasswordResetedV1, PasswordUpdatedV1,
 };

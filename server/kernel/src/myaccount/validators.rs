@@ -1,7 +1,4 @@
-use crate::{
-    error::KernelError,
-    myaccount,
-};
+use crate::{error::KernelError, myaccount};
 use regex::Regex;
 use std::collections::HashSet;
 
@@ -155,23 +152,17 @@ pub fn username(username: &str) -> Result<(), KernelError> {
     return Ok(());
 }
 
-
 pub fn bio(bio: &str) -> Result<(), KernelError> {
     if bio.is_empty() {
-        return Err(KernelError::Validation(
-            "bio cannot be empty".to_string(),
-        ));
+        return Err(KernelError::Validation("bio cannot be empty".to_string()));
     }
 
     if bio.len() > myaccount::BIO_MAX_LENGTH {
-        return Err(KernelError::Validation(
-            "bio is too long".to_string(),
-        ));
+        return Err(KernelError::Validation("bio is too long".to_string()));
     }
 
     return Ok(());
 }
-
 
 pub fn display_name(display_name: &str) -> Result<(), KernelError> {
     if display_name.is_empty() {

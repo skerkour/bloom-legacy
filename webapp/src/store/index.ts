@@ -48,6 +48,9 @@ export default new Vuex.Store<AppState>({
       if (account.first_name) {
         state.account.first_name = account.first_name;
       }
+      if (account.display_name) {
+        state.account.display_name = account.display_name;
+      }
       if (account.last_name) {
         state.account.last_name = account.last_name;
       }
