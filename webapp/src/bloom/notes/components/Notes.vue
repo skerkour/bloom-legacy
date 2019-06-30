@@ -11,20 +11,14 @@
         </v-flex>
       </v-layout>
       <v-layout row wrap justify-left class="mt-1">
-      <v-flex
-        v-for="note in notes"
-        xs12
-        sm4
-        md3
-        :key="note.id"
-      >
-      <blm-notes-note
-        :note="note"
-        @archive="note_archived"
-        @remove="note_removed"
-        @update="note_updated"
-        @delete="note_deleted"
-      />
+      <v-flex v-for="note in notes" :key="note.id" xs12 sm4 md3>
+        <blm-notes-note
+          :note="note"
+          @archive="note_archived"
+          @remove="note_removed"
+          @update="note_updated"
+          @delete="note_deleted"
+        />
       </v-flex>
     </v-layout>
     </v-container>

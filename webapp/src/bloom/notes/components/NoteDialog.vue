@@ -22,7 +22,6 @@
           ref="notebody"
           v-model="body"
           placeholder="Take a note..."
-          height="100%"
           auto-grow
         ></v-textarea>
       </v-card-text>
