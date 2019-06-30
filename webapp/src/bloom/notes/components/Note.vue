@@ -5,7 +5,7 @@
       <div class="headline">{{ note.title }}</div>
     </v-card-title>
     <v-card-text @click="update" class="pointer">
-      <p>{{ note.body }}</p>
+      <p class="blm-note-body">{{ note.body }}</p>
     </v-card-text>
     <v-divider light></v-divider>
     <v-card-actions>
@@ -191,5 +191,9 @@ export default class Note extends Vue {
 <style scoped lang="scss">
 .v-card {
   border-radius: 8px;
+}
+
+.blm-note-body {
+  height: 80px;
 }
 </style>
