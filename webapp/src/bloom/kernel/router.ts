@@ -14,7 +14,7 @@ import Contact from './views/contact/Index.vue';
 import Security from './views/security/Index.vue';
 import SignInForm from './components/SignInForm.vue';
 import RegisterForm from './components/RegisterForm.vue';
-import DefaultLayout from '@/bloom/kernel/layouts/Default.vue';
+import UserProfile from './views/UserProfile.vue';
 import VerifyAccount from './components/Verify.vue';
 import SetupUsernameForm from './components/SetupUsernameForm.vue';
 import P404 from './views/404.vue';
@@ -138,6 +138,12 @@ const router = new Router({
         onboarding: true,
       },
       path: '/welcome/username',
+    },
+
+    // public user profile
+    {
+      component: UserProfile,
+      path: '/@:username',
     },
     ...MyAccountRoutes,
     ...DriveRoutes,
