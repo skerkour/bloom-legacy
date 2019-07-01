@@ -49,7 +49,6 @@ pub struct FailDownloadBody {
     pub error: String,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct JobResponse {
     pub id: uuid::Uuid,
