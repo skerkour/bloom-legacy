@@ -4,6 +4,7 @@
 
 ```sh
 $ cd webapp
+$ echo 'VUE_APP_API_BASE_URL=http://0.0.0.0:8000/api' > .env.local
 $ make install
 $ make dev
 ```
