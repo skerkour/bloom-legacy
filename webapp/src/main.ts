@@ -33,13 +33,6 @@ Vue.component('blm-footer', Footer);
 
 // import './registerServiceWorker';
 
-// init sentry for bug tracking
-Sentry.init({
-  dsn: config.SENTRY_URL,
-  environment: config.ENV,
-  integrations: [new Integrations.Vue({ Vue })],
-});
-
 // init stage dependant stuff
 if (config.ENV === 'development') {
   Vue.config.productionTip = true;
@@ -52,6 +45,15 @@ if (config.ENV === 'development') {
 }
 
 log.with({ config }).debug('config loaded');
+
+
+// init sentry for bug tracking
+Sentry.init({
+  dsn: config.SENTRY_URL,
+  environment: config.ENV,
+  integrations: [new Integrations.Vue({ Vue })],
+});
+
 
 // init libraries and components
 Vue.use(Vuetify, {
