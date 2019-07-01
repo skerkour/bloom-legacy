@@ -153,10 +153,6 @@ pub fn username(username: &str) -> Result<(), KernelError> {
 }
 
 pub fn bio(bio: &str) -> Result<(), KernelError> {
-    if bio.is_empty() {
-        return Err(KernelError::Validation("bio cannot be empty".to_string()));
-    }
-
     if bio.len() > myaccount::BIO_MAX_LENGTH {
         return Err(KernelError::Validation("bio is too long".to_string()));
     }
