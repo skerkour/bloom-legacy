@@ -33,8 +33,6 @@ Vue.component('blm-footer', Footer);
 
 // import './registerServiceWorker';
 
-log.with({ config }).debug('config loaded');
-
 // init sentry for bug tracking
 Sentry.init({
   dsn: config.SENTRY_URL,
@@ -52,6 +50,8 @@ if (config.ENV === 'development') {
     log.config({ level: Level.INFO });
   }
 }
+
+log.with({ config }).debug('config loaded');
 
 // init libraries and components
 Vue.use(Vuetify, {
