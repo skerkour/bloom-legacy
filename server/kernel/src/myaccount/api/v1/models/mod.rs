@@ -130,3 +130,22 @@ pub struct PasswordResetRequestBody {
 pub struct NewCodeBody {
     pub id: uuid::Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct PublicProfileResponse {
+    pub avatar_url: String,
+    pub display_name: String,
+    pub username: String,
+    pub bio: String,
+}
+
+impl From<account::Account> for PublicProfileResponse {
+    fn from(account: account::Account) -> Self {
+        PublicProfileResponse {
+            username: account.username,
+            avatar_url: account.avatar_url,
+            bio: account.bio,
+            display_name: account.display_name,
+        }
+    }
+}

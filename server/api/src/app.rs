@@ -84,6 +84,10 @@ pub fn config(cfg: &mut web::ServiceConfig) {
                 "/myaccount/v1/me/sessions/{session_id}/revoke",
                 web::post().to_async(myaccountv1::me::sessions::revoke::post),
             )
+            .route(
+                "/myaccount/v1/users/{username}",
+                web::get().to_async(myaccountv1::users::user::get),
+            )
             // drive
             .route(
                 "/drive/v1/uploads",

@@ -1,6 +1,7 @@
 mod delete_account;
 mod find_account;
 mod find_sessions_for_account;
+mod find_user;
 mod registration_complete;
 mod registration_start;
 mod registration_verify;
@@ -19,6 +20,7 @@ mod verify_email;
 pub use delete_account::DeleteAccount;
 pub use find_account::FindAccount;
 pub use find_sessions_for_account::FindSessionsForAccount;
+pub use find_user::FindUser;
 pub use registration_complete::CompleteRegistration;
 pub use registration_start::StartRegistration;
 pub use registration_verify::VerifyPendingAccount;
