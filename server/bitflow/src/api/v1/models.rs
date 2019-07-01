@@ -48,3 +48,29 @@ pub struct UpdateDownloadBody {
 pub struct FailDownloadBody {
     pub error: String,
 }
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct JobResponse {
+    pub id: uuid::Uuid,
+    pub created_at: chrono::DateTime<chrono::Utc>,
+    pub name: String,
+    pub error: Option<String>,
+    pub progress: i32,
+    pub url: download::DownloadUrl,
+    pub max_size: u64,
+}
+
+impl From<download::Download> for JobResponse {
+    fn from(download: download::Download) -> Self {
+        JobResponse {
+            id: download.id,
+            created_at: download.created_at,
+            url: download.url,
+            name: download.name,
+            error: download.error,
+            progress: download.progress,
+            max_size: crate::MAX_DOWNLOAD_SIZE,
+        }
+    }
+}

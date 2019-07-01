@@ -35,7 +35,7 @@ pub fn get(
             .from_err()
             .and_then(move |res| match res {
                 Ok(download) => {
-                    let res = models::DownloadResponse::from(download);
+                    let res = models::JobResponse::from(download);
                     let res = api::Response::data(res);
                     ok(HttpResponse::Ok().json(&res))
                 }
