@@ -5,7 +5,7 @@
       <div class="headline">{{ note.title }}</div>
     </v-card-title>
     <v-card-text @click="update" class="pointer">
-      <p class="blm-note-body">{{ note.body }}</p>
+      <p class="blm-note-body">{{ (note.body.length > 200) ? note.body.substring(0,200) + "..." : note.body }}</p>
     </v-card-text>
     <v-divider light></v-divider>
     <v-card-actions>
