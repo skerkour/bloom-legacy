@@ -7,39 +7,43 @@ database = {
 }
 
 aws = {
-    secret_access_key = "XXX",
-    access_key_id = "XXX",
-    region = "XXX",
+    secret_access_key = "[XXX]",
+    access_key_id = "[XXX]",
+    region = "[XXX]",
 }
 
 s3 = {
-    bucket = "XXX",
+    bucket = "[XXX]",
     base_url = "https://s3.REGION.amazonaws.com",
 }
 
 sentry = {
-    server_url = "XXX" # optional
-    webapp_url = "XXX" # optional
+    server_url = "[XXX]" # optional
+    webapp_url = "[XXX]" # optional
 }
 
 phaser = {
-    secret = "XXX",
+    # cryptographically secure random string of at least 65 characters
+    secret = "[XXX]",
 }
 
 bitflow = {
-    secret = "XXX",
+    # cryptographically secure random string of at least 65 characters
+    secret = "[XXX]",
 }
 
 smtp = {
     port = 587,
-    host = "XXX",
-    username = "XXX",
-    password = "XXX",
+    # in development, host, username and password can be left as empty strings: ""
+    # if empty, emails will be printed in the console
+    host = "[XXX]",
+    username = "[XXX]",
+    password = "[XXX]",
 }
 
 stripe = {
-    public_key = "XXX",
-    secret_key = "XXX",
+    public_key = "[XXX]",
+    secret_key = "[XXX]",
 }
 
 blacklists = {
