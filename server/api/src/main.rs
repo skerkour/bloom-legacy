@@ -60,7 +60,7 @@ fn main() {
             .max_age(3600)
         )
         .wrap(NormalizePath)
-        .wrap(Logger::default())
+        .wrap(Logger::new(r#""%r" %s %b %D"#))
         .wrap(api::middlewares::RequestIdMiddleware)
         .wrap(middleware::DefaultHeaders::new()
             .header("X-Content-Type-Options", "nosniff")
