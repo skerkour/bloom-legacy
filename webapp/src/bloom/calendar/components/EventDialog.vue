@@ -200,7 +200,6 @@ export default class EventDialog extends Vue {
 
   // lifecycle
   // watch
-
   @Watch('event')
   on_event_changed(event: any) {
     if (event !== null) {
@@ -213,10 +212,12 @@ export default class EventDialog extends Vue {
     }
   }
 
-  @Watch('birthday_menu')
-  on_birthday_menu_changed(birthday_menu: boolean) {
-    if (birthday_menu) {
-      this.$nextTick(() => ((this.$refs.birthday_picker) as any).activePicker = 'YEAR');
+  @Watch('start_at')
+  on_start_at_changed(new_start_at: string) {
+    const start_at_time = new Date(new_start_at).getTime();
+    const end_at_time = new Date(this.end_at).getTime();
+    if (end_at_time < start_at_time) {
+      this.end_at = new_start_at;
     }
   }
 
@@ -252,10 +253,6 @@ export default class EventDialog extends Vue {
     } else {
       this.create_event();
     }
-  }
-
-  save_birthday(date: any) {
-    (this.$refs.birthday_menu as any).save(date);
   }
 
   async delete_event(event: any) {
