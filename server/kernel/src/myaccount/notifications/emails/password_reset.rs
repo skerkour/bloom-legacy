@@ -34,7 +34,7 @@ pub fn send_password_reset(
             .render_template(TEMPLATE, &data)
             .expect("error rendering template")
             .as_str(),
-    );
+    )?;
 
     return Ok(());
 }

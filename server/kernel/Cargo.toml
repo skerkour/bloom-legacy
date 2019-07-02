@@ -30,7 +30,7 @@ diesel = { version = "1.4", features = ["postgres", "chrono", "serde_json", "r2d
 futures = "0.1"
 image = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
-rand = "0.6"
+rand = "0.7"
 base64 = "0.10.1"
 mime = "0.3"
 url = "1.7"
@@ -39,8 +39,8 @@ walkdir = "2"
 
 # emails
 handlebars = "2.0.0-beta.1"
-lettre = "0.9.0"
-lettre_email = "0.9.0"
+lettre = "0.9.2"
+lettre_email = "0.9.2"
 
 # logging
 slog = "2.4"

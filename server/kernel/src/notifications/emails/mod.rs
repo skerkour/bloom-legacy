@@ -1,6 +1,6 @@
 mod default_template;
 
-use crate::config::Config;
+use crate::{config::Config, KernelError};
 use lettre::{smtp::authentication::Credentials, SmtpClient, Transport};
 use lettre_email::EmailBuilder;
 
@@ -12,11 +12,11 @@ pub fn send_email(
     to: (&str, &str),
     subject: &str,
     content: &str,
-) {
+) -> Result<(), KernelError> {
     // Useful in development mode when you haven't a smtp configured
     if config.smtp.host == "" {
         println!("=============\n{}\n=============", content);
-        return;
+        return Ok(());
     }
     let email = EmailBuilder::new()
         // Addresses can be specified by the tuple (email, alias)
@@ -25,11 +25,9 @@ pub fn send_email(
         .from(from)
         .subject(subject)
         .html(content)
-        .build()
-        .expect("error building email");
+        .build()?;
 
-    let mut mailer = SmtpClient::new_simple(config.smtp.host.as_str())
-        .expect("error building email transport")
+    let mut mailer = SmtpClient::new_simple(config.smtp.host.as_str())?
         // Add credentials for authentication
         .credentials(Credentials::new(
             config.smtp.username.clone(),
@@ -40,5 +38,6 @@ pub fn send_email(
         .transport();
 
     // Send the email
-    mailer.send(email.into()).expect("error sending email");
+    mailer.send(email.into())?;
+    return Ok(());
 }

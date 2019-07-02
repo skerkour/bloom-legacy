@@ -57,8 +57,7 @@ impl Handler<UpdateEmail> for DbActor {
                 format!("{} {}", &msg.account.first_name, &msg.account.last_name).as_str(),
                 &new_pending_email.email,
                 &non_persisted.code,
-            )
-            .expect("error sending email");
+            )?;
 
             return Ok(new_pending_email);
         })?);

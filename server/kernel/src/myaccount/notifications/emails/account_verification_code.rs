@@ -43,7 +43,7 @@ pub fn send_account_verification_code(
             .render_template(TEMPLATE, &data)
             .expect("error rendering template")
             .as_str(),
-    );
+    )?;
 
     // escapedID := url.QueryEscape(id)
     // formattedToken := token[:4] + "-" + token[4:]

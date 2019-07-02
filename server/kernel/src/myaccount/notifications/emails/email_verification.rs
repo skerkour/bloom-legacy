@@ -36,7 +36,7 @@ pub fn send_email_verification_code(
             .render_template(TEMPLATE, &data)
             .expect("error rendering template")
             .as_str(),
-    );
+    )?;
 
     return Ok(());
 }
