@@ -52,7 +52,7 @@
               <v-divider></v-divider>
             </v-flex>
             <v-flex xs12>
-              <v-btn color="success" outline v-if="account.is_disabled" @click="enable_account">
+              <v-btn color="success" outline v-if="account.disabled_at" @click="enable_account">
                 Activate
               </v-btn>
               <v-btn v-else color="error" outline @click="disable_account">
@@ -116,7 +116,7 @@ export default class Account extends Vue {
     this.is_loading = true;
     try {
       await api.post(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}/disable`);
-      this.account.is_disabled = true;
+      this.account.disabled_at = new Date();
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -129,7 +129,7 @@ export default class Account extends Vue {
     this.is_loading = true;
     try {
       await api.post(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}/enable`);
-      this.account.is_disabled = false;
+      this.account.disabled_at = null;
     } catch (err) {
       this.error = err.message;
     } finally {

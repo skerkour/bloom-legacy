@@ -69,7 +69,7 @@ impl Handler<SignIn> for DbActor {
                 ));
             }
 
-            if account.is_disabled {
+            if account.disabled_at.is_some() {
                 return Err(KernelError::Unauthorized(
                     "Account is disabled. Please contact support.".to_string(),
                 ))?;

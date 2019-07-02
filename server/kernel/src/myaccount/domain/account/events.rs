@@ -119,7 +119,7 @@ impl eventsourcing::Event for Event {
                 password_reset_id: None,
                 password_reset_token: None,
                 username: data.username.clone(),
-                is_disabled: false,
+                disabled_at: None,
                 bio: String::new(),
                 display_name: data.username.clone(),
             },
@@ -165,12 +165,12 @@ impl eventsourcing::Event for Event {
             },
             // DisabledV1
             EventData::DisabledV1 => account::Account {
-                is_disabled: true,
+                disabled_at: Some(self.timestamp),
                 ..aggregate
             },
             // EnabledV1
             EventData::EnabledV1 => account::Account {
-                is_disabled: false,
+                disabled_at: None,
                 ..aggregate
             },
             // AccountDeletedV1
@@ -178,6 +178,7 @@ impl eventsourcing::Event for Event {
                 let random_string = utils::random_hex_string(10);
                 account::Account {
                     deleted_at: Some(self.timestamp),
+                    disabled_at: Some(self.timestamp),
                     first_name: random_string.clone(),
                     last_name: random_string.clone(),
                     email: random_string.clone(),
@@ -188,7 +189,7 @@ impl eventsourcing::Event for Event {
             // DeletedV1
             EventData::DeletedV1(ref data) => account::Account {
                 deleted_at: Some(self.timestamp),
-                is_disabled: true,
+                disabled_at: Some(self.timestamp),
                 first_name: data.random_string.clone(),
                 last_name: data.random_string.clone(),
                 email: data.random_string.clone(),

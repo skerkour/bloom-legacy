@@ -21,9 +21,9 @@ pub struct Account {
     pub password_reset_id: Option<uuid::Uuid>,
     pub password_reset_token: Option<String>,
     pub username: String,
-    pub is_disabled: bool,
     pub bio: String,
     pub display_name: String,
+    pub disabled_at: Option<chrono::DateTime<chrono::Utc>>,
 }
 
 impl Account {
@@ -46,9 +46,9 @@ impl Account {
             password_reset_id: None,
             password_reset_token: None,
             username: String::new(),
-            is_disabled: false,
             bio: String::new(),
             display_name: String::new(),
+            disabled_at: None,
         };
     }
 }

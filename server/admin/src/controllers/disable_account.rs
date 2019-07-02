@@ -51,7 +51,7 @@ impl Handler<DisableAccount> for DbActor {
                 let remaining_admins: i64 = kernel_accounts::dsl::kernel_accounts
                     .filter(kernel_accounts::dsl::is_admin.eq(true))
                     .filter(kernel_accounts::dsl::deleted_at.is_null())
-                    .filter(kernel_accounts::dsl::is_disabled.eq(false))
+                    .filter(kernel_accounts::dsl::disabled_at.is_null())
                     .count()
                     .get_result(&conn)?;
                 if remaining_admins < 2 {
