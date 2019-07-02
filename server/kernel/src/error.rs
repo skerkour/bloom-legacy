@@ -58,6 +58,12 @@ pub enum KernelError {
 
     #[fail(display = "SerdeJson: {:?}", 0)]
     SerdeJson(String),
+
+    #[fail(display = "LettreEmail: {:?}", 0)]
+    LettreEmail(String),
+
+    #[fail(display = "LettreSmtp: {:?}", 0)]
+    LettreSmtp(String),
 }
 
 impl std::convert::From<actix::MailboxError> for KernelError {
@@ -129,14 +135,27 @@ impl std::convert::From<serde_json::Error> for KernelError {
     }
 }
 
+impl std::convert::From<lettre_email::error::Error> for KernelError {
+    fn from(err: lettre_email::error::Error) -> Self {
+        KernelError::LettreEmail(format!("{:?}", err))
+    }
+}
+
+impl std::convert::From<lettre::smtp::error::Error> for KernelError {
+    fn from(err: lettre::smtp::error::Error) -> Self {
+        KernelError::LettreSmtp(format!("{:?}", err))
+    }
+}
+
 impl error::ResponseError for KernelError {
     fn error_response(&self) -> HttpResponse {
         let res: Response<()> = Response::error(self.clone());
         match *self {
             // 400
-            KernelError::Validation(_) | KernelError::UrlParseError(_) => {
-                HttpResponse::BadRequest().json(&res)
-            }
+            KernelError::Validation(_)
+            | KernelError::UrlParseError(_)
+            | KernelError::LettreEmail(_)
+            | KernelError::LettreSmtp(_) => HttpResponse::BadRequest().json(&res),
             // 401
             KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
             // 403

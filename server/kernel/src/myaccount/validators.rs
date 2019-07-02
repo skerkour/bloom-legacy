@@ -54,13 +54,20 @@ pub fn password(basic_passwords: HashSet<String>, password: &str) -> Result<(), 
 }
 
 pub fn email(disposable_emails: HashSet<String>, email: &str) -> Result<(), KernelError> {
+    if email.is_empty() || !email.contains('@') {
+        return Err(KernelError::Validation("email is not valid".to_string()));
+    }
+
     let parts: Vec<&str> = email.split("@").collect();
 
     if parts.len() != 2 {
         return Err(KernelError::Validation("email is not valid".to_string()));
     }
 
-    if parts[0].is_empty() || parts[1].is_empty() {
+    let user_part = parts[1];
+    let domain_part = parts[0];
+
+    if user_part.is_empty() || domain_part.is_empty() {
         return Err(KernelError::Validation("email is not valid".to_string()));
     }
 
@@ -70,26 +77,28 @@ pub fn email(disposable_emails: HashSet<String>, email: &str) -> Result<(), Kern
         ));
     }
 
-    if disposable_emails.contains(&parts[1].to_string()) {
-        return Err(KernelError::Validation(
-            "email domain is not valid".to_string(),
-        ));
-    }
-
     if email.len() > 128 {
         return Err(KernelError::Validation("email is too long".to_string()));
     }
 
-    let re = Regex::new(
-        r"(?x)
-        ^(?P<login>[^@\s]+)@
-        ([[:word:]]+\.)*
-        [[:word:]]+$
-    ",
+    let user_re = Regex::new(r"^(?i)[a-z0-9.!#$%&'*+/=?^_`{|}~-]+\z")
+        .expect("error compiling user email regex");
+    let domain_re = Regex::new(
+        r"(?i)^[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?(?:.[a-z0-9](?:[a-z0-9-]{0,61}[a-z0-9])?)*$",
     )
-    .expect("error compiling email regex");
-    if !re.is_match(email) {
+    .expect("error compiling domain email regex");
+
+    if !user_re.is_match(user_part) {
         return Err(KernelError::Validation("email is not valid".to_string()));
+    }
+    if !domain_re.is_match(domain_part) {
+        return Err(KernelError::Validation("email is not valid".to_string()));
+    }
+
+    if disposable_emails.contains(&domain_part.to_string()) {
+        return Err(KernelError::Validation(
+            "email domain is not valid".to_string(),
+        ));
     }
 
     return Ok(());
