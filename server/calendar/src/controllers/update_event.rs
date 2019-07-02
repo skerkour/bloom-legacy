@@ -89,16 +89,16 @@ impl Handler<UpdateEvent> for DbActor {
                 _ => event_to_update,
             };
 
-            // start_at
-            let event_to_update = match &msg.start_at {
-                Some(start_at) if start_at != &event_to_update.start_at => {
-                    let update_start_at_cmd = event::UpdateStartAt {
-                        start_at: start_at.clone(),
+            // end_at
+            let event_to_update = match &msg.end_at {
+                Some(end_at) if end_at != &event_to_update.end_at => {
+                    let update_end_at_cmd = event::UpdateEndAt {
+                        end_at: end_at.clone(),
                         metadata: metadata.clone(),
                     };
 
                     let (event_to_update, event, _) =
-                        eventsourcing::execute(&conn, event_to_update, &update_start_at_cmd)?;
+                        eventsourcing::execute(&conn, event_to_update, &update_end_at_cmd)?;
 
                     // update event
                     diesel::update(&event_to_update)
@@ -112,16 +112,16 @@ impl Handler<UpdateEvent> for DbActor {
                 _ => event_to_update,
             };
 
-            // end_at
-            let event_to_update = match &msg.end_at {
-                Some(end_at) if end_at != &event_to_update.end_at => {
-                    let update_end_at_cmd = event::UpdateEndAt {
-                        end_at: end_at.clone(),
+            // start_at
+            let event_to_update = match &msg.start_at {
+                Some(start_at) if start_at != &event_to_update.start_at => {
+                    let update_start_at_cmd = event::UpdateStartAt {
+                        start_at: start_at.clone(),
                         metadata: metadata.clone(),
                     };
 
                     let (event_to_update, event, _) =
-                        eventsourcing::execute(&conn, event_to_update, &update_end_at_cmd)?;
+                        eventsourcing::execute(&conn, event_to_update, &update_start_at_cmd)?;
 
                     // update event
                     diesel::update(&event_to_update)
