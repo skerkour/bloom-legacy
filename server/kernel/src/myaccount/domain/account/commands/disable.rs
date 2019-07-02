@@ -22,7 +22,7 @@ impl eventsourcing::Command for Disable {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.is_disabled {
+        if aggregate.disabled_at.is_some() {
             return Err(KernelError::Validation(
                 "Account is already disabled".to_string(),
             ));

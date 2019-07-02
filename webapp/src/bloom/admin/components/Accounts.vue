@@ -52,7 +52,7 @@
             </td>
 
             <td class="text-xs-left">
-              <v-chip color="success" outline v-if="!props.item.is_disabled">Active</v-chip>
+              <v-chip color="success" outline v-if="!props.item.disabled_at">Active</v-chip>
               <v-chip v-else outline>Disabled</v-chip>
 
               <v-chip color="error" dark v-if="props.item.deleted_at">Deleted</v-chip>
@@ -109,7 +109,7 @@ export default class Accounts extends Vue {
       align: 'left',
       sortable: false,
       text: 'Active',
-      value: 'is_disabled',
+      value: 'disabled_at',
     },
     { text: 'Actions', sortable: false },
   ];

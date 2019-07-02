@@ -22,7 +22,7 @@ impl eventsourcing::Command for Enable {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if !aggregate.is_disabled {
+        if aggregate.disabled_at.is_none() {
             return Err(KernelError::Validation(
                 "Account is not disabled".to_string(),
             ));
