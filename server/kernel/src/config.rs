@@ -22,6 +22,7 @@ struct ConfigFile {
     bitflow: BitflowConfig,
     blacklists: BlacklistsConfig,
     stripe: StripeConfig,
+    disabled: Option<Vec<DisabledService>>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -40,6 +41,7 @@ pub struct Config {
     pub disposable_email_domains: HashSet<String>,
     pub basic_passwords: HashSet<String>,
     pub version: String,
+    pub disabled: DisabledConfig,
 }
 
 impl From<ConfigFile> for Config {
@@ -77,6 +79,23 @@ impl From<ConfigFile> for Config {
 
         let version = include_str!("../../../VERSION.txt").trim().to_string();
 
+        let mut disabled = DisabledConfig::default();
+
+        if let Some(disabled_services) = config.disabled {
+            for disabled_service in disabled_services {
+                match disabled_service {
+                    DisabledService::Arcade => disabled.arcade = true,
+                    DisabledService::Bitflow => disabled.bitflow = true,
+                    DisabledService::Calendar => disabled.calendar = true,
+                    DisabledService::Contacts => disabled.contacts = true,
+                    DisabledService::Drive => disabled.drive = true,
+                    DisabledService::Gallery => disabled.gallery = true,
+                    DisabledService::Music => disabled.music = true,
+                    DisabledService::Phaser => disabled.phaser = true,
+                }
+            }
+        }
+
         return Config {
             rust_env: config.rust_env,
             host: config.host,
@@ -92,6 +111,7 @@ impl From<ConfigFile> for Config {
             disposable_email_domains: blacklisted_email_domains,
             basic_passwords: blacklisted_passwords,
             version,
+            disabled,
         };
     }
 }
@@ -204,6 +224,39 @@ pub struct StripeConfig {
     pub public_key: String,
     pub secret_key: String,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub enum DisabledService {
+    #[serde(rename = "arcade")]
+    Arcade,
+    #[serde(rename = "bitflow")]
+    Bitflow,
+    #[serde(rename = "calendar")]
+    Calendar,
+    #[serde(rename = "contacts")]
+    Contacts,
+    #[serde(rename = "drive")]
+    Drive,
+    #[serde(rename = "gallery")]
+    Gallery,
+    #[serde(rename = "music")]
+    Music,
+    #[serde(rename = "phaser")]
+    Phaser,
+}
+
+#[derive(Clone, Debug, Default, Deserialize, Serialize)]
+pub struct DisabledConfig {
+    pub arcade: bool,
+    pub bitflow: bool,
+    pub calendar: bool,
+    pub contacts: bool,
+    pub drive: bool,
+    pub gallery: bool,
+    pub music: bool,
+    pub phaser: bool,
+}
+
 
 pub fn init() -> Config {
     let config_file_contents = fs::read_to_string("bloom.sane").expect("Error reading bloom.sane");

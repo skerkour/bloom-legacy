@@ -1,7 +1,7 @@
 mod state;
 
 use crate::KernelError;
-use actix_web::{web, web::JsonConfig, HttpResponse, Result as ActixResult};
+use actix_web::{web, web::JsonConfig, HttpResponse, Result as ActixResult, ResponseError};
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;
@@ -12,11 +12,11 @@ pub use state::State;
 #[derive(Serialize)]
 pub struct Response<T: Serialize> {
     pub data: Option<T>,
-    pub error: Option<ResponseError>,
+    pub error: Option<BlmResponseError>,
 }
 
 #[derive(Serialize)]
-pub struct ResponseError {
+pub struct BlmResponseError {
     message: String,
 }
 
@@ -39,7 +39,7 @@ impl<T: Serialize> Response<T> {
     pub fn error(err: KernelError) -> Response<T> {
         return Response {
             data: None,
-            error: Some(ResponseError {
+            error: Some(BlmResponseError {
                 message: format!("{}", err),
             }),
         };
@@ -52,9 +52,11 @@ pub fn index() -> ActixResult<HttpResponse> {
 }
 
 pub fn route_404() -> ActixResult<HttpResponse> {
-    let err = KernelError::RouteNotFound;
-    let res: Response<()> = Response::error(err);
-    return Ok(HttpResponse::NotFound().json(res));
+    return Ok(KernelError::RouteNotFound.error_response());
+}
+
+pub fn route_disabled() -> ActixResult<HttpResponse> {
+    return Ok(KernelError::Validation("Service is disabled".to_string()).error_response());
 }
 
 pub fn json_default_config() -> JsonConfig {
