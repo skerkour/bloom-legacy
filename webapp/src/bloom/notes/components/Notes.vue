@@ -3,23 +3,19 @@
     <v-container fluid grid-list-lg>
       <v-layout align-center justify-center>
         <v-flex xs12 sm6>
-          <v-text-field
-            placeholder="Take a note..."
-            solo
-            @click="open_note_dialog"
-          ></v-text-field>
+          <v-text-field placeholder="Take a note..." solo @click="open_note_dialog" />
         </v-flex>
       </v-layout>
       <v-layout row wrap justify-left class="mt-1">
-      <v-flex v-for="note in notes" :key="note.id" xs12 sm4 md3>
-        <blm-notes-note
-          :note="note"
-          @archive="note_archived"
-          @remove="note_removed"
-          @update="note_updated"
-          @delete="note_deleted"
-        />
-      </v-flex>
+        <v-flex v-for="note in notes" :key="note.id" xs12 sm4 md3>
+          <blm-notes-note
+            :note="note"
+            @archive="note_archived"
+            @remove="note_removed"
+            @update="note_updated"
+            @delete="note_deleted"
+          />
+        </v-flex>
     </v-layout>
     </v-container>
 

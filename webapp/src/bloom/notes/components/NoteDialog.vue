@@ -5,6 +5,7 @@
     scrollable
     width="50%"
     :fullscreen="$vuetify.breakpoint.smAndDown"
+    lazy
   >
     <v-card>
       <v-card-title class="headline">
@@ -23,6 +24,7 @@
           v-model="body"
           placeholder="Take a note..."
           auto-grow
+          color="white"
         ></v-textarea>
       </v-card-text>
 
