@@ -55,4 +55,4 @@ blacklists = {
     ]
 }
 
-disabled = [] # you can disable service like disabled = ["phaser", "bitflow"]
+disabled = [] # optional, you can disable service like disabled = ["phaser", "bitflow"]
