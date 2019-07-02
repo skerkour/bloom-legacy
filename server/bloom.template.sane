@@ -54,3 +54,5 @@ blacklists = {
         "assets/common_passwords_200.txt",
     ]
 }
+
+disabled = [] # you can disable service like disabled = ["phaser", "bitflow"]
