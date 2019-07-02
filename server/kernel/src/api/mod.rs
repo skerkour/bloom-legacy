@@ -1,7 +1,7 @@
 mod state;
 
 use crate::KernelError;
-use actix_web::{web, web::JsonConfig, HttpResponse, Result as ActixResult, ResponseError};
+use actix_web::{web, web::JsonConfig, HttpResponse, ResponseError, Result as ActixResult};
 use handlebars::Handlebars;
 use serde::{Deserialize, Serialize};
 use std::collections::BTreeMap;

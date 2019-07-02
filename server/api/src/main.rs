@@ -71,7 +71,7 @@ fn main() {
             .header("Content-Security-Policy", "default-src 'self' https://s3.eu-west-3.amazonaws.com https://s3-eu-west-3.amazonaws.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://s3.eu-west-3.amazonaws.com https://s3-eu-west-3.amazonaws.com; connect-src 'self' https://sentry.io; report-uri https://sentry.io/api/1316998/security/?sentry_key=db4dde9412754e5988de21c84d5337d4")
         )
 
-        .configure(app::config)
+        .configure(app::config(cfg.clone()))
         .default_service(web::route().to(app::p404))
     })
     .backlog(8192)

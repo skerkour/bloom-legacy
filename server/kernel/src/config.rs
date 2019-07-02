@@ -91,6 +91,7 @@ impl From<ConfigFile> for Config {
                     DisabledService::Drive => disabled.drive = true,
                     DisabledService::Gallery => disabled.gallery = true,
                     DisabledService::Music => disabled.music = true,
+                    DisabledService::Notes => disabled.notes = true,
                     DisabledService::Phaser => disabled.phaser = true,
                 }
             }
@@ -241,6 +242,8 @@ pub enum DisabledService {
     Gallery,
     #[serde(rename = "music")]
     Music,
+    #[serde(rename = "notes")]
+    Notes,
     #[serde(rename = "phaser")]
     Phaser,
 }
@@ -254,9 +257,9 @@ pub struct DisabledConfig {
     pub drive: bool,
     pub gallery: bool,
     pub music: bool,
+    pub notes: bool,
     pub phaser: bool,
 }
-
 
 pub fn init() -> Config {
     let config_file_contents = fs::read_to_string("bloom.sane").expect("Error reading bloom.sane");
