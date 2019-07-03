@@ -1,4 +1,5 @@
 #![cfg_attr(feature = "benchmarks", feature(test))]
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
 // Copyright (c) 2013-2014 The Rust Project Developers.
 // Copyright (c) 2015-2018 The rust-hex Developers.
 //
@@ -24,7 +25,6 @@
 //! }
 //! ```
 
-#[cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
 use std::error;
 use std::fmt;
 

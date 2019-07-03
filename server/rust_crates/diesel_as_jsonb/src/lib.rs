@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
+
 #![recursion_limit = "256"]
 extern crate proc_macro;
 extern crate proc_macro2;
