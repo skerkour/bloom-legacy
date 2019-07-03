@@ -25,7 +25,6 @@
 //! ```
 
 #[cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
-
 use std::error;
 use std::fmt;
 
