@@ -1,5 +1,3 @@
-use std::ascii::AsciiExt;
-
 pub enum Magic {
     Number(&'static str, &'static [u8]),
     Mask(&'static str, &'static [u8], &'static [u8]),
