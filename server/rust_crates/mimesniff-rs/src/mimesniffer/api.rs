@@ -1,7 +1,7 @@
 // use url::Url;
 use mime::Mime;
 
-use super::magic::{is_unknown_mime_type, sniff_mime_type, sniff_mime_type_from_local_data};
+use super::magic::{sniff_mime_type_from_local_data};
 
 /// Extension methods for MIME type sniffer
 pub trait MimeTypeSniffer {

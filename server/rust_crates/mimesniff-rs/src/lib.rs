@@ -1,5 +1,5 @@
 #![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
-
+#[allow(dead_code)]
 mod mimesniffer;
 
 use crate::mimesniffer::MimeTypeSnifferExt;
