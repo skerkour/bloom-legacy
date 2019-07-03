@@ -20,7 +20,6 @@ lto = true
 [workspace]
 members = [
     "rust_crates/diesel_as_jsonb",
-    "rust_crates/sendgrid-rs",
     "rust_crates/bcrypt-rs",
     "rust_crates/hex-rs",
     "rust_crates/eventsourcing-rs",

@@ -1,3 +1,4 @@
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
 //! This crate aims to provide a convenient short-hand for returning early
 //! from `futures`-based functions.
 //!

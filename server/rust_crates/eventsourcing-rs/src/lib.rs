@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
+
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 

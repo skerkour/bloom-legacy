@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
+
 //! Easily hash and verify passwords using bcrypt
 
 #[macro_use]

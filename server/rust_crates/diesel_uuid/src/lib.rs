@@ -1,3 +1,5 @@
+#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
+
 #[macro_use]
 extern crate diesel;
 #[macro_use]
