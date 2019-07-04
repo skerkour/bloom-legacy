@@ -62,3 +62,9 @@ impl eventsourcing::Aggregate for Account {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Account {
+    fn default() -> Self {
+        Self::new()
+    }
+}
