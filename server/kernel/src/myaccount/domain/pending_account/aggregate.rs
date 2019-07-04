@@ -53,6 +53,12 @@ impl eventsourcing::Aggregate for PendingAccount {
     }
 }
 
+impl Default for PendingAccount {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 // #[derive(Clone, Debug)]
 // pub enum Command {
 //     Create(Create),

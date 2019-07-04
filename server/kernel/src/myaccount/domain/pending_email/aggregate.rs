@@ -48,3 +48,9 @@ impl eventsourcing::Aggregate for PendingEmail {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for PendingEmail {
+    fn default() -> Self {
+        Self::new()
+    }
+}
