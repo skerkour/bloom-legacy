@@ -8,7 +8,7 @@ pub mod reactors;
 pub mod validators;
 
 pub const DEFAULT_AVAILABLE_SPACE: i64 = 30_000_000_000; // 30GB
-pub const DEFAULT_FOLDERS: [&'static str; 8] = [
+pub const DEFAULT_FOLDERS: [&str; 8] = [
     "Books",
     "Downloads",
     "Documents",

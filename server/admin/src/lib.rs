@@ -1,5 +1,5 @@
-#[macro_use]
-extern crate diesel;
+// #[macro_use]
+// extern crate diesel;
 
 pub mod api;
 pub mod controllers;
