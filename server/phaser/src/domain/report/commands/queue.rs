@@ -36,7 +36,7 @@ impl eventsourcing::Command for Queue {
     ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
         let data = report::EventData::QueuedV1(report::QueuedV1 {
-            id: id,
+            id,
             scan_id: self.scan_id,
             targets: self.targets.clone(),
             profile: self.profile.clone(),

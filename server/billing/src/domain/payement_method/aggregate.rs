@@ -47,6 +47,12 @@ impl eventsourcing::Aggregate for PaymentMethod {
     }
 }
 
+impl Default for PaymentMethod {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum PaymentDetails {
     None,

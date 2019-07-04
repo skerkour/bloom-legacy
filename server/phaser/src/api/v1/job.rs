@@ -29,7 +29,7 @@ pub fn get(
             .send(controllers::StartScan {
                 // account_id: auth.account.expect("unwrapping non none account").id,
                 // session_id: auth.session.expect("unwraping non none session").id,
-                request_id: request_id,
+                request_id,
             })
             .map_err(|_| KernelError::ActixMailbox)
             .from_err()
