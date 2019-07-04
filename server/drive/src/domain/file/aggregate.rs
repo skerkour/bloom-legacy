@@ -82,7 +82,7 @@ impl eventsourcing::Aggregate for File {
     }
 }
 
-impl Default for impl Default for Profile {
+impl Default for Profile {
     fn default() -> Self {
         Self::new()
     }
