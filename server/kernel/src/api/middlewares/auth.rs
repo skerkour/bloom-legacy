@@ -198,7 +198,7 @@ fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     let decoded = String::from_utf8(decoded).map_err(|_| {
         KernelError::Validation("Authorization HTTP header is not valid".to_string())
     })?;
-    let parts: Vec<String> = decoded.split(":").map(String::from).collect();
+    let parts: Vec<String> = decoded.split(':').map(String::from).collect();
 
     if parts.len() != 2 {
         return Err(KernelError::Validation(
@@ -222,7 +222,7 @@ fn extract_secret_header(value: &str) -> Result<CheckAuth, KernelError> {
             "Authorization HTTP header is not valid".to_string(),
         ));
     }
-    let parts: Vec<&str> = parts[1].split(":").collect();
+    let parts: Vec<&str> = parts[1].split(':').collect();
     if parts.len() != 2 {
         return Err(KernelError::Validation(
             "Authorization HTTP header is not valid".to_string(),
@@ -304,9 +304,10 @@ impl Handler<CheckAuth> for DbActor {
                         })?;
 
                 // verify session token
-                if !bcrypt::verify(&msg.token, &session.token).map_err(|_| {
+                let is_valid = bcrypt::verify(&msg.token, &session.token).map_err(|_| {
                     KernelError::Validation("Authorization HTTP header is not valid".to_string())
-                })? {
+                })?;
+                if !is_valid {
                     return Err(KernelError::Validation(
                         "Authorization token is not valid".to_string(),
                     ));

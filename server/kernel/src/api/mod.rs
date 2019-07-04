@@ -60,9 +60,11 @@ pub fn route_disabled() -> ActixResult<HttpResponse> {
 }
 
 pub fn json_default_config() -> JsonConfig {
-    return JsonConfig::default().limit(256000).error_handler(|err, _| {
-        KernelError::Validation(err.to_string()).into() // <- create custom error response
-    });
+    return JsonConfig::default()
+        .limit(256_000)
+        .error_handler(|err, _| {
+            KernelError::Validation(err.to_string()).into() // <- create custom error response
+        });
 }
 
 static ENV_TEMPLATE: &str = r#"
@@ -85,7 +87,7 @@ pub fn webapp_env(state: web::Data<State>) -> ActixResult<HttpResponse> {
     data.insert("node_env".to_string(), config.rust_env.to_string());
     data.insert(
         "sentry_url".to_string(),
-        config.sentry.webapp_url.unwrap_or("".to_string()),
+        config.sentry.webapp_url.unwrap_or(String::new()),
     );
     data.insert("host".to_string(), config.host);
     data.insert("stripe_public_key".to_string(), config.stripe.public_key);

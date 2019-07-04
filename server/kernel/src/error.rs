@@ -82,7 +82,7 @@ impl std::convert::From<diesel::result::Error> for KernelError {
     fn from(err: diesel::result::Error) -> Self {
         match err {
             e @ diesel::result::Error::NotFound => KernelError::NotFound(format!("{}", e)),
-            e @ _ => KernelError::Diesel(format!("{:?}", e)),
+            e => KernelError::Diesel(format!("{:?}", e)),
         }
     }
 }

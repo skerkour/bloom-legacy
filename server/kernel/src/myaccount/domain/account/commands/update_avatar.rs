@@ -60,7 +60,7 @@ impl eventsourcing::Command for UpdateAvatar {
         let avatar_url = format!("{}/{}/{}", &self.s3_base_url, &self.s3_bucket, &key);
         let req = PutObjectRequest {
             bucket: self.s3_bucket.clone(),
-            key: key,
+            key,
             body: Some(result.into()),
             ..Default::default()
         };
