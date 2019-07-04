@@ -127,7 +127,7 @@ fn handle_upload(upload_path: &str, field: Field) -> Box<Stream<Item = (), Error
                     )
                 })
                 .map(|_| ())
-                .map_err(|e| error::ErrorInternalServerError(e)),
+                .map_err(error::ErrorInternalServerError),
         )
         .into_stream(),
     );
