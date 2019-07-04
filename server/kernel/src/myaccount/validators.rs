@@ -32,7 +32,10 @@ pub fn last_name(last_name: &str) -> Result<(), KernelError> {
     return Ok(());
 }
 
-pub fn password(basic_passwords: HashSet<String>, password: &str) -> Result<(), KernelError> {
+pub fn password<S: ::std::hash::BuildHasher>(
+    basic_passwords: HashSet<String, S>,
+    password: &str,
+) -> Result<(), KernelError> {
     let length = password.len();
 
     if length < 8 {
@@ -53,12 +56,15 @@ pub fn password(basic_passwords: HashSet<String>, password: &str) -> Result<(), 
     return Ok(());
 }
 
-pub fn email(disposable_emails: HashSet<String>, email: &str) -> Result<(), KernelError> {
+pub fn email<S: ::std::hash::BuildHasher>(
+    disposable_emails: HashSet<String, S>,
+    email: &str,
+) -> Result<(), KernelError> {
     if email.is_empty() || !email.contains('@') {
         return Err(KernelError::Validation("email is not valid".to_string()));
     }
 
-    let parts: Vec<&str> = email.split("@").collect();
+    let parts: Vec<&str> = email.split('@').collect();
 
     if parts.len() != 2 {
         return Err(KernelError::Validation("email is not valid".to_string()));
