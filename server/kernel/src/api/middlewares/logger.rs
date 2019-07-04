@@ -73,7 +73,7 @@ impl FromRequest for RequestLogger {
     #[inline]
     fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {
         // String processing because request_id.0 is private
-        let req_id = req.request_id().0.clone();
+        let req_id = req.request_id().0;
 
         // Return the current logger augmented with the request_id
         let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id.to_string()));

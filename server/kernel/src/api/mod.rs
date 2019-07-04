@@ -87,7 +87,7 @@ pub fn webapp_env(state: web::Data<State>) -> ActixResult<HttpResponse> {
     data.insert("node_env".to_string(), config.rust_env.to_string());
     data.insert(
         "sentry_url".to_string(),
-        config.sentry.webapp_url.unwrap_or(String::new()),
+        config.sentry.webapp_url.unwrap_or_default(),
     );
     data.insert("host".to_string(), config.host);
     data.insert("stripe_public_key".to_string(), config.stripe.public_key);
