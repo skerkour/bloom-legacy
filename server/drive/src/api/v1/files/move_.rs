@@ -29,7 +29,7 @@ pub fn post(
             .db
             .send(controllers::Move {
                 files: move_data.files.clone(),
-                to: move_data.to.clone(),
+                to: move_data.to,
                 owner_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,
                 request_id,

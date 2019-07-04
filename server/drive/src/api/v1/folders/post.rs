@@ -28,7 +28,7 @@ pub fn post(
         state
             .db
             .send(controllers::CreateFolder {
-                parent_id: create_data.parent_id.clone(),
+                parent_id: create_data.parent_id,
                 name: create_data.name.clone(),
                 owner_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,
