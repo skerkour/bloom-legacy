@@ -29,7 +29,7 @@ pub fn post(
             .db
             .send(controllers::StartUpload {
                 file_name: upload_data.file_name.clone(),
-                parent_id: upload_data.parent_id.clone(),
+                parent_id: upload_data.parent_id,
                 account_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,
                 request_id,

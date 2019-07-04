@@ -53,3 +53,10 @@ impl eventsourcing::Aggregate for Upload {
         self.updated_at = timestamp;
     }
 }
+
+
+impl Default for Upload {
+    fn default() -> Self {
+        Self::new()
+    }
+}

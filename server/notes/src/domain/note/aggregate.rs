@@ -50,3 +50,9 @@ impl eventsourcing::Aggregate for Note {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Note {
+    fn default() -> Self {
+        Self::new()
+    }
+}

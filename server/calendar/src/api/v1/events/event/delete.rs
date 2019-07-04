@@ -31,7 +31,7 @@ pub fn delete(
                 event_id: event_id.into_inner(),
                 actor_id: auth.account.expect("unwraping non none account").id,
                 session_id: auth.session.expect("unwraping non none session").id,
-                request_id: request_id,
+                request_id,
             })
             .map_err(|_| KernelError::ActixMailbox)
             .from_err()

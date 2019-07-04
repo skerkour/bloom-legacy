@@ -33,7 +33,7 @@ pub fn get(
         state
             .db
             .send(controllers::FindFolder {
-                id: query_params.id.clone(),
+                id: query_params.id,
                 owner_id: auth.account.expect("unwrapping non none account").id,
             })
             .map_err(|_| KernelError::ActixMailbox)

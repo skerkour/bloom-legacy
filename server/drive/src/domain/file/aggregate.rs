@@ -81,3 +81,9 @@ impl eventsourcing::Aggregate for File {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for impl Default for Profile {
+    fn default() -> Self {
+        Self::new()
+    }
+}
