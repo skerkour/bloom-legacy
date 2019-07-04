@@ -42,7 +42,7 @@ fmt_check:
 	cargo fmt --all -- --check
 
 lint:
-	cargo clippy -- -D warnings
+	cargo clippy -- -D warnings -A clippy::needless_return
 
 audit:
 	cargo audit

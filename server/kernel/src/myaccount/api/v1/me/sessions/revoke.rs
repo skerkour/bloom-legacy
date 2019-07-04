@@ -31,7 +31,7 @@ pub fn post(
             .send(controllers::RevokeSession {
                 actor: auth.account.unwrap(),
                 session_id: session_id.into_inner(),
-                request_id: request_id,
+                request_id,
                 current_session_id: auth.session.unwrap().id,
             })
             .map_err(|_| KernelError::ActixMailbox)

@@ -34,7 +34,7 @@ pub trait GetRequestLogger {
 
 impl GetRequestLogger for HttpRequest {
     fn logger(&self) -> RequestLogger {
-        let req_id = self.request_id().0.clone();
+        let req_id = self.request_id().0;
 
         // Return the current logger augmented with the request_id
         let new_log = slog_scope::logger().new(slog_o!("request_id" => req_id.to_string()));
