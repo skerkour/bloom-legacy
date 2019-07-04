@@ -35,7 +35,7 @@ impl eventsourcing::Command for Create {
         let id = uuid::Uuid::new_v4();
 
         let data = profile::EventData::CreatedV1(profile::CreatedV1 {
-            id: id,
+            id,
             home_id: self.home_id,
             total_space: DEFAULT_AVAILABLE_SPACE,
             account_id: self.account_id,

@@ -47,7 +47,7 @@ impl eventsourcing::Command for Download {
         let key = format!("drive/{}/{}", self.owner_id, self.file_id);
         let req = GetObjectRequest {
             bucket: self.s3_bucket.clone(),
-            key: key,
+            key,
             response_content_disposition: Some(format!(
                 r#"attachment; filename="{}""#,
                 &aggregate.name
