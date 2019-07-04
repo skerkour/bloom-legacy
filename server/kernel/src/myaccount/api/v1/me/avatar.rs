@@ -79,6 +79,6 @@ fn read_file(field: Field) -> Box<Future<Item = Vec<u8>, Error = Error>> {
                     future::ok(acc)
                 },
             )
-            .map_err(|e| error::ErrorInternalServerError(e)),
+            .map_err(error::ErrorInternalServerError),
     )
 }

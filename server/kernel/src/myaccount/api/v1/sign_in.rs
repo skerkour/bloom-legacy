@@ -22,7 +22,7 @@ pub fn post(
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
     let connection_info = req.connection_info();
-    let remote = connection_info.remote().clone();
+    let remote = connection_info.remote();
 
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
         return Either::A(ok(KernelError::Unauthorized(
@@ -33,8 +33,7 @@ pub fn post(
 
     let session_ip = match remote {
         Some(ref remote) => remote
-            .split(":")
-            .into_iter()
+            .split(':')
             .nth(0)
             .expect("Error accessing session ip")
             .to_string(),
