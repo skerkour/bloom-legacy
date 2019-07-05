@@ -8,7 +8,7 @@
     </v-toolbar>
 
     <v-card-text class="text-xs-center">
-      <v-carousel :cycle="false" height="100%" v-model="_index">
+      <v-carousel :cycle="false" height="100%" v-model="_index" hide-delimiters>
         <v-carousel-item v-for="file in media" :key="file.id" lazy>
           <v-img :src="file.url" contain height="100%" />
         </v-carousel-item>
