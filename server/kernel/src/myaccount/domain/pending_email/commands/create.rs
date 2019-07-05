@@ -15,17 +15,11 @@ pub struct Create {
     pub metadata: EventMetadata,
 }
 
-#[derive(Clone, Debug)]
-pub struct CreateNonStored {
-    pub code: String,
-}
-
 impl eventsourcing::Command for Create {
     type Aggregate = pending_email::PendingEmail;
     type Event = pending_email::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = CreateNonStored;
 
     fn validate(
         &self,
@@ -57,7 +51,7 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let now = chrono::Utc::now();
         let new_pending_email_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
@@ -69,19 +63,16 @@ impl eventsourcing::Command for Create {
             email: self.email.clone(),
             account_id: self.account_id,
             token,
+            code,
         });
 
-        let non_stored = CreateNonStored { code };
-
-        return Ok((
+        return Ok(
             pending_email::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: now,
                 data,
                 aggregate_id: new_pending_email_id,
                 metadata: self.metadata.clone(),
-            },
-            non_stored,
-        ));
+            });
     }
 }

@@ -25,7 +25,7 @@ impl Handler<VerifyEmail> for DbActor {
 
     fn handle(&mut self, msg: VerifyEmail, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{
-            kernel_accounts_events, kernel_pending_emails, kernel_pending_emails_events,
+            kernel_pending_emails,
         };
         use diesel::prelude::*;
 
@@ -61,11 +61,8 @@ impl Handler<VerifyEmail> for DbActor {
             diesel::update(&pending_email)
                 .set(&pending_email)
                 .execute(&conn)?;
-            diesel::insert_into(kernel_pending_emails_events::dsl::kernel_pending_emails_events)
-                .values(&event)
-                .execute(&conn)?;
 
-            let account_to_update = match event.data {
+            match event.data {
                 pending_email::EventData::VerificationSucceededV1 => {
                     let update_email_cmd = account::UpdateEmail {
                         email: pending_email.email,
@@ -73,14 +70,11 @@ impl Handler<VerifyEmail> for DbActor {
                     };
 
                     let (account_to_update, event, _) =
-                        eventsourcing::execute(&conn, account_to_update, &update_email_cmd)?;
+                        eventsourcing::execute(&conn, &mut account_to_update, &update_email_cmd)?;
 
                     // update account
                     diesel::update(&account_to_update)
                         .set(&account_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                        .values(&event)
                         .execute(&conn)?;
 
                     // delete all other pending emails for account
@@ -98,19 +92,13 @@ impl Handler<VerifyEmail> for DbActor {
 
                     for pending_email_to_delete in pending_emails_to_delete {
                         let (pending_email_to_delete, event, _) =
-                            eventsourcing::execute(&conn, pending_email_to_delete, &delete_cmd)?;
+                            eventsourcing::execute(&conn, &mut pending_email_to_delete, &delete_cmd)?;
                         diesel::update(&pending_email_to_delete)
                             .set(&pending_email_to_delete)
                             .execute(&conn)?;
-                        diesel::insert_into(
-                            kernel_pending_emails_events::dsl::kernel_pending_emails_events,
-                        )
-                        .values(&event)
-                        .execute(&conn)?;
                     }
-                    account_to_update
                 }
-                _ => account_to_update,
+                _ => {},
             };
 
             return match event.data {

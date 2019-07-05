@@ -22,7 +22,6 @@ impl eventsourcing::Command for RequestPasswordReset {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = RequestPasswordResetNonStored;
 
     fn validate(
         &self,
@@ -36,7 +35,7 @@ impl eventsourcing::Command for RequestPasswordReset {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let password_reset_id = uuid::Uuid::new_v4();
         let mut rng = rand::thread_rng();
         let token_length = rng.gen_range(
@@ -51,19 +50,16 @@ impl eventsourcing::Command for RequestPasswordReset {
             account::EventData::PasswordResetRequestedV1(account::PasswordResetRequestedV1 {
                 password_reset_id,
                 password_reset_token: hashed_token.clone(),
+                token_plaintext: token,
             });
 
-        return Ok((
+        return Ok(
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            RequestPasswordResetNonStored {
-                plaintext_token: token,
-            },
-        ));
+            });
     }
 }

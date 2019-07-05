@@ -16,17 +16,11 @@ pub struct Start {
     pub metadata: EventMetadata,
 }
 
-#[derive(Clone, Debug)]
-pub struct StartNonStored {
-    pub token_plaintext: String,
-}
-
 impl eventsourcing::Command for Start {
     type Aggregate = session::Session;
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = StartNonStored;
 
     fn validate(
         &self,
@@ -45,7 +39,7 @@ impl eventsourcing::Command for Start {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let mut rng = rand::thread_rng();
         let token_length = rng.gen_range(
             myaccount::SESSION_TOKEN_MIN_LENGTH,
@@ -60,25 +54,20 @@ impl eventsourcing::Command for Start {
         let data = session::EventData::StartedV1(session::StartedV1 {
             id: new_session_id,
             account_id: self.account_id,
-            token: hashed_token,
+            token_hash: hashed_token,
+            token_plaintext: token,
             ip: self.ip.clone(),
             device: session::Device {},
             location: session::Location {},
         });
 
-        let non_stored = StartNonStored {
-            token_plaintext: token,
-        };
-
-        return Ok((
+        return Ok(
             session::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp,
                 data,
                 aggregate_id: new_session_id,
                 metadata: self.metadata.clone(),
-            },
-            non_stored,
-        ));
+            });
     }
 }

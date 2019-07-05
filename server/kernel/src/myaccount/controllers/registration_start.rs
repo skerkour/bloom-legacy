@@ -23,7 +23,7 @@ impl Handler<StartRegistration> for DbActor {
     type Result = Result<domain::PendingAccount, KernelError>;
 
     fn handle(&mut self, msg: StartRegistration, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_pending_accounts, kernel_pending_accounts_events};
+        use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -45,17 +45,13 @@ impl Handler<StartRegistration> for DbActor {
                 config: msg.config.clone(),
                 metadata,
             };
-            let (new_pending_account, event, non_persisted) =
-                eventsourcing::execute(&conn, pending_account::PendingAccount::new(), &create_cmd)?;
+            let new_pending_account = pending_account::PendingAccount::new();
+            let event =
+                eventsourcing::execute(&conn, &mut new_pending_account, &create_cmd)?;
 
             diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)
                 .execute(&conn)?;
-            diesel::insert_into(
-                kernel_pending_accounts_events::dsl::kernel_pending_accounts_events,
-            )
-            .values(&event)
-            .execute(&conn)?;
 
             send_account_verification_code(
                 &config,
@@ -66,7 +62,7 @@ impl Handler<StartRegistration> for DbActor {
                 )
                 .as_str(),
                 new_pending_account.id.to_string().as_str(),
-                &non_persisted.code,
+                &event.code,
             )
             .expect("error sending email");
 

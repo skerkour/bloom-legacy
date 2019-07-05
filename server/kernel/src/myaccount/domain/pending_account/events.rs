@@ -1,10 +1,7 @@
-use crate::{db::schema::kernel_pending_accounts_events, events::EventMetadata};
-use diesel::Queryable;
-use diesel_as_jsonb::AsJsonb;
+use crate::{events::EventMetadata};
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "kernel_pending_accounts_events"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -13,7 +10,7 @@ pub struct Event {
     pub metadata: EventMetadata, // TODO: change
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
     NewCodeSentV1(NewCodeSentV1),
@@ -30,6 +27,7 @@ pub struct CreatedV1 {
     pub email: String,
     pub password: String,
     pub token: String,
+    pub code: String,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
@@ -55,13 +53,14 @@ impl ToString for VerificationFailedReason {
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NewCodeSentV1 {
-    pub token: String,
+    pub token_hash: String,
+    pub code: String,
 }
 
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingAccount;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: &mut Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
             EventData::CreatedV1(ref data) => super::PendingAccount {
@@ -95,7 +94,7 @@ impl eventsourcing::Event for Event {
             },
             // NewCodeSentV1
             EventData::NewCodeSentV1(ref data) => super::PendingAccount {
-                token: data.token.clone(),
+                token: data.token_hash.clone(),
                 ..aggregate
             },
         }

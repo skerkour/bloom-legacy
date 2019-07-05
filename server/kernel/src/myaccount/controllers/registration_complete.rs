@@ -26,8 +26,8 @@ impl Handler<CompleteRegistration> for DbActor {
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
         use crate::db::schema::{
-            kernel_accounts, kernel_accounts_events, kernel_pending_accounts,
-            kernel_pending_accounts_events, kernel_sessions, kernel_sessions_events,
+            kernel_accounts, kernel_pending_accounts,
+            kernel_sessions,
         };
         use diesel::prelude::*;
 
@@ -52,20 +52,15 @@ impl Handler<CompleteRegistration> for DbActor {
                 id: msg.id,
                 metadata: metadata.clone(),
             };
-            let (pending_account_to_update, event, _) = eventsourcing::execute(
+            let _ = eventsourcing::execute(
                 &conn,
-                pending_account_to_update,
+                &mut pending_account_to_update,
                 &complete_registration_cmd,
             )?;
 
             diesel::update(&pending_account_to_update)
                 .set(&pending_account_to_update)
                 .execute(&conn)?;
-            diesel::insert_into(
-                kernel_pending_accounts_events::dsl::kernel_pending_accounts_events,
-            )
-            .values(&event)
-            .execute(&conn)?;
 
             // create account
             let create_cmd = account::Create {
@@ -77,14 +72,12 @@ impl Handler<CompleteRegistration> for DbActor {
                 host: msg.config.host,
                 metadata: metadata.clone(),
             };
-            let (new_account, event, _) =
-                eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
+            let new_account = Account::new();
+            let event =
+                eventsourcing::execute(&conn, &mut new_account, &create_cmd)?;
 
             diesel::insert_into(kernel_accounts::dsl::kernel_accounts)
                 .values(&new_account)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             eventsourcing::publish::<_, _, KernelError>(&conn, &event)?;
@@ -94,23 +87,27 @@ impl Handler<CompleteRegistration> for DbActor {
                 actor_id: Some(new_account.id),
                 ..metadata.clone()
             };
+
             let start_cmd = session::Start {
                 account_id: new_account.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(),  // TODO
                 metadata,
             };
-            let (new_session, event, non_stored) =
-                eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
+            let new_session = Session::new();
+            let event = eventsourcing::execute(&conn, &mut new_session, &start_cmd)?;
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)
                 .execute(&conn)?;
-            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
-                .values(&event)
-                .execute(&conn)?;
 
-            return Ok((new_session, non_stored.token_plaintext));
+            let token_plaintext = if let session::EventData::StartedV1(ref data) = event.data {
+                data.token_plaintext.clone()
+            } else {
+                return Err(KernelError::Internal(String::new()));
+            };
+
+            return Ok((new_session, token_plaintext));
         })?);
     }
 }

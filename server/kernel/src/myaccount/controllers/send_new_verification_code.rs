@@ -24,7 +24,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: SendNewVerificationCode, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_pending_accounts, kernel_pending_accounts_events};
+        use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -44,18 +44,13 @@ impl Handler<SendNewVerificationCode> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let (pending_account, event, non_persisted) =
-                eventsourcing::execute(&conn, pending_account, &resend_code_cmd)?;
+            let event =
+                eventsourcing::execute(&conn, &pending_account, &resend_code_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)
                 .set(&pending_account)
                 .execute(&conn)?;
-            diesel::insert_into(
-                kernel_pending_accounts_events::dsl::kernel_pending_accounts_events,
-            )
-            .values(&event)
-            .execute(&conn)?;
 
             let config = msg.config.clone();
             send_account_verification_code(
@@ -67,7 +62,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
                 )
                 .as_str(),
                 pending_account.id.to_string().as_str(),
-                &non_persisted.code,
+                &event.code,
             )
             .expect("error sending email");
 

@@ -23,7 +23,7 @@ impl Handler<RevokeSession> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: RevokeSession, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_sessions, kernel_sessions_events};
+        use crate::db::schema::kernel_sessions;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -48,13 +48,10 @@ impl Handler<RevokeSession> for DbActor {
                 metadata,
             };
 
-            let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+            let _ = eventsourcing::execute(&conn, session, &revoke_cmd)?;
 
             // update session
             diesel::update(&session).set(&session).execute(&conn)?;
-            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
-                .values(&event)
-                .execute(&conn)?;
 
             return Ok(());
         })?);

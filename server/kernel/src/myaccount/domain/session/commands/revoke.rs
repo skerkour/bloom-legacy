@@ -17,7 +17,6 @@ impl eventsourcing::Command for Revoke {
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -45,11 +44,11 @@ impl eventsourcing::Command for Revoke {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = session::EventData::RevokedV1(self.reason);
+    ) -> Result<Self::Event, Self::Error> {
+        let data = session::EventData::RevokedV1(session::RevokedV1{ reason: self.reason });
         let timestamp = chrono::Utc::now();
 
-        return Ok((
+        return Ok(
             session::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp,
@@ -57,7 +56,6 @@ impl eventsourcing::Command for Revoke {
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
             },
-            (),
-        ));
+        );
     }
 }

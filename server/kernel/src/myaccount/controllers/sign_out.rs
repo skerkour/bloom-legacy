@@ -22,7 +22,6 @@ impl Handler<SignOut> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: SignOut, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::kernel_sessions_events;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -35,13 +34,10 @@ impl Handler<SignOut> for DbActor {
             };
             let sign_out_cmd = session::SignOut { metadata };
 
-            let (session, event, _) = eventsourcing::execute(&conn, msg.session, &sign_out_cmd)?;
+            let _ = eventsourcing::execute(&conn, &mut msg.session, &sign_out_cmd)?;
 
             // update session
-            diesel::update(&session).set(&session).execute(&conn)?;
-            diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
-                .values(&event)
-                .execute(&conn)?;
+            diesel::update(&msg.session).set(&msg.session).execute(&conn)?;
 
             return Ok(());
         })?);

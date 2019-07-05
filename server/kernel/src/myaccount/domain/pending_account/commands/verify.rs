@@ -19,7 +19,6 @@ impl eventsourcing::Command for Verify {
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -33,7 +32,7 @@ impl eventsourcing::Command for Verify {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let metadata = self.metadata.clone();
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
@@ -56,15 +55,13 @@ impl eventsourcing::Command for Verify {
             pending_account::EventData::VerificationSucceededV1
         };
 
-        return Ok((
+        return Ok(
             pending_account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp,
                 data,
                 aggregate_id: aggregate.id,
                 metadata,
-            },
-            (),
-        ));
+            });
     }
 }

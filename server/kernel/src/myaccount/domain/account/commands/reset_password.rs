@@ -21,7 +21,6 @@ impl eventsourcing::Command for ResetPassword {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -64,7 +63,7 @@ impl eventsourcing::Command for ResetPassword {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
@@ -72,15 +71,13 @@ impl eventsourcing::Command for ResetPassword {
             password: hashed_password,
         });
 
-        return Ok((
+        return Ok(
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            });
     }
 }

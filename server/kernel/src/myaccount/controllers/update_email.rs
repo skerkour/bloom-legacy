@@ -22,7 +22,7 @@ impl Handler<UpdateEmail> for DbActor {
     type Result = Result<domain::PendingEmail, KernelError>;
 
     fn handle(&mut self, msg: UpdateEmail, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_pending_emails, kernel_pending_emails_events};
+        use crate::db::schema::kernel_pending_emails;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -41,14 +41,12 @@ impl Handler<UpdateEmail> for DbActor {
                 config: msg.config.clone(),
                 metadata,
             };
-            let (new_pending_email, event, non_persisted) =
-                eventsourcing::execute(&conn, pending_email::PendingEmail::new(), &create_cmd)?;
+            let new_pending_email = pending_email::PendingEmail::new();
+            let event =
+                eventsourcing::execute(&conn, &mut new_pending_email, &create_cmd)?;
 
             diesel::insert_into(kernel_pending_emails::dsl::kernel_pending_emails)
                 .values(&new_pending_email)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_pending_emails_events::dsl::kernel_pending_emails_events)
-                .values(&event)
                 .execute(&conn)?;
 
             send_email_verification_code(
@@ -56,7 +54,7 @@ impl Handler<UpdateEmail> for DbActor {
                 new_pending_email.email.as_str(),
                 format!("{} {}", &msg.account.first_name, &msg.account.last_name).as_str(),
                 &new_pending_email.email,
-                &non_persisted.code,
+                &event.code,
             )?;
 
             return Ok(new_pending_email);

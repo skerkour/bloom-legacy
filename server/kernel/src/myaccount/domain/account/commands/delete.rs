@@ -16,7 +16,6 @@ impl eventsourcing::Command for Delete {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -36,7 +35,7 @@ impl eventsourcing::Command for Delete {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let random_string = utils::random_hex_string(10);
         let random_password = utils::random_hex_string(100);
         let password = bcrypt::hash(random_password, myaccount::PASSWORD_BCRYPT_COST)
@@ -47,7 +46,7 @@ impl eventsourcing::Command for Delete {
             password,
         });
 
-        return Ok((
+        Ok((
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
@@ -56,6 +55,6 @@ impl eventsourcing::Command for Delete {
                 metadata: self.metadata.clone(),
             },
             (),
-        ));
+        ))
     }
 }

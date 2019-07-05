@@ -20,7 +20,7 @@ impl Handler<RequestPasswordReset> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: RequestPasswordReset, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_accounts, kernel_accounts_events};
+        use crate::db::schema::kernel_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -42,14 +42,11 @@ impl Handler<RequestPasswordReset> for DbActor {
                 session_id: msg.session_id,
             };
             let request_password_reset_cmd = account::RequestPasswordReset { metadata };
-            let (account_to_update, event, non_stored) =
-                eventsourcing::execute(&conn, account_to_update, &request_password_reset_cmd)?;
+            let event =
+                eventsourcing::execute(&conn, &account_to_update, &request_password_reset_cmd)?;
 
             diesel::update(&account_to_update)
                 .set(&account_to_update)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // send email
@@ -67,7 +64,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                     .unwrap()
                     .to_string()
                     .as_str(),
-                &non_stored.plaintext_token,
+                &event.plaintext_token,
             )
             .expect("error sending email");
 
