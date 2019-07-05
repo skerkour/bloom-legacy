@@ -238,9 +238,7 @@ export default class Toolbar extends Vue {
   }
 
   setup() {
-    console.log('setup');
     this.service = this.$route.meta.service;
-    console.log(this.service);
     switch (this.service) {
       case 'myaccount':
         this.secondary_title = 'MyAccount';
