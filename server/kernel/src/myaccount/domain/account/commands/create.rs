@@ -23,6 +23,7 @@ impl eventsourcing::Command for Create {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
+    type AdditionalData = ();
 
     fn validate(
         &self,
@@ -66,7 +67,7 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<Self::Event, Self::Error> {
+    ) -> Result<(Self::Event, Self::AdditionalData), Self::Error> {
         let now = chrono::Utc::now();
         let id = uuid::Uuid::new_v4();
         let mut metadata = self.metadata.clone();

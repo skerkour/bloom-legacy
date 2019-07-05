@@ -1,5 +1,3 @@
-#![cfg_attr(feature = "cargo-clippy", allow(clippy::all))]
-
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 
@@ -12,16 +10,17 @@ pub trait Event {
     type Aggregate: Aggregate;
 
     fn apply(&self, agrgegate: &mut Self::Aggregate);
-
     #[inline]
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
 }
 
-pub trait Command<D> {
+pub trait Command {
     type Aggregate: Aggregate;
     type Event: Event;
     type Context;
     type Error;
+    type AdditionalData;
+
     fn validate(
         &self,
         conn: &Self::Context,
@@ -31,7 +30,7 @@ pub trait Command<D> {
         &self,
         conn: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::Error>;
+    ) -> Result<(Self::Event, Self::AdditionalData), Self::Error>;
 }
 
 pub trait Subscription {
@@ -146,24 +145,24 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-pub fn execute<A, CTX, CMD, Ev, EvData, Err>(
+pub fn execute<A, CTX, CMD, Ev, Err, D>(
     ctx: &CTX,
     aggregate: &mut A,
     cmd: &CMD,
-) -> Result<((Ev, EvData), Err>
+) -> Result<(Ev, D), Err>
 where
     A: Aggregate,
-    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err>,
+    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err, AdditionalData = D>,
     Ev: Event<Aggregate = A> + Any,
     Err: Any,
     CTX: Any,
 {
     cmd.validate(ctx, aggregate)?;
-    let event = cmd.build_event(ctx, aggregate)?;
+    let (event, additional_data) = cmd.build_event(ctx, aggregate)?;
     event.apply(aggregate);
     aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
     // publish::<_, _, Err>(ctx, &event)?;
-    return Ok(event);
+    return Ok((event, additional_data));
 }
 // pub fn execute execute<A, C, E, ED>(conn: &PgConnection, aggregate: &mut A, cmd: C, event: &mut E)() -> Result<(Aggregate)
