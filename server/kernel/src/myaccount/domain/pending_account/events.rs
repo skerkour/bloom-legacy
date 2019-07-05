@@ -60,42 +60,38 @@ pub struct NewCodeSentV1 {
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingAccount;
 
-    fn apply(&self, aggregate: &mut Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: &mut Self::Aggregate) {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::PendingAccount {
-                id: data.id,
-                created_at: self.timestamp,
-                updated_at: self.timestamp,
-                deleted_at: None,
-                version: 0,
-                email: data.email.clone(),
-                first_name: data.first_name.clone(),
-                last_name: data.last_name.clone(),
-                password: data.password.clone(),
-                token: data.token.clone(),
-                trials: 0,
-                verified: false,
+            EventData::CreatedV1(ref data) => {
+                aggregate.id = data.id;
+                aggregate.created_at = self.timestamp;
+                aggregate.updated_at = self.timestamp;
+                aggregate.deleted_at = None;
+                aggregate.version = 0;
+                aggregate.email = data.email.clone();
+                aggregate.first_name = data.first_name.clone();
+                aggregate.last_name = data.last_name.clone();
+                aggregate.password = data.password.clone();
+                aggregate.token = data.token.clone();
+                aggregate.trials = 0;
+                aggregate.verified = false;
             },
             // VerificationSucceededV1
-            EventData::VerificationSucceededV1 => super::PendingAccount {
-                verified: true,
-                ..aggregate
+            EventData::VerificationSucceededV1 => {
+                aggregate.verified = true;
             },
             // VerificationFailedV1
-            EventData::VerificationFailedV1(_) => super::PendingAccount {
-                trials: aggregate.trials + 1,
-                ..aggregate
+            EventData::VerificationFailedV1(_) => {
+                aggregate.trials = aggregate.trials + 1;
             },
             // RegistrationCompletedV1
-            EventData::RegistrationCompletedV1 => super::PendingAccount {
-                deleted_at: Some(self.timestamp),
-                ..aggregate
+            EventData::RegistrationCompletedV1 => {
+                aggregate.deleted_at = Some(self.timestamp);
             },
             // NewCodeSentV1
-            EventData::NewCodeSentV1(ref data) => super::PendingAccount {
-                token: data.token_hash.clone(),
-                ..aggregate
+            EventData::NewCodeSentV1(ref data) => {
+                aggregate.token = data.token_hash.clone();
             },
         }
     }
