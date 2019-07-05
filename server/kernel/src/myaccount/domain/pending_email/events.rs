@@ -52,31 +52,29 @@ impl ToString for VerificationFailedReason {
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingEmail;
 
-    fn apply(&self, aggregate: &mut Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: &mut Self::Aggregate) {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => super::PendingEmail {
-                id: data.id,
-                created_at: self.timestamp,
-                updated_at: self.timestamp,
-                deleted_at: None,
-                version: 0,
-                email: data.email.clone(),
-                token: data.token.clone(),
-                trials: 0,
-                account_id: data.account_id,
+            EventData::CreatedV1(ref data) => {
+                aggregate.id = data.id;
+                aggregate.created_at = self.timestamp;
+                aggregate.updated_at = self.timestamp;
+                aggregate.deleted_at = None;
+                aggregate.version = 0;
+                aggregate.email = data.email.clone();
+                aggregate.token = data.token.clone();
+                aggregate.trials = 0;
+                aggregate.account_id = data.account_id;
             },
             // VerificationSucceededV1
-            EventData::VerificationSucceededV1 => aggregate,
+            EventData::VerificationSucceededV1 => {},
             // VerificationFailedV1
-            EventData::VerificationFailedV1(_) => super::PendingEmail {
-                trials: aggregate.trials + 1,
-                ..aggregate
+            EventData::VerificationFailedV1(_) => {
+                aggregate.trials = aggregate.trials + 1;
             },
             // PendingEmail
-            EventData::DeletedV1 => super::PendingEmail {
-                deleted_at: Some(self.timestamp),
-                ..aggregate
+            EventData::DeletedV1 => {
+                aggregate.deleted_at = Some(self.timestamp);
             },
         }
     }

@@ -53,7 +53,7 @@ impl Handler<ResetPassword> for DbActor {
                 metadata: metadata.clone(),
             };
 
-            let _ = eventsourcing::execute(&conn, account, &update_last_name_cmd)?;
+            let _ = eventsourcing::execute(&conn, &mut account, &update_last_name_cmd)?;
 
             // update account
             diesel::update(&account).set(&account).execute(&conn)?;
@@ -72,7 +72,7 @@ impl Handler<ResetPassword> for DbActor {
             };
 
             for session in sessions {
-                let _ = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+                let _ = eventsourcing::execute(&conn, &mut session, &revoke_cmd)?;
                 // update session
                 diesel::update(&session).set(&session).execute(&conn)?;
             }
@@ -90,6 +90,12 @@ impl Handler<ResetPassword> for DbActor {
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)
                 .execute(&conn)?;
+
+            let token_plaintext = if let session::EventData::StartedV1(ref data) = event.data {
+                data.token_plaintext.clone()
+            } else {
+                return Err(KernelError::Internal(String::new()));
+            };
 
             return Ok((new_session, event.token_plaintext));
         })?);

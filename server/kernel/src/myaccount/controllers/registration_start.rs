@@ -53,6 +53,12 @@ impl Handler<StartRegistration> for DbActor {
                 .values(&new_pending_account)
                 .execute(&conn)?;
 
+            let code = if let pending_account::EventData::CreatedV1(ref data) = event.data {
+                data.code.clone()
+            } else {
+                return Err(KernelError::Internal(String::new()));
+            };
+
             send_account_verification_code(
                 &config,
                 new_pending_account.email.as_str(),
@@ -62,7 +68,7 @@ impl Handler<StartRegistration> for DbActor {
                 )
                 .as_str(),
                 new_pending_account.id.to_string().as_str(),
-                &event.code,
+                &code,
             )
             .expect("error sending email");
 

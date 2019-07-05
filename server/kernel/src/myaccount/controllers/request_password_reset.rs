@@ -43,11 +43,17 @@ impl Handler<RequestPasswordReset> for DbActor {
             };
             let request_password_reset_cmd = account::RequestPasswordReset { metadata };
             let event =
-                eventsourcing::execute(&conn, &account_to_update, &request_password_reset_cmd)?;
+                eventsourcing::execute(&conn, &mut account_to_update, &request_password_reset_cmd)?;
 
             diesel::update(&account_to_update)
                 .set(&account_to_update)
                 .execute(&conn)?;
+
+            let plaintext_token = if let session::EventData::StartedV1(ref data) = event.data {
+                data.plaintext_token.clone()
+            } else {
+                return Err(KernelError::Internal(String::new()));
+            };
 
             // send email
             // we can safely unwrap account.password_reset_id because it's set when applying the event to account
@@ -64,7 +70,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                     .unwrap()
                     .to_string()
                     .as_str(),
-                &event.plaintext_token,
+                &plaintext_token,
             )
             .expect("error sending email");
 

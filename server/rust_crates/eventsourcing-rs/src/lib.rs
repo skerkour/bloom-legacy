@@ -17,7 +17,7 @@ pub trait Event {
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
 }
 
-pub trait Command {
+pub trait Command<D> {
     type Aggregate: Aggregate;
     type Event: Event;
     type Context;
@@ -31,7 +31,7 @@ pub trait Command {
         &self,
         conn: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<Self::Event, Self::Error>;
+    ) -> Result<(Self::Event, Self::Error>;
 }
 
 pub trait Subscription {
@@ -146,11 +146,11 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-pub fn execute<A, CTX, CMD, Ev, Err>(
+pub fn execute<A, CTX, CMD, Ev, EvData, Err>(
     ctx: &CTX,
     aggregate: &mut A,
     cmd: &CMD,
-) -> Result<Ev, Err>
+) -> Result<((Ev, EvData), Err>
 where
     A: Aggregate,
     CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err>,
