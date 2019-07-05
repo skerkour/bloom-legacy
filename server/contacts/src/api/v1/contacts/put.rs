@@ -30,7 +30,7 @@ pub fn put(
             .db
             .send(controllers::UpdateContact {
                 addresses: contact_data.addresses.clone(),
-                birthday: contact_data.birthday.clone(),
+                birthday: contact_data.birthday,
                 company: contact_data.company.clone(),
                 emails: contact_data.emails.clone(),
                 first_name: contact_data.first_name.clone(),

@@ -53,7 +53,7 @@ impl Handler<FindFiles> for DbActor {
                 let key = format!("drive/{}/{}", file.owner_id, file.id);
                 let req = GetObjectRequest {
                     bucket: msg.s3_bucket.clone(),
-                    key: key,
+                    key,
                     // response_content_disposition: Some(format!(r#"attachment; filename="{}""#, &aggregate.name)),
                     response_content_type: Some(file.type_.clone()),
                     ..Default::default()

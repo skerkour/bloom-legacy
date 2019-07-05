@@ -30,6 +30,7 @@ impl Message for CompleteReport {
 impl Handler<CompleteReport> for DbActor {
     type Result = Result<(), KernelError>;
 
+    #[allow(clippy::unused_io_amount)]
     fn handle(&mut self, msg: CompleteReport, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
         use kernel::db::schema::{
@@ -54,7 +55,7 @@ impl Handler<CompleteReport> for DbActor {
             // send to S3
             for entry in WalkDir::new(&msg.report_dir)
                 .into_iter()
-                .filter_map(|e| e.ok())
+                .filter_map(Result::ok)
                 .filter(|e| e.file_type().is_file())
             {
                 let name = entry
@@ -104,9 +105,7 @@ impl Handler<CompleteReport> for DbActor {
             let report_path = format!("{}/report.json", &msg.report_dir);
             let report_contents = fs::read_to_string(&report_path)?;
             let parsed_report: models::report::Report = serde_json::from_str(&report_contents)?;
-            let parsed_report = match parsed_report {
-                models::report::Report::V1(parsed_report) => parsed_report,
-            };
+            let models::report::Report::V1(parsed_report) = parsed_report;
             let scan_id = parsed_report.scan_id;
 
             // generate report

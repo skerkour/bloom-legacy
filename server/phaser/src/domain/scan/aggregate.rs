@@ -85,3 +85,9 @@ impl eventsourcing::Aggregate for Scan {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Scan {
+    fn default() -> Self {
+        Self::new()
+    }
+}

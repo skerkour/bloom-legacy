@@ -45,6 +45,12 @@ impl eventsourcing::Aggregate for Album {
     }
 }
 
+impl Default for Album {
+    fn default() -> Self {
+        Self::new()
+    }
+}
+
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "gallery_albums_files"]
 pub struct AlbumFile {

@@ -97,3 +97,9 @@ impl eventsourcing::Aggregate for Download {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Download {
+    fn default() -> Self {
+        Self::new()
+    }
+}

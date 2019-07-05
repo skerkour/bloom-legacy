@@ -15,7 +15,7 @@ pub struct Event {
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
-    CreatedV1(CreatedV1),
+    CreatedV1(Box<CreatedV1>),
     DeletedV1,
     AddressesUpdatedV1(AddressesUpdatedV1),
     BirthdayUpdatedV1(BirthdayUpdatedV1),

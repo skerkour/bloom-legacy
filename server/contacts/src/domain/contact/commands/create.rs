@@ -43,7 +43,7 @@ impl eventsourcing::Command for Create {
         _aggregate: &Self::Aggregate,
     ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
-        let data = contact::EventData::CreatedV1(contact::CreatedV1 {
+        let data = contact::EventData::CreatedV1(Box::new(contact::CreatedV1 {
             id,
             addresses: self.addresses.clone(),
             birthday: self.birthday,
@@ -57,7 +57,7 @@ impl eventsourcing::Command for Create {
             phones: self.phones.clone(),
             websites: self.websites.clone(),
             owner_id: self.owner_id,
-        });
+        }));
 
         return Ok((
             contact::Event {

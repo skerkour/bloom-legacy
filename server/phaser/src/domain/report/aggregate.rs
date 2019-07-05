@@ -87,3 +87,9 @@ impl eventsourcing::Aggregate for Report {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Report {
+    fn default() -> Self {
+        Self::new()
+    }
+}

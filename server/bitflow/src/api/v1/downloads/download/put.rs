@@ -31,7 +31,7 @@ pub fn put(
             .send(controllers::UpdateDownload {
                 download_id: download_id.into_inner(),
                 name: download_data.name.clone(),
-                progress: download_data.progress.clone(),
+                progress: download_data.progress,
                 // actor_id: auth.account.expect("error unwraping non none account").id,
                 // session_id: auth.session.expect("error unwraping non none session").id,
                 request_id,

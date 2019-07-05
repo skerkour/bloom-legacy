@@ -29,6 +29,7 @@ impl Message for UpdateContact {
 impl Handler<UpdateContact> for DbActor {
     type Result = Result<contact::Contact, KernelError>;
 
+    #[allow(clippy::cognitive_complexity)]
     fn handle(&mut self, msg: UpdateContact, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
         use kernel::db::schema::{contacts_contacts, contacts_contacts_events};
