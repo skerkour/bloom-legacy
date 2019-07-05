@@ -151,3 +151,9 @@ impl eventsourcing::Aggregate for Contact {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Contact {
+    fn default() -> Self {
+        Self::new()
+    }
+}

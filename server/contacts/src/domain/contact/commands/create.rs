@@ -46,7 +46,7 @@ impl eventsourcing::Command for Create {
         let data = contact::EventData::CreatedV1(contact::CreatedV1 {
             id,
             addresses: self.addresses.clone(),
-            birthday: self.birthday.clone(),
+            birthday: self.birthday,
             company: self.company.clone(),
             emails: self.emails.clone(),
             first_name: self.first_name.clone(),

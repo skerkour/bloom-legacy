@@ -31,8 +31,8 @@ pub fn put(
             .send(controllers::UpdateEvent {
                 title: event_data.title.clone(),
                 description: event_data.description.clone(),
-                start_at: event_data.start_at.clone(),
-                end_at: event_data.end_at.clone(),
+                start_at: event_data.start_at,
+                end_at: event_data.end_at,
                 event_id: event_id.into_inner(),
                 actor_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,
