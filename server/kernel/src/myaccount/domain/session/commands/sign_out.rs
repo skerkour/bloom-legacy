@@ -15,7 +15,6 @@ impl eventsourcing::Command for SignOut {
     type Event = session::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -34,19 +33,18 @@ impl eventsourcing::Command for SignOut {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let data = session::EventData::SignedOutV1;
         let timestamp = chrono::Utc::now();
 
-        return Ok((
+        return Ok(
             session::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp,
                 data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            }
+        );
     }
 }

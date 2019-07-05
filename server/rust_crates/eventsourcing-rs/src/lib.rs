@@ -11,7 +11,8 @@ pub trait Aggregate {
 pub trait Event {
     type Aggregate: Aggregate;
 
-    fn apply(&self, agrgegate: Self::Aggregate) -> Self::Aggregate;
+    fn apply(&self, agrgegate: &mut Self::Aggregate);
+
     #[inline]
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
 }
@@ -21,8 +22,6 @@ pub trait Command {
     type Event: Event;
     type Context;
     type Error;
-    type NonStoredData;
-
     fn validate(
         &self,
         conn: &Self::Context,
@@ -32,7 +31,7 @@ pub trait Command {
         &self,
         conn: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error>;
+    ) -> Result<Self::Event, Self::Error>;
 }
 
 pub trait Subscription {
@@ -147,24 +146,24 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-pub fn execute<A, CTX, CMD, Ev, Err, D>(
+pub fn execute<A, CTX, CMD, Ev, Err>(
     ctx: &CTX,
-    aggregate: A,
+    aggregate: &mut A,
     cmd: &CMD,
-) -> Result<(A, Ev, D), Err>
+) -> Result<Ev, Err>
 where
     A: Aggregate,
-    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err, NonStoredData = D>,
+    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err>,
     Ev: Event<Aggregate = A> + Any,
     Err: Any,
     CTX: Any,
 {
-    cmd.validate(ctx, &aggregate)?;
-    let (event, non_stored_data) = cmd.build_event(ctx, &aggregate)?;
-    let mut aggregate = event.apply(aggregate);
+    cmd.validate(ctx, aggregate)?;
+    let event = cmd.build_event(ctx, aggregate)?;
+    event.apply(aggregate);
     aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
     // publish::<_, _, Err>(ctx, &event)?;
-    return Ok((aggregate, event, non_stored_data));
+    return Ok(event);
 }
 // pub fn execute execute<A, C, E, ED>(conn: &PgConnection, aggregate: &mut A, cmd: C, event: &mut E)() -> Result<(Aggregate)

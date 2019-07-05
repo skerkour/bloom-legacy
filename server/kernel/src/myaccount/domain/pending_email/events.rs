@@ -1,11 +1,8 @@
-use crate::{db::schema::kernel_pending_emails_events, events::EventMetadata};
-use diesel::Queryable;
-use diesel_as_jsonb::AsJsonb;
+use crate::events::EventMetadata;
 use serde::{Deserialize, Serialize};
 use std::string::ToString;
 
-#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "kernel_pending_emails_events"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -14,7 +11,7 @@ pub struct Event {
     pub metadata: EventMetadata, // TODO: change
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
     DeletedV1,
@@ -28,6 +25,7 @@ pub struct CreatedV1 {
     pub email: String,
     pub token: String,
     pub account_id: uuid::Uuid,
+    pub code: String,
 }
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
@@ -54,7 +52,7 @@ impl ToString for VerificationFailedReason {
 impl eventsourcing::Event for Event {
     type Aggregate = super::PendingEmail;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: &mut Self::Aggregate) -> Self::Aggregate {
         match self.data {
             // CreatedV1
             EventData::CreatedV1(ref data) => super::PendingEmail {

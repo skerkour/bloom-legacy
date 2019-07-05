@@ -14,7 +14,6 @@ impl eventsourcing::Command for FailSignIn {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -28,16 +27,14 @@ impl eventsourcing::Command for FailSignIn {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data: account::EventData::SignInFailedV1,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            });
     }
 }

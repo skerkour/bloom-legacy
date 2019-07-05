@@ -22,7 +22,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: VerifyPendingAccount, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_pending_accounts, kernel_pending_accounts_events};
+        use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -46,18 +46,13 @@ impl Handler<VerifyPendingAccount> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let (pending_account, event, _) =
+            let event =
                 eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)
                 .set(&pending_account)
                 .execute(&conn)?;
-            diesel::insert_into(
-                kernel_pending_accounts_events::dsl::kernel_pending_accounts_events,
-            )
-            .values(&event)
-            .execute(&conn)?;
 
             return match event.data {
                 EventData::VerificationFailedV1(err) => {

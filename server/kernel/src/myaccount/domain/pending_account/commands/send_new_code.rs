@@ -22,7 +22,6 @@ impl eventsourcing::Command for SendNewCode {
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = SendNewCodeNonStored;
 
     fn validate(
         &self,
@@ -47,25 +46,21 @@ impl eventsourcing::Command for SendNewCode {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let code = utils::random_digit_string(8);
-        let token = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
+        let token_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         let data =
-            pending_account::EventData::NewCodeSentV1(pending_account::NewCodeSentV1 { token });
+            pending_account::EventData::NewCodeSentV1(pending_account::NewCodeSentV1 { token_hash, code });
 
-        let non_stored = SendNewCodeNonStored { code };
-
-        return Ok((
+        return Ok(
             pending_account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            non_stored,
-        ));
+            });
     }
 }

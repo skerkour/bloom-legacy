@@ -15,7 +15,6 @@ impl eventsourcing::Command for UpdateAvatar {
     type Event = account::Event;
     type Context = rusoto_s3::S3Client;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -42,7 +41,7 @@ impl eventsourcing::Command for UpdateAvatar {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         // resize image to account::AVATAR_RESIZE
         let img = image::load_from_memory(&self.avatar)?;
         let scaled = img.resize(
@@ -70,15 +69,13 @@ impl eventsourcing::Command for UpdateAvatar {
         let event_data =
             account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1 { avatar_url });
 
-        return Ok((
+        return Ok(
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data: event_data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            });
     }
 }

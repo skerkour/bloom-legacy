@@ -18,7 +18,6 @@ impl Handler<DeleteAccount> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: DeleteAccount, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::kernel_accounts_events;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -34,16 +33,12 @@ impl Handler<DeleteAccount> for DbActor {
             };
 
             // just pass uuid
-            let (account_to_delete, event, _) =
-                eventsourcing::execute(&conn, msg.account, &delete_account_cmd)?;
+            let _ =
+                eventsourcing::execute(&conn, &mut msg.account, &delete_account_cmd)?;
 
             // update just deleted_at = chrono::Utc::now() or check that eventsourcing done that
-            diesel::update(&account_to_delete)
-                .set(&account_to_delete)
-                .execute(&conn)?;
-
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
+            diesel::update(&msg.account)
+                .set(&msg.account)
                 .execute(&conn)?;
 
             Ok(())

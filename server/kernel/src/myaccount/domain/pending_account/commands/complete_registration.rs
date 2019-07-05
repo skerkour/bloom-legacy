@@ -16,7 +16,6 @@ impl eventsourcing::Command for CompleteRegistration {
     type Event = pending_account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -43,16 +42,14 @@ impl eventsourcing::Command for CompleteRegistration {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(
             pending_account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data: pending_account::EventData::RegistrationCompletedV1,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            });
     }
 }

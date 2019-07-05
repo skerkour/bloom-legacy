@@ -26,7 +26,7 @@ impl Handler<UpdatePassword> for DbActor {
     type Result = Result<(), KernelError>;
 
     fn handle(&mut self, msg: UpdatePassword, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_accounts_events, kernel_sessions, kernel_sessions_events};
+        use crate::db::schema::kernel_sessions;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -48,14 +48,11 @@ impl Handler<UpdatePassword> for DbActor {
             };
 
             let (account_to_update, event, _) =
-                eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
+                eventsourcing::execute(&conn, &mut account_to_update, &update_last_name_cmd)?;
 
             // update account
             diesel::update(&account_to_update)
                 .set(&account_to_update)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // revoke all other active sessions
@@ -73,12 +70,9 @@ impl Handler<UpdatePassword> for DbActor {
             };
 
             for session in sessions {
-                let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+                let _ = eventsourcing::execute(&conn, &mut session, &revoke_cmd)?;
                 // update session
                 diesel::update(&session).set(&session).execute(&conn)?;
-                diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
-                    .values(&event)
-                    .execute(&conn)?;
             }
 
             return Ok(());

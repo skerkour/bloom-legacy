@@ -1,12 +1,9 @@
 use crate::{
-    db::schema::kernel_accounts_events, events::EventMetadata, myaccount::domain::account, utils,
+  events::EventMetadata,
 };
-use diesel::Queryable;
-use diesel_as_jsonb::AsJsonb;
 use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Insertable, Queryable, Serialize)]
-#[table_name = "kernel_accounts_events"]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Event {
     pub id: uuid::Uuid,
     pub timestamp: chrono::DateTime<chrono::Utc>,
@@ -15,7 +12,7 @@ pub struct Event {
     pub metadata: EventMetadata,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub enum EventData {
     CreatedV1(CreatedV1),
     FirstNameUpdatedV1(FirstNameUpdatedV1),
@@ -28,7 +25,6 @@ pub enum EventData {
     PasswordResetedV1(PasswordResetedV1),
     DisabledV1,
     EnabledV1,
-    AccountDeletedV1, // DO NOT USE, use DeletedV1 instead
     DeletedV1(DeletedV1),
     BioUpdatedV1(BioUpdatedV1),
     DisplayNameUpdatedV1(DisplayNameUpdatedV1),
@@ -75,6 +71,7 @@ pub struct AvatarUpdatedV1 {
 pub struct PasswordResetRequestedV1 {
     pub password_reset_id: uuid::Uuid,
     pub password_reset_token: String, // hashed token
+    pub token_plaintext: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -101,112 +98,87 @@ pub struct DisplayNameUpdatedV1 {
 impl eventsourcing::Event for Event {
     type Aggregate = super::Account;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: &mut Self::Aggregate) {
         match self.data {
             // CreatedV1
-            EventData::CreatedV1(ref data) => account::Account {
-                id: data.id,
-                created_at: self.timestamp,
-                updated_at: self.timestamp,
-                deleted_at: None,
-                version: 0,
-                avatar_url: data.avatar_url.clone(),
-                email: data.email.clone(),
-                first_name: data.first_name.clone(),
-                is_admin: data.is_admin,
-                last_name: data.last_name.clone(),
-                password: data.password.clone(),
-                password_reset_id: None,
-                password_reset_token: None,
-                username: data.username.clone(),
-                disabled_at: None,
-                bio: String::new(),
-                display_name: data.username.clone(),
+            EventData::CreatedV1(ref data) => {
+                aggregate.id = data.id;
+                aggregate.created_at = self.timestamp;
+                aggregate.updated_at = self.timestamp;
+                aggregate.deleted_at = None;
+                aggregate.version = 0;
+                aggregate.avatar_url = data.avatar_url.clone();
+                aggregate.email = data.email.clone();
+                aggregate.first_name = data.first_name.clone();
+                aggregate.is_admin = data.is_admin;
+                aggregate.last_name = data.last_name.clone();
+                aggregate.password = data.password.clone();
+                aggregate.password_reset_id = None;
+                aggregate.password_reset_token = None;
+                aggregate.username = data.username.clone();
+                aggregate.disabled_at = None;
+                aggregate.bio = String::new();
+                aggregate.display_name = data.username.clone();
             },
             // FirstNameUpdatedV1
-            EventData::FirstNameUpdatedV1(ref data) => account::Account {
-                first_name: data.first_name.clone(),
-                ..aggregate
+            EventData::FirstNameUpdatedV1(ref data) => {
+                aggregate.first_name = data.first_name.clone();
             },
             // LastNameUpdatedV1
-            EventData::LastNameUpdatedV1(ref data) => account::Account {
-                last_name: data.last_name.clone(),
-                ..aggregate
+            EventData::LastNameUpdatedV1(ref data) => {
+                aggregate.last_name = data.last_name.clone();
             },
             // PasswordUpdatedV1
-            EventData::PasswordUpdatedV1(ref data) => account::Account {
-                password: data.password.clone(),
-                ..aggregate
+            EventData::PasswordUpdatedV1(ref data) => {
+                aggregate.password = data.password.clone();
             },
             // EmailUpdatedV1
-            EventData::EmailUpdatedV1(ref data) => account::Account {
-                email: data.email.clone(),
-                ..aggregate
+            EventData::EmailUpdatedV1(ref data) => {
+                aggregate.email = data.email.clone();
             },
             // SignInFailedV1
-            EventData::SignInFailedV1 => account::Account { ..aggregate },
+            EventData::SignInFailedV1 => {},
             // AvatarUpdatedV1
-            EventData::AvatarUpdatedV1(ref data) => account::Account {
-                avatar_url: data.avatar_url.clone(),
-                ..aggregate
+            EventData::AvatarUpdatedV1(ref data) => {
+                aggregate.avatar_url = data.avatar_url.clone();
             },
             // PasswordResetRequestedV1
-            EventData::PasswordResetRequestedV1(ref data) => account::Account {
-                password_reset_id: Some(data.password_reset_id),
-                password_reset_token: Some(data.password_reset_token.clone()),
-                ..aggregate
+            EventData::PasswordResetRequestedV1(ref data) => {
+                aggregate.password_reset_id = Some(data.password_reset_id);
+                aggregate.password_reset_token = Some(data.password_reset_token.clone());
             },
             // PasswordResetedV1
-            EventData::PasswordResetedV1(ref data) => account::Account {
-                password: data.password.clone(),
-                password_reset_id: None,
-                password_reset_token: None,
-                ..aggregate
+            EventData::PasswordResetedV1(ref data) => {
+                aggregate.password = data.password.clone();
+                aggregate.password_reset_id = None;
+                aggregate.password_reset_token = None;
             },
             // DisabledV1
-            EventData::DisabledV1 => account::Account {
-                disabled_at: Some(self.timestamp),
-                ..aggregate
+            EventData::DisabledV1 => {
+                aggregate.disabled_at = Some(self.timestamp);
             },
             // EnabledV1
-            EventData::EnabledV1 => account::Account {
-                disabled_at: None,
-                ..aggregate
+            EventData::EnabledV1 => {
+                aggregate.disabled_at = None;
             },
-            // AccountDeletedV1
-            EventData::AccountDeletedV1 => {
-                let random_string = utils::random_hex_string(10);
-                account::Account {
-                    deleted_at: Some(self.timestamp),
-                    disabled_at: Some(self.timestamp),
-                    first_name: random_string.clone(),
-                    last_name: random_string.clone(),
-                    email: random_string.clone(),
-                    avatar_url: random_string,
-                    ..aggregate
-                }
-            }
             // DeletedV1
-            EventData::DeletedV1(ref data) => account::Account {
-                deleted_at: Some(self.timestamp),
-                disabled_at: Some(self.timestamp),
-                first_name: data.random_string.clone(),
-                last_name: data.random_string.clone(),
-                email: data.random_string.clone(),
-                password: data.password.clone(),
-                bio: data.random_string.clone(),
-                display_name: data.random_string.clone(),
-                ..aggregate
+            EventData::DeletedV1(ref data) => {
+                aggregate.deleted_at = Some(self.timestamp);
+                aggregate.disabled_at = Some(self.timestamp);
+                aggregate.first_name = data.random_string.clone();
+                aggregate.last_name = data.random_string.clone();
+                aggregate.email = data.random_string.clone();
+                aggregate.password = data.password.clone();
+                aggregate.bio = data.random_string.clone();
+                aggregate.display_name = data.random_string.clone();
             },
             // BioUpdatedV1
-            EventData::BioUpdatedV1(ref data) => account::Account {
-                bio: data.bio.clone(),
-                ..aggregate
+            EventData::BioUpdatedV1(ref data) => {
+                aggregate.bio = data.bio.clone();
             },
             // DisplayNameUpdatedV1
-            EventData::DisplayNameUpdatedV1(ref data) => account::Account {
-                display_name: data.display_name.clone(),
-                ..aggregate
+            EventData::DisplayNameUpdatedV1(ref data) => {
+                aggregate.display_name = data.display_name.clone();
             },
         }
     }

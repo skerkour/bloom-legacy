@@ -25,7 +25,6 @@ impl Handler<UpdateAvatar> for DbActor {
     type Result = Result<Account, KernelError>;
 
     fn handle(&mut self, msg: UpdateAvatar, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::kernel_accounts_events;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -46,15 +45,12 @@ impl Handler<UpdateAvatar> for DbActor {
                 metadata: metadata.clone(),
             };
 
-            let (account_to_update, event, _) =
-                eventsourcing::execute(&msg.s3_client, account_to_update, &update_first_name_cmd)?;
+            let _ =
+                eventsourcing::execute(&msg.s3_client, &mut account_to_update, &update_first_name_cmd)?;
 
             // update account
             diesel::update(&account_to_update)
                 .set(&account_to_update)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(account_to_update);

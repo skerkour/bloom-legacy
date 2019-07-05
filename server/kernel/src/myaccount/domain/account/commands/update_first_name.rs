@@ -17,7 +17,6 @@ impl eventsourcing::Command for UpdateFirstName {
     type Event = account::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -33,20 +32,18 @@ impl eventsourcing::Command for UpdateFirstName {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let data = account::EventData::FirstNameUpdatedV1(account::FirstNameUpdatedV1 {
             first_name: self.first_name.clone(),
         });
 
-        return Ok((
+        return Ok(
             account::Event {
                 id: uuid::Uuid::new_v4(),
                 timestamp: chrono::Utc::now(),
                 data,
                 aggregate_id: aggregate.id,
                 metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+            });
     }
 }
