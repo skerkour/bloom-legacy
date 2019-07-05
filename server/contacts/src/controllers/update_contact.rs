@@ -74,7 +74,7 @@ impl Handler<UpdateContact> for DbActor {
 
             // birthday
             let contact_to_update = match &msg.birthday {
-                Some(birthday) if &Some(*birthday) != &contact_to_update.birthday => {
+                Some(birthday) if Some(*birthday) != contact_to_update.birthday => {
                     let update_birthday_cmd = contact::UpdateBirthday {
                         birthday: Some(*birthday),
                         metadata: metadata.clone(),

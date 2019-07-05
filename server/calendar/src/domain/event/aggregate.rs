@@ -60,3 +60,9 @@ impl eventsourcing::Aggregate for CalendarEvent {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for CalendarEvent {
+    fn default() -> Self {
+        Self::new()
+    }
+}

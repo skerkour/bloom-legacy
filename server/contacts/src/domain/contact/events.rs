@@ -104,7 +104,7 @@ impl eventsourcing::Event for Event {
                 version: 0,
 
                 addresses: data.addresses.clone(),
-                birthday: data.birthday.clone(),
+                birthday: data.birthday,
                 company: data.company.clone(),
                 emails: data.emails.clone(),
                 first_name: data.first_name.clone(),
@@ -129,7 +129,7 @@ impl eventsourcing::Event for Event {
             },
             // BirthdayUpdatedV1
             EventData::BirthdayUpdatedV1(ref data) => super::Contact {
-                birthday: data.birthday.clone(),
+                birthday: data.birthday,
                 ..aggregate.clone()
             },
             // EmailsUpdatedV1
