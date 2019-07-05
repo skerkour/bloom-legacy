@@ -54,7 +54,6 @@ impl eventsourcing::Aggregate for Upload {
     }
 }
 
-
 impl Default for Upload {
     fn default() -> Self {
         Self::new()
