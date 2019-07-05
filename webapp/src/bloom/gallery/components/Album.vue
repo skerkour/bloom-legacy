@@ -105,7 +105,9 @@
   <blm-gallery-dialog-carousel
     :media="media"
     :visible="display_carousel_dialog"
-    @close="display_carousel_dialog = false" />
+    :index="index"
+    @close="display_carousel_dialog = false"
+    @update="carousel_index_updated" />
 </div>
 </template>
 
@@ -131,6 +133,7 @@ export default class Index extends Vue {
   // props
   // data
   media: any[] = [];
+  index = 0;
   album: any = null;
   is_loading = false;
   display_rename_album_dialog = false;
@@ -182,9 +185,11 @@ export default class Index extends Vue {
   album_renamed(album: any) {
     this.album = album;
   }
+
   added_to_album() {
     this.fetch_data();
   }
+
   media_removed() {
     this.fetch_data();
   }
@@ -192,14 +197,22 @@ export default class Index extends Vue {
   open_rename_dialog() {
     this.display_rename_album_dialog = true;
   }
+
   open_add_dialog() {
     this.display_add_media_to_album_dialog = true;
   }
+
   open_remove_dialog() {
     this.display_remove_dialog = true;
   }
-  open_carousel_dialog() {
+
+  open_carousel_dialog(index: number) {
+    this.index = index;
     this.display_carousel_dialog = true;
+  }
+
+  carousel_index_updated(index: number) {
+    this.index = index;
   }
 }
 </script>

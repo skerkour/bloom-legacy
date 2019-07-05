@@ -10,8 +10,8 @@
                 <p>No media</p>
               </v-container>
             </v-flex>
-            <v-flex v-for="file in media" :key="file.id" xs4 sm3 md2 d-flex
-             @click="open_dialog_caroussel" class="pointer">
+            <v-flex v-for="(file, index) in media" :key="file.id" xs4 sm3 md2 d-flex
+             @click="open_dialog_caroussel(index)" class="pointer">
               <v-card flat tile class="d-flex">
                 <v-img :src="file.url" class="grey lighten-2" contain>
                   <template v-slot:placeholder>
@@ -30,7 +30,9 @@
   <blm-gallery-dialog-carousel
     :media="media"
     :visible="display_carousel_dialog"
-    @close="display_carousel_dialog = false" />
+    :index="index"
+    @close="display_carousel_dialog = false"
+    @update="carousel_updated" />
 </div>
 </template>
 
@@ -51,6 +53,7 @@ export default class Index extends Vue {
   is_loading = false;
   error = '';
   display_carousel_dialog = false;
+  index = 0;
 
 
   // computed
@@ -74,8 +77,13 @@ export default class Index extends Vue {
     }
   }
 
-  open_dialog_caroussel() {
+  open_dialog_caroussel(index: number) {
+    this.index = index;
     this.display_carousel_dialog = true;
+  }
+
+  carousel_updated(index: number) {
+    this.index = index;
   }
 }
 </script>

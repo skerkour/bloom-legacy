@@ -8,7 +8,7 @@
     </v-toolbar>
 
     <v-card-text class="text-xs-center">
-      <v-carousel :cycle="false" height="100%">
+      <v-carousel :cycle="false" height="100%" v-model="_index">
         <v-carousel-item v-for="file in media" :key="file.id" lazy>
           <v-img :src="file.url" contain height="100%" />
         </v-carousel-item>
@@ -29,6 +29,7 @@ export default class CreateAlbumDialog extends Vue {
   // props
   @Prop({ type: Array, default: [] }) media!: any[];
   @Prop({ type: Boolean, default: false }) visible!: boolean;
+  @Prop({ type: Number, default: false }) index!: number;
 
 
   // data
@@ -41,6 +42,14 @@ export default class CreateAlbumDialog extends Vue {
     if (!value) {
       this.$emit('close');
     }
+  }
+
+  get _index(): number {
+    return this.index;
+  }
+
+  set _index(value: number) {
+    this.$emit('update', value);
   }
 
 
