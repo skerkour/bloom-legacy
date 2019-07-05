@@ -53,3 +53,9 @@ pub struct PlaylistFile {
     pub playlist_id: uuid::Uuid,
     pub file_id: uuid::Uuid,
 }
+
+impl Default for Playlist {
+    fn default() -> Self {
+        Self::new()
+    }
+}

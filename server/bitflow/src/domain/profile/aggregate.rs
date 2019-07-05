@@ -42,3 +42,9 @@ impl eventsourcing::Aggregate for Profile {
         self.updated_at = timestamp;
     }
 }
+
+impl Default for Profile {
+    fn default() -> Self {
+        Self::new()
+    }
+}

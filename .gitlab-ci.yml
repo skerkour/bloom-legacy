@@ -51,6 +51,7 @@ test:server:
     - rustup component add rustfmt
     - cp bloom.default.sane server/bloom.sane
     - make -C server fmt_check
+    - make -C server lint
     - make -C server test
   services:
     - postgres:11

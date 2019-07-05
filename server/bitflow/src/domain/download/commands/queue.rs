@@ -55,7 +55,7 @@ impl eventsourcing::Command for Queue {
         };
 
         let event_data = download::EventData::QueuedV1(download::QueuedV1 {
-            id: id,
+            id,
             owner_id: self.owner_id,
             name: self.url.clone(),
             url,

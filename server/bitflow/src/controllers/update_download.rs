@@ -67,7 +67,7 @@ impl Handler<UpdateDownload> for DbActor {
             let download_to_update = match msg.progress {
                 Some(progress) if (progress as i32) != download_to_update.progress => {
                     let update_progress_cmd = download::UpdateProgress {
-                        progress: progress,
+                        progress,
                         metadata: metadata.clone(),
                     };
 

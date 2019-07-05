@@ -32,6 +32,7 @@ impl eventsourcing::Command for Complete {
         return Ok(());
     }
 
+    #[allow(clippy::unused_io_amount)]
     fn build_event(
         &self,
         _ctx: &Self::Context,

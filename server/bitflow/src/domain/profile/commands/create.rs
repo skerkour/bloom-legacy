@@ -35,7 +35,7 @@ impl eventsourcing::Command for Create {
     ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
         let id = uuid::Uuid::new_v4();
         let data = profile::EventData::CreatedV1(profile::CreatedV1 {
-            id: id,
+            id,
             download_folder_id: self.download_folder_id,
             account_id: self.account_id,
         });
