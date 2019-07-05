@@ -1,5 +1,6 @@
 <template>
-  <v-dialog v-model="show" fullscreen hide-overlay @keydown.esc="show = false">
+  <v-dialog v-model="show" fullscreen hide-overlay @keydown.esc="show = false"
+    v-on:keyup.right="next" v-on:keyup.left="previous">
   <v-card>
     <v-toolbar dark color="black">
       <v-btn icon dark @click="show = false">
@@ -8,7 +9,7 @@
     </v-toolbar>
 
     <v-card-text class="text-xs-center">
-      <v-carousel :cycle="false" height="100%" v-model="_index" hide-delimiters>
+      <v-carousel :cycle="false" height="calc(100vh - 120px)" v-model="_index" hide-delimiters>
         <v-carousel-item v-for="file in media" :key="file.id" lazy>
           <v-img :src="file.url" contain height="100%" />
         </v-carousel-item>
@@ -23,6 +24,9 @@
 import { Component, Prop, Vue, Watch } from 'vue-property-decorator';
 import api from '@/bloom/kernel/api';
 
+
+const LEFT = 37;
+const RIGHT = 39;
 
 @Component
 export default class CreateAlbumDialog extends Vue {
@@ -54,8 +58,38 @@ export default class CreateAlbumDialog extends Vue {
 
 
   // lifecycle
+  mounted() {
+    window.addEventListener('keyup', this.on_key_up);
+  }
+
+  destroyed() {
+    window.removeEventListener('keyup', this.on_key_up);
+  }
   // watch
   // methods
+  next() {
+    if (this.index + 1 >= this.media.length) {
+      this._index = 0;
+    } else {
+      this._index += 1;
+    }
+  }
+
+  previous() {
+    if (this.index - 1 < 0) {
+      this._index = this.media.length - 1;
+    } else {
+      this._index -= 1;
+    }
+  }
+
+  on_key_up(e: any) {
+    if (e.keyCode === LEFT) {
+      this.previous();
+    } else if (e.keyCode === RIGHT) {
+      this.next();
+    }
+  }
 }
 </script>
 
@@ -65,7 +99,7 @@ export default class CreateAlbumDialog extends Vue {
   background-color: black;
 }
 
-.blm-carousel-image {
-  height: 100%;
+.v-image__image--contain {
+  background-position: top center !important;
 }
 </style>
