@@ -1,6 +1,6 @@
 <template>
   <v-toolbar color="primary" dark flat fixed clipped-left app class="blm-toolbar">
-    <v-toolbar-side-icon v-if="(side_icon && $store.state.session) || (secondary_title === 'Help')" @click.stop="side_icon_clicked">
+    <v-toolbar-side-icon v-if="(side_icon && $store.state.session) || (service === 'help')" @click.stop="side_icon_clicked">
       <v-icon>mdi-menu</v-icon>
     </v-toolbar-side-icon>
     <router-link to="/">
@@ -159,6 +159,7 @@ export default class Toolbar extends Vue {
   display_searchbar = false;
   searchbar_label = 'Search';
   secondary_title = '';
+  service = '';
   apps = [
     {
       logo: '/kernel/static/imgs/logos/platform.svg',
@@ -237,7 +238,10 @@ export default class Toolbar extends Vue {
   }
 
   setup() {
-    switch (this.$route.meta.service) {
+    console.log('setup');
+    this.service = this.$route.meta.service;
+    console.log(this.service);
+    switch (this.service) {
       case 'myaccount':
         this.secondary_title = 'MyAccount';
         this.side_icon = true;
@@ -309,9 +313,6 @@ export default class Toolbar extends Vue {
         break;
     }
     document.title = `Bloom ${this.secondary_title}`;
-    if (!this.$route.meta.auth || this.$route.meta.auth.layout !== 'authenticated') {
-      this.side_icon = false;
-    }
   }
 
   search(q: string) {
