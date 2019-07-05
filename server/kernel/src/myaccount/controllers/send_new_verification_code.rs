@@ -45,12 +45,18 @@ impl Handler<SendNewVerificationCode> for DbActor {
                     .first(&conn)?;
 
             let event =
-                eventsourcing::execute(&conn, &pending_account, &resend_code_cmd)?;
+                eventsourcing::execute(&conn, &mut pending_account, &resend_code_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)
                 .set(&pending_account)
                 .execute(&conn)?;
+
+            let code = if let pending_account::EventData::NewCodeSentV1(ref data) = event.data {
+                data.code.clone()
+            } else {
+                return Err(KernelError::Internal(String::new()));
+            };
 
             let config = msg.config.clone();
             send_account_verification_code(
@@ -62,7 +68,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
                 )
                 .as_str(),
                 pending_account.id.to_string().as_str(),
-                &event.code,
+                &code,
             )
             .expect("error sending email");
 

@@ -47,7 +47,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
                     .first(&conn)?;
 
             let event =
-                eventsourcing::execute(&conn, pending_account, &verify_pending_account_cmd)?;
+                eventsourcing::execute(&conn, &mut pending_account, &verify_pending_account_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)
