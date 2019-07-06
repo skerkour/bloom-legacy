@@ -17,7 +17,7 @@ pub struct Create {
 
 impl eventsourcing::Command for Create {
     type Aggregate = pending_email::PendingEmail;
-    type Event = pending_email::Event;
+    type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -52,26 +52,43 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let now = chrono::Utc::now();
         let new_pending_email_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
         let token = bcrypt::hash(&code, myaccount::PENDING_EMAIL_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = pending_email::EventData::CreatedV1(pending_email::CreatedV1 {
+        return Ok(Created {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             id: new_pending_email_id,
             email: self.email.clone(),
             account_id: self.account_id,
             token,
             code,
         });
+    }
+}
 
-        return Ok(pending_email::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data,
-            aggregate_id: new_pending_email_id,
-            metadata: self.metadata.clone(),
-        });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Created {
+    type Aggregate = pending_email::PendingEmail;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: data.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            email: data.email.clone(),
+            token: data.token.clone(),
+            trials: 0,
+            account_id: data.account_id,
+        };
     }
 }

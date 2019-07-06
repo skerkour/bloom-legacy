@@ -1,7 +1,10 @@
 mod aggregate;
 mod commands;
-mod events;
 
 pub use aggregate::PendingEmail;
-pub use commands::{Create, Delete, Verify};
-pub use events::{CreatedV1, Event, EventData, VerificationFailedReason};
+pub use commands::{
+    create::{Create, Created},
+    delete::{Delete, Deleted},
+    fail_verification::{FailVerification, VerificationFailed},
+    verify::{Verified, Verify},
+};

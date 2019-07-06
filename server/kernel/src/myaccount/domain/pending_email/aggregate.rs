@@ -1,9 +1,19 @@
 use crate::db::schema::kernel_pending_emails;
 use diesel::Queryable;
-use serde::{Deserialize, Serialize};
 use eventsourcing::Aggregate;
+use serde::{Deserialize, Serialize};
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "kernel_pending_emails"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingEmail {
@@ -45,7 +55,6 @@ impl Default for PendingEmail {
         Self::new()
     }
 }
-
 
 #[derive(Clone, Copy, Debug, Deserialize, Serialize)]
 pub enum VerificationFailedReason {
