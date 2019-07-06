@@ -1,26 +1,6 @@
-use crate::events::EventMetadata;
-use serde::{Deserialize, Serialize};
-use std::string::ToString;
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Event {
-    pub id: uuid::Uuid,
-    pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub data: EventData,
-    pub aggregate_id: uuid::Uuid,
-    pub metadata: EventMetadata, // TODO: change
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub enum EventData {
-    CreatedV1(CreatedV1),
-    DeletedV1,
-    VerificationFailedV1(VerificationFailedReason),
-    VerificationSucceededV1,
-}
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CreatedV1 {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,
     pub email: String,
     pub token: String,
@@ -28,25 +8,20 @@ pub struct CreatedV1 {
     pub code: String,
 }
 
-#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
-pub enum VerificationFailedReason {
-    CodeNotValid,
-    CodeExpired,
-    TooManyTrials,
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Deleted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-impl ToString for VerificationFailedReason {
-    fn to_string(&self) -> String {
-        match self {
-            VerificationFailedReason::CodeNotValid => "Code is not valid.".to_string(),
-            VerificationFailedReason::CodeExpired => {
-                "Code has expired. Please try again".to_string()
-            }
-            VerificationFailedReason::TooManyTrials => {
-                "Maximum number of trials reached. Please ry again".to_string()
-            }
-        }
-    }
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerificationFailed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub reason: VerificationFailedReason,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Verified {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
 impl eventsourcing::Event for Event {
@@ -66,8 +41,6 @@ impl eventsourcing::Event for Event {
                 aggregate.trials = 0;
                 aggregate.account_id = data.account_id;
             }
-            // VerificationSucceededV1
-            EventData::VerificationSucceededV1 => {}
             // VerificationFailedV1
             EventData::VerificationFailedV1(_) => {
                 aggregate.trials = aggregate.trials + 1;

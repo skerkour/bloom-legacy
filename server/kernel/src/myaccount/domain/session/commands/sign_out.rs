@@ -45,7 +45,7 @@ pub struct SignedOut {
 }
 
 impl Event for SignedOut {
-    type Aggregate = super::Account;
+    type Aggregate = session::Session;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

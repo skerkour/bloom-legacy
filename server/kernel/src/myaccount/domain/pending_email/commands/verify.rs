@@ -54,30 +54,36 @@ impl eventsourcing::Command for Verify {
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
-        let data = if aggregate.trials + 1 >= 8 {
-            pending_email::EventData::VerificationFailedV1(
-                pending_email::VerificationFailedReason::TooManyTrials,
-            )
+        if aggregate.trials + 1 >= 8 {
+            return Err(KernelError::Validation(pending_email::VerificationFailedReason::TooManyTrials.to_string()));
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_email::EventData::VerificationFailedV1(
-                pending_email::VerificationFailedReason::CodeNotValid,
-            )
+            return Err(KernelError::Validation(pending_email::VerificationFailedReason::CodeNotValid.to_string()));
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_email::EventData::VerificationFailedV1(
-                pending_email::VerificationFailedReason::CodeExpired,
-            )
-        } else {
-            pending_email::EventData::VerificationSucceededV1
-        };
+            return Err(KernelError::Validation(pending_email::VerificationFailedReason::CodeExpired.to_string()));
+        }
 
-        return Ok(pending_email::Event {
-            id: uuid::Uuid::new_v4(),
+        return Ok(Verified {
             timestamp,
-            data,
-            aggregate_id: aggregate.id,
-            metadata,
         });
+    }
+}
+
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Verified {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Revoked {
+    type Aggregate = pending_email::PendingEmail;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp);
+            ..aggregate
+        };
     }
 }
