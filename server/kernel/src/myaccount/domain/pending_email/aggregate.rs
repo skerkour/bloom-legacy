@@ -1,8 +1,9 @@
 use crate::db::schema::kernel_pending_emails;
 use diesel::Queryable;
 use serde::{Deserialize, Serialize};
+use eventsourcing::Aggregate;
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "kernel_pending_emails"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingEmail {
@@ -39,18 +40,30 @@ impl PendingEmail {
     }
 }
 
-impl eventsourcing::Aggregate for PendingEmail {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
-    }
-}
-
 impl Default for PendingEmail {
     fn default() -> Self {
         Self::new()
+    }
+}
+
+
+#[derive(Clone, Copy, Debug, Deserialize, Serialize)]
+pub enum VerificationFailedReason {
+    CodeNotValid,
+    CodeExpired,
+    TooManyTrials,
+}
+
+impl ToString for VerificationFailedReason {
+    fn to_string(&self) -> String {
+        match self {
+            VerificationFailedReason::CodeNotValid => "Code is not valid.".to_string(),
+            VerificationFailedReason::CodeExpired => {
+                "Code has expired. Please try again".to_string()
+            }
+            VerificationFailedReason::TooManyTrials => {
+                "Maximum number of trials reached. Please ry again".to_string()
+            }
+        }
     }
 }
