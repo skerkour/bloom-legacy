@@ -1,25 +1,29 @@
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 
-pub trait Aggregate {
+pub use eventsourcing_derive::{EventTs, Aggregate};
+
+pub trait AggregateData {
     fn increment_version(&mut self);
     fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>);
 }
 
-pub trait Event {
-    type Aggregate: Aggregate;
-
-    fn apply(&self, agrgegate: &mut Self::Aggregate);
+pub trait EventData {
     #[inline]
     fn timestamp(&self) -> chrono::DateTime<chrono::Utc>;
 }
 
+pub trait Event {
+    type Aggregate: AggregateData;
+
+    fn apply(&self, agrgegate: Self::Aggregate) -> Self::Aggregate;
+}
+
 pub trait Command {
-    type Aggregate: Aggregate;
-    type Event: Event;
+    type Aggregate: AggregateData;
+    type Event: Event + EventData;
     type Context;
     type Error;
-    type AdditionalData;
 
     fn validate(
         &self,
@@ -30,15 +34,15 @@ pub trait Command {
         &self,
         conn: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::AdditionalData), Self::Error>;
+    ) -> Result<Self::Event, Self::Error>;
 }
 
 pub trait Subscription {
     type Error;
-    type Message;
+    type Event;
     type Context;
 
-    fn handle(&self, ctx: &Self::Context, msg: &Self::Message) -> Result<(), Self::Error>;
+    fn handle(&self, ctx: &Self::Context, event: &Self::Event) -> Result<(), Self::Error>;
 }
 
 impl EventBus {
@@ -48,13 +52,13 @@ impl EventBus {
         };
     }
 
-    fn subscribe<C: Any, M: Any, E: Any>(
+    fn subscribe<C: Any, Ev: Any, Err: Any>(
         &mut self,
-        subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>,
+        subscription: Box<(dyn Subscription<Context = C, Event = Ev, Error = Err> + 'static)>,
     ) {
-        let msg_id = TypeId::of::<M>();
+        let msg_id = TypeId::of::<Ev>();
         let boxed = Box::new(subscription);
-        // let boxed = Box::new(subscription) as Box<dyn Subscription<Context = C, Message = M, Error = E>>;
+        // let boxed = Box::new(subscription) as Box<dyn Subscription<Context = C, Event = Ev, Error = Err>>;
         // print_typeid(&boxed);
         if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
             subscriptions.push(boxed);
@@ -63,12 +67,12 @@ impl EventBus {
         }
     }
 
-    fn publish<C: Any, M: Any, E: Any>(&mut self, ctx: &C, message: &M) -> Result<(), E> {
-        let msg_id = TypeId::of::<M>();
+    fn publish<C: Any, Ev: Any, Err: Any>(&mut self, ctx: &C, message: &Ev) -> Result<(), Err> {
+        let msg_id = TypeId::of::<Ev>();
         if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
             for subscription in subscriptions {
                 // println!("{:?}", subscription.get_type_id());
-                let subscription: &Box<Subscription<Context = C, Message = M, Error = E>> =
+                let subscription: &Box<Subscription<Context = C, Event = Ev, Error = Err>> =
                     subscription.downcast_ref().expect("error downcasting");
                 subscription.handle(ctx, message)?;
             }
@@ -136,7 +140,7 @@ fn event_bus() -> &'static mut EventBus {
 // }
 
 pub fn subscribe<C: Any, M: Any, E: Any>(
-    subscription: Box<(dyn Subscription<Context = C, Message = M, Error = E> + 'static)>,
+    subscription: Box<(dyn Subscription<Context = C, Event = M, Error = E> + 'static)>,
 ) {
     event_bus().subscribe(subscription);
 }
@@ -145,24 +149,24 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-pub fn execute<A, CTX, CMD, Ev, Err, D>(
+pub fn execute<A, CTX, CMD, Ev, Err>(
     ctx: &CTX,
-    aggregate: &mut A,
+    aggregate: A,
     cmd: &CMD,
-) -> Result<(Ev, D), Err>
+) -> Result<(A, Ev), Err>
 where
-    A: Aggregate,
-    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err, AdditionalData = D>,
-    Ev: Event<Aggregate = A> + Any,
+    A: AggregateData,
+    CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err>,
+    Ev: Event<Aggregate = A> + Any + EventData,
     Err: Any,
     CTX: Any,
 {
-    cmd.validate(ctx, aggregate)?;
-    let (event, additional_data) = cmd.build_event(ctx, aggregate)?;
-    event.apply(aggregate);
+    cmd.validate(ctx, &aggregate)?;
+    let event = cmd.build_event(ctx, &aggregate)?;
+    let mut aggregate = event.apply(aggregate);
     aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
-    // publish::<_, _, Err>(ctx, &event)?;
-    return Ok((event, additional_data));
+    publish::<_, _, Err>(ctx, &event)?;
+    return Ok((aggregate, event));
 }
 // pub fn execute execute<A, C, E, ED>(conn: &PgConnection, aggregate: &mut A, cmd: C, event: &mut E)() -> Result<(Aggregate)

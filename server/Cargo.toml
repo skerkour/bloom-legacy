@@ -23,6 +23,7 @@ members = [
     "rust_crates/bcrypt-rs",
     "rust_crates/hex-rs",
     "rust_crates/eventsourcing-rs",
+    "rust_crates/eventsourcing_derive",
     "rust_crates/mimesniff-rs",
     "rust_crates/diesel-derive-enum",
     "rust_crates/diesel-enum-derive",

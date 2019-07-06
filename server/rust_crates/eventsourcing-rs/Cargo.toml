@@ -1,6 +1,6 @@
 [package]
 name = "eventsourcing"
-version = "0.1.0"
+version = "0.2.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 description = "Event Sourcing for Rust"
@@ -9,3 +9,4 @@ keywords = ["event", "eventsourcing", "aggregate", "command"]
 
 [dependencies]
 chrono = { version = "0.4" }
+eventsourcing_derive = { path = "../eventsourcing_derive" }
