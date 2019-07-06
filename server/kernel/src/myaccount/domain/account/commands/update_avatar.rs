@@ -1,7 +1,7 @@
 use crate::{error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account};
+use eventsourcing::{Event, EventTs};
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
-use eventsourcing::{Event, EventTs};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
@@ -73,7 +73,6 @@ impl eventsourcing::Command for UpdateAvatar {
         });
     }
 }
-
 
 // Event
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]

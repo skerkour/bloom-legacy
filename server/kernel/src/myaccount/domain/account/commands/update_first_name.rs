@@ -8,7 +8,6 @@ use diesel::{
 use eventsourcing::{Event, EventTs};
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Clone, Debug)]
 pub struct UpdateFirstName {
     pub first_name: String,

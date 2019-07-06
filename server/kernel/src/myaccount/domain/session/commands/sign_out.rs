@@ -6,13 +6,11 @@ use diesel::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct SignOut {
-    pub metadata: EventMetadata,
-}
+pub struct SignOut {}
 
 impl eventsourcing::Command for SignOut {
     type Aggregate = session::Session;
-    type Event = session::Event;
+    type Event = SignedOut;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -34,15 +32,25 @@ impl eventsourcing::Command for SignOut {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = session::EventData::SignedOutV1;
-        let timestamp = chrono::Utc::now();
-
-        return Ok(session::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp,
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
+        return Ok(SignedOut {
+            timestamp: chrono::Utc::now(),
         });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct SignedOut {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for SignedOut {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }

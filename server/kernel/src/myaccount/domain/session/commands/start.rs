@@ -13,12 +13,11 @@ pub struct Start {
     pub account_id: uuid::Uuid,
     pub ip: String,
     pub user_agent: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Start {
     type Aggregate = session::Session;
-    type Event = session::Event;
+    type Event = Started;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -48,11 +47,10 @@ impl eventsourcing::Command for Start {
         let token = utils::random_hex_string(token_length as usize);
         let hashed_token = bcrypt::hash(&token, myaccount::SESSION_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
-        let timestamp = chrono::Utc::now();
 
-        let new_session_id = uuid::Uuid::new_v4();
-        let data = session::EventData::StartedV1(session::StartedV1 {
-            id: new_session_id,
+        return Ok(Started {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             account_id: self.account_id,
             token_hash: hashed_token,
             token_plaintext: token,
@@ -60,13 +58,36 @@ impl eventsourcing::Command for Start {
             device: session::Device {},
             location: session::Location {},
         });
+    }
+}
 
-        return Ok(session::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp,
-            data,
-            aggregate_id: new_session_id,
-            metadata: self.metadata.clone(),
-        });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Started {
+    pub id: uuid::Uuid,
+    pub account_id: uuid::Uuid,
+    pub token_hash: String,
+    pub token_plaintext: String,
+    pub ip: String,
+    pub location: session::Location,
+    pub device: session::Device,
+}
+
+impl Event for Started {
+    type Aggregate = session::Session;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: data.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            device: data.device.clone(),
+            ip: data.ip.clone(),
+            location: Some(data.location.clone()),
+            token: data.token.clone(),
+            account_id: data.account_id,
+        };
     }
 }

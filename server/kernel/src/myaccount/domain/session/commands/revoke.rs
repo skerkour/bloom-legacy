@@ -9,12 +9,11 @@ use serde::{Deserialize, Serialize};
 pub struct Revoke {
     pub current_session_id: Option<uuid::Uuid>,
     pub reason: session::RevokedReason,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Revoke {
     type Aggregate = session::Session;
-    type Event = session::Event;
+    type Event = Revoked;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -45,17 +44,27 @@ impl eventsourcing::Command for Revoke {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = session::EventData::RevokedV1(session::RevokedV1 {
+        return Ok(Revoked {
+            timestamp: chrono::Utc::now(),
             reason: self.reason,
         });
-        let timestamp = chrono::Utc::now();
+    }
+}
 
-        return Ok(session::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp,
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
-        });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Revoked {
+    pub reason: session::RevokedReason,
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Revoked {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }
