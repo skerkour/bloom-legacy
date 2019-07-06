@@ -70,7 +70,7 @@ impl eventsourcing::Command for ResetPassword {
 
         return Ok(account::Event {
             timestamp: chrono::Utc::now(),
-            password: hashed_password,,
+            password: hashed_password,
         });
     }
 }

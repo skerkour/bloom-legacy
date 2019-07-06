@@ -41,7 +41,6 @@ impl eventsourcing::Command for UpdateEmail {
     }
 }
 
-
 // Event
 #[derive(Clone, Debug, EventTs)]
 pub struct EmailUpdated {

@@ -67,7 +67,7 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::AdditionalData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         return Ok(account::Created {
             timestamp: chrono::Utc::now(),
             id: uuid::Uuid::new_v4(),

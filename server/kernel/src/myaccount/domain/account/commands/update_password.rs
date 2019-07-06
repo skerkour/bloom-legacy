@@ -67,7 +67,6 @@ impl eventsourcing::Command for UpdatePassword {
     }
 }
 
-
 // Event
 #[derive(Clone, Debug, Deserialize, Eventts, Serialize)]
 pub struct PasswordUpdated {

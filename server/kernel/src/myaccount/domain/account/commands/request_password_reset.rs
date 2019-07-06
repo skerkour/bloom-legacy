@@ -5,13 +5,12 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use rand::Rng;
 use eventsourcing::{Event, EventTs};
+use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
-pub struct RequestPasswordReset {
-}
+pub struct RequestPasswordReset {}
 
 #[derive(Clone, Debug)]
 pub struct RequestPasswordResetNonStored {
@@ -50,12 +49,11 @@ impl eventsourcing::Command for RequestPasswordReset {
         return Ok(PasswordResetRequested {
             timestamp: chrono::Utc::now(),
             password_reset_id,
-                password_reset_token: hashed_token.clone(),
-                token_plaintext: token,
+            password_reset_token: hashed_token.clone(),
+            token_plaintext: token,
         });
     }
 }
-
 
 // Event
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]

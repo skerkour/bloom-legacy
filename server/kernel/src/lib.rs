@@ -4,7 +4,6 @@ extern crate diesel;
 extern crate try_future;
 
 pub mod error;
-pub mod events;
 pub mod log;
 pub use error::KernelError;
 pub mod api;

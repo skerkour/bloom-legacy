@@ -1,9 +1,20 @@
 use crate::db::schema::kernel_sessions;
 use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
+use eventsourcing::Aggregate;
 use serde::{Deserialize, Serialize};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "kernel_sessions"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Session {
@@ -42,16 +53,6 @@ impl Session {
     }
 }
 
-impl eventsourcing::Aggregate for Session {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
-    }
-}
-
 impl Default for Session {
     fn default() -> Self {
         Self::new()
@@ -63,3 +64,11 @@ pub struct Device {}
 
 #[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
 pub struct Location {}
+
+#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
+pub enum RevokedReason {
+    Manually,
+    PasswordUpdated,
+    PasswordReseted,
+    AccountDisabled,
+}
