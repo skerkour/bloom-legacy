@@ -24,9 +24,7 @@ impl Handler<VerifyEmail> for DbActor {
     type Result = Result<Account, KernelError>;
 
     fn handle(&mut self, msg: VerifyEmail, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            kernel_pending_emails,
-        };
+        use crate::db::schema::kernel_pending_emails;
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -91,14 +89,17 @@ impl Handler<VerifyEmail> for DbActor {
                     };
 
                     for pending_email_to_delete in pending_emails_to_delete {
-                        let (pending_email_to_delete, event, _) =
-                            eventsourcing::execute(&conn, &mut pending_email_to_delete, &delete_cmd)?;
+                        let (pending_email_to_delete, event, _) = eventsourcing::execute(
+                            &conn,
+                            &mut pending_email_to_delete,
+                            &delete_cmd,
+                        )?;
                         diesel::update(&pending_email_to_delete)
                             .set(&pending_email_to_delete)
                             .execute(&conn)?;
                     }
                 }
-                _ => {},
+                _ => {}
             };
 
             return match event.data {

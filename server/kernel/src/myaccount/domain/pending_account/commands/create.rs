@@ -81,13 +81,12 @@ impl eventsourcing::Command for Create {
             code,
         });
 
-        return Ok(
-            pending_account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: now,
-                data,
-                aggregate_id: new_pending_account_id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(pending_account::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp: now,
+            data,
+            aggregate_id: new_pending_account_id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

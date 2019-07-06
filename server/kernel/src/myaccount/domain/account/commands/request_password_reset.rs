@@ -6,10 +6,11 @@ use diesel::{
     PgConnection,
 };
 use rand::Rng;
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct RequestPasswordReset {
-    pub metadata: EventMetadata,
 }
 
 #[derive(Clone, Debug)]
@@ -19,7 +20,7 @@ pub struct RequestPasswordResetNonStored {
 
 impl eventsourcing::Command for RequestPasswordReset {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = PasswordResetRequested;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -46,20 +47,33 @@ impl eventsourcing::Command for RequestPasswordReset {
         let hashed_token = bcrypt::hash(&token, myaccount::PASSWORD_RESET_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data =
-            account::EventData::PasswordResetRequestedV1(account::PasswordResetRequestedV1 {
-                password_reset_id,
+        return Ok(PasswordResetRequested {
+            timestamp: chrono::Utc::now(),
+            password_reset_id,
                 password_reset_token: hashed_token.clone(),
                 token_plaintext: token,
-            });
+        });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct PasswordResetRequested {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub password_reset_id: uuid::Uuid,
+    pub password_reset_token: String, // hashed token
+    pub token_plaintext: String,
+}
+
+impl Event for PasswordResetRequested {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            password_reset_id: Some(self.password_reset_id),
+            password_reset_token: Some(self.password_reset_token.clone()),
+            ..aggregate
+        };
     }
 }

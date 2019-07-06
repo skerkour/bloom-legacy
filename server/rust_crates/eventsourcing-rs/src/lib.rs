@@ -1,7 +1,7 @@
 use std::any::{Any, TypeId};
 use std::collections::HashMap;
 
-pub use eventsourcing_derive::{EventTs, Aggregate};
+pub use eventsourcing_derive::{Aggregate, EventTs};
 
 pub trait AggregateData {
     fn increment_version(&mut self);
@@ -149,11 +149,7 @@ pub fn publish<C: Any, M: Any, E: Any>(ctx: &C, message: &M) -> Result<(), E> {
     return event_bus().publish(ctx, message);
 }
 
-pub fn execute<A, CTX, CMD, Ev, Err>(
-    ctx: &CTX,
-    aggregate: A,
-    cmd: &CMD,
-) -> Result<(A, Ev), Err>
+pub fn execute<A, CTX, CMD, Ev, Err>(ctx: &CTX, aggregate: A, cmd: &CMD) -> Result<(A, Ev), Err>
 where
     A: AggregateData,
     CMD: Command<Aggregate = A, Event = Ev, Context = CTX, Error = Err>,

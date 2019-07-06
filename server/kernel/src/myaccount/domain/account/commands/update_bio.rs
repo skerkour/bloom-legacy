@@ -5,16 +5,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct UpdateBio {
     pub bio: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateBio {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = BioUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -33,17 +34,27 @@ impl eventsourcing::Command for UpdateBio {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = account::EventData::BioUpdatedV1(account::BioUpdatedV1 {
+        return Ok(BioUpdated {
+            timestamp: chrono::Utc::now(),
             bio: self.bio.clone(),
         });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct BioUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub bio: String,
+}
+
+impl Event for BioUpdated {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            bio: self.bio.clone(),
+            ..aggregate
+        };
     }
 }

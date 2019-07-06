@@ -4,7 +4,7 @@ pub struct Account {
     id: u64,
     balance: i64,
     version: i64,
-    updated_at: chrono::DateTime<chrono::Utc>
+    updated_at: chrono::DateTime<chrono::Utc>,
 }
 
 #[derive(Clone, Debug)]
@@ -39,7 +39,6 @@ impl eventsourcing::Command for WithdrawFunds {
         return Ok(());
     }
 }
-
 
 #[derive(Debug, Clone, EventTs)]
 pub struct FundsWithdrawn {
@@ -117,7 +116,8 @@ fn main() {
     let x = 42;
     let ctx = Ctx { x: x };
 
-    let (current_state, event) = eventsourcing::execute(&ctx, initial_state, &withdraw_cmd).expect("error execurting");
+    let (current_state, event) =
+        eventsourcing::execute(&ctx, initial_state, &withdraw_cmd).expect("error execurting");
 
     println!("initial state: {:#?}", &initial_state2);
     println!("current state: {:#?}", &current_state);

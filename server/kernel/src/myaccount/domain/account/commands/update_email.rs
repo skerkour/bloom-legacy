@@ -3,16 +3,16 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 
 #[derive(Clone, Debug)]
 pub struct UpdateEmail {
     pub email: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateEmail {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = EmailUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -34,17 +34,28 @@ impl eventsourcing::Command for UpdateEmail {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = account::EventData::EmailUpdatedV1(account::EmailUpdatedV1 {
+        return Ok(EmailUpdated {
+            timestamp: chrono::Utc::now(),
             email: self.email.clone(),
         });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct EmailUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub email: String,
+}
+
+impl Event for EmailUpdated {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            email: self.email.clone(),
+            ..aggregate
+        };
     }
 }

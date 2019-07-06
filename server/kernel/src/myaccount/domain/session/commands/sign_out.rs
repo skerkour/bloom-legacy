@@ -37,14 +37,12 @@ impl eventsourcing::Command for SignOut {
         let data = session::EventData::SignedOutV1;
         let timestamp = chrono::Utc::now();
 
-        return Ok(
-            session::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp,
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            }
-        );
+        return Ok(session::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp,
+            data,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

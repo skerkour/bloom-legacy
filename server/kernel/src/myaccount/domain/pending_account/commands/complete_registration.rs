@@ -43,13 +43,12 @@ impl eventsourcing::Command for CompleteRegistration {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(
-            pending_account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: pending_account::EventData::RegistrationCompletedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(pending_account::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
+            data: pending_account::EventData::RegistrationCompletedV1,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

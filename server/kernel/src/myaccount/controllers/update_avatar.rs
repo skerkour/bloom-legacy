@@ -45,8 +45,11 @@ impl Handler<UpdateAvatar> for DbActor {
                 metadata: metadata.clone(),
             };
 
-            let _ =
-                eventsourcing::execute(&msg.s3_client, &mut account_to_update, &update_first_name_cmd)?;
+            let _ = eventsourcing::execute(
+                &msg.s3_client,
+                &mut account_to_update,
+                &update_first_name_cmd,
+            )?;
 
             // update account
             diesel::update(&account_to_update)

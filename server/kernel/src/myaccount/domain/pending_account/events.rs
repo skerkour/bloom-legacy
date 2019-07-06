@@ -1,4 +1,4 @@
-use crate::{events::EventMetadata};
+use crate::events::EventMetadata;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -76,23 +76,23 @@ impl eventsourcing::Event for Event {
                 aggregate.token = data.token.clone();
                 aggregate.trials = 0;
                 aggregate.verified = false;
-            },
+            }
             // VerificationSucceededV1
             EventData::VerificationSucceededV1 => {
                 aggregate.verified = true;
-            },
+            }
             // VerificationFailedV1
             EventData::VerificationFailedV1(_) => {
                 aggregate.trials = aggregate.trials + 1;
-            },
+            }
             // RegistrationCompletedV1
             EventData::RegistrationCompletedV1 => {
                 aggregate.deleted_at = Some(self.timestamp);
-            },
+            }
             // NewCodeSentV1
             EventData::NewCodeSentV1(ref data) => {
                 aggregate.token = data.token_hash.clone();
-            },
+            }
         }
     }
 

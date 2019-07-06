@@ -26,9 +26,7 @@ impl Handler<ResetPassword> for DbActor {
     type Result = Result<(Session, String), KernelError>;
 
     fn handle(&mut self, msg: ResetPassword, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{
-            kernel_accounts, kernel_sessions,
-        };
+        use crate::db::schema::{kernel_accounts, kernel_sessions};
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;

@@ -3,16 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct Enable {
     pub actor: account::Account,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Enable {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = Enabled;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -39,14 +40,25 @@ impl eventsourcing::Command for Enable {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: account::EventData::EnabledV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            }
-        );
+        return Ok(Enabled {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Enabled {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Enabled {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            disabled_at: None,
+            ..aggregate
+        };
     }
 }

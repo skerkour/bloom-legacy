@@ -6,6 +6,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -15,15 +17,13 @@ pub struct Create {
     pub password: String,
     pub username: String,
     pub host: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = account::Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type AdditionalData = ();
 
     fn validate(
         &self,
@@ -68,30 +68,56 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(Self::Event, Self::AdditionalData), Self::Error> {
-        let now = chrono::Utc::now();
-        let id = uuid::Uuid::new_v4();
-        let mut metadata = self.metadata.clone();
-        metadata.actor_id = Some(id);
-        let data = account::EventData::CreatedV1(account::CreatedV1 {
-            id,
+        return Ok(account::Created {
+            timestamp: chrono::Utc::now(),
+            id: uuid::Uuid::new_v4(),
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
             email: self.email.clone(),
             password: self.password.clone(),
-            avatar_url: format!("{}{}", &self.host, myaccount::AVATAR_DEFAULT_PATH),
+            avatar_url: myaccount::AVATAR_DEFAULT_PATH.to_string(),
             username: self.username.clone(),
             is_admin: false,
         });
+    }
+}
 
-        return Ok((
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: now,
-                data,
-                aggregate_id: id,
-                metadata,
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub password: String,
+    pub avatar_url: String,
+    pub username: String,
+    pub is_admin: bool,
+}
+
+impl Event for Created {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            avatar_url: self.avatar_url.clone(),
+            email: self.email.clone(),
+            first_name: self.first_name.clone(),
+            is_admin: self.is_admin,
+            last_name: self.last_name.clone(),
+            password: self.password.clone(),
+            password_reset_id: None,
+            password_reset_token: None,
+            username: self.username.clone(),
+            disabled_at: None,
+            bio: String::new(),
+            display_name: self.username.clone(),
+        };
     }
 }

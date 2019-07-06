@@ -46,8 +46,7 @@ impl Handler<StartRegistration> for DbActor {
                 metadata,
             };
             let new_pending_account = pending_account::PendingAccount::new();
-            let event =
-                eventsourcing::execute(&conn, &mut new_pending_account, &create_cmd)?;
+            let event = eventsourcing::execute(&conn, &mut new_pending_account, &create_cmd)?;
 
             diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)

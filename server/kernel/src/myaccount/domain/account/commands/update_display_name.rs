@@ -5,16 +5,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct UpdateDisplayName {
     pub display_name: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateDisplayName {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = DisplayNameUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -33,17 +34,27 @@ impl eventsourcing::Command for UpdateDisplayName {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = account::EventData::DisplayNameUpdatedV1(account::DisplayNameUpdatedV1 {
+        return Ok(DisplayNameUpdated {
+            timestamp: chrono::Utc::now(),
             display_name: self.display_name.clone(),
         });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct DisplayNameUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub display_name: String,
+}
+
+impl Event for DisplayNameUpdated {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            display_name: self.display_name.clone(),
+            ..aggregate
+        };
     }
 }
