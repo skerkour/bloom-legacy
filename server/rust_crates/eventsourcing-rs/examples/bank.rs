@@ -1,16 +1,10 @@
-#[derive(Debug, Clone)]
+use eventsourcing::{Aggregate, Event, EventTs};
+#[derive(Aggregate, Debug, Clone)]
 pub struct Account {
     id: u64,
     balance: i64,
     version: i64,
-}
-
-impl eventsourcing::Aggregate for Account {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, _timestamp: chrono::DateTime<chrono::Utc>) {}
+    updated_at: chrono::DateTime<chrono::Utc>
 }
 
 #[derive(Clone, Debug)]
@@ -21,29 +15,20 @@ struct WithdrawFunds {
 
 impl eventsourcing::Command for WithdrawFunds {
     type Aggregate = Account;
-    type Event = AccountEvent;
+    type Event = FundsWithdrawn;
     type Context = Ctx;
     type Error = String;
-    type NonStoredData = ();
 
     fn build_event(
         &self,
         _conn: &Self::Context,
-        aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = AccountEventData::FundsWithdrawn(FundsWithdrawn {
+        _aggregate: &Self::Aggregate,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(FundsWithdrawn {
+            timestamp: chrono::Utc::now(),
             account: self.account.clone(),
             amount: self.amount,
         });
-        return Ok((
-            AccountEvent {
-                id: 1, // random
-                timestamp: 123,
-                data,
-                aggregate_id: aggregate.id,
-            },
-            (),
-        ));
     }
 
     fn validate(
@@ -55,54 +40,44 @@ impl eventsourcing::Command for WithdrawFunds {
     }
 }
 
-#[derive(Clone, Debug)]
-pub struct AccountEvent {
-    pub id: u64,
-    pub timestamp: u64,
-    pub data: AccountEventData,
-    pub aggregate_id: u64,
-}
 
-#[derive(Debug, Clone)]
-pub enum AccountEventData {
-    FundsWithdrawn(FundsWithdrawn),
-    FundsDeposited(FundsDeposited),
-}
-
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, EventTs)]
 pub struct FundsWithdrawn {
     account: String,
     amount: i64,
+    timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-#[derive(Debug, Clone)]
+#[derive(Debug, Clone, EventTs)]
 pub struct FundsDeposited {
     account: String,
     amount: i64,
+    timestamp: chrono::DateTime<chrono::Utc>,
 }
 
 pub struct Ctx {
     pub x: i32,
 }
 
-impl eventsourcing::Event for AccountEvent {
+impl Event for FundsWithdrawn {
     type Aggregate = Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        match self.data {
-            AccountEventData::FundsWithdrawn(ref data) => Account {
-                balance: aggregate.balance - data.amount,
-                ..aggregate
-            },
-            AccountEventData::FundsDeposited(ref data) => Account {
-                balance: aggregate.balance + data.amount,
-                ..aggregate
-            },
-        }
+        return Self::Aggregate {
+            balance: aggregate.balance - self.amount,
+            ..aggregate
+        };
     }
+}
 
-    fn timestamp(&self) -> chrono::DateTime<chrono::Utc> {
-        return chrono::Utc::now();
+impl Event for FundsDeposited {
+    type Aggregate = Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            balance: aggregate.balance + self.amount,
+            ..aggregate
+        };
     }
 }
 
@@ -111,20 +86,20 @@ impl eventsourcing::Event for AccountEvent {
 //     return Ok(());
 // }
 
-struct CreateProfile;
-impl eventsourcing::Subscription for CreateProfile {
+struct FundsWithdrawnReactor;
+impl eventsourcing::Subscription for FundsWithdrawnReactor {
     type Error = String;
-    type Message = AccountEvent;
+    type Event = FundsWithdrawn;
     type Context = Ctx;
 
-    fn handle(&self, _ctx: &Self::Context, msg: &Self::Message) -> Result<(), Self::Error> {
-        println!("account created: {}", msg.id);
+    fn handle(&self, _ctx: &Self::Context, event: &Self::Event) -> Result<(), Self::Error> {
+        println!("amount withdrawn: {}", event.amount);
         return Ok(());
     }
 }
 
 fn main() {
-    eventsourcing::subscribe::<_, AccountEvent, _>(Box::new(CreateProfile {}));
+    eventsourcing::subscribe::<_, FundsWithdrawn, _>(Box::new(FundsWithdrawnReactor {}));
 
     let withdraw_cmd = WithdrawFunds {
         account: "SAVINGS100".to_string(),
@@ -135,14 +110,14 @@ fn main() {
         id: 42,
         balance: 800,
         version: 1,
+        updated_at: chrono::Utc::now(),
     };
     let initial_state2 = initial_state.clone();
 
     let x = 42;
     let ctx = Ctx { x: x };
 
-    let (current_state, event, _) =
-        eventsourcing::execute(&ctx, initial_state, &withdraw_cmd).expect("error execurting");
+    let (current_state, event) = eventsourcing::execute(&ctx, initial_state, &withdraw_cmd).expect("error execurting");
 
     println!("initial state: {:#?}", &initial_state2);
     println!("current state: {:#?}", &current_state);
