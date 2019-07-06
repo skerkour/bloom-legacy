@@ -1,4 +1,4 @@
-use crate::{events::EventMetadata};
+use crate::events::EventMetadata;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -29,7 +29,7 @@ pub struct StartedV1 {
 }
 
 #[derive(Copy, Clone, Debug, Deserialize, Serialize)]
-pub struct RevokedV1{
+pub struct RevokedV1 {
     pub reason: RevokedReason,
 }
 
@@ -48,21 +48,21 @@ impl eventsourcing::Event for Event {
         match self.data {
             // StartedV1
             EventData::StartedV1(ref data) => {
-                aggregate.id =  data.id;
-                aggregate.created_at =  self.timestamp;
-                aggregate.updated_at =  self.timestamp;
-                aggregate.deleted_at =  None;
-                aggregate.version =  0;
-                aggregate.device =  data.device.clone();
-                aggregate.ip =  data.ip.clone();
-                aggregate.location =  Some(data.location.clone());
-                aggregate.token =  data.token.clone();
-                aggregate.account_id =  data.account_id;
-            },
+                aggregate.id = data.id;
+                aggregate.created_at = self.timestamp;
+                aggregate.updated_at = self.timestamp;
+                aggregate.deleted_at = None;
+                aggregate.version = 0;
+                aggregate.device = data.device.clone();
+                aggregate.ip = data.ip.clone();
+                aggregate.location = Some(data.location.clone());
+                aggregate.token = data.token.clone();
+                aggregate.account_id = data.account_id;
+            }
             // SignedOutV1 | RevokedV1
             EventData::SignedOutV1 | EventData::RevokedV1(_) => {
                 aggregate.deleted_at = Some(self.timestamp);
-            },
+            }
         }
     }
 

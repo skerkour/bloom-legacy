@@ -66,13 +66,12 @@ impl eventsourcing::Command for Create {
             code,
         });
 
-        return Ok(
-            pending_email::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: now,
-                data,
-                aggregate_id: new_pending_email_id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(pending_email::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp: now,
+            data,
+            aggregate_id: new_pending_email_id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

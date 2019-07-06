@@ -45,17 +45,17 @@ impl eventsourcing::Command for Revoke {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = session::EventData::RevokedV1(session::RevokedV1{ reason: self.reason });
+        let data = session::EventData::RevokedV1(session::RevokedV1 {
+            reason: self.reason,
+        });
         let timestamp = chrono::Utc::now();
 
-        return Ok(
-            session::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp,
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-        );
+        return Ok(session::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp,
+            data,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

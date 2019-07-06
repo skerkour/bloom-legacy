@@ -1,9 +1,19 @@
 use crate::db::schema::kernel_accounts;
 use diesel::Queryable;
-use serde::{Deserialize, Serialize};
 use eventsourcing::Aggregate;
+use serde::{Deserialize, Serialize};
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "kernel_accounts"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Account {

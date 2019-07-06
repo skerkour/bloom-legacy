@@ -55,13 +55,12 @@ impl eventsourcing::Command for Verify {
             pending_account::EventData::VerificationSucceededV1
         };
 
-        return Ok(
-            pending_account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp,
-                data,
-                aggregate_id: aggregate.id,
-                metadata,
-            });
+        return Ok(pending_account::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp,
+            data,
+            aggregate_id: aggregate.id,
+            metadata,
+        });
     }
 }

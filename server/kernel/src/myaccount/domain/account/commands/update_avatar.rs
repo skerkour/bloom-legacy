@@ -1,18 +1,19 @@
 use crate::{error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account};
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct UpdateAvatar {
     pub avatar: Vec<u8>,
     pub s3_bucket: String,
     pub s3_base_url: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateAvatar {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = AvatarUpdated;
     type Context = rusoto_s3::S3Client;
     type Error = KernelError;
 
@@ -42,7 +43,7 @@ impl eventsourcing::Command for UpdateAvatar {
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        // resize image to account::AVATAR_RESIZE
+        // resize image
         let img = image::load_from_memory(&self.avatar)?;
         let scaled = img.resize(
             myaccount::AVATAR_RESIZE as u32,
@@ -66,16 +67,28 @@ impl eventsourcing::Command for UpdateAvatar {
         // TODO: handle error
         ctx.put_object(req).sync().expect("Couldn't PUT object");
 
-        let event_data =
-            account::EventData::AvatarUpdatedV1(account::AvatarUpdatedV1 { avatar_url });
+        return Ok(AvatarUpdated {
+            timestamp: chrono::Utc::now(),
+            avatar_url,
+        });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct AvatarUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub avatar_url: String,
+}
+
+impl Event for AvatarUpdated {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            avatar_url: self.avatar_url.clone(),
+            ..aggregate
+        };
     }
 }

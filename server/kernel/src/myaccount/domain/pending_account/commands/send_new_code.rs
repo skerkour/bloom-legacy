@@ -51,16 +51,17 @@ impl eventsourcing::Command for SendNewCode {
         let token_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data =
-            pending_account::EventData::NewCodeSentV1(pending_account::NewCodeSentV1 { token_hash, code });
+        let data = pending_account::EventData::NewCodeSentV1(pending_account::NewCodeSentV1 {
+            token_hash,
+            code,
+        });
 
-        return Ok(
-            pending_account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(pending_account::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
+            data,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

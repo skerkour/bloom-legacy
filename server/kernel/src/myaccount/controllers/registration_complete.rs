@@ -25,10 +25,7 @@ impl Handler<CompleteRegistration> for DbActor {
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
-        use crate::db::schema::{
-            kernel_accounts, kernel_pending_accounts,
-            kernel_sessions,
-        };
+        use crate::db::schema::{kernel_accounts, kernel_pending_accounts, kernel_sessions};
         use diesel::prelude::*;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -73,8 +70,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 metadata: metadata.clone(),
             };
             let new_account = Account::new();
-            let event =
-                eventsourcing::execute(&conn, &mut new_account, &create_cmd)?;
+            let event = eventsourcing::execute(&conn, &mut new_account, &create_cmd)?;
 
             diesel::insert_into(kernel_accounts::dsl::kernel_accounts)
                 .values(&new_account)

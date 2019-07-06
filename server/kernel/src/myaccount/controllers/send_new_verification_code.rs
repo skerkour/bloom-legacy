@@ -44,8 +44,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let event =
-                eventsourcing::execute(&conn, &mut pending_account, &resend_code_cmd)?;
+            let event = eventsourcing::execute(&conn, &mut pending_account, &resend_code_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)

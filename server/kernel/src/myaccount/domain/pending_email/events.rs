@@ -65,17 +65,17 @@ impl eventsourcing::Event for Event {
                 aggregate.token = data.token.clone();
                 aggregate.trials = 0;
                 aggregate.account_id = data.account_id;
-            },
+            }
             // VerificationSucceededV1
-            EventData::VerificationSucceededV1 => {},
+            EventData::VerificationSucceededV1 => {}
             // VerificationFailedV1
             EventData::VerificationFailedV1(_) => {
                 aggregate.trials = aggregate.trials + 1;
-            },
+            }
             // PendingEmail
             EventData::DeletedV1 => {
                 aggregate.deleted_at = Some(self.timestamp);
-            },
+            }
         }
     }
 

@@ -72,13 +72,12 @@ impl eventsourcing::Command for Verify {
             pending_email::EventData::VerificationSucceededV1
         };
 
-        return Ok(
-            pending_email::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp,
-                data,
-                aggregate_id: aggregate.id,
-                metadata,
-            });
+        return Ok(pending_email::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp,
+            data,
+            aggregate_id: aggregate.id,
+            metadata,
+        });
     }
 }

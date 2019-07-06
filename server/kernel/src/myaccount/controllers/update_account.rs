@@ -43,8 +43,11 @@ impl Handler<UpdateAccount> for DbActor {
                         metadata: metadata.clone(),
                     };
 
-                    let _ =
-                        eventsourcing::execute(&conn, &mut account_to_update, &update_first_name_cmd)?;
+                    let _ = eventsourcing::execute(
+                        &conn,
+                        &mut account_to_update,
+                        &update_first_name_cmd,
+                    )?;
 
                     // update account
                     diesel::update(&account_to_update)
@@ -61,8 +64,11 @@ impl Handler<UpdateAccount> for DbActor {
                         metadata: metadata.clone(),
                     };
 
-                    let _ =
-                        eventsourcing::execute(&conn, &mut account_to_update, &update_last_name_cmd)?;
+                    let _ = eventsourcing::execute(
+                        &conn,
+                        &mut account_to_update,
+                        &update_last_name_cmd,
+                    )?;
 
                     // update account
                     diesel::update(&account_to_update)
@@ -79,8 +85,7 @@ impl Handler<UpdateAccount> for DbActor {
                         metadata: metadata.clone(),
                     };
 
-                    let _ =
-                        eventsourcing::execute(&conn, &mut account_to_update, &update_bio_cmd)?;
+                    let _ = eventsourcing::execute(&conn, &mut account_to_update, &update_bio_cmd)?;
 
                     // update account
                     diesel::update(&account_to_update)
@@ -97,8 +102,11 @@ impl Handler<UpdateAccount> for DbActor {
                         metadata: metadata.clone(),
                     };
 
-                    let _ =
-                        eventsourcing::execute(&conn, &mut account_to_update, &update_display_name_cmd)?;
+                    let _ = eventsourcing::execute(
+                        &conn,
+                        &mut account_to_update,
+                        &update_display_name_cmd,
+                    )?;
 
                     // update account
                     diesel::update(&account_to_update)

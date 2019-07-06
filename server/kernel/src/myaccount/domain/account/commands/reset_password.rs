@@ -7,18 +7,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct ResetPassword {
     pub new_password: String,
     pub token: String,
     pub config: Config,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for ResetPassword {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = PasswordReseted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -67,17 +68,29 @@ impl eventsourcing::Command for ResetPassword {
         let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = account::EventData::PasswordResetedV1(account::PasswordResetedV1 {
-            password: hashed_password,
+        return Ok(account::Event {
+            timestamp: chrono::Utc::now(),
+            password: hashed_password,,
         });
+    }
+}
 
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct PasswordReseted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub password: String, // hashed password
+}
+
+impl Event for PasswordReseted {
+    type Aggregate = super::Account;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            password: self.password.clone(),
+            password_reset_id: None,
+            password_reset_token: None,
+            ..aggregate
+        };
     }
 }

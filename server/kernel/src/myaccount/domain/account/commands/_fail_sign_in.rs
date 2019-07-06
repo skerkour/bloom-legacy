@@ -28,13 +28,12 @@ impl eventsourcing::Command for FailSignIn {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(
-            account::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: account::EventData::SignInFailedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(account::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
+            data: account::EventData::SignInFailedV1,
+            aggregate_id: aggregate.id,
+            metadata: self.metadata.clone(),
+        });
     }
 }

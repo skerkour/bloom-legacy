@@ -61,13 +61,12 @@ impl eventsourcing::Command for Start {
             location: session::Location {},
         });
 
-        return Ok(
-            session::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp,
-                data,
-                aggregate_id: new_session_id,
-                metadata: self.metadata.clone(),
-            });
+        return Ok(session::Event {
+            id: uuid::Uuid::new_v4(),
+            timestamp,
+            data,
+            aggregate_id: new_session_id,
+            metadata: self.metadata.clone(),
+        });
     }
 }
