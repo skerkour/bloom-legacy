@@ -38,12 +38,13 @@ impl Handler<VerifyEmail> for DbActor {
 
             let account_to_update = msg.account;
 
-            let pending_email: PendingEmail = kernel_pending_emails::dsl::kernel_pending_emails
-                .filter(kernel_pending_emails::dsl::id.eq(msg.id))
-                .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
-                .filter(kernel_pending_emails::dsl::deleted_at.is_null())
-                .for_update()
-                .first(&conn)?;
+            let pending_email_to_verify: PendingEmail =
+                kernel_pending_emails::dsl::kernel_pending_emails
+                    .filter(kernel_pending_emails::dsl::id.eq(msg.id))
+                    .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
+                    .filter(kernel_pending_emails::dsl::deleted_at.is_null())
+                    .for_update()
+                    .first(&conn)?;
 
             let verify_cmd = pending_email::Verify {
                 id: msg.id,
@@ -52,62 +53,62 @@ impl Handler<VerifyEmail> for DbActor {
                 metadata: metadata.clone(),
             };
 
-            let (pending_email, event, _) =
-                eventsourcing::execute(&conn, pending_email, &verify_cmd)?;
+            let pending_email_to_verify =
+                match eventsourcing::execute(&conn, pending_email, &verify_cmd) {
+                    Ok((pending_email_to_verify, event)) => pending_email_to_verify,
+                    Err(err) => match err {
+                        KernelError::Validation(msg) => {
+                            let fail_cmd = pending_email::Fail {};
+                            let (pending_email, _) = eventsourcing::execute(
+                                &conn,
+                                pending_email_to_verify,
+                                &verify_cmd,
+                            )?;
+                            pending_email
+                        }
+                        _ => return Err(err),
+                    },
+                };
 
             // update pending_email
-            diesel::update(&pending_email)
-                .set(&pending_email)
+            diesel::update(&pending_email_to_verify)
+                .set(&pending_email_to_verify)
                 .execute(&conn)?;
 
-            match event.data {
-                pending_email::EventData::VerificationSucceededV1 => {
-                    let update_email_cmd = account::UpdateEmail {
-                        email: pending_email.email,
-                        metadata: metadata.clone(),
-                    };
-
-                    let (account_to_update, event, _) =
-                        eventsourcing::execute(&conn, &mut account_to_update, &update_email_cmd)?;
-
-                    // update account
-                    diesel::update(&account_to_update)
-                        .set(&account_to_update)
-                        .execute(&conn)?;
-
-                    // delete all other pending emails for account
-                    let pending_emails_to_delete: Vec<PendingEmail> =
-                        kernel_pending_emails::dsl::kernel_pending_emails
-                            .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
-                            .filter(kernel_pending_emails::dsl::id.ne(msg.id))
-                            .filter(kernel_pending_emails::dsl::deleted_at.is_null())
-                            .for_update()
-                            .load(&conn)?;
-
-                    let delete_cmd = pending_email::Delete {
-                        metadata: metadata.clone(),
-                    };
-
-                    for pending_email_to_delete in pending_emails_to_delete {
-                        let (pending_email_to_delete, event, _) = eventsourcing::execute(
-                            &conn,
-                            &mut pending_email_to_delete,
-                            &delete_cmd,
-                        )?;
-                        diesel::update(&pending_email_to_delete)
-                            .set(&pending_email_to_delete)
-                            .execute(&conn)?;
-                    }
-                }
-                _ => {}
+            let update_email_cmd = account::UpdateEmail {
+                email: pending_email_to_verify.email,
             };
 
-            return match event.data {
-                pending_email::EventData::VerificationFailedV1(err) => {
-                    Err(KernelError::Validation(err.to_string()))
-                }
-                _ => Ok(account_to_update),
+            let (account_to_update, _) =
+                eventsourcing::execute(&conn, account_to_update, &update_email_cmd)?;
+
+            // update account
+            diesel::update(&account_to_update)
+                .set(&account_to_update)
+                .execute(&conn)?;
+
+            // delete all other pending emails for account
+            let pending_emails_to_delete: Vec<PendingEmail> =
+                kernel_pending_emails::dsl::kernel_pending_emails
+                    .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
+                    .filter(kernel_pending_emails::dsl::id.ne(msg.id))
+                    .filter(kernel_pending_emails::dsl::deleted_at.is_null())
+                    .for_update()
+                    .load(&conn)?;
+
+            let delete_cmd = pending_email::Delete {
+                metadata: metadata.clone(),
             };
+
+            for pending_email_to_delete in pending_emails_to_delete {
+                let (pending_email_to_delete, event, _) =
+                    eventsourcing::execute(&conn, &mut pending_email_to_delete, &delete_cmd)?;
+                diesel::update(&pending_email_to_delete)
+                    .set(&pending_email_to_delete)
+                    .execute(&conn)?;
+            }
+
+            return Ok(account_to_update);
         })?);
     }
 }

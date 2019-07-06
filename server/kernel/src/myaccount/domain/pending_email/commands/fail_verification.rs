@@ -1,4 +1,5 @@
 use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
+use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -6,24 +7,19 @@ use diesel::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Delete {}
+pub struct Fail {}
 
-impl eventsourcing::Command for Delete {
+impl eventsourcing::Command for Fail {
     type Aggregate = pending_email::PendingEmail;
-    type Event = Deleted;
+    type Event = VerificationFailed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
     fn validate(
         &self,
-        _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        ctx: &Self::Context,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation(
-                "PDeleteing email has already been deleted.".to_string(),
-            ));
-        }
         return Ok(());
     }
 
@@ -32,24 +28,22 @@ impl eventsourcing::Command for Delete {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(Deleted {
-            timestamp: chrono::Utc::now(),
-        });
+        return Ok(VerificationFailed { timestamp });
     }
 }
 
 // Event
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
-pub struct Deleted {
+pub struct VerificationFailed {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-impl Event for Deleted {
+impl Event for VerificationFailed {
     type Aggregate = pending_email::PendingEmail;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
+            trials: aggregate.trials + 1,
             ..aggregate
         };
     }
