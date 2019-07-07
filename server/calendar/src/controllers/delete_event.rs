@@ -1,6 +1,6 @@
 use crate::domain::event;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -20,7 +20,7 @@ impl Handler<DeleteEvent> for DbActor {
 
     fn handle(&mut self, msg: DeleteEvent, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{calendar_events, calendar_events_events};
+        use kernel::db::schema::calendar_events;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -39,15 +39,11 @@ impl Handler<DeleteEvent> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (event_to_delete, event, _) =
-                eventsourcing::execute(&conn, event_to_delete, &delete_cmd)?;
+            let (event_to_delete, _) = eventsourcing::execute(&conn, event_to_delete, &delete_cmd)?;
 
             // update event
             diesel::update(&event_to_delete)
                 .set(&event_to_delete)
-                .execute(&conn)?;
-            diesel::insert_into(calendar_events_events::dsl::calendar_events_events)
-                .values(&event)
                 .execute(&conn)?;
 
             Ok(())

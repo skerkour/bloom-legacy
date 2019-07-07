@@ -3,21 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateStartAt {
     pub start_at: chrono::DateTime<chrono::Utc>,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateStartAt {
     type Aggregate = event::CalendarEvent;
-    type Event = event::Event;
+    type Event = StartAtUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -30,27 +28,35 @@ impl eventsourcing::Command for UpdateStartAt {
 
         validators::event_dates(self.start_at, aggregate.end_at)?;
 
-        Ok(())
+        return Ok(());
     }
 
     fn build_event(
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = event::EventData::StartAtUpdatedV1(event::StartAtUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(StartAtUpdated {
+            timestamp: chrono::Utc::now(),
             start_at: self.start_at,
         });
+    }
+}
 
-        Ok((
-            event::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ))
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct StartAtUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub start_at: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for StartAtUpdated {
+    type Aggregate = event::CalendarEvent;
+
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            start_at: self.start_at,
+            ..aggregate
+        };
     }
 }

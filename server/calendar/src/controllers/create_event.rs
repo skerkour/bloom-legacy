@@ -1,6 +1,6 @@
 use crate::domain::event;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -24,17 +24,11 @@ impl Handler<CreateEvent> for DbActor {
 
     fn handle(&mut self, msg: CreateEvent, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{calendar_events, calendar_events_events};
+        use kernel::db::schema::calendar_events;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.owner_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let create_cmd = event::Create {
                 title: msg.title,
                 description: msg.description,
@@ -43,13 +37,10 @@ impl Handler<CreateEvent> for DbActor {
                 owner_id: msg.owner_id,
                 metadata: metadata.clone(),
             };
-            let (new_calendar_event, event, _) =
+            let (new_calendar_event, _) =
                 eventsourcing::execute(&conn, event::CalendarEvent::new(), &create_cmd)?;
             diesel::insert_into(calendar_events::dsl::calendar_events)
                 .values(&new_calendar_event)
-                .execute(&conn)?;
-            diesel::insert_into(calendar_events_events::dsl::calendar_events_events)
-                .values(&event)
                 .execute(&conn)?;
 
             Ok(new_calendar_event)

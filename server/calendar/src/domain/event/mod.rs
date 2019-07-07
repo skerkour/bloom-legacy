@@ -1,10 +1,12 @@
 mod aggregate;
 mod commands;
-mod events;
 
 pub use aggregate::CalendarEvent;
-pub use commands::{Create, Delete, UpdateDescription, UpdateEndAt, UpdateStartAt, UpdateTitle};
-pub use events::{
-    CreatedV1, DescriptionUpdatedV1, EndAtUpdatedV1, Event, EventData, StartAtUpdatedV1,
-    TitleUpdatedV1,
+pub use commands::{
+    create::{Create, Created},
+    delete::{Delete, Deleted},
+    update_end_at::{EndAtUpdated, UpdateEndAt},
+    update_start_at::{StartAtUpdated, UpdateStartAt},
+    update_title::{TitleUpdated, UpdateTitle},
+    updated_description::{DescriptionUpdated, UpdateDescription},
 };
