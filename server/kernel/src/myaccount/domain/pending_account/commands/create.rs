@@ -1,11 +1,12 @@
 use crate::{
-    config::Config, error::KernelError, events::EventMetadata, myaccount,
+    config::Config, error::KernelError, myaccount,
     myaccount::domain::pending_account, myaccount::validators, utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -13,7 +14,6 @@ pub struct Create {
     pub last_name: String,
     pub email: String,
     pub password: String,
-    pub metadata: EventMetadata,
     pub config: Config,
 }
 
@@ -63,7 +63,6 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let now = chrono::Utc::now();
         let new_pending_account_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
         let hashed_password = bcrypt::hash(&self.password, myaccount::PASSWORD_BCRYPT_COST)
@@ -71,7 +70,8 @@ impl eventsourcing::Command for Create {
         let token = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = pending_account::EventData::CreatedV1(pending_account::CreatedV1 {
+        return Ok(Created {
+            timestamp: chrono::Utc::now(),
             id: new_pending_account_id,
             first_name: self.first_name.clone(),
             last_name: self.last_name.clone(),
@@ -80,19 +80,11 @@ impl eventsourcing::Command for Create {
             token,
             code,
         });
-
-        return Ok(pending_account::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp: now,
-            data,
-            aggregate_id: new_pending_account_id,
-            metadata: self.metadata.clone(),
-        });
     }
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,

@@ -1,7 +1,6 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    events::EventMetadata,
     myaccount::domain::{session, Account, Session},
 };
 use actix::{Handler, Message};
@@ -86,7 +85,7 @@ impl Handler<SignIn> for DbActor {
                 metadata,
             };
             let new_session = Session::new();
-            let event = eventsourcing::execute(&conn, &mut new_session, &start_cmd)?;
+            let event = eventsourcing::execute(&conn, new_session, &start_cmd)?;
 
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)

@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account, utils,
+    error::KernelError, myaccount, myaccount::domain::account, utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -64,7 +64,7 @@ pub struct Deleted {
 }
 
 impl Event for Deleted {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

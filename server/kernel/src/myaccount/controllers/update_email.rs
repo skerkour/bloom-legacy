@@ -1,5 +1,5 @@
 use crate::{
-    config::Config, db::DbActor, error::KernelError, events::EventMetadata, myaccount::domain,
+    config::Config, db::DbActor, error::KernelError, myaccount::domain,
     myaccount::domain::pending_email,
     myaccount::notifications::emails::send_email_verification_code,
 };
@@ -29,17 +29,10 @@ impl Handler<UpdateEmail> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let config = msg.config.clone();
-
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
             let create_cmd = pending_email::Create {
                 email: msg.email.clone(),
                 account_id: msg.account.id,
                 config: msg.config.clone(),
-                metadata,
             };
             let new_pending_email = pending_email::PendingEmail::new();
             let event = eventsourcing::execute(&conn, &mut new_pending_email, &create_cmd)?;

@@ -1,4 +1,4 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::account};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -53,7 +53,7 @@ pub struct Enabled {
 }
 
 impl Event for Enabled {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

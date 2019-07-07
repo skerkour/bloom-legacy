@@ -1,18 +1,20 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount, myaccount::domain::pending_account, utils,
+    error::KernelError, myaccount, myaccount::domain::pending_account, utils,
 };
 use chrono::Duration;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug)]
 pub struct SendNewCode {}
 
 impl eventsourcing::Command for SendNewCode {
     type Aggregate = pending_account::PendingAccount;
-    type Event = pending_account::Event;
+    type Event = NewCodeSent;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -44,11 +46,6 @@ impl eventsourcing::Command for SendNewCode {
         let token_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        let data = pending_account::EventData::NewCodeSentV1(pending_account::NewCodeSentV1 {
-            token_hash,
-            code,
-        });
-
         return Ok(NewCodeSent {
             timestamp: chrono::Utc::now(),
             token_hash,
@@ -58,7 +55,7 @@ impl eventsourcing::Command for SendNewCode {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct NewCodeSent {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub token_hash: String,
@@ -70,7 +67,7 @@ impl Event for NewCodeSent {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            token: data.token_hash.clone(),
+            token: self.token_hash.clone(),
             ..aggregate
         };
     }

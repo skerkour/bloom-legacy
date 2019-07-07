@@ -1,7 +1,7 @@
 mod aggregate;
 mod commands;
 
-pub use aggregate::PendingAccount;
+pub use aggregate::{PendingAccount, VerificationFailedReason};
 pub use commands::{
     create::{Create, Created},
     delete::{Delete, Deleted},

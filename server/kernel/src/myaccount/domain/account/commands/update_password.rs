@@ -1,5 +1,5 @@
 use crate::{
-    config::Config, error::KernelError, events::EventMetadata, myaccount,
+    config::Config, error::KernelError, myaccount,
     myaccount::domain::account, myaccount::validators,
 };
 use diesel::{
@@ -68,7 +68,7 @@ impl eventsourcing::Command for UpdatePassword {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, Eventts, Serialize)]
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
 pub struct PasswordUpdated {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub password: String,

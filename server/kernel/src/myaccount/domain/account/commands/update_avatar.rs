@@ -1,4 +1,4 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account};
+use crate::{error::KernelError, myaccount, myaccount::domain::account};
 use eventsourcing::{Event, EventTs};
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};

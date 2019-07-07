@@ -1,10 +1,11 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
-use chrono::Utc;
+use crate::{error::KernelError, myaccount::domain::pending_email};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FailVerification {}
@@ -28,7 +29,7 @@ impl eventsourcing::Command for FailVerification {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(VerificationFailed { timestamp });
+        return Ok(VerificationFailed { timestamp: chrono::Utc::now()  });
     }
 }
 

@@ -2,7 +2,6 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
-    events::EventMetadata,
     myaccount::domain::{account, session, Account, Session},
 };
 use actix::{Handler, Message};
@@ -32,19 +31,12 @@ impl Handler<UpdatePassword> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.current_session.id),
-            };
-
             let account_to_update = msg.account;
 
             let update_last_name_cmd = account::UpdatePassword {
                 current_password: msg.current_password,
                 new_password: msg.new_password,
                 config: msg.config,
-                metadata: metadata.clone(),
             };
 
             let (account_to_update, event, _) =
@@ -66,7 +58,6 @@ impl Handler<UpdatePassword> for DbActor {
             let revoke_cmd = session::Revoke {
                 current_session_id: Some(msg.current_session.id),
                 reason: session::RevokedReason::PasswordUpdated,
-                metadata: metadata.clone(),
             };
 
             for session in sessions {

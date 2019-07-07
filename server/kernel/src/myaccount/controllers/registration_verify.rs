@@ -1,8 +1,7 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    events::EventMetadata,
-    myaccount::domain::{pending_account, pending_account::EventData, PendingAccount},
+    myaccount::domain::{pending_account, PendingAccount},
 };
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
@@ -58,8 +57,8 @@ impl Handler<VerifyPendingAccount> for DbActor {
                 };
 
             // update pending_account
-            diesel::update(&pending_account)
-                .set(&pending_account)
+            diesel::update(&pending_account_to_verify)
+                .set(&pending_account_to_verify)
                 .execute(&conn)?;
 
             return Ok(());

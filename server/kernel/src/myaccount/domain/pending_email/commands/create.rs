@@ -1,18 +1,19 @@
 use crate::{
-    config, error::KernelError, events::EventMetadata, myaccount, myaccount::domain::pending_email,
+    config, error::KernelError, myaccount, myaccount::domain::pending_email,
     myaccount::validators, utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug)]
 pub struct Create {
     pub email: String,
     pub account_id: uuid::Uuid,
     pub config: config::Config,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
@@ -70,7 +71,7 @@ impl eventsourcing::Command for Create {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
@@ -80,15 +81,15 @@ impl Event for Created {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            id: data.id,
+            id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
             deleted_at: None,
             version: 0,
-            email: data.email.clone(),
-            token: data.token.clone(),
+            email: self.email.clone(),
+            token: self.token.clone(),
             trials: 0,
-            account_id: data.account_id,
+            account_id: self.account_id,
         };
     }
 }

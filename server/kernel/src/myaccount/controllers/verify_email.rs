@@ -1,7 +1,6 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    events::EventMetadata,
     myaccount::domain::{account, pending_email, Account, PendingEmail},
 };
 use actix::{Handler, Message};
@@ -30,12 +29,6 @@ impl Handler<VerifyEmail> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let account_to_update = msg.account;
 
             let pending_email_to_verify: PendingEmail =
@@ -50,11 +43,10 @@ impl Handler<VerifyEmail> for DbActor {
                 id: msg.id,
                 code: msg.code.clone(),
                 email: pending_email.email.clone(),
-                metadata: metadata.clone(),
             };
 
             let pending_email_to_verify =
-                match eventsourcing::execute(&conn, pending_email, &verify_cmd) {
+                match eventsourcing::execute(&conn, pending_email_to_verify, &verify_cmd) {
                     Ok((pending_email_to_verify, event)) => pending_email_to_verify,
                     Err(err) => match err {
                         KernelError::Validation(msg) => {
@@ -96,9 +88,7 @@ impl Handler<VerifyEmail> for DbActor {
                     .for_update()
                     .load(&conn)?;
 
-            let delete_cmd = pending_email::Delete {
-                metadata: metadata.clone(),
-            };
+            let delete_cmd = pending_email::Delete {};
 
             for pending_email_to_delete in pending_emails_to_delete {
                 let (pending_email_to_delete, event, _) =

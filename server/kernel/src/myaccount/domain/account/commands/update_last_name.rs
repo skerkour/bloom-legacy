@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount::domain::account, myaccount::validators,
+    error::KernelError, myaccount::domain::account, myaccount::validators,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -11,7 +11,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug)]
 pub struct UpdateLastName {
     pub last_name: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateLastName {

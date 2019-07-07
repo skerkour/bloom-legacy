@@ -1,5 +1,5 @@
 use crate::{
-    config::Config, error::KernelError, events::EventMetadata, myaccount,
+    config::Config, error::KernelError, myaccount,
     myaccount::domain::account, myaccount::validators,
 };
 use chrono::Utc;
@@ -68,7 +68,7 @@ impl eventsourcing::Command for ResetPassword {
         let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
-        return Ok(account::Event {
+        return Ok(PasswordReseted {
             timestamp: chrono::Utc::now(),
             password: hashed_password,
         });
@@ -83,7 +83,7 @@ pub struct PasswordReseted {
 }
 
 impl Event for PasswordReseted {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

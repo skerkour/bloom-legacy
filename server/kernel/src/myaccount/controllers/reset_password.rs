@@ -2,7 +2,6 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
-    events::EventMetadata,
     myaccount::domain::{account, session, Account, Session},
 };
 use actix::{Handler, Message};
@@ -38,17 +37,10 @@ impl Handler<ResetPassword> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: Some(account.id),
-                request_id: Some(msg.request_id),
-                session_id: msg.session_id,
-            };
-
             let update_last_name_cmd = account::ResetPassword {
                 new_password: msg.new_password,
                 token: msg.token,
                 config: msg.config,
-                metadata: metadata.clone(),
             };
 
             let _ = eventsourcing::execute(&conn, &mut account, &update_last_name_cmd)?;
@@ -66,7 +58,6 @@ impl Handler<ResetPassword> for DbActor {
             let revoke_cmd = session::Revoke {
                 current_session_id: None,
                 reason: session::RevokedReason::PasswordReseted,
-                metadata: metadata.clone(),
             };
 
             for session in sessions {
@@ -80,20 +71,12 @@ impl Handler<ResetPassword> for DbActor {
                 account_id: account.id,
                 ip: "127.0.0.1".to_string(), // TODO
                 user_agent: "".to_string(),  // TODO
-                metadata,
             };
-            let new_session = Session::new();
-            let event = eventsourcing::execute(&conn, &mut new_session, &start_cmd)?;
+            let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)
                 .execute(&conn)?;
-
-            let token_plaintext = if let session::EventData::StartedV1(ref data) = event.data {
-                data.token_plaintext.clone()
-            } else {
-                return Err(KernelError::Internal(String::new()));
-            };
 
             return Ok((new_session, event.token_plaintext));
         })?);
