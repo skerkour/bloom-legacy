@@ -2,7 +2,7 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
-    myaccount::domain::{account, session},
+    myaccount::domain::{account},
     myaccount::notifications::emails::send_password_reset,
 };
 use actix::{Handler, Message};
@@ -62,7 +62,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                     .unwrap()
                     .to_string()
                     .as_str(),
-                &event.plaintext_token,
+                &event.token_plaintext,
             )
             .expect("error sending email");
 

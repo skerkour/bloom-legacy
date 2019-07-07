@@ -26,18 +26,13 @@ impl Handler<SignOut> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session.id),
-            };
-            let sign_out_cmd = session::SignOut { metadata };
+            let sign_out_cmd = session::SignOut { };
 
-            let _ = eventsourcing::execute(&conn, &mut msg.session, &sign_out_cmd)?;
+            let (session, _) = eventsourcing::execute(&conn, msg.session, &sign_out_cmd)?;
 
             // update session
-            diesel::update(&msg.session)
-                .set(&msg.session)
+            diesel::update(&session)
+                .set(&session)
                 .execute(&conn)?;
 
             return Ok(());

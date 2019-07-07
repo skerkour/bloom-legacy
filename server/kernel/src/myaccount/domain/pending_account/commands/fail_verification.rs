@@ -28,7 +28,7 @@ impl eventsourcing::Command for FailVerification {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(VerificationFailed { timestamp });
+        return Ok(VerificationFailed { timestamp: chrono::Utc::now() });
     }
 }
 

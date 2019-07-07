@@ -101,16 +101,16 @@ impl Event for Created {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            id: data.id,
+            id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
             deleted_at: None,
             version: 0,
-            email: data.email.clone(),
-            first_name: data.first_name.clone(),
-            last_name: data.last_name.clone(),
-            password: data.password.clone(),
-            token: data.token.clone(),
+            email: self.email.clone(),
+            first_name: self.first_name.clone(),
+            last_name: self.last_name.clone(),
+            password: self.password.clone(),
+            token: self.token.clone(),
             trials: 0,
             verified: false,
         };

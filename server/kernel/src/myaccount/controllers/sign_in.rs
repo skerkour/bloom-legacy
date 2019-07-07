@@ -73,16 +73,10 @@ impl Handler<SignIn> for DbActor {
             }
 
             // start Session
-            let metadata = EventMetadata {
-                actor_id: Some(account.id),
-                request_id: Some(msg.request_id),
-                session_id: None,
-            };
             let start_cmd = session::Start {
                 account_id: account.id,
                 ip: msg.session_ip,
                 user_agent: "".to_string(), // TODO
-                metadata,
             };
             let new_session = Session::new();
             let event = eventsourcing::execute(&conn, new_session, &start_cmd)?;
