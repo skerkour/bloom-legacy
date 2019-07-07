@@ -3,7 +3,7 @@ pub mod delete;
 pub mod update_addresses;
 pub mod update_birthday;
 pub mod update_emails;
-pub mod update_fisrt_name;
+pub mod update_first_name;
 pub mod update_last_name;
 pub mod update_notes;
 pub mod update_organizations;

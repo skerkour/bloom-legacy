@@ -7,7 +7,6 @@ use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
 pub struct Cancel {
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Cancel {

@@ -1,6 +1,6 @@
 use crate::domain::{download, Download};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -20,18 +20,12 @@ impl Handler<QueueDownload> for DbActor {
 
     fn handle(&mut self, msg: QueueDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events, drive_profiles};
+        use kernel::db::schema::{bitflow_downloads, drive_profiles};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             // create Download
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let profile: drive::domain::Profile = drive_profiles::dsl::drive_profiles
                 .filter(drive_profiles::dsl::account_id.eq(msg.account_id))
                 .filter(drive_profiles::dsl::deleted_at.is_null())
@@ -61,15 +55,11 @@ impl Handler<QueueDownload> for DbActor {
             let queue_cmd = download::Queue {
                 url: msg.url,
                 owner_id: msg.account_id,
-                metadata,
             };
-            let (download, event, _) = eventsourcing::execute(&conn, Download::new(), &queue_cmd)?;
+            let (download, _) = eventsourcing::execute(&conn, Download::new(), &queue_cmd)?;
 
             diesel::insert_into(bitflow_downloads::dsl::bitflow_downloads)
                 .values(&download)
-                .execute(&conn)?;
-            diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(download);

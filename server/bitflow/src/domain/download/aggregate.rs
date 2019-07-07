@@ -2,8 +2,9 @@ use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
 use kernel::db::schema::bitflow_downloads;
 use serde::{Deserialize, Serialize};
+use eventsourcing::Aggregate;
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "bitflow_downloads"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Download {
@@ -85,16 +86,6 @@ impl Download {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Download {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

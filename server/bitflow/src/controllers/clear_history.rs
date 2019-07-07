@@ -1,6 +1,6 @@
 use crate::domain;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -19,7 +19,7 @@ impl Handler<ClearHistory> for DbActor {
 
     fn handle(&mut self, msg: ClearHistory, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events};
+        use kernel::db::schema::{bitflow_downloads};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -30,18 +30,10 @@ impl Handler<ClearHistory> for DbActor {
                 .filter(bitflow_downloads::dsl::removed_at.is_not_null())
                 .load(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-            let delete_cmd = domain::download::Delete { metadata };
+            let delete_cmd = domain::download::Delete { };
 
             for download in history {
-                let (download, event, _) = eventsourcing::execute(&conn, download, &delete_cmd)?;
-                diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
-                    .values(&event)
-                    .execute(&conn)?;
+                let (download, _) = eventsourcing::execute(&conn, download, &delete_cmd)?;
                 diesel::update(&download).set(&download).execute(&conn)?;
             }
 
