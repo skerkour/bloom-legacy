@@ -1,8 +1,19 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::drive_profiles;
 use serde::{Deserialize, Serialize};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "drive_profiles"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Profile {
@@ -36,16 +47,6 @@ impl Profile {
             account_id: uuid::Uuid::new_v4(),
             home_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Profile {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

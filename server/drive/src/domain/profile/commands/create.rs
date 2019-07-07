@@ -3,21 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Create {
     pub account_id: uuid::Uuid,
     pub home_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
     type Aggregate = profile::Profile;
-    type Event = profile::Event;
+    type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -31,25 +29,41 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-
-        let data = profile::EventData::CreatedV1(profile::CreatedV1 {
-            id,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Created {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             home_id: self.home_id,
             total_space: DEFAULT_AVAILABLE_SPACE,
             account_id: self.account_id,
         });
+    }
+}
 
-        return Ok((
-            profile::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub home_id: uuid::Uuid,
+    pub total_space: i64,
+    pub account_id: uuid::Uuid,
+}
+
+impl Event for Created {
+    type Aggregate = profile::Profile;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            total_space: self.total_space,
+            used_space: 0,
+            account_id: self.account_id,
+            home_id: self.home_id,
+        };
     }
 }

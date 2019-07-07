@@ -3,20 +3,18 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct UpdateUsedSpace {
     pub space: i64,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateUsedSpace {
     type Aggregate = profile::Profile;
-    type Event = profile::Event;
+    type Event = UsedSpaceUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -30,20 +28,28 @@ impl eventsourcing::Command for UpdateUsedSpace {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = profile::EventData::UsedSpaceUpdatedV1(profile::UsedSpaceUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(UsedSpaceUpdated {
+            timestamp: chrono::Utc::now(),
             space: self.space,
         });
+    }
+}
 
-        return Ok((
-            profile::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct UsedSpaceUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub space: i64,
+}
+
+impl Event for UsedSpaceUpdated {
+    type Aggregate = profile::Profile;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            used_space: aggregate.used_space + self.space,
+            ..aggregate
+        };
     }
 }

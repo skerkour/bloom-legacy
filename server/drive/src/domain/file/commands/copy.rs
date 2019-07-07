@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 use rusoto_s3::{CopyObjectRequest, S3Client, S3};
 

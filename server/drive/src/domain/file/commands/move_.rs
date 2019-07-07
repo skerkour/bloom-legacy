@@ -3,20 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Move {
     pub to: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Move {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Moved;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -53,18 +52,30 @@ impl eventsourcing::Command for Move {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let event_data = file::EventData::MovedV1(file::MovedV1 { to: self.to });;
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        return Ok(Moved {
+            timestamp: chrono::Utc::now(),
+            to: self.to,
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Moved {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub to: uuid::Uuid, // new parent
+}
+
+impl Event for Moved {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            parent_id: Some(data.to),
+            ..aggregate
+        };
     }
 }
