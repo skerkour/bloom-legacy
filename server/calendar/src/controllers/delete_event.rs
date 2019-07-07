@@ -25,12 +25,7 @@ impl Handler<DeleteEvent> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-            let delete_cmd = event::Delete { metadata };
+            let delete_cmd = event::Delete {};
 
             let event_to_delete: event::CalendarEvent = calendar_events::dsl::calendar_events
                 .filter(calendar_events::dsl::id.eq(msg.event_id))

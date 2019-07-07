@@ -52,9 +52,9 @@ pub struct DescriptionUpdated {
 }
 
 impl Event for DescriptionUpdated {
-    type Aggregate = CalendarEvent;
+    type Aggregate = event::CalendarEvent;
 
-    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             deleted_at: Some(self.timestamp),
             ..aggregate

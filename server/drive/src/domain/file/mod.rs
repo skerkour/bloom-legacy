@@ -6,7 +6,7 @@ pub use commands::{
     copy::{Copied, Copy_},
     create::{Create, Created},
     delete::{Delete, Deleted},
-    downlaod::{Download, Downloaded},
+    download::{Download, Downloaded},
     move_::{Move, Moved},
     rename::{Rename, Renamed},
     restore::{Restore, Restored},

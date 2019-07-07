@@ -85,8 +85,8 @@ impl Event for Completed {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             deleted_at: Some(self.timestamp),
-            size: data.size,
-            type_: data.type_.clone(),
+            size: self.size,
+            type_: self.type_.clone(),
             ..aggregate
         };
     }

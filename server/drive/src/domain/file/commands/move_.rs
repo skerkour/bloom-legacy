@@ -53,8 +53,6 @@ impl eventsourcing::Command for Move {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let event_data = file::EventData::MovedV1(file::MovedV1 { to: self.to });;
-
         return Ok(Moved {
             timestamp: chrono::Utc::now(),
             to: self.to,
@@ -74,7 +72,7 @@ impl Event for Moved {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            parent_id: Some(data.to),
+            parent_id: Some(self.to),
             ..aggregate
         };
     }

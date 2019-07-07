@@ -1,5 +1,5 @@
 use diesel::Queryable;
-use eventsour::Aggregate;
+use eventsourcing::Aggregate;
 use kernel::db::schema::drive_uploads;
 use serde::{Deserialize, Serialize};
 

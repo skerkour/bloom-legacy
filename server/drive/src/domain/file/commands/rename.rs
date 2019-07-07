@@ -57,7 +57,7 @@ impl Event for Renamed {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            name: data.name.clone(),
+            name: self.name.clone(),
             ..aggregate
         };
     }

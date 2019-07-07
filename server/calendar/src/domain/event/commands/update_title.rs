@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
@@ -53,9 +54,9 @@ pub struct TitleUpdated {
 }
 
 impl Event for TitleUpdated {
-    type Aggregate = CalendarEvent;
+    type Aggregate = event::CalendarEvent;
 
-    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             title: self.title.clone(),
             ..aggregate
