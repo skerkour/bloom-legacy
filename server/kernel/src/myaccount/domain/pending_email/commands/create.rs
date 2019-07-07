@@ -1,13 +1,12 @@
 use crate::{
-    config, error::KernelError, myaccount, myaccount::domain::pending_email,
-    myaccount::validators, utils,
+    config, error::KernelError, myaccount, myaccount::domain::pending_email, myaccount::validators,
+    utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -59,7 +58,6 @@ impl eventsourcing::Command for Create {
             .map_err(|_| KernelError::Bcrypt)?;
 
         return Ok(Created {
-            id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             id: new_pending_email_id,
             email: self.email.clone(),
@@ -74,12 +72,17 @@ impl eventsourcing::Command for Create {
 #[derive(Clone, Debug, EventTs)]
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub email: String,
+    pub account_id: uuid::Uuid,
+    pub token: String,
+    pub code: String,
 }
 
 impl Event for Created {
     type Aggregate = pending_email::PendingEmail;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,

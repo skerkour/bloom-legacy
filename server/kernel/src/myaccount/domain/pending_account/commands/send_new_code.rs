@@ -1,13 +1,10 @@
-use crate::{
-    error::KernelError, myaccount, myaccount::domain::pending_account, utils,
-};
+use crate::{error::KernelError, myaccount, myaccount::domain::pending_account, utils};
 use chrono::Duration;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-
 
 #[derive(Clone, Debug)]
 pub struct SendNewCode {}
@@ -40,7 +37,7 @@ impl eventsourcing::Command for SendNewCode {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let code = utils::random_digit_string(8);
         let token_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)

@@ -1,9 +1,19 @@
 use crate::db::schema::kernel_pending_accounts;
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use serde::{Deserialize, Serialize};
-use eventsourcing::{Aggregate};
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "kernel_pending_accounts"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingAccount {
@@ -43,7 +53,6 @@ impl PendingAccount {
         };
     }
 }
-
 
 impl Default for PendingAccount {
     fn default() -> Self {

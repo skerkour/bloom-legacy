@@ -7,7 +7,6 @@ use crate::{
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
     pub id: uuid::Uuid,

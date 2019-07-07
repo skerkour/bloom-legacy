@@ -3,8 +3,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use serde::{Deserialize, Serialize};
 use eventsourcing::{Event, EventTs};
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FailVerification {}
@@ -17,7 +17,7 @@ impl eventsourcing::Command for FailVerification {
 
     fn validate(
         &self,
-        ctx: &Self::Context,
+        _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
         return Ok(());
@@ -26,9 +26,11 @@ impl eventsourcing::Command for FailVerification {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(VerificationFailed { timestamp: chrono::Utc::now() });
+        return Ok(VerificationFailed {
+            timestamp: chrono::Utc::now(),
+        });
     }
 }
 

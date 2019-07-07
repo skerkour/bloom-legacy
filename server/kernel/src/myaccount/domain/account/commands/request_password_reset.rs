@@ -1,6 +1,4 @@
-use crate::{
-    error::KernelError, myaccount, myaccount::domain::account, utils,
-};
+use crate::{error::KernelError, myaccount, myaccount::domain::account, utils};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -34,7 +32,7 @@ impl eventsourcing::Command for RequestPasswordReset {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let password_reset_id = uuid::Uuid::new_v4();
         let mut rng = rand::thread_rng();

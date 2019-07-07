@@ -38,7 +38,8 @@ impl Handler<StartRegistration> for DbActor {
                 password: msg.password.clone(),
                 config: msg.config.clone(),
             };
-            let (new_pending_account, event) = eventsourcing::execute(&conn, pending_account::PendingAccount::new(), &create_cmd)?;
+            let (new_pending_account, event) =
+                eventsourcing::execute(&conn, pending_account::PendingAccount::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)

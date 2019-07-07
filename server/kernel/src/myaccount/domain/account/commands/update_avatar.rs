@@ -41,7 +41,7 @@ impl eventsourcing::Command for UpdateAvatar {
     fn build_event(
         &self,
         ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         // resize image
         let img = image::load_from_memory(&self.avatar)?;

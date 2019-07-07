@@ -1,7 +1,4 @@
-use crate::{
-    error::KernelError, myaccount, myaccount::domain::account,
-    myaccount::validators,
-};
+use crate::{error::KernelError, myaccount, myaccount::domain::account, myaccount::validators};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -99,7 +96,7 @@ pub struct Created {
 impl Event for Created {
     type Aggregate = account::Account;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,

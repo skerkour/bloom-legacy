@@ -1,13 +1,12 @@
 use crate::error::KernelError;
-use crate::{myaccount::domain::pending_account};
+use crate::myaccount::domain::pending_account;
 use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use serde::{Deserialize, Serialize};
 use eventsourcing::{Event, EventTs};
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {

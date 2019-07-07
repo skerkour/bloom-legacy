@@ -29,7 +29,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let resend_code_cmd = pending_account::SendNewCode { };
+            let resend_code_cmd = pending_account::SendNewCode {};
 
             let pending_account: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
@@ -38,7 +38,8 @@ impl Handler<SendNewVerificationCode> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let (pending_account, event) = eventsourcing::execute(&conn, pending_account, &resend_code_cmd)?;
+            let (pending_account, event) =
+                eventsourcing::execute(&conn, pending_account, &resend_code_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)

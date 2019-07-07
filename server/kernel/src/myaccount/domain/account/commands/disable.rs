@@ -38,7 +38,7 @@ impl eventsourcing::Command for Disable {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Disabled {
             timestamp: chrono::Utc::now(),

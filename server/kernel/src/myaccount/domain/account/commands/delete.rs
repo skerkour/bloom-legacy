@@ -1,6 +1,4 @@
-use crate::{
-    error::KernelError, myaccount, myaccount::domain::account, utils,
-};
+use crate::{error::KernelError, myaccount, myaccount::domain::account, utils};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -40,7 +38,7 @@ impl eventsourcing::Command for Delete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let random_string = utils::random_hex_string(5);
         let random_password = utils::random_hex_string(128);

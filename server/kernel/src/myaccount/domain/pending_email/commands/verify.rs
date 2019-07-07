@@ -4,9 +4,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use serde::{Deserialize, Serialize};
 use eventsourcing::{Event, EventTs};
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
@@ -51,7 +50,6 @@ impl eventsourcing::Command for Verify {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let metadata = self.metadata.clone();
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
@@ -71,7 +69,7 @@ impl eventsourcing::Command for Verify {
             ));
         }
 
-        return Ok(Verified { timestamp });
+        return Ok(Verified { timestamp: chrono::Utc::now() });
     }
 }
 

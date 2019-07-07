@@ -1,8 +1,5 @@
 use crate::{
-    config::Config,
-    db::DbActor,
-    error::KernelError,
-    myaccount::domain::{account},
+    config::Config, db::DbActor, error::KernelError, myaccount::domain::account,
     myaccount::notifications::emails::send_password_reset,
 };
 use actix::{Handler, Message};
