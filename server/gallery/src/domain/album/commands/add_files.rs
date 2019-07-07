@@ -4,22 +4,21 @@ use diesel::{
     PgConnection,
 };
 use drive::domain::File;
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use std::collections::HashSet;
 
 #[derive(Clone, Debug)]
 pub struct AddFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for AddFiles {
     type Aggregate = album::Album;
-    type Event = album::Event;
+    type Event = FilesAdded;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -94,19 +93,25 @@ impl eventsourcing::Command for AddFiles {
             .values(&files)
             .execute(ctx)?;
 
-        let data = album::EventData::FilesAddedV1(album::FilesAddedV1 {
+        return Ok(FilesAdded {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             files: self.files.clone(),
         });
+    }
+}
 
-        return Ok((
-            album::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct FilesAdded {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub files: Vec<uuid::Uuid>,
+}
+
+impl Event for FilesAdded {
+    type Aggregate = album::Album;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return aggregate;
     }
 }
