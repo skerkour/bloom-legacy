@@ -2,7 +2,6 @@ use actix::{Handler, Message};
 use kernel::{
     db::DbActor,
     error::KernelError,
-    events::EventMetadata,
     myaccount::domain::{account, Account},
 };
 use serde::{Deserialize, Serialize};
@@ -24,17 +23,11 @@ impl Handler<DeleteAccount> for DbActor {
 
     fn handle(&mut self, msg: DeleteAccount, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{kernel_accounts, kernel_accounts_events};
+        use kernel::db::schema::kernel_accounts;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             if !msg.actor.is_admin {
                 return Err(KernelError::Forbidden("Admin role is required".to_string()));
             }
@@ -45,15 +38,12 @@ impl Handler<DeleteAccount> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let delete_cmd = account::Delete { metadata };
+            let delete_cmd = account::Delete {};
 
-            let (account_to_delete, event, _) =
+            let (account_to_delete, _) =
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;
             diesel::update(&account_to_delete)
                 .set(&account_to_delete)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(());

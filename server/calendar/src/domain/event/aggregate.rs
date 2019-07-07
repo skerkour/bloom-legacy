@@ -1,9 +1,11 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::calendar_events;
 use serde::{Deserialize, Serialize};
 use uuid::Uuid;
 
 #[derive(
+    Aggregate,
     AsChangeset,
     Clone,
     Debug,
@@ -48,16 +50,6 @@ impl CalendarEvent {
             start_at: now,
             end_at: now,
         };
-    }
-}
-
-impl eventsourcing::Aggregate for CalendarEvent {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

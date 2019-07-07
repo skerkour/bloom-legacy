@@ -2,7 +2,6 @@ use actix::{Handler, Message};
 use kernel::{
     db::DbActor,
     error::KernelError,
-    events::EventMetadata,
     myaccount::domain::{account, session, Account},
 };
 use serde::{Deserialize, Serialize};
@@ -24,19 +23,11 @@ impl Handler<DisableAccount> for DbActor {
 
     fn handle(&mut self, msg: DisableAccount, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            kernel_accounts, kernel_accounts_events, kernel_sessions, kernel_sessions_events,
-        };
+        use kernel::db::schema::{kernel_accounts, kernel_sessions};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             if !msg.actor.is_admin {
                 return Err(KernelError::Forbidden("Admin role is required".to_string()));
             }
@@ -61,18 +52,12 @@ impl Handler<DisableAccount> for DbActor {
                 }
             }
 
-            let disable_cmd = account::Disable {
-                actor: msg.actor,
-                metadata: metadata.clone(),
-            };
+            let disable_cmd = account::Disable { actor: msg.actor };
 
-            let (account_to_disable, event, _) =
+            let (account_to_disable, _) =
                 eventsourcing::execute(&conn, account_to_disable, &disable_cmd)?;
             diesel::update(&account_to_disable)
                 .set(&account_to_disable)
-                .execute(&conn)?;
-            diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // revoke all sessions
@@ -85,16 +70,12 @@ impl Handler<DisableAccount> for DbActor {
             let revoke_cmd = session::Revoke {
                 current_session_id: None,
                 reason: session::RevokedReason::AccountDisabled,
-                metadata: metadata.clone(),
             };
 
             for session in sessions {
-                let (session, event, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
+                let (session, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
                 diesel::update(&session).set(&session).execute(&conn)?;
-                diesel::insert_into(kernel_sessions_events::dsl::kernel_sessions_events)
-                    .values(&event)
-                    .execute(&conn)?;
             }
 
             return Ok(());

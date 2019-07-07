@@ -9,15 +9,13 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateEndAt {
     pub end_at: chrono::DateTime<chrono::Utc>,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateEndAt {
     type Aggregate = event::CalendarEvent;
-    type Event = event::Event;
+    type Event = EndAtUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -30,27 +28,35 @@ impl eventsourcing::Command for UpdateEndAt {
 
         validators::event_dates(aggregate.start_at, self.end_at)?;
 
-        Ok(())
+        return Ok(());
     }
 
     fn build_event(
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = event::EventData::EndAtUpdatedV1(event::EndAtUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(EndAtUpdated {
+            timestamp: chrono::Utc::now(),
             end_at: self.end_at,
         });
+    }
+}
 
-        Ok((
-            event::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ))
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct EndAtUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub end_at: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for EndAtUpdated {
+    type Aggregate = event::CalendarEvent;
+
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            end_at: self.end_at,
+            ..aggregate
+        };
     }
 }

@@ -3,21 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateDescription {
     pub description: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateDescription {
     type Aggregate = event::CalendarEvent;
-    type Event = event::Event;
+    type Event = DescriptionUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -30,27 +28,35 @@ impl eventsourcing::Command for UpdateDescription {
 
         validators::event_description(&self.description)?;
 
-        Ok(())
+        return Ok(());
     }
 
     fn build_event(
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = event::EventData::DescriptionUpdatedV1(event::DescriptionUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(DescriptionUpdated {
+            timestamp: chrono::Utc::now(),
             description: self.description.clone(),
         });
+    }
+}
 
-        Ok((
-            event::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ))
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct DescriptionUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub description: String,
+}
+
+impl Event for DescriptionUpdated {
+    type Aggregate = CalendarEvent;
+
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }
