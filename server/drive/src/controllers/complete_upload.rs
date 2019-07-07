@@ -1,6 +1,6 @@
 use crate::domain::{file, profile, upload, File, Upload};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use std::fs;
 
 #[derive(Clone)]
@@ -24,10 +24,7 @@ impl Handler<CompleteUpload> for DbActor {
 
     fn handle(&mut self, msg: CompleteUpload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            drive_files, drive_files_events, drive_profiles, drive_profiles_events, drive_uploads,
-            drive_uploads_events,
-        };
+        use kernel::db::schema::{drive_files, drive_profiles, drive_uploads};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -45,27 +42,17 @@ impl Handler<CompleteUpload> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             // complete Upload
             let complete_cmd = upload::Complete {
                 s3_bucket: msg.s3_bucket.clone(),
                 s3_client: msg.s3_client.clone(),
                 file_path: msg.file_path.clone(),
-                metadata: metadata.clone(),
             };
-            let (upload_to_update, event, _) =
+            let (upload_to_update, _) =
                 eventsourcing::execute(&conn, upload_to_update, &complete_cmd)?;
 
             diesel::update(&upload_to_update)
                 .set(&upload_to_update)
-                .execute(&conn)?;
-            diesel::insert_into(drive_uploads_events::dsl::drive_uploads_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // create file
@@ -76,31 +63,21 @@ impl Handler<CompleteUpload> for DbActor {
                 size: upload_to_update.size,
                 type_: upload_to_update.type_.clone(),
                 owner_id: upload_to_update.owner_id,
-                metadata: metadata.clone(),
             };
-            let (uploaded_file, event, _) =
-                eventsourcing::execute(&conn, File::new(), &upload_cmd)?;
+            let (uploaded_file, _) = eventsourcing::execute(&conn, File::new(), &upload_cmd)?;
 
             diesel::insert_into(drive_files::dsl::drive_files)
                 .values(&uploaded_file)
-                .execute(&conn)?;
-            diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // update profile
             let space_cmd = profile::UpdateUsedSpace {
                 space: upload_to_update.size,
-                metadata: metadata.clone(),
             };
-            let (drive_profile, event, _) =
-                eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+            let (drive_profile, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
             diesel::update(&drive_profile)
                 .set(&drive_profile)
-                .execute(&conn)?;
-            diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // remove upload directory

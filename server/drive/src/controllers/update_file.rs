@@ -21,17 +21,11 @@ impl Handler<UpdateFile> for DbActor {
 
     fn handle(&mut self, msg: UpdateFile, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{drive_files, drive_files_events};
+        use kernel::db::schema::drive_files;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let file_to_update: file::File = drive_files::dsl::drive_files
                 .filter(drive_files::dsl::id.eq(msg.file_id))
                 .filter(drive_files::dsl::owner_id.eq(msg.actor_id))
@@ -42,20 +36,14 @@ impl Handler<UpdateFile> for DbActor {
             // name
             let file_to_update = match &msg.name {
                 Some(name) if name != &file_to_update.name => {
-                    let rename_cmd = file::Rename {
-                        name: name.clone(),
-                        metadata: metadata.clone(),
-                    };
+                    let rename_cmd = file::Rename { name: name.clone() };
 
-                    let (file_to_update, event, _) =
+                    let (file_to_update, _) =
                         eventsourcing::execute(&conn, file_to_update, &rename_cmd)?;
 
                     // update note
                     diesel::update(&file_to_update)
                         .set(&file_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                        .values(&event)
                         .execute(&conn)?;
                     file_to_update
                 }
