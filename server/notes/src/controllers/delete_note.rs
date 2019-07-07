@@ -20,17 +20,12 @@ impl Handler<DeleteNote> for DbActor {
 
     fn handle(&mut self, msg: DeleteNote, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{notes_notes, notes_notes_events};
+        use kernel::db::schema::notes_notes;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-            let delete_cmd = note::Delete { metadata };
+            let delete_cmd = note::Delete {};
 
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
@@ -39,15 +34,11 @@ impl Handler<DeleteNote> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (note_to_update, event, _) =
-                eventsourcing::execute(&conn, note_to_update, &delete_cmd)?;
+            let (note_to_update, _) = eventsourcing::execute(&conn, note_to_update, &delete_cmd)?;
 
             // update note
             diesel::update(&note_to_update)
                 .set(&note_to_update)
-                .execute(&conn)?;
-            diesel::insert_into(notes_notes_events::dsl::notes_notes_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(());

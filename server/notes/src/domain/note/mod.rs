@@ -1,7 +1,14 @@
 mod aggregate;
 mod commands;
-mod events;
 
 pub use aggregate::Note;
-pub use commands::{Archive, Create, Delete, Remove, Restore, Unarchive, UpdateBody, UpdateTitle};
-pub use events::{BodyUpdatedV1, CreatedV1, Event, EventData, TitleUpdatedV1};
+pub use commands::{
+    archive::{Archive, Archived},
+    create::{Create, Created},
+    delete::{Delete, Deleted},
+    remove::{Remove, Removed},
+    restore::{Restore, Restored},
+    unarchive::{Unarchive, Unarchived},
+    update_body::{BodyUpdated, UpdateBody},
+    update_title::{TitleUpdated, UpdateTitle},
+};

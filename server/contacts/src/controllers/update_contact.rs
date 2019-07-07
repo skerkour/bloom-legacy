@@ -1,6 +1,6 @@
 use crate::domain::contact;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -32,17 +32,11 @@ impl Handler<UpdateContact> for DbActor {
     #[allow(clippy::cognitive_complexity)]
     fn handle(&mut self, msg: UpdateContact, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{contacts_contacts, contacts_contacts_events};
+        use kernel::db::schema::contacts_contacts;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let contact_to_update: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
                 .filter(contacts_contacts::dsl::owner_id.eq(msg.actor_id))
@@ -55,18 +49,14 @@ impl Handler<UpdateContact> for DbActor {
                 Some(addresses) if addresses != &contact_to_update.addresses => {
                     let update_addresses_cmd = contact::UpdateAddresses {
                         addresses: addresses.clone(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_addresses_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -78,18 +68,14 @@ impl Handler<UpdateContact> for DbActor {
                 Some(birthday) if Some(*birthday) != contact_to_update.birthday => {
                     let update_birthday_cmd = contact::UpdateBirthday {
                         birthday: Some(*birthday),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_birthday_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -101,18 +87,14 @@ impl Handler<UpdateContact> for DbActor {
                 Some(emails) if emails != &contact_to_update.emails => {
                     let update_emails_cmd = contact::UpdateEmails {
                         emails: emails.clone(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_emails_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -130,20 +112,14 @@ impl Handler<UpdateContact> for DbActor {
                     } else {
                         Some(first_name.to_string())
                     };
-                    let update_first_name_cmd = contact::UpdateFirstName {
-                        first_name,
-                        metadata: metadata.clone(),
-                    };
+                    let update_first_name_cmd = contact::UpdateFirstName { first_name };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_first_name_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -159,20 +135,14 @@ impl Handler<UpdateContact> for DbActor {
                     } else {
                         Some(last_name.to_string())
                     };
-                    let update_last_name_cmd = contact::UpdateLastName {
-                        last_name,
-                        metadata: metadata.clone(),
-                    };
+                    let update_last_name_cmd = contact::UpdateLastName { last_name };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_last_name_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -188,20 +158,14 @@ impl Handler<UpdateContact> for DbActor {
                     } else {
                         Some(notes.to_string())
                     };
-                    let update_notes_cmd = contact::UpdateNotes {
-                        notes,
-                        metadata: metadata.clone(),
-                    };
+                    let update_notes_cmd = contact::UpdateNotes { notes };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_notes_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -213,10 +177,9 @@ impl Handler<UpdateContact> for DbActor {
                 Some(organizations) if organizations != &contact_to_update.organizations => {
                     let update_organizations_cmd = contact::UpdateOrganizations {
                         organizations: organizations.clone(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) = eventsourcing::execute(
+                    let (contact_to_update, _) = eventsourcing::execute(
                         &conn,
                         contact_to_update,
                         &update_organizations_cmd,
@@ -225,9 +188,6 @@ impl Handler<UpdateContact> for DbActor {
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -239,18 +199,14 @@ impl Handler<UpdateContact> for DbActor {
                 Some(phones) if phones != &contact_to_update.phones => {
                     let update_phones_cmd = contact::UpdatePhones {
                         phones: phones.clone(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_phones_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }
@@ -262,18 +218,14 @@ impl Handler<UpdateContact> for DbActor {
                 Some(websites) if websites != &contact_to_update.websites => {
                     let update_phones_cmd = contact::UpdateWebsites {
                         websites: websites.clone(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (contact_to_update, event, _) =
+                    let (contact_to_update, _) =
                         eventsourcing::execute(&conn, contact_to_update, &update_phones_cmd)?;
 
                     // update note
                     diesel::update(&contact_to_update)
                         .set(&contact_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                        .values(&event)
                         .execute(&conn)?;
                     contact_to_update
                 }

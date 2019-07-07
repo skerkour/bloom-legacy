@@ -49,8 +49,8 @@ impl eventsourcing::Command for Create {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
-pub struct CreatedV1 {
+#[derive(Clone, Debug, EventTs)]
+pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,
     pub title: String,

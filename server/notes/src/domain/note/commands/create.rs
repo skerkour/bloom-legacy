@@ -3,22 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Create {
     pub title: String,
     pub body: String,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
     type Aggregate = note::Note;
-    type Event = note::Event;
+    type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,24 +33,42 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-        let data = note::EventData::CreatedV1(note::CreatedV1 {
-            id,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Created {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             title: self.title.clone(),
             body: self.body.clone(),
             owner_id: self.owner_id,
         });
+    }
+}
 
-        return Ok((
-            note::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub title: String,
+    pub body: String,
+    pub owner_id: uuid::Uuid,
+}
+
+impl Event for Created {
+    type Aggregate = note::Note;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            archived_at: None,
+            body: self.body.clone(),
+            removed_at: None,
+            title: self.title.clone(),
+            owner_id: self.owner_id,
+        };
     }
 }

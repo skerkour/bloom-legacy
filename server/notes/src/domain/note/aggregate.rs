@@ -1,8 +1,19 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::notes_notes;
 use serde::{Deserialize, Serialize};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "notes_notes"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Note {
@@ -38,16 +49,6 @@ impl Note {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Note {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 
