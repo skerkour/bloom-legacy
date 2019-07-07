@@ -1,17 +1,20 @@
 mod aggregate;
 mod commands;
-mod events;
 
 pub use aggregate::{
     Address, AddressLabel, Contact, Email, EmailLabel, Organization, Phone, PhoneLabel, Website,
     WebsiteLabel,
 };
 pub use commands::{
-    Create, Delete, UpdateAddresses, UpdateBirthday, UpdateEmails, UpdateFirstName, UpdateLastName,
-    UpdateNotes, UpdateOrganizations, UpdatePhones, UpdateWebsites,
-};
-pub use events::{
-    AddressesUpdatedV1, BirthdayUpdatedV1, CreatedV1, EmailsUpdatedV1, Event, EventData,
-    FirstNameUpdatedV1, LastNameUpdatedV1, NotesUpdatedV1, OrganizationsUpdatedV1, PhonesUpdatedV1,
-    WebsitesUpdatedV1,
+    create::{Create, Created},
+    delete::{Delete, Deleted},
+    update_addresses::{AddressesUpdated, UpdateAddresses},
+    update_birthday::{BirthdayUpdated, UpdateBirthday},
+    update_emails::{EmailsUpdated, UpdateEmails},
+    update_first_name::{FirstNameUpdated, UpdateFirstName},
+    update_last_name::{LastNameUpdated, UpdateLastName},
+    update_notes::{NotesUpdated, UpdateNotes},
+    update_organizations::{organizations_updated, UpdateOrganizations},
+    update_phones::{phones_updated, UpdatePhones},
+    update_websites::{UpdateWebsites, WebsitesUpdated},
 };

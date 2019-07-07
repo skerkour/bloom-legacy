@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
@@ -45,7 +46,7 @@ pub struct Deleted {
 }
 
 impl Event for Deleted {
-    type Aggregate = account::Account;
+    type Aggregate = event::CalendarEvent;
 
     fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

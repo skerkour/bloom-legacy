@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 
 #[derive(Clone, Debug)]
@@ -45,7 +46,7 @@ impl eventsourcing::Command for Create {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,

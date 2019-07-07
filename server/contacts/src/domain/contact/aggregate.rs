@@ -1,9 +1,20 @@
 use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
+use eventsourcing::Aggregate;
 use kernel::db::schema::contacts_contacts;
 use serde::{Deserialize, Serialize};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "contacts_contacts"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Contact {
@@ -139,16 +150,6 @@ impl Contact {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Contact {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateOrganizations {
     pub organizations: Vec<contact::Organization>,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateOrganizations {
     type Aggregate = contact::Contact;
-    type Event = contact::Event;
+    type Event = OrganizationsUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,20 +34,28 @@ impl eventsourcing::Command for UpdateOrganizations {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = contact::EventData::OrganizationsUpdatedV1(contact::OrganizationsUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(OrganizationsUpdated {
+            timestamp: chrono::Utc::now(),
             organizations: self.organizations.clone(),
         });
+    }
+}
 
-        return Ok((
-            contact::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct OrganizationsUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub organizations: Vec<contact::Organization>,
+}
+
+impl Event for OrganizationsUpdated {
+    type Aggregate = contact::Contact;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            organizations: data.organizations.clone(),
+            ..aggregate
+        };
     }
 }

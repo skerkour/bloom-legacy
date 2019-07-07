@@ -1,6 +1,6 @@
 use crate::domain::scan;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 // TODO: delete all associated reports
@@ -21,17 +21,11 @@ impl Handler<DeleteScan> for DbActor {
 
     fn handle(&mut self, msg: DeleteScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{phaser_scans, phaser_scans_events};
+        use kernel::db::schema::phaser_scans;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             // retrieve Scan
             let scan_to_delete: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
@@ -40,15 +34,11 @@ impl Handler<DeleteScan> for DbActor {
                 .first(&conn)?;
 
             // delete Scan
-            let delete_cmd = scan::Delete { metadata };
-            let (deleted_scan, event, _) =
-                eventsourcing::execute(&conn, scan_to_delete, &delete_cmd)?;
+            let delete_cmd = scan::Delete {};
+            let (deleted_scan, _) = eventsourcing::execute(&conn, scan_to_delete, &delete_cmd)?;
 
             diesel::update(&deleted_scan)
                 .set(&deleted_scan)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(());

@@ -4,7 +4,7 @@ use crate::{
 };
 use actix::{Handler, Message};
 use futures_fs::FsPool;
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use rusoto_s3::{PutObjectRequest, StreamingBody, S3};
 use std::fs;
 use std::io;
@@ -33,19 +33,11 @@ impl Handler<CompleteReport> for DbActor {
     #[allow(clippy::unused_io_amount)]
     fn handle(&mut self, msg: CompleteReport, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
-        };
+        use kernel::db::schema::{phaser_reports, phaser_scans};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: None,
-                request_id: Some(msg.request_id),
-                session_id: None,
-            };
-
             // unzip
             let report_zip = format!("{}/report.zip", &msg.report_dir);
             let file = fs::File::open(&report_zip)?;
@@ -133,16 +125,12 @@ impl Handler<CompleteReport> for DbActor {
             let complete_cmd = report::Complete {
                 findings: report::Finding::V1(parsed_report),
                 total_findings,
-                metadata: metadata.clone(),
             };
-            let (completed_report, event, _) =
+            let (completed_report, _) =
                 eventsourcing::execute(&conn, report_to_complete, &complete_cmd)?;
 
             diesel::update(&completed_report)
                 .set(&completed_report)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // complete scan
@@ -155,16 +143,12 @@ impl Handler<CompleteReport> for DbActor {
 
             let complete_cmd = scan::Complete {
                 findings: total_findings,
-                metadata: metadata.clone(),
             };
-            let (completed_scan, event, _) =
+            let (completed_scan, _) =
                 eventsourcing::execute(&conn, scan_to_complete, &complete_cmd)?;
 
             diesel::update(&completed_scan)
                 .set(&completed_scan)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // remove files

@@ -3,10 +3,10 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct Remove {}
 
 impl eventsourcing::Command for Remove {
@@ -45,7 +45,7 @@ impl eventsourcing::Command for Remove {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct Removed {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }

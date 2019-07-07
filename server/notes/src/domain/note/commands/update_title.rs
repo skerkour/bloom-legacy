@@ -3,10 +3,10 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone, Debug)]
 pub struct UpdateTitle {
     pub title: String,
 }
@@ -44,7 +44,7 @@ impl eventsourcing::Command for UpdateTitle {
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, Debug, EventTs)]
 pub struct TitleUpdated {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub title: String,
