@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 
 #[derive(Clone, Debug)]
@@ -38,6 +39,7 @@ impl eventsourcing::Command for Create {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Created {
+            timestamp: chrono::Utc::now(),
             id: uuid::Uuid::new_v4(),
             title: self.title.clone(),
             description: self.description.clone(),
@@ -61,7 +63,7 @@ pub struct Created {
 }
 
 impl Event for Created {
-    type Aggregate = account::Account;
+    type Aggregate = event::CalendarEvent;
 
     fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

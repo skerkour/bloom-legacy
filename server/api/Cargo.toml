@@ -17,7 +17,7 @@ gallery = { path = "../gallery" }
 music = { path = "../music" }
 bitflow = { path = "../bitflow" }
 phaser = { path = "../phaser" }
-billing = { path = "../billing" }
+# billing = { path = "../billing" }
 admin = { path = "../admin" }
 calendar = { path = "../calendar" }
 

@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateNotes {
     pub notes: Option<String>,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateNotes {
     type Aggregate = contact::Contact;
-    type Event = contact::Event;
+    type Event = NotesUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,20 +34,32 @@ impl eventsourcing::Command for UpdateNotes {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let data = contact::EventData::NotesUpdatedV1(contact::NotesUpdatedV1 {
             notes: self.notes.clone(),
         });
 
-        return Ok((
-            contact::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        return Ok(NotesUpdated {
+            timestamp: chrono::Utc::now(),
+            notes: self.notes.clone(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct NotesUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub notes: Option<String>,
+}
+
+impl Event for NotesUpdated {
+    type Aggregate = contact::Contact;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            notes: self.notes.clone(),
+            ..aggregate
+        };
     }
 }

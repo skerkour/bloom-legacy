@@ -3,7 +3,7 @@ use crate::{
     validators,
 };
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -23,19 +23,11 @@ impl Handler<QueueScan> for DbActor {
 
     fn handle(&mut self, msg: QueueScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
-        };
+        use kernel::db::schema::{phaser_reports, phaser_scans};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             // retrieve Scan
             let scan_to_queue: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
@@ -53,31 +45,23 @@ impl Handler<QueueScan> for DbActor {
                 targets: scan_to_queue.targets.clone(),
                 profile: scan_to_queue.profile.clone(),
                 trigger: trigger.clone(),
-                metadata: metadata.clone(),
             };
-            let (queued_report, event, _) =
+            let (queued_report, _) =
                 eventsourcing::execute(&conn, report::Report::new(), &queue_cmd)?;
 
             diesel::insert_into(phaser_reports::dsl::phaser_reports)
                 .values(&queued_report)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // queue Scan
             let queue_cmd = scan::Queue {
                 report_id: queued_report.id,
                 trigger: trigger.clone(),
-                metadata,
             };
-            let (queued_scan, event, _) = eventsourcing::execute(&conn, scan_to_queue, &queue_cmd)?;
+            let (queued_scan, _) = eventsourcing::execute(&conn, scan_to_queue, &queue_cmd)?;
 
             diesel::update(&queued_scan)
                 .set(&queued_scan)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(queued_scan);

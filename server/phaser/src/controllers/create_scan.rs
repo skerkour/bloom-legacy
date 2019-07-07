@@ -1,6 +1,6 @@
 use crate::domain::{scan, Scan};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -24,18 +24,12 @@ impl Handler<CreateScan> for DbActor {
 
     fn handle(&mut self, msg: CreateScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{phaser_scans, phaser_scans_events};
+        use kernel::db::schema::phaser_scans;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             // create Scan
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             // check the number of scans
             let number_of_scan: i64 = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::owner_id.eq(msg.account_id))
@@ -56,15 +50,11 @@ impl Handler<CreateScan> for DbActor {
                 schedule: msg.schedule.clone(),
                 target: msg.target.clone(),
                 owner_id: msg.account_id,
-                metadata,
             };
-            let (scan, event, _) = eventsourcing::execute(&conn, Scan::new(), &create_cmd)?;
+            let (scan, _) = eventsourcing::execute(&conn, Scan::new(), &create_cmd)?;
 
             diesel::insert_into(phaser_scans::dsl::phaser_scans)
                 .values(&scan)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(scan);

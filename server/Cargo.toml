@@ -37,7 +37,7 @@ members = [
     "music",
     "bitflow",
     "phaser",
-    "billing",
+    # "billing",
     "admin",
     "calendar",
 ]

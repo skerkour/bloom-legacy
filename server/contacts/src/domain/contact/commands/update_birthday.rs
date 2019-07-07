@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateBirthday {
     pub birthday: Option<chrono::DateTime<chrono::Utc>>,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateBirthday {
     type Aggregate = contact::Contact;
-    type Event = contact::Event;
+    type Event = BirthdayUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,20 +34,28 @@ impl eventsourcing::Command for UpdateBirthday {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = contact::EventData::BirthdayUpdatedV1(contact::BirthdayUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(BirthdayUpdated {
+            timestamp: chrono::Utc::now(),
             birthday: self.birthday,
         });
+    }
+}
 
-        return Ok((
-            contact::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct BirthdayUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub birthday: Option<chrono::DateTime<chrono::Utc>>,
+}
+
+impl Event for BirthdayUpdated {
+    type Aggregate = contact::Contact;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            birthday: self.birthday,
+            ..aggregate
+        };
     }
 }

@@ -1,6 +1,6 @@
 use crate::domain::{report, scan};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 // TODO: delete all associated reports
@@ -21,19 +21,11 @@ impl Handler<CancelScan> for DbActor {
 
     fn handle(&mut self, msg: CancelScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
-        };
+        use kernel::db::schema::{phaser_reports, phaser_scans};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             // retrieve Scan
             let scan_to_cancel: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
@@ -42,17 +34,11 @@ impl Handler<CancelScan> for DbActor {
                 .first(&conn)?;
 
             // cancel Scan
-            let cancel_cmd = scan::Cancel {
-                metadata: metadata.clone(),
-            };
-            let (canceled_scan, event, _) =
-                eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
+            let cancel_cmd = scan::Cancel {};
+            let (canceled_scan, _) = eventsourcing::execute(&conn, scan_to_cancel, &cancel_cmd)?;
 
             diesel::update(&canceled_scan)
                 .set(&canceled_scan)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
                 .execute(&conn)?;
 
             // TODO: cancel report
@@ -64,14 +50,11 @@ impl Handler<CancelScan> for DbActor {
                 .first(&conn)?;
 
             let cancel_cmd = report::Cancel { metadata };
-            let (cancelped_report, event, _) =
+            let (cancelped_report, _) =
                 eventsourcing::execute(&conn, report_to_cancel, &cancel_cmd)?;
 
             diesel::update(&cancelped_report)
                 .set(&cancelped_report)
-                .execute(&conn)?;
-            diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(());

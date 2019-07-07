@@ -1,6 +1,6 @@
 use crate::domain;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -19,19 +19,11 @@ impl Handler<StartScan> for DbActor {
 
     fn handle(&mut self, msg: StartScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            phaser_reports, phaser_reports_events, phaser_scans, phaser_scans_events,
-        };
+        use kernel::db::schema::{phaser_reports, phaser_scans};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: None, // Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: None, // Some(msg.session_id),
-            };
-
             // start report
             let report: domain::Report = phaser_reports::dsl::phaser_reports
                 .filter(phaser_reports::dsl::deleted_at.is_null())
@@ -39,15 +31,10 @@ impl Handler<StartScan> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let start_cmd = domain::report::Start {
-                metadata: metadata.clone(),
-            };
+            let start_cmd = domain::report::Start {};
 
-            let (report, event, _) = eventsourcing::execute(&conn, report, &start_cmd)?;
+            let (report, _) = eventsourcing::execute(&conn, report, &start_cmd)?;
             diesel::update(&report).set(&report).execute(&conn)?;
-            diesel::insert_into(phaser_reports_events::dsl::phaser_reports_events)
-                .values(&event)
-                .execute(&conn)?;
 
             // start scan
             let scan: domain::Scan = phaser_scans::dsl::phaser_scans
@@ -57,15 +44,10 @@ impl Handler<StartScan> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let start_cmd = domain::scan::Start {
-                metadata: metadata.clone(),
-            };
+            let start_cmd = domain::scan::Start {};
 
-            let (scan, event, _) = eventsourcing::execute(&conn, scan, &start_cmd)?;
+            let (scan, _) = eventsourcing::execute(&conn, scan, &start_cmd)?;
             diesel::update(&scan).set(&scan).execute(&conn)?;
-            diesel::insert_into(phaser_scans_events::dsl::phaser_scans_events)
-                .values(&event)
-                .execute(&conn)?;
 
             return Ok(report);
         })?);
