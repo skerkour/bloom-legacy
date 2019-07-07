@@ -1,6 +1,6 @@
 use crate::domain::{playlist, Playlist};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -20,29 +20,20 @@ impl Handler<CreatePlaylist> for DbActor {
 
     fn handle(&mut self, msg: CreatePlaylist, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{music_playlists, music_playlists_events};
+        use kernel::db::schema::{music_playlists};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             // create Playlist
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
             let create_cmd = playlist::Create {
                 name: msg.name,
                 owner_id: msg.account_id,
-                metadata,
             };
-            let (playlist, event, _) = eventsourcing::execute(&conn, Playlist::new(), &create_cmd)?;
+            let (playlist, _) = eventsourcing::execute(&conn, Playlist::new(), &create_cmd)?;
 
             diesel::insert_into(music_playlists::dsl::music_playlists)
                 .values(&playlist)
-                .execute(&conn)?;
-            diesel::insert_into(music_playlists_events::dsl::music_playlists_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(playlist);

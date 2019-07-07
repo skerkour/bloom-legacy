@@ -1,6 +1,6 @@
 use crate::domain;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 
 #[derive(Clone)]
 pub struct CompleteDownload {
@@ -23,8 +23,7 @@ impl Handler<CompleteDownload> for DbActor {
     fn handle(&mut self, msg: CompleteDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
         use kernel::db::schema::{
-            bitflow_downloads, bitflow_downloads_events, bitflow_profiles, drive_profiles,
-            drive_profiles_events,
+            bitflow_downloads, bitflow_profiles, drive_profiles,
         };
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
@@ -40,23 +39,14 @@ impl Handler<CompleteDownload> for DbActor {
                 .filter(bitflow_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: None, // Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: None, // Some(msg.session_id),
-            };
             let complete_cmd = domain::download::Complete {
                 s3_bucket: msg.s3_bucket,
                 s3_client: msg.s3_client,
                 profile,
                 data: msg.complete_data.clone(),
-                metadata: metadata.clone(),
             };
 
-            let (download, event, _) = eventsourcing::execute(&conn, download, &complete_cmd)?;
-            diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
-                .values(&event)
-                .execute(&conn)?;
+            let (download, _) = eventsourcing::execute(&conn, download, &complete_cmd)?;
             diesel::update(&download).set(&download).execute(&conn)?;
 
             let total_size = msg.complete_data.files.iter().fold(0i64, |acc, x| {
@@ -71,16 +61,12 @@ impl Handler<CompleteDownload> for DbActor {
 
             let space_cmd = drive::domain::profile::UpdateUsedSpace {
                 space: total_size,
-                metadata: metadata.clone(),
             };
-            let (drive_profile, event, _) =
+            let (drive_profile, _) =
                 eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
             diesel::update(&drive_profile)
                 .set(&drive_profile)
-                .execute(&conn)?;
-            diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(download);

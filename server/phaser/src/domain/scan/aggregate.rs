@@ -1,8 +1,9 @@
 use diesel::Queryable;
 use kernel::db::schema::phaser_scans;
 use serde::{Deserialize, Serialize};
+use eventsourcing::Aggregate;
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "phaser_scans"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Scan {
@@ -73,16 +74,6 @@ impl Scan {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Scan {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

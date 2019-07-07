@@ -14,7 +14,7 @@ pub use commands::{
     update_first_name::{FirstNameUpdated, UpdateFirstName},
     update_last_name::{LastNameUpdated, UpdateLastName},
     update_notes::{NotesUpdated, UpdateNotes},
-    update_organizations::{organizations_updated, UpdateOrganizations},
-    update_phones::{phones_updated, UpdatePhones},
+    update_organizations::{OrganizationsUpdated, UpdateOrganizations},
+    update_phones::{PhonesUpdated, UpdatePhones},
     update_websites::{UpdateWebsites, WebsitesUpdated},
 };

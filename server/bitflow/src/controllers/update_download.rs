@@ -1,6 +1,6 @@
 use crate::domain::{download, Download};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -22,17 +22,11 @@ impl Handler<UpdateDownload> for DbActor {
 
     fn handle(&mut self, msg: UpdateDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads, bitflow_downloads_events};
+        use kernel::db::schema::{bitflow_downloads};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: None, // Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: None, //Some(msg.session_id),
-            };
-
             let download_to_update: Download = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(msg.download_id))
                 // .filter(bitflow_downloads::dsl::owner_id.eq(msg.actor_id))
@@ -45,18 +39,14 @@ impl Handler<UpdateDownload> for DbActor {
                 Some(name) if name != &download_to_update.name => {
                     let update_name_cmd = download::UpdateName {
                         name: name.to_string(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (download_to_update, event, _) =
+                    let (download_to_update, _) =
                         eventsourcing::execute(&conn, download_to_update, &update_name_cmd)?;
 
                     // update download
                     diesel::update(&download_to_update)
                         .set(&download_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
-                        .values(&event)
                         .execute(&conn)?;
                     download_to_update
                 }
@@ -68,18 +58,14 @@ impl Handler<UpdateDownload> for DbActor {
                 Some(progress) if (progress as i32) != download_to_update.progress => {
                     let update_progress_cmd = download::UpdateProgress {
                         progress,
-                        metadata: metadata.clone(),
                     };
 
-                    let (download_to_update, event, _) =
+                    let (download_to_update, _) =
                         eventsourcing::execute(&conn, download_to_update, &update_progress_cmd)?;
 
                     // update download
                     diesel::update(&download_to_update)
                         .set(&download_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(bitflow_downloads_events::dsl::bitflow_downloads_events)
-                        .values(&event)
                         .execute(&conn)?;
                     download_to_update
                 }
