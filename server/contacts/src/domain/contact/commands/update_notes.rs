@@ -35,10 +35,6 @@ impl eventsourcing::Command for UpdateNotes {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = contact::EventData::NotesUpdatedV1(contact::NotesUpdatedV1 {
-            notes: self.notes.clone(),
-        });
-
         return Ok(NotesUpdated {
             timestamp: chrono::Utc::now(),
             notes: self.notes.clone(),

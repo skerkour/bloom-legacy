@@ -76,7 +76,7 @@ pub struct Downloaded {
     pub presigned_url: String,
 }
 
-impl Event for Deleted {
+impl Event for Downloaded {
     type Aggregate = file::File;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {

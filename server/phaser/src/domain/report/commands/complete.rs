@@ -69,7 +69,7 @@ impl Event for Deleted {
             low_level_findings: self.low_level_findings as i64,
             medium_level_findings: self.medium_level_findings as i64,
             total_findings: self.total_findings as i64,
-            status: ReportStatus::Success,
+            status: report::ReportStatus::Success,
             completed_at: Some(self.timestamp),
             ..aggregate
         };

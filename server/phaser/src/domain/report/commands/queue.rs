@@ -16,10 +16,9 @@ pub struct Queue {
 
 impl eventsourcing::Command for Queue {
     type Aggregate = report::Report;
-    type Event = report::Event;
+    type Event = Queued;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,

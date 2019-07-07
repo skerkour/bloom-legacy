@@ -62,7 +62,6 @@ pub struct Created {
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub size: i64,
-    #[serde(rename = "type")]
     pub type_: String, // MIME type
     pub owner_id: uuid::Uuid,
 }

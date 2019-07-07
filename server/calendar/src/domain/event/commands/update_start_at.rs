@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
@@ -53,7 +54,7 @@ pub struct StartAtUpdated {
 impl Event for StartAtUpdated {
     type Aggregate = event::CalendarEvent;
 
-    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             start_at: self.start_at,
             ..aggregate

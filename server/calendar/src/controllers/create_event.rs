@@ -35,7 +35,6 @@ impl Handler<CreateEvent> for DbActor {
                 start_at: msg.start_at,
                 end_at: msg.end_at,
                 owner_id: msg.owner_id,
-                metadata: metadata.clone(),
             };
             let (new_calendar_event, _) =
                 eventsourcing::execute(&conn, event::CalendarEvent::new(), &create_cmd)?;

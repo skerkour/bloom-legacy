@@ -21,7 +21,7 @@ impl Handler<RestoreFiles> for DbActor {
 
     fn handle(&mut self, msg: RestoreFiles, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{drive_files, drive_files_events};
+        use kernel::db::schema::drive_files;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
