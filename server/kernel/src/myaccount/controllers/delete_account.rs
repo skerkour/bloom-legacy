@@ -28,7 +28,8 @@ impl Handler<DeleteAccount> for DbActor {
             };
 
             // just pass uuid
-            let (deleted_account, _) = eventsourcing::execute(&conn, msg.account, &delete_account_cmd)?;
+            let (deleted_account, _) =
+                eventsourcing::execute(&conn, msg.account, &delete_account_cmd)?;
 
             // update just deleted_at = chrono::Utc::now() or check that eventsourcing done that
             diesel::update(&deleted_account)
