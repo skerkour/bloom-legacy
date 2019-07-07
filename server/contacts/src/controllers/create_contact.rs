@@ -1,6 +1,6 @@
 use crate::domain::contact;
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -30,17 +30,12 @@ impl Handler<CreateContact> for DbActor {
 
     fn handle(&mut self, msg: CreateContact, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{contacts_contacts, contacts_contacts_events};
+        use kernel::db::schema::contacts_contacts;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             // create Contact
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
             let create_cmd = contact::Create {
                 addresses: msg.addresses,
                 birthday: msg.birthday,
@@ -54,16 +49,11 @@ impl Handler<CreateContact> for DbActor {
                 phones: msg.phones,
                 websites: msg.websites,
                 owner_id: msg.account_id,
-                metadata,
             };
-            let (note, event, _) =
-                eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
+            let (note, _) = eventsourcing::execute(&conn, contact::Contact::new(), &create_cmd)?;
 
             diesel::insert_into(contacts_contacts::dsl::contacts_contacts)
                 .values(&note)
-                .execute(&conn)?;
-            diesel::insert_into(contacts_contacts_events::dsl::contacts_contacts_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(note);

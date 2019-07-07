@@ -1,6 +1,6 @@
 use crate::domain::{note, Note};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -22,17 +22,11 @@ impl Handler<UpdateNote> for DbActor {
 
     fn handle(&mut self, msg: UpdateNote, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{notes_notes, notes_notes_events};
+        use kernel::db::schema::notes_notes;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.actor_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
                 .filter(notes_notes::dsl::owner_id.eq(msg.actor_id))
@@ -45,18 +39,14 @@ impl Handler<UpdateNote> for DbActor {
                 Some(title) if title != &note_to_update.title => {
                     let update_title_cmd = note::UpdateTitle {
                         title: title.to_string(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (note_to_update, event, _) =
+                    let (note_to_update, _) =
                         eventsourcing::execute(&conn, note_to_update, &update_title_cmd)?;
 
                     // update note
                     diesel::update(&note_to_update)
                         .set(&note_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(notes_notes_events::dsl::notes_notes_events)
-                        .values(&event)
                         .execute(&conn)?;
                     note_to_update
                 }
@@ -68,18 +58,14 @@ impl Handler<UpdateNote> for DbActor {
                 Some(body) if body != &note_to_update.body => {
                     let update_body_cmd = note::UpdateBody {
                         body: body.to_string(),
-                        metadata: metadata.clone(),
                     };
 
-                    let (note_to_update, event, _) =
+                    let (note_to_update, _) =
                         eventsourcing::execute(&conn, note_to_update, &update_body_cmd)?;
 
                     // update note
                     diesel::update(&note_to_update)
                         .set(&note_to_update)
-                        .execute(&conn)?;
-                    diesel::insert_into(notes_notes_events::dsl::notes_notes_events)
-                        .values(&event)
                         .execute(&conn)?;
                     note_to_update
                 }

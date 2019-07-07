@@ -38,7 +38,7 @@ impl Handler<DeleteAccount> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let delete_cmd = account::Delete {};
+            let delete_cmd = account::Delete { actor: msg.actor };
 
             let (account_to_delete, _) =
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;

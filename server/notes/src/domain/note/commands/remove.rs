@@ -3,20 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Remove {
-    pub metadata: EventMetadata,
-}
+pub struct Remove {}
 
 impl eventsourcing::Command for Remove {
     type Aggregate = note::Note;
-    type Event = note::Event;
+    type Event = Removed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -39,17 +36,27 @@ impl eventsourcing::Command for Remove {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            note::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: note::EventData::RemovedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        _aggregate: &Self::Aggregate,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Removed {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Removed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Removed {
+    type Aggregate = note::Note;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            removed_at: Some(self.timestamp),
+            ..Aggregate
+        };
     }
 }

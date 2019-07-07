@@ -3,20 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Restore {
-    pub metadata: EventMetadata,
-}
+pub struct Restore {}
 
 impl eventsourcing::Command for Restore {
     type Aggregate = note::Note;
-    type Event = note::Event;
+    type Event = Restored;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -38,16 +35,26 @@ impl eventsourcing::Command for Restore {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            note::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: note::EventData::RestoredV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Restored {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Restored {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Restored {
+    type Aggregate = note::Note;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            removed_at: None,
+            ..Aggregate
+        };
     }
 }
