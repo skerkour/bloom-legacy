@@ -3,20 +3,18 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Delete {
-    pub metadata: EventMetadata,
-}
+pub struct Delete {}
 
 impl eventsourcing::Command for Delete {
     type Aggregate = album::Album;
-    type Event = album::Event;
+    type Event = Deleted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -54,15 +52,25 @@ impl eventsourcing::Command for Delete {
         )
         .execute(ctx)?;
 
-        return Ok((
-            album::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: album::EventData::DeletedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        return Ok(Deleted {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Deleted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Deleted {
+    type Aggregate = album::Album;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }
