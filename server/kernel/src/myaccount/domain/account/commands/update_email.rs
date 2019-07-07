@@ -49,7 +49,7 @@ pub struct EmailUpdated {
 }
 
 impl Event for EmailUpdated {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

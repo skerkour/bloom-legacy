@@ -49,7 +49,7 @@ pub struct BioUpdated {
 }
 
 impl Event for BioUpdated {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

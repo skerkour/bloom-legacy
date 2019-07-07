@@ -42,7 +42,7 @@ impl Handler<VerifyEmail> for DbActor {
             let verify_cmd = pending_email::Verify {
                 id: msg.id,
                 code: msg.code.clone(),
-                email: pending_email.email.clone(),
+                email: pending_email_to_verify.email.clone(),
             };
 
             let pending_email_to_verify =

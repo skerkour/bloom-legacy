@@ -6,7 +6,6 @@ use crate::{
 };
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
-use eventsourcing::{Event, EventTs};
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -41,9 +40,9 @@ impl Handler<CompleteRegistration> for DbActor {
 
             // complete registration
             let complete_registration_cmd = pending_account::Delete {};
-            let _ = eventsourcing::execute(
+            let (pending_account_to_update, _) = eventsourcing::execute(
                 &conn,
-                &mut pending_account_to_update,
+                pending_account_to_update,
                 &complete_registration_cmd,
             )?;
 
@@ -60,8 +59,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 username: msg.username.clone(),
                 host: msg.config.host,
             };
-            let new_account = Account::new();
-            let event = eventsourcing::execute(&conn, &mut new_account, &create_cmd)?;
+            let (new_account, event) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_accounts::dsl::kernel_accounts)
                 .values(&new_account)

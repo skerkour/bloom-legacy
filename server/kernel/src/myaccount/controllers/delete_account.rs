@@ -23,10 +23,12 @@ impl Handler<DeleteAccount> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let delete_account_cmd = account::Delete {};
+            let delete_account_cmd = account::Delete {
+                actor: msg.account.clone(),
+            };
 
             // just pass uuid
-            let _ = eventsourcing::execute(&conn, &mut msg.account, &delete_account_cmd)?;
+            let _ = eventsourcing::execute(&conn, msg.account, &delete_account_cmd)?;
 
             // update just deleted_at = chrono::Utc::now() or check that eventsourcing done that
             diesel::update(&msg.account)

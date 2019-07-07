@@ -82,7 +82,7 @@ pub struct AvatarUpdated {
 }
 
 impl Event for AvatarUpdated {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
