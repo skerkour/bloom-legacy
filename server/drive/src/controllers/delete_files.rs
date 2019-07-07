@@ -1,7 +1,7 @@
 use crate::{domain, domain::file, domain::profile};
 use actix::{Handler, Message};
 use diesel::{pg::types::sql_types, sql_query};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -22,19 +22,11 @@ impl Handler<DeleteFiles> for DbActor {
 
     fn handle(&mut self, msg: DeleteFiles, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            drive_files, drive_files_events, drive_profiles, drive_profiles_events,
-        };
+        use kernel::db::schema::{drive_files, drive_profiles};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.owner_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let mut space_freed = 0i64;
 
             for file_id in msg.files.into_iter() {
@@ -44,16 +36,11 @@ impl Handler<DeleteFiles> for DbActor {
                     .filter(drive_files::dsl::deleted_at.is_null())
                     .first(&conn)?;
 
-                let delete_cmd = file::Delete {
-                    metadata: metadata.clone(),
-                };
-                let (file_to_delete, event, _) =
+                let delete_cmd = file::Delete {};
+                let (file_to_delete, _) =
                     eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
                 diesel::update(&file_to_delete)
                     .set(&file_to_delete)
-                    .execute(&conn)?;
-                diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                    .values(&event)
                     .execute(&conn)?;
 
                 if file_to_delete.type_ == crate::FOLDER_TYPE {
@@ -70,23 +57,17 @@ impl Handler<DeleteFiles> for DbActor {
                             .filter(drive_files::dsl::deleted_at.is_null())
                             .first(&conn)?;
 
-                        let delete_cmd = file::Delete {
-                            metadata: metadata.clone(),
-                        };
+                        let delete_cmd = file::Delete {};
                         let (file_to_delete, event, _) =
                             eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
                         diesel::update(&file_to_delete)
                             .set(&file_to_delete)
-                            .execute(&conn)?;
-                        diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                            .values(&event)
                             .execute(&conn)?;
 
                         if file_to_delete.type_ != crate::FOLDER_TYPE {
                             // update profile
                             let space_cmd = profile::UpdateUsedSpace {
                                 space: -file_to_delete.size,
-                                metadata: metadata.clone(),
                             };
                             space_freed += file_to_delete.size;
                             let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
@@ -94,14 +75,11 @@ impl Handler<DeleteFiles> for DbActor {
                                 .filter(drive_profiles::dsl::deleted_at.is_null())
                                 .for_update()
                                 .first(&conn)?;
-                            let (drive_profile, event, _) =
+                            let (drive_profile, _) =
                                 eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
                             diesel::update(&drive_profile)
                                 .set(&drive_profile)
-                                .execute(&conn)?;
-                            diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
-                                .values(&event)
                                 .execute(&conn)?;
                         }
                     }
@@ -115,17 +93,13 @@ impl Handler<DeleteFiles> for DbActor {
                         .first(&conn)?;
                     let space_cmd = profile::UpdateUsedSpace {
                         space: -file_to_delete.size,
-                        metadata: metadata.clone(),
                     };
                     space_freed += file_to_delete.size;
-                    let (drive_profile, event, _) =
+                    let (drive_profile, _) =
                         eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
                     diesel::update(&drive_profile)
                         .set(&drive_profile)
-                        .execute(&conn)?;
-                    diesel::insert_into(drive_profiles_events::dsl::drive_profiles_events)
-                        .values(&event)
                         .execute(&conn)?;
                 }
             }

@@ -1,6 +1,6 @@
 use crate::{domain, domain::file, FOLDER_TYPE};
 use actix::{Handler, Message};
-use kernel::{db::DbActor, events::EventMetadata, KernelError};
+use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -21,7 +21,7 @@ impl Handler<CreateFolder> for DbActor {
 
     fn handle(&mut self, msg: CreateFolder, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{drive_files, drive_files_events};
+        use kernel::db::schema::drive_files;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -33,27 +33,16 @@ impl Handler<CreateFolder> for DbActor {
                 .filter(drive_files::dsl::trashed_at.is_null())
                 .first(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: Some(msg.owner_id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let create_cmd = file::Create {
                 name: msg.name,
                 type_: FOLDER_TYPE.to_string(),
                 size: 0,
                 parent_id: Some(parent.id),
                 owner_id: msg.owner_id,
-                metadata: metadata.clone(),
             };
-            let (new_folder, event, _) =
-                eventsourcing::execute(&conn, file::File::new(), &create_cmd)?;
+            let (new_folder, _) = eventsourcing::execute(&conn, file::File::new(), &create_cmd)?;
             diesel::insert_into(drive_files::dsl::drive_files)
                 .values(&new_folder)
-                .execute(&conn)?;
-            diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                .values(&event)
                 .execute(&conn)?;
 
             return Ok(new_folder);
