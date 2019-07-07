@@ -8,14 +8,7 @@ use diesel::{
 };
 
 #[derive(Clone, Debug)]
-pub struct SendNewCode {
-    pub metadata: EventMetadata,
-}
-
-#[derive(Clone, Debug)]
-pub struct SendNewCodeNonStored {
-    pub code: String,
-}
+pub struct SendNewCode {}
 
 impl eventsourcing::Command for SendNewCode {
     type Aggregate = pending_account::PendingAccount;
@@ -56,12 +49,29 @@ impl eventsourcing::Command for SendNewCode {
             code,
         });
 
-        return Ok(pending_account::Event {
-            id: uuid::Uuid::new_v4(),
+        return Ok(NewCodeSent {
             timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
+            token_hash,
+            code,
         });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NewCodeSent {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub token_hash: String,
+    pub code: String,
+}
+
+impl Event for NewCodeSent {
+    type Aggregate = pending_account::PendingAccount;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            token: data.token_hash.clone(),
+            ..aggregate
+        };
     }
 }

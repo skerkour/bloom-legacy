@@ -1,4 +1,4 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
+use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_account};
 use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -9,8 +9,8 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct FailVerification {}
 
-impl eventsourcing::Command for FailVerification {
-    type Aggregate = pending_email::PendingEmail;
+impl eventsourcing::Command for Fail {
+    type Aggregate = pending_account::PendingAccount;
     type Event = VerificationFailed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
@@ -39,7 +39,7 @@ pub struct VerificationFailed {
 }
 
 impl Event for VerificationFailed {
-    type Aggregate = pending_email::PendingEmail;
+    type Aggregate = pending_account::PendingAccount;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

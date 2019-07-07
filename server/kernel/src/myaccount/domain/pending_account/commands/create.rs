@@ -19,7 +19,7 @@ pub struct Create {
 
 impl eventsourcing::Command for Create {
     type Aggregate = pending_account::PendingAccount;
-    type Event = pending_account::Event;
+    type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -88,5 +88,39 @@ impl eventsourcing::Command for Create {
             aggregate_id: new_pending_account_id,
             metadata: self.metadata.clone(),
         });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub first_name: String,
+    pub last_name: String,
+    pub email: String,
+    pub password: String,
+    pub token: String,
+    pub code: String,
+}
+
+impl Event for Created {
+    type Aggregate = pending_account::PendingAccount;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: data.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            email: data.email.clone(),
+            first_name: data.first_name.clone(),
+            last_name: data.last_name.clone(),
+            password: data.password.clone(),
+            token: data.token.clone(),
+            trials: 0,
+            verified: false,
+        };
     }
 }
