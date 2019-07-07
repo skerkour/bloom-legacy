@@ -3,7 +3,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -13,15 +14,13 @@ pub struct Create {
     pub schedule: scan::ScanSchedule,
     pub target: String,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Create {
     type Aggregate = scan::Scan;
-    type Event = scan::Event;
+    type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -38,10 +37,10 @@ impl eventsourcing::Command for Create {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-        let data = scan::EventData::CreatedV1(scan::CreatedV1 {
-            id,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Created {
+            timestamp: chrono::Utc::now(),
+            id: uuid::Uuid::new_v4(),
             name: self.name.clone(),
             description: self.description.clone(),
             owner_id: self.owner_id,
@@ -49,16 +48,41 @@ impl eventsourcing::Command for Create {
             schedule: self.schedule.clone(),
             targets: vec![self.target.clone()],
         });
+    }
+}
 
-        return Ok((
-            scan::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Created {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub owner_id: uuid::Uuid,
+    pub name: String,
+    pub description: String,
+    pub profile: ScanProfile,
+    pub schedule: ScanSchedule,
+    pub targets: Vec<String>,
+}
+
+impl Event for Created {
+    type Aggregate = scan::Scan;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            name: self.name.clone(),
+            description: self.description.clone(),
+            findings: 0,
+            last: None,
+            profile: self.profile.clone(),
+            schedule: self.schedule.clone(),
+            state: scan::ScanState::Waiting,
+            targets: self.targets.clone(),
+            owner_id: self.owner_id,
+        };
     }
 }

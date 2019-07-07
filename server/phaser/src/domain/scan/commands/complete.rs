@@ -3,20 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Complete {
     pub findings: u64,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Complete {
     type Aggregate = scan::Scan;
-    type Event = scan::Event;
+    type Event = Completed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -34,20 +33,30 @@ impl eventsourcing::Command for Complete {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = scan::EventData::CompletedV1(scan::CompletedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Completed {
+            timestamp: chrono::Utc::now(),
             findings: self.findings,
         });
+    }
+}
 
-        return Ok((
-            scan::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Completed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub findings: u64,
+}
+
+impl Event for Completed {
+    type Aggregate = scan::Scan;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            state: scan::ScanState::Waiting,
+            last: Some(self.timestamp),
+            findings: self.findings as i64,
+            ..aggregate
+        };
     }
 }

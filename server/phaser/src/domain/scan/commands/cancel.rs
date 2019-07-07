@@ -3,19 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
-pub struct Cancel {
-    pub metadata: EventMetadata,
-}
+pub struct Cancel {}
 
 impl eventsourcing::Command for Cancel {
     type Aggregate = scan::Scan;
-    type Event = scan::Event;
+    type Event = Canceled;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,16 +33,26 @@ impl eventsourcing::Command for Cancel {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            scan::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: scan::EventData::CanceledV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Canceled {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Canceled {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Canceled {
+    type Aggregate = scan::Scan;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            state: scan::ScanState::Waiting,
+            ..aggregate
+        };
     }
 }
