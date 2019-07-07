@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateName {
     pub name: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateName {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = NameUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -41,20 +40,28 @@ impl eventsourcing::Command for UpdateName {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = download::EventData::NameUpdatedV1(download::NameUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(NameUpdated {
+            timestamp: chrono::Utc::now(),
             name: self.name.clone(),
         });
+    }
+}
 
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct NameUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub name: String,
+}
+
+impl Event for NameUpdated {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            name: self.name.clone(),
+            ..aggregate
+        };
     }
 }

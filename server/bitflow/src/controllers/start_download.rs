@@ -19,7 +19,7 @@ impl Handler<StartDownload> for DbActor {
 
     fn handle(&mut self, msg: StartDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads};
+        use kernel::db::schema::bitflow_downloads;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -31,7 +31,7 @@ impl Handler<StartDownload> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let start_cmd = domain::download::Start { };
+            let start_cmd = domain::download::Start {};
 
             let (download, _) = eventsourcing::execute(&conn, download, &start_cmd)?;
             diesel::update(&download).set(&download).execute(&conn)?;

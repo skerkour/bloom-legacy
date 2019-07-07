@@ -19,7 +19,7 @@ impl Handler<ClearHistory> for DbActor {
 
     fn handle(&mut self, msg: ClearHistory, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads};
+        use kernel::db::schema::bitflow_downloads;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -30,7 +30,7 @@ impl Handler<ClearHistory> for DbActor {
                 .filter(bitflow_downloads::dsl::removed_at.is_not_null())
                 .load(&conn)?;
 
-            let delete_cmd = domain::download::Delete { };
+            let delete_cmd = domain::download::Delete {};
 
             for download in history {
                 let (download, _) = eventsourcing::execute(&conn, download, &delete_cmd)?;

@@ -21,7 +21,7 @@ impl Handler<RemoveDownloads> for DbActor {
     fn handle(&mut self, msg: RemoveDownloads, _: &mut Self::Context) -> Self::Result {
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads};
+        use kernel::db::schema::bitflow_downloads;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -37,7 +37,7 @@ impl Handler<RemoveDownloads> for DbActor {
                 return Err(KernelError::NotFound("downloads not found".to_string()));
             }
 
-            let remove_cmd = domain::download::Remove { };
+            let remove_cmd = domain::download::Remove {};
 
             for download in downloads {
                 let (download, _) = eventsourcing::execute(&conn, download, &remove_cmd)?;

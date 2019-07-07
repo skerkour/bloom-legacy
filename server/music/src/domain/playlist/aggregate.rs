@@ -1,9 +1,19 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::{music_playlists, music_playlists_files};
 use serde::{Deserialize, Serialize};
-use eventsourcing::Aggregate;
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "music_playlists"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Playlist {
@@ -35,7 +45,6 @@ impl Playlist {
         };
     }
 }
-
 
 #[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
 #[table_name = "music_playlists_files"]

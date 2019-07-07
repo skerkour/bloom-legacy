@@ -3,20 +3,18 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Start {
-    pub metadata: EventMetadata,
-}
+pub struct Start {}
 
 impl eventsourcing::Command for Start {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = Started;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -46,16 +44,26 @@ impl eventsourcing::Command for Start {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: download::EventData::StartedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Started {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Started {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Started {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            status: download::DownloadStatus::Downloading,
+            ..aggregate
+        };
     }
 }

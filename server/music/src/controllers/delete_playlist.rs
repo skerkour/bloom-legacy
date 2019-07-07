@@ -25,7 +25,7 @@ impl Handler<DeletePlaylist> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let delete_cmd = playlist::Delete { };
+            let delete_cmd = playlist::Delete {};
 
             let playlist_to_update: Playlist = music_playlists::dsl::music_playlists
                 .filter(music_playlists::dsl::id.eq(msg.playlist_id))

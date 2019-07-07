@@ -20,7 +20,7 @@ impl Handler<FailDownload> for DbActor {
 
     fn handle(&mut self, msg: FailDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads};
+        use kernel::db::schema::bitflow_downloads;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 

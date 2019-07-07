@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Fail {
     pub error: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Fail {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = Failed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -41,20 +40,29 @@ impl eventsourcing::Command for Fail {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = download::EventData::FailedV1(download::FailedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Failed {
+            timestamp: chrono::Utc::now(),
             error: self.error.clone(),
         });
+    }
+}
 
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Failed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub error: String,
+}
+
+impl Event for Failed {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            error: Some(data.error.clone()),
+            status: download::DownloadStatus::Failed,
+            ..aggregate
+        };
     }
 }

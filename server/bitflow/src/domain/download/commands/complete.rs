@@ -4,7 +4,8 @@ use diesel::{
     PgConnection,
 };
 use drive::domain::file;
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use rusoto_s3::{CopyObjectRequest, S3};
 
 #[derive(Clone)]
@@ -13,15 +14,13 @@ pub struct Complete {
     pub s3_bucket: String,
     pub s3_client: rusoto_s3::S3Client,
     pub profile: domain::Profile,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Complete {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = Completed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -51,9 +50,9 @@ impl eventsourcing::Command for Complete {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::prelude::*;
-        use kernel::db::schema::{drive_files, drive_files_events};
+        use kernel::db::schema::drive_files;
 
         let files = self
             .data
@@ -70,13 +69,10 @@ impl eventsourcing::Command for Complete {
                     owner_id: aggregate.owner_id,
                     metadata: self.metadata.clone(),
                 };
-                let (uploaded_file, event, _) =
+                let (uploaded_file, _) =
                     eventsourcing::execute(ctx, file::File::new(), &upload_cmd)?;
                 diesel::insert_into(drive_files::dsl::drive_files)
                     .values(&uploaded_file)
-                    .execute(ctx)?;
-                diesel::insert_into(drive_files_events::dsl::drive_files_events)
-                    .values(&event)
                     .execute(ctx)?;
 
                 // copy s3 file
@@ -103,16 +99,28 @@ impl eventsourcing::Command for Complete {
             })
             .collect::<Result<Vec<uuid::Uuid>, KernelError>>()?;
 
-        let data = download::EventData::CompletedV1(download::CompletedV1 { files });
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        return Ok(Completed {
+            timestamp: chrono::Utc::now(),
+            files,
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Completed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub files: Vec<uuid::Uuid>,
+}
+
+impl Event for Completed {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            status: download::DownloadStatus::Success,
+            progress: 100,
+            ..aggregate
+        };
     }
 }

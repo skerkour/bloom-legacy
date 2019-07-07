@@ -20,7 +20,7 @@ impl Handler<CreatePlaylist> for DbActor {
 
     fn handle(&mut self, msg: CreatePlaylist, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{music_playlists};
+        use kernel::db::schema::music_playlists;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 

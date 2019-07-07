@@ -3,7 +3,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 use url::Url;
 
@@ -11,15 +12,13 @@ use url::Url;
 pub struct Queue {
     pub url: String,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Queue {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = Queued;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,9 +34,7 @@ impl eventsourcing::Command for Queue {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-
+    ) -> Result<Self::Event, Self::Error> {
         // todo: correct url type
         let parsed_url = Url::parse(&self.url)?;
         let url = match parsed_url.scheme() {
@@ -54,22 +51,43 @@ impl eventsourcing::Command for Queue {
             }
         };
 
-        let event_data = download::EventData::QueuedV1(download::QueuedV1 {
-            id,
+        return Ok(Queued {
+            timestamp: chrono::Utc::now(),
+            id: uuid::Uuid::new_v4(),
             owner_id: self.owner_id,
             name: self.url.clone(),
             url,
         });
+    }
+}
 
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Queued {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub owner_id: uuid::Uuid,
+    pub name: String,
+    pub url: downlaod::DownloadUrl,
+}
+
+impl Event for Failed {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            name: self.name.clone(),
+            url: self.url.clone(),
+            status: super::DownloadStatus::Queued,
+            progress: 0,
+            removed_at: None,
+            error: None,
+            owner_id: self.owner_id,
+        };
     }
 }

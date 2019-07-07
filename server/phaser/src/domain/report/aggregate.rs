@@ -4,11 +4,21 @@ use crate::{
 };
 use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
+use eventsourcing::Aggregate;
 use kernel::db::schema::phaser_reports;
 use serde::{Deserialize, Serialize};
-use eventsourcing::Aggregate;
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "phaser_reports"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Report {
