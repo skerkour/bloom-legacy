@@ -3,19 +3,16 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
-pub struct Delete {
-    pub metadata: EventMetadata,
-}
+pub struct Delete {}
 
 impl eventsourcing::Command for Delete {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Deleted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,18 +32,28 @@ impl eventsourcing::Command for Delete {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = file::EventData::DeletedV1;
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Deleted {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Deleted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Deleted {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            explicitly_trashed: false,
+            trashed_at: None,
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }

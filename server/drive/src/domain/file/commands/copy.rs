@@ -3,7 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use rusoto_s3::{CopyObjectRequest, S3Client, S3};
 
 #[derive(Clone)]
@@ -12,15 +12,13 @@ pub struct Copy_ {
     pub new_file: uuid::Uuid,
     pub s3_client: S3Client,
     pub s3_bucket: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Copy_ {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Copied;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     // TODO: check that to is owned by owner
     fn validate(
@@ -51,7 +49,7 @@ impl eventsourcing::Command for Copy_ {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let source_key = format!("drive/{}/{}", aggregate.owner_id, aggregate.id);
         let dest_key = format!("drive/{}/{}", aggregate.owner_id, self.new_file);
         let req = CopyObjectRequest {
@@ -67,21 +65,27 @@ impl eventsourcing::Command for Copy_ {
             .sync()
             .expect("Couldn't PUT object");
 
-        let event_data = file::EventData::CopiedV1(file::CopiedV1 {
+        return Ok(Copied {
+            timestamp: chrono::Utc::now(),
             to: self.to, // new parent
             new_file: self.new_file,
         });
+    }
+}
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Copied {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub to: uuid::Uuid, // new parent
+    pub new_file: uuid::Uuid,
+}
+
+impl Event for Copied {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return aggregate;
     }
 }
 

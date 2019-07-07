@@ -1,8 +1,10 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::drive_files;
 use serde::{Deserialize, Serialize};
 
 #[derive(
+    Aggregate,
     AsChangeset,
     Clone,
     Debug,
@@ -69,16 +71,6 @@ impl File {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for File {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 
