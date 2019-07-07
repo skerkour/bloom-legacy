@@ -21,14 +21,12 @@ impl Handler<RenamePlaylist> for DbActor {
 
     fn handle(&mut self, msg: RenamePlaylist, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{music_playlists};
+        use kernel::db::schema::music_playlists;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let rename_cmd = playlist::Rename {
-                name: msg.name,
-            };
+            let rename_cmd = playlist::Rename { name: msg.name };
 
             let playlist_to_update: Playlist = music_playlists::dsl::music_playlists
                 .filter(music_playlists::dsl::id.eq(msg.playlist_id))

@@ -21,14 +21,12 @@ impl Handler<RenameAlbum> for DbActor {
 
     fn handle(&mut self, msg: RenameAlbum, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{gallery_albums};
+        use kernel::db::schema::gallery_albums;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let rename_cmd = album::Rename {
-                name: msg.name,
-            };
+            let rename_cmd = album::Rename { name: msg.name };
 
             let album_to_update: Album = gallery_albums::dsl::gallery_albums
                 .filter(gallery_albums::dsl::id.eq(msg.album_id))
@@ -37,8 +35,7 @@ impl Handler<RenameAlbum> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (album_to_update, _) =
-                eventsourcing::execute(&conn, album_to_update, &rename_cmd)?;
+            let (album_to_update, _) = eventsourcing::execute(&conn, album_to_update, &rename_cmd)?;
             // update album
             diesel::update(&album_to_update)
                 .set(&album_to_update)

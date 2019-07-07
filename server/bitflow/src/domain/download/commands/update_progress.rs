@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UpdateProgress {
     pub progress: u32,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateProgress {
     type Aggregate = download::Download;
-    type Event = download::Event;
+    type Event = ProgressUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -47,20 +46,28 @@ impl eventsourcing::Command for UpdateProgress {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = download::EventData::ProgressUpdatedV1(download::ProgressUpdatedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(ProgressUpdated {
+            timestamp: chrono::Utc::now(),
             progress: self.progress,
         });
+    }
+}
 
-        return Ok((
-            download::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct ProgressUpdated {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub progress: u32,
+}
+
+impl Event for ProgressUpdated {
+    type Aggregate = download::Download;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            progress: data.progress as i32,
+            ..aggregate
+        };
     }
 }

@@ -6,8 +6,7 @@ use diesel::{
 use kernel::{events::EventMetadata, KernelError};
 
 #[derive(Clone, Debug)]
-pub struct Cancel {
-}
+pub struct Cancel {}
 
 impl eventsourcing::Command for Cancel {
     type Aggregate = report::Report;

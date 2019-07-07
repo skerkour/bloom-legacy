@@ -22,7 +22,7 @@ impl Handler<UpdateDownload> for DbActor {
 
     fn handle(&mut self, msg: UpdateDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{bitflow_downloads};
+        use kernel::db::schema::bitflow_downloads;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -56,9 +56,7 @@ impl Handler<UpdateDownload> for DbActor {
             // progress
             let download_to_update = match msg.progress {
                 Some(progress) if (progress as i32) != download_to_update.progress => {
-                    let update_progress_cmd = download::UpdateProgress {
-                        progress,
-                    };
+                    let update_progress_cmd = download::UpdateProgress { progress };
 
                     let (download_to_update, _) =
                         eventsourcing::execute(&conn, download_to_update, &update_progress_cmd)?;

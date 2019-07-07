@@ -1,9 +1,19 @@
 use diesel::Queryable;
+use eventsourcing::Aggregate;
 use kernel::db::schema::phaser_scans;
 use serde::{Deserialize, Serialize};
-use eventsourcing::Aggregate;
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "phaser_scans"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Scan {

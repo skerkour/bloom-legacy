@@ -1,10 +1,20 @@
 use diesel::Queryable;
 use diesel_as_jsonb::AsJsonb;
+use eventsourcing::Aggregate;
 use kernel::db::schema::bitflow_downloads;
 use serde::{Deserialize, Serialize};
-use eventsourcing::Aggregate;
 
-#[derive(Aggregate, AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "bitflow_downloads"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Download {

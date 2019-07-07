@@ -21,7 +21,7 @@ impl Handler<RemoveFilesFromAlbum> for DbActor {
 
     fn handle(&mut self, msg: RemoveFilesFromAlbum, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{gallery_albums};
+        use kernel::db::schema::gallery_albums;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 

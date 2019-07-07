@@ -1,12 +1,17 @@
 mod aggregate;
 mod commands;
-mod events;
 
 pub use aggregate::{
     CompleteData, CompleteDataFile, Download, DownloadStatus, DownloadUrl, DownloadUrlHttp,
     DownloadUrlTorrentMagnet,
 };
-pub use commands::{Complete, Delete, Fail, Queue, Remove, Start, UpdateName, UpdateProgress};
-pub use events::{
-    CompletedV1, Event, EventData, FailedV1, NameUpdatedV1, ProgressUpdatedV1, QueuedV1,
+pub use commands::{
+    complete::{Complete, Completed},
+    delete::{Delete, Deleted},
+    fail::{Fail, Failed},
+    queue::{Queue, Queued},
+    remove::{Remove, Removed},
+    start::{Start, Started},
+    update_name::{NameUpdated, UpdateName},
+    update_progress::{ProgressUpdated, UpdateProgress},
 };

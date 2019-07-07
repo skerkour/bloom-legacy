@@ -22,9 +22,7 @@ impl Handler<CompleteDownload> for DbActor {
 
     fn handle(&mut self, msg: CompleteDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{
-            bitflow_downloads, bitflow_profiles, drive_profiles,
-        };
+        use kernel::db::schema::{bitflow_downloads, bitflow_profiles, drive_profiles};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -59,11 +57,8 @@ impl Handler<CompleteDownload> for DbActor {
                 .filter(drive_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let space_cmd = drive::domain::profile::UpdateUsedSpace {
-                space: total_size,
-            };
-            let (drive_profile, _) =
-                eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
+            let space_cmd = drive::domain::profile::UpdateUsedSpace { space: total_size };
+            let (drive_profile, _) = eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
 
             diesel::update(&drive_profile)
                 .set(&drive_profile)

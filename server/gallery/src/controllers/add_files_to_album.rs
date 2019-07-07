@@ -21,7 +21,7 @@ impl Handler<AddFilesToAlbum> for DbActor {
 
     fn handle(&mut self, msg: AddFilesToAlbum, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{gallery_albums};
+        use kernel::db::schema::gallery_albums;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -38,8 +38,7 @@ impl Handler<AddFilesToAlbum> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (album_to_update, _) =
-                eventsourcing::execute(&conn, album_to_update, &add_cmd)?;
+            let (album_to_update, _) = eventsourcing::execute(&conn, album_to_update, &add_cmd)?;
             // update album
             diesel::update(&album_to_update)
                 .set(&album_to_update)

@@ -20,7 +20,7 @@ impl Handler<CreateAlbum> for DbActor {
 
     fn handle(&mut self, msg: CreateAlbum, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{gallery_albums};
+        use kernel::db::schema::gallery_albums;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
