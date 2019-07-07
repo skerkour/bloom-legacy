@@ -6,14 +6,13 @@ use diesel::{
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CompleteRegistration {
+pub struct Delete {
     pub id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
-impl eventsourcing::Command for CompleteRegistration {
+impl eventsourcing::Command for Delete {
     type Aggregate = pending_account::PendingAccount;
-    type Event = pending_account::Event;
+    type Event = Deleted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -43,12 +42,25 @@ impl eventsourcing::Command for CompleteRegistration {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        return Ok(pending_account::Event {
-            id: uuid::Uuid::new_v4(),
+        return Ok(Deleted {
             timestamp: chrono::Utc::now(),
-            data: pending_account::EventData::RegistrationCompletedV1,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
         });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Deleted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Deleted {
+    type Aggregate = session::Session;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }

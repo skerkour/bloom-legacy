@@ -37,30 +37,39 @@ impl eventsourcing::Command for Verify {
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
-        let data = if aggregate.trials + 1 >= 10 {
-            pending_account::EventData::VerificationFailedV1(
-                pending_account::VerificationFailedReason::TooManyTrials,
-            )
+        if aggregate.trials + 1 >= 10 {
+            return Err(KernelError::Validation(
+                pending_account::VerificationFailedReason::TooManyTrials.to_string(),
+            ));
         } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
             // verify given code
-            pending_account::EventData::VerificationFailedV1(
-                pending_account::VerificationFailedReason::CodeNotValid,
-            )
+            return Err(KernelError::Validation(
+                pending_account::VerificationFailedReason::CodeNotValid.to_string(),
+            ));
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            pending_account::EventData::VerificationFailedV1(
-                pending_account::VerificationFailedReason::CodeExpired,
-            )
-        } else {
-            pending_account::EventData::VerificationSucceededV1
-        };
+            return Err(KernelError::Validation(
+                pending_account::VerificationFailedReason::CodeExpired.to_string(),
+            ));
+        }
 
-        return Ok(pending_account::Event {
-            id: uuid::Uuid::new_v4(),
-            timestamp,
-            data,
-            aggregate_id: aggregate.id,
-            metadata,
-        });
+        return Ok(Verified { timestamp });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+pub struct Verified {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Verified {
+    type Aggregate = pending_account::PendingAccount;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            verified: true,
+            ..aggregate
+        };
     }
 }

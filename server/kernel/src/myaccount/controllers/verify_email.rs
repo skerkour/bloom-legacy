@@ -58,13 +58,13 @@ impl Handler<VerifyEmail> for DbActor {
                     Ok((pending_email_to_verify, event)) => pending_email_to_verify,
                     Err(err) => match err {
                         KernelError::Validation(msg) => {
-                            let fail_cmd = pending_email::Fail {};
-                            let (pending_email, _) = eventsourcing::execute(
+                            let fail_cmd = pending_email::FailVerification {};
+                            let (pending_email_to_verify, _) = eventsourcing::execute(
                                 &conn,
                                 pending_email_to_verify,
                                 &verify_cmd,
                             )?;
-                            pending_email
+                            pending_email_to_verify
                         }
                         _ => return Err(err),
                     },
