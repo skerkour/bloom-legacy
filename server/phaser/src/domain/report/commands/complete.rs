@@ -3,21 +3,20 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Complete {
     pub findings: report::Finding,
     pub total_findings: u64,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Complete {
     type Aggregate = report::Report;
-    type Event = report::Event;
+    type Event = Completed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,8 +34,8 @@ impl eventsourcing::Command for Complete {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = report::EventData::CompletedV1(report::CompletedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Completed {
             findings: vec![self.findings.clone()],
             high_level_findings: 0,
             information_findings: 0,
@@ -44,16 +43,35 @@ impl eventsourcing::Command for Complete {
             medium_level_findings: 0,
             total_findings: self.total_findings,
         });
+    }
+}
 
-        return Ok((
-            report::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Completed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub findings: Vec<Finding>,
+    pub high_level_findings: u64,
+    pub information_findings: u64,
+    pub low_level_findings: u64,
+    pub medium_level_findings: u64,
+    pub total_findings: u64,
+}
+
+impl Event for Deleted {
+    type Aggregate = report::Report;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            findings: Some(self.findings.clone()),
+            high_level_findings: self.high_level_findings as i64,
+            information_findings: self.information_findings as i64,
+            low_level_findings: self.low_level_findings as i64,
+            medium_level_findings: self.medium_level_findings as i64,
+            total_findings: self.total_findings as i64,
+            status: ReportStatus::Success,
+            completed_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }

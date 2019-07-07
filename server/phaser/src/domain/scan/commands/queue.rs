@@ -3,13 +3,13 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Queue {
     pub trigger: scan::ReportTrigger,
     pub report_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Queue {
@@ -37,21 +37,30 @@ impl eventsourcing::Command for Queue {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let data = scan::EventData::QueuedV1(scan::QueuedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Queued {
+            timestamp: chrono::Utc::now(),
             report_id: self.report_id,
             trigger: self.trigger.clone(),
         });
+    }
+}
 
-        return Ok((
-            scan::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Queued {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub trigger: scan::ReportTrigger,
+    pub report_id: uuid::Uuid,
+}
+
+impl Event for Queued {
+    type Aggregate = scan::Scan;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            state: scan::ScanState::Queued,
+            ..aggregate
+        };
     }
 }

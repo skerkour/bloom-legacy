@@ -94,3 +94,13 @@ impl Default for Report {
         Self::new()
     }
 }
+
+/*
+
+            // FailedV1
+            EventData::FailedV1(ref data) => Self::Aggregate {
+                status: ReportStatus::Failed,
+                error: Some(data.error.clone()),
+                ..aggregate
+            },
+*/

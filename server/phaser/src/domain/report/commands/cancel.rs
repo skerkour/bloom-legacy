@@ -3,17 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Cancel {}
 
 impl eventsourcing::Command for Cancel {
     type Aggregate = report::Report;
-    type Event = report::Event;
+    type Event = Canceled;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,16 +35,26 @@ impl eventsourcing::Command for Cancel {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            report::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: report::EventData::CanceledV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Canceled {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Canceled {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Deleted {
+    type Aggregate = report::Report;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            status: report::ReportStatus::Canceled,
+            ..aggregate
+        };
     }
 }

@@ -3,19 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
-pub struct Start {
-    pub metadata: EventMetadata,
-}
+pub struct Start {}
 
 impl eventsourcing::Command for Start {
     type Aggregate = report::Report;
-    type Event = report::Event;
+    type Event = Started;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -33,16 +31,27 @@ impl eventsourcing::Command for Start {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        return Ok((
-            report::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: report::EventData::StartedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Started {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Started {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Started {
+    type Aggregate = report::Report;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            started_at: Some(self.timestamp),
+            status: ReportStatus::Scanning,
+            ..aggregate
+        };
     }
 }

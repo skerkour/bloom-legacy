@@ -92,3 +92,36 @@ impl Default for Scan {
         Self::new()
     }
 }
+
+/*
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NameUpdatedV1 {
+    pub name: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct DescriptionUpdatedV1 {
+    pub description: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct ScheduleUpdatedV1 {
+    pub schedule: ScanSchedule,
+}
+
+ // NameUpdatedV1
+            EventData::NameUpdatedV1(ref data) => super::Scan {
+                name: data.name.clone(),
+                ..aggregate
+            },
+            // DescriptionUpdatedV1
+            EventData::DescriptionUpdatedV1(ref data) => super::Scan {
+                description: data.description.clone(),
+                ..aggregate
+            },
+            // ScheduleUpdatedV1
+            EventData::ScheduleUpdatedV1(ref data) => super::Scan {
+                schedule: data.schedule.clone(),
+                ..aggregate
+
+*/
