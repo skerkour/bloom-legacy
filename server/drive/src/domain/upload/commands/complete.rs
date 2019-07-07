@@ -3,8 +3,9 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use futures_fs::FsPool;
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use rusoto_s3::{PutObjectRequest, StreamingBody, S3};
 use std::fs;
 use std::io::Read;
@@ -14,15 +15,13 @@ pub struct Complete {
     pub s3_bucket: String,
     pub s3_client: rusoto_s3::S3Client,
     pub file_path: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Complete {
     type Aggregate = upload::Upload;
-    type Event = upload::Event;
+    type Event = Completed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -37,7 +36,7 @@ impl eventsourcing::Command for Complete {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         // get file metadata
 
         let file_metadata = fs::metadata(&self.file_path)?;
@@ -64,20 +63,31 @@ impl eventsourcing::Command for Complete {
             .sync()
             .expect("pahser: Couldn't PUT object");
 
-        let event_data = upload::EventData::CompletedV1(upload::CompletedV1 {
+        return Ok(Completed {
+            timestamp: chrono::Utc::now(),
             size: file_metadata.len() as i64,
             type_: content_type.to_string(),
         });
+    }
+}
 
-        return Ok((
-            upload::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Completed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub size: i64,
+    pub type_: String,
+}
+
+impl Event for Completed {
+    type Aggregate = upload::Upload;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            size: data.size,
+            type_: data.type_.clone(),
+            ..aggregate
+        };
     }
 }

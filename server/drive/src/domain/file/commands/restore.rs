@@ -3,19 +3,17 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
-pub struct Restore {
-    pub metadata: EventMetadata,
-}
+pub struct Restore {}
 
 impl eventsourcing::Command for Restore {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Restored;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -33,18 +31,27 @@ impl eventsourcing::Command for Restore {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = file::EventData::RestoredV1;
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Restored {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Restored {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Restored {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            explicitly_trashed: false,
+            trashed_at: None,
+            ..aggregate
+        };
     }
 }

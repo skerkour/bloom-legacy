@@ -3,20 +3,19 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Trash {
     pub explicitly_trashed: bool,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Trash {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Trashed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -36,20 +35,30 @@ impl eventsourcing::Command for Trash {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let event_data = file::EventData::TrashedV1(file::TrashedV1 {
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Trashed {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             explicitly_trashed: self.explicitly_trashed,
         });
+    }
+}
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Trashed {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub explicitly_trashed: bool,
+}
+
+impl Event for Trashed {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            explicitly_trashed: self.explicitly_trashed,
+            trashed_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }

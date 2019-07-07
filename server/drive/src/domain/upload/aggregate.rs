@@ -1,8 +1,19 @@
 use diesel::Queryable;
+use eventsour::Aggregate;
 use kernel::db::schema::drive_uploads;
 use serde::{Deserialize, Serialize};
 
-#[derive(AsChangeset, Clone, Debug, Deserialize, Identifiable, Insertable, Queryable, Serialize)]
+#[derive(
+    Aggregate,
+    AsChangeset,
+    Clone,
+    Debug,
+    Deserialize,
+    Identifiable,
+    Insertable,
+    Queryable,
+    Serialize,
+)]
 #[table_name = "drive_uploads"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Upload {
@@ -41,16 +52,6 @@ impl Upload {
 
             owner_id: uuid::Uuid::new_v4(),
         };
-    }
-}
-
-impl eventsourcing::Aggregate for Upload {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
     }
 }
 

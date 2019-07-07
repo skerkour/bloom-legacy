@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use futures::future::Future;
 use kernel::KernelError;
 use rusoto_core::Region;

@@ -3,22 +3,21 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct Start {
     pub file_name: String,
     pub parent_id: Option<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Start {
     type Aggregate = upload::Upload;
-    type Event = upload::Event;
+    type Event = Started;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,27 +34,45 @@ impl eventsourcing::Command for Start {
         &self,
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
-        let id = uuid::Uuid::new_v4();
-        let file_id = uuid::Uuid::new_v4();
-
-        let event_data = upload::EventData::StartedV1(upload::StartedV1 {
-            id,
+    ) -> Result<Self::Event, Self::Error> {
+        return Ok(Started {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             file_name: self.file_name.clone(),
-            file_id,
+            file_id: uuid::Uuid::new_v4(),
             parent_id: self.parent_id,
             owner_id: self.owner_id,
         });
+    }
+}
 
-        return Ok((
-            upload::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Started {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub file_name: String,
+    pub file_id: uuid::Uuid,
+    pub parent_id: Option<uuid::Uuid>,
+    pub owner_id: uuid::Uuid,
+}
+
+impl Event for Started {
+    type Aggregate = upload::Upload;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            id: self.id,
+            created_at: self.timestamp,
+            updated_at: self.timestamp,
+            deleted_at: None,
+            version: 0,
+            file_name: self.file_name.clone(),
+            file_id: self.file_id,
+            parent_id: self.parent_id,
+            size: 0,
+            type_: String::new(),
+            owner_id: self.owner_id,
+        };
     }
 }
