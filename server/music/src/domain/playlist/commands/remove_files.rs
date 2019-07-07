@@ -4,21 +4,20 @@ use diesel::{
     PgConnection,
 };
 use drive::domain::File;
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 
 #[derive(Clone, Debug)]
 pub struct RemoveFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for RemoveFiles {
     type Aggregate = playlist::Playlist;
-    type Event = playlist::Event;
+    type Event = FilesRemoved;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -61,7 +60,7 @@ impl eventsourcing::Command for RemoveFiles {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
         use kernel::db::schema::music_playlists_files;
@@ -72,19 +71,24 @@ impl eventsourcing::Command for RemoveFiles {
         )
         .execute(ctx)?;
 
-        let data = playlist::EventData::FilesRemovedV1(playlist::FilesRemovedV1 {
+        return Ok(FilesRemoved {
+            timestamp: chrono::Utc::now(),
             files: self.files.clone(),
         });
+    }
+}
 
-        return Ok((
-            playlist::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct FilesRemoved {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub files: Vec<uuid::Uuid>,
+}
+
+impl Event for FilesRemoved {
+    type Aggregate = playlist::Playlist;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return aggregate;
     }
 }

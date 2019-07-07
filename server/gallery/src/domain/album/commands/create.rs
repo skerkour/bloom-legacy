@@ -52,7 +52,7 @@ pub struct Created {
 }
 
 impl Event for Created {
-    type Aggregate = profile::Profile;
+    type Aggregate = album::Album;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

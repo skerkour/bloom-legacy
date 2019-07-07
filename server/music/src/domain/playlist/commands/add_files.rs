@@ -4,22 +4,21 @@ use diesel::{
     PgConnection,
 };
 use drive::domain::File;
-use kernel::{events::EventMetadata, KernelError};
+use eventsourcing::{Event, EventTs};
+use kernel::KernelError;
 use std::collections::HashSet;
 
 #[derive(Clone, Debug)]
 pub struct AddFiles {
     pub files: Vec<uuid::Uuid>,
     pub owner_id: uuid::Uuid,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for AddFiles {
     type Aggregate = playlist::Playlist;
-    type Event = playlist::Event;
+    type Event = FilesAdded;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -75,7 +74,7 @@ impl eventsourcing::Command for AddFiles {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::prelude::*;
         use kernel::db::schema::music_playlists_files::dsl::music_playlists_files;
 
@@ -93,19 +92,25 @@ impl eventsourcing::Command for AddFiles {
             .values(&files)
             .execute(ctx)?;
 
-        let data = playlist::EventData::FilesAddedV1(playlist::FilesAddedV1 {
+        return Ok(FilesAdded {
+            id: uuid::Uuid::new_v4(),
+            timestamp: chrono::Utc::now(),
             files: self.files.clone(),
         });
+    }
+}
 
-        return Ok((
-            playlist::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct FilesAdded {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub files: Vec<uuid::Uuid>,
+}
+
+impl Event for FilesAdded {
+    type Aggregate = playlist::Playlist;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return aggregate;
     }
 }
