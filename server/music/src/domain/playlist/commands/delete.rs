@@ -3,20 +3,18 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::{events::EventMetadata, KernelError};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Delete {
-    pub metadata: EventMetadata,
-}
+pub struct Delete {}
 
 impl eventsourcing::Command for Delete {
     type Aggregate = playlist::Playlist;
-    type Event = playlist::Event;
+    type Event = Deleted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -35,7 +33,7 @@ impl eventsourcing::Command for Delete {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
         use kernel::db::schema::{drive_files, music_playlists_files};
@@ -54,15 +52,25 @@ impl eventsourcing::Command for Delete {
         )
         .execute(ctx)?;
 
-        return Ok((
-            playlist::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: playlist::EventData::DeletedV1,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            (),
-        ));
+        return Ok(Deleted {
+            timestamp: chrono::Utc::now(),
+        });
+    }
+}
+
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Deleted {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+}
+
+impl Event for Created {
+    type Aggregate = playlist::Playlist;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }
