@@ -1,14 +1,13 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_account};
+use crate::{error::KernelError, myaccount::domain::pending_account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct Delete {
-    pub id: uuid::Uuid,
-}
+pub struct Delete {}
 
 impl eventsourcing::Command for Delete {
     type Aggregate = pending_account::PendingAccount;
@@ -55,7 +54,7 @@ pub struct Deleted {
 }
 
 impl Event for Deleted {
-    type Aggregate = session::Session;
+    type Aggregate = pending_account::PendingAccount;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

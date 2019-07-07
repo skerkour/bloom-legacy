@@ -1,22 +1,23 @@
 use crate::error::KernelError;
-use crate::{events::EventMetadata, myaccount::domain::pending_account};
+use crate::{myaccount::domain::pending_account};
 use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
     pub id: uuid::Uuid,
     pub code: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Verify {
     type Aggregate = pending_account::PendingAccount;
-    type Event = pending_account::Event;
+    type Event = Verified;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -33,7 +34,6 @@ impl eventsourcing::Command for Verify {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let metadata = self.metadata.clone();
         let timestamp = Utc::now();
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 

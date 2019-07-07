@@ -1,5 +1,5 @@
 use crate::error::KernelError;
-use crate::{db::DbActor, events::EventMetadata, myaccount::domain::account};
+use crate::{db::DbActor, myaccount::domain::account};
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 
@@ -23,14 +23,7 @@ impl Handler<DeleteAccount> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-            let delete_account_cmd = account::Delete {
-                metadata: metadata.clone(),
-            };
+            let delete_account_cmd = account::Delete {};
 
             // just pass uuid
             let _ = eventsourcing::execute(&conn, &mut msg.account, &delete_account_cmd)?;

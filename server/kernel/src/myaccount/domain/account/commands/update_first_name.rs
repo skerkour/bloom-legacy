@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount::domain::account, myaccount::validators,
+    error::KernelError, myaccount::domain::account, myaccount::validators,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -11,12 +11,11 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug)]
 pub struct UpdateFirstName {
     pub first_name: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for UpdateFirstName {
     type Aggregate = account::Account;
-    type Event = account::Event;
+    type Event = FirstNameUpdated;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 
@@ -35,16 +34,9 @@ impl eventsourcing::Command for UpdateFirstName {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let data = account::EventData::FirstNameUpdated(account::FirstNameUpdated {
-            first_name: self.first_name.clone(),
-        });
-
-        return Ok(account::Event {
-            id: uuid::Uuid::new_v4(),
+        return Ok(FirstNameUpdated {
             timestamp: chrono::Utc::now(),
-            data,
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
+            first_name: self.first_name.clone(),
         });
     }
 }

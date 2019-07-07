@@ -2,7 +2,6 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
-    events::EventMetadata,
     myaccount::domain::{account, session},
     myaccount::notifications::emails::send_password_reset,
 };
@@ -40,24 +39,13 @@ impl Handler<RequestPasswordReset> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let metadata = EventMetadata {
-                actor_id: Some(account_to_update.id),
-                request_id: Some(msg.request_id),
-                session_id: msg.session_id,
-            };
-            let request_password_reset_cmd = account::RequestPasswordReset { metadata };
-            let event =
-                eventsourcing::execute(&conn, &mut account_to_update, &request_password_reset_cmd)?;
+            let request_password_reset_cmd = account::RequestPasswordReset {};
+            let (account_to_update, event) =
+                eventsourcing::execute(&conn, account_to_update, &request_password_reset_cmd)?;
 
             diesel::update(&account_to_update)
                 .set(&account_to_update)
                 .execute(&conn)?;
-
-            let plaintext_token = if let session::EventData::StartedV1(ref data) = event.data {
-                data.plaintext_token.clone()
-            } else {
-                return Err(KernelError::Internal(String::new()));
-            };
 
             // send email
             // we can safely unwrap account.password_reset_id because it's set when applying the event to account
@@ -74,7 +62,7 @@ impl Handler<RequestPasswordReset> for DbActor {
                     .unwrap()
                     .to_string()
                     .as_str(),
-                &plaintext_token,
+                &event.plaintext_token,
             )
             .expect("error sending email");
 

@@ -1,4 +1,4 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::account};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,

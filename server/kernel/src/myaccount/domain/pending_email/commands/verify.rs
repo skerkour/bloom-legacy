@@ -1,22 +1,23 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
+use crate::{error::KernelError, myaccount::domain::pending_email};
 use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
     pub id: uuid::Uuid,
     pub code: String,
     pub email: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Verify {
     type Aggregate = pending_email::PendingEmail;
-    type Event = pending_email::Event;
+    type Event = Verified;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
 

@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount, myaccount::domain::account,
+    error::KernelError, myaccount, myaccount::domain::account,
     myaccount::validators,
 };
 use diesel::{
@@ -97,7 +97,7 @@ pub struct Created {
 }
 
 impl Event for Created {
-    type Aggregate = super::Account;
+    type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {

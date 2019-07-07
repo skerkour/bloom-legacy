@@ -1,7 +1,6 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    events::EventMetadata,
     myaccount::domain::{account, Account},
 };
 use actix::{Handler, Message};
@@ -30,19 +29,12 @@ impl Handler<UpdateAvatar> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let account_to_update = msg.account;
 
             let update_first_name_cmd = account::UpdateAvatar {
                 avatar: msg.avatar,
                 s3_bucket: msg.s3_bucket,
                 s3_base_url: msg.s3_base_url,
-                metadata: metadata.clone(),
             };
 
             let _ = eventsourcing::execute(

@@ -1,9 +1,11 @@
-use crate::{error::KernelError, events::EventMetadata, myaccount::domain::pending_email};
+use crate::{error::KernelError, myaccount::domain::pending_email};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Delete {}

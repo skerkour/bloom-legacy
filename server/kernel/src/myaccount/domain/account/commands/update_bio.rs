@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount::domain::account, myaccount::validators,
+    error::KernelError, myaccount::domain::account, myaccount::validators,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},

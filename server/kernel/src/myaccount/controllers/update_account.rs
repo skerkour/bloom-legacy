@@ -1,5 +1,5 @@
 use crate::error::KernelError;
-use crate::{db::DbActor, events::EventMetadata, myaccount::domain::account};
+use crate::{db::DbActor, myaccount::domain::account};
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 
@@ -27,12 +27,6 @@ impl Handler<UpdateAccount> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: Some(msg.account.id),
-                request_id: Some(msg.request_id),
-                session_id: Some(msg.session_id),
-            };
-
             let account_to_update = msg.account;
 
             // first_name
@@ -40,7 +34,6 @@ impl Handler<UpdateAccount> for DbActor {
                 if first_name != &account_to_update.first_name {
                     let update_first_name_cmd = account::UpdateFirstName {
                         first_name: first_name.to_string(),
-                        metadata: metadata.clone(),
                     };
 
                     let _ = eventsourcing::execute(
@@ -61,7 +54,6 @@ impl Handler<UpdateAccount> for DbActor {
                 if last_name != &account_to_update.last_name {
                     let update_last_name_cmd = account::UpdateLastName {
                         last_name: last_name.to_string(),
-                        metadata: metadata.clone(),
                     };
 
                     let _ = eventsourcing::execute(
@@ -82,7 +74,6 @@ impl Handler<UpdateAccount> for DbActor {
                 if bio != &account_to_update.bio {
                     let update_bio_cmd = account::UpdateBio {
                         bio: bio.to_string(),
-                        metadata: metadata.clone(),
                     };
 
                     let _ = eventsourcing::execute(&conn, &mut account_to_update, &update_bio_cmd)?;
@@ -99,7 +90,6 @@ impl Handler<UpdateAccount> for DbActor {
                 if display_name != &account_to_update.display_name {
                     let update_display_name_cmd = account::UpdateDisplayName {
                         display_name: display_name.to_string(),
-                        metadata: metadata.clone(),
                     };
 
                     let _ = eventsourcing::execute(

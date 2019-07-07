@@ -2,7 +2,6 @@ use crate::error::KernelError;
 use crate::{
     config::Config,
     db::DbActor,
-    events::EventMetadata,
     myaccount::domain::{pending_account, PendingAccount},
     myaccount::notifications::emails::send_account_verification_code,
 };
@@ -30,12 +29,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let metadata = EventMetadata {
-                actor_id: None,
-                request_id: Some(msg.request_id),
-                session_id: None,
-            };
-            let resend_code_cmd = pending_account::SendNewCode { metadata };
+            let resend_code_cmd = pending_account::SendNewCode { };
 
             let pending_account: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
@@ -44,18 +38,12 @@ impl Handler<SendNewVerificationCode> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let event = eventsourcing::execute(&conn, &mut pending_account, &resend_code_cmd)?;
+            let (pending_account, event) = eventsourcing::execute(&conn, pending_account, &resend_code_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account)
                 .set(&pending_account)
                 .execute(&conn)?;
-
-            let code = if let pending_account::EventData::NewCodeSentV1(ref data) = event.data {
-                data.code.clone()
-            } else {
-                return Err(KernelError::Internal(String::new()));
-            };
 
             let config = msg.config.clone();
             send_account_verification_code(
@@ -67,7 +55,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
                 )
                 .as_str(),
                 pending_account.id.to_string().as_str(),
-                &code,
+                &event.code,
             )
             .expect("error sending email");
 

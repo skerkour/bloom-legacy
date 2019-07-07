@@ -1,5 +1,5 @@
 use crate::{
-    error::KernelError, events::EventMetadata, myaccount, myaccount::domain::session, utils,
+    error::KernelError, myaccount, myaccount::domain::session, utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -7,6 +7,8 @@ use diesel::{
 };
 use rand::Rng;
 use serde::{Deserialize, Serialize};
+use eventsourcing::{Event, EventTs};
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Start {
@@ -78,16 +80,16 @@ impl Event for Started {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            id: data.id,
+            id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
             deleted_at: None,
             version: 0,
-            device: data.device.clone(),
-            ip: data.ip.clone(),
-            location: Some(data.location.clone()),
-            token: data.token.clone(),
-            account_id: data.account_id,
+            device: self.device.clone(),
+            ip: self.ip.clone(),
+            location: Some(self.location.clone()),
+            token: self.token.clone(),
+            account_id: self.account_id,
         };
     }
 }

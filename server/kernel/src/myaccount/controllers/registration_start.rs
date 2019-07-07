@@ -1,5 +1,5 @@
 use crate::{
-    config::Config, db::DbActor, error::KernelError, events::EventMetadata, myaccount::domain,
+    config::Config, db::DbActor, error::KernelError, myaccount::domain,
     myaccount::domain::pending_account,
     myaccount::notifications::emails::send_account_verification_code,
 };
@@ -31,32 +31,18 @@ impl Handler<StartRegistration> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let config = msg.config.clone();
 
-            let metadata = EventMetadata {
-                actor_id: None,
-                request_id: Some(msg.request_id),
-                session_id: None,
-            };
-
             let create_cmd = pending_account::Create {
                 first_name: msg.first_name.clone(),
                 last_name: msg.last_name.clone(),
                 email: msg.email.clone(),
                 password: msg.password.clone(),
                 config: msg.config.clone(),
-                metadata,
             };
-            let new_pending_account = pending_account::PendingAccount::new();
-            let event = eventsourcing::execute(&conn, &mut new_pending_account, &create_cmd)?;
+            let (new_pending_account, event) = eventsourcing::execute(&conn, pending_account::PendingAccount::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
                 .values(&new_pending_account)
                 .execute(&conn)?;
-
-            let code = if let pending_account::EventData::CreatedV1(ref data) = event.data {
-                data.code.clone()
-            } else {
-                return Err(KernelError::Internal(String::new()));
-            };
 
             send_account_verification_code(
                 &config,
@@ -67,7 +53,7 @@ impl Handler<StartRegistration> for DbActor {
                 )
                 .as_str(),
                 new_pending_account.id.to_string().as_str(),
-                &code,
+                &event.code,
             )
             .expect("error sending email");
 
