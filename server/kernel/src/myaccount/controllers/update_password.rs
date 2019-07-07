@@ -39,8 +39,8 @@ impl Handler<UpdatePassword> for DbActor {
                 config: msg.config,
             };
 
-            let (account_to_update, event, _) =
-                eventsourcing::execute(&conn, &mut account_to_update, &update_last_name_cmd)?;
+            let (account_to_update, _) =
+                eventsourcing::execute(&conn, account_to_update, &update_last_name_cmd)?;
 
             // update account
             diesel::update(&account_to_update)
@@ -61,7 +61,7 @@ impl Handler<UpdatePassword> for DbActor {
             };
 
             for session in sessions {
-                let _ = eventsourcing::execute(&conn, &mut session, &revoke_cmd)?;
+                let (session, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
                 diesel::update(&session).set(&session).execute(&conn)?;
             }

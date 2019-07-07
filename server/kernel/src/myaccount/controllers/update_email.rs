@@ -34,8 +34,8 @@ impl Handler<UpdateEmail> for DbActor {
                 account_id: msg.account.id,
                 config: msg.config.clone(),
             };
-            let new_pending_email = pending_email::PendingEmail::new();
-            let event = eventsourcing::execute(&conn, &mut new_pending_email, &create_cmd)?;
+            let (new_pending_email, event) =
+                eventsourcing::execute(&conn, pending_email::PendingEmail::new(), &create_cmd)?;
 
             diesel::insert_into(kernel_pending_emails::dsl::kernel_pending_emails)
                 .values(&new_pending_email)

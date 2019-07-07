@@ -1,6 +1,6 @@
 use crate::{
-    config::Config, error::KernelError, myaccount,
-    myaccount::domain::account, myaccount::validators,
+    config::Config, error::KernelError, myaccount, myaccount::domain::account,
+    myaccount::validators,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -55,7 +55,7 @@ impl eventsourcing::Command for UpdatePassword {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;

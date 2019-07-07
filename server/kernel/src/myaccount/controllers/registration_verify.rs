@@ -40,15 +40,15 @@ impl Handler<VerifyPendingAccount> for DbActor {
                     .first(&conn)?;
 
             let pending_account_to_verify =
-                match eventsourcing::execute(&conn, pending_account_to_verify, &verify_cmd) {
-                    Ok((pending_account_to_verify, event)) => pending_account_to_verify,
+                match eventsourcing::execute(&conn, pending_account_to_verify.clone(), &verify_cmd) {
+                    Ok((pending_account_to_verify, _)) => pending_account_to_verify,
                     Err(err) => match err {
-                        KernelError::Validation(msg) => {
+                        KernelError::Validation(_) => {
                             let fail_cmd = pending_account::FailVerification {};
                             let (pending_account_to_verify, _) = eventsourcing::execute(
                                 &conn,
                                 pending_account_to_verify,
-                                &verify_cmd,
+                                &fail_cmd,
                             )?;
                             pending_account_to_verify
                         }

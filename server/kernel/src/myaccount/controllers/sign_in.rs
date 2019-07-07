@@ -78,8 +78,7 @@ impl Handler<SignIn> for DbActor {
                 ip: msg.session_ip,
                 user_agent: "".to_string(), // TODO
             };
-            let new_session = Session::new();
-            let event = eventsourcing::execute(&conn, new_session, &start_cmd)?;
+            let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
             diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
                 .values(&new_session)

@@ -46,15 +46,15 @@ impl Handler<VerifyEmail> for DbActor {
             };
 
             let pending_email_to_verify =
-                match eventsourcing::execute(&conn, pending_email_to_verify, &verify_cmd) {
-                    Ok((pending_email_to_verify, event)) => pending_email_to_verify,
+                match eventsourcing::execute(&conn, pending_email_to_verify.clone(), &verify_cmd) {
+                    Ok((pending_email_to_verify, _)) => pending_email_to_verify,
                     Err(err) => match err {
-                        KernelError::Validation(msg) => {
+                        KernelError::Validation(_) => {
                             let fail_cmd = pending_email::FailVerification {};
                             let (pending_email_to_verify, _) = eventsourcing::execute(
                                 &conn,
                                 pending_email_to_verify,
-                                &verify_cmd,
+                                &fail_cmd,
                             )?;
                             pending_email_to_verify
                         }
@@ -91,8 +91,8 @@ impl Handler<VerifyEmail> for DbActor {
             let delete_cmd = pending_email::Delete {};
 
             for pending_email_to_delete in pending_emails_to_delete {
-                let (pending_email_to_delete, event, _) =
-                    eventsourcing::execute(&conn, &mut pending_email_to_delete, &delete_cmd)?;
+                let (pending_email_to_delete, _) =
+                    eventsourcing::execute(&conn, pending_email_to_delete, &delete_cmd)?;
                 diesel::update(&pending_email_to_delete)
                     .set(&pending_email_to_delete)
                     .execute(&conn)?;

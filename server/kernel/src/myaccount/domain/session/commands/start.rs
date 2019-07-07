@@ -1,14 +1,11 @@
-use crate::{
-    error::KernelError, myaccount, myaccount::domain::session, utils,
-};
+use crate::{error::KernelError, myaccount, myaccount::domain::session, utils};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use rand::Rng;
 use serde::{Deserialize, Serialize};
-use eventsourcing::{Event, EventTs};
-
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Start {
@@ -66,6 +63,7 @@ impl eventsourcing::Command for Start {
 // Event
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
 pub struct Started {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,
     pub account_id: uuid::Uuid,
     pub token_hash: String,
@@ -78,7 +76,7 @@ pub struct Started {
 impl Event for Started {
     type Aggregate = session::Session;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,
@@ -88,7 +86,7 @@ impl Event for Started {
             device: self.device.clone(),
             ip: self.ip.clone(),
             location: Some(self.location.clone()),
-            token: self.token.clone(),
+            token: self.token_hash.clone(),
             account_id: self.account_id,
         };
     }

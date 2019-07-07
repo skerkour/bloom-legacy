@@ -3,9 +3,8 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
-use serde::{Deserialize, Serialize};
 use eventsourcing::{Event, EventTs};
-
+use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Delete {}
@@ -32,7 +31,7 @@ impl eventsourcing::Command for Delete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Deleted {
             timestamp: chrono::Utc::now(),

@@ -38,7 +38,7 @@ impl eventsourcing::Command for Enable {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Enabled {
             timestamp: chrono::Utc::now(),
