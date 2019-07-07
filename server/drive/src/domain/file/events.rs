@@ -13,32 +13,8 @@ pub struct Event {
     pub metadata: EventMetadata,
 }
 
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub enum EventData {
-    UploadedV1(UploadedV1),
-    CreatedV1(CreatedV1),
-    DownloadedV1(DownloadedV1),
-    MovedV1(MovedV1),
-    TrashedV1(TrashedV1),
-    RestoredV1,
-    DeletedV1,
-    CopiedV1(CopiedV1),
-    RenamedV1(RenamedV1),
-}
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct UploadedV1 {
-    pub id: uuid::Uuid,
-    pub name: String,
-    pub parent_id: Option<uuid::Uuid>,
-    pub size: i64,
-    #[serde(rename = "type")]
-    pub type_: String, // MIME type
-    pub owner_id: uuid::Uuid,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct CreatedV1 {
     pub id: uuid::Uuid,
     pub name: String,
     pub parent_id: Option<uuid::Uuid>,
@@ -96,23 +72,6 @@ impl eventsourcing::Event for Event {
 
                 owner_id: data.owner_id,
             },
-            // CreatedV1
-            EventData::CreatedV1(ref data) => super::File {
-                id: data.id,
-                created_at: self.timestamp,
-                updated_at: self.timestamp,
-                deleted_at: None,
-                version: 0,
-
-                explicitly_trashed: false,
-                name: data.name.clone(),
-                parent_id: data.parent_id,
-                size: data.size,
-                type_: data.type_.clone(),
-                trashed_at: None,
-
-                owner_id: data.owner_id,
-            },
             // DownloadedV1
             EventData::DownloadedV1(_) => super::File { ..aggregate },
             // MovedV1
@@ -132,15 +91,7 @@ impl eventsourcing::Event for Event {
                 trashed_at: None,
                 ..aggregate
             },
-            // DeletedV1
-            EventData::DeletedV1 => super::File {
-                explicitly_trashed: false,
-                trashed_at: None,
-                deleted_at: Some(self.timestamp),
-                ..aggregate
-            },
             // CopiedV1
-            EventData::CopiedV1(_) => super::File { ..aggregate },
             // RenamedV1
             EventData::RenamedV1(ref data) => super::File {
                 name: data.name.clone(),

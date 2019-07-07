@@ -4,7 +4,7 @@ use diesel::{
     PgConnection,
 };
 use futures::future::Future;
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use rusoto_core::Region;
 use rusoto_credential::{EnvironmentProvider, ProvideAwsCredentials};
 use rusoto_s3::{util::PreSignedRequest, GetObjectRequest};
@@ -16,15 +16,13 @@ pub struct Download {
     pub owner_id: uuid::Uuid,
     pub s3_bucket: String,
     pub s3_region: String,
-    pub metadata: EventMetadata,
 }
 
 impl eventsourcing::Command for Download {
     type Aggregate = file::File;
-    type Event = file::Event;
+    type Event = Downloaded;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = String;
 
     fn validate(
         &self,
@@ -43,7 +41,7 @@ impl eventsourcing::Command for Download {
         &self,
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         let key = format!("drive/{}/{}", self.owner_id, self.file_id);
         let req = GetObjectRequest {
             bucket: self.s3_bucket.clone(),
@@ -63,19 +61,29 @@ impl eventsourcing::Command for Download {
             .expect("error getting default credentials");
         let presigned_url = req.get_presigned_url(&region, &credentials, &Default::default());
 
-        let event_data = file::EventData::DownloadedV1(file::DownloadedV1 {
+        return Ok(Downloaded {
+            timestamp: chrono::Utc::now(),
             presigned_url: presigned_url.clone(),
-        });;
+        });
+    }
+}
 
-        return Ok((
-            file::Event {
-                id: uuid::Uuid::new_v4(),
-                timestamp: chrono::Utc::now(),
-                data: event_data,
-                aggregate_id: aggregate.id,
-                metadata: self.metadata.clone(),
-            },
-            presigned_url,
-        ));
+// Event
+#[derive(Clone, Debug, EventTs)]
+pub struct Downloaded {
+    pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub presigned_url: String,
+}
+
+impl Event for Deleted {
+    type Aggregate = file::File;
+
+    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+        return Self::Aggregate {
+            explicitly_trashed: false,
+            trashed_at: None,
+            deleted_at: Some(self.timestamp),
+            ..aggregate
+        };
     }
 }
