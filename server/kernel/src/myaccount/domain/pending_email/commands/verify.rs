@@ -69,7 +69,9 @@ impl eventsourcing::Command for Verify {
             ));
         }
 
-        return Ok(Verified { timestamp: chrono::Utc::now() });
+        return Ok(Verified {
+            timestamp: chrono::Utc::now(),
+        });
     }
 }
 
