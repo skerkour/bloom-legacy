@@ -79,29 +79,29 @@ impl Event for Deleted {
     }
 }
 
-#[cfg(test)]
-mod test {
-    use super::*;
-    use std::env;
-    use std::path::Path;
+// #[cfg(test)]
+// mod test {
+//     use super::*;
+//     use std::env;
+//     use std::path::Path;
 
-    #[test]
-    fn test_account_deleted_v1() {
-        env::set_current_dir(Path::new(".."))
-            .expect("changing directory for correct config file path");
-        let cfg = crate::config::init();
-        let db_actor_addr = crate::db::get_pool_db_conn(&cfg);
+//     #[test]
+//     fn test_account_deleted_v1() {
+//         env::set_current_dir(Path::new(".."))
+//             .expect("changing directory for correct config file path");
+//         let cfg = crate::config::init();
+//         let db_actor_addr = crate::db::get_pool_db_conn(&cfg);
 
-        let conn = db_actor_addr.get().unwrap();
-        let mut account_to_delete = account::Account::new();
-        account_to_delete.username = crate::utils::random_hex_string(10);
-        let delete_account_cmd = account::Delete {};
-        assert!(account_to_delete.deleted_at.is_none());
+//         let conn = db_actor_addr.get().unwrap();
+//         let mut account_to_delete = account::Account::new();
+//         account_to_delete.username = crate::utils::random_hex_string(10);
+//         let delete_account_cmd = account::Delete {};
+//         assert!(account_to_delete.deleted_at.is_none());
 
-        let (account_to_delete, _event) =
-            eventsourcing::execute(&conn, account_to_delete, &delete_account_cmd)
-                .expect("error executing delete account command");
+//         let (account_to_delete, _event) =
+//             eventsourcing::execute(&conn, account_to_delete, &delete_account_cmd)
+//                 .expect("error executing delete account command");
 
-        assert!(account_to_delete.deleted_at.is_some());
-    }
-}
+//         assert!(account_to_delete.deleted_at.is_some());
+//     }
+// }
