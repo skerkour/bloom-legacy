@@ -22,10 +22,21 @@ pub fn put(
     let request_id = req.request_id().0;
     let mut rng = rand::thread_rng();
     let config = state.config.clone();
+    let connection_info = req.connection_info();
+    let remote = connection_info.remote();
 
     let session_id = match auth.session {
         Some(ref session) => Some(session.id),
         None => None,
+    };
+
+    let ip = match remote {
+        Some(ref remote) => remote
+            .split(':')
+            .nth(0)
+            .expect("Error accessing session ip")
+            .to_string(),
+        _ => "".to_string(),
     };
 
     // random sleep to prevent bruteforce and sidechannels attacks
@@ -42,6 +53,7 @@ pub fn put(
                     config,
                     request_id,
                     session_id,
+                    ip,
                 })
                 .flatten()
         })

@@ -21,6 +21,8 @@ pub fn post(
     let config = state.config.clone();
     let request_id = req.request_id().0;
     let auth = req.request_auth();
+    let connection_info = req.connection_info();
+    let remote = connection_info.remote();
 
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
         return Either::A(ok(KernelError::Unauthorized(
@@ -28,6 +30,15 @@ pub fn post(
         )
         .error_response()));
     }
+
+    let ip = match remote {
+        Some(ref remote) => remote
+            .split(':')
+            .nth(0)
+            .expect("Error accessing session ip")
+            .to_string(),
+        _ => "".to_string(),
+    };
 
     // random sleep to prevent bruteforce and sidechannels attacks
     return Either::B(
@@ -42,6 +53,7 @@ pub fn post(
                         username: registration_data.username.clone(),
                         config,
                         request_id,
+                        ip,
                     })
                     .flatten()
             })
