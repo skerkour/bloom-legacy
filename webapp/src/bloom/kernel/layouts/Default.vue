@@ -6,7 +6,7 @@
       clipped
       app
       width="250"
-      v-if="display_drawer">
+      v-if="display_drawer && drawer">
 
       <v-img class="hidden-lg-and-up pointer" :aspect-ratio="16/6"
       @click="goto('/myaccount'); drawer = false"
