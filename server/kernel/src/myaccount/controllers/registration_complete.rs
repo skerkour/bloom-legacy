@@ -12,6 +12,7 @@ pub struct CompleteRegistration {
     pub id: uuid::Uuid,
     pub username: String,
     pub config: Config,
+    pub ip: String,
     pub request_id: uuid::Uuid,
 }
 
@@ -69,8 +70,8 @@ impl Handler<CompleteRegistration> for DbActor {
             // start Session
             let start_cmd = session::Start {
                 account_id: new_account.id,
-                ip: "127.0.0.1".to_string(), // TODO
-                user_agent: "".to_string(),  // TODO
+                ip: msg.ip,
+                user_agent: "".to_string(), // TODO
             };
 
             let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;

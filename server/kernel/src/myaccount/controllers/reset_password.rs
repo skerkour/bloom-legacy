@@ -14,6 +14,7 @@ pub struct ResetPassword {
     pub new_password: String,
     pub config: Config,
     pub request_id: uuid::Uuid,
+    pub ip: String,
     pub session_id: Option<uuid::Uuid>,
 }
 
@@ -69,8 +70,8 @@ impl Handler<ResetPassword> for DbActor {
             // start new session
             let start_cmd = session::Start {
                 account_id: account.id,
-                ip: "127.0.0.1".to_string(), // TODO
-                user_agent: "".to_string(),  // TODO
+                ip: msg.ip,                 // TODO
+                user_agent: "".to_string(), // TODO
             };
             let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
