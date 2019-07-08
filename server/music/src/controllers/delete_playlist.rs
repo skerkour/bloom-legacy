@@ -20,7 +20,7 @@ impl Handler<DeletePlaylist> for DbActor {
 
     fn handle(&mut self, msg: DeletePlaylist, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{music_playlists, music_playlists_events};
+        use kernel::db::schema::music_playlists;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 

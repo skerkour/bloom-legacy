@@ -33,7 +33,7 @@ impl eventsourcing::Command for Delete {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;
         use kernel::db::schema::{drive_files, gallery_albums_files};

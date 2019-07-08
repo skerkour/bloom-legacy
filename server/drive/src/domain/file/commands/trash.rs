@@ -34,10 +34,9 @@ impl eventsourcing::Command for Trash {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Trashed {
-            id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             explicitly_trashed: self.explicitly_trashed,
         });

@@ -59,15 +59,15 @@ pub struct Created {
     pub owner_id: uuid::Uuid,
     pub name: String,
     pub description: String,
-    pub profile: ScanProfile,
-    pub schedule: ScanSchedule,
+    pub profile: scan::ScanProfile,
+    pub schedule: scan::ScanSchedule,
     pub targets: Vec<String>,
 }
 
 impl Event for Created {
     type Aggregate = scan::Scan;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,

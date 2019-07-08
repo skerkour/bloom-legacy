@@ -33,13 +33,11 @@ impl eventsourcing::Command for UpdateFirstName {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(FirstNameUpdated {
             timestamp: chrono::Utc::now(),
             first_name: self.first_name.clone(),
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
         });
     }
 }

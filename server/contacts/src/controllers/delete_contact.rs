@@ -25,7 +25,7 @@ impl Handler<DeleteConatct> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
-            let delete_cmd = contact::Delete { metadata };
+            let delete_cmd = contact::Delete {};
 
             let contact_to_update: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))

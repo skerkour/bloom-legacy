@@ -17,7 +17,7 @@ impl Message for StartDownload {
 impl Handler<StartDownload> for DbActor {
     type Result = Result<domain::Download, KernelError>;
 
-    fn handle(&mut self, msg: StartDownload, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, _msg: StartDownload, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
         use kernel::db::schema::bitflow_downloads;
 

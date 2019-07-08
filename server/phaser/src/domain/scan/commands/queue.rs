@@ -14,10 +14,9 @@ pub struct Queue {
 
 impl eventsourcing::Command for Queue {
     type Aggregate = scan::Scan;
-    type Event = scan::Event;
+    type Event = Queued;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,
@@ -36,7 +35,7 @@ impl eventsourcing::Command for Queue {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Queued {
             timestamp: chrono::Utc::now(),

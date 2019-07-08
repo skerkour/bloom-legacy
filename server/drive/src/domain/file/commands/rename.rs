@@ -36,7 +36,7 @@ impl eventsourcing::Command for Rename {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Renamed {
             timestamp: chrono::Utc::now(),

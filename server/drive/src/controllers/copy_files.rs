@@ -55,8 +55,7 @@ impl Handler<CopyFiles> for DbActor {
                     s3_client: msg.s3_client.clone(),
                     s3_bucket: msg.s3_bucket.clone(),
                 };
-                let (file_to_copy, event, _) =
-                    eventsourcing::execute(&conn, file_to_copy, &copy_cmd)?;
+                let (file_to_copy, _) = eventsourcing::execute(&conn, file_to_copy, &copy_cmd)?;
                 diesel::update(&file_to_copy)
                     .set(&file_to_copy)
                     .execute(&conn)?;

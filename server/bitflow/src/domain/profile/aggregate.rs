@@ -44,16 +44,6 @@ impl Profile {
     }
 }
 
-impl eventsourcing::Aggregate for Profile {
-    fn increment_version(&mut self) {
-        self.version += 1;
-    }
-
-    fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
-        self.updated_at = timestamp;
-    }
-}
-
 impl Default for Profile {
     fn default() -> Self {
         Self::new()

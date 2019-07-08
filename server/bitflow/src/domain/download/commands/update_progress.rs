@@ -45,7 +45,7 @@ impl eventsourcing::Command for UpdateProgress {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(ProgressUpdated {
             timestamp: chrono::Utc::now(),
@@ -66,7 +66,7 @@ impl Event for ProgressUpdated {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            progress: data.progress as i32,
+            progress: self.progress as i32,
             ..aggregate
         };
     }

@@ -75,7 +75,7 @@ impl eventsourcing::Command for AddFiles {
         &self,
         ctx: &Self::Context,
         aggregate: &Self::Aggregate,
-    ) -> Result<(Self::Event, Self::NonStoredData), Self::Error> {
+    ) -> Result<Self::Event, Self::Error> {
         use diesel::prelude::*;
         use kernel::db::schema::gallery_albums_files::dsl::gallery_albums_files;
 
@@ -94,7 +94,6 @@ impl eventsourcing::Command for AddFiles {
             .execute(ctx)?;
 
         return Ok(FilesAdded {
-            id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             files: self.files.clone(),
         });

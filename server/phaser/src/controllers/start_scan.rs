@@ -17,7 +17,7 @@ impl Message for StartScan {
 impl Handler<StartScan> for DbActor {
     type Result = Result<domain::Report, KernelError>;
 
-    fn handle(&mut self, msg: StartScan, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, _msg: StartScan, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
         use kernel::db::schema::{phaser_reports, phaser_scans};
 

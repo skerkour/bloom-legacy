@@ -39,7 +39,7 @@ impl eventsourcing::Command for UpdateName {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(NameUpdated {
             timestamp: chrono::Utc::now(),

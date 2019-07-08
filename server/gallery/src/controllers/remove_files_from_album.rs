@@ -38,8 +38,7 @@ impl Handler<RemoveFilesFromAlbum> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let (album_to_update, event, _) =
-                eventsourcing::execute(&conn, album_to_update, &remove_cmd)?;
+            let (album_to_update, _) = eventsourcing::execute(&conn, album_to_update, &remove_cmd)?;
             // update album
             diesel::update(&album_to_update)
                 .set(&album_to_update)

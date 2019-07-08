@@ -4,7 +4,7 @@ use diesel::{
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-use kernel::{events::EventMetadata, KernelError};
+use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -64,7 +64,7 @@ pub struct Deleted {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-impl Event for Created {
+impl Event for Deleted {
     type Aggregate = playlist::Playlist;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {

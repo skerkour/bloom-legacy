@@ -49,7 +49,7 @@ impl Handler<CancelScan> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let cancel_cmd = report::Cancel { metadata };
+            let cancel_cmd = report::Cancel {};
             let (cancelped_report, _) =
                 eventsourcing::execute(&conn, report_to_cancel, &cancel_cmd)?;
 

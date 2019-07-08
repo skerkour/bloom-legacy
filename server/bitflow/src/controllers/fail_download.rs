@@ -30,10 +30,7 @@ impl Handler<FailDownload> for DbActor {
                 .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
-            let fail_cmd = domain::download::Fail {
-                error: msg.error,
-                metadata,
-            };
+            let fail_cmd = domain::download::Fail { error: msg.error };
 
             let (download, _) = eventsourcing::execute(&conn, download, &fail_cmd)?;
             diesel::update(&download).set(&download).execute(&conn)?;

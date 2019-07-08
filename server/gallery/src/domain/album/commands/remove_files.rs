@@ -59,7 +59,7 @@ impl eventsourcing::Command for RemoveFiles {
     fn build_event(
         &self,
         ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         use diesel::pg::expression::dsl::any;
         use diesel::prelude::*;

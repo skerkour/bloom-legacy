@@ -29,7 +29,6 @@ impl Handler<RemoveFilesFromPlaylist> for DbActor {
             let remove_cmd = playlist::RemoveFiles {
                 files: msg.files.clone(),
                 owner_id: msg.account_id,
-                metadata,
             };
 
             let playlist_to_update: Playlist = music_playlists::dsl::music_playlists

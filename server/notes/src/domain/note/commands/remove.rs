@@ -56,7 +56,7 @@ impl Event for Removed {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             removed_at: Some(self.timestamp),
-            ..Aggregate
+            ..aggregate
         };
     }
 }
