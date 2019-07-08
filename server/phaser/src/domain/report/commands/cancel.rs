@@ -34,7 +34,7 @@ impl eventsourcing::Command for Cancel {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Canceled {
             timestamp: chrono::Utc::now(),
@@ -48,7 +48,7 @@ pub struct Canceled {
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 
-impl Event for Deleted {
+impl Event for Canceled {
     type Aggregate = report::Report;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {

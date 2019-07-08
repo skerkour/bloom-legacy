@@ -28,7 +28,7 @@ impl eventsourcing::Command for UpdateUsedSpace {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(UsedSpaceUpdated {
             timestamp: chrono::Utc::now(),

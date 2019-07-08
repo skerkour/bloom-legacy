@@ -6,6 +6,6 @@ pub use commands::{
     add_files::{AddFiles, FilesAdded},
     create::{Create, Created},
     delete::{Delete, Deleted},
-    remove_file::{FilesRemoved, RemoveFiles},
+    remove_files::{FilesRemoved, RemoveFiles},
     rename::{Rename, Renamed},
 };

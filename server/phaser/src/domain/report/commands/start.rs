@@ -30,7 +30,7 @@ impl eventsourcing::Command for Start {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Started {
             timestamp: chrono::Utc::now(),
@@ -50,7 +50,7 @@ impl Event for Started {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             started_at: Some(self.timestamp),
-            status: ReportStatus::Scanning,
+            status: report::ReportStatus::Scanning,
             ..aggregate
         };
     }

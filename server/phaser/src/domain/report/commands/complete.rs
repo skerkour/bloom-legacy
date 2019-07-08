@@ -33,9 +33,10 @@ impl eventsourcing::Command for Complete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Completed {
+            timestamp: chrono::Utc::now(),
             findings: vec![self.findings.clone()],
             high_level_findings: 0,
             information_findings: 0,
@@ -50,7 +51,7 @@ impl eventsourcing::Command for Complete {
 #[derive(Clone, Debug, EventTs)]
 pub struct Completed {
     pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub findings: Vec<Finding>,
+    pub findings: Vec<report::Finding>,
     pub high_level_findings: u64,
     pub information_findings: u64,
     pub low_level_findings: u64,
@@ -58,7 +59,7 @@ pub struct Completed {
     pub total_findings: u64,
 }
 
-impl Event for Deleted {
+impl Event for Completed {
     type Aggregate = report::Report;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {

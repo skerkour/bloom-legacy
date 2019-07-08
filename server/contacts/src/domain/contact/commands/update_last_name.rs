@@ -33,7 +33,7 @@ impl eventsourcing::Command for UpdateLastName {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(LastNameUpdated {
             timestamp: chrono::Utc::now(),

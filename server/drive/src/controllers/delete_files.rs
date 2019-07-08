@@ -58,7 +58,7 @@ impl Handler<DeleteFiles> for DbActor {
                             .first(&conn)?;
 
                         let delete_cmd = file::Delete {};
-                        let (file_to_delete, event, _) =
+                        let (file_to_delete, _) =
                             eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
                         diesel::update(&file_to_delete)
                             .set(&file_to_delete)

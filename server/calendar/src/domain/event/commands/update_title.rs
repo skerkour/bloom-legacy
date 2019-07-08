@@ -35,13 +35,11 @@ impl eventsourcing::Command for UpdateTitle {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(TitleUpdated {
             timestamp: chrono::Utc::now(),
             title: self.title.clone(),
-            aggregate_id: aggregate.id,
-            metadata: self.metadata.clone(),
         });
     }
 }

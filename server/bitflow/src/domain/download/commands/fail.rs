@@ -39,7 +39,7 @@ impl eventsourcing::Command for Fail {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Failed {
             timestamp: chrono::Utc::now(),
@@ -60,7 +60,7 @@ impl Event for Failed {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            error: Some(data.error.clone()),
+            error: Some(self.error.clone()),
             status: download::DownloadStatus::Failed,
             ..aggregate
         };

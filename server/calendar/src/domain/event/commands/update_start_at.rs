@@ -35,7 +35,7 @@ impl eventsourcing::Command for UpdateStartAt {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(StartAtUpdated {
             timestamp: chrono::Utc::now(),

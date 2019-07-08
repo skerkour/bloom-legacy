@@ -35,7 +35,7 @@ impl eventsourcing::Command for UpdateDescription {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(DescriptionUpdated {
             timestamp: chrono::Utc::now(),

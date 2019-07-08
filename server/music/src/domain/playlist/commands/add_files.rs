@@ -93,7 +93,6 @@ impl eventsourcing::Command for AddFiles {
             .execute(ctx)?;
 
         return Ok(FilesAdded {
-            id: uuid::Uuid::new_v4(),
             timestamp: chrono::Utc::now(),
             files: self.files.clone(),
         });

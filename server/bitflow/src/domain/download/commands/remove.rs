@@ -3,6 +3,7 @@ use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
+use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
 use serde::{Deserialize, Serialize};
 
@@ -36,7 +37,7 @@ impl eventsourcing::Command for Remove {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Removed {
             timestamp: chrono::Utc::now(),
@@ -64,7 +65,7 @@ impl Event for Removed {
         return Self::Aggregate {
             removed_at: Some(self.timestamp),
             status,
-            ..aggregate..aggregate
+            ..aggregate
         };
     }
 }

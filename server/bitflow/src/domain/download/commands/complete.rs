@@ -67,7 +67,6 @@ impl eventsourcing::Command for Complete {
                     size: file.size as i64,
                     type_: file.type_.clone(),
                     owner_id: aggregate.owner_id,
-                    metadata: self.metadata.clone(),
                 };
                 let (uploaded_file, _) =
                     eventsourcing::execute(ctx, file::File::new(), &upload_cmd)?;

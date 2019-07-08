@@ -30,7 +30,7 @@ impl eventsourcing::Command for Rename {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Renamed {
             timestamp: chrono::Utc::now(),
@@ -51,7 +51,7 @@ impl Event for Renamed {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            name: data.name.clone(),
+            name: self.name.clone(),
             ..aggregate
         };
     }

@@ -33,7 +33,7 @@ impl eventsourcing::Command for UpdateEmails {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(EmailsUpdated {
             timestamp: chrono::Utc::now(),
@@ -46,7 +46,7 @@ impl eventsourcing::Command for UpdateEmails {
 #[derive(Clone, Debug, EventTs)]
 pub struct EmailsUpdated {
     pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub emails: Vec<super::Email>,
+    pub emails: Vec<contact::Email>,
 }
 
 impl Event for EmailsUpdated {

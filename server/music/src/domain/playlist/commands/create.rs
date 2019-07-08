@@ -54,7 +54,7 @@ pub struct Created {
 impl Event for Created {
     type Aggregate = playlist::Playlist;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,

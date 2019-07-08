@@ -51,7 +51,7 @@ impl eventsourcing::Command for Move {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Moved {
             timestamp: chrono::Utc::now(),

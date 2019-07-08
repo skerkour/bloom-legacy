@@ -34,7 +34,7 @@ impl eventsourcing::Command for Unarchive {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Unarchived {
             timestamp: chrono::Utc::now(),
@@ -54,7 +54,7 @@ impl Event for Unarchived {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             archived_at: None,
-            ..Aggregate
+            ..aggregate
         };
     }
 }

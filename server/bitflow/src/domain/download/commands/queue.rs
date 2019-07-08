@@ -68,13 +68,13 @@ pub struct Queued {
     pub id: uuid::Uuid,
     pub owner_id: uuid::Uuid,
     pub name: String,
-    pub url: downlaod::DownloadUrl,
+    pub url: download::DownloadUrl,
 }
 
-impl Event for Failed {
+impl Event for Queued {
     type Aggregate = download::Download;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             id: self.id,
             created_at: self.timestamp,
@@ -83,7 +83,7 @@ impl Event for Failed {
             version: 0,
             name: self.name.clone(),
             url: self.url.clone(),
-            status: super::DownloadStatus::Queued,
+            status: download::DownloadStatus::Queued,
             progress: 0,
             removed_at: None,
             error: None,

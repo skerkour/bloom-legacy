@@ -33,7 +33,7 @@ impl eventsourcing::Command for UpdatePhones {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(PhonesUpdated {
             timestamp: chrono::Utc::now(),
@@ -54,7 +54,7 @@ impl Event for PhonesUpdated {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            phones: data.phones.clone(),
+            phones: self.phones.clone(),
             ..aggregate
         };
     }

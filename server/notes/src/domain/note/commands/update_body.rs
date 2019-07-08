@@ -33,7 +33,7 @@ impl eventsourcing::Command for UpdateBody {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(BodyUpdated {
             timestamp: chrono::Utc::now(),
@@ -55,7 +55,7 @@ impl Event for BodyUpdated {
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
             body: self.body.clone(),
-            ..Aggregate
+            ..aggregate
         };
     }
 }

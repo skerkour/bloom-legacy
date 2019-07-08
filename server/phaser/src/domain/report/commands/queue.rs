@@ -51,16 +51,16 @@ pub struct Queued {
     pub id: uuid::Uuid,
     pub scan_id: uuid::Uuid,
     pub targets: Vec<String>,
-    pub profile: ScanProfile,
-    pub trigger: ReportTrigger,
+    pub profile: scan::ScanProfile,
+    pub trigger: scan::ReportTrigger,
 }
 
 impl Event for Queued {
     type Aggregate = report::Report;
 
-    fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
+    fn apply(&self, _aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            id: selfid,
+            id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
             deleted_at: None,
@@ -72,13 +72,13 @@ impl Event for Queued {
             information_findings: 0,
             low_level_findings: 0,
             medium_level_findings: 0,
-            profile: selfprofile.clone(),
+            profile: self.profile.clone(),
             started_at: None,
             status: report::ReportStatus::Queued,
             targets: self.targets.clone(),
-            trigger: selftrigger.clone(),
+            trigger: self.trigger.clone(),
             total_findings: 0,
-            scan_id: selfscan_id,
+            scan_id: self.scan_id,
         };
     }
 }

@@ -30,7 +30,7 @@ impl eventsourcing::Command for Delete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Deleted {
             timestamp: chrono::Utc::now(),
@@ -51,7 +51,7 @@ impl Event for Deleted {
         return Self::Aggregate {
             deleted_at: Some(self.timestamp),
             removed_at: None,
-            ..Aggregate
+            ..aggregate
         };
     }
 }

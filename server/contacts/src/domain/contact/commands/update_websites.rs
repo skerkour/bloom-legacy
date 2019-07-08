@@ -33,7 +33,7 @@ impl eventsourcing::Command for UpdateWebsites {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(WebsitesUpdated {
             timestamp: chrono::Utc::now(),
@@ -54,7 +54,7 @@ impl Event for WebsitesUpdated {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            websites: data.websites.clone(),
+            websites: self.websites.clone(),
             ..aggregate
         };
     }
