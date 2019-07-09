@@ -1,7 +1,4 @@
-use crate::{
-    domain::{report, scan, Scan},
-    validators,
-};
+use crate::domain::{report, scan, Scan};
 use actix::{Handler, Message};
 use kernel::{db::DbActor, KernelError};
 use serde::{Deserialize, Serialize};
@@ -35,7 +32,7 @@ impl Handler<QueueScan> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            validators::target(&scan_to_queue.targets[0].clone())?;
+            scan::validators::target(&scan_to_queue.targets[0].clone())?;
 
             // queue report
             let trigger = scan::ReportTrigger::Manual;

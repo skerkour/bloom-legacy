@@ -1,4 +1,4 @@
-use crate::{domain::scan, validators};
+use crate::domain::scan;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -27,8 +27,8 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::scan_name(&self.name)?;
-        validators::target(&self.target)?;
+        scan::validators::scan_name(&self.name)?;
+        scan::validators::target(&self.target)?;
 
         return Ok(());
     }
