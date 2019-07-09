@@ -19,12 +19,8 @@ impl eventsourcing::Command for Delete {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Event not found".to_string()));
-        }
-
         return Ok(());
     }
 
@@ -49,9 +45,6 @@ impl Event for Deleted {
     type Aggregate = event::CalendarEvent;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }

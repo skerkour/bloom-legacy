@@ -80,7 +80,6 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         title -> Text,
         description -> Text,

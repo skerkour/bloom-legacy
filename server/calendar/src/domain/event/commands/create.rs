@@ -70,7 +70,6 @@ impl Event for Created {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             title: self.title.clone(),
             description: self.description.clone(),

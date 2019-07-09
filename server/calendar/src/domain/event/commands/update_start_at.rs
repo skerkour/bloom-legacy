@@ -23,10 +23,6 @@ impl eventsourcing::Command for UpdateStartAt {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Event not found".to_string()));
-        }
-
         event::validators::dates(self.start_at, aggregate.end_at)?;
 
         return Ok(());

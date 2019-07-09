@@ -30,16 +30,13 @@ impl Handler<DeleteEvent> for DbActor {
             let event_to_delete: event::CalendarEvent = calendar_events::dsl::calendar_events
                 .filter(calendar_events::dsl::id.eq(msg.event_id))
                 .filter(calendar_events::dsl::owner_id.eq(msg.actor_id))
-                .filter(calendar_events::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
             let (event_to_delete, _) = eventsourcing::execute(&conn, event_to_delete, &delete_cmd)?;
 
             // update event
-            diesel::update(&event_to_delete)
-                .set(&event_to_delete)
-                .execute(&conn)?;
+            diesel::delete(&event_to_delete).execute(&conn)?;
 
             Ok(())
         })?);
