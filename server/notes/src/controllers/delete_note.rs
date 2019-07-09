@@ -30,16 +30,13 @@ impl Handler<DeleteNote> for DbActor {
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
                 .filter(notes_notes::dsl::owner_id.eq(msg.actor_id))
-                .filter(notes_notes::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
             let (note_to_update, _) = eventsourcing::execute(&conn, note_to_update, &delete_cmd)?;
 
-            // update note
-            diesel::update(&note_to_update)
-                .set(&note_to_update)
-                .execute(&conn)?;
+            // delete note
+            diesel::delete(&note_to_update).execute(&conn)?;
 
             return Ok(());
         })?);

@@ -30,7 +30,6 @@ impl Handler<ArchiveNote> for DbActor {
             let note_to_update: Note = notes_notes::dsl::notes_notes
                 .filter(notes_notes::dsl::id.eq(msg.note_id))
                 .filter(notes_notes::dsl::owner_id.eq(msg.account_id))
-                .filter(notes_notes::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

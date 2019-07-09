@@ -20,10 +20,6 @@ impl eventsourcing::Command for Restore {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Note not found".to_string()));
-        }
-
         if aggregate.removed_at.is_none() {
             return Err(KernelError::NotFound("Note is not in trash".to_string()));
         }

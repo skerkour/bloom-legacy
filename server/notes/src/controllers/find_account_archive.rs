@@ -23,7 +23,6 @@ impl Handler<FindAccountArchive> for DbActor {
 
         let notes: Vec<domain::Note> = notes_notes::dsl::notes_notes
             .filter(notes_notes::dsl::owner_id.eq(msg.account_id))
-            .filter(notes_notes::dsl::deleted_at.is_null())
             .filter(notes_notes::dsl::archived_at.is_not_null())
             .filter(notes_notes::dsl::removed_at.is_null())
             .order_by(notes_notes::dsl::updated_at.desc())
