@@ -21,12 +21,8 @@ impl eventsourcing::Command for UpdateTitle {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Event not found".to_string()));
-        }
-
         event::validators::title(&self.title)?;
 
         return Ok(());

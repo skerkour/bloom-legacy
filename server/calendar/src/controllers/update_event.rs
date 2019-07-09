@@ -33,7 +33,6 @@ impl Handler<UpdateEvent> for DbActor {
             let event_to_update: event::CalendarEvent = calendar_events::dsl::calendar_events
                 .filter(calendar_events::dsl::id.eq(msg.event_id))
                 .filter(calendar_events::dsl::owner_id.eq(msg.actor_id))
-                .filter(calendar_events::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

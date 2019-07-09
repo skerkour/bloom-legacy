@@ -21,12 +21,8 @@ impl eventsourcing::Command for UpdateDescription {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Event not found".to_string()));
-        }
-
         event::validators::description(&self.description)?;
 
         return Ok(());
@@ -56,7 +52,7 @@ impl Event for DescriptionUpdated {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
+            description: self.description.clone(),
             ..aggregate
         };
     }
