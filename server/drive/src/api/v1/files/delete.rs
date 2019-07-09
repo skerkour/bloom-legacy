@@ -31,6 +31,8 @@ pub fn post(
                 files: delete_data.files.clone(),
                 owner_id: auth.account.expect("error unwraping non none account").id,
                 session_id: auth.session.expect("error unwraping non none session").id,
+                s3_bucket: state.config.s3.bucket.clone(),
+                s3_client: state.s3_client.clone(),
                 request_id,
             })
             .map_err(|_| KernelError::ActixMailbox)

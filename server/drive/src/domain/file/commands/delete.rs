@@ -5,9 +5,13 @@ use diesel::{
 };
 use eventsourcing::{Event, EventTs};
 use kernel::KernelError;
+use rusoto_s3::{DeleteObjectRequest, S3};
 
-#[derive(Clone, Debug)]
-pub struct Delete {}
+#[derive(Clone)]
+pub struct Delete {
+    pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
+}
 
 impl eventsourcing::Command for Delete {
     type Aggregate = file::File;
@@ -26,8 +30,20 @@ impl eventsourcing::Command for Delete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        _aggregate: &Self::Aggregate,
+        aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
+        if aggregate.type_ != crate::FOLDER_TYPE {
+            let req = DeleteObjectRequest {
+                bucket: self.s3_bucket.clone(),
+                key: format!("drive/{}/{}", aggregate.owner_id, aggregate.id),
+                ..Default::default()
+            };
+            self.s3_client
+                .delete_object(req)
+                .sync()
+                .expect("pahser: Couldn't PUT object");
+        }
+
         return Ok(Deleted {
             timestamp: chrono::Utc::now(),
         });

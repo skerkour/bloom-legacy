@@ -148,7 +148,7 @@ export default class Account extends Vue {
     this.is_loading = true;
     try {
       await api.delete(`${api.ADMIN}/v1/accounts/${this.$route.params.account_id}`);
-      router.push({ path: '/admin' });
+      router.push({ path: '/admin/accounts' });
     } catch (err) {
       this.error = err.message;
     } finally {

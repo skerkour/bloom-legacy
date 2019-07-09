@@ -2,11 +2,12 @@ use crate::{domain, domain::file, domain::profile};
 use actix::{Handler, Message};
 use diesel::{pg::types::sql_types, sql_query};
 use kernel::{db::DbActor, KernelError};
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone)]
 pub struct DeleteFiles {
     pub files: Vec<uuid::Uuid>,
+    pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
     pub owner_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
@@ -35,11 +36,6 @@ impl Handler<DeleteFiles> for DbActor {
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                     .first(&conn)?;
 
-                let delete_cmd = file::Delete {};
-                let (file_to_delete, _) =
-                    eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
-                diesel::delete(&file_to_delete).execute(&conn)?;
-
                 if file_to_delete.type_ == crate::FOLDER_TYPE {
                     // find children and delete
                     let folder_children: Vec<file::FolderChild> =
@@ -53,12 +49,13 @@ impl Handler<DeleteFiles> for DbActor {
                             .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                             .first(&conn)?;
 
-                        let delete_cmd = file::Delete {};
+                        let delete_cmd = file::Delete {
+                            s3_client: msg.s3_client.clone(),
+                            s3_bucket: msg.s3_bucket.clone(),
+                        };
                         let (file_to_delete, _) =
                             eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
-                        diesel::update(&file_to_delete)
-                            .set(&file_to_delete)
-                            .execute(&conn)?;
+                        diesel::delete(&file_to_delete).execute(&conn)?;
 
                         if file_to_delete.type_ != crate::FOLDER_TYPE {
                             // update profile
@@ -79,6 +76,16 @@ impl Handler<DeleteFiles> for DbActor {
                         }
                     }
                 }
+
+                // delete file last, to not
+                let delete_cmd = file::Delete {
+                    s3_client: msg.s3_client.clone(),
+                    s3_bucket: msg.s3_bucket.clone(),
+                };
+                let (file_to_delete, _) =
+                    eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
+                diesel::delete(&file_to_delete).execute(&conn)?;
+
                 if file_to_delete.type_ != crate::FOLDER_TYPE {
                     // update profile
                     let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...

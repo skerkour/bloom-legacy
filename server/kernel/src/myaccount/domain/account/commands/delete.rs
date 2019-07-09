@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::account, utils};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -34,15 +34,8 @@ impl eventsourcing::Command for Delete {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let random_string = utils::random_hex_string(5);
-        let random_password = utils::random_hex_string(128);
-        let password = bcrypt::hash(random_password, myaccount::PASSWORD_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
-
         return Ok(Deleted {
             timestamp: chrono::Utc::now(),
-            random_string,
-            password,
         });
     }
 }
@@ -51,24 +44,13 @@ impl eventsourcing::Command for Delete {
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
 pub struct Deleted {
     pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub password: String,
-    pub random_string: String,
 }
 
 impl Event for Deleted {
     type Aggregate = account::Account;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            disabled_at: Some(self.timestamp),
-            first_name: self.random_string.clone(),
-            last_name: self.random_string.clone(),
-            email: self.random_string.clone(),
-            password: self.password.clone(),
-            bio: self.random_string.clone(),
-            display_name: self.random_string.clone(),
-            ..aggregate
-        };
+        return aggregate;
     }
 }
 
