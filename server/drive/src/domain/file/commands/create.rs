@@ -1,4 +1,4 @@
-use crate::{domain::file, validators};
+use crate::domain::file;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -33,7 +33,7 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::file_name(&self.name)?;
+        file::validators::name(&self.name)?;
         return Ok(());
     }
 

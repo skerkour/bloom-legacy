@@ -1,4 +1,4 @@
-use crate::{api::v1::models, controllers, validators};
+use crate::{api::v1::models, controllers, domain::event};
 use actix_web::{web, Error, HttpRequest, HttpResponse, ResponseError};
 use chrono::Datelike;
 use futures::{future::ok, future::Either, future::Future};
@@ -39,7 +39,7 @@ pub fn get(
         .end_at
         .unwrap_or_else(|| start_at + chrono::Duration::days(31));
 
-    if let Err(err) = validators::event_dates(start_at, end_at) {
+    if let Err(err) = event::validators::dates(start_at, end_at) {
         return Either::A(ok(err.error_response()));
     }
 

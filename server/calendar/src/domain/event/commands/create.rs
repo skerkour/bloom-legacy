@@ -1,4 +1,4 @@
-use crate::{domain::event, validators};
+use crate::domain::event;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -27,9 +27,9 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::event_dates(self.start_at, self.end_at)?;
-        validators::event_title(&self.title)?;
-        validators::event_description(&self.description)?;
+        event::validators::dates(self.start_at, self.end_at)?;
+        event::validators::title(&self.title)?;
+        event::validators::description(&self.description)?;
         return Ok(());
     }
 

@@ -1,6 +1,7 @@
 mod aggregate;
 mod commands;
 
+pub mod validators;
 pub use aggregate::{
     CompleteData, CompleteDataFile, Download, DownloadStatus, DownloadUrl, DownloadUrlHttp,
     DownloadUrlTorrentMagnet,

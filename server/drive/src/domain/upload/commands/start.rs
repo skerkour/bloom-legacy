@@ -1,4 +1,4 @@
-use crate::{domain::upload, validators};
+use crate::domain::{file, upload};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -24,7 +24,7 @@ impl eventsourcing::Command for Start {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::file_name(&self.file_name)?;
+        file::validators::name(&self.file_name)?;
         // TODO: check that parent exists
 
         return Ok(());

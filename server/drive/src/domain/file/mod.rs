@@ -1,6 +1,7 @@
 mod aggregate;
 mod commands;
 
+pub mod validators;
 pub use aggregate::{File, FolderChild, FolderPath};
 pub use commands::{
     copy::{Copied, Copy_},

@@ -5,7 +5,6 @@ pub mod api;
 pub mod controllers;
 pub mod domain;
 pub mod reactors;
-pub mod validators;
 
 pub const DEFAULT_AVAILABLE_SPACE: i64 = 30_000_000_000; // 30GB
 pub const DEFAULT_FOLDERS: [&str; 8] = [

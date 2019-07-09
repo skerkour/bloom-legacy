@@ -1,4 +1,4 @@
-use crate::{domain::file, validators};
+use crate::domain::file;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -28,7 +28,7 @@ impl eventsourcing::Command for Rename {
         if aggregate.trashed_at.is_some() {
             return Err(KernelError::Validation("File is in trash".to_string()));
         }
-        validators::file_name(&self.name)?;
+        file::validators::name(&self.name)?;
 
         return Ok(());
     }

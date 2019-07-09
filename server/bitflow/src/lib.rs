@@ -10,6 +10,5 @@ pub mod api;
 pub mod controllers;
 pub mod domain;
 pub mod reactors;
-pub mod validators;
 
 pub const MAX_DOWNLOAD_SIZE: u64 = 8_000_000_000; // 8 GB
