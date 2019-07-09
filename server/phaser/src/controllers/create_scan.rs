@@ -33,7 +33,6 @@ impl Handler<CreateScan> for DbActor {
             // check the number of scans
             let number_of_scan: i64 = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::owner_id.eq(msg.account_id))
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .count()
                 .get_result(&conn)?;
 

@@ -24,13 +24,11 @@ impl Handler<FindScanReports> for DbActor {
 
         let _: domain::Scan = phaser_scans::dsl::phaser_scans
             .filter(phaser_scans::dsl::id.eq(msg.scan_id))
-            .filter(phaser_scans::dsl::deleted_at.is_null())
             .filter(phaser_scans::dsl::owner_id.eq(msg.account_id))
             .first(&conn)?;
 
         let reports: Vec<domain::Report> = phaser_reports::dsl::phaser_reports
             .filter(phaser_reports::dsl::scan_id.eq(msg.scan_id))
-            .filter(phaser_reports::dsl::deleted_at.is_null())
             .filter(phaser_reports::dsl::status.ne(domain::report::ReportStatus::Canceled))
             .order_by(phaser_reports::dsl::created_at.desc())
             .limit(21)

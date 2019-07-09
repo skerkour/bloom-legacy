@@ -29,7 +29,6 @@ impl Handler<CancelScan> for DbActor {
             // retrieve Scan
             let scan_to_cancel: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -44,7 +43,6 @@ impl Handler<CancelScan> for DbActor {
             // TODO: cancel report
             let report_to_cancel: report::Report = phaser_reports::dsl::phaser_reports
                 .filter(phaser_reports::dsl::scan_id.eq(msg.scan_id))
-                .filter(phaser_reports::dsl::deleted_at.is_null())
                 .order(phaser_reports::dsl::created_at.desc())
                 .for_update()
                 .first(&conn)?;

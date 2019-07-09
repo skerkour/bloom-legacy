@@ -26,7 +26,6 @@ impl Handler<StartScan> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             // start report
             let report: domain::Report = phaser_reports::dsl::phaser_reports
-                .filter(phaser_reports::dsl::deleted_at.is_null())
                 .filter(phaser_reports::dsl::status.eq(domain::report::ReportStatus::Queued))
                 .for_update()
                 .first(&conn)?;
@@ -38,7 +37,6 @@ impl Handler<StartScan> for DbActor {
 
             // start scan
             let scan: domain::Scan = phaser_scans::dsl::phaser_scans
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .filter(phaser_scans::dsl::id.eq(report.scan_id))
                 .filter(phaser_scans::dsl::state.eq(domain::scan::ScanState::Queued))
                 .for_update()

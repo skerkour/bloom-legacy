@@ -63,7 +63,6 @@ impl Event for Queued {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             completed_at: None,
             error: None,

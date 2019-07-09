@@ -28,7 +28,6 @@ impl Handler<QueueScan> for DbActor {
             // retrieve Scan
             let scan_to_queue: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

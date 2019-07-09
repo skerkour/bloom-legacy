@@ -29,7 +29,6 @@ impl Handler<DeleteScan> for DbActor {
             // retrieve Scan
             let scan_to_delete: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(msg.scan_id))
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -37,9 +36,7 @@ impl Handler<DeleteScan> for DbActor {
             let delete_cmd = scan::Delete {};
             let (deleted_scan, _) = eventsourcing::execute(&conn, scan_to_delete, &delete_cmd)?;
 
-            diesel::update(&deleted_scan)
-                .set(&deleted_scan)
-                .execute(&conn)?;
+            diesel::delete(&deleted_scan).execute(&conn)?;
 
             return Ok(());
         })?);
