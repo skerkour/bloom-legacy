@@ -1,6 +1,10 @@
 use crate::{domain, domain::file, domain::profile};
 use actix::{Handler, Message};
-use diesel::{pg::types::sql_types, sql_query};
+use diesel::{
+    pg::types::sql_types,
+    r2d2::{ConnectionManager, PooledConnection},
+    sql_query, PgConnection,
+};
 use kernel::{db::DbActor, KernelError};
 
 #[derive(Clone)]
@@ -23,7 +27,7 @@ impl Handler<DeleteFiles> for DbActor {
 
     fn handle(&mut self, msg: DeleteFiles, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::{drive_files, drive_profiles};
+        use kernel::db::schema::drive_files;
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -36,76 +40,83 @@ impl Handler<DeleteFiles> for DbActor {
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                     .first(&conn)?;
 
-                if file_to_delete.type_ == crate::FOLDER_TYPE {
-                    // find children and delete
-                    let folder_children: Vec<file::FolderChild> =
-                        sql_query(include_str!("../../sql_requests/folder_children.sql"))
-                            .bind::<sql_types::Uuid, _>(file_to_delete.id)
-                            .load(&conn)?;
+                space_freed += delete_file_with_children(
+                    file_to_delete.clone(),
+                    msg.s3_client.clone(),
+                    msg.s3_bucket.clone(),
+                    &conn,
+                )?;
 
-                    for child in folder_children.iter() {
-                        let file_to_delete: domain::File = drive_files::dsl::drive_files
-                            .filter(drive_files::dsl::id.eq(child.id))
-                            .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
-                            .first(&conn)?;
-
-                        let delete_cmd = file::Delete {
-                            s3_client: msg.s3_client.clone(),
-                            s3_bucket: msg.s3_bucket.clone(),
-                        };
-                        let (file_to_delete, _) =
-                            eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
-                        diesel::delete(&file_to_delete).execute(&conn)?;
-
-                        if file_to_delete.type_ != crate::FOLDER_TYPE {
-                            // update profile
-                            let space_cmd = profile::UpdateUsedSpace {
-                                space: -file_to_delete.size,
-                            };
-                            space_freed += file_to_delete.size;
-                            let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
-                                .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
-                                .for_update()
-                                .first(&conn)?;
-                            let (drive_profile, _) =
-                                eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
-
-                            diesel::update(&drive_profile)
-                                .set(&drive_profile)
-                                .execute(&conn)?;
-                        }
-                    }
-                }
-
-                // delete file last, to not
-                let delete_cmd = file::Delete {
-                    s3_client: msg.s3_client.clone(),
-                    s3_bucket: msg.s3_bucket.clone(),
-                };
-                let (file_to_delete, _) =
-                    eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
                 diesel::delete(&file_to_delete).execute(&conn)?;
-
-                if file_to_delete.type_ != crate::FOLDER_TYPE {
-                    // update profile
-                    let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
-                        .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
-                        .for_update()
-                        .first(&conn)?;
-                    let space_cmd = profile::UpdateUsedSpace {
-                        space: -file_to_delete.size,
-                    };
-                    space_freed += file_to_delete.size;
-                    let (drive_profile, _) =
-                        eventsourcing::execute(&conn, drive_profile, &space_cmd)?;
-
-                    diesel::update(&drive_profile)
-                        .set(&drive_profile)
-                        .execute(&conn)?;
-                }
             }
 
             return Ok(space_freed);
         })?);
     }
+}
+
+fn delete_file_with_children(
+    file: domain::File,
+    s3_client: rusoto_s3::S3Client,
+    s3_bucket: String,
+    conn: &PooledConnection<ConnectionManager<PgConnection>>,
+) -> Result<i64, KernelError> {
+    use diesel::prelude::*;
+    use kernel::db::schema::{drive_files, drive_profiles};
+
+    let mut space_freed = 0i64;
+
+    if file.type_ == crate::FOLDER_TYPE {
+        // find children
+
+        let folder_children: Vec<file::FolderChild> =
+            sql_query(include_str!("../../sql_requests/folder_children.sql"))
+                .bind::<sql_types::Uuid, _>(file.id)
+                .load(conn)?;
+
+        // delete children
+        for child in folder_children.iter() {
+            let file_to_delete: domain::File = drive_files::dsl::drive_files
+                .filter(drive_files::dsl::id.eq(child.id))
+                .filter(drive_files::dsl::owner_id.eq(file.owner_id))
+                .first(conn)?;
+
+            let delete_cmd = file::Delete {
+                s3_client: s3_client.clone(),
+                s3_bucket: s3_bucket.clone(),
+            };
+            let (file_to_delete, _) = eventsourcing::execute(conn, file_to_delete, &delete_cmd)?;
+
+            // recursively
+            space_freed += delete_file_with_children(
+                file_to_delete,
+                s3_client.clone(),
+                s3_bucket.clone(),
+                conn,
+            )?;
+        }
+    } else {
+        // update profile
+        let space_cmd = profile::UpdateUsedSpace { space: -file.size };
+        space_freed += file.size;
+        let drive_profile: profile::Profile =
+            drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
+                .filter(drive_profiles::dsl::account_id.eq(file.owner_id))
+                .for_update()
+                .first(conn)?;
+        let (drive_profile, _) = eventsourcing::execute(conn, drive_profile, &space_cmd)?;
+
+        diesel::update(&drive_profile)
+            .set(&drive_profile)
+            .execute(conn)?;
+    }
+
+    // delete file
+    let delete_cmd = file::Delete {
+        s3_client: s3_client.clone(),
+        s3_bucket: s3_bucket.clone(),
+    };
+    let _ = eventsourcing::execute(conn, file, &delete_cmd)?;
+
+    return Ok(space_freed);
 }
