@@ -1,6 +1,6 @@
 use kernel::KernelError;
 
-pub fn playlist_name(playlist_name: &str) -> Result<(), KernelError> {
+pub fn name(playlist_name: &str) -> Result<(), KernelError> {
     if playlist_name.is_empty() {
         return Err(KernelError::Validation(
             "playlist name cannot be empty".to_string(),

@@ -1,6 +1,7 @@
 mod aggregate;
 mod commands;
 
+pub mod validators;
 pub use aggregate::Note;
 pub use commands::{
     archive::{Archive, Archived},

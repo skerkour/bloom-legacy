@@ -1,4 +1,4 @@
-use crate::{domain::note, validators};
+use crate::domain::note;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -26,7 +26,7 @@ impl eventsourcing::Command for UpdateTitle {
             return Err(KernelError::NotFound("Note not found".to_string()));
         }
 
-        validators::title(&self.title)?;
+        note::validators::title(&self.title)?;
 
         return Ok(());
     }

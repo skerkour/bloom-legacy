@@ -1,6 +1,7 @@
 mod aggregate;
 mod commands;
 
+pub mod validators;
 pub use aggregate::{Playlist, PlaylistFile};
 pub use commands::{
     add_files::{AddFiles, FilesAdded},
