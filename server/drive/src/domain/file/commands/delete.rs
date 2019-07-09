@@ -41,7 +41,7 @@ impl eventsourcing::Command for Delete {
             self.s3_client
                 .delete_object(req)
                 .sync()
-                .expect("pahser: Couldn't PUT object");
+                .expect("drive: Couldn't Delete object");
         }
 
         return Ok(Deleted {
