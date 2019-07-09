@@ -38,7 +38,6 @@ impl Handler<FindAlbum> for DbActor {
         // il nous faut l'album + les files
         let album: album::Album = gallery_albums::dsl::gallery_albums
             .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
-            .filter(gallery_albums::dsl::deleted_at.is_null())
             .filter(gallery_albums::dsl::id.eq(msg.album_id))
             .first(&conn)?;
 

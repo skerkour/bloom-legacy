@@ -23,7 +23,6 @@ impl Handler<FindAlbums> for DbActor {
 
         let albums: Vec<domain::Album> = gallery_albums::dsl::gallery_albums
             .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
-            .filter(gallery_albums::dsl::deleted_at.is_null())
             .load(&conn)?;
 
         return Ok(albums);

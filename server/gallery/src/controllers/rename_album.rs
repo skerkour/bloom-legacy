@@ -31,7 +31,6 @@ impl Handler<RenameAlbum> for DbActor {
             let album_to_update: Album = gallery_albums::dsl::gallery_albums
                 .filter(gallery_albums::dsl::id.eq(msg.album_id))
                 .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
-                .filter(gallery_albums::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

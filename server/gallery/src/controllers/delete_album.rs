@@ -30,14 +30,12 @@ impl Handler<DeleteAlbum> for DbActor {
             let album_to_update: Album = gallery_albums::dsl::gallery_albums
                 .filter(gallery_albums::dsl::id.eq(msg.album_id))
                 .filter(gallery_albums::dsl::owner_id.eq(msg.account_id))
-                .filter(gallery_albums::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
             let (album_to_update, _) = eventsourcing::execute(&conn, album_to_update, &delete_cmd)?;
-            // update album
-            diesel::update(&album_to_update)
-                .set(&album_to_update)
+            // delete album
+            diesel::delete(&album_to_update)
                 .execute(&conn)?;
 
             return Ok(());
