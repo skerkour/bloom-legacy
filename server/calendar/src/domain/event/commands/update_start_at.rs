@@ -1,4 +1,4 @@
-use crate::{domain::event, validators};
+use crate::domain::event;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -27,7 +27,7 @@ impl eventsourcing::Command for UpdateStartAt {
             return Err(KernelError::NotFound("Event not found".to_string()));
         }
 
-        validators::event_dates(self.start_at, aggregate.end_at)?;
+        event::validators::dates(self.start_at, aggregate.end_at)?;
 
         return Ok(());
     }

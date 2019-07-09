@@ -3,7 +3,7 @@ use regex::Regex;
 use std::net;
 use url::Url;
 
-pub fn download_url(download_url: &str) -> Result<(), KernelError> {
+pub fn url(download_url: &str) -> Result<(), KernelError> {
     // TODO: valdiate url...
     let parsed_url = Url::parse(&download_url)?;
     let scheme = parsed_url.scheme();

@@ -1,6 +1,7 @@
 mod aggregate;
 mod commands;
 
+pub mod validators;
 pub use aggregate::CalendarEvent;
 pub use commands::{
     create::{Create, Created},

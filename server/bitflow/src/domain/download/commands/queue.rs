@@ -1,4 +1,4 @@
-use crate::{domain::download, validators};
+use crate::domain::download;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -25,7 +25,7 @@ impl eventsourcing::Command for Queue {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::download_url(&self.url)?;
+        download::validators::url(&self.url)?;
 
         return Ok(());
     }
