@@ -36,7 +36,6 @@ impl eventsourcing::Command for AddFiles {
         // check that file is owned by same owner
         let files: Vec<File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::owner_id.eq(self.owner_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .filter(drive_files::dsl::id.eq(any(&self.files)))
             .load(ctx)?;

@@ -44,7 +44,6 @@ impl Handler<FindPlaylist> for DbActor {
         let files: Vec<(File, playlist::PlaylistFile)> = drive_files::dsl::drive_files
             .inner_join(music_playlists_files::table)
             .filter(music_playlists_files::dsl::playlist_id.eq(msg.playlist_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .load(&conn)?;
         let files: Vec<File> = files.into_iter().map(|file| file.0).collect();
