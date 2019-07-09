@@ -28,12 +28,10 @@ impl Handler<QueueDownload> for DbActor {
             // create Download
             let profile: drive::domain::Profile = drive_profiles::dsl::drive_profiles
                 .filter(drive_profiles::dsl::account_id.eq(msg.account_id))
-                .filter(drive_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let active_downloads: i64 = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::owner_id.eq(msg.account_id))
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Stopped))
                 .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Success))
                 .filter(bitflow_downloads::dsl::status.ne(download::DownloadStatus::Failed))

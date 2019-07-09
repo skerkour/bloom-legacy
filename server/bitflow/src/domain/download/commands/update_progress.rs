@@ -23,10 +23,6 @@ impl eventsourcing::Command for UpdateProgress {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Download not found".to_string()));
-        }
-
         if aggregate.removed_at.is_some() {
             return Err(KernelError::Validation(
                 "Download has been removed".to_string(),

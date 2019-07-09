@@ -58,7 +58,6 @@ impl Event for Created {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             account_id: self.account_id,
             download_folder_id: self.download_folder_id,
