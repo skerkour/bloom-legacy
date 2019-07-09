@@ -1,6 +1,6 @@
 use kernel::KernelError;
 
-pub fn album_name(album_name: &str) -> Result<(), KernelError> {
+pub fn name(album_name: &str) -> Result<(), KernelError> {
     if album_name.is_empty() {
         return Err(KernelError::Validation(
             "album name cannot be empty".to_string(),

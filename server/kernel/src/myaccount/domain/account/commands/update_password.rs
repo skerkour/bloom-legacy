@@ -1,7 +1,4 @@
-use crate::{
-    config::Config, error::KernelError, myaccount, myaccount::domain::account,
-    myaccount::validators,
-};
+use crate::{config::Config, error::KernelError, myaccount, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -27,7 +24,7 @@ impl eventsourcing::Command for UpdatePassword {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::password(self.config.basic_passwords.clone(), &self.new_password)?;
+        account::validators::password(self.config.basic_passwords.clone(), &self.new_password)?;
 
         if aggregate.email == self.new_password {
             return Err(KernelError::Validation(

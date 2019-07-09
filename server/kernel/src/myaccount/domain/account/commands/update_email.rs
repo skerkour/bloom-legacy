@@ -21,10 +21,7 @@ impl eventsourcing::Command for UpdateEmail {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        // validators::email(self.config.disposable_email_domains(), &self.email)?;
-
-        // verify that an email isn't already in use
-        // already done in pending emial verify
+        // validations must be done in pending_email::verify
 
         return Ok(());
     }
