@@ -36,7 +36,6 @@ impl Handler<FindFiles> for DbActor {
 
         let files: Vec<File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::owner_id.eq(msg.account_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .filter(drive_files::dsl::type_.eq(any(vec!["image/gif", "image/png", "image/jpeg"])))
             .load(&conn)?;

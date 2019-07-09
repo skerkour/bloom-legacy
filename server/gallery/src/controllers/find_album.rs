@@ -44,7 +44,6 @@ impl Handler<FindAlbum> for DbActor {
         let files: Vec<(File, album::AlbumFile)> = drive_files::dsl::drive_files
             .inner_join(gallery_albums_files::table)
             .filter(gallery_albums_files::dsl::album_id.eq(msg.album_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .load(&conn)?;
         let files: Vec<File> = files.into_iter().map(|file| file.0).collect();
