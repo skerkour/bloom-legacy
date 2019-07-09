@@ -23,7 +23,6 @@ impl Handler<FindPlaylists> for DbActor {
 
         let playlists: Vec<domain::Playlist> = music_playlists::dsl::music_playlists
             .filter(music_playlists::dsl::owner_id.eq(msg.account_id))
-            .filter(music_playlists::dsl::deleted_at.is_null())
             .load(&conn)?;
 
         return Ok(playlists);

@@ -40,7 +40,6 @@ impl Handler<UpdateContact> for DbActor {
             let contact_to_update: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
                 .filter(contacts_contacts::dsl::owner_id.eq(msg.actor_id))
-                .filter(contacts_contacts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

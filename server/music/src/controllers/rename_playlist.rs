@@ -31,7 +31,6 @@ impl Handler<RenamePlaylist> for DbActor {
             let playlist_to_update: Playlist = music_playlists::dsl::music_playlists
                 .filter(music_playlists::dsl::id.eq(msg.playlist_id))
                 .filter(music_playlists::dsl::owner_id.eq(msg.account_id))
-                .filter(music_playlists::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

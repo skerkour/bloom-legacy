@@ -38,7 +38,6 @@ impl Handler<FindPlaylist> for DbActor {
         // il nous faut l'playlist + les files
         let playlist: playlist::Playlist = music_playlists::dsl::music_playlists
             .filter(music_playlists::dsl::owner_id.eq(msg.account_id))
-            .filter(music_playlists::dsl::deleted_at.is_null())
             .filter(music_playlists::dsl::id.eq(msg.playlist_id))
             .first(&conn)?;
 
