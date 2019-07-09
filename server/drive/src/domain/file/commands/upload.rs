@@ -70,7 +70,6 @@ impl Event for Uploaded {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             explicitly_trashed: false,
             name: self.name.clone(),

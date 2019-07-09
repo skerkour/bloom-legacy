@@ -52,3 +52,18 @@ ALTER TABLE phaser_reports DROP CONSTRAINT phaser_reports_scan_id_fkey,
 ALTER TABLE phaser_scans ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
 ALTER TABLE phaser_scans DROP CONSTRAINT phaser_scans_owner_id_fkey,
   ADD CONSTRAINT phaser_scans_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);
+
+-- drive
+ALTER TABLE drive_uploads ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
+ALTER TABLE drive_uploads DROP CONSTRAINT drive_uploads_owner_id_fkey,
+  ADD CONSTRAINT drive_uploads_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);
+ALTER TABLE drive_uploads DROP CONSTRAINT drive_uploads_parent_id_fkey,
+  ADD CONSTRAINT drive_uploads_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES drive_files(id);
+
+ALTER TABLE drive_profiles ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
+ALTER TABLE drive_profiles DROP CONSTRAINT drive_profiles_account_id_fkey,
+  ADD CONSTRAINT drive_profiles_account_id_fkey FOREIGN KEY (account_id) REFERENCES kernel_accounts(id);
+
+ALTER TABLE drive_files ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
+ALTER TABLE drive_files DROP CONSTRAINT drive_files_owner_id_fkey,
+  ADD CONSTRAINT drive_files_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);

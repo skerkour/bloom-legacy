@@ -33,15 +33,12 @@ impl Handler<DeleteFiles> for DbActor {
                 let file_to_delete: domain::File = drive_files::dsl::drive_files
                     .filter(drive_files::dsl::id.eq(file_id))
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
-                    .filter(drive_files::dsl::deleted_at.is_null())
                     .first(&conn)?;
 
                 let delete_cmd = file::Delete {};
                 let (file_to_delete, _) =
                     eventsourcing::execute(&conn, file_to_delete, &delete_cmd)?;
-                diesel::update(&file_to_delete)
-                    .set(&file_to_delete)
-                    .execute(&conn)?;
+                diesel::delete(&file_to_delete).execute(&conn)?;
 
                 if file_to_delete.type_ == crate::FOLDER_TYPE {
                     // find children and delete
@@ -54,7 +51,6 @@ impl Handler<DeleteFiles> for DbActor {
                         let file_to_delete: domain::File = drive_files::dsl::drive_files
                             .filter(drive_files::dsl::id.eq(child.id))
                             .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
-                            .filter(drive_files::dsl::deleted_at.is_null())
                             .first(&conn)?;
 
                         let delete_cmd = file::Delete {};
@@ -72,7 +68,6 @@ impl Handler<DeleteFiles> for DbActor {
                             space_freed += file_to_delete.size;
                             let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
                                 .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
-                                .filter(drive_profiles::dsl::deleted_at.is_null())
                                 .for_update()
                                 .first(&conn)?;
                             let (drive_profile, _) =
@@ -88,7 +83,6 @@ impl Handler<DeleteFiles> for DbActor {
                     // update profile
                     let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles // TODO: ULTRA UGLY...
                         .filter(drive_profiles::dsl::account_id.eq(msg.owner_id))
-                        .filter(drive_profiles::dsl::deleted_at.is_null())
                         .for_update()
                         .first(&conn)?;
                     let space_cmd = profile::UpdateUsedSpace {

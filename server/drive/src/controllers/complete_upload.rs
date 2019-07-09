@@ -31,14 +31,12 @@ impl Handler<CompleteUpload> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let upload_to_update: Upload = drive_uploads::dsl::drive_uploads
                 .filter(drive_uploads::dsl::id.eq(msg.upload_id))
-                .filter(drive_uploads::dsl::deleted_at.is_null())
                 .filter(drive_uploads::dsl::owner_id.eq(msg.account_id))
                 .for_update()
                 .first(&conn)?;
 
             let drive_profile: profile::Profile = drive_profiles::dsl::drive_profiles
                 .filter(drive_profiles::dsl::account_id.eq(msg.account_id))
-                .filter(drive_profiles::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -51,9 +49,7 @@ impl Handler<CompleteUpload> for DbActor {
             let (upload_to_update, _) =
                 eventsourcing::execute(&conn, upload_to_update, &complete_cmd)?;
 
-            diesel::update(&upload_to_update)
-                .set(&upload_to_update)
-                .execute(&conn)?;
+            diesel::delete(&upload_to_update).execute(&conn)?;
 
             // create file
             let upload_cmd = file::Upload {

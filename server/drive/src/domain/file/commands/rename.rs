@@ -22,9 +22,6 @@ impl eventsourcing::Command for Rename {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation("File not found".to_string()));
-        }
         if aggregate.trashed_at.is_some() {
             return Err(KernelError::Validation("File is in trash".to_string()));
         }

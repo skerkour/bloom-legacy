@@ -27,10 +27,6 @@ impl eventsourcing::Command for Copy_ {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("File not found".to_string()));
-        }
-
         if aggregate.trashed_at.is_some() {
             return Err(KernelError::Validation(
                 "File cannot be copied while in Trash".to_string(),

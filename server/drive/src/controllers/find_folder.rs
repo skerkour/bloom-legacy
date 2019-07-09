@@ -28,7 +28,6 @@ impl Handler<FindFolder> for DbActor {
                 .filter(drive_files::dsl::id.eq(id))
                 .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                 .filter(drive_files::dsl::type_.eq(FOLDER_TYPE))
-                .filter(drive_files::dsl::deleted_at.is_null())
                 .filter(drive_files::dsl::trashed_at.is_null())
                 .first(&conn)?,
             // retrieve root folder
@@ -36,7 +35,6 @@ impl Handler<FindFolder> for DbActor {
                 .filter(drive_files::dsl::name.eq(BLOOM_ROOT_NAME))
                 .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                 .filter(drive_files::dsl::type_.eq(FOLDER_TYPE))
-                .filter(drive_files::dsl::deleted_at.is_null())
                 .filter(drive_files::dsl::trashed_at.is_null())
                 .first(&conn)?,
         };
@@ -44,7 +42,6 @@ impl Handler<FindFolder> for DbActor {
         // find children
         let children: Vec<domain::File> = drive_files::dsl::drive_files
             .filter(drive_files::dsl::parent_id.eq(folder.id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .load(&conn)?;
 
