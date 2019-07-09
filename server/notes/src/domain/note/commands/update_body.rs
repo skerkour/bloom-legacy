@@ -1,4 +1,4 @@
-use crate::{domain::note, validators};
+use crate::domain::note;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -25,7 +25,7 @@ impl eventsourcing::Command for UpdateBody {
         if aggregate.deleted_at.is_some() {
             return Err(KernelError::NotFound("Note not found".to_string()));
         }
-        validators::body(&self.body)?;
+        note::validators::body(&self.body)?;
 
         return Ok(());
     }

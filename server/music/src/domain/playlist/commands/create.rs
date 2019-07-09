@@ -1,4 +1,4 @@
-use crate::{domain::playlist, validators};
+use crate::domain::playlist;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -23,7 +23,7 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::playlist_name(&self.name)?;
+        playlist::validators::name(&self.name)?;
 
         return Ok(());
     }
