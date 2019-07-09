@@ -27,7 +27,6 @@ impl Handler<FailDownload> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let download: domain::Download = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(msg.download_id))
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let fail_cmd = domain::download::Fail { error: msg.error };

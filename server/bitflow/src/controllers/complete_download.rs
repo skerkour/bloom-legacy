@@ -29,12 +29,10 @@ impl Handler<CompleteDownload> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let download: domain::Download = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(msg.download_id))
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let profile: domain::Profile = bitflow_profiles::dsl::bitflow_profiles
                 .filter(bitflow_profiles::dsl::account_id.eq(download.owner_id))
-                .filter(bitflow_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let complete_cmd = domain::download::Complete {
@@ -54,7 +52,6 @@ impl Handler<CompleteDownload> for DbActor {
             // update drive profile: Add all uploaded data size
             let drive_profile: drive::domain::Profile = drive_profiles::dsl::drive_profiles
                 .filter(drive_profiles::dsl::account_id.eq(download.owner_id))
-                .filter(drive_profiles::dsl::deleted_at.is_null())
                 .first(&conn)?;
 
             let space_cmd = drive::domain::profile::UpdateUsedSpace { space: total_size };

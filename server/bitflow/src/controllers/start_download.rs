@@ -25,7 +25,6 @@ impl Handler<StartDownload> for DbActor {
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let download: domain::Download = bitflow_downloads::dsl::bitflow_downloads
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .filter(bitflow_downloads::dsl::removed_at.is_null())
                 .filter(bitflow_downloads::dsl::status.eq(domain::download::DownloadStatus::Queued))
                 .for_update()

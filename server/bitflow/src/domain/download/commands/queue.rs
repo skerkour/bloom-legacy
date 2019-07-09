@@ -79,7 +79,6 @@ impl Event for Queued {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             name: self.name.clone(),
             url: self.url.clone(),

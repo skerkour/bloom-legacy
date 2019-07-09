@@ -26,7 +26,6 @@ impl Handler<ClearHistory> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let history: Vec<domain::Download> = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::owner_id.eq(msg.actor_id))
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .filter(bitflow_downloads::dsl::removed_at.is_not_null())
                 .load(&conn)?;
 

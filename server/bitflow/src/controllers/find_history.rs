@@ -23,7 +23,6 @@ impl Handler<FindHistory> for DbActor {
 
         let downloads: Vec<domain::Download> = bitflow_downloads::dsl::bitflow_downloads
             .filter(bitflow_downloads::dsl::owner_id.eq(msg.account_id))
-            .filter(bitflow_downloads::dsl::deleted_at.is_null())
             .filter(bitflow_downloads::dsl::removed_at.is_not_null())
             .load(&conn)?;
 

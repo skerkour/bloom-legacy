@@ -21,10 +21,6 @@ impl eventsourcing::Command for Delete {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::NotFound("Download not found".to_string()));
-        }
-
         return Ok(());
     }
 
@@ -49,9 +45,6 @@ impl Event for Deleted {
     type Aggregate = download::Download;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }

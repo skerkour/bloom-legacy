@@ -29,8 +29,6 @@ impl Handler<UpdateDownload> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let download_to_update: Download = bitflow_downloads::dsl::bitflow_downloads
                 .filter(bitflow_downloads::dsl::id.eq(msg.download_id))
-                // .filter(bitflow_downloads::dsl::owner_id.eq(msg.actor_id))
-                .filter(bitflow_downloads::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
