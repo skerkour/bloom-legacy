@@ -30,7 +30,6 @@ impl Handler<TrashFiles> for DbActor {
                 let file_to_trash: domain::File = drive_files::dsl::drive_files
                     .filter(drive_files::dsl::id.eq(file_id))
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
-                    .filter(drive_files::dsl::deleted_at.is_null())
                     .first(&conn)?;
 
                 let trash_cmd = file::Trash {

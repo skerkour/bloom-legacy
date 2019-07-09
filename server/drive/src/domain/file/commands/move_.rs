@@ -29,7 +29,6 @@ impl eventsourcing::Command for Move {
         let new_parent: file::File = drive_files::dsl::drive_files
             .filter(drive_files::dsl::id.eq(self.to))
             .filter(drive_files::dsl::owner_id.eq(aggregate.owner_id))
-            .filter(drive_files::dsl::deleted_at.is_null())
             .filter(drive_files::dsl::trashed_at.is_null())
             .first(ctx)?;
 

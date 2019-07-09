@@ -23,7 +23,6 @@ impl Handler<FindProfile> for DbActor {
 
         let profile = drive_profiles::dsl::drive_profiles
             .filter(drive_profiles::dsl::account_id.eq(msg.account_id))
-            .filter(drive_profiles::dsl::deleted_at.is_null())
             .first(&conn)?;
 
         return Ok(profile);

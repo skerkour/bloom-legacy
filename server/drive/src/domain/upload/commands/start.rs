@@ -65,7 +65,6 @@ impl Event for Started {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             file_name: self.file_name.clone(),
             file_id: self.file_id,

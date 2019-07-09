@@ -29,7 +29,6 @@ impl Handler<UpdateFile> for DbActor {
             let file_to_update: file::File = drive_files::dsl::drive_files
                 .filter(drive_files::dsl::id.eq(msg.file_id))
                 .filter(drive_files::dsl::owner_id.eq(msg.actor_id))
-                .filter(drive_files::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
