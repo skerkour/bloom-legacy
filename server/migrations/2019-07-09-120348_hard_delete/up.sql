@@ -93,6 +93,9 @@ ALTER TABLE drive_profiles DROP COLUMN deleted_at;
 
 
 ALTER TABLE drive_files
+  DROP CONSTRAINT drive_files_parent_id_fkey,
+  ADD CONSTRAINT drive_files_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES drive_files(id) ON DELETE CASCADE;
+ALTER TABLE drive_files
   DROP CONSTRAINT drive_files_owner_id_fkey,
   ADD CONSTRAINT drive_files_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id) ON DELETE CASCADE;
 DELETE FROM drive_files WHERE deleted_at IS NOT NULL;

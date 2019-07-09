@@ -67,6 +67,8 @@ ALTER TABLE drive_profiles DROP CONSTRAINT drive_profiles_account_id_fkey,
 ALTER TABLE drive_files ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
 ALTER TABLE drive_files DROP CONSTRAINT drive_files_owner_id_fkey,
   ADD CONSTRAINT drive_files_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);
+ALTER TABLE drive_files DROP CONSTRAINT drive_files_parent_id_fkey,
+  ADD CONSTRAINT drive_files_parent_id_fkey FOREIGN KEY (parent_id) REFERENCES drive_files(id);
 
 -- myaccount
 ALTER TABLE kernel_pending_emails ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
