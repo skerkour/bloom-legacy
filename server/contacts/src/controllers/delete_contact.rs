@@ -30,17 +30,14 @@ impl Handler<DeleteConatct> for DbActor {
             let contact_to_update: contact::Contact = contacts_contacts::dsl::contacts_contacts
                 .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
                 .filter(contacts_contacts::dsl::owner_id.eq(msg.actor_id))
-                .filter(contacts_contacts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
             let (contact_to_update, _) =
                 eventsourcing::execute(&conn, contact_to_update, &delete_cmd)?;
 
-            // update contact
-            diesel::update(&contact_to_update)
-                .set(&contact_to_update)
-                .execute(&conn)?;
+            // delete contact
+            diesel::delete(&contact_to_update).execute(&conn)?;
 
             return Ok(());
         })?);

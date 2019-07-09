@@ -35,8 +35,7 @@ impl Handler<DeleteAlbum> for DbActor {
 
             let (album_to_update, _) = eventsourcing::execute(&conn, album_to_update, &delete_cmd)?;
             // delete album
-            diesel::delete(&album_to_update)
-                .execute(&conn)?;
+            diesel::delete(&album_to_update).execute(&conn)?;
 
             return Ok(());
         })?);

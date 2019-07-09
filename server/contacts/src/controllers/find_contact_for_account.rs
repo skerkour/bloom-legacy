@@ -25,7 +25,6 @@ impl Handler<FindContactForAccount> for DbActor {
         let contact: contact::Contact = contacts_contacts::dsl::contacts_contacts
             .filter(contacts_contacts::dsl::id.eq(msg.contact_id))
             .filter(contacts_contacts::dsl::owner_id.eq(msg.account_id))
-            .filter(contacts_contacts::dsl::deleted_at.is_null())
             .first(&conn)?;
 
         return Ok(contact);

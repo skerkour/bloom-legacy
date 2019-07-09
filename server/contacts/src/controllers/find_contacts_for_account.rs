@@ -23,7 +23,6 @@ impl Handler<FindContactsForAccount> for DbActor {
 
         let contacts: Vec<contact::Contact> = contacts_contacts::dsl::contacts_contacts
             .filter(contacts_contacts::dsl::owner_id.eq(msg.account_id))
-            .filter(contacts_contacts::dsl::deleted_at.is_null())
             .load(&conn)?;
 
         return Ok(contacts);
