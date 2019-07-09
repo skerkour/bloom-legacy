@@ -64,8 +64,8 @@
         <v-container grid-list-sm fluid>
           <v-layout row wrap>
 
-            <v-flex v-for="file in media" :key="file.id" xs4 sm3 md2 d-flex
-              @click="open_carousel_dialog" class="pointer">
+            <v-flex v-for="(file, index) in media" :key="file.id" xs4 sm3 md2 d-flex
+              @click="open_carousel_dialog(index)" class="pointer">
               <v-card flat tile class="d-flex" >
                 <v-img :src="file.url" class="grey lighten-2" contain>
                   <template v-slot:placeholder>
