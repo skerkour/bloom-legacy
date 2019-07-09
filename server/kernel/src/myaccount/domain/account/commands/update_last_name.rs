@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount::domain::account, myaccount::validators};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -22,7 +22,7 @@ impl eventsourcing::Command for UpdateLastName {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::last_name(&self.last_name)?;
+        account::validators::last_name(&self.last_name)?;
 
         return Ok(());
     }

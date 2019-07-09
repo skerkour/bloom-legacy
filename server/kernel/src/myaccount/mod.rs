@@ -2,7 +2,6 @@ pub mod api;
 pub mod controllers;
 pub mod domain;
 pub mod notifications;
-pub mod validators;
 
 pub const PASSWORD_BCRYPT_COST: u32 = 13;
 pub const PENDING_USER_TOKEN_BCRYPT_COST: u32 = 11;

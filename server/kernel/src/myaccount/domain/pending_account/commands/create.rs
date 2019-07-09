@@ -1,6 +1,9 @@
 use crate::{
-    config::Config, error::KernelError, myaccount, myaccount::domain::pending_account,
-    myaccount::validators, utils,
+    config::Config,
+    error::KernelError,
+    myaccount,
+    myaccount::domain::{account, pending_account},
+    utils,
 };
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -31,10 +34,10 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
-        validators::first_name(&self.first_name)?;
-        validators::last_name(&self.last_name)?;
-        validators::password(self.config.basic_passwords.clone(), &self.password)?;
-        validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
+        account::validators::first_name(&self.first_name)?;
+        account::validators::last_name(&self.last_name)?;
+        account::validators::password(self.config.basic_passwords.clone(), &self.password)?;
+        account::validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
 
         if self.password == self.email {
             return Err(KernelError::Validation(

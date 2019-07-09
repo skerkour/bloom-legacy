@@ -1,7 +1,4 @@
-use crate::{
-    config::Config, error::KernelError, myaccount, myaccount::domain::account,
-    myaccount::validators,
-};
+use crate::{config::Config, error::KernelError, myaccount, myaccount::domain::account};
 use chrono::Utc;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -28,7 +25,7 @@ impl eventsourcing::Command for ResetPassword {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::password(self.config.basic_passwords.clone(), &self.new_password)?;
+        account::validators::password(self.config.basic_passwords.clone(), &self.new_password)?;
         let timestamp = Utc::now();
         let duration = aggregate.updated_at.signed_duration_since(timestamp);
 

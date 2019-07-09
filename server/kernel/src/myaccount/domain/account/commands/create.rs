@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::account, myaccount::validators};
+use crate::{error::KernelError, myaccount, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -30,7 +30,7 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
-        validators::username(&self.username)?;
+        account::validators::username(&self.username)?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts

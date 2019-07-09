@@ -1,4 +1,4 @@
-use crate::{domain::album, validators};
+use crate::domain::album;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -23,7 +23,7 @@ impl eventsourcing::Command for Create {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::album_name(&self.name)?;
+        album::validators::name(&self.name)?;
 
         return Ok(());
     }

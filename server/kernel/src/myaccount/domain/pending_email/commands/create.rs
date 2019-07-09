@@ -1,5 +1,8 @@
 use crate::{
-    config, error::KernelError, myaccount, myaccount::domain::pending_email, myaccount::validators,
+    config,
+    error::KernelError,
+    myaccount,
+    myaccount::domain::{account, pending_email},
     utils,
 };
 use diesel::{
@@ -29,7 +32,7 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
-        validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
+        account::validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts

@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount::domain::account, myaccount::validators};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -22,7 +22,7 @@ impl eventsourcing::Command for UpdateDisplayName {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        validators::display_name(&self.display_name)?;
+        account::validators::display_name(&self.display_name)?;
 
         return Ok(());
     }
