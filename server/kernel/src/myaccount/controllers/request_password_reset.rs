@@ -32,7 +32,6 @@ impl Handler<RequestPasswordReset> for DbActor {
                         .eq(&msg.email_or_username)
                         .or(kernel_accounts::dsl::username.eq(&msg.email_or_username)),
                 )
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

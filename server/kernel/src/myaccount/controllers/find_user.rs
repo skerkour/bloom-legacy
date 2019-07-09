@@ -22,7 +22,6 @@ impl Handler<FindUser> for DbActor {
 
         let account: domain::Account = kernel_accounts::dsl::kernel_accounts
             .filter(kernel_accounts::dsl::username.eq(msg.username))
-            .filter(kernel_accounts::dsl::deleted_at.is_null())
             .filter(kernel_accounts::dsl::disabled_at.is_null())
             .first(&conn)?;
 

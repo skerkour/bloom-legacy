@@ -18,13 +18,8 @@ impl eventsourcing::Command for SignOut {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation(
-                "Session is currently not active.".to_string(),
-            ));
-        }
         return Ok(());
     }
 
@@ -49,9 +44,6 @@ impl Event for SignedOut {
     type Aggregate = session::Session;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }

@@ -9,7 +9,6 @@ pub struct PaymentMethod {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
-    pub deleted_at: Option<chrono::DateTime<chrono::Utc>>,
     pub version: i64,
 
     pub details: PaymentDetails,
@@ -26,7 +25,6 @@ impl PaymentMethod {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
-            deleted_at: None,
             version: 0,
 
             details: PaymentDetails::None,

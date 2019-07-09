@@ -35,7 +35,6 @@ impl Handler<VerifyPendingAccount> for DbActor {
             let pending_account_to_verify: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
                     .filter(kernel_pending_accounts::dsl::id.eq(msg.id))
-                    .filter(kernel_pending_accounts::dsl::deleted_at.is_null())
                     .for_update()
                     .first(&conn)?;
 

@@ -20,10 +20,6 @@ impl eventsourcing::Command for SendNewCode {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation("Account not found.".to_string()));
-        }
-
         let now = chrono::Utc::now();
         if now.signed_duration_since(aggregate.updated_at) < Duration::seconds(20) {
             return Err(KernelError::Validation(

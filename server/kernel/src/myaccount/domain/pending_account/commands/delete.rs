@@ -57,9 +57,6 @@ impl Event for Deleted {
     type Aggregate = pending_account::PendingAccount;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }

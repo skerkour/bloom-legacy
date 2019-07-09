@@ -23,12 +23,6 @@ impl eventsourcing::Command for Revoke {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation(
-                "Session is currently not active.".to_string(),
-            ));
-        }
-
         if let Some(current_session_id) = self.current_session_id {
             if current_session_id == aggregate.id {
                 return Err(KernelError::Validation(
@@ -63,9 +57,6 @@ impl Event for Revoked {
     type Aggregate = session::Session;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }

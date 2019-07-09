@@ -5,7 +5,6 @@ parent_id,
 id,
 created_at,
 updated_at,
-deleted_at,
 removed_at,
 name,
 type
@@ -18,7 +17,6 @@ AS (
     id,
     created_at,
     updated_at,
-    deleted_at,
     removed_at,
     name,
     type
@@ -32,12 +30,11 @@ AS (
     fs.id,
     fs.created_at,
     fs.updated_at,
-    fs.deleted_at,
     fs.removed_at,
     fs.name,
     fs.type
   FROM drive_files fs, menu_tree mt
-  WHERE fs.parent_id = mt.id AND fs.deleted_at IS NULL AND fs.removed_at IS NULL
+  WHERE fs.parent_id = mt.id AND fs.removed_at IS NULL
 )
 SELECT * FROM menu_tree ORDER BY level;
 

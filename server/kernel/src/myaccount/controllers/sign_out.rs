@@ -31,7 +31,7 @@ impl Handler<SignOut> for DbActor {
             let (session, _) = eventsourcing::execute(&conn, msg.session, &sign_out_cmd)?;
 
             // update session
-            diesel::update(&session).set(&session).execute(&conn)?;
+            diesel::delete(&session).execute(&conn)?;
 
             return Ok(());
         })?);

@@ -50,7 +50,7 @@ impl Handler<FindAlbum> for DbActor {
 
         // let files: Vec<File> = sql_query("SELECT * FROM drive_files AS file
         //     INNER JOIN gallery_albums_files AS file ON file.id = file.file_id
-        //     WHERE file.album_id = $1 AND file.deleted_at IS NULL AND file.trashed_at IS NULL")
+        //     WHERE file.album_id = $1 AND file.trashed_at IS NULL")
         //     .bind::<sql_types::Uuid, _>(msg.album_id)
         //     .load(&conn)?;
 

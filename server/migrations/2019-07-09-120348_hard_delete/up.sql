@@ -95,5 +95,30 @@ ALTER TABLE drive_profiles DROP COLUMN deleted_at;
 ALTER TABLE drive_files
   DROP CONSTRAINT drive_files_owner_id_fkey,
   ADD CONSTRAINT drive_files_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id) ON DELETE CASCADE;
-DELETE FROM drive_files WHERE drive_files IS NOT NULL;
+DELETE FROM drive_files WHERE deleted_at IS NOT NULL;
 ALTER TABLE drive_files DROP COLUMN deleted_at;
+
+-- billing
+DROP TABLE IF EXISTS billing_invoices;
+DROP TABLE IF EXISTS billing_payment_methods;
+DROP TABLE IF EXISTS billing_subscriptions;
+DROP TABLE IF EXISTS billing_profiles;
+
+-- myaccount
+ALTER TABLE kernel_pending_emails
+  DROP CONSTRAINT kernel_pending_emails_account_id_fkey,
+  ADD CONSTRAINT kernel_pending_emails_account_id_fkey FOREIGN KEY (account_id) REFERENCES kernel_accounts(id) ON DELETE CASCADE;
+DELETE FROM kernel_pending_emails WHERE deleted_at IS NOT NULL;
+ALTER TABLE kernel_pending_emails DROP COLUMN deleted_at;
+
+ALTER TABLE kernel_sessions
+  DROP CONSTRAINT kernel_sessions_account_id_fkey,
+  ADD CONSTRAINT kernel_sessions_account_id_fkey FOREIGN KEY (account_id) REFERENCES kernel_accounts(id) ON DELETE CASCADE;
+DELETE FROM kernel_sessions WHERE deleted_at IS NOT NULL;
+ALTER TABLE kernel_sessions DROP COLUMN deleted_at;
+
+DELETE FROM kernel_pending_accounts WHERE deleted_at IS NOT NULL;
+ALTER TABLE kernel_pending_accounts DROP COLUMN deleted_at;
+
+DELETE FROM kernel_accounts WHERE deleted_at IS NOT NULL;
+ALTER TABLE kernel_accounts DROP COLUMN deleted_at;

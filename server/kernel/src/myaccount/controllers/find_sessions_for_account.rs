@@ -22,7 +22,6 @@ impl Handler<FindSessionsForAccount> for DbActor {
 
         let sessions: Vec<domain::Session> = kernel_sessions::dsl::kernel_sessions
             .filter(kernel_sessions::dsl::account_id.eq(msg.account_id))
-            .filter(kernel_sessions::dsl::deleted_at.is_null())
             .load(&conn)?;
 
         return Ok(sessions);

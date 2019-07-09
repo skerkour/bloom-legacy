@@ -51,7 +51,6 @@ impl Handler<UpdatePassword> for DbActor {
             let sessions: Vec<Session> = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::account_id.eq(account_to_update.id))
                 .filter(kernel_sessions::dsl::id.ne(msg.current_session.id))
-                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .load(&conn)?;
 
