@@ -48,7 +48,6 @@ impl eventsourcing::Command for Create {
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts
             .filter(email.eq(&self.email))
-            .filter(deleted_at.is_null())
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
@@ -107,7 +106,6 @@ impl Event for Created {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            deleted_at: None,
             version: 0,
             email: self.email.clone(),
             first_name: self.first_name.clone(),

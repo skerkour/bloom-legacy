@@ -41,7 +41,6 @@ impl eventsourcing::Event for Event {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
-                deleted_at: None,
                 version: 0,
                 account_id: data.account_id,
                 stripe_customer_id: None,

@@ -35,7 +35,6 @@ impl Handler<VerifyEmail> for DbActor {
                 kernel_pending_emails::dsl::kernel_pending_emails
                     .filter(kernel_pending_emails::dsl::id.eq(msg.id))
                     .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
-                    .filter(kernel_pending_emails::dsl::deleted_at.is_null())
                     .for_update()
                     .first(&conn)?;
 
@@ -81,7 +80,6 @@ impl Handler<VerifyEmail> for DbActor {
                 kernel_pending_emails::dsl::kernel_pending_emails
                     .filter(kernel_pending_emails::dsl::account_id.eq(account_to_update.id))
                     .filter(kernel_pending_emails::dsl::id.ne(msg.id))
-                    .filter(kernel_pending_emails::dsl::deleted_at.is_null())
                     .for_update()
                     .load(&conn)?;
 

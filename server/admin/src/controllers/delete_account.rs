@@ -34,7 +34,6 @@ impl Handler<DeleteAccount> for DbActor {
 
             let account_to_delete: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::id.eq(msg.account_id))
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -42,9 +41,7 @@ impl Handler<DeleteAccount> for DbActor {
 
             let (account_to_delete, _) =
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;
-            diesel::update(&account_to_delete)
-                .set(&account_to_delete)
-                .execute(&conn)?;
+            diesel::delete(&account_to_delete).execute(&conn)?;
 
             return Ok(());
         })?);

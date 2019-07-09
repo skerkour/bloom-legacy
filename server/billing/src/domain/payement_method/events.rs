@@ -40,17 +40,13 @@ impl eventsourcing::Event for Event {
                 id: data.id,
                 created_at: self.timestamp,
                 updated_at: self.timestamp,
-                deleted_at: None,
                 version: 0,
                 details: data.details.clone(),
                 is_default: data.is_default,
                 billing_profile_id: data.billing_profile_id,
             },
             // RemovedV1
-            EventData::RemovedV1 => Self::Aggregate {
-                deleted_at: Some(self.timestamp),
-                ..aggregate
-            },
+            EventData::RemovedV1 => aggregate,
             // SetAsDefaultV1
             EventData::SetAsDefaultV1 => Self::Aggregate {
                 is_default: true,

@@ -34,7 +34,6 @@ impl Handler<ResetPassword> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let account: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::password_reset_id.eq(msg.reset_password_id))
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -52,7 +51,6 @@ impl Handler<ResetPassword> for DbActor {
             // revoke all active sessions
             let sessions: Vec<Session> = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::account_id.eq(account.id))
-                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .load(&conn)?;
 

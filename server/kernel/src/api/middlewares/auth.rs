@@ -296,7 +296,6 @@ impl Handler<CheckAuth> for DbActor {
                 let (session, account): (domain::Session, domain::Account) =
                     kernel_sessions::dsl::kernel_sessions
                         .filter(kernel_sessions::dsl::id.eq(msg.session_id))
-                        .filter(kernel_sessions::dsl::deleted_at.is_null())
                         .inner_join(kernel_accounts::table)
                         .first(&conn)
                         .map_err(|_| {

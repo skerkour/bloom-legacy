@@ -33,7 +33,6 @@ impl eventsourcing::Command for Verify {
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts
             .filter(email.eq(&self.email))
-            .filter(deleted_at.is_null())
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {

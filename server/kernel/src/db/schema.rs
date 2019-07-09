@@ -1,52 +1,4 @@
 table! {
-    billing_invoices (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        details -> Jsonb,
-        billing_profile_id -> Uuid,
-    }
-}
-
-table! {
-    billing_payment_methods (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        details -> Jsonb,
-        is_default -> Bool,
-        billing_profile_id -> Uuid,
-    }
-}
-
-table! {
-    billing_profiles (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        stripe_customer_id -> Nullable<Text>,
-        account_id -> Uuid,
-    }
-}
-
-table! {
-    billing_subscriptions (id) {
-        id -> Uuid,
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
-        version -> Int8,
-        billing_profile_id -> Uuid,
-    }
-}
-
-table! {
     bitflow_downloads (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -178,7 +130,6 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         avatar_url -> Text,
         email -> Text,
@@ -200,7 +151,6 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         email -> Text,
         first_name -> Text,
@@ -217,7 +167,6 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         email -> Text,
         token -> Text,
@@ -231,7 +180,6 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
-        deleted_at -> Nullable<Timestamptz>,
         version -> Int8,
         device -> Jsonb,
         ip -> Text,
@@ -315,10 +263,6 @@ table! {
     }
 }
 
-joinable!(billing_invoices -> billing_profiles (billing_profile_id));
-joinable!(billing_payment_methods -> billing_profiles (billing_profile_id));
-joinable!(billing_profiles -> kernel_accounts (account_id));
-joinable!(billing_subscriptions -> billing_profiles (billing_profile_id));
 joinable!(bitflow_downloads -> kernel_accounts (owner_id));
 joinable!(bitflow_profiles -> drive_files (download_folder_id));
 joinable!(bitflow_profiles -> kernel_accounts (account_id));
@@ -342,10 +286,6 @@ joinable!(phaser_reports -> phaser_scans (scan_id));
 joinable!(phaser_scans -> kernel_accounts (owner_id));
 
 allow_tables_to_appear_in_same_query!(
-    billing_invoices,
-    billing_payment_methods,
-    billing_profiles,
-    billing_subscriptions,
     bitflow_downloads,
     bitflow_profiles,
     calendar_events,

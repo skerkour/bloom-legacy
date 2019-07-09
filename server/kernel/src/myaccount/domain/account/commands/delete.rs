@@ -20,14 +20,8 @@ impl eventsourcing::Command for Delete {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.deleted_at.is_some() {
-            return Err(KernelError::Validation(
-                "Account is already deleted".to_string(),
-            ));
-        }
-
         if !self.actor.is_admin {
             return Err(KernelError::Forbidden("Admin role is required".to_string()));
         }
@@ -66,7 +60,6 @@ impl Event for Deleted {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            deleted_at: Some(self.timestamp),
             disabled_at: Some(self.timestamp),
             first_name: self.random_string.clone(),
             last_name: self.random_string.clone(),
@@ -96,12 +89,11 @@ impl Event for Deleted {
 //         let mut account_to_delete = account::Account::new();
 //         account_to_delete.username = crate::utils::random_hex_string(10);
 //         let delete_account_cmd = account::Delete {};
-//         assert!(account_to_delete.deleted_at.is_none());
+//        ASSERT
 
 //         let (account_to_delete, _event) =
 //             eventsourcing::execute(&conn, account_to_delete, &delete_account_cmd)
 //                 .expect("error executing delete account command");
-
-//         assert!(account_to_delete.deleted_at.is_some());
+//        ASSERT
 //     }
 // }

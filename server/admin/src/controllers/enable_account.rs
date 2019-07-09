@@ -34,7 +34,6 @@ impl Handler<EnableAccount> for DbActor {
 
             let account_to_disable: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::id.eq(msg.account_id))
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

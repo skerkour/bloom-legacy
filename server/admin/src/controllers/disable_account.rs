@@ -34,14 +34,12 @@ impl Handler<DisableAccount> for DbActor {
 
             let account_to_disable: Account = kernel_accounts::dsl::kernel_accounts
                 .filter(kernel_accounts::dsl::id.eq(msg.account_id))
-                .filter(kernel_accounts::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
             if account_to_disable.is_admin {
                 let remaining_admins: i64 = kernel_accounts::dsl::kernel_accounts
                     .filter(kernel_accounts::dsl::is_admin.eq(true))
-                    .filter(kernel_accounts::dsl::deleted_at.is_null())
                     .filter(kernel_accounts::dsl::disabled_at.is_null())
                     .count()
                     .get_result(&conn)?;
@@ -63,7 +61,6 @@ impl Handler<DisableAccount> for DbActor {
             // revoke all sessions
             let sessions: Vec<session::Session> = kernel_sessions::dsl::kernel_sessions
                 .filter(kernel_sessions::dsl::account_id.eq(account_to_disable.id))
-                .filter(kernel_sessions::dsl::deleted_at.is_null())
                 .for_update()
                 .load(&conn)?;
 
