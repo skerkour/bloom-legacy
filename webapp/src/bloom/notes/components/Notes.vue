@@ -3,7 +3,7 @@
     <v-container fluid grid-list-lg>
       <v-layout align-center justify-center>
         <v-flex xs12 sm6>
-          <v-text-field placeholder="Take a note..." solo @click="open_note_dialog" />
+          <v-text-field placeholder="Take a note..." solo @click="open_note_dialog" readonly/>
         </v-flex>
       </v-layout>
       <v-layout row wrap justify-left class="mt-1">
