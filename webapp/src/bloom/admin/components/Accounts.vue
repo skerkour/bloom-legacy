@@ -54,8 +54,6 @@
             <td class="text-xs-left">
               <v-chip color="success" outline v-if="!props.item.disabled_at">Active</v-chip>
               <v-chip v-else outline>Disabled</v-chip>
-
-              <v-chip color="error" dark v-if="props.item.deleted_at">Deleted</v-chip>
             </td>
 
             <td class="justify-left">
