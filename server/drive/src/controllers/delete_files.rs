@@ -40,6 +40,12 @@ impl Handler<DeleteFiles> for DbActor {
                     .filter(drive_files::dsl::owner_id.eq(msg.owner_id))
                     .first(&conn)?;
 
+                if file_to_delete.name == crate::BLOOM_ROOT_NAME {
+                    return Err(KernelError::Validation(
+                        "You can not delete Home".to_string(),
+                    ));
+                }
+
                 space_freed += delete_file_with_children(
                     file_to_delete.clone(),
                     msg.s3_client.clone(),
