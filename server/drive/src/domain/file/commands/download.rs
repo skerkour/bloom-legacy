@@ -80,11 +80,6 @@ impl Event for Downloaded {
     type Aggregate = file::File;
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
-        return Self::Aggregate {
-            explicitly_trashed: false,
-            trashed_at: None,
-            deleted_at: Some(self.timestamp),
-            ..aggregate
-        };
+        return aggregate;
     }
 }
