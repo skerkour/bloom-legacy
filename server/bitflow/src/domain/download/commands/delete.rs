@@ -19,7 +19,7 @@ impl eventsourcing::Command for Delete {
     fn validate(
         &self,
         _ctx: &Self::Context,
-        aggregate: &Self::Aggregate,
+        _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
         return Ok(());
     }

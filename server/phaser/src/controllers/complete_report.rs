@@ -118,7 +118,6 @@ impl Handler<CompleteReport> for DbActor {
             // retrieve report
             let report_to_complete: report::Report = phaser_reports::dsl::phaser_reports
                 .filter(phaser_reports::dsl::id.eq(parsed_report.id))
-                .filter(phaser_reports::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 
@@ -137,7 +136,6 @@ impl Handler<CompleteReport> for DbActor {
             // retrieve Scan
             let scan_to_complete: scan::Scan = phaser_scans::dsl::phaser_scans
                 .filter(phaser_scans::dsl::id.eq(scan_id))
-                .filter(phaser_scans::dsl::deleted_at.is_null())
                 .for_update()
                 .first(&conn)?;
 

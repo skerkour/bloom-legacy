@@ -23,7 +23,6 @@ impl Handler<FindScans> for DbActor {
 
         let scans: Vec<domain::Scan> = phaser_scans::dsl::phaser_scans
             .filter(phaser_scans::dsl::owner_id.eq(msg.account_id))
-            .filter(phaser_scans::dsl::deleted_at.is_null())
             .load(&conn)?;
 
         return Ok(scans);
