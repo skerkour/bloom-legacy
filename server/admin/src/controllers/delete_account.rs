@@ -2,7 +2,7 @@ use actix::{Handler, Message};
 use kernel::{
     db::DbActor,
     error::KernelError,
-    myaccount::domain::{account, Account},
+    myaccount::domain::{account, deleted_username, Account, DeletedUsername},
 };
 
 #[derive(Clone)]
@@ -24,7 +24,7 @@ impl Handler<DeleteAccount> for DbActor {
 
     fn handle(&mut self, msg: DeleteAccount, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
-        use kernel::db::schema::kernel_accounts;
+        use kernel::db::schema::{kernel_accounts, kernel_deleted_usernames};
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
@@ -43,10 +43,17 @@ impl Handler<DeleteAccount> for DbActor {
                 s3_client: msg.s3_client,
                 s3_bucket: msg.s3_bucket,
             };
-
             let (account_to_delete, _) =
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;
             diesel::delete(&account_to_delete).execute(&conn)?;
+
+            let create_cmd = deleted_username::Create {
+                username: account_to_delete.username.clone(),
+            };
+            let (username, _) = eventsourcing::execute(&conn, DeletedUsername::new(), &create_cmd)?;
+            diesel::insert_into(kernel_deleted_usernames::dsl::kernel_deleted_usernames)
+                .values(&username)
+                .execute(&conn)?;
 
             return Ok(());
         })?);

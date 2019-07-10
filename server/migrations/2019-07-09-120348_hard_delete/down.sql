@@ -82,3 +82,5 @@ ALTER TABLE kernel_sessions DROP CONSTRAINT kernel_sessions_account_id_fkey,
 ALTER TABLE kernel_accounts ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
 
 ALTER TABLE kernel_pending_accounts ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
+
+DROP TABLE kernel_deleted_usernames;

@@ -27,14 +27,14 @@ impl eventsourcing::Command for Create {
         ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        use crate::db::schema::kernel_accounts::dsl::*;
+        use crate::db::schema::{kernel_accounts, kernel_deleted_usernames};
         use diesel::prelude::*;
 
         account::validators::username(&self.username)?;
 
         // verify that an email isn't already in use
-        let existing_email: i64 = kernel_accounts
-            .filter(email.eq(&self.email))
+        let existing_email: i64 = kernel_accounts::dsl::kernel_accounts
+            .filter(kernel_accounts::dsl::email.eq(&self.email))
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
@@ -45,11 +45,24 @@ impl eventsourcing::Command for Create {
         }
 
         // verify that username isn't already in use
-        let existing_username: i64 = kernel_accounts
-            .filter(username.eq(&self.username))
+        let existing_username: i64 = kernel_accounts::dsl::kernel_accounts
+            .filter(kernel_accounts::dsl::username.eq(&self.username))
             .count()
             .get_result(ctx)?;
         if existing_username != 0 {
+            return Err(KernelError::Validation(format!(
+                "Username: {} is already in use.",
+                &self.username
+            )));
+        }
+
+        // verify that username was not used by a deleted account
+        let existing_deleted_username: i64 =
+            kernel_deleted_usernames::dsl::kernel_deleted_usernames
+                .filter(kernel_deleted_usernames::dsl::username.eq(&self.username))
+                .count()
+                .get_result(ctx)?;
+        if existing_deleted_username != 0 {
             return Err(KernelError::Validation(format!(
                 "Username: {} is already in use.",
                 &self.username
