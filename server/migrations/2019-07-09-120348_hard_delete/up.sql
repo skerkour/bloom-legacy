@@ -125,3 +125,14 @@ ALTER TABLE kernel_pending_accounts DROP COLUMN deleted_at;
 
 DELETE FROM kernel_accounts WHERE deleted_at IS NOT NULL;
 ALTER TABLE kernel_accounts DROP COLUMN deleted_at;
+
+
+CREATE TABLE kernel_deleted_usernames (
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    version BIGINT NOT NULL,
+
+    username TEXT NOT NULL,
+
+    PRIMARY KEY(username)
+);

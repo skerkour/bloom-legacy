@@ -147,6 +147,15 @@ table! {
 }
 
 table! {
+    kernel_deleted_usernames (username) {
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        version -> Int8,
+        username -> Text,
+    }
+}
+
+table! {
     kernel_pending_accounts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -296,6 +305,7 @@ allow_tables_to_appear_in_same_query!(
     gallery_albums,
     gallery_albums_files,
     kernel_accounts,
+    kernel_deleted_usernames,
     kernel_pending_accounts,
     kernel_pending_emails,
     kernel_sessions,
