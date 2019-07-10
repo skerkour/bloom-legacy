@@ -35,6 +35,11 @@ impl Handler<UpdateFile> for DbActor {
             // name
             let file_to_update = match &msg.name {
                 Some(name) if name != &file_to_update.name => {
+                    if name == crate::BLOOM_ROOT_NAME {
+                        return Err(KernelError::Validation(
+                            "file name is not valid".to_string(),
+                        ));
+                    }
                     let rename_cmd = file::Rename { name: name.clone() };
 
                     let (file_to_update, _) =

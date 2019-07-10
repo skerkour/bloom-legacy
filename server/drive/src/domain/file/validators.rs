@@ -6,11 +6,7 @@ pub fn name(file_name: &str) -> Result<(), KernelError> {
         return Err(KernelError::Validation("file name is too long".to_string()));
     }
 
-    if file_name == crate::BLOOM_ROOT_NAME {
-        return Err(KernelError::Validation(
-            "file name is not valid".to_string(),
-        ));
-    }
+    // file_name == crate::BLOOM_ROOT_NAME done in controllers to avoid error while creating account...
 
     return Ok(());
 }
