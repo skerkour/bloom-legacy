@@ -1,4 +1,3 @@
-mod delete_account;
 mod find_account;
 mod find_sessions_for_account;
 mod find_user;
@@ -17,7 +16,6 @@ mod update_email;
 mod update_password;
 mod verify_email;
 
-pub use delete_account::DeleteAccount;
 pub use find_account::FindAccount;
 pub use find_sessions_for_account::FindSessionsForAccount;
 pub use find_user::FindUser;

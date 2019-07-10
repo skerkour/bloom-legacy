@@ -4,11 +4,12 @@ use kernel::{
     error::KernelError,
     myaccount::domain::{account, Account},
 };
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug, Deserialize, Serialize)]
+#[derive(Clone)]
 pub struct DeleteAccount {
     pub actor: Account,
+    pub s3_bucket: String,
+    pub s3_client: rusoto_s3::S3Client,
     pub account_id: uuid::Uuid,
     pub session_id: uuid::Uuid,
     pub request_id: uuid::Uuid,
@@ -37,7 +38,11 @@ impl Handler<DeleteAccount> for DbActor {
                 .for_update()
                 .first(&conn)?;
 
-            let delete_cmd = account::Delete { actor: msg.actor };
+            let delete_cmd = account::Delete {
+                actor: msg.actor,
+                s3_client: msg.s3_client,
+                s3_bucket: msg.s3_bucket,
+            };
 
             let (account_to_delete, _) =
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;

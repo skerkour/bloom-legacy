@@ -20,3 +20,4 @@ chrono = { version = "0.4", features = ["serde"] }
 actix-web = "1.0.0"
 actix = "0.8"
 futures = "0.1"
+rusoto_s3 = "0.39"

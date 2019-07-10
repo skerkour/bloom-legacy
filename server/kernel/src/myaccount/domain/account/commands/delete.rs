@@ -4,10 +4,11 @@ use diesel::{
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-use serde::{Deserialize, Serialize};
 
-#[derive(Clone, Debug)]
+#[derive(Clone)]
 pub struct Delete {
+    pub s3_client: rusoto_s3::S3Client,
+    pub s3_bucket: String,
     pub actor: account::Account,
 }
 
@@ -32,18 +33,24 @@ impl eventsourcing::Command for Delete {
     fn build_event(
         &self,
         _ctx: &Self::Context,
-        _aggregate: &Self::Aggregate,
+        aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Deleted {
+            id: aggregate.id,
             timestamp: chrono::Utc::now(),
+            s3_client: self.s3_client.clone(),
+            s3_bucket: self.s3_bucket.clone(),
         });
     }
 }
 
 // Event
-#[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
+#[derive(Clone, EventTs)]
 pub struct Deleted {
     pub timestamp: chrono::DateTime<chrono::Utc>,
+    pub id: uuid::Uuid,
+    pub s3_client: rusoto_s3::S3Client,
+    pub s3_bucket: String,
 }
 
 impl Event for Deleted {

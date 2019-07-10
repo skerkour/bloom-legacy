@@ -52,8 +52,6 @@ impl Handler<DeleteFiles> for DbActor {
                     msg.s3_bucket.clone(),
                     &conn,
                 )?;
-
-                diesel::delete(&file_to_delete).execute(&conn)?;
             }
 
             return Ok(space_freed);
@@ -61,7 +59,7 @@ impl Handler<DeleteFiles> for DbActor {
     }
 }
 
-fn delete_file_with_children(
+pub fn delete_file_with_children(
     file: domain::File,
     s3_client: rusoto_s3::S3Client,
     s3_bucket: String,
@@ -74,7 +72,6 @@ fn delete_file_with_children(
 
     if file.type_ == crate::FOLDER_TYPE {
         // find children
-
         let folder_children: Vec<file::FolderChild> =
             sql_query(include_str!("../../sql_requests/folder_children.sql"))
                 .bind::<sql_types::Uuid, _>(file.id)
@@ -117,12 +114,14 @@ fn delete_file_with_children(
             .execute(conn)?;
     }
 
-    // delete file
+    // delete file, all children will be delete thanks to PostgreSQL cascading
     let delete_cmd = file::Delete {
         s3_client: s3_client.clone(),
         s3_bucket: s3_bucket.clone(),
     };
-    let _ = eventsourcing::execute(conn, file, &delete_cmd)?;
+    let (file, _) = eventsourcing::execute(conn, file, &delete_cmd)?;
+
+    diesel::delete(&file).execute(conn)?;
 
     return Ok(space_freed);
 }
