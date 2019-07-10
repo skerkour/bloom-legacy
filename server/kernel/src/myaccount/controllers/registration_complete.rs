@@ -51,8 +51,7 @@ impl Handler<CompleteRegistration> for DbActor {
 
             // create account
             let create_cmd = account::Create {
-                first_name: pending_account_to_update.first_name.clone(),
-                last_name: pending_account_to_update.last_name.clone(),
+                display_name: pending_account_to_update.display_name.clone(),
                 email: pending_account_to_update.email.clone(),
                 password: pending_account_to_update.password.clone(),
                 username: msg.username.clone(),

@@ -7,8 +7,7 @@ use actix::{Handler, Message};
 
 #[derive(Clone, Debug)]
 pub struct StartRegistration {
-    pub first_name: String,
-    pub last_name: String,
+    pub display_name: String,
     pub email: String,
     pub password: String,
     pub config: Config,
@@ -32,8 +31,7 @@ impl Handler<StartRegistration> for DbActor {
             let config = msg.config.clone();
 
             let create_cmd = pending_account::Create {
-                first_name: msg.first_name.clone(),
-                last_name: msg.last_name.clone(),
+                display_name: msg.display_name.clone(),
                 email: msg.email.clone(),
                 password: msg.password.clone(),
                 config: msg.config.clone(),
@@ -48,11 +46,7 @@ impl Handler<StartRegistration> for DbActor {
             send_account_verification_code(
                 &config,
                 new_pending_account.email.as_str(),
-                format!(
-                    "{} {}",
-                    &new_pending_account.first_name, &new_pending_account.last_name
-                )
-                .as_str(),
+                &msg.display_name,
                 new_pending_account.id.to_string().as_str(),
                 &event.code,
             )

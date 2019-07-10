@@ -23,12 +23,11 @@ pub struct PendingAccount {
     pub version: i64,
 
     pub email: String,
-    pub first_name: String,
-    pub last_name: String,
     pub password: String, // hashed password
     pub token: String,    // hashed verification code
     pub trials: i64,
     pub verified: bool,
+    pub display_name: String,
 }
 
 impl PendingAccount {
@@ -42,8 +41,7 @@ impl PendingAccount {
             version: 0,
 
             email: String::new(),
-            first_name: String::new(),
-            last_name: String::new(),
+            display_name: String::new(),
             password: String::new(),
             token: String::new(),
             trials: 0,

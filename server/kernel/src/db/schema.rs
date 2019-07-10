@@ -159,12 +159,11 @@ table! {
         updated_at -> Timestamptz,
         version -> Int8,
         email -> Text,
-        first_name -> Text,
-        last_name -> Text,
         password -> Text,
         token -> Text,
         trials -> Int8,
         verified -> Bool,
+        display_name -> Text,
     }
 }
 

@@ -13,8 +13,7 @@ use eventsourcing::{Event, EventTs};
 
 #[derive(Clone, Debug)]
 pub struct Create {
-    pub first_name: String,
-    pub last_name: String,
+    pub display_name: String,
     pub email: String,
     pub password: String,
     pub config: Config,
@@ -34,8 +33,7 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
-        account::validators::first_name(&self.first_name)?;
-        account::validators::last_name(&self.last_name)?;
+        account::validators::display_name(&self.display_name)?;
         account::validators::password(self.config.basic_passwords.clone(), &self.password)?;
         account::validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
 
@@ -75,8 +73,7 @@ impl eventsourcing::Command for Create {
         return Ok(Created {
             timestamp: chrono::Utc::now(),
             id: new_pending_account_id,
-            first_name: self.first_name.clone(),
-            last_name: self.last_name.clone(),
+            display_name: self.display_name.clone(),
             email: self.email.clone(),
             password: hashed_password,
             token,
@@ -90,8 +87,7 @@ impl eventsourcing::Command for Create {
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,
-    pub first_name: String,
-    pub last_name: String,
+    pub display_name: String,
     pub email: String,
     pub password: String,
     pub token: String,
@@ -108,8 +104,7 @@ impl Event for Created {
             updated_at: self.timestamp,
             version: 0,
             email: self.email.clone(),
-            first_name: self.first_name.clone(),
-            last_name: self.last_name.clone(),
+            display_name: self.display_name.clone(),
             password: self.password.clone(),
             token: self.token.clone(),
             trials: 0,
