@@ -26,6 +26,11 @@ impl Handler<StartUpload> for DbActor {
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
         return Ok(conn.transaction::<_, KernelError, _>(|| {
+            if msg.file_name == crate::BLOOM_ROOT_NAME {
+                return Err(KernelError::Validation(
+                    "file name is not valid".to_string(),
+                ));
+            }
             // start Upload
             let start_cmd = upload::Start {
                 file_name: msg.file_name.clone(),

@@ -32,6 +32,12 @@ impl Handler<CreateFolder> for DbActor {
                 .filter(drive_files::dsl::trashed_at.is_null())
                 .first(&conn)?;
 
+            if msg.name == crate::BLOOM_ROOT_NAME {
+                return Err(KernelError::Validation(
+                    "file name is not valid".to_string(),
+                ));
+            }
+
             let create_cmd = file::Create {
                 name: msg.name,
                 type_: FOLDER_TYPE.to_string(),
