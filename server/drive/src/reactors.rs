@@ -1,4 +1,5 @@
 use crate::{
+    controllers,
     domain::{file, profile},
     BLOOM_ROOT_NAME, DEFAULT_FOLDERS, FOLDER_TYPE,
 };
@@ -57,6 +58,34 @@ impl eventsourcing::Subscription for AccountCreated {
                 .values(&new_folder)
                 .execute(ctx)?;
         }
+
+        return Ok(());
+    }
+}
+
+pub struct AccountDeleted;
+impl eventsourcing::Subscription for AccountDeleted {
+    type Error = KernelError;
+    type Event = account::Deleted;
+    type Context = PooledConnection<ConnectionManager<PgConnection>>;
+
+    fn handle(&self, ctx: &Self::Context, event: &Self::Event) -> Result<(), Self::Error> {
+        use diesel::prelude::*;
+        use kernel::db::schema::drive_files;
+
+        // find home
+        let home_file: file::File = drive_files::dsl::drive_files
+            .filter(drive_files::dsl::name.eq(crate::BLOOM_ROOT_NAME))
+            .filter(drive_files::dsl::owner_id.eq(event.id))
+            .first(ctx)?;
+
+        // delete home
+        controllers::delete_file_with_children(
+            home_file,
+            event.s3_client.clone(),
+            event.s3_bucket.clone(),
+            ctx,
+        )?;
 
         return Ok(());
     }

@@ -29,6 +29,8 @@ pub fn delete(
             .db
             .send(controllers::DeleteAccount {
                 actor: auth.account.expect("unwraping non none account"),
+                s3_bucket: state.config.s3.bucket.clone(),
+                s3_client: state.s3_client.clone(),
                 account_id: account_id.into_inner(),
                 request_id,
                 session_id: auth.session.expect("unwraping non none session").id,

@@ -15,7 +15,7 @@ mod update_file;
 pub use complete_upload::CompleteUpload;
 pub use copy_files::CopyFiles;
 pub use create_folder::CreateFolder;
-pub use delete_files::DeleteFiles;
+pub use delete_files::{delete_file_with_children, DeleteFiles};
 pub use download_file::DownloadFile;
 pub use find_folder::FindFolder;
 pub use find_profile::FindProfile;
