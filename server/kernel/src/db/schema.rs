@@ -148,9 +148,6 @@ table! {
 
 table! {
     kernel_deleted_usernames (username) {
-        created_at -> Timestamptz,
-        updated_at -> Timestamptz,
-        version -> Int8,
         username -> Text,
     }
 }

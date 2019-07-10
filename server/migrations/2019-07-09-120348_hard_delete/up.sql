@@ -128,10 +128,6 @@ ALTER TABLE kernel_accounts DROP COLUMN deleted_at;
 
 
 CREATE TABLE kernel_deleted_usernames (
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    version BIGINT NOT NULL,
-
     username TEXT NOT NULL,
 
     PRIMARY KEY(username)
