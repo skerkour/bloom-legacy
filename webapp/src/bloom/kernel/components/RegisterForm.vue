@@ -9,7 +9,7 @@
           v-model="full_name"
           :rules="fulle_name_rules"
           :disabled="is_loading"
-           hint="Will be public"
+           hint="This will be public"
           ></v-text-field>
       </v-flex>
 
