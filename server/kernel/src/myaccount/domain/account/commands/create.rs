@@ -8,8 +8,7 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
 pub struct Create {
-    pub first_name: String,
-    pub last_name: String,
+    pub display_name: String,
     pub email: String,
     pub password: String,
     pub username: String,
@@ -80,8 +79,7 @@ impl eventsourcing::Command for Create {
         return Ok(account::Created {
             timestamp: chrono::Utc::now(),
             id: uuid::Uuid::new_v4(),
-            first_name: self.first_name.clone(),
-            last_name: self.last_name.clone(),
+            display_name: self.display_name.clone(),
             email: self.email.clone(),
             password: self.password.clone(),
             avatar_url: myaccount::AVATAR_DEFAULT_PATH.to_string(),
@@ -96,8 +94,7 @@ impl eventsourcing::Command for Create {
 pub struct Created {
     pub timestamp: chrono::DateTime<chrono::Utc>,
     pub id: uuid::Uuid,
-    pub first_name: String,
-    pub last_name: String,
+    pub display_name: String,
     pub email: String,
     pub password: String,
     pub avatar_url: String,
@@ -116,16 +113,16 @@ impl Event for Created {
             version: 0,
             avatar_url: self.avatar_url.clone(),
             email: self.email.clone(),
-            first_name: self.first_name.clone(),
             is_admin: self.is_admin,
-            last_name: self.last_name.clone(),
+            last_name: String::new(),
+            first_name: String::new(),
             password: self.password.clone(),
             password_reset_id: None,
             password_reset_token: None,
             username: self.username.clone(),
             disabled_at: None,
             bio: String::new(),
-            display_name: self.username.clone(),
+            display_name: self.display_name.clone(),
         };
     }
 }

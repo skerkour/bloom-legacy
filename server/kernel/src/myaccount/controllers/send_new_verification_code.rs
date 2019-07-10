@@ -49,11 +49,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
             send_account_verification_code(
                 &config,
                 pending_account.email.as_str(),
-                format!(
-                    "{} {}",
-                    &pending_account.first_name, &pending_account.last_name
-                )
-                .as_str(),
+                &pending_account.display_name,
                 pending_account.id.to_string().as_str(),
                 &event.code,
             )

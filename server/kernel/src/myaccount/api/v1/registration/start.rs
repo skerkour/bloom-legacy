@@ -38,8 +38,7 @@ pub fn post(
                 state
                     .db
                     .send(controllers::StartRegistration {
-                        first_name: register_data.first_name.clone(),
-                        last_name: register_data.last_name.clone(),
+                        display_name: register_data.full_name.clone(),
                         email: register_data.email.clone(),
                         password: register_data.password.clone(),
                         config,
