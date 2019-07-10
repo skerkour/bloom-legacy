@@ -19,9 +19,32 @@
 ## Non goals
 
 
+
+
 ## Models
 
+### Profile
+
+#### Commands
+
+#### Validators
+
+
 ### Invoice
+
+#### Commands
+
+#### Validators
+
+
+### Payement Method
+
+#### Commands
+
+#### Validators
+
+
+### Subscription
 
 #### Commands
 
