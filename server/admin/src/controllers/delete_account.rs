@@ -2,7 +2,7 @@ use actix::{Handler, Message};
 use kernel::{
     db::DbActor,
     error::KernelError,
-    myaccount::domain::{account, deleted_username, Account, DeletedUsername},
+    myaccount::domain::{account, Account, DeletedUsername},
 };
 
 #[derive(Clone)]
@@ -47,10 +47,10 @@ impl Handler<DeleteAccount> for DbActor {
                 eventsourcing::execute(&conn, account_to_delete, &delete_cmd)?;
             diesel::delete(&account_to_delete).execute(&conn)?;
 
-            let create_cmd = deleted_username::Create {
+            // save username to not use it again
+            let username = DeletedUsername {
                 username: account_to_delete.username.clone(),
             };
-            let (username, _) = eventsourcing::execute(&conn, DeletedUsername::new(), &create_cmd)?;
             diesel::insert_into(kernel_deleted_usernames::dsl::kernel_deleted_usernames)
                 .values(&username)
                 .execute(&conn)?;
