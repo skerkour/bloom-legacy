@@ -2,22 +2,14 @@
   <v-container grid-list-xl text-xs-center>
     <v-layout row wrap text-xs-center>
 
-      <v-flex xs12 sm4 offset-sm2>
+      <v-flex xs12 sm8 offset-sm2>
         <v-text-field
-          label="First name"
+          label="Full name"
           type="text"
-          v-model="first_name"
-          :rules="first_name_rules"
+          v-model="full_name"
+          :rules="fulle_name_rules"
           :disabled="is_loading"
-          ></v-text-field>
-      </v-flex>
-      <v-flex xs12 sm4>
-        <v-text-field
-          label="Last name"
-          type="text"
-          v-model="last_name"
-          :rules="last_name_rules"
-          :disabled="is_loading"
+           hint="Will be public"
           ></v-text-field>
       </v-flex>
 
@@ -82,13 +74,9 @@ import router from '@/bloom/kernel/router';
 @Component
 export default class RegisterForm extends Vue {
   show_password = false;
-  first_name = '';
-  first_name_rules = [
-    (v: string) => !!v || 'First name is required',
-  ];
-  last_name = '';
-  last_name_rules = [
-    (v: string) => !!v || 'Last name is required',
+  full_name = '';
+  fulle_name_rules = [
+    (v: string) => !!v || 'Name is required',
   ];
   email = '';
   email_rules = [
@@ -110,8 +98,7 @@ export default class RegisterForm extends Vue {
     this.error = '';
     const payload = {
       email: this.email,
-      first_name: this.first_name,
-      last_name: this.last_name,
+      full_name: this.full_name,
       password: this.password,
     };
     try {
