@@ -35,7 +35,7 @@ ALTER TABLE contacts_contacts ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NU
 ALTER TABLE contacts_contacts DROP CONSTRAINT contacts_contacts_owner_id_fkey,
   ADD CONSTRAINT contacts_contacts_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);
 
--- contacts
+-- bitflow
 ALTER TABLE bitflow_downloads ADD deleted_at TIMESTAMP WITH TIME ZONE DEFAULT NULL;
 ALTER TABLE bitflow_downloads DROP CONSTRAINT bitflow_downloads_owner_id_fkey,
   ADD CONSTRAINT bitflow_downloads_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id);

@@ -32,6 +32,7 @@ pub struct Profile {
     pub updated_at: chrono::DateTime<chrono::Utc>,
     pub version: i64,
 
+    pub strip_anonymous_id: String,
     pub stripe_customer_id: Option<String>,
 
     pub account_id: uuid::Uuid,
