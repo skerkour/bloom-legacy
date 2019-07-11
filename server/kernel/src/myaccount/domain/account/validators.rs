@@ -183,9 +183,10 @@ pub fn display_name(display_name: &str) -> Result<(), KernelError> {
     }
 
     if display_name.len() > myaccount::DISPLAY_NAME_MAX_LENGTH {
-        return Err(KernelError::Validation(
-            "display_name is too long".to_string(),
-        ));
+        return Err(KernelError::Validation(format!(
+            "display_name is too long ({} characters max)",
+            myaccount::DISPLAY_NAME_MAX_LENGTH
+        )));
     }
 
     return Ok(());
