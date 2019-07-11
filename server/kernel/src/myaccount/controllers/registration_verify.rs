@@ -26,7 +26,7 @@ impl Handler<VerifyPendingAccount> for DbActor {
 
         let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
 
-        return Ok(conn.transaction::<_, KernelError, _>(|| {
+        match conn.transaction::<_, KernelError, _>(|| {
             let verify_cmd = pending_account::Verify {
                 id: msg.id,
                 code: msg.code.clone(),
@@ -38,23 +38,8 @@ impl Handler<VerifyPendingAccount> for DbActor {
                     .for_update()
                     .first(&conn)?;
 
-            let pending_account_to_verify =
-                match eventsourcing::execute(&conn, pending_account_to_verify.clone(), &verify_cmd)
-                {
-                    Ok((pending_account_to_verify, _)) => pending_account_to_verify,
-                    Err(err) => match err {
-                        KernelError::Validation(_) => {
-                            let fail_cmd = pending_account::FailVerification {};
-                            let (pending_account_to_verify, _) = eventsourcing::execute(
-                                &conn,
-                                pending_account_to_verify,
-                                &fail_cmd,
-                            )?;
-                            pending_account_to_verify
-                        }
-                        _ => return Err(err),
-                    },
-                };
+            let (pending_account_to_verify, _) =
+                eventsourcing::execute(&conn, pending_account_to_verify.clone(), &verify_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account_to_verify)
@@ -62,6 +47,26 @@ impl Handler<VerifyPendingAccount> for DbActor {
                 .execute(&conn)?;
 
             return Ok(());
-        })?);
+        }) {
+            Ok(_) => return Ok(()),
+            Err(err) => match err {
+                KernelError::Validation(_) => {
+                    let pending_account_to_verify: PendingAccount =
+                        kernel_pending_accounts::dsl::kernel_pending_accounts
+                            .filter(kernel_pending_accounts::dsl::id.eq(msg.id))
+                            .for_update()
+                            .first(&conn)?;
+                    let fail_cmd = pending_account::FailVerification {};
+                    let (pending_account_to_verify, _) =
+                        eventsourcing::execute(&conn, pending_account_to_verify, &fail_cmd)?;
+                    // update pending_account_to_verify trials
+                    diesel::update(&pending_account_to_verify)
+                        .set(&pending_account_to_verify)
+                        .execute(&conn)?;
+                    return Err(err);
+                }
+                _ => return Err(err),
+            },
+        }
     }
 }
