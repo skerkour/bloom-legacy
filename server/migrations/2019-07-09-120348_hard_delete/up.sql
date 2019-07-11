@@ -42,7 +42,7 @@ ALTER TABLE music_playlists
 DELETE FROM music_playlists WHERE deleted_at IS NOT NULL;
 ALTER TABLE music_playlists DROP COLUMN deleted_at;
 
--- calendar
+-- contacts
 ALTER TABLE contacts_contacts
   DROP CONSTRAINT contacts_contacts_owner_id_fkey,
   ADD CONSTRAINT contacts_contacts_owner_id_fkey FOREIGN KEY (owner_id) REFERENCES kernel_accounts(id) ON DELETE CASCADE;

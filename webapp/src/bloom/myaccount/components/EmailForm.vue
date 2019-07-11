@@ -38,7 +38,7 @@
           <v-alert icon="mdi-check-circle" :value="dialog_success" type="success">
             Success!
           </v-alert>
-          <v-alert icon="mdi-check-circle" :value="dialog_error" type="success">
+          <v-alert icon="mdi-check-circle" :value="dialog_error" type="error">
             {{ dialog_error }}
           </v-alert>
           <p>
