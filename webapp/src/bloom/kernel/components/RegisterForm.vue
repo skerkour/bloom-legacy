@@ -80,7 +80,7 @@ export default class RegisterForm extends Vue {
   ];
   email = '';
   email_rules = [
-    (v: string) => !!v || 'Email name is required',
+    (v: string) => !!v || 'Email is required',
     (v: string) => v.indexOf('@') !== -1 || 'Email is not valid',
   ];
   password = '';
