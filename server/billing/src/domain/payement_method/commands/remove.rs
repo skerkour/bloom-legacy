@@ -21,7 +21,6 @@ impl eventsourcing::Command for Remove {
     type Event = payment_method::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(&self, _ctx: &Self::Context, _aggregate: &Self::Aggregate) -> Result<(), Self::Error> {
         return Ok(());

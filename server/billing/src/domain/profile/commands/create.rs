@@ -16,7 +16,6 @@ impl eventsourcing::Command for Create {
     type Event = profile::Event;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
     type Error = KernelError;
-    type NonStoredData = ();
 
     fn validate(
         &self,

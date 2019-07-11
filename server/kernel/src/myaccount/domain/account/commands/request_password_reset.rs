@@ -10,11 +10,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug)]
 pub struct RequestPasswordReset {}
 
-#[derive(Clone, Debug)]
-pub struct RequestPasswordResetNonStored {
-    pub plaintext_token: String,
-}
-
 impl eventsourcing::Command for RequestPasswordReset {
     type Aggregate = account::Account;
     type Event = PasswordResetRequested;
