@@ -19,7 +19,7 @@
           <v-flex shrink>
             <div class="subheading">
               <span v-if="$store.state.account">
-                {{ $store.state.account.first_name }} {{ $store.state.account.last_name }}
+                {{ $store.state.account.display_name }}
               </span>
               <span v-else>Name</span>
             </div>
