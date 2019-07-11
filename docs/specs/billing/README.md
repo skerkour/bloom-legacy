@@ -13,17 +13,26 @@
 
 ## Overview
 
+
+* See https://stripe.com/docs/billing/lifecycle
+
 ## Scenarios
 
+The Billing service is used to charge customer for service provided by us.
+
+In order to stay privacy oriented, but secure, we need to use external providers (Stripe, Paypal) to store customers card details, but to not send personal information to those providers, and use an anonymous customer id.
 
 ## Non goals
 
-
+* Crypto payments
 
 
 ## Models
 
 ### Profile
+
+The Billing profile is used to store general purpose data about the customer,
+like the legally required information.
 
 ```rust
 pub struct Profile {
@@ -46,6 +55,9 @@ pub struct Profile {
 
 ### Invoice
 
+Invoices must embed all the data legally required, like the products (references?),
+the quantity, the price, the invoice unique number...
+
 ```rust
 pub struct Invoice {
     pub id: uuid::Uuid,
@@ -63,6 +75,9 @@ pub struct Invoice {
 
 
 ### Payement Method
+
+Payment methods are used to cherge money to customers, it can be a credit card,
+a PayPal account, a Apple Pay account...
 
 ```rust
 pub struct PaymentMethod {
@@ -84,6 +99,8 @@ pub struct PaymentMethod {
 
 
 ### Subscription
+
+A subscription is used to allow recurring billing
 
 ```rust
 pub struct Subscription {
