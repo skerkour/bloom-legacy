@@ -131,7 +131,7 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("SETTINGS"),
+      child: Text("App settings"),
     );
   }
 }
@@ -142,38 +142,17 @@ class BloomApps extends StatefulWidget {
   _BloomAppsState createState() => _BloomAppsState();
 }
 
+ class BlmApp {
+   final String title;
+   final String route;
+   const BlmApp({ @required this.title, @required this.route });
+ }
+
 class _BloomAppsState extends State<BloomApps> {
-  List<String> apps = [
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes",
-    "Calendar",
-    "Bitflow",
-    "Notes"
+  List<BlmApp> apps = [
+    BlmApp(title: 'Home', route: '/'),
+    BlmApp(title: 'Notes', route: '/notes'),
+    BlmApp(title: 'Contacts', route: '/contacts'),
   ];
 
   @override
@@ -183,21 +162,25 @@ class _BloomAppsState extends State<BloomApps> {
     );
   }
 
-  Widget _buildApp(String app) {
-    return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: Row(
-        children: <Widget>[
-          CircleAvatar(
-            backgroundColor: Colors.blue,
-            child: Container(
-                child: Center(child: Text(app.substring(0, 1).toUpperCase()))),
-          ),
-          SizedBox(
-            width: 16,
-          ),
-          Text(app)
-        ],
+  Widget _buildApp(BlmApp app) {
+    return InkWell(
+      onTap: () => Navigator.pushNamed(context, app.route),
+      child: Padding(
+        padding: const EdgeInsets.all(10.0),
+        child: Row(
+          children: <Widget>[
+            CircleAvatar(
+              backgroundColor: Colors.blue,
+              child: Container(
+                  child:
+                      Center(child: Text(app.title.substring(0, 1).toUpperCase()))),
+            ),
+            SizedBox(
+              width: 16,
+            ),
+            Text(app.title)
+          ],
+        ),
       ),
     );
   }
