@@ -162,7 +162,10 @@ class _BloomAppsState extends State<BloomApps> {
 
   Widget _buildApp(_BlmApp app) {
     return InkWell(
-      onTap: () => Navigator.pushNamed(context, app.route),
+      onTap: () {
+         Navigator.of(context).pop();
+        Navigator.pushNamed(context, app.route);
+      },
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(

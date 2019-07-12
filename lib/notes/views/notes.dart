@@ -24,6 +24,7 @@ class _NotesState extends State<Notes> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _newNoteTapped(context),
         child: Icon(Icons.add),
+        backgroundColor: Colors.red,
       ),
     );
   }

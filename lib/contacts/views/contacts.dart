@@ -24,6 +24,7 @@ class _ContactsState extends State<Contacts> {
       floatingActionButton: FloatingActionButton(
         onPressed: () => _newContactTapped(context),
         child: Icon(Icons.add),
+        backgroundColor: Colors.red,
       ),
     );
   }
