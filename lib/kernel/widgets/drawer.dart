@@ -84,7 +84,8 @@ class _BlmDrawerState extends State<BlmDrawer>
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: ClipRRect(
-                          borderRadius: const BorderRadius.all(Radius.circular(16)),
+                          borderRadius:
+                              const BorderRadius.all(Radius.circular(16)),
                           child: Container(
                             color: Colors.grey.shade300,
                             width: 45,
@@ -140,21 +141,22 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
 class BloomApps extends StatefulWidget {
   const BloomApps({Key key}) : super(key: key);
 
-    @override
+  @override
   _BloomAppsState createState() => _BloomAppsState();
 }
 
- class _BlmApp {
-    const _BlmApp({ @required this.title, @required this.route });
-   final String title;
-   final String route;
- }
+class _BlmApp {
+  const _BlmApp({@required this.icon, @required this.title, @required this.route});
+  final String icon;
+  final String title;
+  final String route;
+}
 
 class _BloomAppsState extends State<BloomApps> {
   final List<_BlmApp> apps = <_BlmApp>[
-    const _BlmApp(title: 'Home', route: '/'),
-    const _BlmApp(title: 'Notes', route: '/notes'),
-    const _BlmApp(title: 'Contacts', route: '/contacts'),
+    const _BlmApp(icon: 'assets/contacts_128.png', title: 'Home', route: '/'),
+    const _BlmApp(icon: 'assets/contacts_128.png', title: 'Notes', route: '/notes'),
+    const _BlmApp(icon: 'assets/contacts_128.png', title: 'Contacts', route: '/contacts'),
   ];
 
   @override
@@ -168,17 +170,21 @@ class _BloomAppsState extends State<BloomApps> {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, app.route),
       child: Padding(
-        padding: const EdgeInsets.all(10.0),
+        padding: const EdgeInsets.all(4.0),
         child: Row(
           children: <Widget>[
             CircleAvatar(
-              backgroundColor: Colors.blue,
-              child: Container(
-                  child:
-                      Center(child: Text(app.title.substring(0, 1).toUpperCase()))),
+              backgroundImage: AssetImage(app.icon),
+              backgroundColor: Colors.transparent,
+              radius: 25,
             ),
+            //   backgroundColor: Colors.blue,
+            //   child: Container(
+            //       child: Center(
+            //           child: Text(app.title.substring(0, 1).toUpperCase()))),
+            // ),
             const SizedBox(
-              width: 16,
+              width: 12,
             ),
             Text(app.title)
           ],
