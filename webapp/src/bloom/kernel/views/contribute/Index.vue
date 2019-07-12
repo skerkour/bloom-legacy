@@ -45,13 +45,9 @@
             <p>
               In order to coordinate our efforts we have setup 3 communication channels:
               <ul>
-                <li><a href="https://forum.bloom.sh" target="_blank" rel="noopener">The forum</a></li>
                 <li><a href="https://gitlab.com/groups/bloom42/-/issues" target="_blank" rel="noopener">GitLab issues</a></li>
                 <li><a href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">The Discord chat</a></li>
               </ul>
-            </p>
-            <p>
-              <b>The forum</b> is used to discuss about non-technical issues, ask help to the community
             </p>
             <p>
               <b>GitLab issues</b> are are used to discuss about bugs and new features. They are our primary
@@ -61,7 +57,7 @@
             </p>
             <p>
               <b>The Discord chat</b> is used for instant and informal communication. It must be used in resort,
-              and contributors should not rely on the long term archiving of the chat. The forum is often prefered.
+              and contributors should not rely on the long term archiving of the chat. GitLab issues are prefered to discuss new features.
             </p>
           </v-card-text>
         </div>
