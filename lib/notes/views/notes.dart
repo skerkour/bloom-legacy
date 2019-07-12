@@ -21,6 +21,17 @@ class _NotesState extends State<Notes> {
         // in the middle of the parent.
         child: const Text('Notes'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _newNoteTapped(context),
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _newNoteTapped(BuildContext ctx) {
+    print('new note tapped');
+    // "-1" id indicates the note is not new
+    // var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
+    // Navigator.push(ctx,MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
   }
 }

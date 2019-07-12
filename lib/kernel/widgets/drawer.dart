@@ -37,27 +37,18 @@ class _BlmDrawerState extends State<BlmDrawer>
           children: <Widget>[
             Container(
               child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                mainAxisAlignment: MainAxisAlignment.end,
                 children: <Widget>[
-                  Expanded(
-                    child: Container(
-                      child: ListTile(
-                        leading: Icon(
-                          Icons.close,
-                          color: Colors.black,
-                        ),
-                        onTap: () {
-                          // change app state...
-                          Navigator.pop(context); // close the drawer
-                        },
-                      ),
-                    ),
-                  ),
                   Container(
+                    padding: const EdgeInsets.only(right: 10.0, top: 10.0),
                     child: InkWell(
                         onTap: () {
                           setState(() {
-                            _tabController.index = 1;
+                            if (_tabController.index == 1) {
+                              _tabController.index = 0;
+                            } else {
+                              _tabController.index = 1;
+                            }
                           });
                         },
                         child: Padding(
@@ -146,7 +137,8 @@ class BloomApps extends StatefulWidget {
 }
 
 class _BlmApp {
-  const _BlmApp({@required this.icon, @required this.title, @required this.route});
+  const _BlmApp(
+      {@required this.icon, @required this.title, @required this.route});
   final String icon;
   final String title;
   final String route;
@@ -155,8 +147,10 @@ class _BlmApp {
 class _BloomAppsState extends State<BloomApps> {
   final List<_BlmApp> apps = <_BlmApp>[
     const _BlmApp(icon: 'assets/contacts_128.png', title: 'Home', route: '/'),
-    const _BlmApp(icon: 'assets/contacts_128.png', title: 'Notes', route: '/notes'),
-    const _BlmApp(icon: 'assets/contacts_128.png', title: 'Contacts', route: '/contacts'),
+    const _BlmApp(
+        icon: 'assets/contacts_128.png', title: 'Notes', route: '/notes'),
+    const _BlmApp(
+        icon: 'assets/contacts_128.png', title: 'Contacts', route: '/contacts'),
   ];
 
   @override

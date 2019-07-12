@@ -21,6 +21,14 @@ class _ContactsState extends State<Contacts> {
         // in the middle of the parent.
         child: const Text('Contacts'),
       ),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () => _newContactTapped(context),
+        child: Icon(Icons.add),
+      ),
     );
+  }
+
+  void _newContactTapped(BuildContext ctx) {
+    print('new contact tapped');
   }
 }
