@@ -144,27 +144,27 @@ class BloomApps extends StatefulWidget {
   _BloomAppsState createState() => _BloomAppsState();
 }
 
- class BlmApp {
-    const BlmApp({ @required this.title, @required this.route });
+ class _BlmApp {
+    const _BlmApp({ @required this.title, @required this.route });
    final String title;
    final String route;
  }
 
 class _BloomAppsState extends State<BloomApps> {
-  final List<BlmApp> apps = <BlmApp>[
-    const BlmApp(title: 'Home', route: '/'),
-    const BlmApp(title: 'Notes', route: '/notes'),
-    const BlmApp(title: 'Contacts', route: '/contacts'),
+  final List<_BlmApp> apps = <_BlmApp>[
+    const _BlmApp(title: 'Home', route: '/'),
+    const _BlmApp(title: 'Notes', route: '/notes'),
+    const _BlmApp(title: 'Contacts', route: '/contacts'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: apps.map((BlmApp app) => _buildApp(app)).toList(),
+      children: apps.map((_BlmApp app) => _buildApp(app)).toList(),
     );
   }
 
-  Widget _buildApp(BlmApp app) {
+  Widget _buildApp(_BlmApp app) {
     return InkWell(
       onTap: () => Navigator.pushNamed(context, app.route),
       child: Padding(
