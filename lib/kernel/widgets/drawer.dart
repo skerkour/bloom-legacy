@@ -10,8 +10,8 @@ class BlmDrawer extends StatefulWidget {
 class _BlmDrawerState extends State<BlmDrawer>
     with SingleTickerProviderStateMixin {
   final List<Tab> tabs = <Tab>[
-    Tab(text: ''), // current app tab
-    Tab(text: ''), // Apps tab
+    const Tab(text: ''), // current app tab
+    const Tab(text: ''), // Apps tab
   ];
   TabController _tabController;
 
@@ -22,7 +22,7 @@ class _BlmDrawerState extends State<BlmDrawer>
     _tabController.addListener(_onTabChanged);
   }
 
-  _onTabChanged() {
+  void _onTabChanged() {
     setState(() {});
   }
 
@@ -76,7 +76,7 @@ class _BlmDrawerState extends State<BlmDrawer>
                 children: <Widget>[
                   TabBarView(
                     controller: _tabController,
-                    children: <Widget>[SettingsCurrentApp(), BloomApps()],
+                    children: const <Widget>[SettingsCurrentApp(), BloomApps()],
                   ),
                   SafeArea(
                     child: Padding(
@@ -84,7 +84,7 @@ class _BlmDrawerState extends State<BlmDrawer>
                       child: Align(
                         alignment: Alignment.bottomCenter,
                         child: ClipRRect(
-                          borderRadius: BorderRadius.all(Radius.circular(16)),
+                          borderRadius: const BorderRadius.all(Radius.circular(16)),
                           child: Container(
                             color: Colors.grey.shade300,
                             width: 45,
@@ -122,8 +122,9 @@ class _BlmDrawerState extends State<BlmDrawer>
 }
 
 class SettingsCurrentApp extends StatefulWidget {
-  SettingsCurrentApp({Key key}) : super(key: key);
+  const SettingsCurrentApp({Key key}) : super(key: key);
 
+  @override
   _SettingsCurrentAppState createState() => _SettingsCurrentAppState();
 }
 
@@ -131,34 +132,35 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: Text("App settings"),
+      child: const Text('App settings'),
     );
   }
 }
 
 class BloomApps extends StatefulWidget {
-  BloomApps({Key key}) : super(key: key);
+  const BloomApps({Key key}) : super(key: key);
 
+    @override
   _BloomAppsState createState() => _BloomAppsState();
 }
 
  class BlmApp {
+    const BlmApp({ @required this.title, @required this.route });
    final String title;
    final String route;
-   const BlmApp({ @required this.title, @required this.route });
  }
 
 class _BloomAppsState extends State<BloomApps> {
-  List<BlmApp> apps = [
-    BlmApp(title: 'Home', route: '/'),
-    BlmApp(title: 'Notes', route: '/notes'),
-    BlmApp(title: 'Contacts', route: '/contacts'),
+  final List<BlmApp> apps = <BlmApp>[
+    const BlmApp(title: 'Home', route: '/'),
+    const BlmApp(title: 'Notes', route: '/notes'),
+    const BlmApp(title: 'Contacts', route: '/contacts'),
   ];
 
   @override
   Widget build(BuildContext context) {
     return ListView(
-      children: apps.map((app) => _buildApp(app)).toList(),
+      children: apps.map((BlmApp app) => _buildApp(app)).toList(),
     );
   }
 
@@ -175,7 +177,7 @@ class _BloomAppsState extends State<BloomApps> {
                   child:
                       Center(child: Text(app.title.substring(0, 1).toUpperCase()))),
             ),
-            SizedBox(
+            const SizedBox(
               width: 16,
             ),
             Text(app.title)

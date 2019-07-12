@@ -24,18 +24,18 @@ class MyApp extends StatelessWidget {
           primarySwatch: Colors.blue,
         ),
         initialRoute: '/',
-        routes: {
+        routes: <String, WidgetBuilder>{
           // home: MyHomePage(title: 'Bloom'),
-          '/': (context) => MyHomePage(title: 'Bloom'),
+          '/': (BuildContext context) => const MyHomePage(title: 'Bloom'),
           // When navigating to the "/second" route, build the SecondScreen widget.
-          '/notes': (context) => Notes(),
-          '/contacts': (context) => Contacts(),
+          '/notes': (BuildContext context) => Notes(),
+          '/contacts': (BuildContext context) => Contacts(),
         });
   }
 }
 
 class MyHomePage extends StatefulWidget {
-  MyHomePage({Key key, this.title}) : super(key: key);
+  const MyHomePage({Key key, this.title}) : super(key: key);
 
   // This widget is the home page of your application. It is stateful, meaning
   // that it has a State object (defined below) that contains fields that affect
@@ -75,7 +75,7 @@ class _MyHomePageState extends State<MyHomePage> {
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
     return Scaffold(
-      drawer: BlmDrawer(),
+      drawer: const BlmDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
@@ -101,7 +101,7 @@ class _MyHomePageState extends State<MyHomePage> {
           // horizontal).
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
+            const Text(
               'You have pushed the button this many times:',
             ),
             Text(
