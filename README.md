@@ -33,7 +33,7 @@ See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 ## Sponsoring
 
 Bloom is a free and open source project. If you are interested in supporting this project, the core team
-and the contributors please consider please visit our
+and the contributors please visit our
 [dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
 
 
