@@ -1,7 +1,5 @@
-import 'package:bloom/kernel/blocs/apps_bloc.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:bloom/notes/models/db/note.dart';
-import 'package:bloom/notes/views/note.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -12,13 +10,6 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesState extends State<NotesView> {
-
-  @override
-  void initState() {
-    appsBloc.setApps(Apps.NOTES);
-    super.initState();
-  }
-  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -98,11 +89,6 @@ class _NotesState extends State<NotesView> {
 
   void _newNoteTapped(BuildContext ctx) {
     print('new note tapped');
-    Navigator.push<dynamic>(
-      ctx,
-      MaterialPageRoute<dynamic>(
-        builder: (BuildContext ctx) => NoteView(note: Note()),
-      ),
-    );
+    Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
   }
 }

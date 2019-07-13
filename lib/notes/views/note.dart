@@ -4,9 +4,9 @@ import 'package:bloom/notes/models/db/note.dart';
 import 'package:flutter/material.dart';
 
 class NoteView extends StatefulWidget {
-  const NoteView({this.note});
+  const NoteView();
 
-  final Note note;
+  // final Note note;
 
   @override
   _NotesState createState() => _NotesState();
@@ -23,9 +23,19 @@ class _NotesState extends State<NoteView> {
   Color _color;
   Note _note;
 
+  // @override
+  // void initState() {
+
+  //   super.initState();
+  // }
+
   @override
-  void initState() {
-    _note = widget.note;
+  Widget build(BuildContext context) {
+    final RouteSettings settings = ModalRoute.of(context).settings;
+    _note = settings.arguments;
+    _note ??= Note();
+
+    // _note = widget.note;
     _titleController.text = _note.title;
     _bodyController.text = _note.body;
     _color = _note.color;
@@ -41,11 +51,7 @@ class _NotesState extends State<NoteView> {
       print('editable note id: ${_note.id}');
       _persistData();
     });
-    super.initState();
-  }
 
-  @override
-  Widget build(BuildContext context) {
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(

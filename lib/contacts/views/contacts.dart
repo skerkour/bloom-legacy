@@ -1,4 +1,3 @@
-import 'package:bloom/kernel/blocs/apps_bloc.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -8,12 +7,6 @@ class ContactsView extends StatefulWidget {
 }
 
 class _ContactsState extends State<ContactsView> {
-
-  @override
-  void initState() {
-    appsBloc.setApps(Apps.CONTACTS);
-    super.initState();
-  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(

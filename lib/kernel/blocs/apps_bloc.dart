@@ -2,12 +2,11 @@ import 'dart:async';
 
 import 'package:bloom/kernel/blocs/bloc_provider.dart';
 
-class AppsBloc extends BlocBase{
-
+class AppsBloc extends BlocBase {
   Apps apps = Apps.HOME;
 
   final StreamController<Apps> _appsController =
-  StreamController<Apps>.broadcast();
+      StreamController<Apps>.broadcast();
   Sink<Apps> get _inApps => _appsController.sink;
   Stream<Apps> get outApps => _appsController.stream;
 
@@ -20,13 +19,8 @@ class AppsBloc extends BlocBase{
     apps = app;
     _inApps.add(apps);
   }
-  
 }
 
 AppsBloc appsBloc = AppsBloc();
 
-enum Apps {
-  HOME,
-  NOTES,
-  CONTACTS
-}
+enum Apps { HOME, NOTES, CONTACTS }
