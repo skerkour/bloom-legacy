@@ -78,23 +78,23 @@ class _NotesState extends State<NoteView> {
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               // Flexible(
-                Container(
-                  padding: const EdgeInsets.all(5),
+              Container(
+                padding: const EdgeInsets.all(5),
 //          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
-                  child: EditableText(
-                    // onChanged: (str) => {updateNoteObject()},
-                    maxLines: null,
-                    controller: _titleController,
-                    focusNode: _titleFocus,
-                    style: TextStyle(
-                      color: Colors.black,
-                      fontSize: 22,
-                      fontWeight: FontWeight.bold,
-                    ),
-                    cursorColor: Colors.blue,
-                    backgroundCursorColor: Colors.blue,
+                child: EditableText(
+                  // onChanged: (str) => {updateNoteObject()},
+                  maxLines: null,
+                  controller: _titleController,
+                  focusNode: _titleFocus,
+                  style: TextStyle(
+                    color: Colors.black,
+                    fontSize: 22,
+                    fontWeight: FontWeight.bold,
                   ),
+                  cursorColor: Colors.blue,
+                  backgroundCursorColor: Colors.blue,
                 ),
+              ),
               // ),
               Divider(color: Colors.grey),
               Expanded(
