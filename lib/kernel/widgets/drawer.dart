@@ -1,3 +1,7 @@
+import 'package:bloom/contacts/views/contact_settings.dart';
+import 'package:bloom/kernel/blocs/apps_bloc.dart';
+import 'package:bloom/kernel/views/home_settings.dart';
+import 'package:bloom/notes/views/notes_settings.dart';
 import 'package:flutter/material.dart';
 
 class BlmDrawer extends StatefulWidget {
@@ -123,8 +127,23 @@ class SettingsCurrentApp extends StatefulWidget {
 class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('App settings'),
+    return StreamBuilder<Apps>(
+      initialData: appsBloc.apps,
+      stream: appsBloc.outApps,
+      builder: (BuildContext context, AsyncSnapshot<Apps> snapshot) {
+        switch (snapshot.data) {
+          case Apps.HOME:
+            return const HomeSettings();
+            break;
+          case Apps.CONTACTS:
+            return const ContactSettings();
+            break;
+          case Apps.NOTES:
+            return const NotesSettings();
+          default:
+            return Container();
+        }
+      }
     );
   }
 }
@@ -166,6 +185,7 @@ class _BloomAppsState extends State<BloomApps> {
         Navigator.pop(context);
         if (app.route == '/') {
           // Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
+          appsBloc.setApps(Apps.HOME);
           Navigator.of(context).popUntil(ModalRoute.withName('/'));
         } else {
           Navigator.pushNamed(context, app.route);

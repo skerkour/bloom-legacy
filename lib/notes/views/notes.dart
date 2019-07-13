@@ -1,3 +1,4 @@
+import 'package:bloom/kernel/blocs/apps_bloc.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
@@ -11,6 +12,13 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesState extends State<NotesView> {
+
+  @override
+  void initState() {
+    appsBloc.setApps(Apps.NOTES);
+    super.initState();
+  }
+  
   @override
   Widget build(BuildContext context) {
     return Scaffold(
