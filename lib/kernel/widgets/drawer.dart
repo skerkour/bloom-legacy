@@ -1,5 +1,5 @@
 import 'package:bloom/contacts/widgets/drawer.dart';
-import 'package:bloom/kernel/blocs/apps_bloc.dart';
+import 'package:bloom/kernel/blocs/drawer_bloc.dart';
 import 'package:bloom/kernel/widgets/home_drawer.dart';
 import 'package:bloom/notes/widgets/drawer.dart';
 import 'package:flutter/material.dart';
@@ -128,8 +128,8 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
   @override
   Widget build(BuildContext context) {
     return StreamBuilder<Apps>(
-        initialData: appsBloc.apps,
-        stream: appsBloc.outApps,
+        initialData: drawerBloc.apps,
+        stream: drawerBloc.outApps,
         builder: (BuildContext context, AsyncSnapshot<Apps> snapshot) {
           switch (snapshot.data) {
             case Apps.HOME:

@@ -1,4 +1,4 @@
-import 'package:bloom/kernel/blocs/apps_bloc.dart';
+import 'package:bloom/kernel/blocs/drawer_bloc.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
@@ -14,7 +14,7 @@ class HomeView extends StatefulWidget {
 class _HomeViewState extends State<HomeView> {
   @override
   void initState() {
-    appsBloc.setApps(Apps.HOME);
+    drawerBloc.setApp(Apps.HOME);
     super.initState();
   }
 

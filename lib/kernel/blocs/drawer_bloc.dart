@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloom/kernel/blocs/bloc_provider.dart';
 
-class AppsBloc extends BlocBase {
+class DrawerBloc extends BlocBase {
   Apps apps = Apps.HOME;
 
   final StreamController<Apps> _appsController =
@@ -15,12 +15,12 @@ class AppsBloc extends BlocBase {
     _appsController.close();
   }
 
-  void setApps(Apps app) {
+  void setApp(Apps app) {
     apps = app;
     _inApps.add(apps);
   }
 }
 
-AppsBloc appsBloc = AppsBloc();
+DrawerBloc drawerBloc = DrawerBloc();
 
 enum Apps { HOME, NOTES, CONTACTS }
