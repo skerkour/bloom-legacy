@@ -1,12 +1,14 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:bloom/notes/models/db/note.dart';
+import 'package:bloom/notes/views/note.dart';
 import 'package:flutter/material.dart';
 
-class Notes extends StatefulWidget {
+class NotesView extends StatefulWidget {
   @override
   _NotesState createState() => _NotesState();
 }
 
-class _NotesState extends State<Notes> {
+class _NotesState extends State<NotesView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -31,6 +33,7 @@ class _NotesState extends State<Notes> {
 
   void _newNoteTapped(BuildContext ctx) {
     print('new note tapped');
+    Navigator.push<dynamic>(ctx, MaterialPageRoute<dynamic>(builder: (BuildContext ctx) => NoteView(Note())));
     // "-1" id indicates the note is not new
     // var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
     // Navigator.push(ctx,MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));

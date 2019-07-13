@@ -28,6 +28,7 @@ dependencies:
   path:
   intl: ^0.15.8
   share: ^0.6.1
+  uuid: ^2.0.2
 
 dev_dependencies:
   flutter_test:

@@ -1,12 +1,12 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class Contacts extends StatefulWidget {
+class ContactsView extends StatefulWidget {
   @override
   _ContactsState createState() => _ContactsState();
 }
 
-class _ContactsState extends State<Contacts> {
+class _ContactsState extends State<ContactsView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
