@@ -77,8 +77,8 @@ class _NotesState extends State<NoteView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Flexible(
-                child: Container(
+              // Flexible(
+                Container(
                   padding: const EdgeInsets.all(5),
 //          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                   child: EditableText(
@@ -95,11 +95,10 @@ class _NotesState extends State<NoteView> {
                     backgroundCursorColor: Colors.blue,
                   ),
                 ),
-              ),
+              // ),
               Divider(color: Colors.grey),
               Expanded(
                 child: Container(
-                  color: Colors.red,
                   padding: const EdgeInsets.all(5),
                   child: EditableText(
                     maxLines: null,
@@ -164,6 +163,9 @@ class _NotesState extends State<NoteView> {
     _note.color = _color;
 
     if (_note.id == null) {
+      if (_note.title.isEmpty && _note.body.isEmpty) {
+        return;
+      }
       _note = await Note.create(_note.title, _note.body, _note.color);
       print('note created');
     } else {
