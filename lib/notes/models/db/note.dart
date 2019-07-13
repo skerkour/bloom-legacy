@@ -5,7 +5,7 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Note {
-  Note({ this.title, this.body, this.color});
+  Note({this.title, this.body, this.color});
   String id = '';
   String title = '';
   String body = '';
@@ -17,8 +17,8 @@ class Note {
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
-      'title': utf8.encode(title),
-      'body': utf8.encode(body),
+      'title': title,
+      'body': body,
       'created_at': epochFromDate(createdAt),
       'updated_at': epochFromDate(updatedAt),
       'color': color.toString(),
@@ -39,15 +39,7 @@ class Note {
 // overriding toString() of the note class to print a better debug description of this custom class
   @override
   String toString() {
-    return <String, dynamic>{
-      'id': id,
-      'title': title,
-      'body': body,
-      'created_at': epochFromDate(createdAt),
-      'updated_at': epochFromDate(updatedAt),
-      'color': color.toString(),
-      'is_archived': isArchived
-    }.toString();
+    return toMap().toString();
   }
 
   static Future<Note> create(String title, String body, Color color) async {
@@ -75,7 +67,13 @@ class Note {
     updatedAt = DateTime.now();
 
     // Insert the Notes into the correct table.
-    await database.update(DB.notesTable, toMap());
+    await database.update(
+      DB.notesTable,
+      toMap(),
+      where: 'id = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: <String>[id],
+    );
     return this;
   }
 }
