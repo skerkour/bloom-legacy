@@ -4,41 +4,55 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Note {
-  Note({this.title, this.body, this.color});
+  Note(
+      {this.id,
+      this.title,
+      this.body,
+      this.color,
+      this.createdAt,
+      this.updatedAt,
+      this.archivedAt});
   String id = '';
   String title = '';
   String body = '';
   DateTime createdAt = DateTime.now();
   DateTime updatedAt = DateTime.now();
   Color color = Colors.white;
-  int isArchived = 0;
+  DateTime archivedAt = DateTime.now();
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
       'title': title,
       'body': body,
-      'created_at': epochFromDate(createdAt),
-      'updated_at': epochFromDate(updatedAt),
-      'color': color.toString(),
-      'is_archived': isArchived //  for later use for integrating archiving
+      'created_at': _dateToEpochMs(updatedAt),
+      'updated_at': _dateToEpochMs(updatedAt),
+      'color': color.value,
+      'archived_at': _dateToEpochMs(archivedAt),
     };
     return data;
-  }
-
-// Converting the date time object into int representing seconds passed after midnight 1st Jan, 1970 UTC
-  int epochFromDate(DateTime dt) {
-    return dt.millisecondsSinceEpoch ~/ 1000;
-  }
-
-  void archiveThisNote() {
-    isArchived = 1;
   }
 
 // overriding toString() of the note class to print a better debug description of this custom class
   @override
   String toString() {
     return toMap().toString();
+  }
+
+  static int _dateToEpochMs(DateTime date) {
+    if (date == null) {
+      return null;
+    } else {
+      return date.millisecondsSinceEpoch;
+    }
+  }
+
+  static DateTime _epochMsToDate(int epoch) {
+    if (epoch == null) {
+      return null;
+    } else {
+      return DateTime.fromMillisecondsSinceEpoch(epoch);
+    }
   }
 
   static Future<Note> create(String title, String body, Color color) async {
@@ -74,5 +88,36 @@ class Note {
       whereArgs: <String>[id],
     );
     return this;
+  }
+
+  static Future<List<Note>> find() async {
+    // Get a reference to the database.
+    print('find called');
+    final DB db = DB();
+    final Database database = await db.db;
+
+    // Query the table for all The Dogs.
+    final List<Map<String, dynamic>> results = await database.query(DB.notesTable);
+    //   DB.notesTable,
+    //   where: 'archived_at = ?',
+    //   whereArgs: <dynamic>[null],
+    // );
+
+    print('fetched: $results');
+
+    return results.map((Map<String, dynamic> result) {
+      print('result: $result');
+      final note =  Note(
+        id: result['id'],
+        title: result['title'],
+        body: result['body'],
+        archivedAt: _epochMsToDate(result['archived_at']),
+        createdAt: _epochMsToDate(result['created_at']),
+        updatedAt: _epochMsToDate(result['updated_at']),
+        color: Color(result['color']),
+      );
+      print('note: $note');
+      return note;
+    }).toList();
   }
 }

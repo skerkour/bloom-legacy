@@ -28,10 +28,12 @@ class _NotesState extends State<NoteView> {
     _note = widget.note;
     _titleController.text = _note.title;
     _bodyController.text = _note.body;
+        _color = _note.color;
+        _color = Colors.white;
+    print('color: $_color');
 
     // _initialTitle = _note.title;
     // _initialBody = _note.body;
-    _color = _note.color;
 
     _persistenceTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
       // call insert query here
@@ -92,7 +94,6 @@ class _NotesState extends State<NoteView> {
                       padding: const EdgeInsets.all(5),
 //    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                       child: EditableText(
-                        maxLines: 300, // line limit extendable later
                         controller: _bodyController,
                         focusNode: _bodyFocus,
                         style: TextStyle(color: Colors.black, fontSize: 20),
@@ -151,7 +152,7 @@ class _NotesState extends State<NoteView> {
     _note.title = _titleController.text;
     _note.color = _color;
 
-    if (_note.id == '') {
+    if (_note.id == null) {
       _note = await Note.create(_note.title, _note.body, _note.color);
       print('note created');
     } else {
