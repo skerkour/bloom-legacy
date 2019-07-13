@@ -155,7 +155,8 @@ class _NotesState extends State<NoteView> {
       _note = await Note.create(_note.title, _note.body, _note.color);
       print('note created');
     } else {
-      print('save existing note');
+      _note = await _note.update();
+      print('note saved');
     }
   }
 

@@ -14,9 +14,9 @@ class Note {
   Color color = Colors.white;
   int isArchived = 0;
 
-  Map<String, dynamic> toMap(bool forUpdate) {
+  Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
-//      'id': id,  since id is auto incremented in the database we don't need to send it to the insert query.
+      'id': id,
       'title': utf8.encode(title),
       'body': utf8.encode(body),
       'created_at': epochFromDate(createdAt),
@@ -24,9 +24,6 @@ class Note {
       'color': color.toString(),
       'is_archived': isArchived //  for later use for integrating archiving
     };
-    if (forUpdate) {
-      data['id'] = id;
-    }
     return data;
   }
 
@@ -58,15 +55,27 @@ class Note {
     print('insert called');
     final DB db = DB();
     final Database database = await db.db;
-    final Uuid uuid = Uuid();
 
     final Note note = Note(title: title, body: body, color: color);
-    note.id = uuid.v4();
+    note.id = Uuid().v4();
     note.createdAt = DateTime.now();
     note.updatedAt = DateTime.now();
+    print(note.toMap());
 
     // Insert the Notes into the correct table.
-    await database.insert(DB.notesTable, note.toMap(false));
+    await database.insert(DB.notesTable, note.toMap());
     return note;
+  }
+
+  Future<Note> update() async {
+    // Get a reference to the database
+    print('update called');
+    final DB db = DB();
+    final Database database = await db.db;
+    updatedAt = DateTime.now();
+
+    // Insert the Notes into the correct table.
+    await database.update(DB.notesTable, toMap());
+    return this;
   }
 }
