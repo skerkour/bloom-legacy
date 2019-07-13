@@ -97,7 +97,8 @@ class Note {
     final Database database = await db.db;
 
     // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> results = await database.query(DB.notesTable);
+    final List<Map<String, dynamic>> results =
+        await database.query(DB.notesTable);
     //   DB.notesTable,
     //   where: 'archived_at = ?',
     //   whereArgs: <dynamic>[null],

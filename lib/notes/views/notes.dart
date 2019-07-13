@@ -82,7 +82,10 @@ class _NotesState extends State<NotesView> {
       leftAndRight = 8;
     }
     return EdgeInsets.only(
-        left: leftAndRight, right: leftAndRight, top: bottomAndTop, bottom: bottomAndTop);
+        left: leftAndRight,
+        right: leftAndRight,
+        top: bottomAndTop,
+        bottom: bottomAndTop);
   }
 
   void _newNoteTapped(BuildContext ctx) {
@@ -90,7 +93,7 @@ class _NotesState extends State<NotesView> {
     Navigator.push<dynamic>(
       ctx,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext ctx) => NoteView(Note()),
+        builder: (BuildContext ctx) => NoteView(note: Note()),
       ),
     );
   }

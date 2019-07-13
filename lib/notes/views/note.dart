@@ -4,7 +4,7 @@ import 'package:bloom/notes/models/db/note.dart';
 import 'package:flutter/material.dart';
 
 class NoteView extends StatefulWidget {
-  const NoteView(this.note);
+  const NoteView({this.note});
 
   final Note note;
 

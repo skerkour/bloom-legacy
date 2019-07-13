@@ -17,13 +17,12 @@ class DB {
     return _database;
   }
 
-
   Future<Database> init() async {
     final String path = await getDatabasesPath();
     final String dbPath = join(path, databaseName);
     // ignore: argument_type_not_assignable
-    final Database dbConnection = await openDatabase(
-        dbPath, version: 1, onCreate: (Database db, int version) async {
+    final Database dbConnection = await openDatabase(dbPath, version: 1,
+        onCreate: (Database db, int version) async {
       print('executing create query from onCreate callback');
       final String createNotestableQuery = '''
         CREATE TABLE IF NOT EXISTS $notesTable (
@@ -42,4 +41,3 @@ class DB {
     return dbConnection;
   }
 }
-

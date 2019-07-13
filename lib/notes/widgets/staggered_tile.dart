@@ -2,9 +2,6 @@ import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
 import 'package:flutter/material.dart';
 import 'package:auto_size_text/auto_size_text.dart';
-// import '../ViewControllers/NotePage.dart';
-// import '../Models/Note.dart';
-// import '../Models/Utility.dart';
 
 class BlmStaggeredTile extends StatefulWidget {
   const BlmStaggeredTile({this.note});
@@ -45,7 +42,7 @@ class _MyStaggeredTileState extends State<BlmStaggeredTile> {
     Navigator.push<dynamic>(
         ctx,
         MaterialPageRoute<dynamic>(
-            builder: (BuildContext ctx) => NoteView(widget.note)));
+            builder: (BuildContext ctx) => NoteView(note: widget.note)));
   }
 
   Widget constructChild() {
