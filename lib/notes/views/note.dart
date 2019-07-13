@@ -28,8 +28,8 @@ class _NotesState extends State<NoteView> {
     _note = widget.note;
     _titleController.text = _note.title;
     _bodyController.text = _note.body;
-        _color = _note.color;
-        _color = Colors.white;
+    _color = _note.color;
+    _color = Colors.white;
     print('color: $_color');
 
     // _initialTitle = _note.title;
@@ -76,36 +76,41 @@ class _NotesState extends State<NoteView> {
                   padding: const EdgeInsets.all(5),
 //          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                   child: EditableText(
-                      // onChanged: (str) => {updateNoteObject()},
-                      maxLines: null,
-                      controller: _titleController,
-                      focusNode: _titleFocus,
-                      style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 22,
-                          fontWeight: FontWeight.bold),
-                      cursorColor: Colors.blue,
-                      backgroundCursorColor: Colors.blue),
+                    // onChanged: (str) => {updateNoteObject()},
+                    maxLines: null,
+                    controller: _titleController,
+                    focusNode: _titleFocus,
+                    style: TextStyle(
+                      color: Colors.black,
+                      fontSize: 22,
+                      fontWeight: FontWeight.bold,
+                    ),
+                    cursorColor: Colors.blue,
+                    backgroundCursorColor: Colors.blue,
+                  ),
                 ),
               ),
               Divider(color: Colors.grey),
-              Flexible(
-                  child: Container(
-                      padding: const EdgeInsets.all(5),
-//    decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1),borderRadius: BorderRadius.all(Radius.circular(10)) ),
-                      child: EditableText(
-                        controller: _bodyController,
-                        focusNode: _bodyFocus,
-                        style: TextStyle(color: Colors.black, fontSize: 20),
-                        backgroundCursorColor: Colors.red,
-                        cursorColor: Colors.blue,
-                      )))
+              Expanded(
+                child: Container(
+                  color: Colors.red,
+                  padding: const EdgeInsets.all(5),
+                  child: EditableText(
+                    maxLines: null,
+                    controller: _bodyController,
+                    focusNode: _bodyFocus,
+                    style: TextStyle(color: Colors.black, fontSize: 20),
+                    backgroundCursorColor: Colors.red,
+                    cursorColor: Colors.blue,
+                  ),
+                ),
+              ),
             ],
           ),
           left: true,
           right: true,
           top: false,
-          bottom: false,
+          bottom: true,
         ));
   }
 

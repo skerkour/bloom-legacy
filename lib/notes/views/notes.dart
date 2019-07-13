@@ -11,8 +11,6 @@ class NotesView extends StatefulWidget {
 }
 
 class _NotesState extends State<NotesView> {
-  List<Note> _notes = [];
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -24,7 +22,7 @@ class _NotesState extends State<NotesView> {
       ),
       body: FutureBuilder<List<Note>>(
         future: Note.find(),
-        builder: (context, snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
           print(snapshot.data);
 
           if (snapshot.hasData) {
@@ -54,8 +52,8 @@ class _NotesState extends State<NotesView> {
         crossAxisSpacing: 6,
         mainAxisSpacing: 6,
         crossAxisCount: _colForStaggeredView(context),
-        children: List.generate(notes.length, (int i) {
-          return BlmStaggeredTile(notes[i]);
+        children: List<BlmStaggeredTile>.generate(notes.length, (int i) {
+          return BlmStaggeredTile(note: notes[i]);
         }),
         staggeredTiles: _tilesForView(notes),
       ),
@@ -69,32 +67,31 @@ class _NotesState extends State<NotesView> {
 
   List<StaggeredTile> _tilesForView(List<Note> notes) {
     // Generate staggered tiles for the view based on the current preference.
-    return List.generate(notes.length, (index) {
-      return StaggeredTile.fit(1);
+    return List<StaggeredTile>.generate(notes.length, (int index) {
+      return const StaggeredTile.fit(1);
     });
   }
 
   EdgeInsets _paddingForView(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double padding;
-    double top_bottom = 8;
+    final double width = MediaQuery.of(context).size.width;
+    double leftAndRight;
+    const double bottomAndTop = 8;
     if (width > 500) {
-      padding = (width) * 0.05; // 5% padding of width on both side
+      leftAndRight = width * 0.05; // 5% padding of width on both side
     } else {
-      padding = 8;
+      leftAndRight = 8;
     }
     return EdgeInsets.only(
-        left: padding, right: padding, top: top_bottom, bottom: top_bottom);
+        left: leftAndRight, right: leftAndRight, top: bottomAndTop, bottom: bottomAndTop);
   }
 
   void _newNoteTapped(BuildContext ctx) {
     print('new note tapped');
     Navigator.push<dynamic>(
-        ctx,
-        MaterialPageRoute<dynamic>(
-            builder: (BuildContext ctx) => NoteView(Note())));
-    // "-1" id indicates the note is not new
-    // var emptyNote = new Note(-1, "", "", DateTime.now(), DateTime.now(), Colors.white);
-    // Navigator.push(ctx,MaterialPageRoute(builder: (ctx) => NotePage(emptyNote)));
+      ctx,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext ctx) => NoteView(Note()),
+      ),
+    );
   }
 }

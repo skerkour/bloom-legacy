@@ -107,7 +107,7 @@ class Note {
 
     return results.map((Map<String, dynamic> result) {
       print('result: $result');
-      final note =  Note(
+      return Note(
         id: result['id'],
         title: result['title'],
         body: result['body'],
@@ -116,8 +116,6 @@ class Note {
         updatedAt: _epochMsToDate(result['updated_at']),
         color: Color(result['color']),
       );
-      print('note: $note');
-      return note;
     }).toList();
   }
 }
