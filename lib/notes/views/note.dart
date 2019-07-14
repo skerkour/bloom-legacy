@@ -60,7 +60,7 @@ class _NoteState extends State<NoteView> {
           ),
           actions: _buildAppBarActions(context),
           elevation: 1,
-          backgroundColor: Colors.white,
+          backgroundColor: _note.color,
         ),
         body: Builder(builder: (BuildContext context) {
           _scaffoldContext = context;
@@ -207,7 +207,7 @@ class _NoteState extends State<NoteView> {
       duration: Duration(seconds: 3),
     ));
     setState(() {});
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   Future<void> _unarchiveNote(BuildContext context) async {
@@ -218,7 +218,7 @@ class _NoteState extends State<NoteView> {
       duration: Duration(seconds: 3),
     ));
     setState(() {});
-    // Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 
   void _changeColor(Color newColorSelected) {
