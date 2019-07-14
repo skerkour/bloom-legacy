@@ -5,6 +5,7 @@ import 'package:auto_size_text/auto_size_text.dart';
 class BlmStaggeredTile extends StatefulWidget {
   const BlmStaggeredTile({this.note});
   final Note note;
+
   @override
   _MyStaggeredTileState createState() => _MyStaggeredTileState();
 }
@@ -12,24 +13,24 @@ class BlmStaggeredTile extends StatefulWidget {
 class _MyStaggeredTileState extends State<BlmStaggeredTile> {
   String _content;
   double _fontSize;
-  Color tileColor;
-  String title;
+  Color _tileColor;
+  String _title;
 
   @override
   Widget build(BuildContext context) {
     _content = widget.note.body;
     _fontSize = _determineFontSizeForContent();
-    tileColor = widget.note.color;
-    title = widget.note.title;
+    _tileColor = widget.note.color;
+    _title = widget.note.title;
 
     return GestureDetector(
       onTap: () => _noteTapped(context),
       child: Container(
         decoration: BoxDecoration(
-            border: tileColor == Colors.white
+            border: _tileColor == Colors.white
                 ? Border.all(color: Colors.grey)
                 : null,
-            color: tileColor,
+            color: _tileColor,
             borderRadius: const BorderRadius.all(Radius.circular(8))),
         padding: const EdgeInsets.all(8),
         child: constructChild(),
@@ -47,7 +48,7 @@ class _MyStaggeredTileState extends State<BlmStaggeredTile> {
     if (widget.note.title.isNotEmpty) {
       contentsOfTiles.add(
         AutoSizeText(
-          title,
+          _title,
           style: TextStyle(fontSize: _fontSize, fontWeight: FontWeight.bold),
           maxLines: widget.note.title.isEmpty ? 1 : 3,
           textScaleFactor: 1.5,

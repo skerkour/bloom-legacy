@@ -33,6 +33,18 @@ class Note {
     return data;
   }
 
+  static Note fromMap(Map<String, dynamic> data) {
+    return Note(
+      id: data['id'],
+      title: data['title'],
+      body: data['body'],
+      archivedAt: _epochMsToDate(data['archived_at']),
+      createdAt: _epochMsToDate(data['created_at']),
+      updatedAt: _epochMsToDate(data['updated_at']),
+      color: Color(data['color']),
+    );
+  }
+
 // overriding toString() of the note class to print a better debug description of this custom class
   @override
   String toString() {
@@ -74,7 +86,7 @@ class Note {
 
   Future<Note> update() async {
     // Get a reference to the database
-    print('update called');
+    debugPrint('Note.update called (id: $id)');
     final DB db = DB();
     final Database database = await db.db;
     updatedAt = DateTime.now();
@@ -90,33 +102,54 @@ class Note {
     return this;
   }
 
+  Future<Note> delete() async {
+    // Get a reference to the database
+    debugPrint('Note.delete called (id: $id)');
+    final DB db = DB();
+    final Database database = await db.db;
+    updatedAt = DateTime.now();
+
+    await database.delete(
+      DB.notesTable,
+      // Use a `where` clause to delete a specific dog.
+      where: 'id = ?',
+      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: <String>[id],
+    );
+    return this;
+  }
+
   static Future<List<Note>> find() async {
     // Get a reference to the database.
-    print('find called');
+    print('Note.find called');
     final DB db = DB();
     final Database database = await db.db;
 
-    // Query the table for all The Dogs.
-    final List<Map<String, dynamic>> results =
-        await database.query(DB.notesTable);
-    //   DB.notesTable,
-    //   where: 'archived_at = ?',
-    //   whereArgs: <dynamic>[null],
-    // );
+    // Query the table for all The Notes.
+    final List<Map<String, dynamic>> results = await database.query(
+      DB.notesTable,
+      where: 'archived_at IS NULL',
+    );
 
-    print('fetched: $results');
+    print('fetched: ${results.length} notes');
 
-    return results.map((Map<String, dynamic> result) {
-      print('result: $result');
-      return Note(
-        id: result['id'],
-        title: result['title'],
-        body: result['body'],
-        archivedAt: _epochMsToDate(result['archived_at']),
-        createdAt: _epochMsToDate(result['created_at']),
-        updatedAt: _epochMsToDate(result['updated_at']),
-        color: Color(result['color']),
-      );
-    }).toList();
+    return results.map(Note.fromMap).toList();
+  }
+
+  static Future<List<Note>> findArchived() async {
+    // Get a reference to the database.
+    print('Note.findArchived called');
+    final DB db = DB();
+    final Database database = await db.db;
+
+    // Query the table for all The Notes.
+    final List<Map<String, dynamic>> results = await database.query(
+      DB.notesTable,
+      where: 'archived_at IS NOT NULL',
+    );
+
+    print('fetched: ${results.length} notes');
+
+    return results.map(Note.fromMap).toList();
   }
 }

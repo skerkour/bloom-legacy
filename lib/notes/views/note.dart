@@ -23,11 +23,17 @@ class _NotesState extends State<NoteView> {
   Color _color;
   Note _note;
 
-  // @override
-  // void initState() {
+  @override
+  void initState() {
+    _persistenceTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+      // call insert query here
+      debugPrint('5 seconds passed');
+      debugPrint('editable note id: ${_note.id}');
+      _persistData();
+    });
 
-  //   super.initState();
-  // }
+    super.initState();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -35,22 +41,10 @@ class _NotesState extends State<NoteView> {
     _note = settings.arguments;
     _note ??= Note();
 
-    // _note = widget.note;
     _titleController.text = _note.title;
     _bodyController.text = _note.body;
     _color = _note.color;
-    _color = Colors.white;
-    print('color: $_color');
-
-    // _initialTitle = _note.title;
-    // _initialBody = _note.body;
-
-    _persistenceTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
-      // call insert query here
-      print('5 seconds passed');
-      print('editable note id: ${_note.id}');
-      _persistData();
-    });
+    debugPrint('color: $_color');
 
     return WillPopScope(
       child: Scaffold(
@@ -77,12 +71,9 @@ class _NotesState extends State<NoteView> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              // Flexible(
               Container(
                 padding: const EdgeInsets.all(5),
-//          decoration: BoxDecoration(border: Border.all(color: CentralStation.borderColor,width: 1 ),borderRadius: BorderRadius.all(Radius.circular(10)) ),
                 child: EditableText(
-                  // onChanged: (str) => {updateNoteObject()},
                   maxLines: null,
                   controller: _titleController,
                   focusNode: _titleFocus,
@@ -95,7 +86,6 @@ class _NotesState extends State<NoteView> {
                   backgroundCursorColor: Colors.blue,
                 ),
               ),
-              // ),
               Divider(color: Colors.grey),
               Expanded(
                 child: Container(
@@ -164,20 +154,19 @@ class _NotesState extends State<NoteView> {
 
     if (_note.id == null) {
       if (_note.title.isEmpty && _note.body.isEmpty) {
+        debugPrint('note is empty, aborting');
         return;
       }
       _note = await Note.create(_note.title, _note.body, _note.color);
-      print('note created');
+      debugPrint('note created');
     } else {
       _note = await _note.update();
-      print('note saved');
+      debugPrint('note updated');
     }
   }
 
   Future<bool> _readyToPop() async {
     _persistenceTimer.cancel();
-    //show saved toast after calling _persistData function.
-
     await _persistData();
     return true;
   }

@@ -22,14 +22,11 @@ class _NotesState extends State<NotesView> {
       body: FutureBuilder<List<Note>>(
         future: Note.find(),
         builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
-          print(snapshot.data);
-
           if (snapshot.hasData) {
-            print('hasData');
-            print(snapshot.data);
+            debugPrint('hasData');
             return _buildBody(snapshot.data);
           } else {
-            print('has no Data');
+            debugPrint('has no Data');
             return _buildBody(<Note>[]);
           }
         },
