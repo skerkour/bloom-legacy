@@ -122,14 +122,13 @@ class _NotesState extends State<NoteView> {
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: InkWell(
-          child: GestureDetector(
+        child: GestureDetector(
+            onTap: () => _archiveNote(context),
             child: Icon(
               Icons.archive,
               color: Colors.black,
             ),
           ),
-        ),
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -169,5 +168,15 @@ class _NotesState extends State<NoteView> {
     _persistenceTimer.cancel();
     await _persistData();
     return true;
+  }
+
+  Future<void> _archiveNote(BuildContext context) async {
+    await _note.archive();
+    Scaffold.of(context).showSnackBar(SnackBar(
+      content: const Text('Note archived'),
+      duration: Duration(seconds: 3),
+    ));
+        Navigator.of(context).pop();
+
   }
 }

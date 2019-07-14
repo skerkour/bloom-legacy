@@ -69,7 +69,7 @@ class Note {
 
   static Future<Note> create(String title, String body, Color color) async {
     // Get a reference to the database
-    print('insert called');
+    debugPrint('Note.create called');
     final DB db = DB();
     final Database database = await db.db;
 
@@ -77,10 +77,11 @@ class Note {
     note.id = Uuid().v4();
     note.createdAt = DateTime.now();
     note.updatedAt = DateTime.now();
-    print(note.toMap());
 
-    // Insert the Notes into the correct table.
-    await database.insert(DB.notesTable, note.toMap());
+    final Map<String, dynamic> data = note.toMap();
+    debugPrint('note: $data');
+    // Insert the Note into the correct table.
+    await database.insert(DB.notesTable, data);
     return note;
   }
 
@@ -89,6 +90,7 @@ class Note {
     debugPrint('Note.update called (id: $id)');
     final DB db = DB();
     final Database database = await db.db;
+
     updatedAt = DateTime.now();
 
     // Insert the Notes into the correct table.
@@ -96,7 +98,25 @@ class Note {
       DB.notesTable,
       toMap(),
       where: 'id = ?',
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      whereArgs: <String>[id],
+    );
+    return this;
+  }
+
+  Future<Note> archive() async {
+    // Get a reference to the database
+    debugPrint('Note.archive called (id: $id)');
+    final DB db = DB();
+    final Database database = await db.db;
+
+    updatedAt = DateTime.now();
+    archivedAt = DateTime.now();
+
+    // Insert the Notes into the correct table.
+    await database.update(
+      DB.notesTable,
+      toMap(),
+      where: 'id = ?',
       whereArgs: <String>[id],
     );
     return this;
@@ -107,13 +127,12 @@ class Note {
     debugPrint('Note.delete called (id: $id)');
     final DB db = DB();
     final Database database = await db.db;
-    updatedAt = DateTime.now();
 
     await database.delete(
       DB.notesTable,
-      // Use a `where` clause to delete a specific dog.
+      // Use a `where` clause to delete a specific note.
       where: 'id = ?',
-      // Pass the Dog's id as a whereArg to prevent SQL injection.
+      // Pass the note's id as a whereArg to prevent SQL injection.
       whereArgs: <String>[id],
     );
     return this;
@@ -121,7 +140,7 @@ class Note {
 
   static Future<List<Note>> find() async {
     // Get a reference to the database.
-    print('Note.find called');
+    debugPrint('Note.find called');
     final DB db = DB();
     final Database database = await db.db;
 
@@ -130,15 +149,14 @@ class Note {
       DB.notesTable,
       where: 'archived_at IS NULL',
     );
-
-    print('fetched: ${results.length} notes');
+    debugPrint('fetched: ${results.length} notes');
 
     return results.map(Note.fromMap).toList();
   }
 
   static Future<List<Note>> findArchived() async {
     // Get a reference to the database.
-    print('Note.findArchived called');
+    debugPrint('Note.findArchived called');
     final DB db = DB();
     final Database database = await db.db;
 
@@ -148,7 +166,7 @@ class Note {
       where: 'archived_at IS NOT NULL',
     );
 
-    print('fetched: ${results.length} notes');
+    debugPrint('fetched: ${results.length} notes');
 
     return results.map(Note.fromMap).toList();
   }
