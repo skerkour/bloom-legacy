@@ -169,7 +169,7 @@ class _NoteState extends State<NoteView> {
         return MoreOptionsSheet(
           color: _note.color,
           onColorChanged: _changeColor,
-          onDeleted: _onDeleted,
+          onDeleted: _onDeleted(context),
           onShared: _onShared,
           // callBackOptionTapped: bottomSheetOptionTappedHandler,
           updatedAt: _note.updatedAt,
@@ -233,11 +233,35 @@ class _NoteState extends State<NoteView> {
     _persistData();
   }
 
-  Future<void> _onDeleted() async {
-    if (_note.id != null) {
-      await _note.delete();
-    }
-    Navigator.of(context).pop();
+  Function _onDeleted(BuildContext context) {
+    return () {
+      showDialog<Widget>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm ?'),
+              content: const Text('This note will be permanently deleted'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'),
+                ),
+                FlatButton(
+                  onPressed: () async {
+                    if (_note.id != null) {
+                      await _note.delete();
+                    }
+                    Navigator.of(context).pop();
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          });
+    };
   }
 
   void _onShared() {
