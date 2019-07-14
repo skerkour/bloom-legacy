@@ -5,7 +5,6 @@ import 'package:bloom/notes/views/notes.dart';
 import 'package:flutter/material.dart';
 
 import 'kernel/widgets/route_observer.dart';
-import 'notes/views/note.dart';
 
 void main() => runApp(MyApp());
 
@@ -23,7 +22,6 @@ class MyApp extends StatelessWidget {
         '/': (BuildContext context) => const HomeView(title: 'Bloom'),
         '/notes': (BuildContext context) => NotesView(),
         '/notes/archive': (BuildContext context) => ArchiveView(),
-        '/notes/note': (BuildContext context) => const NoteView(),
         '/contacts': (BuildContext context) => ContactsView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],

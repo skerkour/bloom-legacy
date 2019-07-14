@@ -1,3 +1,4 @@
+import 'package:bloom/notes/views/archive.dart';
 import 'package:flutter/material.dart';
 
 class NotesDrawer extends StatefulWidget {
@@ -30,7 +31,12 @@ class _NotesDrawerState extends State<NotesDrawer> {
             ),
           ),
           InkWell(
-            onTap: () => Navigator.pushNamed(context, '/notes/archive'),
+            onTap: () => Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => ArchiveView(),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(

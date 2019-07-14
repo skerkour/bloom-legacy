@@ -31,12 +31,6 @@ class _NotesState extends State<ArchiveView> {
           }
         },
       ),
-      // ) _buildBody(),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _newNoteTapped(context),
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red,
-      ),
     );
   }
 
@@ -82,10 +76,5 @@ class _NotesState extends State<ArchiveView> {
         right: leftAndRight,
         top: bottomAndTop,
         bottom: bottomAndTop);
-  }
-
-  void _newNoteTapped(BuildContext ctx) {
-    print('new note tapped');
-    Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
   }
 }

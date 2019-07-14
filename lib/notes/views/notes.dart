@@ -1,5 +1,6 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:bloom/notes/models/db/note.dart';
+import 'package:bloom/notes/views/note.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -84,6 +85,11 @@ class _NotesState extends State<NotesView> {
 
   void _newNoteTapped(BuildContext ctx) {
     debugPrint('new note tapped');
-    Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
+    // Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+          builder: (BuildContext context) => const NoteView()),
+    );
   }
 }

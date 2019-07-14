@@ -6,9 +6,9 @@ import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
 class NoteView extends StatefulWidget {
-  const NoteView();
+  const NoteView({this.note});
 
-  // final Note note;
+  final Note note;
 
   @override
   _NoteState createState() => _NoteState();
@@ -41,8 +41,8 @@ class _NoteState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final RouteSettings routeSettings = ModalRoute.of(context).settings;
-    _note = routeSettings.arguments;
+    // final RouteSettings routeSettings = ModalRoute.of(context).settings;
+    _note = widget.note;
     _note ??= Note();
 
     debugPrint('new note: $_note');
