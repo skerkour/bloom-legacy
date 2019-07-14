@@ -9,6 +9,7 @@ class MoreOptionsSheet extends StatefulWidget {
   final DateTime updatedAt;
   final void Function(Color) onColorChanged;
   final void Function() onDeleted;
+  final void Function() onShared;
 
   final void Function(moreOptions) callBackOptionTapped;
 
@@ -18,6 +19,7 @@ class MoreOptionsSheet extends StatefulWidget {
       this.updatedAt,
       this.onColorChanged,
       this.onDeleted,
+      this.onShared,
       this.callBackOptionTapped})
       : super(key: key);
 
@@ -42,7 +44,7 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
           new ListTile(
             leading: new Icon(Icons.delete),
             title: new Text('Delete permanently'),
-            onTap: _onDeleted,
+            onTap: () => _onDeleted(context),
           ),
           new ListTile(
               leading: new Icon(Icons.content_copy),
@@ -93,7 +95,13 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
     });
   }
 
-  void _onDeleted() {
+  void _onDeleted(BuildContext context) {
+    Navigator.of(context).pop();
     widget.onDeleted();
+  }
+
+  void _onShared(BuildContext context) {
+    // Navigator.of(context).pop();
+    widget.onShared();
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
+import 'package:share/share.dart';
 
 class NoteView extends StatefulWidget {
   const NoteView();
@@ -169,6 +170,7 @@ class _NoteState extends State<NoteView> {
           color: _note.color,
           onColorChanged: _changeColor,
           onDeleted: _onDeleted,
+          onShared: _onShared,
           // callBackOptionTapped: bottomSheetOptionTappedHandler,
           updatedAt: _note.updatedAt,
         );
@@ -232,8 +234,13 @@ class _NoteState extends State<NoteView> {
   }
 
   Future<void> _onDeleted() async {
-    await _note.delete();
+    if (_note.id != null) {
+      await _note.delete();
+    }
     Navigator.of(context).pop();
-    Navigator.of(context).pop();
+  }
+
+  void _onShared() {
+    Share.share("${_note.title}\n${_note.body}");
   }
 }
