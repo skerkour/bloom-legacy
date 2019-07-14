@@ -47,7 +47,7 @@ class _NotesState extends State<NotesView> {
               AsyncSnapshot<NotesSnackbarMessage> snapshot) {
             if (snapshot.hasData &&
                 snapshot.data == NotesSnackbarMessage.Archived) {
-                  debugPrint('noteArchived StreamBuilder');
+              debugPrint('noteArchived StreamBuilder');
               Scaffold.of(context).showSnackBar(SnackBar(
                 content: const Text('Note archived'),
                 duration: Duration(seconds: 3),
