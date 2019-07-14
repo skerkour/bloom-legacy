@@ -83,7 +83,7 @@ class _NoteState extends State<NoteView> {
               Container(
                 padding: const EdgeInsets.all(5),
                 child: EditableText(
-                  maxLines: null,
+                  maxLines: 1,
                   controller: _titleController,
                   focusNode: _titleFocus,
                   style: TextStyle(
@@ -241,6 +241,6 @@ class _NoteState extends State<NoteView> {
   }
 
   void _onShared() {
-    Share.share("${_note.title}\n${_note.body}");
+    Share.share('${_note.title}\n${_note.body}');
   }
 }
