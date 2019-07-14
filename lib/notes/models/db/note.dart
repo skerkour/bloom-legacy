@@ -4,21 +4,25 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Note {
-  Note(
-      {this.id,
-      this.title,
-      this.body,
-      this.color,
-      this.createdAt,
-      this.updatedAt,
-      this.archivedAt});
-  String id = '';
-  String title = '';
-  String body = '';
-  DateTime createdAt = DateTime.now();
-  DateTime updatedAt = DateTime.now();
-  Color color = Colors.white;
-  DateTime archivedAt = DateTime.now();
+  Note({
+    this.id,
+    this.title = '',
+    this.body = '',
+    this.color = Colors.white,
+    this.createdAt,
+    this.updatedAt,
+    this.archivedAt,
+  }) {
+    createdAt = DateTime.now();
+    updatedAt = DateTime.now();
+  }
+  String id;
+  String title;
+  String body;
+  DateTime createdAt;
+  DateTime updatedAt;
+  Color color;
+  DateTime archivedAt;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
@@ -112,7 +116,26 @@ class Note {
     updatedAt = DateTime.now();
     archivedAt = DateTime.now();
 
-    // Insert the Notes into the correct table.
+    // update the Note
+    await database.update(
+      DB.notesTable,
+      toMap(),
+      where: 'id = ?',
+      whereArgs: <String>[id],
+    );
+    return this;
+  }
+
+  Future<Note> unarchive() async {
+    // Get a reference to the database
+    debugPrint('Note.unarchive called (id: $id)');
+    final DB db = DB();
+    final Database database = await db.db;
+
+    updatedAt = DateTime.now();
+    archivedAt = null;
+
+    // update the Note
     await database.update(
       DB.notesTable,
       toMap(),

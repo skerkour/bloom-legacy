@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloom/notes/models/blocs/snackbar_bloc.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:flutter/material.dart';
 
@@ -9,10 +10,10 @@ class NoteView extends StatefulWidget {
   // final Note note;
 
   @override
-  _NotesState createState() => _NotesState();
+  _NoteState createState() => _NoteState();
 }
 
-class _NotesState extends State<NoteView> {
+class _NoteState extends State<NoteView> {
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _bodyController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
@@ -37,9 +38,11 @@ class _NotesState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    final RouteSettings settings = ModalRoute.of(context).settings;
-    _note = settings.arguments;
+    final RouteSettings routeSettings = ModalRoute.of(context).settings;
+    _note = routeSettings.arguments;
     _note ??= Note();
+
+    debugPrint('new note: $_note');
 
     _titleController.text = _note.title;
     _bodyController.text = _note.body;
@@ -121,15 +124,22 @@ class _NotesState extends State<NoteView> {
         ),
       ),
       Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: GestureDetector(
-            onTap: () => _archiveNote(context),
-            child: Icon(
-              Icons.archive,
-              color: Colors.black,
-            ),
-          ),
-      ),
+          padding: const EdgeInsets.symmetric(horizontal: 12),
+          child: _note.archivedAt == null
+              ? GestureDetector(
+                  onTap: () => _archiveNote(context),
+                  child: Icon(
+                    Icons.archive,
+                    color: Colors.black,
+                  ),
+                )
+              : GestureDetector(
+                  onTap: () => _unarchiveNote(context),
+                  child: Icon(
+                    Icons.unarchive,
+                    color: Colors.black,
+                  ),
+                )),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
@@ -172,11 +182,14 @@ class _NotesState extends State<NoteView> {
 
   Future<void> _archiveNote(BuildContext context) async {
     await _note.archive();
-    Scaffold.of(context).showSnackBar(SnackBar(
-      content: const Text('Note archived'),
-      duration: Duration(seconds: 3),
-    ));
-        Navigator.of(context).pop();
+    _persistenceTimer.cancel();
+    Navigator.of(context).pop();
+    notesSnackbarBloc.archived();
+  }
 
+  Future<void> _unarchiveNote(BuildContext context) async {
+    await _note.unarchive();
+    _persistenceTimer.cancel();
+    Navigator.of(context).pop();
   }
 }

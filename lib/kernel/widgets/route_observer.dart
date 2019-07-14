@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 
 class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
   BlmRouteObserver();
+  Apps _currentApp;
 
   @override
   void didPush(Route<dynamic> route, Route<dynamic> previousRoute) {
@@ -29,13 +30,22 @@ class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
     final String routeStr = route.settings.name;
     if (routeStr == '/') {
       debugPrint('(RouteObserver) Home');
-      drawerBloc.setApp(Apps.HOME);
+      if (_currentApp != Apps.HOME) {
+        _currentApp = Apps.HOME;
+        drawerBloc.setApp(_currentApp);
+      }
     } else if (routeStr.startsWith('/notes')) {
       debugPrint('(RouteObserver) Notes');
-      drawerBloc.setApp(Apps.NOTES);
+      if (_currentApp != Apps.NOTES) {
+        _currentApp = Apps.NOTES;
+        drawerBloc.setApp(_currentApp);
+      }
     } else if (routeStr.startsWith('/contacts')) {
       drawerBloc.setApp(Apps.CONTACTS);
-      debugPrint('(RouteObserver) Contacts');
+      if (_currentApp != Apps.CONTACTS) {
+        _currentApp = Apps.CONTACTS;
+        drawerBloc.setApp(_currentApp);
+      }
     } else {
       debugPrint('(RouteObserver) route not found');
     }
