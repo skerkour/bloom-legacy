@@ -1,6 +1,7 @@
 import 'dart:async';
 
 import 'package:bloom/notes/models/db/note.dart';
+import 'package:bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 
 class NoteView extends StatefulWidget {
@@ -72,7 +73,7 @@ class _NoteState extends State<NoteView> {
 
   Widget _buildBody(BuildContext ctx) {
     return Container(
-        color: Colors.white,
+        color: _note.color,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
         child: SafeArea(
           child: Column(
@@ -148,7 +149,7 @@ class _NoteState extends State<NoteView> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
-            // onTap: () => bottomSheet(context),
+            onTap: () => _bottomSheet(context),
             child: Icon(
               Icons.more_vert,
               color: Colors.black,
@@ -158,6 +159,20 @@ class _NoteState extends State<NoteView> {
       )
     ];
     return actions;
+  }
+
+  void _bottomSheet(BuildContext context) {
+    showModalBottomSheet<MoreOptionsSheet>(
+      context: context,
+      builder: (BuildContext ctx) {
+        return MoreOptionsSheet(
+          color: _note.color,
+          onColorChanged: _changeColor,
+          // callBackOptionTapped: bottomSheetOptionTappedHandler,
+          updatedAt: _note.updatedAt,
+        );
+      },
+    );
   }
 
   Future<void> _persistData() async {
@@ -204,5 +219,14 @@ class _NoteState extends State<NoteView> {
     ));
     setState(() {});
     // Navigator.of(context).pop();
+  }
+
+  void _changeColor(Color newColorSelected) {
+    debugPrint('color changed');
+    setState(() {
+      _color = newColorSelected;
+      _note.color = newColorSelected;
+    });
+    _persistData();
   }
 }
