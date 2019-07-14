@@ -1,6 +1,5 @@
 import 'dart:async';
 
-import 'package:bloom/notes/models/blocs/snackbar_bloc.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:flutter/material.dart';
 
@@ -23,10 +22,12 @@ class _NoteState extends State<NoteView> {
   Timer _persistenceTimer;
   Color _color;
   Note _note;
+  BuildContext _scaffoldContext;
 
   @override
   void initState() {
-    _persistenceTimer = Timer.periodic(Duration(seconds: 5), (Timer timer) {
+    _persistenceTimer =
+        Timer.periodic(const Duration(seconds: 5), (Timer timer) {
       // call insert query here
       debugPrint('5 seconds passed');
       debugPrint('editable note id: ${_note.id}');
@@ -60,7 +61,10 @@ class _NoteState extends State<NoteView> {
           elevation: 1,
           backgroundColor: Colors.white,
         ),
-        body: _buildBody(context),
+        body: Builder(builder: (BuildContext context) {
+          _scaffoldContext = context;
+          return _buildBody(context);
+        }),
       ),
       onWillPop: _readyToPop,
     );
@@ -181,15 +185,24 @@ class _NoteState extends State<NoteView> {
   }
 
   Future<void> _archiveNote(BuildContext context) async {
-    await _note.archive();
+    _note = await _note.archive();
     _persistenceTimer.cancel();
-    Navigator.of(context).pop();
-    notesSnackbarBloc.archived();
+    Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
+      content: Text('Note archived'),
+      duration: Duration(seconds: 3),
+    ));
+    setState(() {});
+    // Navigator.of(context).pop();
   }
 
   Future<void> _unarchiveNote(BuildContext context) async {
-    await _note.unarchive();
+    _note = await _note.unarchive();
     _persistenceTimer.cancel();
-    Navigator.of(context).pop();
+    Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
+      content: Text('Note unarchived'),
+      duration: Duration(seconds: 3),
+    ));
+    setState(() {});
+    // Navigator.of(context).pop();
   }
 }

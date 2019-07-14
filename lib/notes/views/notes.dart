@@ -1,5 +1,4 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
-import 'package:bloom/notes/models/blocs/snackbar_bloc.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';
 import 'package:flutter/material.dart';
@@ -40,33 +39,18 @@ class _NotesState extends State<NotesView> {
 
   Widget _buildBody(BuildContext ctx, List<Note> notes) {
     return Container(
-      child: StreamBuilder<NotesSnackbarMessage>(
-          stream: null,
-          initialData: null,
-          builder: (BuildContext context,
-              AsyncSnapshot<NotesSnackbarMessage> snapshot) {
-            if (snapshot.hasData &&
-                snapshot.data == NotesSnackbarMessage.Archived) {
-              debugPrint('noteArchived StreamBuilder');
-              Scaffold.of(context).showSnackBar(SnackBar(
-                content: const Text('Note archived'),
-                duration: Duration(seconds: 3),
-              ));
-            }
-            return Padding(
-              padding: _paddingForView(context),
-              child: StaggeredGridView.count(
-                crossAxisSpacing: 6,
-                mainAxisSpacing: 6,
-                crossAxisCount: _colForStaggeredView(context),
-                children:
-                    List<BlmStaggeredTile>.generate(notes.length, (int i) {
-                  return BlmStaggeredTile(note: notes[i]);
-                }),
-                staggeredTiles: _tilesForView(notes),
-              ),
-            );
+      child: Padding(
+        padding: _paddingForView(context),
+        child: StaggeredGridView.count(
+          crossAxisSpacing: 6,
+          mainAxisSpacing: 6,
+          crossAxisCount: _colForStaggeredView(context),
+          children: List<BlmStaggeredTile>.generate(notes.length, (int i) {
+            return BlmStaggeredTile(note: notes[i]);
           }),
+          staggeredTiles: _tilesForView(notes),
+        ),
+      ),
     );
   }
 
@@ -99,7 +83,7 @@ class _NotesState extends State<NotesView> {
   }
 
   void _newNoteTapped(BuildContext ctx) {
-    print('new note tapped');
+    debugPrint('new note tapped');
     Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
   }
 }
