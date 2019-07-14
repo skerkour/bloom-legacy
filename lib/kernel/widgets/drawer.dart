@@ -180,15 +180,11 @@ class _BloomAppsState extends State<BloomApps> {
 
   Widget _buildApp(_BlmApp app) {
     return InkWell(
-      onTap: () {
-        Navigator.pop(context);
-        if (app.route == '/') {
-          // Navigator.of(context).pushNamedAndRemoveUntil('/login', (Route<dynamic> route) => false);
-          Navigator.of(context).popUntil(ModalRoute.withName('/'));
-        } else {
-          Navigator.pushNamed(context, app.route);
-        }
-      },
+      onTap: () => Navigator.pushNamedAndRemoveUntil(
+        context,
+        app.route,
+        (Route<dynamic> route) => false,
+      ),
       child: Padding(
         padding: const EdgeInsets.all(4.0),
         child: Row(
@@ -198,11 +194,6 @@ class _BloomAppsState extends State<BloomApps> {
               backgroundColor: Colors.transparent,
               radius: 25,
             ),
-            //   backgroundColor: Colors.blue,
-            //   child: Container(
-            //       child: Center(
-            //           child: Text(app.title.substring(0, 1).toUpperCase()))),
-            // ),
             const SizedBox(
               width: 12,
             ),
