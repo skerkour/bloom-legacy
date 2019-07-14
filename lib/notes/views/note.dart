@@ -168,6 +168,7 @@ class _NoteState extends State<NoteView> {
         return MoreOptionsSheet(
           color: _note.color,
           onColorChanged: _changeColor,
+          onDeleted: _onDeleted,
           // callBackOptionTapped: bottomSheetOptionTappedHandler,
           updatedAt: _note.updatedAt,
         );
@@ -228,5 +229,11 @@ class _NoteState extends State<NoteView> {
       _note.color = newColorSelected;
     });
     _persistData();
+  }
+
+  Future<void> _onDeleted() async {
+    await _note.delete();
+    Navigator.of(context).pop();
+    Navigator.of(context).pop();
   }
 }

@@ -151,6 +151,8 @@ class Note {
     final DB db = DB();
     final Database database = await db.db;
 
+    updatedAt = DateTime.now();
+
     await database.delete(
       DB.notesTable,
       // Use a `where` clause to delete a specific note.

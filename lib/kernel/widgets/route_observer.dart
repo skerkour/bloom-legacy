@@ -28,6 +28,9 @@ class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
 
   void updateDrawer(Route<dynamic> route) {
     final String routeStr = route.settings.name;
+    if (routeStr == null) {
+      return;
+    }
     if (routeStr == '/') {
       debugPrint('(RouteObserver) Home');
       if (_currentApp != Apps.HOME) {
