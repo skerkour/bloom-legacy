@@ -1,4 +1,6 @@
 import 'package:bloom/notes/views/archive.dart';
+import 'package:bloom/notes/views/note.dart';
+import 'package:bloom/notes/views/notes.dart';
 import 'package:flutter/material.dart';
 
 class NotesDrawer extends StatefulWidget {
@@ -15,7 +17,12 @@ class _NotesDrawerState extends State<NotesDrawer> {
       child: ListView(
         children: <Widget>[
           InkWell(
-            onTap: () => Navigator.pushNamed(context, '/notes'),
+            onTap: () => Navigator.pushReplacement<dynamic, dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => NotesView(),
+              ),
+            ),
             child: Padding(
               padding: const EdgeInsets.all(4.0),
               child: Row(

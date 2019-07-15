@@ -194,9 +194,7 @@ class _BloomAppsState extends State<BloomApps> {
               backgroundColor: Colors.transparent,
               radius: 25,
             ),
-            const SizedBox(
-              width: 12,
-            ),
+            const SizedBox(width: 12),
             Text(app.title)
           ],
         ),
