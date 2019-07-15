@@ -95,7 +95,7 @@ export default class Projects extends Vue {
     },
     {
       description: 'Correct commonly misspelled English words in source files 📖',
-      homepage: 'https://gitlab.com/bloom42/sane',
+      homepage: 'https://gitlab.com/bloom42/tools/misspell',
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'misspell',
     },
@@ -107,7 +107,7 @@ export default class Projects extends Vue {
     },
     {
       description: 'Fast and configurable filesystem (file and directory names) linter',
-      homepage: 'https://gitlab.com/bloom42/flint',
+      homepage: 'https://gitlab.com/bloom42/tools/flint',
       img: '/kernel/static/imgs/img_square_3.svg',
       name: 'Flint',
     },
