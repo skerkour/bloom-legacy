@@ -1,5 +1,4 @@
 import 'package:bloom/notes/views/archive.dart';
-import 'package:bloom/notes/views/note.dart';
 import 'package:bloom/notes/views/notes.dart';
 import 'package:flutter/material.dart';
 
