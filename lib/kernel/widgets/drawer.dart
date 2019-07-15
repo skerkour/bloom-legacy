@@ -179,25 +179,17 @@ class _BloomAppsState extends State<BloomApps> {
   }
 
   Widget _buildApp(_BlmApp app) {
-    return InkWell(
+    return ListTile(
+      leading: CircleAvatar(
+        backgroundImage: AssetImage(app.icon),
+        backgroundColor: Colors.transparent,
+        radius: 25,
+      ),
+      title: Text(app.title),
       onTap: () => Navigator.pushNamedAndRemoveUntil(
         context,
         app.route,
         (Route<dynamic> route) => false,
-      ),
-      child: Padding(
-        padding: const EdgeInsets.all(4.0),
-        child: Row(
-          children: <Widget>[
-            CircleAvatar(
-              backgroundImage: AssetImage(app.icon),
-              backgroundColor: Colors.transparent,
-              radius: 25,
-            ),
-            const SizedBox(width: 12),
-            Text(app.title)
-          ],
-        ),
       ),
     );
   }

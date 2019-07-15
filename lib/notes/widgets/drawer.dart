@@ -16,47 +16,31 @@ class _NotesDrawerState extends State<NotesDrawer> {
     return Container(
       child: ListView(
         children: <Widget>[
-          InkWell(
-            onTap: () => Navigator.pushReplacement<dynamic, dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) => NotesView(),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.list,
-                    color: Colors.black,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Notes')
-                ],
-              ),
-            ),
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Notes'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement<dynamic, dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => NotesView(),
+                ),
+              );
+            },
           ),
-          InkWell(
-            onTap: () => Navigator.push<dynamic>(
-              context,
-              MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) => ArchiveView(),
-              ),
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(4.0),
-              child: Row(
-                children: <Widget>[
-                  Icon(
-                    Icons.archive,
-                    color: Colors.black,
-                  ),
-                  const SizedBox(width: 12),
-                  const Text('Archive')
-                ],
-              ),
-            ),
+          ListTile(
+            leading: const Icon(Icons.archive),
+            title: const Text('Archive'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushReplacement<dynamic, dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => ArchiveView(),
+                ),
+              );
+            },
           ),
         ],
       ),
