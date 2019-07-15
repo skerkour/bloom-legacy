@@ -58,6 +58,12 @@ export default class Projects extends Vue {
       name: 'Bloom',
     },
     {
+      description: 'Bloom applications (Android, IOS, Desktop)',
+      homepage: 'https://gitlab.com/bloom42/apps',
+      img: '/kernel/static/imgs/logos/bloom_256.png',
+      name: 'Apps',
+    },
+    {
       description: 'The cloud native security scanner ☁️',
       homepage: 'https://gitlab.com/bloom42/phaser',
       img: '/phaser/static/imgs/phaser_rounded_256.png',
