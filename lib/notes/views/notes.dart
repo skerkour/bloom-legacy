@@ -83,13 +83,22 @@ class _NotesState extends State<NotesView> {
         bottom: bottomAndTop);
   }
 
-  void _newNoteTapped(BuildContext ctx) {
+  Future<void> _newNoteTapped(BuildContext ctx) async {
     debugPrint('new note tapped');
     // Navigator.pushNamed(ctx, '/notes/note', arguments: Note());
-    Navigator.push<dynamic>(
+    final NoteViewResult res = await Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-          builder: (BuildContext context) => const NoteView()),
+        builder: (BuildContext context) => const NoteView(),
+      ),
     );
+
+    if (res != null) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Note ${res.toString().split('.').last}')),
+        );
+    }
   }
 }

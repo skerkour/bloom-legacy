@@ -5,6 +5,11 @@ import 'package:bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
 
+enum NoteViewResult {
+  Archived,
+  Unarchived,
+}
+
 class NoteView extends StatefulWidget {
   const NoteView({this.note});
 
@@ -24,7 +29,6 @@ class _NoteState extends State<NoteView> {
   Timer _persistenceTimer;
   Color _color;
   Note _note;
-  BuildContext _scaffoldContext;
 
   @override
   void initState() {
@@ -64,7 +68,6 @@ class _NoteState extends State<NoteView> {
           backgroundColor: _note.color,
         ),
         body: Builder(builder: (BuildContext context) {
-          _scaffoldContext = context;
           return _buildBody(context);
         }),
       ),
@@ -205,23 +208,15 @@ class _NoteState extends State<NoteView> {
   Future<void> _archiveNote(BuildContext context) async {
     _note = await _note.archive();
     _persistenceTimer?.cancel();
-    Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
-      content: Text('Note archived'),
-      duration: Duration(seconds: 3),
-    ));
     setState(() {});
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(NoteViewResult.Archived);
   }
 
   Future<void> _unarchiveNote(BuildContext context) async {
     _note = await _note.unarchive();
     _persistenceTimer?.cancel();
-    Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
-      content: Text('Note unarchived'),
-      duration: Duration(seconds: 3),
-    ));
     setState(() {});
-    Navigator.of(context).pop();
+    Navigator.of(context).pop(NoteViewResult.Unarchived);
   }
 
   void _changeColor(Color newColorSelected) {

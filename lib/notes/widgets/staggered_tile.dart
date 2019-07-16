@@ -39,14 +39,22 @@ class _MyStaggeredTileState extends State<BlmStaggeredTile> {
     );
   }
 
-  void _noteTapped(BuildContext ctx) {
+  Future<void> _noteTapped(BuildContext ctx) async {
     // Navigator.pushNamed(ctx, '/notes/note', arguments: widget.note);
-    Navigator.push<dynamic>(
+    final NoteViewResult res = await Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
         builder: (BuildContext context) => NoteView(note: widget.note),
       ),
     );
+
+    if (res != null) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Note ${res.toString().split('.').last}')),
+        );
+    }
   }
 
   Widget constructChild() {
