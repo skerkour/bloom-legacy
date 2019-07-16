@@ -12,6 +12,7 @@ class Note {
     this.createdAt,
     this.updatedAt,
     this.archivedAt,
+    this.isPinned = false,
   }) {
     createdAt = DateTime.now();
     updatedAt = DateTime.now();
@@ -23,6 +24,7 @@ class Note {
   DateTime updatedAt;
   Color color;
   DateTime archivedAt;
+  bool isPinned;
 
   Map<String, dynamic> toMap() {
     final Map<String, dynamic> data = <String, dynamic>{
@@ -33,6 +35,7 @@ class Note {
       'updated_at': _dateToEpochMs(updatedAt),
       'color': color.value,
       'archived_at': _dateToEpochMs(archivedAt),
+      'is_pinned': isPinned ? 1 : 0,
     };
     return data;
   }
@@ -46,6 +49,7 @@ class Note {
       createdAt: _epochMsToDate(data['created_at']),
       updatedAt: _epochMsToDate(data['updated_at']),
       color: Color(data['color']),
+      isPinned: data['is_pinned'] == 1,
     );
   }
 

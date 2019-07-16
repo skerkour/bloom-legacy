@@ -197,14 +197,14 @@ class _NoteState extends State<NoteView> {
   }
 
   Future<bool> _readyToPop() async {
-    _persistenceTimer.cancel();
+    _persistenceTimer?.cancel();
     await _persistData();
     return true;
   }
 
   Future<void> _archiveNote(BuildContext context) async {
     _note = await _note.archive();
-    _persistenceTimer.cancel();
+    _persistenceTimer?.cancel();
     Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
       content: Text('Note archived'),
       duration: Duration(seconds: 3),
@@ -215,7 +215,7 @@ class _NoteState extends State<NoteView> {
 
   Future<void> _unarchiveNote(BuildContext context) async {
     _note = await _note.unarchive();
-    _persistenceTimer.cancel();
+    _persistenceTimer?.cancel();
     Scaffold.of(_scaffoldContext).showSnackBar(const SnackBar(
       content: Text('Note unarchived'),
       duration: Duration(seconds: 3),
