@@ -45,6 +45,9 @@ class _NoteState extends State<NoteView> {
     _bloc = NoteBloc(note: note);
     _color = note.color;
 
+    _titleController.text = _bloc.note.title;
+    _bodyController.text = _bloc.note.body;
+
     _bloc.deleted.listen((Note _) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
@@ -72,11 +75,6 @@ class _NoteState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    // final RouteSettings routeSettings = ModalRoute.of(context).settings;
-
-    _titleController.text = _bloc.note.title;
-    _bodyController.text = _bloc.note.body;
-
     return WillPopScope(
       child: Scaffold(
         appBar: AppBar(
