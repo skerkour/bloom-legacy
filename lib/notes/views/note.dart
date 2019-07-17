@@ -25,8 +25,6 @@ class _NoteState extends State<NoteView> {
   final TextEditingController _bodyController = TextEditingController();
   final FocusNode _titleFocus = FocusNode();
   final FocusNode _bodyFocus = FocusNode();
-  // String _initialTitle;
-  // String _initialBody;
   Timer _persistenceTimer;
   NoteBloc _bloc;
   Color _color;
@@ -49,9 +47,9 @@ class _NoteState extends State<NoteView> {
     _bodyController.text = _bloc.note.body;
 
     _bloc.deleted.listen((Note _) {
-      Navigator.of(context).pop();
-      Navigator.of(context).pop();
       _persistenceTimer?.cancel();
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
     });
 
     _bloc.archived.listen((Note _) {
@@ -203,6 +201,7 @@ class _NoteState extends State<NoteView> {
 
   Future<bool> _readyToPop() async {
     _persistenceTimer?.cancel();
+    // save data a last time before quitting
     await _bloc.save(_titleController.text, _bodyController.text);
     return true;
   }
