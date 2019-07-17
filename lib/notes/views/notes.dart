@@ -1,4 +1,5 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:bloom/notes/blocs/notes_bloc.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';
@@ -6,35 +7,53 @@ import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
 
 class NotesView extends StatefulWidget {
+  const NotesView({this.archive = false});
+  final bool archive;
+
   @override
   _NotesState createState() => _NotesState();
 }
 
 class _NotesState extends State<NotesView> {
+  NotesBloc _bloc;
+  bool _archive;
+
+  @override
+  void initState() {
+    _bloc = NotesBloc();
+    _archive = widget.archive;
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    if (_archive) {
+      _bloc.getArchive();
+    } else {
+      _bloc.getNotes();
+    }
     return Scaffold(
       drawer: const BlmDrawer(),
       appBar: AppBar(
-        title: const Text('Notes'),
+        title: Text(_archive ? 'Archive' : 'Notes'),
       ),
-      body: FutureBuilder<List<Note>>(
-        future: Note.find(),
+      body: StreamBuilder<List<Note>>(
+        stream: _bloc.notesOut,
         builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
           if (snapshot.hasData) {
-            debugPrint('hasData');
             return _buildBody(context, snapshot.data);
           } else {
-            debugPrint('has no Data');
-            return _buildBody(context, <Note>[]);
+            return Center(child: const CircularProgressIndicator());
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () => _newNoteTapped(context),
-        child: Icon(Icons.add),
-        backgroundColor: Colors.red,
-      ),
+      floatingActionButton: _archive
+          ? null
+          : FloatingActionButton(
+              onPressed: () => _newNoteTapped(context),
+              child: Icon(Icons.add),
+              backgroundColor: Colors.red,
+            ),
     );
   }
 
@@ -100,5 +119,11 @@ class _NotesState extends State<NotesView> {
           SnackBar(content: Text('Note ${res.toString().split('.').last}')),
         );
     }
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }

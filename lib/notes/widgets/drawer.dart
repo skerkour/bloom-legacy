@@ -1,4 +1,3 @@
-import 'package:bloom/notes/views/archive.dart';
 import 'package:bloom/notes/views/notes.dart';
 import 'package:flutter/material.dart';
 
@@ -23,7 +22,7 @@ class _NotesDrawerState extends State<NotesDrawer> {
               Navigator.pushAndRemoveUntil<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => NotesView(),
+                  builder: (BuildContext context) => const NotesView(),
                 ),
                 (Route<dynamic> route) => false,
               );
@@ -37,7 +36,8 @@ class _NotesDrawerState extends State<NotesDrawer> {
               Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => ArchiveView(),
+                  builder: (BuildContext context) =>
+                      const NotesView(archive: true),
                 ),
               );
             },

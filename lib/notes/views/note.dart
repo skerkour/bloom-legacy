@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:bloom/notes/blocs/note_bloc.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -27,17 +28,43 @@ class _NoteState extends State<NoteView> {
   // String _initialTitle;
   // String _initialBody;
   Timer _persistenceTimer;
+  NoteBloc _bloc;
   Color _color;
-  Note _note;
 
   @override
   void initState() {
     _persistenceTimer =
         Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      // call insert query here
-      debugPrint('5 seconds passed');
-      debugPrint('editable note id: ${_note.id}');
-      _persistData();
+      if (_bloc != null) {
+        _bloc.save(_titleController.text, _bodyController.text);
+      }
+    });
+
+    final Note note = widget.note ?? Note();
+
+    _bloc = NoteBloc(note: note);
+    _color = note.color;
+
+    _bloc.deleted.listen((Note _) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+      _persistenceTimer?.cancel();
+    });
+
+    _bloc.archived.listen((Note _) {
+      _persistenceTimer?.cancel();
+      Navigator.of(context).pop(NoteViewResult.Archived);
+    });
+
+    _bloc.unarchived.listen((Note _) {
+      _persistenceTimer?.cancel();
+      Navigator.of(context).pop(NoteViewResult.Unarchived);
+    });
+
+    _bloc.color.listen((Color color) {
+      setState(() {
+        _color = color;
+      });
     });
 
     super.initState();
@@ -46,15 +73,9 @@ class _NoteState extends State<NoteView> {
   @override
   Widget build(BuildContext context) {
     // final RouteSettings routeSettings = ModalRoute.of(context).settings;
-    _note = widget.note;
-    _note ??= Note();
 
-    debugPrint('new note: $_note');
-
-    _titleController.text = _note.title;
-    _bodyController.text = _note.body;
-    _color = _note.color;
-    debugPrint('color: $_color');
+    _titleController.text = _bloc.note.title;
+    _bodyController.text = _bloc.note.body;
 
     return WillPopScope(
       child: Scaffold(
@@ -65,7 +86,7 @@ class _NoteState extends State<NoteView> {
           ),
           actions: _buildAppBarActions(context),
           elevation: 1,
-          backgroundColor: _note.color,
+          backgroundColor: _color,
         ),
         body: Builder(builder: (BuildContext context) {
           return _buildBody(context);
@@ -77,7 +98,7 @@ class _NoteState extends State<NoteView> {
 
   Widget _buildBody(BuildContext ctx) {
     return Container(
-        color: _note.color,
+        color: _color,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
         child: SafeArea(
           child: Column(
@@ -122,7 +143,7 @@ class _NoteState extends State<NoteView> {
   }
 
   List<Widget> _buildAppBarActions(BuildContext context) {
-    final List<Widget> actions = <Widget>[
+    final List<Widget> list = <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
@@ -133,22 +154,23 @@ class _NoteState extends State<NoteView> {
         ),
       ),
       Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 12),
-          child: _note.archivedAt == null
-              ? GestureDetector(
-                  onTap: () => _archiveNote(context),
-                  child: Icon(
-                    Icons.archive,
-                    color: Colors.black,
-                  ),
-                )
-              : GestureDetector(
-                  onTap: () => _unarchiveNote(context),
-                  child: Icon(
-                    Icons.unarchive,
-                    color: Colors.black,
-                  ),
-                )),
+        padding: const EdgeInsets.symmetric(horizontal: 12),
+        child: _bloc.note.archivedAt == null
+            ? GestureDetector(
+                onTap: _bloc.archive,
+                child: Icon(
+                  Icons.archive,
+                  color: Colors.black,
+                ),
+              )
+            : GestureDetector(
+                onTap: _bloc.unarchive,
+                child: Icon(
+                  Icons.unarchive,
+                  color: Colors.black,
+                ),
+              ),
+      ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
@@ -160,8 +182,9 @@ class _NoteState extends State<NoteView> {
             ),
           ),
         ),
-      )
+      ),
     ];
+    final List<Widget> actions = list;
     return actions;
   }
 
@@ -170,62 +193,20 @@ class _NoteState extends State<NoteView> {
       context: context,
       builder: (BuildContext ctx) {
         return MoreOptionsSheet(
-          color: _note.color,
-          onColorChanged: _changeColor,
+          color: _color,
+          onColorChanged: _bloc.updateColor,
           onDeleted: _onDeleted(context),
           onShared: _onShared,
-          // callBackOptionTapped: bottomSheetOptionTappedHandler,
-          updatedAt: _note.updatedAt,
+          updatedAt: _bloc.note.updatedAt,
         );
       },
     );
   }
 
-  Future<void> _persistData() async {
-    _note.body = _bodyController.text;
-    _note.title = _titleController.text;
-    _note.color = _color;
-
-    if (_note.id == null) {
-      if (_note.title.isEmpty && _note.body.isEmpty) {
-        debugPrint('note is empty, aborting');
-        return;
-      }
-      _note = await Note.create(_note.title, _note.body, _note.color);
-      debugPrint('note created');
-    } else {
-      _note = await _note.update();
-      debugPrint('note updated');
-    }
-  }
-
   Future<bool> _readyToPop() async {
     _persistenceTimer?.cancel();
-    await _persistData();
+    await _bloc.save(_titleController.text, _bodyController.text);
     return true;
-  }
-
-  Future<void> _archiveNote(BuildContext context) async {
-    _note = await _note.archive();
-    _persistenceTimer?.cancel();
-    setState(() {});
-    Navigator.of(context).pop(NoteViewResult.Archived);
-  }
-
-  Future<void> _unarchiveNote(BuildContext context) async {
-    _note = await _note.unarchive();
-    _persistenceTimer?.cancel();
-    setState(() {});
-    Navigator.of(context).pop(NoteViewResult.Unarchived);
-  }
-
-  void _changeColor(Color newColorSelected) {
-    debugPrint('color changed');
-    setState(() {
-      _color = newColorSelected;
-      _note.color = newColorSelected;
-    });
-    _persistData();
   }
 
   Function _onDeleted(BuildContext context) {
@@ -239,18 +220,13 @@ class _NoteState extends State<NoteView> {
               actions: <Widget>[
                 FlatButton(
                   onPressed: () {
+                    // close dialog
                     Navigator.of(context).pop();
                   },
                   child: const Text('No'),
                 ),
                 FlatButton(
-                  onPressed: () async {
-                    if (_note.id != null) {
-                      await _note.delete();
-                    }
-                    Navigator.of(context).pop();
-                    Navigator.of(context).pop();
-                  },
+                  onPressed: _bloc.delete,
                   child: const Text('Yes'),
                 ),
               ],
@@ -260,6 +236,12 @@ class _NoteState extends State<NoteView> {
   }
 
   void _onShared() {
-    Share.share('${_note.title}\n${_note.body}');
+    Share.share('${_bloc.note.title}\n${_bloc.note.body}');
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 }
