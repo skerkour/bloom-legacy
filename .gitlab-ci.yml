@@ -21,10 +21,10 @@ before_script:
   - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
   - set -o pipefail
   # flutter sdk setup
-  - wget --output-document=flutter-sdk.tar.xz $FLUTTER_VERSION
-  - tar -xf flutter-sdk.tar.xz
-  - export PATH=$PATH:$PWD/flutter/bin
-  - echo flutter.sdk=$PWD/flutter > android/local.properties
+  - cd $HOME && wget --output-document=flutter-sdk.tar.xz $FLUTTER_VERSION
+      && tar -xf flutter-sdk.tar.xz && export PATH=$PATH:$HOME/flutter/bin
+      && cd -
+  - echo flutter.sdk=$HOME/flutter > android/local.properties
   - chmod +x ./android/gradlew
 
 stages:
