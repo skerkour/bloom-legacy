@@ -50,35 +50,35 @@ class NoteBloc extends BlocBase {
     _inDeleted.add(note);
   }
 
-  Future<Note> create(String title, String body, Color color) async {
-    note = await Note.create(title, body, color);
-    _inNote.add(note);
-    return note;
-  }
-
-  Future<Note> update(Note noteToUpdate) async {
-    note = await noteToUpdate.update();
-    _inNote.add(note);
-    return note;
-  }
-
   Future<void> archive() async {
-    note = await note.archive();
+    note.archivedAt = DateTime.now();
+
+    note = await note.update();
     _inNote.add(note);
     _inArchived.add(note);
   }
 
   Future<void> unarchive() async {
-    note = await note.unarchive();
+    note.archivedAt = null;
+
+    note = await note.update();
     _inNote.add(note);
     _inUnarchived.add(note);
   }
 
   Future<void> updateColor(Color color) async {
     note.color = color;
+
     note = await note.update();
     _inNote.add(note);
     _inColorUpdated.add(color);
+  }
+
+  Future<void> pinUnpin() async {
+    note.isPinned = !note.isPinned;
+
+    note = await note.update();
+    _inNote.add(note);
   }
 
   Future<void> save(String title, String body) async {
@@ -90,10 +90,10 @@ class NoteBloc extends BlocBase {
         debugPrint('note is empty, aborting');
         return;
       }
-      note = await create(note.title, note.body, note.color);
+      note = await Note.create(note.title, note.body, note.color);
       debugPrint('note created');
     } else {
-      note = await update(note);
+      note = await note.update();
       debugPrint('note updated');
     }
     _inNote.add(note);

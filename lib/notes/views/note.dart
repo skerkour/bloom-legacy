@@ -32,9 +32,7 @@ class _NoteState extends State<NoteView> {
   void initState() {
     _persistenceTimer =
         Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      if (_bloc != null) {
-        _bloc.save(_titleController.text, _bodyController.text);
-      }
+      _bloc ?? _bloc.save(_titleController.text, _bodyController.text);
     });
 
     final Note note = widget.note ?? Note();
@@ -44,18 +42,18 @@ class _NoteState extends State<NoteView> {
     _titleController.text = _bloc.note.title;
     _bodyController.text = _bloc.note.body;
 
-    _bloc.deleted.listen((Note _) {
+    _bloc.deleted.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     });
 
-    _bloc.archived.listen((Note _) {
+    _bloc.archived.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop(NoteViewResult.Archived);
     });
 
-    _bloc.unarchived.listen((Note _) {
+    _bloc.unarchived.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop(NoteViewResult.Unarchived);
     });
@@ -82,9 +80,7 @@ class _NoteState extends State<NoteView> {
                   elevation: 1,
                   backgroundColor: note.color,
                 ),
-                body: Builder(builder: (BuildContext context) {
-                  return _buildBody(context, note);
-                }),
+                body: _buildBody(context, note),
               ),
               onWillPop: _readyToPop,
             );
@@ -145,9 +141,13 @@ class _NoteState extends State<NoteView> {
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
+          onTap: _bloc.pinUnpin,
           child: GestureDetector(
-            child:
-                Container(child: Image.asset('assets/pin_36.png'), width: 20),
+            child: Container(
+                child: Image.asset(note.isPinned
+                    ? 'assets/pin_36.png'
+                    : 'assets/pin_outline_36.png'),
+                width: 20),
           ),
         ),
       ),

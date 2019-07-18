@@ -94,52 +94,12 @@ class Note {
   }
 
   Future<Note> update() async {
-    // Get a reference to the database
     debugPrint('Note.update called (id: $id)');
     final DB db = DB();
     final Database database = await db.db;
 
     updatedAt = DateTime.now();
 
-    // Insert the Notes into the correct table.
-    await database.update(
-      DB.notesTable,
-      toMap(),
-      where: 'id = ?',
-      whereArgs: <String>[id],
-    );
-    return this;
-  }
-
-  Future<Note> archive() async {
-    // Get a reference to the database
-    debugPrint('Note.archive called (id: $id)');
-    final DB db = DB();
-    final Database database = await db.db;
-
-    updatedAt = DateTime.now();
-    archivedAt = DateTime.now();
-
-    // update the Note
-    await database.update(
-      DB.notesTable,
-      toMap(),
-      where: 'id = ?',
-      whereArgs: <String>[id],
-    );
-    return this;
-  }
-
-  Future<Note> unarchive() async {
-    // Get a reference to the database
-    debugPrint('Note.unarchive called (id: $id)');
-    final DB db = DB();
-    final Database database = await db.db;
-
-    updatedAt = DateTime.now();
-    archivedAt = null;
-
-    // update the Note
     await database.update(
       DB.notesTable,
       toMap(),
@@ -154,8 +114,6 @@ class Note {
     debugPrint('Note.delete called (id: $id)');
     final DB db = DB();
     final Database database = await db.db;
-
-    updatedAt = DateTime.now();
 
     await database.delete(
       DB.notesTable,
@@ -177,6 +135,7 @@ class Note {
     final List<Map<String, dynamic>> results = await database.query(
       DB.notesTable,
       where: 'archived_at IS NULL',
+      orderBy: 'is_pinned DESC, created_at ASC',
     );
     debugPrint('fetched: ${results.length} notes');
 
@@ -193,6 +152,7 @@ class Note {
     final List<Map<String, dynamic>> results = await database.query(
       DB.notesTable,
       where: 'archived_at IS NOT NULL',
+      orderBy: 'is_pinned DESC, created_at ASC',
     );
 
     debugPrint('fetched: ${results.length} notes');
