@@ -111,30 +111,29 @@ class _ContactState extends State<ContactView> {
     ];
   }
 
-  Function _onDeleted(BuildContext context) {
-    return () {
-      showDialog<Widget>(
-          context: context,
-          builder: (BuildContext context) {
-            return AlertDialog(
-              title: const Text('Confirm ?'),
-              content: const Text('This contact will be permanently deleted'),
-              actions: <Widget>[
-                FlatButton(
-                  onPressed: () {
-                    // close dialog
-                    Navigator.of(context).pop();
-                  },
-                  child: const Text('No'),
-                ),
-                FlatButton(
-                  onPressed: _bloc.delete,
-                  child: const Text('Yes'),
-                ),
-              ],
-            );
-          });
-    }();
+  void _onDeleted(BuildContext context) {
+    showDialog<Widget>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Confirm ?'),
+          content: const Text('This contact will be permanently deleted'),
+          actions: <Widget>[
+            FlatButton(
+              onPressed: () {
+                // close dialog
+                Navigator.of(context).pop();
+              },
+              child: const Text('No'),
+            ),
+            FlatButton(
+              onPressed: _bloc.delete,
+              child: const Text('Yes'),
+            ),
+          ],
+        );
+      },
+    );
   }
 }
 
