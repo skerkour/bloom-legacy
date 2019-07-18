@@ -21,7 +21,7 @@ class _NotesState extends State<NotesView> {
   @override
   void initState() {
     _bloc = NotesBloc();
-    _archive = widget.archive;
+    _archive = widget.archive ?? false;
     super.initState();
   }
 

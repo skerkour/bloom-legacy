@@ -75,14 +75,18 @@ class NoteBloc extends BlocBase {
   }
 
   Future<void> save(String title, String body) async {
+    if (note.title == title && note.body == body) {
+      return;
+    }
+
     note.title = title;
     note.body = body;
 
     if (note.id == null) {
-      if (note.title.isEmpty && note.body.isEmpty) {
-        debugPrint('note is empty, aborting');
-        return;
-      }
+      // if (note.title.isEmpty && note.body.isEmpty) {
+      //   debugPrint('note is empty, aborting');
+      //   return;
+      // }
       note = await Note.create(note.title, note.body, note.color);
       debugPrint('note created');
     } else {

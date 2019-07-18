@@ -31,7 +31,7 @@ class Note {
       'id': id,
       'title': title,
       'body': body,
-      'created_at': _dateToEpochMs(updatedAt),
+      'created_at': _dateToEpochMs(createdAt),
       'updated_at': _dateToEpochMs(updatedAt),
       'color': color.value,
       'archived_at': _dateToEpochMs(archivedAt),
@@ -148,7 +148,7 @@ class Note {
     final DB db = DB();
     final Database database = await db.db;
 
-    // Query the table for all The Notes.
+    // Query the table for all The archived Notes.
     final List<Map<String, dynamic>> results = await database.query(
       DB.notesTable,
       where: 'archived_at IS NOT NULL',
