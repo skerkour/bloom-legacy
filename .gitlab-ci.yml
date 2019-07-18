@@ -32,16 +32,12 @@ stages:
   - build
 
 
-test:lint:
+test:flutter:
   stage: test
   script:
     - make fmt_check
     - make lint
-
-test:flutter:
-  stage: test
-  script:
-    - flutter test
+    - make test
 
 test:android:
   stage: test
