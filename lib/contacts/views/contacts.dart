@@ -1,4 +1,6 @@
+import 'package:bloom/contacts/blocs/contacts.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 
 class ContactsView extends StatefulWidget {
@@ -7,8 +9,17 @@ class ContactsView extends StatefulWidget {
 }
 
 class _ContactsState extends State<ContactsView> {
+  ContactsBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = ContactsBloc();
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
+    _bloc.getContacts();
     return Scaffold(
       drawer: const BlmDrawer(),
       appBar: AppBar(
@@ -16,11 +27,16 @@ class _ContactsState extends State<ContactsView> {
         // the App.build method, and use it to set our appbar title.
         title: const Text('Contacts'),
       ),
-      body: Center(
-        // Center is a layout widget. It takes a single child and positions it
-        // in the middle of the parent.
-        child: const Text('Contacts'),
-      ),
+      body: StreamBuilder<List<Contact>>(
+          stream: _bloc.contactsOut,
+          builder:
+              (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
+            if (snapshot.hasData) {
+              return _buildBody(snapshot.data);
+            } else {
+              return Center(child: const CircularProgressIndicator());
+            }
+          }),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _newContactTapped(context),
         child: Icon(Icons.add),
@@ -29,7 +45,24 @@ class _ContactsState extends State<ContactsView> {
     );
   }
 
-  void _newContactTapped(BuildContext ctx) {
+  SafeArea _buildBody(List<Contact> contacts) {
+    return SafeArea(
+      child: ListView.builder(
+        itemCount: contacts.length ?? 0,
+        itemBuilder: (BuildContext context, int index) {
+          final Contact c = contacts.elementAt(index);
+          return ListTile(
+            leading: (c.avatar != null && c.avatar.isNotEmpty)
+                ? CircleAvatar(backgroundImage: MemoryImage(c.avatar))
+                : CircleAvatar(child: Text(c.initials())),
+            title: Text(c.displayName ?? ''),
+          );
+        },
+      ),
+    );
+  }
+
+  Future<void> _newContactTapped(BuildContext ctx) async {
     print('new contact tapped');
   }
 }
