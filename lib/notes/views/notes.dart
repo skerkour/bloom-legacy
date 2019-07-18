@@ -26,6 +26,12 @@ class _NotesState extends State<NotesView> {
   }
 
   @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     if (_archive) {
       _bloc.getArchive();
@@ -119,11 +125,5 @@ class _NotesState extends State<NotesView> {
           SnackBar(content: Text('Note ${res.toString().split('.').last}')),
         );
     }
-  }
-
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
   }
 }

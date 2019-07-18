@@ -62,6 +62,12 @@ class _NoteState extends State<NoteView> {
   }
 
   @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
+
+  @override
   Widget build(BuildContext context) {
     return StreamBuilder<Note>(
         initialData: _bloc.note,
@@ -236,11 +242,5 @@ class _NoteState extends State<NoteView> {
 
   void _onShared() {
     Share.share('${_bloc.note.title}\n${_bloc.note.body}');
-  }
-
-  @override
-  void dispose() {
-    _bloc.dispose();
-    super.dispose();
   }
 }

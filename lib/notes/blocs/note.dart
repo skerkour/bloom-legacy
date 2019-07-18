@@ -5,9 +5,11 @@ import 'package:bloom/notes/models/db/note.dart';
 import 'package:flutter/material.dart';
 
 class NoteBloc extends BlocBase {
-  NoteBloc({@required this.note});
+  NoteBloc({@required Note note}) {
+    _note = note;
+  }
 
-  Note note;
+  Note _note;
 
   final StreamController<Note> _noteController =
       StreamController<Note>.broadcast();
@@ -29,6 +31,8 @@ class NoteBloc extends BlocBase {
   StreamSink<Note> get _inUnarchived => _noteUnarchivedController.sink;
   Stream<Note> get unarchived => _noteUnarchivedController.stream;
 
+  Note get note => _note;
+
   @override
   void dispose() {
     _noteController.close();
@@ -38,61 +42,61 @@ class NoteBloc extends BlocBase {
   }
 
   Future<void> delete() async {
-    if (note.id != null) {
-      note = await note.delete();
+    if (_note.id != null) {
+      _note = await _note.delete();
     }
-    _inDeleted.add(note);
+    _inDeleted.add(_note);
   }
 
   Future<void> archive() async {
-    note.archivedAt = DateTime.now();
+    _note.archivedAt = DateTime.now();
 
-    note = await note.update();
-    _inNote.add(note);
-    _inArchived.add(note);
+    _note = await _note.update();
+    _inNote.add(_note);
+    _inArchived.add(_note);
   }
 
   Future<void> unarchive() async {
-    note.archivedAt = null;
+    _note.archivedAt = null;
 
-    note = await note.update();
-    _inNote.add(note);
-    _inUnarchived.add(note);
+    _note = await _note.update();
+    _inNote.add(_note);
+    _inUnarchived.add(_note);
   }
 
   Future<void> updateColor(Color color) async {
-    note.color = color;
+    _note.color = color;
 
-    note = await note.update();
-    _inNote.add(note);
+    _note = await _note.update();
+    _inNote.add(_note);
   }
 
   Future<void> pinUnpin() async {
-    note.isPinned = !note.isPinned;
+    _note.isPinned = !_note.isPinned;
 
-    note = await note.update();
-    _inNote.add(note);
+    _note = await _note.update();
+    _inNote.add(_note);
   }
 
   Future<void> save(String title, String body) async {
-    if (note.title == title && note.body == body) {
+    if (_note.title == title && _note.body == body) {
       return;
     }
 
-    note.title = title;
-    note.body = body;
+    _note.title = title;
+    _note.body = body;
 
-    if (note.id == null) {
+    if (_note.id == null) {
       // if (note.title.isEmpty && note.body.isEmpty) {
       //   debugPrint('note is empty, aborting');
       //   return;
       // }
-      note = await Note.create(note.title, note.body, note.color);
+      _note = await Note.create(_note.title, _note.body, _note.color);
       debugPrint('note created');
     } else {
-      note = await note.update();
+      _note = await _note.update();
       debugPrint('note updated');
     }
-    _inNote.add(note);
+    _inNote.add(_note);
   }
 }
