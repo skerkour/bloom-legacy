@@ -1,5 +1,5 @@
 import 'package:bloom/kernel/widgets/drawer.dart';
-import 'package:bloom/notes/blocs/notes_bloc.dart';
+import 'package:bloom/notes/blocs/notes.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';

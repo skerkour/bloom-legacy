@@ -29,18 +29,12 @@ class NoteBloc extends BlocBase {
   StreamSink<Note> get _inUnarchived => _noteUnarchivedController.sink;
   Stream<Note> get unarchived => _noteUnarchivedController.stream;
 
-  final StreamController<Color> _colorUpdatedController =
-      StreamController<Color>.broadcast();
-  StreamSink<Color> get _inColorUpdated => _colorUpdatedController.sink;
-  Stream<Color> get color => _colorUpdatedController.stream;
-
   @override
   void dispose() {
     _noteController.close();
     _noteDeletedController.close();
     _noteArchivedController.close();
     _noteUnarchivedController.close();
-    _colorUpdatedController.close();
   }
 
   Future<void> delete() async {
@@ -71,7 +65,6 @@ class NoteBloc extends BlocBase {
 
     note = await note.update();
     _inNote.add(note);
-    _inColorUpdated.add(color);
   }
 
   Future<void> pinUnpin() async {

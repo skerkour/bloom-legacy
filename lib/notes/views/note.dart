@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloom/notes/blocs/note_bloc.dart';
+import 'package:bloom/notes/blocs/note.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
