@@ -12,18 +12,17 @@ class ContactView extends StatefulWidget {
 }
 
 class _ContactState extends State<ContactView> {
-  // final TextEditingController _titleController = TextEditingController();
-  // final TextEditingController _bodyController = TextEditingController();
-  // final FocusNode _titleFocus = FocusNode();
-  // final FocusNode _bodyFocus = FocusNode();
-  // Timer _persistenceTimer;
   ContactBloc _bloc;
 
   @override
   void initState() {
     final Contact contact = widget.contact ?? Contact();
-
     _bloc = ContactBloc(contact: contact);
+
+    _bloc.deleted.listen((_) {
+      Navigator.of(context).pop();
+      Navigator.of(context).pop();
+    });
     super.initState();
   }
 
@@ -35,47 +34,24 @@ class _ContactState extends State<ContactView> {
 
   @override
   Widget build(BuildContext context) {
-    // return StreamBuilder<Contact>(
-    //     initialData: _bloc.contact,
-    //     stream: _bloc.contactOut,
-    //     builder: (BuildContext context, AsyncSnapshot<Contact> snapshot) {
-    //       if (snapshot.hasData) {
-    //         final Note note = snapshot.data;
-    //         return WillPopScope(
-    //           child: Scaffold(
-    //             appBar: AppBar(
-    //               brightness: Brightness.light,
-    //               leading: BackButton(
-    //                 color: Colors.black,
-    //               ),
-    //               actions: _buildAppBarActions(context, note),
-    //               elevation: 1,
-    //               backgroundColor: note.color,
-    //             ),
-    //             body: _buildBody(context, note),
-    //           ),
-    //           onWillPop: _readyToPop,
-    //         );
-    //       } else {
-    //         return Container();
-    //       }
-    //     });
     return Scaffold(
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
         title: Text(_bloc.contact.displayName),
+        actions: _buildAppBarActions(context),
       ),
       body: StreamBuilder<Contact>(
-          initialData: _bloc.contact,
-          stream: _bloc.contactOut,
-          builder: (BuildContext context, AsyncSnapshot<Contact> snapshot) {
-            if (snapshot.hasData) {
-              return _buildBody(snapshot.data);
-            } else {
-              return Center(child: const CircularProgressIndicator());
-            }
-          }),
+        initialData: _bloc.contact,
+        stream: _bloc.contactOut,
+        builder: (BuildContext context, AsyncSnapshot<Contact> snapshot) {
+          if (snapshot.hasData) {
+            return _buildBody(snapshot.data);
+          } else {
+            return Center(child: const CircularProgressIndicator());
+          }
+        },
+      ),
     );
   }
 
@@ -121,6 +97,44 @@ class _ContactState extends State<ContactView> {
         ],
       ),
     );
+  }
+
+  List<Widget> _buildAppBarActions(BuildContext context) {
+    return <Widget>[
+      IconButton(
+        icon: Icon(
+          Icons.delete,
+          color: Colors.white,
+        ),
+        onPressed: () => _onDeleted(context),
+      ),
+    ];
+  }
+
+  Function _onDeleted(BuildContext context) {
+    return () {
+      showDialog<Widget>(
+          context: context,
+          builder: (BuildContext context) {
+            return AlertDialog(
+              title: const Text('Confirm ?'),
+              content: const Text('This contact will be permanently deleted'),
+              actions: <Widget>[
+                FlatButton(
+                  onPressed: () {
+                    // close dialog
+                    Navigator.of(context).pop();
+                  },
+                  child: const Text('No'),
+                ),
+                FlatButton(
+                  onPressed: _bloc.delete,
+                  child: const Text('Yes'),
+                ),
+              ],
+            );
+          });
+    }();
   }
 }
 
