@@ -1,4 +1,4 @@
-import 'package:bloom/kernel/blocs/drawer.dart';
+import 'package:bloom/kernel/blocs/app.dart';
 import 'package:flutter/material.dart';
 
 class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
@@ -35,19 +35,19 @@ class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
       debugPrint('(RouteObserver) Home');
       if (_currentApp != Apps.HOME) {
         _currentApp = Apps.HOME;
-        drawerBloc.setApp(_currentApp);
+        appBloc.setCurrentApp(_currentApp);
       }
     } else if (routeStr.startsWith('/notes')) {
       debugPrint('(RouteObserver) Notes');
       if (_currentApp != Apps.NOTES) {
         _currentApp = Apps.NOTES;
-        drawerBloc.setApp(_currentApp);
+        appBloc.setCurrentApp(_currentApp);
       }
     } else if (routeStr.startsWith('/contacts')) {
-      drawerBloc.setApp(Apps.CONTACTS);
+      debugPrint('(RouteObserver) Contacts');
       if (_currentApp != Apps.CONTACTS) {
         _currentApp = Apps.CONTACTS;
-        drawerBloc.setApp(_currentApp);
+        appBloc.setCurrentApp(_currentApp);
       }
     } else {
       debugPrint('(RouteObserver) route not found');
