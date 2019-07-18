@@ -27,7 +27,6 @@ class _NoteState extends State<NoteView> {
   final FocusNode _bodyFocus = FocusNode();
   Timer _persistenceTimer;
   NoteBloc _bloc;
-  Color _color;
 
   @override
   void initState() {
@@ -41,7 +40,6 @@ class _NoteState extends State<NoteView> {
     final Note note = widget.note ?? Note();
 
     _bloc = NoteBloc(note: note);
-    _color = note.color;
 
     _titleController.text = _bloc.note.title;
     _bodyController.text = _bloc.note.body;
@@ -62,39 +60,43 @@ class _NoteState extends State<NoteView> {
       Navigator.of(context).pop(NoteViewResult.Unarchived);
     });
 
-    _bloc.color.listen((Color color) {
-      setState(() {
-        _color = color;
-      });
-    });
-
     super.initState();
   }
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      child: Scaffold(
-        appBar: AppBar(
-          brightness: Brightness.light,
-          leading: BackButton(
-            color: Colors.black,
-          ),
-          actions: _buildAppBarActions(context),
-          elevation: 1,
-          backgroundColor: _color,
-        ),
-        body: Builder(builder: (BuildContext context) {
-          return _buildBody(context);
-        }),
-      ),
-      onWillPop: _readyToPop,
-    );
+    return StreamBuilder<Note>(
+        initialData: _bloc.note,
+        stream: _bloc.noteOut,
+        builder: (BuildContext context, AsyncSnapshot<Note> snapshot) {
+          if (snapshot.hasData) {
+            final Note note = snapshot.data;
+            return WillPopScope(
+              child: Scaffold(
+                appBar: AppBar(
+                  brightness: Brightness.light,
+                  leading: BackButton(
+                    color: Colors.black,
+                  ),
+                  actions: _buildAppBarActions(context, note),
+                  elevation: 1,
+                  backgroundColor: note.color,
+                ),
+                body: Builder(builder: (BuildContext context) {
+                  return _buildBody(context, note);
+                }),
+              ),
+              onWillPop: _readyToPop,
+            );
+          } else {
+            return Container();
+          }
+        });
   }
 
-  Widget _buildBody(BuildContext ctx) {
+  Widget _buildBody(BuildContext ctx, Note note) {
     return Container(
-        color: _color,
+        color: note.color,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
         child: SafeArea(
           child: Column(
@@ -138,7 +140,7 @@ class _NoteState extends State<NoteView> {
         ));
   }
 
-  List<Widget> _buildAppBarActions(BuildContext context) {
+  List<Widget> _buildAppBarActions(BuildContext context, Note note) {
     final List<Widget> list = <Widget>[
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
@@ -171,7 +173,7 @@ class _NoteState extends State<NoteView> {
         padding: const EdgeInsets.symmetric(horizontal: 12),
         child: InkWell(
           child: GestureDetector(
-            onTap: () => _bottomSheet(context),
+            onTap: () => _bottomSheet(context, note),
             child: Icon(
               Icons.more_vert,
               color: Colors.black,
@@ -184,16 +186,16 @@ class _NoteState extends State<NoteView> {
     return actions;
   }
 
-  void _bottomSheet(BuildContext context) {
+  void _bottomSheet(BuildContext context, Note note) {
     showModalBottomSheet<MoreOptionsSheet>(
       context: context,
       builder: (BuildContext ctx) {
         return MoreOptionsSheet(
-          color: _color,
+          color: note.color,
           onColorChanged: _bloc.updateColor,
           onDeleted: _onDeleted(context),
           onShared: _onShared,
-          updatedAt: _bloc.note.updatedAt,
+          updatedAt: note.updatedAt,
         );
       },
     );
