@@ -1,4 +1,4 @@
-import 'package:bloom/kernel/blocs/drawer_bloc.dart';
+import 'package:bloom/kernel/blocs/drawer.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
