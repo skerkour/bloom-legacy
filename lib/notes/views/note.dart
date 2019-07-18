@@ -153,7 +153,7 @@ class _NoteState extends State<NoteView> {
       ),
       Padding(
         padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: _bloc.note.archivedAt == null
+        child: note.archivedAt == null
             ? GestureDetector(
                 onTap: _bloc.archive,
                 child: Icon(
