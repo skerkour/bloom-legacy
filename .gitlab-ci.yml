@@ -26,6 +26,7 @@ before_script:
       && cd -
   - echo flutter.sdk=$HOME/flutter > android/local.properties
   - chmod +x ./android/gradlew
+  - flutter config --no-analytics
 
 stages:
   - test
@@ -39,11 +40,11 @@ test:flutter:
     - make lint
     - make test
 
-test:android:
-  stage: test
-  script:
-    - cd android
-    - ./gradlew -Pci --console=plain :app:testDebug
+# test:android:
+#   stage: test
+#   script:
+#     - cd android
+#     - ./gradlew -Pci --console=plain :app:testDebug
 
 build:apk:
   stage: build
