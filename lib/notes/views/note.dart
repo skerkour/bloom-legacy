@@ -144,48 +144,33 @@ class _NoteState extends State<NoteView> {
 
   List<Widget> _buildAppBarActions(BuildContext context, Note note) {
     final List<Widget> list = <Widget>[
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: InkWell(
-          onTap: _bloc.pinUnpin,
-          child: GestureDetector(
-            child: Container(
-                child: Image.asset(note.isPinned
-                    ? 'assets/pin_36.png'
-                    : 'assets/pin_outline_36.png'),
-                width: 20),
-          ),
+      IconButton(
+        icon: Container(
+          child: Image.asset(note.isPinned
+              ? 'assets/pin_36.png'
+              : 'assets/pin_outline_36.png'),
+          width: 20,
         ),
+        onPressed: _bloc.pinUnpin,
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: note.archivedAt == null
-            ? GestureDetector(
-                onTap: _bloc.archive,
-                child: Icon(
-                  Icons.archive,
-                  color: Colors.black,
-                ),
+      IconButton(
+        icon: note.archivedAt == null
+            ? Icon(
+                Icons.archive,
+                color: Colors.black,
               )
-            : GestureDetector(
-                onTap: _bloc.unarchive,
-                child: Icon(
-                  Icons.unarchive,
-                  color: Colors.black,
-                ),
+            : Icon(
+                Icons.unarchive,
+                color: Colors.black,
               ),
+        onPressed: note.archivedAt == null ? _bloc.archive : _bloc.unarchive,
       ),
-      Padding(
-        padding: const EdgeInsets.symmetric(horizontal: 12),
-        child: InkWell(
-          child: GestureDetector(
-            onTap: () => _bottomSheet(context, note),
-            child: Icon(
-              Icons.more_vert,
-              color: Colors.black,
-            ),
-          ),
+      IconButton(
+        icon: Icon(
+          Icons.more_vert,
+          color: Colors.black,
         ),
+        onPressed: () => _bottomSheet(context, note),
       ),
     ];
     final List<Widget> actions = list;
