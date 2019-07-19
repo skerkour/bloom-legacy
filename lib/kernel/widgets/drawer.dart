@@ -1,5 +1,6 @@
 import 'package:bloom/contacts/widgets/drawer.dart';
 import 'package:bloom/kernel/blocs/app.dart';
+import 'package:bloom/kernel/views/auth.dart';
 import 'package:bloom/kernel/widgets/home_drawer.dart';
 import 'package:bloom/notes/widgets/drawer.dart';
 import 'package:flutter/material.dart';
@@ -126,7 +127,10 @@ class _BlmDrawerState extends State<BlmDrawer>
   }
 
   void _detailsPressed() {
-    debugPrint('drawer details pressed');
+    Navigator.of(context).pop();
+    Navigator.of(context).push<dynamic>(MaterialPageRoute<dynamic>(
+      builder: (BuildContext context) => const AuthView(),
+    ));
   }
 }
 

@@ -2,9 +2,7 @@ import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
-  const HomeView({Key key, this.title}) : super(key: key);
-
-  final String title;
+  const HomeView({Key key}) : super(key: key);
 
   @override
   _HomeViewState createState() => _HomeViewState();
@@ -24,7 +22,7 @@ class _HomeViewState extends State<HomeView> {
     return Scaffold(
       drawer: const BlmDrawer(),
       appBar: AppBar(
-        title: Text(widget.title),
+        title: const Text('Bloom'),
       ),
       body: _buildBody(context),
     );
