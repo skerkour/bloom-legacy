@@ -49,6 +49,12 @@ class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
         _currentApp = Apps.CONTACTS;
         appBloc.setCurrentApp(_currentApp);
       }
+    } else if (routeStr.startsWith('/calendar')) {
+      debugPrint('(RouteObserver) Calendar');
+      if (_currentApp != Apps.CALENDAR) {
+        _currentApp = Apps.CALENDAR;
+        appBloc.setCurrentApp(_currentApp);
+      }
     } else {
       debugPrint('(RouteObserver) route not found');
     }

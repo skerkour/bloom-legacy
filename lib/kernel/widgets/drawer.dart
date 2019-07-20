@@ -1,3 +1,4 @@
+import 'package:bloom/calendar/widgets/drawer.dart';
 import 'package:bloom/contacts/widgets/drawer.dart';
 import 'package:bloom/kernel/blocs/app.dart';
 import 'package:bloom/kernel/views/auth.dart';
@@ -157,6 +158,8 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
               break;
             case Apps.NOTES:
               return const NotesDrawer();
+            case Apps.CALENDAR:
+              return const CalendarDrawer();
             default:
               return Container();
           }
@@ -186,6 +189,8 @@ class _BloomAppsState extends State<BloomApps> {
         icon: 'assets/contacts_128.png', title: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: 'assets/contacts_128.png', title: 'Contacts', route: '/contacts'),
+    const _BlmApp(
+        icon: 'assets/contacts_128.png', title: 'Calendar', route: '/calendar'),
   ];
 
   @override

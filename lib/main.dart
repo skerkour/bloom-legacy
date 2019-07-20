@@ -1,3 +1,4 @@
+import 'package:bloom/calendar/views/calendar.dart';
 import 'package:bloom/contacts/views/contacts.dart';
 import 'package:bloom/kernel/views/home.dart';
 import 'package:bloom/notes/views/notes.dart';
@@ -21,6 +22,7 @@ class MyApp extends StatelessWidget {
         '/': (BuildContext context) => const HomeView(),
         '/notes': (BuildContext context) => const NotesView(),
         '/contacts': (BuildContext context) => ContactsView(),
+        '/calendar': (BuildContext context) => const CalendarView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

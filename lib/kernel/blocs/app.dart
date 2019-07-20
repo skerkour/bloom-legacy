@@ -24,4 +24,4 @@ class AppBloc extends BlocBase {
 
 AppBloc appBloc = AppBloc();
 
-enum Apps { HOME, NOTES, CONTACTS }
+enum Apps { HOME, NOTES, CONTACTS, CALENDAR }
