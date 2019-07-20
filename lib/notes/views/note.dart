@@ -42,18 +42,18 @@ class _NoteState extends State<NoteView> {
     _titleController.text = _bloc.note.title;
     _bodyController.text = _bloc.note.body;
 
-    _bloc.deleted.listen((_) {
+    _bloc.deletedStream.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     });
 
-    _bloc.archived.listen((_) {
+    _bloc.archivedStream.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop(NoteViewResult.Archived);
     });
 
-    _bloc.unarchived.listen((_) {
+    _bloc.unarchivedStream.listen((_) {
       _persistenceTimer?.cancel();
       Navigator.of(context).pop(NoteViewResult.Unarchived);
     });
@@ -71,7 +71,7 @@ class _NoteState extends State<NoteView> {
   Widget build(BuildContext context) {
     return StreamBuilder<Note>(
         initialData: _bloc.note,
-        stream: _bloc.noteOut,
+        stream: _bloc.noteStream,
         builder: (BuildContext context, AsyncSnapshot<Note> snapshot) {
           if (snapshot.hasData) {
             final Note note = snapshot.data;

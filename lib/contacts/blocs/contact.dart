@@ -18,8 +18,8 @@ class ContactBloc extends BlocBase {
 
   final StreamController<Contact> _contactDeletedController =
       StreamController<Contact>.broadcast();
-  StreamSink<Contact> get _inDeleted => _contactDeletedController.sink;
-  Stream<Contact> get deleted => _contactDeletedController.stream;
+  StreamSink<Contact> get _deletedStream => _contactDeletedController.sink;
+  Stream<Contact> get deletedStream => _contactDeletedController.stream;
 
   Contact get contact => _contact;
 
@@ -30,6 +30,6 @@ class ContactBloc extends BlocBase {
 
   Future<void> delete() async {
     await ContactsService.deleteContact(_contact);
-    _inDeleted.add(_contact);
+    _deletedStream.add(_contact);
   }
 }

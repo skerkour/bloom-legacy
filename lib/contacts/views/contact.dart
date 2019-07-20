@@ -19,7 +19,7 @@ class _ContactState extends State<ContactView> {
     final Contact contact = widget.contact ?? Contact();
     _bloc = ContactBloc(contact: contact);
 
-    _bloc.deleted.listen((_) {
+    _bloc.deletedStream.listen((_) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     });

@@ -10,7 +10,7 @@ class ContactsBloc extends BlocBase {
 
   final StreamController<List<Contact>> _contactsController =
       StreamController<List<Contact>>.broadcast();
-  Stream<List<Contact>> get contactsOut => _contactsController.stream;
+  Stream<List<Contact>> get contactsStream => _contactsController.stream;
 
   @override
   void dispose() {

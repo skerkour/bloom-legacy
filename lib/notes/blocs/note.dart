@@ -13,23 +13,23 @@ class NoteBloc extends BlocBase {
 
   final StreamController<Note> _noteController =
       StreamController<Note>.broadcast();
-  StreamSink<Note> get _inNote => _noteController.sink;
-  Stream<Note> get noteOut => _noteController.stream;
+  StreamSink<Note> get _noteStream => _noteController.sink;
+  Stream<Note> get noteStream => _noteController.stream;
 
   final StreamController<Note> _noteDeletedController =
       StreamController<Note>.broadcast();
-  StreamSink<Note> get _inDeleted => _noteDeletedController.sink;
-  Stream<Note> get deleted => _noteDeletedController.stream;
+  StreamSink<Note> get _deletedStream => _noteDeletedController.sink;
+  Stream<Note> get deletedStream => _noteDeletedController.stream;
 
   final StreamController<Note> _noteArchivedController =
       StreamController<Note>.broadcast();
-  StreamSink<Note> get _inArchived => _noteArchivedController.sink;
-  Stream<Note> get archived => _noteArchivedController.stream;
+  StreamSink<Note> get _archivedStream => _noteArchivedController.sink;
+  Stream<Note> get archivedStream => _noteArchivedController.stream;
 
   final StreamController<Note> _noteUnarchivedController =
       StreamController<Note>.broadcast();
-  StreamSink<Note> get _inUnarchived => _noteUnarchivedController.sink;
-  Stream<Note> get unarchived => _noteUnarchivedController.stream;
+  StreamSink<Note> get _unarchivedStream => _noteUnarchivedController.sink;
+  Stream<Note> get unarchivedStream => _noteUnarchivedController.stream;
 
   Note get note => _note;
 
@@ -45,37 +45,37 @@ class NoteBloc extends BlocBase {
     if (_note.id != null) {
       _note = await _note.delete();
     }
-    _inDeleted.add(_note);
+    _deletedStream.add(_note);
   }
 
   Future<void> archive() async {
     _note.archivedAt = DateTime.now();
 
     _note = await _note.update();
-    _inNote.add(_note);
-    _inArchived.add(_note);
+    _noteStream.add(_note);
+    _archivedStream.add(_note);
   }
 
   Future<void> unarchive() async {
     _note.archivedAt = null;
 
     _note = await _note.update();
-    _inNote.add(_note);
-    _inUnarchived.add(_note);
+    _noteStream.add(_note);
+    _unarchivedStream.add(_note);
   }
 
   Future<void> updateColor(Color color) async {
     _note.color = color;
 
     _note = await _note.update();
-    _inNote.add(_note);
+    _noteStream.add(_note);
   }
 
   Future<void> pinUnpin() async {
     _note.isPinned = !_note.isPinned;
 
     _note = await _note.update();
-    _inNote.add(_note);
+    _noteStream.add(_note);
   }
 
   Future<void> save(String title, String body) async {
@@ -97,6 +97,6 @@ class NoteBloc extends BlocBase {
       _note = await _note.update();
       debugPrint('note updated');
     }
-    _inNote.add(_note);
+    _noteStream.add(_note);
   }
 }

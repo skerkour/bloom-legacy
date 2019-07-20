@@ -29,7 +29,7 @@ class _ContactsState extends State<ContactsView> {
         title: const Text('Contacts'),
       ),
       body: StreamBuilder<List<Contact>>(
-          stream: _bloc.contactsOut,
+          stream: _bloc.contactsStream,
           builder:
               (BuildContext context, AsyncSnapshot<List<Contact>> snapshot) {
             if (snapshot.hasData) {

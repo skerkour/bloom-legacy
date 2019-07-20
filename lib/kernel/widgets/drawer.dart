@@ -148,7 +148,7 @@ class _SettingsCurrentAppState extends State<SettingsCurrentApp> {
   Widget build(BuildContext context) {
     return StreamBuilder<Apps>(
         initialData: appBloc.currentApp,
-        stream: appBloc.outCurrentApp,
+        stream: appBloc.currentAppStream,
         builder: (BuildContext context, AsyncSnapshot<Apps> snapshot) {
           switch (snapshot.data) {
             case Apps.HOME:

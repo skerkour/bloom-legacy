@@ -8,8 +8,8 @@ class AppBloc extends BlocBase {
 
   final StreamController<Apps> _currentAppController =
       StreamController<Apps>.broadcast();
-  Sink<Apps> get _inCurrentApp => _currentAppController.sink;
-  Stream<Apps> get outCurrentApp => _currentAppController.stream;
+  Sink<Apps> get _currentAppStream => _currentAppController.sink;
+  Stream<Apps> get currentAppStream => _currentAppController.stream;
 
   @override
   void dispose() {
@@ -18,7 +18,7 @@ class AppBloc extends BlocBase {
 
   void setCurrentApp(Apps app) {
     _currentApp = app;
-    _inCurrentApp.add(_currentApp);
+    _currentAppStream.add(_currentApp);
   }
 }
 
