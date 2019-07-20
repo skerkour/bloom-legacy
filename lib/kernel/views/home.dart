@@ -89,5 +89,7 @@ List<_BlmApp> getApps() {
         icon: 'assets/contacts_128.png', name: 'Contacts', route: '/contacts'),
     const _BlmApp(
         icon: 'assets/contacts_128.png', name: 'Calendar', route: '/calendar'),
+    const _BlmApp(
+        icon: 'assets/contacts_128.png', name: 'Drive', route: '/drive'),
   ];
 }
