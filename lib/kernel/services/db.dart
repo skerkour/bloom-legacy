@@ -13,11 +13,11 @@ class DB {
       return _database;
     }
 
-    _database = await init();
+    _database = await _init();
     return _database;
   }
 
-  Future<Database> init() async {
+  Future<Database> _init() async {
     final String path = await getDatabasesPath();
     final String dbPath = join(path, databaseName);
     // ignore: argument_type_not_assignable

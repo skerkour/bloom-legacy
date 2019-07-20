@@ -1,3 +1,4 @@
+import 'package:bloom/kernel/blocs/app.dart';
 import 'package:bloom/kernel/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
@@ -16,6 +17,7 @@ class Note {
   }) {
     createdAt = DateTime.now();
     updatedAt = DateTime.now();
+    // db = DB();
   }
   String id;
   String title;
@@ -78,8 +80,7 @@ class Note {
   static Future<Note> create(String title, String body, Color color) async {
     // Get a reference to the database
     debugPrint('Note.create called');
-    final DB db = DB();
-    final Database database = await db.db;
+    final Database db = await appBloc.db.db;
 
     final Note note = Note(title: title, body: body, color: color);
     note.id = Uuid().v4();
@@ -89,18 +90,17 @@ class Note {
     final Map<String, dynamic> data = note.toMap();
     debugPrint('note: $data');
     // Insert the Note into the correct table.
-    await database.insert(DB.notesTable, data);
+    await db.insert(DB.notesTable, data);
     return note;
   }
 
   Future<Note> update() async {
     debugPrint('Note.update called (id: $id)');
-    final DB db = DB();
-    final Database database = await db.db;
+    final Database db = await appBloc.db.db;
 
     updatedAt = DateTime.now();
 
-    await database.update(
+    await db.update(
       DB.notesTable,
       toMap(),
       where: 'id = ?',
@@ -112,10 +112,9 @@ class Note {
   Future<Note> delete() async {
     // Get a reference to the database
     debugPrint('Note.delete called (id: $id)');
-    final DB db = DB();
-    final Database database = await db.db;
+    final Database db = await appBloc.db.db;
 
-    await database.delete(
+    await db.delete(
       DB.notesTable,
       // Use a `where` clause to delete a specific note.
       where: 'id = ?',
@@ -128,11 +127,10 @@ class Note {
   static Future<List<Note>> find() async {
     // Get a reference to the database.
     debugPrint('Note.find called');
-    final DB db = DB();
-    final Database database = await db.db;
+    final Database db = await appBloc.db.db;
 
     // Query the table for all The Notes.
-    final List<Map<String, dynamic>> results = await database.query(
+    final List<Map<String, dynamic>> results = await db.query(
       DB.notesTable,
       where: 'archived_at IS NULL',
       orderBy: 'is_pinned DESC, created_at ASC',
@@ -145,11 +143,10 @@ class Note {
   static Future<List<Note>> findArchived() async {
     // Get a reference to the database.
     debugPrint('Note.findArchived called');
-    final DB db = DB();
-    final Database database = await db.db;
+    final Database db = await appBloc.db.db;
 
     // Query the table for all The archived Notes.
-    final List<Map<String, dynamic>> results = await database.query(
+    final List<Map<String, dynamic>> results = await db.query(
       DB.notesTable,
       where: 'archived_at IS NOT NULL',
       orderBy: 'is_pinned DESC, created_at ASC',
