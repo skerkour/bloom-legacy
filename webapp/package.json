@@ -10,8 +10,8 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
-    "@bloom42/astro": "git+https://gitlab.com/bloom42/astro-js.git",
-    "@mdi/font": "3.7.95",
+    "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
+    "@mdi/font": "3.8.95",
     "@sentry/browser": "5.5.0",
     "@sentry/integrations": "5.5.0",
     "axios": "0.19.0",
@@ -35,7 +35,7 @@
     "@vue/cli-plugin-pwa": "^3.9.0",
     "@vue/cli-plugin-typescript": "^3.9.0",
     "@vue/cli-plugin-unit-jest": "^3.9.0",
-    "@vue/cli-service": "^3.9.2",
+    "@vue/cli-service": "^3.9.3",
     "@vue/test-utils": "^1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "node-sass": "^4.12.0",
