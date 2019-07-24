@@ -1,2 +1,0 @@
-* [Billing](billing)
-* [Calendar](calendar)
