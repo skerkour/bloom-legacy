@@ -42,7 +42,7 @@ cache:
 
 test:server:
   stage: test
-  image: 'rust:1.35'
+  image: 'rust:1.36'
   tags:
     - docker
   script:
@@ -68,7 +68,7 @@ test:webapp:
 
 build:server:
   stage: build
-  image: 'rust:1.35'
+  image: 'rust:1.36'
   tags:
     - docker
   script:
