@@ -1,6 +1,6 @@
 <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
-  <h3 align="center">Bloom - apps</h3>
+  <h3 align="center">Bloom</h3>
   <p align="center">Empowering the world with open technologies</p>
 </p>
 
