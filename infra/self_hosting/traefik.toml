@@ -1,0 +1,42 @@
+debug = false
+logLevel = "INFO"
+
+defaultEntryPoints = ["https","http"]
+
+# The syntax is somewhat esoteric IMHO so this is mostly copy-paste
+[entryPoints]
+  [entryPoints.http]
+    address = ":80"
+    [entryPoints.http.redirect]
+      entryPoint = "https"
+
+  [entryPoints.https]
+    address = ":443"
+    [entryPoints.https.tls]
+
+  [entryPoints.traefik]
+    address = ":8080"
+    [entryPoints.traefik.auth.basic]
+      users = ["user:[PASSWORD]"]
+
+
+[retry]
+
+[docker]
+  endpoint = "unix:///var/run/docker.sock"
+  watch = true
+  exposedByDefault = false
+
+[acme]
+  email = "sylvain@kerkour.com"
+  storage = "/acme.json"
+  entryPoint = "https"
+  OnHostRule = true
+  [acme.httpChallenge]
+    entryPoint = "http"
+
+# Enable web configuration backend
+[api]
+  # Web administration
+  # see traefik entrypoint for the port
+  dashboard = true
