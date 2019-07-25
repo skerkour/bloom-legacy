@@ -40,3 +40,8 @@ and to export contacts (vcf file, JSON).
 ### Contact
 
 ### Settings
+
+* Import
+* Export
+* Sort by
+* Blocked
