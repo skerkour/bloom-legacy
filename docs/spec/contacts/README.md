@@ -11,6 +11,17 @@
 
 ## Overview
 
+On first launch, user is asked for contacts update.
+* If granted, all contacts are imported in Bloom contacts
+* Else, nothing is done.
+
+Then each time a conatct is saved,
+* if permission is granted, also save on device
+* else, only save in Bloom
+
+There is also an option in settings to import contacts (from sim, device or vcf file, JSON),
+and to export contacts (vcf file, JSON).
+
 
 ## Scenarios
 
