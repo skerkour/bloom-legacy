@@ -22,7 +22,6 @@ Then each time a conatct is saved,
 There is also an option in settings to import contacts (from sim, device or vcf file, JSON),
 and to export contacts (vcf file, JSON).
 
-
 ## Scenarios
 
 ## Non goals
