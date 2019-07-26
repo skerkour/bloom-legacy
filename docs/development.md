@@ -42,32 +42,48 @@ $ cat bloom.sane
 rust_env = "development"
 host = "http://localhost:8080"
 port = 8000
+
 database = {
     url = "postgres://USER:PASSWORD@127.0.0.1:5432/DATABASE?sslmode=disable"
 }
+
 aws = {
-    secret_access_key = "XXX",
-    access_key_id = "XXX",
-    region = "XXX",
+    secret_access_key = "[XXX]",
+    access_key_id = "[XXX]",
+    region = "[XXX]",
 }
+
 s3 = {
-    bucket = "XXX",
+    bucket = "[XXX]",
     base_url = "https://s3.REGION.amazonaws.com",
 }
+
 sentry = {
-    url = "XXX" # optional
+    server_url = "[XXX]" # optional
 }
+
 phaser = {
-    secret = "XXX",
+    # cryptographically secure random string of at least 65 characters
+    secret = "[XXX]",
 }
+
 bitflow = {
-    secret = "XXX",
+    # cryptographically secure random string of at least 65 characters
+    secret = "[XXX]",
 }
+
 smtp = {
     port = 587,
-    host = "XXX",
-    username = "XXX",
-    password = "XXX",
+    # in development, host, username and password can be left as empty strings: ""
+    # if empty, emails will be printed in the console
+    host = "[XXX]",
+    username = "[XXX]",
+    password = "[XXX]",
+}
+
+stripe = {
+    public_key = "[XXX]",
+    secret_key = "[XXX]",
 }
 
 blacklists = {
@@ -78,6 +94,8 @@ blacklists = {
         "assets/common_passwords_200.txt",
     ]
 }
+
+disabled = [] # optional, you can disable service like disabled = ["phaser", "bitflow"]
 ```
 
 7. Run migrations

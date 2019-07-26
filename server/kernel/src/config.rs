@@ -206,7 +206,6 @@ pub struct SmtpConfig {
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct SentryConfig {
     pub server_url: Option<String>,
-    pub webapp_url: Option<String>,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -373,14 +372,6 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
         for match_ in re.find_iter(&url) {
             let match_str = match_.as_str();
             config.sentry.server_url =
-                Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
-        }
-    }
-    if let Some(ref url) = config.sentry.webapp_url {
-        let url = url.clone();
-        for match_ in re.find_iter(&url) {
-            let match_str = match_.as_str();
-            config.sentry.webapp_url =
                 Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
         }
     }

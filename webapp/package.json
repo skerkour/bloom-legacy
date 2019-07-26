@@ -12,8 +12,6 @@
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "3.8.95",
-    "@sentry/browser": "5.5.0",
-    "@sentry/integrations": "5.5.0",
     "axios": "0.19.0",
     "echarts": "4.2.1",
     "howler": "2.1.2",

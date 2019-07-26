@@ -19,7 +19,6 @@ s3 = {
 
 sentry = {
     server_url = "[XXX]" # optional
-    webapp_url = "[XXX]" # optional
 }
 
 phaser = {
