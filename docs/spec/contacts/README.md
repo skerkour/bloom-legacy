@@ -31,7 +31,6 @@ and to export contacts (vcf file, JSON).
 
 ## Models
 
-
 ## Views
 
 ### Contacts
