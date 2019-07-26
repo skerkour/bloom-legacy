@@ -71,7 +71,6 @@ static ENV_TEMPLATE: &str = r#"
 window.__bloom = {
   config: {
     ENV: "{{node_env}}",
-    SENTRY_URL: "{{sentry_url}}",
     HOST: "{{host}}",
     STRIPE_PUBLIC_KEY: "{{stripe_public_key}}",
     VERSION: "{{version}}",
@@ -85,10 +84,6 @@ pub fn webapp_env(state: web::Data<State>) -> ActixResult<HttpResponse> {
 
     let mut data = BTreeMap::new();
     data.insert("node_env".to_string(), config.rust_env.to_string());
-    data.insert(
-        "sentry_url".to_string(),
-        config.sentry.webapp_url.unwrap_or_default(),
-    );
     data.insert("host".to_string(), config.host);
     data.insert("stripe_public_key".to_string(), config.stripe.public_key);
     data.insert("version".to_string(), config.version);

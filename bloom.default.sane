@@ -15,7 +15,6 @@ s3 = {
 }
 sentry = {
     server_url = "${SENTRY_SERVER_URL}",
-    webapp_url = "${SENTRY_WEBAPP_URL}",
 }
 phaser = {
     secret =  "${PHASER_SECRET}",

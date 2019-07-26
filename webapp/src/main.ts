@@ -1,7 +1,5 @@
 /* tslint:disable */
 import Vue from 'vue';
-import * as Sentry from '@sentry/browser';
-import * as Integrations from '@sentry/integrations';
 import Vuetify from 'vuetify';
 const { log, Level } = require('@bloom42/astro');
 
@@ -45,14 +43,6 @@ if (config.ENV === 'development') {
 }
 
 log.with({ config }).debug('config loaded');
-
-
-// init sentry for bug tracking
-Sentry.init({
-  dsn: config.SENTRY_URL,
-  environment: config.ENV,
-  integrations: [new Integrations.Vue({ Vue })],
-});
 
 
 // init libraries and components
