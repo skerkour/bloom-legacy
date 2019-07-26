@@ -1,7 +1,6 @@
 import 'package:bloom/contacts/blocs/contacts.dart';
-import 'package:bloom/contacts/views/contact.dart';
 import 'package:bloom/kernel/widgets/drawer.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:bloom/contacts/models/db/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactsView extends StatefulWidget {
@@ -53,19 +52,20 @@ class _ContactsState extends State<ContactsView> {
         itemBuilder: (BuildContext context, int index) {
           final Contact contact = contacts.elementAt(index);
           return ListTile(
-            onTap: () {
-              Navigator.push<dynamic>(
-                context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) =>
-                      ContactView(contact: contact),
-                ),
-              );
-            },
-            leading: (contact.avatar != null && contact.avatar.isNotEmpty)
-                ? CircleAvatar(backgroundImage: MemoryImage(contact.avatar))
-                : CircleAvatar(child: Text(contact.initials())),
-            title: Text(contact.displayName ?? ''),
+            // onTap: () {
+            //   Navigator.push<dynamic>(
+            //     context,
+            //     MaterialPageRoute<dynamic>(
+            //       builder: (BuildContext context) =>
+            //           ContactView(contact: contact),
+            //     ),
+            //   );
+            // },
+            // leading: (contact.avatar != null && contact.avatar.isNotEmpty)
+            //     ? CircleAvatar(backgroundImage: MemoryImage(contact.avatar))
+            leading: CircleAvatar(
+                child: Text((contact.name[0] ?? '').toUpperCase())),
+            title: Text(contact.name),
           );
         },
       ),

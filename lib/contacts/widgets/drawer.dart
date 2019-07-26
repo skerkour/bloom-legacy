@@ -1,3 +1,5 @@
+import 'package:bloom/contacts/views/contacts.dart';
+import 'package:bloom/contacts/views/settings.dart';
 import 'package:flutter/material.dart';
 
 class ContactsDrawer extends StatefulWidget {
@@ -11,7 +13,37 @@ class _ContactsDrawerState extends State<ContactsDrawer> {
   @override
   Widget build(BuildContext context) {
     return Container(
-      child: const Text('Settings contacts'),
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Contacts'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => ContactsView(),
+                ),
+                (Route<dynamic> route) => false,
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.settings),
+            title: const Text('Settings'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => SettingsView(),
+                ),
+              );
+            },
+          ),
+        ],
+      ),
     );
   }
 }

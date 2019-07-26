@@ -55,7 +55,6 @@ class Note {
     );
   }
 
-// overriding toString() of the note class to print a better debug description of this custom class
   @override
   String toString() {
     return toMap().toString();

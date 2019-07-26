@@ -6,6 +6,7 @@ import 'package:sqflite/sqlite_api.dart';
 class DB {
   final String databaseName = 'bloom.db';
   static String notesTable = 'notes';
+  static String contactsTable = 'contacts';
   static Database _database;
 
   Future<Database> get db async {
@@ -37,6 +38,15 @@ class DB {
         )
       ''';
       await db.execute(createNotestableQuery);
+
+      final String createContacttableQuery = '''
+        CREATE TABLE IF NOT EXISTS $contactsTable (
+          id TEXT PRIMARY KEY NOT NULL,
+          name TEXT NOT NULL,
+          device_id TEXT
+        )
+        ''';
+      await db.execute(createContacttableQuery);
     });
 
     return dbConnection;
