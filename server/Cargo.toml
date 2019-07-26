@@ -14,7 +14,7 @@
 [profile.release]
 # for error tracking
 debug = true
-#lto = true
+lto = true
 
 
 [workspace]
