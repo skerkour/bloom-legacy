@@ -29,7 +29,6 @@ and to export contacts (vcf file, JSON).
 
 * Sync with server
 
-
 ## Models
 
 
