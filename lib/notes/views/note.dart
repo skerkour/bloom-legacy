@@ -64,6 +64,8 @@ class _NoteState extends State<NoteView> {
   @override
   void dispose() {
     _bloc.dispose();
+    _bodyController.dispose();
+    _titleController.dispose();
     super.dispose();
   }
 
