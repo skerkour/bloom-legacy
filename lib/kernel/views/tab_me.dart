@@ -72,8 +72,7 @@ class _BlmApp {
 
 List<_BlmApp> getApps() {
   return <_BlmApp>[
-    const _BlmApp(
-        icon: 'assets/contacts_128.png', name: 'Notes', route: '/notes'),
+    const _BlmApp(icon: 'assets/notes_128.png', name: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: 'assets/contacts_128.png', name: 'Contacts', route: '/contacts'),
     const _BlmApp(

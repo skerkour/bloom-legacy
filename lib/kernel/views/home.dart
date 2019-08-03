@@ -17,12 +17,58 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: const Text('Bloom'),
-      ),
+      appBar: _buildAppBar(),
       body: _buildBody(context),
       bottomNavigationBar: _buildBottomNavigationBar(),
+      floatingActionButton: _buildFloatingActionButton(context),
     );
+  }
+
+  AppBar _buildAppBar() {
+    String title = '';
+    switch (_selectedIndex) {
+      case 0:
+        title = 'Chats';
+        break;
+      case 1:
+        title = 'Groups';
+        break;
+      case 2:
+        title = 'Discover';
+        break;
+      default:
+        title = 'Me';
+    }
+    return AppBar(
+      title: Text(title),
+    );
+  }
+
+  FloatingActionButton _buildFloatingActionButton(BuildContext context) {
+    switch (_selectedIndex) {
+      case 0:
+        return FloatingActionButton(
+          onPressed: () => _fabChatsPressed(),
+          child: Icon(Icons.add),
+          backgroundColor: Colors.red,
+        );
+      case 1:
+        return FloatingActionButton(
+          onPressed: () => _fabGroupsPressed(),
+          child: Icon(Icons.add),
+          backgroundColor: Colors.red,
+        );
+      default:
+        return null;
+    }
+  }
+
+  void _fabChatsPressed() {
+    debugPrint('FAB Chats pressed');
+  }
+
+  void _fabGroupsPressed() {
+    debugPrint('FAB Groups pressed');
   }
 
   BottomNavigationBar _buildBottomNavigationBar() {
@@ -47,7 +93,6 @@ class _HomeViewState extends State<HomeView> {
       ],
       currentIndex: _selectedIndex,
       selectedItemColor: Colors.blue,
-      unselectedItemColor: Colors.black,
       onTap: _onItemTapped,
       type: BottomNavigationBarType.fixed,
     );
