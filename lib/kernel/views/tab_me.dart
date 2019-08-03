@@ -24,33 +24,18 @@ class _TabMeViewState extends State<TabMeView> {
         shrinkWrap: true,
         itemCount: apps.length,
         itemBuilder: (BuildContext context, int index) {
-          return _buildCard(context, apps[index]);
+          return _buildListTile(context, apps[index]);
         },
-      ),
-    );
-  }
-
-  Card _buildCard(BuildContext context, _BlmApp app) {
-    return Card(
-      elevation: 4.0,
-      margin: const EdgeInsets.symmetric(horizontal: 10.0, vertical: 6.0),
-      child: Container(
-        child: _buildListTile(context, app),
       ),
     );
   }
 
   ListTile _buildListTile(BuildContext context, _BlmApp app) {
     return ListTile(
-      contentPadding:
-          const EdgeInsets.symmetric(horizontal: 20.0, vertical: 10.0),
-      leading: Container(
-        padding: const EdgeInsets.only(right: 12.0),
-        child: CircleAvatar(
-          backgroundImage: AssetImage(app.icon),
-          backgroundColor: Colors.transparent,
-          radius: 25,
-        ),
+      leading: CircleAvatar(
+        backgroundImage: AssetImage(app.icon),
+        backgroundColor: Colors.transparent,
+        radius: 25,
       ),
       title: Text(app.name),
       onTap: () => Navigator.pushNamed(
@@ -72,12 +57,11 @@ class _BlmApp {
 
 List<_BlmApp> getApps() {
   return <_BlmApp>[
-    const _BlmApp(icon: 'assets/notes_128.png', name: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: 'assets/contacts_128.png', name: 'Contacts', route: '/contacts'),
+    const _BlmApp(icon: 'assets/notes_128.png', name: 'Notes', route: '/notes'),
     const _BlmApp(
-        icon: 'assets/contacts_128.png', name: 'Calendar', route: '/calendar'),
-    const _BlmApp(
-        icon: 'assets/contacts_128.png', name: 'Drive', route: '/drive'),
+        icon: 'assets/calendar_128.png', name: 'Calendar', route: '/calendar'),
+    const _BlmApp(icon: 'assets/drive_128.png', name: 'Drive', route: '/drive'),
   ];
 }
