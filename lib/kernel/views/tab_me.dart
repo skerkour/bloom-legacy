@@ -18,15 +18,24 @@ class _TabMeViewState extends State<TabMeView> {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: ListView.builder(
-        scrollDirection: Axis.vertical,
-        shrinkWrap: true,
-        itemCount: apps.length,
-        itemBuilder: (BuildContext context, int index) {
-          return _buildListTile(context, apps[index]);
-        },
-      ),
+    return Column(
+      children: <Widget>[
+        const SizedBox(height: 50),
+        Center(child: const Text('Avatar')),
+        Center(child: const Text('My Name')),
+        Center(child: const Text('@user:domain.com')),
+        const SizedBox(height: 50),
+        Container(
+          child: ListView.builder(
+            scrollDirection: Axis.vertical,
+            shrinkWrap: true,
+            itemCount: apps.length,
+            itemBuilder: (BuildContext context, int index) {
+              return _buildListTile(context, apps[index]);
+            },
+          ),
+        ),
+      ],
     );
   }
 

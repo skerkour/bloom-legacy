@@ -18,30 +18,22 @@ class _HomeViewState extends State<HomeView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: _buildAppBar(),
+      appBar: _buildAppBar(context),
       body: _buildBody(context),
       bottomNavigationBar: _buildBottomNavigationBar(),
       floatingActionButton: _buildFloatingActionButton(context),
     );
   }
 
-  AppBar _buildAppBar() {
-    const String title = 'Bloom';
-    // switch (_selectedIndex) {
-    //   case 0:
-    //     title = 'Chats';
-    //     break;
-    //   case 1:
-    //     title = 'Groups';
-    //     break;
-    //   case 2:
-    //     title = 'Discover';
-    //     break;
-    //   default:
-    //     title = 'Me';
-    // }
+  AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-      title: const Text(title),
+      title: const Text('Bloom'),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(Icons.search),
+          onPressed: () => debugPrint('Search pressed'),
+        ),
+      ],
     );
   }
 
