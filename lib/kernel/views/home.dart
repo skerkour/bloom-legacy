@@ -26,22 +26,22 @@ class _HomeViewState extends State<HomeView> {
   }
 
   AppBar _buildAppBar() {
-    String title = '';
-    switch (_selectedIndex) {
-      case 0:
-        title = 'Chats';
-        break;
-      case 1:
-        title = 'Groups';
-        break;
-      case 2:
-        title = 'Discover';
-        break;
-      default:
-        title = 'Me';
-    }
+    const String title = 'Bloom';
+    // switch (_selectedIndex) {
+    //   case 0:
+    //     title = 'Chats';
+    //     break;
+    //   case 1:
+    //     title = 'Groups';
+    //     break;
+    //   case 2:
+    //     title = 'Discover';
+    //     break;
+    //   default:
+    //     title = 'Me';
+    // }
     return AppBar(
-      title: Text(title),
+      title: const Text(title),
     );
   }
 
