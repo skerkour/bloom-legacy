@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.example.app">
+    package="com.bloom42.bloom">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
@@ -17,7 +17,7 @@
     <application
         android:name="io.flutter.app.FlutterApplication"
         android:label="Bloom"
-        android:icon="@mipmap/launcher_icon">
+        android:icon="@mipmap/ic_launcher">
         <activity
             android:name=".MainActivity"
             android:launchMode="singleTop"
