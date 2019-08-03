@@ -26,8 +26,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   AppBar _buildAppBar(BuildContext context) {
+    final ThemeData theme = Theme.of(context);
     return AppBar(
-      title: const Text('Bloom'),
+      elevation: 0,
+      backgroundColor: theme.scaffoldBackgroundColor,
+      iconTheme: IconThemeData(color: Colors.grey[700]),
+      title: Text('Bloom', style: TextStyle(color: Colors.grey[700])),
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.search),
