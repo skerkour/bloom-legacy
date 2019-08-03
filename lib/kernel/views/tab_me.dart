@@ -8,6 +8,7 @@ class TabMeView extends StatefulWidget {
 }
 
 class _TabMeViewState extends State<TabMeView> {
+  static const String _avatar = 'https://www.kerkour.fr/about/sylvain.jpg';
   List<_BlmApp> apps;
 
   @override
@@ -20,11 +21,20 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const SizedBox(height: 50),
-        Center(child: const Text('Avatar')),
-        Center(child: const Text('My Name')),
-        Center(child: const Text('@user:domain.com')),
-        const SizedBox(height: 50),
+        const SizedBox(height: 21),
+        Center(
+            child: CircleAvatar(
+          backgroundColor: Colors.grey,
+          backgroundImage: NetworkImage(_avatar),
+          radius: 42,
+        )),
+        const SizedBox(height: 21),
+        Center(child: const Text('My Name', style: TextStyle(fontSize: 21))),
+        const SizedBox(height: 5),
+        Center(
+            child:
+                const Text('@user:domain.com', style: TextStyle(fontSize: 18))),
+        const SizedBox(height: 21),
         Container(
           child: ListView.builder(
             scrollDirection: Axis.vertical,

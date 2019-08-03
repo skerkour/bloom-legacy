@@ -10,6 +10,8 @@ class TabGroupsView extends StatefulWidget {
 class _TabGroupsViewState extends State<TabGroupsView> {
   static const List<_Group> _groups = <_Group>[
     _Group(name: 'Bloom', description: 'Empowering people'),
+    _Group(name: '42', description: 'The future of learning'),
+    _Group(name: 'Tesla', description: 'Not so green transport'),
   ];
 
   @override

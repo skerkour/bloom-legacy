@@ -39,7 +39,7 @@ class _NotesState extends State<NotesView> {
       _bloc.getNotes();
     }
     return Scaffold(
-      drawer: const BlmDrawer(),
+      endDrawer: const BlmDrawer(),
       appBar: AppBar(
         title: Text(_archive ? 'Archive' : 'Notes'),
       ),

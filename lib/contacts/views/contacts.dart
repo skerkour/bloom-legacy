@@ -21,7 +21,7 @@ class _ContactsState extends State<ContactsView> {
   Widget build(BuildContext context) {
     _bloc.getContacts();
     return Scaffold(
-      drawer: const BlmDrawer(),
+      endDrawer: const BlmDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
