@@ -1,4 +1,4 @@
-.PHONY: lint fmt fmt_check test
+.PHONY: lint fmt fmt_check test icon
 
 lint:
 	flutter analyze
@@ -11,3 +11,6 @@ fmt_check:
 
 test:
 	- flutter test
+
+icon:
+	- flutter pub run flutter_launcher_icons:main
