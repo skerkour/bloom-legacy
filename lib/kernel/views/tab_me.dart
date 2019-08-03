@@ -53,10 +53,10 @@ class _TabMeViewState extends State<TabMeView> {
         ),
       ),
       title: Text(app.name),
-      onTap: () => Navigator.pushNamedAndRemoveUntil(
+      onTap: () => Navigator.pushNamed(
         context,
         app.route,
-        (Route<dynamic> route) => false,
+        // (Route<dynamic> route) => false,
       ),
     );
   }

@@ -2,6 +2,7 @@ import 'package:bloom/kernel/views/tab_chats.dart';
 import 'package:bloom/kernel/views/tab_discover.dart';
 import 'package:bloom/kernel/views/tab_groups.dart';
 import 'package:bloom/kernel/views/tab_me.dart';
+import 'package:bloom/kernel/widgets/bottom_sheet_chats.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -64,7 +65,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _fabChatsPressed() {
-    debugPrint('FAB Chats pressed');
+    showModalBottomSheet<ChatsBottomSheet>(
+      context: context,
+      builder: (BuildContext ctx) {
+        return ChatsBottomSheet();
+      },
+    );
   }
 
   void _fabGroupsPressed() {
