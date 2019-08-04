@@ -1,3 +1,4 @@
+import 'package:bloom/kernel/widgets/dropdown_item.dart';
 import 'package:flutter/material.dart';
 
 class CreateGroupView extends StatefulWidget {
@@ -8,6 +9,33 @@ class CreateGroupView extends StatefulWidget {
 }
 
 class _CreateGroupState extends State<CreateGroupView> {
+  String _dropdownValue;
+  List<DropdownMenuItem<String>> _dropdownItems;
+  static const String _PUBLIC = 'PUBLIC';
+  static const String _PRIVATE = 'PRIVATE';
+
+  @override
+  void initState() {
+    _dropdownValue = _PRIVATE;
+    _dropdownItems = <DropdownItem>[
+      const DropdownItem(label: 'Private', value: _PRIVATE, icon: Icons.lock),
+      const DropdownItem(label: 'Public', value: _PUBLIC, icon: Icons.public),
+    ].map<DropdownMenuItem<String>>((DropdownItem item) {
+      return DropdownMenuItem<String>(
+        value: item.value,
+        child: Row(
+          children: <Widget>[
+            item.icon != null ? Icon(item.icon) : null,
+            const SizedBox(width: 5),
+            Text(item.label),
+          ],
+        ),
+      );
+    }).toList();
+
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(appBar: _buildAppBar(), body: _buildBody());
@@ -42,6 +70,21 @@ class _CreateGroupState extends State<CreateGroupView> {
             ),
             keyboardType: TextInputType.multiline,
             maxLines: 4,
+          ),
+          const SizedBox(height: 10),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              DropdownButton<String>(
+                value: _dropdownValue,
+                onChanged: (String newValue) {
+                  setState(() {
+                    _dropdownValue = newValue;
+                  });
+                },
+                items: _dropdownItems,
+              ),
+            ],
           ),
         ],
       ),

@@ -1,4 +1,5 @@
 import 'package:bloom/group/views/create.dart';
+import 'package:bloom/home/views/chats_search.dart';
 import 'package:bloom/home/views/tab_chats.dart';
 import 'package:bloom/home/views/tab_discover.dart';
 import 'package:bloom/home/views/tab_groups.dart';
@@ -36,7 +37,12 @@ class _HomeViewState extends State<HomeView> {
       actions: <Widget>[
         IconButton(
           icon: Icon(Icons.search),
-          onPressed: () => debugPrint('Search pressed'),
+          onPressed: () {
+            showSearch<dynamic>(
+              context: context,
+              delegate: ChatsSearchDelegate(),
+            );
+          },
         ),
       ],
     );
