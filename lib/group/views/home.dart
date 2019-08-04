@@ -1,8 +1,8 @@
 import 'package:flutter/material.dart';
 
 class GroupHomeView extends StatefulWidget {
-  GroupHomeView({@required this.name});
-  String name;
+  const GroupHomeView({@required this.name});
+  final String name;
 
   @override
   _GroupHomeState createState() => _GroupHomeState();

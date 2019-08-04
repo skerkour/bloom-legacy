@@ -109,6 +109,7 @@ class _NoteState extends State<NoteView> {
               Container(
                 padding: const EdgeInsets.all(5),
                 child: EditableText(
+                  autofocus: true,
                   enableInteractiveSelection: true,
                   maxLines: 1,
                   controller: _titleController,

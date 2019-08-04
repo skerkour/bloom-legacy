@@ -1,3 +1,4 @@
+import 'package:bloom/group/views/create.dart';
 import 'package:bloom/home/views/tab_chats.dart';
 import 'package:bloom/home/views/tab_discover.dart';
 import 'package:bloom/home/views/tab_groups.dart';
@@ -70,7 +71,12 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _fabGroupsPressed() {
-    debugPrint('FAB Groups pressed');
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const CreateGroupView(),
+      ),
+    );
   }
 
   BottomNavigationBar _buildBottomNavigationBar() {

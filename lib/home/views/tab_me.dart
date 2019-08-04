@@ -21,7 +21,7 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     return Column(
       children: <Widget>[
-        const SizedBox(height: 21),
+        const SizedBox(height: 10),
         Center(
             child: CircleAvatar(
           backgroundColor: Colors.grey,
@@ -34,29 +34,34 @@ class _TabMeViewState extends State<TabMeView> {
         Center(
             child:
                 const Text('@user:domain.com', style: TextStyle(fontSize: 18))),
-        const SizedBox(height: 21),
-        Container(
-          child: ListView.builder(
-            scrollDirection: Axis.vertical,
+        const SizedBox(height: 42),
+        Expanded(
+          child: GridView.count(
+            // scrollDirection: Axis.vertical,
             shrinkWrap: true,
-            itemCount: apps.length,
-            itemBuilder: (BuildContext context, int index) {
-              return _buildListTile(context, apps[index]);
-            },
+            crossAxisCount: 4,
+            children: apps
+                .map((_BlmApp app) => _buildGridItem(context, app))
+                .toList(),
           ),
         ),
       ],
     );
   }
 
-  ListTile _buildListTile(BuildContext context, _BlmApp app) {
-    return ListTile(
-      leading: CircleAvatar(
-        backgroundImage: AssetImage(app.icon),
-        backgroundColor: Colors.transparent,
-        radius: 25,
+  GestureDetector _buildGridItem(BuildContext context, _BlmApp app) {
+    return GestureDetector(
+      child: Column(
+        children: <Widget>[
+          CircleAvatar(
+            backgroundImage: AssetImage(app.icon),
+            backgroundColor: Colors.transparent,
+            radius: 32,
+          ),
+          const SizedBox(height: 5),
+          Text(app.name, style: const TextStyle(fontSize: 16)),
+        ],
       ),
-      title: Text(app.name),
       onTap: () => Navigator.pushNamed(
         context,
         app.route,
