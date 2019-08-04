@@ -1,7 +1,7 @@
-import 'package:bloom/kernel/widgets/drawer.dart';
 import 'package:bloom/notes/blocs/notes.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
+import 'package:bloom/notes/widgets/drawer.dart';
 import 'package:bloom/notes/widgets/staggered_tile.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_staggered_grid_view/flutter_staggered_grid_view.dart';
@@ -39,7 +39,7 @@ class _NotesState extends State<NotesView> {
       _bloc.getNotes();
     }
     return Scaffold(
-      endDrawer: const BlmDrawer(),
+      endDrawer: const NotesDrawer(),
       appBar: AppBar(
         title: Text(_archive ? 'Archive' : 'Notes'),
       ),

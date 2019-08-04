@@ -12,7 +12,7 @@ class ContactsDrawer extends StatefulWidget {
 class _ContactsDrawerState extends State<ContactsDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Drawer(
       child: ListView(
         children: <Widget>[
           ListTile(

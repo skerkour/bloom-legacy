@@ -11,7 +11,7 @@ class NotesDrawer extends StatefulWidget {
 class _NotesDrawerState extends State<NotesDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
+    return Drawer(
       child: ListView(
         children: <Widget>[
           ListTile(
@@ -19,12 +19,12 @@ class _NotesDrawerState extends State<NotesDrawer> {
             title: const Text('Notes'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushAndRemoveUntil<dynamic>(
+              Navigator.push<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) => const NotesView(),
                 ),
-                (Route<dynamic> route) => false,
+                // (Route<dynamic> route) => false,
               );
             },
           ),

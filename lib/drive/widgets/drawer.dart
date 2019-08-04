@@ -10,8 +10,16 @@ class DriveDrawer extends StatefulWidget {
 class _DriveDrawerState extends State<DriveDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Settings drive'),
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.list),
+            title: const Text('Drive'),
+            onTap: () => debugPrint('Drive tapped'),
+          ),
+        ],
+      ),
     );
   }
 }

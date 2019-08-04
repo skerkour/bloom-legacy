@@ -1,4 +1,4 @@
-import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:bloom/drive/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class DriveView extends StatefulWidget {
@@ -12,7 +12,7 @@ class _DriveState extends State<DriveView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const BlmDrawer(),
+      drawer: const DriveDrawer(),
       appBar: AppBar(
         title: const Text('Drive'),
       ),

@@ -1,8 +1,11 @@
+import 'package:bloom/bitflow/views/bitflow.dart';
 import 'package:bloom/calendar/views/calendar.dart';
 import 'package:bloom/contacts/views/contacts.dart';
 import 'package:bloom/drive/views/drive.dart';
-import 'package:bloom/kernel/views/home.dart';
+import 'package:bloom/home/views/home.dart';
 import 'package:bloom/notes/views/notes.dart';
+import 'package:bloom/phaser/views/phaser.dart';
+import 'package:bloom/platform/views/platform.dart';
 import 'package:flutter/material.dart';
 
 import 'kernel/widgets/route_observer.dart';
@@ -25,6 +28,9 @@ class MyApp extends StatelessWidget {
         '/contacts': (BuildContext context) => ContactsView(),
         '/calendar': (BuildContext context) => const CalendarView(),
         '/drive': (BuildContext context) => const DriveView(),
+        '/platform': (BuildContext context) => const PlatformView(),
+        '/phaser': (BuildContext context) => const PhaserView(),
+        '/bitflow': (BuildContext context) => const BitflowView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

@@ -1,4 +1,4 @@
-import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:bloom/calendar/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class CalendarView extends StatefulWidget {
@@ -12,7 +12,7 @@ class _CalendarState extends State<CalendarView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const BlmDrawer(),
+      drawer: const CalendarDrawer(),
       appBar: AppBar(
         title: const Text('Calendar'),
       ),

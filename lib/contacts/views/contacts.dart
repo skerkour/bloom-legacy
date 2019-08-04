@@ -1,5 +1,5 @@
 import 'package:bloom/contacts/blocs/contacts.dart';
-import 'package:bloom/kernel/widgets/drawer.dart';
+import 'package:bloom/contacts/widgets/drawer.dart';
 import 'package:bloom/contacts/models/db/contact.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +21,7 @@ class _ContactsState extends State<ContactsView> {
   Widget build(BuildContext context) {
     _bloc.getContacts();
     return Scaffold(
-      endDrawer: const BlmDrawer(),
+      endDrawer: const ContactsDrawer(),
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.

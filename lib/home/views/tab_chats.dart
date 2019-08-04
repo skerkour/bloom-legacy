@@ -12,40 +12,38 @@ class _TabChatsViewState extends State<TabChatsView> {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return ListView.separated(
       itemCount: _conversations.length,
-      itemBuilder: (BuildContext context, int i) => Column(
-        children: <Widget>[
-          ListTile(
-            leading: CircleAvatar(
-              foregroundColor: Theme.of(context).primaryColor,
-              backgroundColor: Colors.grey,
-              backgroundImage: NetworkImage(_conversations[i].avatar),
-            ),
-            title: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              children: <Widget>[
-                Text(
-                  _conversations[i].name,
-                  // style: TextStyle(fontWeight: FontWeight.bold),
-                ),
-                Text(
-                  timeToString(_conversations[i].time),
-                  style: TextStyle(color: Colors.grey, fontSize: 14.0),
-                ),
-              ],
-            ),
-            subtitle: Container(
-              padding: const EdgeInsets.only(top: 5.0),
-              child: Text(
-                _conversations[i].message,
-                style: TextStyle(color: Colors.grey, fontSize: 15.0),
+      separatorBuilder: (BuildContext context, int index) => Divider(),
+      itemBuilder: (BuildContext context, int i) {
+        return ListTile(
+          leading: CircleAvatar(
+            foregroundColor: Theme.of(context).primaryColor,
+            backgroundColor: Colors.grey,
+            backgroundImage: NetworkImage(_conversations[i].avatar),
+          ),
+          title: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: <Widget>[
+              Text(
+                _conversations[i].name,
+                // style: TextStyle(fontWeight: FontWeight.bold),
               ),
+              Text(
+                timeToString(_conversations[i].time),
+                style: TextStyle(color: Colors.grey, fontSize: 14.0),
+              ),
+            ],
+          ),
+          subtitle: Container(
+            padding: const EdgeInsets.only(top: 5.0),
+            child: Text(
+              _conversations[i].message,
+              style: TextStyle(color: Colors.grey, fontSize: 15.0),
             ),
           ),
-          const Divider(height: 10.0),
-        ],
-      ),
+        );
+      },
     );
   }
 }

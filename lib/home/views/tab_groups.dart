@@ -1,3 +1,4 @@
+import 'package:bloom/group/views/home.dart';
 import 'package:flutter/material.dart';
 
 class TabGroupsView extends StatefulWidget {
@@ -25,6 +26,15 @@ class _TabGroupsViewState extends State<TabGroupsView> {
           title: Text(group.name),
           subtitle: Text(group.description),
           isThreeLine: false,
+          onTap: () {
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) =>
+                    GroupHomeView(name: group.name),
+              ),
+            );
+          },
         );
       },
     );

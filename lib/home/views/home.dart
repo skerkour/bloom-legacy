@@ -1,8 +1,8 @@
-import 'package:bloom/kernel/views/tab_chats.dart';
-import 'package:bloom/kernel/views/tab_discover.dart';
-import 'package:bloom/kernel/views/tab_groups.dart';
-import 'package:bloom/kernel/views/tab_me.dart';
-import 'package:bloom/kernel/widgets/bottom_sheet_chats.dart';
+import 'package:bloom/home/views/tab_chats.dart';
+import 'package:bloom/home/views/tab_discover.dart';
+import 'package:bloom/home/views/tab_groups.dart';
+import 'package:bloom/home/views/tab_me.dart';
+import 'package:bloom/home/widgets/bottom_sheet_chats.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {

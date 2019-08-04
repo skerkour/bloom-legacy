@@ -10,8 +10,16 @@ class CalendarDrawer extends StatefulWidget {
 class _CalendarDrawerState extends State<CalendarDrawer> {
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: const Text('Settings calendar'),
+    return Drawer(
+      child: ListView(
+        children: <Widget>[
+          ListTile(
+            leading: const Icon(Icons.date_range),
+            title: const Text('Calendar'),
+            onTap: () => debugPrint('Calendar tapped'),
+          ),
+        ],
+      ),
     );
   }
 }
