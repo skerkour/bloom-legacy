@@ -34,7 +34,11 @@ class _TabMeViewState extends State<TabMeView> {
         Center(
             child:
                 const Text('@user:domain.com', style: TextStyle(fontSize: 18))),
-        const SizedBox(height: 42),
+        const SizedBox(height: 21),
+        _buildMainAppsRow(),
+        const SizedBox(height: 21),
+        Divider(),
+        const SizedBox(height: 21),
         Expanded(
           child: GridView.count(
             // scrollDirection: Axis.vertical,
@@ -44,6 +48,69 @@ class _TabMeViewState extends State<TabMeView> {
                 .map((_BlmApp app) => _buildGridItem(context, app))
                 .toList(),
           ),
+        ),
+      ],
+    );
+  }
+
+  Row _buildMainAppsRow() {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+      children: <Widget>[
+        Column(
+          children: <Widget>[
+            CircleAvatar(
+              child: Icon(Icons.person),
+              backgroundColor: Colors.blue,
+              foregroundColor: Colors.white,
+              radius: 25,
+            ),
+            const SizedBox(height: 5),
+            const Text('Account', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+        GestureDetector(
+          child: Column(
+            children: <Widget>[
+              CircleAvatar(
+                child: Icon(Icons.people),
+                backgroundColor: Colors.blue,
+                foregroundColor: Colors.white,
+                radius: 25,
+              ),
+              const SizedBox(height: 5),
+              const Text('Contacts', style: TextStyle(fontSize: 16)),
+            ],
+          ),
+          onTap: () => Navigator.pushNamed(
+            context,
+            '/contacts',
+            // (Route<dynamic> route) => false,
+          ),
+        ),
+        Column(
+          children: <Widget>[
+            CircleAvatar(
+              child: Icon(Icons.account_balance_wallet),
+              backgroundColor: Colors.purple,
+              foregroundColor: Colors.white,
+              radius: 25,
+            ),
+            const SizedBox(height: 5),
+            const Text('Wallet', style: TextStyle(fontSize: 16)),
+          ],
+        ),
+        Column(
+          children: <Widget>[
+            CircleAvatar(
+              child: Icon(Icons.settings),
+              backgroundColor: Colors.white,
+              foregroundColor: Colors.grey[700],
+              radius: 25,
+            ),
+            const SizedBox(height: 5),
+            const Text('Settings', style: TextStyle(fontSize: 16)),
+          ],
         ),
       ],
     );
@@ -81,8 +148,6 @@ class _BlmApp {
 
 List<_BlmApp> getApps() {
   return <_BlmApp>[
-    const _BlmApp(
-        icon: 'assets/contacts_128.png', name: 'Contacts', route: '/contacts'),
     const _BlmApp(icon: 'assets/notes_128.png', name: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: 'assets/calendar_128.png', name: 'Calendar', route: '/calendar'),
