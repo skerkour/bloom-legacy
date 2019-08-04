@@ -1,3 +1,4 @@
+import 'package:bloom/chat/views/chat.dart';
 import 'package:flutter/material.dart';
 
 class TabChatsView extends StatefulWidget {
@@ -42,6 +43,19 @@ class _TabChatsViewState extends State<TabChatsView> {
               style: TextStyle(color: Colors.grey, fontSize: 15.0),
             ),
           ),
+          onTap: () {
+            final ChatEntity entity = ChatEntity(
+                name: _conversations[i].name,
+                message: _conversations[i].message,
+                time: '15:30',
+                avatarUrl: _conversations[i].avatar);
+            Navigator.push<dynamic>(
+              context,
+              MaterialPageRoute<dynamic>(
+                builder: (BuildContext context) => ChatView(chatEntity: entity),
+              ),
+            );
+          },
         );
       },
     );
