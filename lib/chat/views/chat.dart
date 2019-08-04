@@ -230,6 +230,8 @@ class _ChatViewState extends State<ChatView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: <Widget>[
             IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               icon: Icon(
                 Icons.attach_file,
                 color: Colors.grey,
@@ -237,6 +239,8 @@ class _ChatViewState extends State<ChatView> {
               onPressed: () => print('Pressed Attach File'),
             ),
             IconButton(
+              splashColor: Colors.transparent,
+              highlightColor: Colors.transparent,
               icon: Icon(
                 Icons.photo_camera,
                 color: Colors.grey,
