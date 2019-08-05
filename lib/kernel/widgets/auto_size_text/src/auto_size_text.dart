@@ -224,7 +224,7 @@ class AutoSizeText extends StatefulWidget {
 
 class _AutoSizeTextState extends State<AutoSizeText> {
   @override
- void initState() {
+  void initState() {
     if (widget.group != null) {
       widget.group._register(this);
     }
@@ -308,7 +308,8 @@ class _AutoSizeTextState extends State<AutoSizeText> {
     }
   }
 
-  List<dynamic> _calculateFontSize(BoxConstraints size, TextStyle style, int maxLines) {
+  List<dynamic> _calculateFontSize(
+      BoxConstraints size, TextStyle style, int maxLines) {
     final TextSpan span = TextSpan(
       style: widget.textSpan?.style ?? style,
       text: widget.textSpan?.text ?? widget.data,
@@ -322,7 +323,8 @@ class _AutoSizeTextState extends State<AutoSizeText> {
     int left;
     int right;
 
-    final List<double> presetFontSizes = widget.presetFontSizes?.reversed?.toList();
+    final List<double> presetFontSizes =
+        widget.presetFontSizes?.reversed?.toList();
     if (presetFontSizes == null) {
       final num defaultFontSize =
           style.fontSize.clamp(widget.minFontSize, widget.maxFontSize);

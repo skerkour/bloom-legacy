@@ -129,10 +129,10 @@ class _ChatViewState extends State<ChatView> {
     return Stack(
       fit: StackFit.expand,
       children: <Widget>[
-        Image.asset(
-          'assets/images/chat_background.png',
-          fit: BoxFit.cover,
-        ),
+        // Image.asset(
+        //   'assets/images/chat_background.png',
+        //   fit: BoxFit.cover,
+        // ),
         SafeArea(
           child: Container(
             child: Column(

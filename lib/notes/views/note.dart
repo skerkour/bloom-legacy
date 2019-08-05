@@ -152,8 +152,8 @@ class _NoteState extends State<NoteView> {
       IconButton(
         icon: Container(
           child: Image.asset(note.isPinned
-              ? 'assets/pin_36.png'
-              : 'assets/pin_outline_36.png'),
+              ? 'assets/images/pin_36.png'
+              : 'assets/images/pin_outline_36.png'),
           width: 20,
         ),
         onPressed: _bloc.pinUnpin,
