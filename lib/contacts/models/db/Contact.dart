@@ -131,7 +131,7 @@ class Contact {
     return results.map(Contact.fromMap).toList();
   }
 
-  static Future<Contact> findWhereDeviceId(int deviceId) async {
+  static Future<List<String>> findDeviceIds() async {
     // Get a reference to the database.
     debugPrint('Contact.find called');
     final Database db = await appBloc.db.db;
@@ -139,16 +139,13 @@ class Contact {
     // Query the table for all The Contacts.
     final List<Map<String, dynamic>> results = await db.query(
       DB.contactsTable,
-       where: 'device_id = ?',
-       whereArgs: <int>[deviceId],
+      where: 'device_id IS NOT NULL',
     );
     debugPrint('fetched: ${results.length} contacts');
 
-    final List<Contact> res = results.map(Contact.fromMap).toList();
-    if (res.isEmpty) {
-      return null;
-    } else {
-      return res[0];
-    }
+    return results
+        .map(Contact.fromMap)
+        .map((Contact contact) => contact.deviceId)
+        .toList();
   }
 }

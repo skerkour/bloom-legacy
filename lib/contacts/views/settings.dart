@@ -8,7 +8,7 @@ class SettingsView extends StatefulWidget {
 }
 
 class _SettingsState extends State<SettingsView> {
-    ContactsBloc _bloc;
+  ContactsBloc _bloc;
 
   @override
   void initState() {
@@ -30,28 +30,27 @@ class _SettingsState extends State<SettingsView> {
         title: const Text('Contacts Settings'),
       ),
       body: Builder(builder: (BuildContext context) {
-          return _buildBody(context);
-        }
-      ),
+        return _buildBody(context);
+      }),
     );
   }
 
   ListView _buildBody(BuildContext context) {
     return ListView(
-          children: <Widget>[
-            ListTile(
-              leading: Icon(Icons.import_contacts),
-              title: const Text('Import from device'),
-              onTap: _onImportTapped(context),
-            ),
-          ],
-        );
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.import_contacts),
+          title: const Text('Import from device'),
+          onTap: _onImportTapped(context),
+        ),
+      ],
+    );
   }
 
   Function _onImportTapped(BuildContext context) {
     return () async {
-    await _bloc.importContacts();
-    Scaffold.of(context)
+      await _bloc.importContacts();
+      Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
           SnackBar(content: const Text('Contacts successfully imported')),
