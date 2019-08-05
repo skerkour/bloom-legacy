@@ -12,7 +12,7 @@ class _CalendarState extends State<CalendarView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      drawer: const CalendarDrawer(),
+      endDrawer: const CalendarDrawer(),
       appBar: AppBar(
         title: const Text('Calendar'),
       ),

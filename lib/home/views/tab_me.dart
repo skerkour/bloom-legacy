@@ -9,21 +9,14 @@ class TabMeView extends StatefulWidget {
 
 class _TabMeViewState extends State<TabMeView> {
   static const String _avatar = 'https://www.kerkour.fr/about/sylvain.jpg';
-  List<GridTile> _apps;
-  List<GridTile> _mainApps;
-
-  @override
-  void initState() {
-    _apps =
-        getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
-    _mainApps = getMainApps()
-        .map((_BlmMainApp app) => _buildMainGridItem(context, app))
-        .toList();
-    super.initState();
-  }
 
   @override
   Widget build(BuildContext context) {
+    final List<GridTile> apps =
+        getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
+    final List<GridTile> mainApps = getMainApps()
+        .map((_BlmMainApp app) => _buildMainGridItem(context, app))
+        .toList();
     return Column(
       children: <Widget>[
         const SizedBox(height: 10),
@@ -41,23 +34,25 @@ class _TabMeViewState extends State<TabMeView> {
                 const Text('@user:domain.com', style: TextStyle(fontSize: 18))),
         const SizedBox(height: 21),
         GridView.count(
+          padding: const EdgeInsets.only(left: 12, right: 12),
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 4,
+          shrinkWrap: true,
+          crossAxisCount: 4,
+          children: mainApps,
+        ),
+        const SizedBox(height: 10),
+        Divider(),
+        const SizedBox(height: 21),
+        Expanded(
+          child: GridView.count(
             padding: const EdgeInsets.only(left: 12, right: 12),
             mainAxisSpacing: 8,
             crossAxisSpacing: 4,
             shrinkWrap: true,
             crossAxisCount: 4,
-            children: _mainApps),
-        const SizedBox(height: 21),
-        Divider(),
-        const SizedBox(height: 21),
-        Expanded(
-          child: GridView.count(
-              padding: const EdgeInsets.only(left: 12, right: 12),
-              mainAxisSpacing: 8,
-              crossAxisSpacing: 4,
-              shrinkWrap: true,
-              crossAxisCount: 4,
-              children: _apps),
+            children: apps,
+          ),
         ),
       ],
     );
@@ -154,9 +149,9 @@ List<_BlmMainApp> getMainApps() {
         route: '/account',
         backgroundColor: Colors.blue),
     const _BlmMainApp(
-        icon: Icons.people,
-        name: 'Contacts',
-        route: '/contacts',
+        icon: Icons.calendar_today,
+        name: 'Calendar',
+        route: '/calendar',
         backgroundColor: Colors.blue),
     const _BlmMainApp(
         icon: Icons.account_balance_wallet,

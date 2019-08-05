@@ -39,7 +39,7 @@ class _SettingsState extends State<SettingsView> {
     return ListView(
       children: <Widget>[
         ListTile(
-          leading: Icon(Icons.import_contacts),
+          leading: Icon(Icons.phone_android),
           title: const Text('Import from device'),
           onTap: _onImportTapped(context),
         ),
@@ -49,11 +49,11 @@ class _SettingsState extends State<SettingsView> {
 
   Function _onImportTapped(BuildContext context) {
     return () async {
-      await _bloc.importContacts();
+      final int imported = await _bloc.importContacts();
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
-          SnackBar(content: const Text('Contacts successfully imported')),
+          SnackBar(content: Text('$imported Contacts successfully imported')),
         );
     };
   }

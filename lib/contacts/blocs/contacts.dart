@@ -47,7 +47,8 @@ class ContactsBloc extends BlocBase {
     _contactsController.sink.add(await Contact.find());
   }
 
-  Future<void> importContacts() async {
+  Future<int> importContacts() async {
+    int importedCount = 0;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
     // check permission
@@ -57,10 +58,10 @@ class ContactsBloc extends BlocBase {
     if (permissionStatus == PermissionStatus.granted) {
       final Iterable<contacts_service.Contact> contacts =
           await contacts_service.ContactsService.getContacts();
-      // _contactsController.sink.add(contacts.toList());
       final List<String> contactsDevicesIds = await Contact.findDeviceIds();
       for (contacts_service.Contact contact in contacts) {
         if (!contactsDevicesIds.contains(contact.identifier)) {
+          importedCount += 1;
           await Contact.create(contact.displayName, contact.identifier);
         }
       }
@@ -72,6 +73,7 @@ class ContactsBloc extends BlocBase {
 
     // find contacts in DB
     _contactsController.sink.add(await Contact.find());
+    return importedCount;
   }
 
   Future<PermissionStatus> _getContactsPermission() async {
