@@ -1,7 +1,7 @@
+import 'package:bloom/kernel/widgets/auto_size_text/auto_size_text.dart';
 import 'package:bloom/notes/models/db/note.dart';
 import 'package:bloom/notes/views/note.dart';
 import 'package:flutter/material.dart';
-import 'package:auto_size_text/auto_size_text.dart';
 
 class BlmStaggeredTile extends StatefulWidget {
   const BlmStaggeredTile({this.note});
