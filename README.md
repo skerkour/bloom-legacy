@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
-  <p align="center">Empowering the world with open technologies</p>
+  <p align="center">Empowering people with open technologies</p>
 </p>
 
 [Try it online for free](https://bloom.sh)
@@ -9,14 +9,17 @@
 --------
 
 
-[Available on Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
-
-1. [Contributing](#contributing)
-2. [Licensing](#licensing)
-3. [Sponsoring](#sponsoring)
-4. [Security](#security)
+1. [Download](#download)
+2. [Contributing](#contributing)
+3. [Licensing](#licensing)
+4. [Sponsoring](#sponsoring)
+5. [Security](#security)
 
 --------
+
+## Download
+
+[Available on Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
 
 ## Contributing
 

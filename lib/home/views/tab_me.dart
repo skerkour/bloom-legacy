@@ -9,11 +9,16 @@ class TabMeView extends StatefulWidget {
 
 class _TabMeViewState extends State<TabMeView> {
   static const String _avatar = 'https://www.kerkour.fr/about/sylvain.jpg';
-  List<_BlmApp> apps;
+  List<GridTile> _apps;
+  List<GridTile> _mainApps;
 
   @override
   void initState() {
-    apps = getApps();
+    _apps =
+        getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
+    _mainApps = getMainApps()
+        .map((_BlmMainApp app) => _buildMainGridItem(context, app))
+        .toList();
     super.initState();
   }
 
@@ -35,104 +40,72 @@ class _TabMeViewState extends State<TabMeView> {
             child:
                 const Text('@user:domain.com', style: TextStyle(fontSize: 18))),
         const SizedBox(height: 21),
-        _buildMainAppsRow(),
+        GridView.count(
+            padding: const EdgeInsets.only(left: 12, right: 12),
+            mainAxisSpacing: 8,
+            crossAxisSpacing: 4,
+            shrinkWrap: true,
+            crossAxisCount: 4,
+            children: _mainApps),
         const SizedBox(height: 21),
         Divider(),
         const SizedBox(height: 21),
         Expanded(
           child: GridView.count(
-            // scrollDirection: Axis.vertical,
-            shrinkWrap: true,
-            crossAxisCount: 4,
-            children: apps
-                .map((_BlmApp app) => _buildGridItem(context, app))
-                .toList(),
-          ),
+              padding: const EdgeInsets.only(left: 12, right: 12),
+              mainAxisSpacing: 8,
+              crossAxisSpacing: 4,
+              shrinkWrap: true,
+              crossAxisCount: 4,
+              children: _apps),
         ),
       ],
     );
   }
 
-  Row _buildMainAppsRow() {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-      children: <Widget>[
-        Column(
+  GridTile _buildGridItem(BuildContext context, _BlmApp app) {
+    return GridTile(
+      child: GestureDetector(
+        child: Column(
           children: <Widget>[
             CircleAvatar(
-              child: Icon(Icons.person),
-              backgroundColor: Colors.blue,
-              foregroundColor: Colors.white,
-              radius: 25,
+              backgroundImage: AssetImage(app.icon),
+              backgroundColor: Colors.transparent,
+              radius: 32,
             ),
             const SizedBox(height: 5),
-            const Text('Account', style: TextStyle(fontSize: 16)),
+            Text(app.name, style: const TextStyle(fontSize: 16)),
           ],
         ),
-        GestureDetector(
-          child: Column(
-            children: <Widget>[
-              CircleAvatar(
-                child: Icon(Icons.people),
-                backgroundColor: Colors.blue,
-                foregroundColor: Colors.white,
-                radius: 25,
-              ),
-              const SizedBox(height: 5),
-              const Text('Contacts', style: TextStyle(fontSize: 16)),
-            ],
-          ),
-          onTap: () => Navigator.pushNamed(
-            context,
-            '/contacts',
-            // (Route<dynamic> route) => false,
-          ),
+        onTap: () => Navigator.pushNamed(
+          context,
+          app.route,
+          // (Route<dynamic> route) => false,
         ),
-        Column(
-          children: <Widget>[
-            CircleAvatar(
-              child: Icon(Icons.account_balance_wallet),
-              backgroundColor: Colors.purple,
-              foregroundColor: Colors.white,
-              radius: 25,
-            ),
-            const SizedBox(height: 5),
-            const Text('Wallet', style: TextStyle(fontSize: 16)),
-          ],
-        ),
-        Column(
-          children: <Widget>[
-            CircleAvatar(
-              child: Icon(Icons.settings),
-              backgroundColor: Colors.white,
-              foregroundColor: Colors.grey[700],
-              radius: 25,
-            ),
-            const SizedBox(height: 5),
-            const Text('Settings', style: TextStyle(fontSize: 16)),
-          ],
-        ),
-      ],
-    );
-  }
-
-  GestureDetector _buildGridItem(BuildContext context, _BlmApp app) {
-    return GestureDetector(
-      child: Column(
-        children: <Widget>[
-          CircleAvatar(
-            backgroundImage: AssetImage(app.icon),
-            backgroundColor: Colors.transparent,
-            radius: 32,
-          ),
-          const SizedBox(height: 5),
-          Text(app.name, style: const TextStyle(fontSize: 16)),
-        ],
       ),
-      onTap: () => Navigator.pushNamed(
-        context,
-        app.route,
-        // (Route<dynamic> route) => false,
+    );
+  }
+
+  GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
+    return GridTile(
+      child: GestureDetector(
+        child: Column(
+          children: <Widget>[
+            CircleAvatar(
+              child: Icon(app.icon),
+              backgroundColor: app.backgroundColor,
+              foregroundColor: app.foregroundColor,
+              radius: 25,
+            ),
+            const SizedBox(height: 5),
+            Text(app.name, style: const TextStyle(fontSize: 16)),
+          ],
+        ),
+        onTap: () => Navigator.pushNamed(
+          context,
+          app.route,
+          // (Route<dynamic> route) => false,
+        ),
       ),
     );
   }
@@ -156,5 +129,45 @@ List<_BlmApp> getApps() {
         icon: 'assets/drive_128.png', name: 'Platform', route: '/platform'),
     const _BlmApp(
         icon: 'assets/drive_128.png', name: 'Bitflow', route: '/bitflow'),
+  ];
+}
+
+class _BlmMainApp {
+  const _BlmMainApp(
+      {@required this.icon,
+      @required this.name,
+      @required this.route,
+      @required this.backgroundColor,
+      this.foregroundColor = Colors.white});
+  final IconData icon;
+  final String name;
+  final String route;
+  final Color backgroundColor;
+  final Color foregroundColor;
+}
+
+List<_BlmMainApp> getMainApps() {
+  return <_BlmMainApp>[
+    const _BlmMainApp(
+        icon: Icons.person,
+        name: 'Account',
+        route: '/account',
+        backgroundColor: Colors.blue),
+    const _BlmMainApp(
+        icon: Icons.people,
+        name: 'Contacts',
+        route: '/contacts',
+        backgroundColor: Colors.blue),
+    const _BlmMainApp(
+        icon: Icons.account_balance_wallet,
+        name: 'Wallet',
+        route: '/wallet',
+        backgroundColor: Colors.green),
+    const _BlmMainApp(
+        icon: Icons.settings,
+        name: 'Settings',
+        route: '/settings',
+        backgroundColor: Colors.white10,
+        foregroundColor: Colors.grey),
   ];
 }

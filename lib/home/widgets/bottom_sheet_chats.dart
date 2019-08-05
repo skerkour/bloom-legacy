@@ -7,7 +7,7 @@ class ChatsBottomSheet extends StatelessWidget {
       child: Wrap(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.people),
+            leading: const Icon(Icons.people),
             title: const Text('Group chat'),
             onTap: () => _onGroupChatTapped(context),
           ),

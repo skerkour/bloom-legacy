@@ -1,7 +1,7 @@
 import 'dart:async';
 
+import 'package:bloom/contacts/models/db/contact.dart';
 import 'package:bloom/kernel/blocs/bloc_provider.dart';
-import 'package:contacts_service/contacts_service.dart';
 import 'package:flutter/material.dart';
 
 class ContactBloc extends BlocBase {
@@ -29,7 +29,7 @@ class ContactBloc extends BlocBase {
   }
 
   Future<void> delete() async {
-    await ContactsService.deleteContact(_contact);
+    await contact.delete();
     _deletedStream.add(_contact);
   }
 }

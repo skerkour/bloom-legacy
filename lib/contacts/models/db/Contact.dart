@@ -108,7 +108,7 @@ class Contact {
     final Database db = await appBloc.db.db;
 
     await db.delete(
-      DB.notesTable,
+      DB.contactsTable,
       // Use a `where` clause to delete a specific contact.
       where: 'id = ?',
       // Pass the coontact's id as a whereArg to prevent SQL injection.
@@ -126,8 +126,29 @@ class Contact {
     final List<Map<String, dynamic>> results = await db.query(
       DB.contactsTable,
     );
-    debugPrint('fetched: ${results.length} notes');
+    debugPrint('fetched: ${results.length} contacts');
 
     return results.map(Contact.fromMap).toList();
+  }
+
+  static Future<Contact> findWhereDeviceId(int deviceId) async {
+    // Get a reference to the database.
+    debugPrint('Contact.find called');
+    final Database db = await appBloc.db.db;
+
+    // Query the table for all The Contacts.
+    final List<Map<String, dynamic>> results = await db.query(
+      DB.contactsTable,
+       where: 'device_id = ?',
+       whereArgs: <int>[deviceId],
+    );
+    debugPrint('fetched: ${results.length} contacts');
+
+    final List<Contact> res = results.map(Contact.fromMap).toList();
+    if (res.isEmpty) {
+      return null;
+    } else {
+      return res[0];
+    }
   }
 }

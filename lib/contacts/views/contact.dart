@@ -1,5 +1,5 @@
 import 'package:bloom/contacts/blocs/contact.dart';
-import 'package:contacts_service/contacts_service.dart';
+import 'package:bloom/contacts/models/db/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactView extends StatefulWidget {
@@ -38,7 +38,7 @@ class _ContactState extends State<ContactView> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(_bloc.contact.displayName),
+        title: Text(_bloc.contact.name),
         actions: _buildAppBarActions(context),
       ),
       body: StreamBuilder<Contact>(
@@ -61,39 +61,39 @@ class _ContactState extends State<ContactView> {
         children: <Widget>[
           ListTile(
             title: const Text('Name'),
-            trailing: Text(contact.givenName ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Middle name'),
-            trailing: Text(contact.middleName ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Family name'),
-            trailing: Text(contact.familyName ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Prefix'),
-            trailing: Text(contact.prefix ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Suffix'),
-            trailing: Text(contact.suffix ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Company'),
-            trailing: Text(contact.company ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Job'),
-            trailing: Text(contact.jobTitle ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
           ListTile(
             title: const Text('Note'),
-            trailing: Text(contact.note ?? ''),
+            trailing: Text(contact.name ?? ''),
           ),
-          AddressesTile(contact.postalAddresses),
-          ItemsTile('Phones', contact.phones),
-          ItemsTile('Emails', contact.emails)
+          // AddressesTile(contact.postalAddresses),
+          // ItemsTile('Phones', contact.phones),
+          // ItemsTile('Emails', contact.emails)
         ],
       ),
     );
@@ -137,77 +137,77 @@ class _ContactState extends State<ContactView> {
   }
 }
 
-class AddressesTile extends StatelessWidget {
-  const AddressesTile(this._addresses);
-  final Iterable<PostalAddress> _addresses;
+// class AddressesTile extends StatelessWidget {
+//   const AddressesTile(this._addresses);
+//   final Iterable<PostalAddress> _addresses;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ListTile(title: const Text('Addresses')),
-        Column(
-          children: _addresses
-              .map((PostalAddress a) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                    child: Column(
-                      children: <Widget>[
-                        ListTile(
-                          title: const Text('Street'),
-                          trailing: Text(a.street ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('Postcode'),
-                          trailing: Text(a.postcode ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('City'),
-                          trailing: Text(a.city ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('Region'),
-                          trailing: Text(a.region ?? ''),
-                        ),
-                        ListTile(
-                          title: const Text('Country'),
-                          trailing: Text(a.country ?? ''),
-                        ),
-                      ],
-                    ),
-                  ))
-              .toList(),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         ListTile(title: const Text('Addresses')),
+//         Column(
+//           children: _addresses
+//               .map((PostalAddress a) => Padding(
+//                     padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                     child: Column(
+//                       children: <Widget>[
+//                         ListTile(
+//                           title: const Text('Street'),
+//                           trailing: Text(a.street ?? ''),
+//                         ),
+//                         ListTile(
+//                           title: const Text('Postcode'),
+//                           trailing: Text(a.postcode ?? ''),
+//                         ),
+//                         ListTile(
+//                           title: const Text('City'),
+//                           trailing: Text(a.city ?? ''),
+//                         ),
+//                         ListTile(
+//                           title: const Text('Region'),
+//                           trailing: Text(a.region ?? ''),
+//                         ),
+//                         ListTile(
+//                           title: const Text('Country'),
+//                           trailing: Text(a.country ?? ''),
+//                         ),
+//                       ],
+//                     ),
+//                   ))
+//               .toList(),
+//         ),
+//       ],
+//     );
+//   }
+// }
 
-class ItemsTile extends StatelessWidget {
-  const ItemsTile(this._title, this._items);
-  final Iterable<Item> _items;
-  final String _title;
+// class ItemsTile extends StatelessWidget {
+//   const ItemsTile(this._title, this._items);
+//   final Iterable<Item> _items;
+//   final String _title;
 
-  @override
-  Widget build(BuildContext context) {
-    return Column(
-      crossAxisAlignment: CrossAxisAlignment.start,
-      children: <Widget>[
-        ListTile(title: Text(_title)),
-        Column(
-          children: _items
-              .map(
-                (Item i) => Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: 16.0),
-                  child: ListTile(
-                    title: Text(i.label ?? ''),
-                    trailing: Text(i.value ?? ''),
-                  ),
-                ),
-              )
-              .toList(),
-        ),
-      ],
-    );
-  }
-}
+//   @override
+//   Widget build(BuildContext context) {
+//     return Column(
+//       crossAxisAlignment: CrossAxisAlignment.start,
+//       children: <Widget>[
+//         ListTile(title: Text(_title)),
+//         Column(
+//           children: _items
+//               .map(
+//                 (Item i) => Padding(
+//                   padding: const EdgeInsets.symmetric(horizontal: 16.0),
+//                   child: ListTile(
+//                     title: Text(i.label ?? ''),
+//                     trailing: Text(i.value ?? ''),
+//                   ),
+//                 ),
+//               )
+//               .toList(),
+//         ),
+//       ],
+//     );
+//   }
+// }

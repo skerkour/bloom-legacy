@@ -1,4 +1,5 @@
 import 'package:bloom/contacts/blocs/contacts.dart';
+import 'package:bloom/contacts/views/contact.dart';
 import 'package:bloom/contacts/widgets/drawer.dart';
 import 'package:bloom/contacts/models/db/contact.dart';
 import 'package:flutter/material.dart';
@@ -15,6 +16,12 @@ class _ContactsState extends State<ContactsView> {
   void initState() {
     _bloc = ContactsBloc();
     super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
   }
 
   @override
@@ -52,15 +59,15 @@ class _ContactsState extends State<ContactsView> {
         itemBuilder: (BuildContext context, int index) {
           final Contact contact = contacts.elementAt(index);
           return ListTile(
-            // onTap: () {
-            //   Navigator.push<dynamic>(
-            //     context,
-            //     MaterialPageRoute<dynamic>(
-            //       builder: (BuildContext context) =>
-            //           ContactView(contact: contact),
-            //     ),
-            //   );
-            // },
+            onTap: () {
+              Navigator.push<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      ContactView(contact: contact),
+                ),
+              );
+            },
             // leading: (contact.avatar != null && contact.avatar.isNotEmpty)
             //     ? CircleAvatar(backgroundImage: MemoryImage(contact.avatar))
             leading: CircleAvatar(
