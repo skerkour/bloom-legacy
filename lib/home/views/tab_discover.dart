@@ -10,6 +10,13 @@ class TabDiscoverView extends StatefulWidget {
 class _TabDiscoverViewState extends State<TabDiscoverView> {
   @override
   Widget build(BuildContext context) {
-    return Center(child: const Text('Discover'));
+    return ListView(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.search),
+          title: const Text('Search web'),
+        ),
+      ],
+    );
   }
 }
