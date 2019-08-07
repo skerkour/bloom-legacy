@@ -1,3 +1,10 @@
+--------
+
+1. [Design](design.md)
+
+--------
+
+
 Bloom's mission is to empower people.
 
 In order to empower people, we need to find better ways to connect them,
@@ -35,5 +42,6 @@ it allows to perform worldwide search
 * Videos
 * Images
 
+-------------
 
 * [Contacts](contacts)
