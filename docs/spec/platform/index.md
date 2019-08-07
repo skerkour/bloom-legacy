@@ -7,5 +7,5 @@ Platform is not really an app, it's just a kind of folder which encapsulate othe
 
 # Views
 
-<img src="platform.jpg" width="360" />
-<img src="platform_drawer.jpg" width="360" />
+<img src="platform.jpg" width="180" />
+<img src="platform_drawer.jpg" width="180" />
