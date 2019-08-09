@@ -8,7 +8,7 @@
 
 --------
 
-[![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
+[![pipeline status](https://gitlab.com/bloom42/server/badges/master/pipeline.svg)](https://gitlab.com/bloom42/server/commits/master)
 
 
 1. [Documentation](#documentation)
@@ -27,7 +27,7 @@ See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs).
 
 ## Docker image
 
-[registry.gitlab.com/bloom42/bloom](https://gitlab.com/bloom42/bloom/container_registry)
+[registry.gitlab.com/bloom42/server](https://gitlab.com/bloom42/server/container_registry)
 
 
 ## Contributing

@@ -53,7 +53,7 @@ export default class Projects extends Vue {
   projects = [
     {
       description: 'The current website',
-      homepage: 'https://gitlab.com/bloom42/bloom',
+      homepage: 'https://gitlab.com/bloom42/server',
       img: '/kernel/static/imgs/logos/bloom_256.png',
       name: 'Bloom',
     },

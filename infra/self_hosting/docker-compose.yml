@@ -2,7 +2,7 @@ version: "3"
 
 services:
   bloom:
-    image: registry.gitlab.com/bloom42/bloom:${BLOOM_VERSION}
+    image: registry.gitlab.com/bloom42/server:${BLOOM_VERSION}
     restart: unless-stopped
     env_file:
       - bloom.env

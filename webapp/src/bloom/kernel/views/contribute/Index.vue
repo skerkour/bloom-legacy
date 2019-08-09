@@ -153,7 +153,7 @@
               Bloom's documentation is splitted in 2 parts:
               <ul>
                 <li>Documentation for users: <router-link to="/help">Help</router-link>,
-                you can find the repo here: <a href="https://gitlab.com/bloom42/bloom">https://gitlab.com/bloom42/bloom</a>
+                you can find the repo here: <a href="https://gitlab.com/bloom42/server">https://gitlab.com/bloom42/server</a>
                 You can open an issue with a proposal or open an merge request.</li>
                 <li>Documentation for developers: <a href="https://bloom.sh/open-source">https://bloom.sh/open-source</a>.
                 Each project documentation can be found within the project's repository in the <b>docs</b> folder.</li>
