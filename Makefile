@@ -2,7 +2,7 @@
 .PHONY: docker_build docker_login docker_release
 
 DIST_DIR = dist
-NAME := bloom
+NAME := server
 VERSION := $(shell cat VERSION.txt | tr -d '\n')
 DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
