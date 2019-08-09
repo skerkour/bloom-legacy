@@ -8,7 +8,7 @@
           Privacy Policy
         </h1>
         <h4 class="text-xs-center text--darken-1 mb-3">
-              Last updated: May 29, 2019
+              Last updated: Aug 09, 2019
         </h4>
 
       </v-flex>
@@ -53,11 +53,6 @@
                 <li>Personal data should be relevant to the purposes for which it is to be used, and, to the extent necessary for those purposes, should be accurate, complete, and up-to-date.</li>
                 <li>We will protect personal information by reasonable security safeguards against loss or theft, as well as unauthorized access, disclosure, copying, use or modification.</li>
                 <li>We will make readily available to customers information about our policies and practices relating to the management of personal information.</li>
-                <li>The user IP address is kept indefinitely in the event the user started a chat session with a website on Bloom. We are legally required by
-                  the law of France to log those IPs in the event of a legal request (for a minimum duration of 1 year).
-                  Though, we keep those IP address longer as we need to aggregate them to protect
-                   our services against botnets and spam attacks, which occur frequently.
-                   The Bloom service could not function at the level our customers expect from us without statistics on those collected IP.</li>
               </ul>
 
             </p>
