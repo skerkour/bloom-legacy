@@ -25,7 +25,7 @@
 
 ## Documentation
 
-See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs).
+See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs/tree/master/bloom).
 
 
 ## Contributing
