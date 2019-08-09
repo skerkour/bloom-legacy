@@ -10,16 +10,23 @@
 
 
 1. [Download](#download)
-2. [Contributing](#contributing)
-3. [Licensing](#licensing)
-4. [Sponsoring](#sponsoring)
-5. [Security](#security)
+2. [Documentation](#documentation)
+3. [Contributing](#contributing)
+4. [Licensing](#licensing)
+5. [Sponsoring](#sponsoring)
+6. [Security](#security)
 
 --------
 
 ## Download
 
 [Available on Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
+
+
+## Documentation
+
+See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs).
+
 
 ## Contributing
 
