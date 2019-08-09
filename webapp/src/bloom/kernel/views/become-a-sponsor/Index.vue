@@ -44,19 +44,6 @@
 
       </v-flex>
 
-
-      <v-flex xs12 class="text-xs-center mb-4 mt-4">
-        <h1 class="display-1 font-weight-medium">
-          Patreon
-        </h1>
-      </v-flex>
-
-      <v-flex xs12 class="text-xs-center mb-5">
-        <a href="https://www.patreon.com/bloom42" target="_blank" rel="noopener">
-          <img src="/kernel/static/imgs/become_a_patron_button.png" height="42"/>
-        </a>
-      </v-flex>
-
     </v-layout>
   </v-container>
 
