@@ -17,8 +17,8 @@
           <h5 class="title pb-3">Product</h5>
           <ul>
             <li><router-link to="/help">Help & Support</router-link></li>
-            <li><router-link class="nav-link" to="/download-apps">Download Apps</router-link></li>
-            <li><router-link class="nav-link" to="/contribute">Contribute</router-link></li>
+            <li><router-link class="nav-link" to="/download">Download Apps</router-link></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42/docs/blob/master/contributing.md" target="_blank" rel="noopener">Contribute</a></li>
             <li><router-link to="/help">Documentation</router-link></li>
             <li><a class="nav-link" href="https://status.bloom.sh" target="_blank" rel="noopener">System Status</a></li>
           </ul>
