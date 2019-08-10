@@ -70,8 +70,9 @@ const router = new Router({
     },
     {
       component: AppsPage,
-      path: '/download-apps',
+      path: '/download',
     },
+    { path: '/download-apps', redirect: '/download' },
     {
       component: Contribute,
       path: '/contribute',
