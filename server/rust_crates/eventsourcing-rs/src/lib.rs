@@ -73,7 +73,7 @@ impl EventBus {
         if let Some(subscriptions) = self.subscriptions.get_mut(&msg_id) {
             for subscription in subscriptions {
                 // println!("{:?}", subscription.get_type_id());
-                let subscription: &Box<Subscription<Context = C, Event = Ev, Error = Err>> =
+                let subscription: &Box<dyn Subscription<Context = C, Event = Ev, Error = Err>> =
                     subscription.downcast_ref().expect("error downcasting");
                 subscription.handle(ctx, message)?;
             }
@@ -86,7 +86,7 @@ impl EventBus {
 pub type TypeMap<A> = HashMap<TypeId, A>;
 
 struct EventBus {
-    pub subscriptions: TypeMap<Vec<Box<Any>>>,
+    pub subscriptions: TypeMap<Vec<Box<dyn Any>>>,
 }
 
 // impl EventBus {

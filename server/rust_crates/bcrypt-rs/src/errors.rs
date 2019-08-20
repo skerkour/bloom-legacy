@@ -70,7 +70,7 @@ impl error::Error for BcryptError {
         }
     }
 
-    fn cause(&self) -> Option<&error::Error> {
+    fn cause(&self) -> Option<&dyn error::Error> {
         match *self {
             BcryptError::Io(ref err) => Some(err),
             BcryptError::InvalidCost(_)
