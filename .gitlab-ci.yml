@@ -1,8 +1,6 @@
-stages:
-    - deploy
-
 pages:
-  stage: deploy
+  only:
+    - master
   image: rust:latest
   variables:
     CARGO_HOME: $CI_PROJECT_DIR/cargo
@@ -10,12 +8,11 @@ pages:
     - export PATH="$PATH:$CARGO_HOME/bin"
     - mdbook --version || cargo install --debug mdbook
   script:
-        - mdbook build -d public
-  only:
-      - master
+    - mdbook build -d public
+
   artifacts:
-      paths:
-          - public
+    paths:
+      - public
   cache:
     paths:
-    - $CARGO_HOME/bin
+      - $CARGO_HOME/bin
