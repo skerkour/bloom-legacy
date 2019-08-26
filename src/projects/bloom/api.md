@@ -1,5 +1,14 @@
 # Api
 
+API should be transport agnostic and based on messages (or events).
+
+we register handlers like
+
+```rust
+server.handle("com.event.type", handler);
+```
+
+
 ##  Soit http, avec routes et codes...
 
 NON, beaucoup trop protocole dependant, et pas assez evolutif.
