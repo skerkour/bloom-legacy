@@ -8,7 +8,7 @@
 
 --------
 
-Why? How? What? 👉 Read the guide: https://theguide.bloom.sh
+Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 
 1. [Download](#download)
 2. [Documentation](#documentation)
