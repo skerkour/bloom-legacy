@@ -4,10 +4,11 @@
   <p align="center">Empowering people with open technologies</p>
 </p>
 
-[Download it online for free](https://bloom.sh/download)
+[Download it for free](https://bloom.sh/download)
 
 --------
 
+Why? How? What? 👉 Read the guide: https://theguide.bloom.sh
 
 1. [Download](#download)
 2. [Documentation](#documentation)
@@ -25,7 +26,7 @@
 
 ## Documentation
 
-See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs/tree/master/bloom).
+See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/projects/bloom).
 
 
 ## Contributing
