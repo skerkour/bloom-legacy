@@ -22,3 +22,5 @@ Thumbs.db
 **/*.rs.bk
 
 book
+
+/notes.md
