@@ -52,7 +52,7 @@ A view displaying the list of accounts. We do not display the code here, to prev
 ### Add manually
 
 <p align="center">
-  <img alt="add manually" src="assets/add_manually.jpg" width="200" />
+  <img alt="add manually" src="assets/add_manually.png" width="200" />
 </p>
 
 ### Account code

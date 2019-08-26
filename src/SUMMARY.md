@@ -17,6 +17,8 @@
 - [People Operations](people_operations/index.md)
 
 - [Engineering](engineering/index.md)
+  - [Templates](engineering/templates/index.md)
+    - [Editor Config](engineering/templates/editor_config.md)
 
 - [Marketing](marketing/index.md)
 
