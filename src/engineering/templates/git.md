@@ -1,0 +1,38 @@
+# Git
+
+
+## .gitignore
+
+```
+# editors / OS
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
+# rust
+/target
+**/*.rs.bk
+
+
+# js / ts
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.sourcemaps/
+.sass-cache/
+node_modules/
+```
