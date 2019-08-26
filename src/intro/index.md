@@ -1,3 +1,3 @@
 # Intro
 
-![Banner](assets/banner.jpg)
+![Banner](/intro/assets/banner.jpg)
