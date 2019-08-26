@@ -7,3 +7,21 @@ This is the ultimate answer to the question of Life, the Universe, and Everythin
 
 
 Read it online: https://bloom42.gitlab.io/the_guide
+
+
+## Install
+
+Install [mdBook](https://github.com/rust-lang-nursery/mdBook).
+
+
+## Build
+
+```bash
+$ make
+```
+
+## Dev
+
+```bash
+$ make dev
+```
