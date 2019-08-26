@@ -1,6 +1,14 @@
 # Values
 
-## CATS
+## CATS 🐱
+
+### Cooperation
+
+### Acuity
+
+### Transparency
+
+### Simplicity
 
 
 
