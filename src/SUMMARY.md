@@ -45,6 +45,7 @@
   - [Templates](engineering/templates/index.md)
     - [Git](engineering/templates/git.md)
     - [Editor Config](engineering/templates/editor_config.md)
+    - [Vue](engineering/templates/vue.md)
   - [Licenses](engineering/licenses/index.md)
     - [Apache 2.0](engineering/licenses/apache_2.0.md)
 
