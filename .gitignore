@@ -1,1 +1,24 @@
+# editors / OS
+*~
+*.sw[mnpcod]
+*.log
+*.tmp
+*.tmp.*
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+log.txt
+*.sublime-project
+*.sublime-workspace
+.vscode/
+.idea/
+.DS_Store
+Thumbs.db
+
+
+# rust
+/target
+**/*.rs.bk
+
 book
