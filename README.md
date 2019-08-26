@@ -32,7 +32,7 @@ See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/project
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://bloom.sh/contribute](https://bloom.sh/contribute) for guidance.
+[https://theguide.bloom.sh/organization/contributing.html](https://theguide.bloom.sh/organization/contributing.html) for guidance.
 
 
 
