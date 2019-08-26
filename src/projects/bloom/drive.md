@@ -81,3 +81,18 @@ path: `/drive/folders/{folder_id}`
 
 ### Trash
 path: `/drive/trash`
+
+
+### Resources
+
+* [https://news.ycombinator.com/item?id=18750797](https://news.ycombinator.com/item?id=18750797)
+* [http://lpan.io/one-liner-dropbox-client/](http://lpan.io/one-liner-dropbox-client/)
+* [https://raymii.org/s/articles/Set_up_your_own_truly_secure_encrypted_shared_storage_aka_Dropbox_clone.html](https://raymii.org/s/articles/Set_up_your_own_truly_secure_encrypted_shared_storage_aka_Dropbox_clone.html)
+* [https://docs.nextcloud.com/server/13/user_manual/files/desktop_mobile_sync.html](https://docs.nextcloud.com/server/13/user_manual/files/desktop_mobile_sync.html)
+* [https://docs.syncthing.net/](https://docs.syncthing.net/)
+* [https://github.com/haiwen/seafile](https://github.com/haiwen/seafile)
+* [https://github.com/haiwen/seadrive-gui](https://github.com/haiwen/seadrive-gui)
+* [https://github.com/haiwen/seafile-client](https://github.com/haiwen/seafile-client)
+* [https://help.seafile.com/en/drive_client/using_drive_client.html](https://help.seafile.com/en/drive_client/using_drive_client.html)
+* [https://blogs.seafile.com/2016/09/02/announcing-seafile-drive-client-a-new-way-to-map-seafile-storage-as-virtual-drive/](https://blogs.seafile.com/2016/09/02/announcing-seafile-drive-client-a-new-way-to-map-seafile-storage-as-virtual-drive/)
+* [https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows](https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows)
