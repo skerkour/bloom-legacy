@@ -4,7 +4,7 @@
   <p align="center">Empowering people with open technologies</p>
 </p>
 
-[Download it for free](https://bloom.sh/download)
+[Try it for free](https://bloom.sh/download)
 
 --------
 
