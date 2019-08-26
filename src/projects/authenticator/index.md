@@ -1,7 +1,5 @@
 # Authenticator
 
-This is the documentation for [https://gitlab.com/bloom42/authenticator](https://gitlab.com/bloom42/authenticator).
-
 1. [Overview](#overview)
 2. [Scenarios](#scenarios)
 3. [Non goals](#non-goals)
@@ -21,6 +19,8 @@ Secrets MUST NOT be stored in cleartext on the devices thus we should use 2 laye
 keystore).
 
 The master key is retrieved only when the app is unlocked (pin or biometric).
+
+Source code: [https://gitlab.com/bloom42/authenticator](https://gitlab.com/bloom42/authenticator)
 
 
 ## Scenarios

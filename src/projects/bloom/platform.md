@@ -9,9 +9,13 @@ Platform is not really an app, it's just a kind of folder which encapsulate othe
 
 ## Views
 
-<img src="platform.jpg" width="180" />
-<img src="platform_drawer.jpg" width="180" />
+<p align="center">
+  <img src="assets/platform.jpg" width="200" />
+</p>
 
+<p align="center">
+  <img src="assets/platform_drawer.jpg" width="200" />
+</p>
 
 ------------
 

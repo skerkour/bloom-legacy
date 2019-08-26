@@ -3,6 +3,9 @@
 Bloom's website is only used as marketing and support material.
 For security reasons, all operations / authentication are done on the native apps.
 
+## Source code
+
+* [https://gitlab.com/bloom42/website](https://gitlab.com/bloom42/website)
 
 # Footer
 
