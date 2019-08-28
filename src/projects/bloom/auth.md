@@ -2,7 +2,7 @@
 
 ## zero knowledge auth
 
-* [ProtonMail whitepaper](../../resources/protonmail-whitepaper.pdf)
+* [ProtonMail whitepaper](/assets/resources/protonmail-whitepaper.pdf)
 * https://hacks.mozilla.org/2018/11/firefox-sync-privacy/
 * https://blog.1password.com/developers-how-we-use-srp-and-you-can-too/
 * https://crypto.stackexchange.com/questions/1145/how-much-would-it-cost-in-u-s-dollars-to-brute-force-a-256-bit-key-in-a-year/1160#1160
