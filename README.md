@@ -11,8 +11,11 @@ Read it online: https://theguide.bloom.sh
 
 ## Install
 
-Install [mdBook](https://github.com/rust-lang-nursery/mdBook).
+Install [MkDocs](https://github.com/mkdocs/mkdocs).
 
+```bash
+$ pip3 install --user mkdocs
+```
 
 ## Build
 
