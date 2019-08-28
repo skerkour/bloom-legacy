@@ -20,7 +20,6 @@
             <li><router-link class="nav-link" to="/download">Download Apps</router-link></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42/docs/blob/master/contributing.md" target="_blank" rel="noopener">Contribute</a></li>
             <li><router-link to="/help">Documentation</router-link></li>
-            <li><a class="nav-link" href="https://status.bloom.sh" target="_blank" rel="noopener">System Status</a></li>
           </ul>
         </v-flex>
         <v-flex xs12 sm4 class="pa-4">
