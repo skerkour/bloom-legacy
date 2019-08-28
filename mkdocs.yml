@@ -1,7 +1,7 @@
 docs_dir: src
 site_url: https://theguide.bloom.sh/
 repo_url: https://gitlab.com/bloom42/the_guide
-edit_uri: https://gitlab.com/bloom42/the_guide/edit/master/src/
+edit_uri: https://gitlab.com/bloom42/the_guide/edit/dev/src/
 site_dir: dist/
 
 use_directory_urls: false
