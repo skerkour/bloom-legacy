@@ -8,8 +8,13 @@ use_directory_urls: false
 
 theme:
   custom_dir: 'themes/mkdocs_material/material'
-  name: material
+  name: null
   logo: 'icon.png'
+  language: en
+  feature:
+  font:
+    text: Roboto
+    code: Roboto Mono
   palette:
     primary: 'blue'
     accent: 'blue'
