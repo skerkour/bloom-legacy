@@ -17,6 +17,7 @@ stages:
 image: python:alpine
 
 before_script:
+  - apk install make
   - pip install mkdocs
 
 
