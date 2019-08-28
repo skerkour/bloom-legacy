@@ -1,0 +1,29 @@
+docs_dir: src
+site_url: https://theguide.bloom.sh/
+repo_url: https://gitlab.com/bloom42/the_guide
+edit_uri: https://gitlab.com/bloom42/the_guide/edit/master/src/
+site_dir: dist/
+
+use_directory_urls: false
+
+theme:
+  custom_dir: 'themes/mkdocs_material/material'
+  name: material
+  logo: 'icon.png'
+  palette:
+    primary: 'blue'
+    accent: 'blue'
+
+# extra:
+#   logo: 'src/icon.svg'
+
+site_name: The Guide
+
+
+
+nav:
+  - Introduction: intro/index.md
+  - Projects:
+    - Overview: projects/index.md
+    - Bloom:
+      - Architecture: projects/bloom/architecture.md

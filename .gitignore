@@ -21,6 +21,7 @@ Thumbs.db
 /target
 **/*.rs.bk
 
-book
+/book
+/dist
 
 /notes.md

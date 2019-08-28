@@ -1,10 +1,10 @@
 .PHONY: dev build release
 
 build:
-	mdbook build
+	mkdocs build
 
 dev:
-	mdbook serve
+	mkdocs serve
 
 release:
 	git checkout master

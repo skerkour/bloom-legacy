@@ -2,18 +2,22 @@ stages:
   - build
   - release
 
-variables:
-  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+# variables:
+#   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
 
-default:
-  image: rust:latest
-  before_script:
-    - export PATH="$PATH:$CARGO_HOME/bin"
-    - mdbook --version || cargo install --debug mdbook
+# default:
+#   image: rust:latest
+#   before_script:
+#     - export PATH="$PATH:$CARGO_HOME/bin"
+#     - mdbook --version || cargo install --debug mdbook
 
-cache:
-  paths:
-    - $CARGO_HOME/bin
+# cache:
+#   paths:
+#     - $CARGO_HOME/bin
+image: python:alpine
+
+before_script:
+  - pip install mkdocs
 
 
 build:
@@ -28,7 +32,7 @@ pages:
     - master
   script:
     - make build
-    - mv book public
+    - mv dist public
   artifacts:
     paths:
       - public
