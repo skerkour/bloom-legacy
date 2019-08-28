@@ -1,3 +1,0 @@
-# Templates
-
-<!-- not used -->

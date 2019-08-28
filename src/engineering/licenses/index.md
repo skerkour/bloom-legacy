@@ -1,3 +1,0 @@
-# Licenses
-
-<!-- not used -->

@@ -1,3 +1,0 @@
-# Organization
-
-<!-- not used -->
