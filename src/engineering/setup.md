@@ -1,6 +1,7 @@
 # Development
 
-Bloom use the following platform to develop it's products:
+Bloom use the following platforms to develop it's products:
+
 * [NodeJS](#nodejs)
 * [Rust](#rust)
 * [Flutter](#flutter)
