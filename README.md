@@ -24,7 +24,6 @@ $ pip3 install --user mkdocs
 $ make
 ```
 
-
 ## Dev
 
 ```bash
