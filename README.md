@@ -18,7 +18,6 @@ $ pip3 install --user mkdocs
 ```
 
 
-
 ## Build
 
 ```bash
