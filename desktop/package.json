@@ -1,6 +1,12 @@
 {
-  "name": "desktop",
+  "name": "bloom_desktop",
+  "productName": "Bloom",
+  "description": "Empowering people",
   "version": "0.1.0",
+  "author": {
+    "name": "Bloom",
+    "email": "hello@bloom.sh"
+  },
   "private": true,
   "main": "src/app.js",
   "scripts": {
