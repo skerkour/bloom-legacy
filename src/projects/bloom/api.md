@@ -53,4 +53,68 @@ NON, beaucoup trop protocole dependant, et pas assez evolutif.
 * https://www.dropboxforum.com/t5/Files-folders/Can-you-explain-the-difference-between-Smart-Sync-and-Selective/td-p/319218
 
 
+
+
+
+---------------------------
+
+* https://github.com/matrix-org/matrix-doc/blob/master/drafts/websockets.rst
+* https://golang.org/src/net/rpc/jsonrpc/client.go?s=2889:2944#L108
+* https://matrix.org/docs/spec/client_server/latest
+* https://github.com/elpheria/rpc-websockets/blob/master/src/lib/client.js
+
+
+en gros ca envoie les message, enregistre un callback dans une map pending[id]callback,
+et a chaque fois que la socket recoit un message, on regarde si il y a un ID et si il est dans pending,
+le cas echeant on appelle le callback (si il n'y a pas d'id c'est une notification)
+
++ un systeme de pubsub, l'event envoye depuis le serveur ne contient pas un champs ID, mais un champs
+stream (ou subscription). Est-ce utile ? car on peut avoir cette fonctionnalite grace au typage des events
+
+{
+    "id": "12345",
+    "method": "send",
+    "params": {
+        "room_id": "!d41d8cd:matrix.org",
+        "event_type": "m.room.message",
+        "content": {
+            "msgtype": "m.text",
+            "body": "hello"
+        }
+    }
+}
+
+Server response:
+
+{
+    "id": "12345",
+    "result": {
+        "event_id": "$66697273743031:matrix.org"
+    }
+}
+
+{
+    "id": "12345",
+    "data": {
+        "event_id": "$66697273743031:matrix.org"
+    },
+    "error": null <- est -ce quon le met ca ?
+}
+
+* https://matrix.org/docs/spec/client_server/latest#api-standards
+
+Alternative server response, in case of error:
+
+{
+    "id": "12345",
+    "error": {
+       "code": "M_MISSING_PARAM", // "COM.BLOOM42.ERROR_TYPE"
+       "message": "Missing parameter: event_type"
+    },
+    "data": null ?? <- est -ce quon le met ca ?
+}
+
+
 Comment on fait pour les uploads?
+
+* un endpoint HTTP
