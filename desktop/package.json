@@ -8,7 +8,7 @@
     "email": "hello@bloom.sh"
   },
   "private": true,
-  "main": "src/app.js",
+  "main": "src/main.js",
   "scripts": {
     "start": "electron .",
     "serve": "vue-cli-service serve",
@@ -19,6 +19,7 @@
   "dependencies": {
     "@mdi/font": "^4.2.95",
     "core-js": "^2.6.5",
+    "sqlite3": "^4.1.0",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-property-decorator": "^8.1.0",
