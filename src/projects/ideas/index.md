@@ -99,4 +99,27 @@
 
 # Robotic
 
-
+* https://www.instructables.com/id/Smartphone-Controlled-Robotic-Vacuum-Cleaner-Using/
+* https://www.pcgamer.com/doomba-turns-your-robotic-vacuum-cleaner-into-a-doom-map-making-machine/
+* https://news.ycombinator.com/item?id=2109832
+* https://spectrum.ieee.org/blog/automaton
+* https://news.ycombinator.com/item?id=11542526
+* https://www.irobot.fr/
+* https://news.ycombinator.com/item?id=10544863
+* https://habr.com/en/post/447460/
+* https://hackaday.com/2018/03/25/rechargeable/
+* https://hackaday.com/2015/06/10/worlds-first-internet-connected-lawnmower/
+* https://mashable.com/2017/06/15/diy-girls-solar-powered-tent-homeless/?europe=true#znpvHH8t5SOh
+* https://thestempedia.com/project/diy-smart-cleaning-robot/
+* https://makezine.com/projects/diy-swarmbots/
+* https://github.com/burkaydurdu/bultut
+* https://news.ycombinator.com/item?id=13772009
+* https://www.thingiverse.com/thing:2352440
+* https://www.thingiverse.com/thing:2800717
+* https://hackaday.io/project/25092/instructions
+* https://hackaday.io/project/1007-rpifpv
+* https://hackaday.com/2019/06/06/designing-a-drone-to-fire-from-a-grenade-launcher/
+* https://hackaday.com/2018/05/27/watch-dogs-inspired-hacking-drone-takes-flight/
+* https://hackaday.com/2019/06/06/designing-a-drone-to-fire-from-a-grenade-launcher/
+* https://hackaday.com/2018/12/27/hd-video-and-telemetry-link-uses-standard-wifi-hardware/
+* https://blog.knoldus.com/hawk-rust-series-actuation-of-raspberry-pi-camera/
