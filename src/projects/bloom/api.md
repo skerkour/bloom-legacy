@@ -166,3 +166,4 @@ https://developer.atlassian.com/server/confluence/pagination-in-the-rest-api/
 * https://www.dropbox.com/developers/documentation/http/documentation#files-get_metadata
 * https://developers.google.com/drive/api/v3/about-files
 * https://www.algolia.com/doc/rest-api/search/#search-index-get
+* https://docs.syncthing.net/dev/events.html
