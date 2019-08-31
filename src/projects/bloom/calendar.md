@@ -7,6 +7,7 @@ The calendar service is a user friendly calendar solution.
 
 An user should be able to save, view and delete his events
 
+Year, Month, week, Day, List
 
 ## Scenarios
 

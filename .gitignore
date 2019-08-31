@@ -16,12 +16,12 @@ log.txt
 .DS_Store
 Thumbs.db
 
-
 # rust
 /target
 **/*.rs.bk
 
+# mdBook
 /book
-/dist
 
-/notes.md
+# MkDocs
+/dist

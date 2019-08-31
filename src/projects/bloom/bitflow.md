@@ -122,3 +122,43 @@ Bouton fab + avec
 - HTTP
 - Youtube
 - other (ouvre une modale)
+
+
+-------------------------------------
+
+
+
+# download_completed -> demande des url signees
+download_started
+download_progress_updated
+
+-> PUT /downloads/{id}
+-3 endpoints differents ou 1 seul endpoint avec des paramètres variables ?
+
+
+
+
+  download(id: String!): Download!
+  downloads: [Download!]!
+  history: [Download!]!
+
+
+GET /downloads/{id}
+GET /downloads
+GET /history
+
+
+
+  queue(url: String!): Download! -> POST /downloads
+  remove(downloads: [String!]!): Boolean! -> POST /downloads/delete
+  clear_history: Boolean! -> DELETE /history
+
+
+
+On ajoute une url sur l’interface web
+Ca cree un download
+Le worker le récupère en pignuant /jobs
+Le worker telecharge le fichier le local,
+Envoie une requête pour dire que le fichier a été telecharge et demande une url signee
+Le worker envoie le fichier -> s3
+Le worker renvoie un message pour dire que le message a bien été mis sur s3

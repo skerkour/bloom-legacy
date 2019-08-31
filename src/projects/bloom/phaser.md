@@ -186,3 +186,24 @@ ets-ce vraiment utilse d'avoir un report.Status ?
 - scan history (au top level)
 - personalised profiles
 - est-ce qu'on utilise des profiles pour les settings ?
+
+
+
+--------------------
+
+https://developer.detectify.com/#scan-reports
+https://cloud.google.com/security-scanner/docs/reference/rest/v1beta/projects.scanConfigs.scanRuns#ScanRun.ExecutionState
+
+
+# C’este la responsabilité de worker ou de scanner d’envoyer a s3 ?
+(Enlever scanner)
+
+-> worker
+
+Soit une fois le scan fais on envoie tous les fichiers (walk…) soit on les envoie 1 par 1 durant le scan.
+
+
+http/apifuzz -> on donne un schema openapi -> et ca fuzz l’api
+
+http/graphql/fuzz -> on donne un schema graphie, et ca fuzz l’api
+

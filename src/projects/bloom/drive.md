@@ -148,3 +148,114 @@ https://keybase.io/docs/crypto/kbfs
 * rsync (https://en.wikipedia.org/wiki/Rsync, https://rsync.samba.org/, https://www.quora.com/How-does-the-rsync-algorithm-work) and zsync (http://zsync.moria.org.uk/)
 * OwnCloud
 * NextCloud
+
+
+## Drive
+- quelque part ou se passent les actions cote serveur (upload s3, conversion...)
+- download/move multiple files / folders (zip)
+- supression des subfiles
+- path au dessus de la liste des fichiers
+- spotlight like search
+- limiter l'acces aux dossiers /  application
+
+
+
+barre de recherche
+
+on peut selectionner plusierus fichiers, pour ensuite:
+- les supprimer
+- les deplacer
+- en faire des copies (ajoute le suffixe "Copy of")
+- telecharger
+- convertion
+
+renommer un fichier individuel
+
+il faut pouvoir creer:
+- upload de fichiers
+- upload de dossier
+- creer un dossier
+
+
+starrer un fichier ou un dossier
+Echange directe entre ordinateurs sur le reseau
+
+v1:
+sous domaines
+v2:
+tout sous le meme domaine ?
+
+subdomain:
+pour personnaliser les apps avec des domains personnalises pour les entreprises.
+
+
+pourquoi on ne peut pas tout meme sous le meme sous domain des la v1 ?
+- temps de chargement
+
+pourquoi tout mettre dans la meme app des le debut ?
+- pas de code / repetition de code
+- plus besoin de cookies -> secu ++
+
+sinon on peut commencer separe, mais avec les URLS d'une monoapp
+
+
+partage:
+- collaboraterus
+ou public
+
+
+
+## Resources
+
+* https://stackoverflow.com/questions/35711897/dropbox-fs-inotify-error
+* https://stackoverflow.com/questions/1960799/using-git-and-dropbox-together-effectively?rq=1
+* https://www.dropboxforum.com/t5/Dropbox/When-will-Smart-Sync-work-on-linux/idi-p/262171
+* https://rclone.org/commands/rclone_mount/#file-caching
+* https://www.smartsync.com/
+* https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync
+* https://www.dropboxforum.com/t5/Files-folders/Can-you-explain-the-difference-between-Smart-Sync-and-Selective/td-p/319218
+* https://news.ycombinator.com/item?id=16743055
+* https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync
+* https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive
+* https://support.tresorit.com/hc/en-us/articles/216114367-How-is-my-password-managed-in-Tresorit-
+* https://support.tresorit.com/hc/en-us/articles/360002172334-Installing-and-Updating-FUSE-on-Mac#
+* https://support.tresorit.com/hc/en-us/articles/216114397-Third-party-services
+* https://support.tresorit.com/hc/en-us/articles/360000936353-Glossary
+* https://wiki.archlinux.org/index.php/Dropbox
+* https://help.nextcloud.com/t/solved-multiple-folder-sync-across-drives/13639
+* https://help.nextcloud.com/t/how-to-sync-a-folder-on-a-server/12901
+* https://help.nextcloud.com/t/to-be-clear-no-way-to-have-2way-sync-with-android-client/35027
+* https://gladinet.com/CloudEnterprise/SelfHostedDropbox.aspx
+* https://docs.nextcloud.com/desktop/2.5/installing.html
+* https://docs.nextcloud.com/desktop/2.3/navigating.html
+* https://github.com/syncany/syncany
+* https://github.com/pydio
+* https://github.com/pydio/cells
+* https://github.com/pydio/cells-client
+* https://www.dropbox.com/developers-v1/datastore/docs/http
+* https://www.dropbox.com/developers/documentation/http/documentation
+* https://en.wikipedia.org/wiki/Rsync#Variations
+* http://librsync.sourceforge.net/
+* https://en.wikipedia.org/wiki/Solid_compression
+* https://serverfault.com/questions/52861/how-does-dropbox-version-upload-large-files
+* https://blogs.dropbox.com/tech/2016/05/inside-the-magic-pocket/
+* https://www.pcloud.com/download-free-online-cloud-file-storage.html
+* https://news.ycombinator.com/item?id=20163389
+* https://news.ycombinator.com/item?id=12619722
+* https://news.ycombinator.com/item?id=12463338&p=2
+* https://news.ycombinator.com/item?id=11570888
+* https://librevault.com/
+* https://www.seafile.com/en/features/
+* https://owncloud.org/news/welcome-delta-sync-for-owncloud/
+* https://github.com/owncloud/client/wiki/DeltaSync
+* https://neon-bindings.com/docs/functions
+* https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
+
+
+Pouvoir convertir des fichiers (audio, video)
+
+
+3 etats:
+- local mais pas cloud
+- cloud mais pas local
+- synchronized

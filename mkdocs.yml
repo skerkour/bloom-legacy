@@ -19,11 +19,8 @@ theme:
     primary: 'blue'
     accent: 'blue'
 
-# extra:
-#   logo: 'src/icon.svg'
 
 site_name: The Guide
-
 
 
 nav:
@@ -35,6 +32,7 @@ nav:
     - Values: organization/values.md
     - Structure: organization/structure.md
     - Leadership: organization/leadership.md
+    - Workflow: organization/workflow.md
     - Contributing: organization/contributing.md
     - Technology: organization/technology.md
 

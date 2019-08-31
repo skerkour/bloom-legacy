@@ -56,6 +56,44 @@ NON, beaucoup trop protocole dependant, et pas assez evolutif.
 
 
 
+# RPC vs graphQL vs REST
+
+RPC:
+separation du transport, On peut ‘facilement’ changer l’encodage et le transport
+http + web socket
+JSONRPC? Twirp?
+
+Error code: String
+Method not found
+Invalid params
+Internal error
+Invalid Request: The JSON sent is not a valid Request object.
+Parse error: Invalid JSON was received by the server. An error occurred on the server while parsing the JSON text.
+
+Method format:
+- Entity.Method.version
+Account.Create.v1, Account.delete.v1, account.update.v1
+- Entity.Method(version)
+Account.Create, account.deletev2
+- Service.Method(version)
+Notes.Note.Updatev2
+
+
+Graphql:
+
+Requites plus longues… ca peut prendre pas mal de place en rfontend
+
+# Pagination
+from / to -> date
+Offset / limit -> pagination
+
+
+# events metadata
+
+actor_id
+session_id
+(project_id, organization_id...)
+
 ---------------------------
 
 * https://github.com/matrix-org/matrix-doc/blob/master/drafts/websockets.rst
@@ -118,3 +156,7 @@ Alternative server response, in case of error:
 Comment on fait pour les uploads?
 
 * un endpoint HTTP
+
+# pagination:
+https://developer.atlassian.com/server/confluence/pagination-in-the-rest-api/
+?limit=5&start=5"

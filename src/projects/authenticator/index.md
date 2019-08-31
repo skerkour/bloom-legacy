@@ -8,6 +8,11 @@
 
 -------------------
 
+# OTP
+TOTP: https://tools.ietf.org/html/rfc6238
+HOTP: https://tools.ietf.org/html/rfc4226
+
+
 
 ## Overview
 
