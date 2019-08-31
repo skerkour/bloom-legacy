@@ -53,27 +53,28 @@ Chaque handler handle one command et result un event
 
 # Federation
 
-https://nl.movim.eu/?node/pubsub.movim.eu/Movim
-https://writefreely.org/
-https://blog.liw.fi/posts/2018/08/30/federated_ci/
-https://github.com/forgefed/forgefed
-https://pixelfed.social/
-https://gitlab.com/gitlab-org/gitlab-ce/issues/4013
-https://news.ycombinator.com/item?id=17171985
-https://news.ycombinator.com/item?id=17153023
-https://news.ycombinator.com/item?id=16734428
-https://news.ycombinator.com/item?id=16667050
-https://www.w3.org/TR/activitypub/
-https://drewdevault.com/2018/07/23/Git-is-already-distributed.html
-https://github.com/tootsuite/mastodon/issues/8122
-https://github.com/Plume-org/Plume
-https://news.ycombinator.com/item?id=19332376
-https://venomousporridge.com/post/30043951343/is-a-federated-twitter-even-possible
-https://medium.com/@EthanZ/mastodon-is-big-in-japan-the-reason-why-is-uncomfortable-684c036498e5
-https://www.libravatar.org/
-https://hackernoon.com/mastodon-is-dead-in-the-water-888c10e8abb1
-https://medium.com/@alex285/from-google-plus-to-facebook-to-twitter-to-mastodon-6a9b0a0cf53a
-https://medium.com/dark-mountain/problems-with-mastodon-7cea23e6bf41
+* https://nl.movim.eu/?node/pubsub.movim.eu/Movim
+* https://writefreely.org/
+* https://blog.liw.fi/posts/2018/08/30/federated_ci/
+* https://github.com/forgefed/forgefed
+* https://pixelfed.social/
+* https://gitlab.com/gitlab-org/gitlab-ce/issues/4013
+* https://news.ycombinator.com/item?id=17171985
+* https://news.ycombinator.com/item?id=17153023
+* https://news.ycombinator.com/item?id=16734428
+* https://news.ycombinator.com/item?id=16667050
+* https://www.w3.org/TR/activitypub/
+* https://drewdevault.com/2018/07/23/Git-is-already-distributed.html
+* https://github.com/tootsuite/mastodon/issues/8122
+* https://github.com/Plume-org/Plume
+* https://news.ycombinator.com/item?id=19332376
+* https://venomousporridge.com/post/30043951343/is-a-federated-twitter-even-possible
+* https://medium.com/@EthanZ/mastodon-is-big-in-japan-the-reason-why-is-uncomfortable-684c036498e5
+* https://www.libravatar.org/
+* https://hackernoon.com/mastodon-is-dead-in-the-water-888c10e8abb1
+* https://medium.com/@alex285/from-google-plus-to-facebook-to-twitter-to-mastodon-6a9b0a0cf53a
+* https://medium.com/dark-mountain/problems-with-mastodon-7cea23e6bf41
+* https://news.ycombinator.com/item?id=20375207
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.

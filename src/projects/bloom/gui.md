@@ -218,3 +218,29 @@ https://github.com/keybase/client/tree/master/go
 * https://www.packtpub.com/eu/application-development/hands-mobile-and-embedded-development-qt-5
 * https://www.packtpub.com/eu/application-development/hands-embedded-programming-c17
 * https://www.packtpub.com/eu/data/qt-5-and-opencv-4-computer-vision-projects
+
+
+# Station & co workspaces
+
+* https://www.youtube.com/watch?v=CZR2qs91nIQ
+* https://www.youtube.com/watch?v=vee8jkCblPA
+* https://www.youtube.com/watch?v=Z5vCWw3993M
+* https://www.youtube.com/watch?v=o2RRDS2tIoY
+* http://www.igoogleportal.com/
+* https://meetfranz.com/
+* https://www.producthunt.com/posts/station-3
+* https://techcrunch.com/2017/10/26/station-combines-all-your-messy-web-apps-into-a-single-app/
+* https://getstation.com/
+* https://www.theverge.com/2018/12/27/18148937/best-mac-apps-2018-apple-macos-adobe-alfred
+* https://medium.com/getstation/your-way-of-working-belongs-to-the-stone-age-9ff64782f40
+* https://www.ausy.com/en/technical-news/mobility-one-or-multiple-apps-your-business
+* https://slite.com/
+* https://www.designernews.co/stories/31375-strategy-question-one-app-to-rule-them-all-or-multiple-apps-for-different-purpose
+* https://forums.meteor.com/t/monolith-vs-multiple-apps-an-architecture-question/9342
+* https://softwareengineering.stackexchange.com/questions/204552/why-dont-companies-ship-multiple-modules-within-a-mobile-app-are-there-concern
+* https://appdevelopermagazine.com/is-this-the-age-of-the-single-purpose-app/
+* https://www.enterprise-cio.com/news/2017/nov/17/are-we-approaching-age-single-purpose-app/
+* https://portableapps.com/apps
+* https://www.behance.net/gallery/79789491/Perfect-Apps-WEB-Workspace
+* https://rambox.pro/#home
+* https://wavebox.io/
