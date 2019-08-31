@@ -11,6 +11,8 @@ Vue frameworks:
 
 * https://github.com/KELiON/cerebro
 * https://github.com/Physiix/topsi-project-manager
+* https://github.com/atom-archive/xray
+* https://www.behance.net/gallery/79789491/Perfect-Apps-WEB-Workspace
 
 Desktop: Plugin system
 
