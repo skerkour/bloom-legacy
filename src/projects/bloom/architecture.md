@@ -118,3 +118,17 @@ I lose the valuable, hard-won community I’ve built by later switching to @john
 
 
 and many others, and they can all interoperate. This gives the fediverse a scale advantage over the walled garden platforms. This is a point that Jeremy’s article made well:
+
+
+
+--------------------
+
+
+* https://docs.microsoft.com/en-us/azure/architecture/patterns/
+
+
+## Event sourcing
+
+* https://medium.com/capital-one-tech/event-sourcing-with-aggregates-in-rust-4022af41cf67
+* https://medium.com/capital-one-tech/building-an-event-sourcing-crate-for-rust-2c4294eea165
+* https://github.com/brendanzab/chronicle
