@@ -250,7 +250,7 @@ ou public
 * https://github.com/owncloud/client/wiki/DeltaSync
 * https://neon-bindings.com/docs/functions
 * https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
-
+* https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
 
 Pouvoir convertir des fichiers (audio, video)
 

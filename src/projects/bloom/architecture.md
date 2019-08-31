@@ -76,6 +76,9 @@ Chaque handler handle one command et result un event
 * https://medium.com/dark-mountain/problems-with-mastodon-7cea23e6bf41
 * https://news.ycombinator.com/item?id=20375207
 * https://rosenzweig.io/blog/the-federation-fallacy.html
+* https://docs.microsoft.com/en-us/azure/architecture/microservices/logging-monitoring
+* https://blog.christianposta.com/microservices/the-hardest-part-about-microservices-data/
+* https://jack-vanlightly.com/blog/2017/12/28/api-series-part-7-inter-service-communication-overview
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.

@@ -77,13 +77,14 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.packtpub.com/eu/security/improving-your-penetration-testing-skills
 * https://github.com/osquery/osquery/blob/master/README.md
 * https://news.ycombinator.com/item?id=19681270
+* https://cybarrior.com/blog/2019/03/28/p4wnp1/
+* https://docs.tcell.io/docs/data-collected
 
 
 # Crypto
 
 * http://engineering.mindlinksoft.com/end-to-end-encryption-with-the-signal-protocol/
 * https://medium.com/@justinomora/demystifying-the-signal-protocol-for-end-to-end-encryption-e2ee-ad6a567e6cb4
-* https://hackernoon.com/e2ee-app-backends-286cc94b8a7
 * https://medium.com/codeclan/what-are-encryption-keys-and-how-do-they-work-cc48c3053bd6
 * https://developers.connectycube.com/guides/end-to-end-encryption-otr
 * https://blog.jabberhead.tk/2019/03/10/a-look-at-matrix-orgs-olm-megolm-encryption-protocol/
@@ -159,3 +160,14 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.raywenderlich.com/778533-encryption-tutorial-for-android-getting-started#
 * https://news.ycombinator.com/item?id=16285135
 * https://research.checkpoint.com/cryptographic-attacks-a-guide-for-the-perplexed/
+* https://medium.com/tenable-techblog/owning-the-network-with-badusb-72daa45d1b00
+* https://blog.mozilla.org/services/2014/04/30/firefox-syncs-new-security-model/
+* https://news.ycombinator.com/item?id=10721876
+* https://news.ycombinator.com/item?id=13239476
+* https://news.ycombinator.com/item?id=16490595
+* https://mlsdev.com/blog/130-how-to-develop-a-secure-messenger-like-signal
+* https://core.telegram.org/api/end-to-end
+* https://www.cossacklabs.com/building-secure-chat
+* https://elasticsecurity.wordpress.com/2016/04/26/a-deeper-look-at-whatsapp-end-to-end-encryption/
+* https://hackernoon.com/e2ee-app-backends-286cc94b8a7
+* https://github.com/nextcloud/end_to_end_encryption/blob/master/doc/api.md

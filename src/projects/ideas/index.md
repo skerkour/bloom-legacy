@@ -178,6 +178,8 @@
 * https://hackernoon.com/how-to-build-a-multiplayer-browser-game-4a793818c29b
 * https://www.gabrielgambetta.com/client-server-game-architecture.html
 * https://www.theverge.com/2019/3/19/18271702/google-stadia-cloud-gaming-service-announcement-gdc-2019
+* https://www.recalbox.com/
+* https://news.ycombinator.com/item?id=19432957
 
 
 # Offline first

@@ -30,3 +30,4 @@ manual production deploy
 
 
 * https://www.atlassian.com/agile/project-management/program
+* https://blog.scottnonnenberg.com/an-agile-organization/
