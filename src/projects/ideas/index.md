@@ -58,3 +58,45 @@
 # Privacy
 
 * https://news.ycombinator.com/item?id=18446278
+
+
+# FarmTech
+
+* https://makezine.com/2017/05/09/edible-innovations-common-garden-develops-open-source-farming-techniques/
+* https://news.ycombinator.com/item?id=14425213
+* https://news.ycombinator.com/item?id=13580390
+* https://news.ycombinator.com/item?id=10444907
+* https://news.ycombinator.com/item?id=18885369
+* https://framagit.org/Gabe/farmnet
+* https://blog.hackster.io/agopen-diy-conversion-gives-your-tractor-the-ability-to-steer-autonomously-b479fd0f8dca
+* https://thestempedia.com/project/diy-automatic-plant-watering-system/
+* https://www.precisionag.com/in-field-technologies/autonomous-farm-robot-see-dot-run-at-demo-day-in-arizona/
+* https://futurism.com/the-byte/seedo-first-automated-cannabis-farm
+* https://cleantechnica.com/2019/04/15/can-indoor-farming-solve-our-agriculture-problems/
+* https://hackerfarm.jp/2019/03/internet-of-things-so-what-a-farmers-guide-to-technology/
+* https://knowledge.wharton.upenn.edu/article/sustainitech-ceo-joey-hundert/
+* https://github.com/Tanibox/tania-core
+* https://news.ycombinator.com/item?id=14769150
+* https://twitter.com/modularscience
+* https://farm.bot/
+* https://edgy.app/farmbot-genesis-grows-produce/
+* https://www.wired.com/story/dot-power-autonomous-farming/
+* https://news.ycombinator.com/item?id=12152984
+* https://www.smithsonianmag.com/innovation/farmbot-genesis-brings-precision-agriculture-your-own-backyard-180959603/?no-ist
+* https://news.ycombinator.com/item?id=11856915
+* https://news.ycombinator.com/item?id=6451350
+* https://news.ycombinator.com/item?id=13468508
+* https://news.ycombinator.com/item?id=11454342
+* https://automicrofarm.com/
+* https://news.ycombinator.com/item?id=4706876
+* https://www.youtube.com/watch?v=pLBVOgaAM5Q
+* https://www.youtube.com/watch?v=ipWDe33e7os
+* https://www.postscapes.com/smart-agriculture/
+* https://dzone.com/articles/iot-in-agriculture-five-technology-uses-for-smart
+* https://hackerfarm.jp/
+* https://hackaday.com/2019/07/09/robot-harvesting-machine-is-tip-of-the-agri-tech-iceberg/
+
+
+# Robotic
+
+

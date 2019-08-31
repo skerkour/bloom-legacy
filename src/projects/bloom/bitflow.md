@@ -162,3 +162,21 @@ Le worker telecharge le fichier le local,
 Envoie une requête pour dire que le fichier a été telecharge et demande une url signee
 Le worker envoie le fichier -> s3
 Le worker renvoie un message pour dire que le message a bien été mis sur s3
+
+* https://github.com/transmission/transmission/blob/master/extras/rpc-spec.txt
+* https://aria2.github.io/
+* https://github.com/lingochamp/FileDownloader
+* https://aria2.github.io/manual/en/html/index.html
+* https://github.com/aria2/aria2
+* https://github.com/qbittorrent/qBittorrent
+* https://github.com/jpillora/cloud-torrent
+* https://github.com/topics/download
+* https://github.com/iawia002/annie
+* https://github.com/ingbyr/VDM
+* https://github.com/Code-Hex/pget
+* https://github.com/derniercri/snatch
+* https://github.com/alanzhangzm/Photon
+* https://pyload.net/
+* https://docs.rs/reqwest/0.6.2/reqwest/header/struct.ContentDisposition.html
+* https://github.com/nukeop/nuclear
+* https://github.com/jakubroztocil/cloudtunes
