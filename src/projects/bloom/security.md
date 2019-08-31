@@ -79,7 +79,23 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://news.ycombinator.com/item?id=19681270
 * https://cybarrior.com/blog/2019/03/28/p4wnp1/
 * https://docs.tcell.io/docs/data-collected
-
+* https://news.ycombinator.com/item?id=19265377
+* https://www.obdev.at/products/littlesnitch/index.html
+* https://pastebin.com/0SNSvyjJ
+* https://medium.com/tenable-techblog/owning-the-network-with-badusb-72daa45d1b00
+* https://hackaday.com/2017/12/28/antenna-alignment-and-hunting-rogue-access-points-with-the-esp8266/
+* https://0xpatrik.com/subdomain-takeover-candidates/
+* https://github.com/rapid7/metasploit-framework/blob/master/modules/auxiliary/crawler/msfcrawler.rb
+* https://wiki.mozilla.org/Security/Projects/Minion
+* https://labs.detectify.com/2019/02/28/thinking-outside-of-the-password-manager-box/
+* https://www.packtpub.com/networking-and-servers/mastering-linux-security-and-hardening
+* https://coreruleset.org/
+* http://appsensor.org/documentation.html
+* https://labs.signalsciences.com/go-development-tools-for-testing-and-hot-reloading
+* https://docs.signalsciences.net/install-guides/python-module/
+* https://www.i-programmer.info/news/83-mobliephone/12440-eu-bug-bounty-software-security-as-a-civil-right.html
+* https://medium.com/@karpov2007/pvs-studio-and-bug-bounties-on-free-and-open-source-software-538f42ee2701
+* https://opaque.link/post/dropgang/
 
 # Crypto
 

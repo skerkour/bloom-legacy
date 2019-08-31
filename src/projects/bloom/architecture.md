@@ -76,9 +76,7 @@ Chaque handler handle one command et result un event
 * https://medium.com/dark-mountain/problems-with-mastodon-7cea23e6bf41
 * https://news.ycombinator.com/item?id=20375207
 * https://rosenzweig.io/blog/the-federation-fallacy.html
-* https://docs.microsoft.com/en-us/azure/architecture/microservices/logging-monitoring
-* https://blog.christianposta.com/microservices/the-hardest-part-about-microservices-data/
-* https://jack-vanlightly.com/blog/2017/12/28/api-series-part-7-inter-service-communication-overview
+
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.
@@ -137,3 +135,28 @@ and many others, and they can all interoperate. This gives the fediverse a scale
 * https://medium.com/capital-one-tech/event-sourcing-with-aggregates-in-rust-4022af41cf67
 * https://medium.com/capital-one-tech/building-an-event-sourcing-crate-for-rust-2c4294eea165
 * https://github.com/brendanzab/chronicle
+* https://medium.com/technology-learning/event-sourcing-and-cqrs-a-look-at-kafka-e0c1b90d17d8
+* https://hackernoon.com/1-year-of-event-sourcing-and-cqrs-fb9033ccd1c6
+* https://github.com/Netflix/security_monkey
+
+
+---------------
+
+* https://docs.microsoft.com/en-us/azure/architecture/microservices/logging-monitoring
+* https://blog.christianposta.com/microservices/the-hardest-part-about-microservices-data/
+* https://jack-vanlightly.com/blog/2017/12/28/api-series-part-7-inter-service-communication-overview
+* https://cloud.google.com/security/infrastructure/design/
+* https://www.upsolver.com/blog/reduce-elasticsearch-costs
+* https://docs.gitlab.com/ee/development/architecture.html
+* https://about.gitlab.com/handbook/engineering/infrastructure/production-architecture/
+* https://www.indiehackers.com/@guru_shiva/scalable-tech-stack-cost-effective-secure-infrastructure-a7fe05cb46
+* https://medium.com/@simon.aubury/machine-learning-kafka-ksql-stream-processing-bug-me-when-ive-left-the-heater-on-bd47540cd1e8
+* https://journal.valeriansaliou.name/announcing-bloom-a-rest-api-caching-middleware/
+* https://www.youtube.com/watch?v=moiSC3gmCew
+* https://www.upsolver.com/blog/reduce-elasticsearch-costs
+* https://towardsdatascience.com/back-to-the-metal-top-3-programming-language-to-develop-big-data-frameworks-in-2019-69a44a36a842
+* https://medium.com/@Alibaba_Cloud/pangu-the-high-performance-distributed-file-system-by-alibaba-cloud-6c189d120710
+* https://docs.google.com/document/d/1xVrPoNutyqTdQ04DXBEZW4ZW4A5RAQW2he7qIpTmG-M/edit
+* https://news.ycombinator.com/item?id=19266823
+* https://iron.io/mq
+* https://blog.npmjs.org/post/152035356435/how-we-deploy-at-npm

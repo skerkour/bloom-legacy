@@ -251,6 +251,8 @@ ou public
 * https://neon-bindings.com/docs/functions
 * https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
 * https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
+* https://www.linux.com/blog/learn/2019/2/5-linux-gui-cloud-backup-tools
+
 
 Pouvoir convertir des fichiers (audio, video)
 

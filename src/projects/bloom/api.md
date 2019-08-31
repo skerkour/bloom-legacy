@@ -167,3 +167,5 @@ https://developer.atlassian.com/server/confluence/pagination-in-the-rest-api/
 * https://developers.google.com/drive/api/v3/about-files
 * https://www.algolia.com/doc/rest-api/search/#search-index-get
 * https://docs.syncthing.net/dev/events.html
+* https://gitlab.com/gitlab-org/gitlab-ce/issues/26396
+* https://latacora.micro.blog/2018/06/12/a-childs-garden.html
