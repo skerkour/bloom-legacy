@@ -75,6 +75,7 @@ Chaque handler handle one command et result un event
 * https://medium.com/@alex285/from-google-plus-to-facebook-to-twitter-to-mastodon-6a9b0a0cf53a
 * https://medium.com/dark-mountain/problems-with-mastodon-7cea23e6bf41
 * https://news.ycombinator.com/item?id=20375207
+* https://rosenzweig.io/blog/the-federation-fallacy.html
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.
