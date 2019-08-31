@@ -27,3 +27,6 @@ Deployment flow:
 each push -> tests on CI/CD
 push new version on master -> deploy on staging
 manual production deploy
+
+
+* https://www.atlassian.com/agile/project-management/program

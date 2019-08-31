@@ -51,17 +51,17 @@ By using trees, it allows better scalability of group conversations
 
 ### WhatsApp
 
-https://www.whatsapp.com/security/WhatsApp-Security-Whitepaper.pdf
+* https://www.whatsapp.com/security/WhatsApp-Security-Whitepaper.pdf
 
 
 ## Other resources
 
-https://medium.com/@wireapp
-https://wiki.mozilla.org/Identity/CryptoIdeas/01-PBKDF-scrypt#PBKDF_User.2FAttacker_Costs
-https://security.stackexchange.com/questions/126768/which-protocols-exist-for-end-to-end-encrypted-group-chat
-https://hal.inria.fr/hal-01426845/document
-https://www.cryptologie.net/article/447/whatsapp-secure-messaging-transcript-consistency-and-trust-in-a-group-chat/
-
+* https://medium.com/@wireapp
+* https://wiki.mozilla.org/Identity/CryptoIdeas/01-PBKDF-scrypt#PBKDF_User.2FAttacker_Costs
+* https://security.stackexchange.com/questions/126768/which-protocols-exist-for-end-to-end-encrypted-group-chat
+* https://hal.inria.fr/hal-01426845/document
+* https://www.cryptologie.net/article/447/whatsapp-secure-messaging-transcript-consistency-and-trust-in-a-group-chat/
+* https://ianix.com/pub/curve25519-deployment.html
 ## On device encryption
 
 Data stored on device are encrypted. Encyption keys are stored in the device secure KeyStore ([KeyStore](https://developer.android.com/training/articles/keystore) on Android, and [Keychain](https://developer.apple.com/documentation/security/keychain_services) on IOS), for whatever it's worth.
@@ -71,3 +71,8 @@ Data stored on device are encrypted. Encyption keys are stored in the device sec
 
 Connection between clients and server and between servers and servers is encrypted using [INSERT PROTOCOL AND VERSION].
 Please note that Bloom's threat model accept that this encryption in transit is insecure.
+
+
+* https://github.com/nowsecure
+* https://www.packtpub.com/eu/security/improving-your-penetration-testing-skills
+* https://github.com/osquery/osquery/blob/master/README.md

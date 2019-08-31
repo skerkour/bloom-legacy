@@ -127,3 +127,9 @@ pub struct Subscription {
 
 
 ## Views
+
+
+
+-------------------------------
+
+* https://stripe.com/docs/billing/quickstart
