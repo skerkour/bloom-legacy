@@ -212,6 +212,10 @@ reducers: prennent l’état et une commande (action) en paramètres, et modifie
 
 https://github.com/keybase/client/tree/master/go
 
+
+* https://www.robinwieruch.de/the-soundcloud-client-in-react-redux/
+* https://www.rust-lang.org/what/wasm
+
 # Qt books
 
 * https://www.packtpub.com/eu/application-development/end-end-gui-development-qt5

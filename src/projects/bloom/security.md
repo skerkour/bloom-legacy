@@ -96,6 +96,8 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.i-programmer.info/news/83-mobliephone/12440-eu-bug-bounty-software-security-as-a-civil-right.html
 * https://medium.com/@karpov2007/pvs-studio-and-bug-bounties-on-free-and-open-source-software-538f42ee2701
 * https://opaque.link/post/dropgang/
+* https://www.contextis.com/en/blog/basic-electron-framework-exploitation
+* https://news.ycombinator.com/item?id=20772416
 
 # Crypto
 
