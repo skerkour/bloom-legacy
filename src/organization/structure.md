@@ -1,6 +1,10 @@
 # Structure
 
 
+## Language
+
+Bloom's official language is **English**.
+
 ## Company
 
 ### Core team
