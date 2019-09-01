@@ -2,7 +2,7 @@
 
 ## Overview
 
-As explained in [Structure](structure.html) Bloom is a distributed organization.
+As explained in [Structure](structure.md), Bloom is a distributed organization.
 It means no in person meetings, no dicussion arround the coffee machine. It also means that some
 colleague or contributors may not live on the same timezone as you, thus, **everything should be written**.
 Whether it be documentation, research, thoughts or anything else,
