@@ -98,3 +98,6 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://opaque.link/post/dropgang/
 * https://www.contextis.com/en/blog/basic-electron-framework-exploitation
 * https://news.ycombinator.com/item?id=20772416
+* https://www.glasswire.com/
+* https://www.youtube.com/watch?v=V29TkJOHlH4
+* https://news.ycombinator.com/item?id=16743055
