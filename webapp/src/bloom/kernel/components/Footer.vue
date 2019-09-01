@@ -18,7 +18,7 @@
           <ul>
             <li><router-link to="/help">Help & Support</router-link></li>
             <li><router-link class="nav-link" to="/download">Download Apps</router-link></li>
-            <li><a class="nav-link" href="https://gitlab.com/bloom42/docs/blob/master/contributing.md" target="_blank" rel="noopener">Contribute</a></li>
+            <li><a class="nav-link" href="https://theguide.bloom.sh/organization/contributing.html" target="_blank" rel="noopener">Contribute</a></li>
             <li><router-link to="/help">Documentation</router-link></li>
           </ul>
         </v-flex>
@@ -26,10 +26,9 @@
           <h5 class="title pb-3">Community</h5>
           <ul>
             <li><a class="nav-link" href="https://theguide.bloom.sh" target="_blank" rel="noopener">The Guide</a></li>
-            <li><router-link class="nav-link" to="/open-source">Open Source</router-link></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
-            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
           </ul>
         </v-flex>
 
