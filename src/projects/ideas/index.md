@@ -518,3 +518,4 @@
 * https://blog.qt.io/blog/2019/03/29/security-for-connected-devices/
 * https://docs.vector.dev/setup/deployment/roles/service
 * https://www.figma.com/blog/building-a-professional-design-tool-on-the-web/
+* https://termius.com/
