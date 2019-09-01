@@ -1,6 +1,7 @@
 # Workflow
 
 
+* https://www.buggycoder.com/project-management-with-gitlab/
 * Product Spec goes into the Wiki
     * Extremely detailed with mockups and sketches, so there's little scope for confusion
     * With versioning and revisions

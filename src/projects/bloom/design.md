@@ -308,3 +308,4 @@ Le module est juste charge de valider + faire les mutations + dispatch
 * https://hyperpixel.io/
 * https://news.ycombinator.com/item?id=20145206
 * https://www.colorhexa.com/5fcdff
+* https://blog.bitsrc.io/building-a-consistent-ui-design-system-4481fb37470f
