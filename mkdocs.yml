@@ -73,6 +73,13 @@ nav:
 
   - Engineering:
     - Setup: engineering/setup.md
+    - Languages:
+      - Rust: engineering/languages/rust.md
+      - TypeScript: engineering/languages/typescript.md
+      - Vue: engineering/languages/vue.md
+      - JavaScript: engineering/languages/javascript.md
+      - Elixir: engineering/languages/elixir.md
+      - Go: engineering/languages/go.md
     - Templates:
       - Git: engineering/templates/git.md
       - Editor Config: engineering/templates/editor_config.md
