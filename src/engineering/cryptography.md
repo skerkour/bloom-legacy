@@ -90,3 +90,13 @@
 * https://elasticsecurity.wordpress.com/2016/04/26/a-deeper-look-at-whatsapp-end-to-end-encryption/
 * https://hackernoon.com/e2ee-app-backends-286cc94b8a7
 * https://github.com/nextcloud/end_to_end_encryption/blob/master/doc/api.md
+
+
+-------------------
+
+* https://blog.talosintelligence.com/2018/12/secureim.html
+* https://hawkpost.co/
+* https://news.ycombinator.com/item?id=12742395
+* https://news.ycombinator.com/item?id=14852157
+* https://github.com/spieglt/flyingcarpet
+* https://news.ycombinator.com/item?id=14976113
