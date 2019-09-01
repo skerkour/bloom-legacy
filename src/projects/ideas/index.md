@@ -182,6 +182,20 @@
 * https://news.ycombinator.com/item?id=19432957
 
 
+### Cloud gaming
+
+* https://blog.parsecgaming.com/a-primer-on-building-udp-networking-protocols-how-we-deliver-low-latency-cloud-gaming-1987806feb62
+* https://blog.parsecgaming.com/description-of-parsec-technology-b2738dcc3842
+* https://medium.com/microsoftazure/a-beginners-guide-to-cloud-gaming-c3e8a5915440
+* https://medium.com/@Electronic_Arts/announcing-project-atlas-a-vision-for-a-cloud-native-gaming-future-d58ef77f74db
+* https://github.com/moonlight-stream/moonlight-qt
+* https://github.com/RainwayApp
+* https://blogs.unity3d.com/2018/06/21/bringing-connected-games-within-reach-with-google-cloud/
+* https://docs.microsoft.com/en-us/windows/win32/direct3ddxgi/desktop-dup-api
+* https://blog.parsecgaming.com/computers-as-a-service-how-accessing-technology-will-change-your-relationship-with-computers-80d63a99c674
+* https://www.reddit.com/r/cloudygamer/
+
+
 # Offline first
 
 * https://irisate.com/crdt-for-real-time-collaborative-apps/
@@ -368,3 +382,81 @@
 * https://languagetool.org/fr/
 * https://nomadgate.com/estonian-e-residency-guide/
 * https://www.youtube.com/watch?v=wSdV1M7n4gQ
+
+
+# Solar
+
+* https://www.ecologique-solidaire.gouv.fr/solaire
+
+
+# Identity
+
+* https://medium.com/@buro9/one-account-all-of-google-4d2929066951
+
+
+# Static hosting
+
+* https://gitlab.com/commonshost/core/issues/1
+* https://www.staticgen.com/
+
+
+# RBAC
+
+* https://cloud.google.com/iam/docs/overview#permissions
+* https://cloud.google.com/iam/docs/overview
+
+
+# Logs
+
+* https://www.humio.com/products
+* https://news.ycombinator.com/item?id=20818106
+
+
+# Git hosting
+
+* https://www.jfrog.com/confluence/display/BT/Key+Concepts
+* https://gemfury.com/
+* https://gitee.com/
+* https://www.jfrog.com/confluence/plugins/servlet/mobile?contentId=68420191#content/view/68420191
+
+
+# Digital distribution
+
+* https://www.wired.com/2017/04/why-distribution-still-matters-in-the-internet-age/
+
+
+# Analytics
+
+* https://github.com/GitbookIO/micro-analytics
+* https://engineering.groupon.com/2014/misc/building-a-custom-tracking-and-analytics-platform-information-is-power/
+* http://engineering.curalate.com/2016/10/19/building-a-tracking-pixel.html
+* https://iwringer.wordpress.com/2014/06/20/glimpse-of-the-future-overlaying-realtime-analytics-on-football-broadcasts/
+
+
+# Politics
+
+* https://openpolitics.org.uk/manifesto/
+
+
+# DevOps
+
+* https://docs.gitlab.com/runner/install/docker.html
+* https://docs.gitlab.com/ee/ci/yaml/#tags
+* https://about.gitlab.com/pricing/gitlab-com/feature-comparison/
+* https://about.gitlab.com/2018/11/22/gitlab-11-5-released/#group-security-dashboard
+* https://github.com/m3db/m3
+* https://blog.gruntwork.io/5-lessons-learned-from-writing-over-300-000-lines-of-infrastructure-code-36ba7fadeac1
+* http://james-leahy.com/posts/cicd/
+* https://jvns.ca/blog/2018/12/15/new-talk--high-reliability-infrastructure-migrations/
+
+
+# Programming language
+
+* https://medium.freecodecamp.org/the-programming-language-pipeline-91d3f449c919
+* https://compilers.iecc.com/crenshaw/
+* https://norasandler.com/2017/11/29/Write-a-Compiler.html
+* https://github.com/mmyoji/go-monkey
+* https://www.tutorialspoint.com/compiler_design/compiler_design_symbol_table.htm
+* https://thorstenball.com/blog/2016/11/16/putting-eval-in-go/
+* https://interpreterbook.com/lost/
+* https://hackernoon.com/if-i-were-to-invent-a-programming-language-for-the-21st-century-78ba605c2ed2

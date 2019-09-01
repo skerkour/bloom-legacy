@@ -18,3 +18,10 @@
 * https://medium.com/@chemidy/create-the-smallest-and-secured-golang-docker-image-based-on-scratch-4752223b7324
 * https://medium.com/@shijuvar/building-microservices-with-event-sourcing-cqrs-in-go-using-grpc-nats-streaming-and-cockroachdb-983f650452aa
 * https://ewanvalentine.io/microservices-in-golang-part-10/
+* https://blog.golang.org/pipelines
+* https://www.gmarik.info/blog/2016/experimenting-with-golang-pipelines/
+* https://github.com/trustmaster/goflow
+* https://appliedgo.net/flow/
+* https://github.com/chrislusf/gleam
+* https://fr.slideshare.net/AntonStepanenko/flow-based-programming-in-golang
+* https://aws.amazon.com/fr/step-functions/

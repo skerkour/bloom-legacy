@@ -5,7 +5,7 @@
 
 ### Resources
 
-
+* https://news.ycombinator.com/item?id=19893493
 * https://medium.com/@lucassaltoncardinali/keeping-state-with-the-bottom-navigation-bar-in-flutter-69e4168878e1
 * https://bitbucket.org/arputer/flutter_with_go/src/master/
 * https://flutter.dev/docs/cookbook
