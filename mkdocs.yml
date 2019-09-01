@@ -85,9 +85,6 @@ nav:
 
     - Ideas: projects/ideas/index.md
 
-
-  - People Operations: people_operations/index.md
-
   - Engineering:
     - Setup: engineering/setup.md
     - Cryptography: engineering/cryptography.md
@@ -109,6 +106,8 @@ nav:
       - Vue: engineering/templates/vue.md
     - Licenses:
       - Apache 2.0: engineering/licenses/apache_2.0.md
+
+  - People Operations: people_operations/index.md
 
   - Marketing: marketing/index.md
 
