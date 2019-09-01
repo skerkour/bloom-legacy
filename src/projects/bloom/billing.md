@@ -133,3 +133,6 @@ pub struct Subscription {
 -------------------------------
 
 * https://stripe.com/docs/billing/quickstart
+* https://news.ycombinator.com/item?id=19608140
+* https://news.ycombinator.com/item?id=19473336
+* https://blog.checklyhq.com/managing-eu-vat-with-stripe-for-saas-is-not-that-hard/

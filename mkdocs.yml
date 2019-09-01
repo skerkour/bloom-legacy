@@ -83,6 +83,8 @@ nav:
 
     - Website: projects/website/index.md
 
+    - SANE: projects/sane/index.md
+
     - Ideas: projects/ideas/index.md
 
   - Engineering:
