@@ -1,5 +1,7 @@
 # Vision
 
+https://www.kerkour.fr/blog/bloom-a-free-and-open-source-google/
+
 The future tech is not HTML and webapps whether it please ad networks or not.
 
 A better looking future is better (federated) protocols.

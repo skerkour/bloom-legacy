@@ -3,9 +3,9 @@
 **Go should never be used in any of Bloom's project:**
 
 * Pointers
-* lack ov immutability
-
-
+* Lack of immutability
+* No algebraic data types
+* Imperative paradigm
 
 ## Resources
 
