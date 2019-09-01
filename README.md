@@ -14,7 +14,7 @@ Why? How? What? 👉 Read it online: https://theguide.bloom.sh
 Install [MkDocs](https://github.com/mkdocs/mkdocs).
 
 ```bash
-$ pip3 install --user mkdocs
+$ pip3 install --user mkdocs pymdown-extensions
 ```
 
 

@@ -19,6 +19,8 @@ theme:
     primary: 'blue'
     accent: 'blue'
 
+markdown_extensions:
+  - pymdownx.magiclink
 
 site_name: The Guide
 

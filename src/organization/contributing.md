@@ -15,7 +15,7 @@ want to consider the Documentation or Translation tracks. Documentation and
 Translation are both just as important as code, and we'd be happy to have your
 contributions.
 
-
+<!--
 1. [Overview](#overview)
 2. [Development](#development)
 3. [UX / Design](#ux-design)
@@ -23,11 +23,12 @@ contributions.
 5. [Sponsoring](#sponsoring)
 6. [Getting Help](#getting-help)
 
--------------------------------
+------------------------------- -->
 
 # Overview
 
 In order to coordinate our efforts we have 2 communication channels:
+
 * <a href="https://gitlab.com/groups/bloom42/-/issues" target="_blank" rel="noopener">GitLab issues</a></li>
 * <a href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">a Discord chat</a></li>
 
