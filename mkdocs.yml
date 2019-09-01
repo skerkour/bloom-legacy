@@ -73,6 +73,9 @@ nav:
 
   - Engineering:
     - Setup: engineering/setup.md
+    - Cryptography: engineering/cryptography.md
+    - Mobile: engineering/mobile.md
+    - Qt: engineering/qt.md
     - Languages:
       - Rust: engineering/languages/rust.md
       - TypeScript: engineering/languages/typescript.md
@@ -80,6 +83,9 @@ nav:
       - JavaScript: engineering/languages/javascript.md
       - Elixir: engineering/languages/elixir.md
       - Go: engineering/languages/go.md
+    - Patterns:
+      - Event Sourcing: engineering/patterns/event_sourcing.md
+      - Flux: engineering/patterns/flux.md
     - Templates:
       - Git: engineering/templates/git.md
       - Editor Config: engineering/templates/editor_config.md
