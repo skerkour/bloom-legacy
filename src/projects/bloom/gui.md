@@ -27,6 +27,7 @@ Desktop: Plugin system
 
 * Tout l'etat dans Rust dans une seule struct avec des sous structs, mais c'est galere, comment on libere la memoire des
 fonctions non utilisees ?
+  * https://stackoverflow.com/questions/27791532/how-do-i-create-a-global-mutable-singleton
 
 * Seulement IO, c'est deja un bon debut mais du coup c'est dommage d'avoir acces a tout node, et tout chrome
 

@@ -101,6 +101,31 @@ session_id
 * https://matrix.org/docs/spec/client_server/latest
 * https://github.com/elpheria/rpc-websockets/blob/master/src/lib/client.js
 
+# Messages
+
+```json
+// Adjacently tagged)
+{
+    "type": "com.bloom42.package.message_type",
+    "message": { // or data
+        // ...
+    }
+}
+
+// Internally tagged)
+{
+    "type": "com.bloom42.package.message_type",
+     // ...
+}
+
+// Externally tagged
+{
+    "com.bloom42.package.message_type": {
+     // ...
+    }
+}
+```
+
 
 en gros ca envoie les message, enregistre un callback dans une map pending[id]callback,
 et a chaque fois que la socket recoit un message, on regarde si il y a un ID et si il est dans pending,
