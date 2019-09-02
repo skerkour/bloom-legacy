@@ -101,3 +101,44 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.glasswire.com/
 * https://www.youtube.com/watch?v=V29TkJOHlH4
 * https://news.ycombinator.com/item?id=16743055
+
+
+## Static analysis
+
+* https://www.sonarqube.org/features/quality-gate/
+* https://www.sonarsource.com/products/codeanalyzers/sonarjs.html
+* https://docs.sonarqube.org/latest/analysis/scan/sonarscanner/
+* https://www.sonarlint.org/
+* https://rules.sonarsource.com/go/RSPEC-1186
+* https://www.codacy.com/product
+* https://www.codefactor.io/features
+* https://www.jetbrains.com/upsource/features/automatedcodereview.html
+* https://docs.sonarqube.org/latest/setup/install-server/
+* https://docs.sonarqube.org/latest/user-guide/concepts/
+* https://github.com/SonarSource/sonar-scanner-api/blob/master/api/src/main/java/org/sonarsource/scanner/api/EmbeddedScanner.java
+* https://github.com/SonarSource/sonar-go
+* https://github.com/uartois/sonar-golang
+* https://github.com/SonarSource/sonarts
+* https://docs.sonarqube.org/latest/analysis/languages/javascript
+* https://docs.coala.io/en/latest/Users/Tutorial.html
+* https://github.com/ajinabraham/NodeJsScan
+* https://help.sider.review/introduction#analysis-tools
+* https://golangci.com/
+* https://intercom.help/hound/en/collections/33942-configuration
+* https://docs.codeclimate.com/docs/git-legal
+* https://scrutinizer-ci.com/continuous-analysis
+* https://github.com/alecthomas/gometalinter
+* https://github.com/golangci/awesome-go-linters
+* https://github.com/golangci
+* https://github.com/markstory/lint-review
+* https://livablesoftware.com/best-bots-software-development/
+* http://groups.csail.mit.edu/pac/patchgen/
+* https://github.com/probot/linter
+* https://github.com/marketplace/better-code-hub
+* https://imgbot.net/
+* https://docs.coveralls.io/go
+* https://github.com/topics/static-analysis
+* https://en.wikipedia.org/wiki/Software_metric
+* https://houndci.com/
+* https://rust-lang.github.io/rust-clippy/master/
+* https://styleci.io/

@@ -519,3 +519,5 @@
 * https://docs.vector.dev/setup/deployment/roles/service
 * https://www.figma.com/blog/building-a-professional-design-tool-on-the-web/
 * https://termius.com/
+* https://github.com/SonarSource/sonarqube
+* https://webhint.io/
