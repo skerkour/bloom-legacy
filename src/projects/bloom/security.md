@@ -101,6 +101,30 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.glasswire.com/
 * https://www.youtube.com/watch?v=V29TkJOHlH4
 * https://news.ycombinator.com/item?id=16743055
+* https://www.opendns.com/phishing-quiz/
+* https://www.sonicwall.com/phishing-iq-test-landing/
+* https://www.owasp.org/index.php/Logging_Cheat_Sheet#Purpose
+* https://deepscan.io/home/
+* https://apipulse.tinfoilsecurity.com/
+* https://duo.com/docs
+* https://depfu.com/
+* https://demo.goharbor.io/harbor/sign-in
+* https://alternativeto.net/software/detectify/
+* https://intruder.io/
+* http://patrolserver.com/
+* https://probely.com/
+* https://duo.com/blog/part-1-usability-is-security
+* https://medium.com/@jsoverson/the-lifespan-of-a-data-breach-fac810841b10
+* https://www.knownsec.com/#/
+* https://github.com/knownsec/wam
+* https://github.com/topics/security-hardening
+* https://github.com/topics/security-automation
+* https://gofi.sh/index.html#intro
+* https://gist.github.com/jivoi/724e4b4b22501b77ef133edc63eba7b4
+* https://www.aquasec.com/
+* https://github.com/lizheng3401?tab=repositories
+* http://workinukraine.space/
+* https://medium.com/@tom_35522/securing-your-practice-a1882261b571
 
 
 ## Static analysis
@@ -142,3 +166,14 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://houndci.com/
 * https://rust-lang.github.io/rust-clippy/master/
 * https://styleci.io/
+
+
+# Honypot
+
+* https://jsonsecurity.blogspot.com/2017/01/dir-610-exploit-attack-seen-on-honeypot.html
+* https://labs.mwrinfosecurity.com/blog/high-interaction-honeypots-with-sysdig-and-falco
+* https://github.com/cowrie/cowrie
+* https://www.robertputt.co.uk/basic-malware-analysis-with-cuckoo-sandbox.html
+* https://www.robertputt.co.uk/learn-from-your-attackers-ssh-honeypot.html
+* https://blog.varonis.fr/pourquoi-un-honeypot-nest-pas-une-solution-de-securite-complete/
+* https://www.supinfo.com/articles/single/772-configuration-utilisation-honeypot-test-failles-avec-metasploit

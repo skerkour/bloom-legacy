@@ -312,3 +312,15 @@ Le module est juste charge de valider + faire les mutations + dispatch
 * https://gallery.manypixels.co/
 * https://undraw.co/
 * https://www.drawkit.io/illustrations/shipping-package-colour
+* https://hackertarget.com/cowrie-honeypot-analysis-24hrs/
+* https://sysdig.com/blog/detecting-cryptojacking/
+* https://laskowski-tech.com/2017/12/19/setting-up-a-honeypot-using-opencanary/
+* https://www.deepshankaryadav.net/low-cost-honeypots-as-enterprise-defense-mechanism/
+* https://news.ycombinator.com/item?id=15288720
+* http://thecodist.com/article/every-server-is-a-kind-of-honeypot
+* https://doublepulsar.com/eternalpot-lessons-from-building-a-global-nation-state-smb-exploit-honeypot-infrastructure-3f2a0b064ffe
+* https://hackertarget.com/cowrie-honeypot-analysis-24hrs
+* https://medium.com/@sudojune/deploying-a-honeypot-on-aws-5bb414753f32
+* https://fr.wikipedia.org/wiki/Honeypot
+* https://en.wikipedia.org/wiki/Honeypot_(computing)
+* https://www.leblogduhacker.fr/les-honeypots-des-pieges-a-pirates/
