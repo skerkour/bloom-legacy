@@ -7,7 +7,7 @@ edition = "2018"
 
 [lib]
 name = "bloom_desktop_native"
-crate-type = ["cdylib"]
+crate-type = ["cdylib"] # required by neon
 
 [build-dependencies]
 neon-build = "0.3.1"
@@ -15,8 +15,6 @@ neon-build = "0.3.1"
 [dependencies]
 neon = "0.3.1"
 lazy_static = "1.4.0"
-serde = { version = "1.0", features = ["derive"] }
-serde_json = "1.0"
 neon-serde = "0.2.0"
 bloom_desktop_core = { path = "bloom/core" }
 

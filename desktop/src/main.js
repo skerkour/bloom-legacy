@@ -1,10 +1,48 @@
-const { app, BrowserWindow } = require('electron');
+const {
+  app,
+  BrowserWindow,
+  Tray,
+  Menu,
+} = require('electron');
+const path = require('path');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
+let tray = null;
+
+// show window
+function showWindow() {
+  // const position = getWindowPosition();
+  // mainWindow.setPosition(position.x, position.y, false);
+  mainWindow.show();
+  mainWindow.focus();
+}
+
+// toggle window
+function toggleWindow() {
+  // if (!mainWindow.isVisible()) {
+  showWindow();
+  // }
+}
 
 function createWindow() {
+  // create tray icon
+  tray = new Tray(path.join('public', 'tray_icon.png'));
+  // tray.on('right-click', toggleWindow);
+  tray.on('right-click', (event, bounds) => {
+    const contextMenu = Menu.buildFromTemplate([
+      { label: 'Quit', click: () => { app.quit(); } },
+    ]);
+    tray.popUpContextMenu(contextMenu);
+    // lastTrayIconBounds = bounds;
+  });
+  tray.setIgnoreDoubleClickEvents(true);
+  tray.on('click', (event) => {
+    toggleWindow();
+  });
+  tray.setToolTip('Bloom');
+
   // Create the browser window.
   mainWindow = new BrowserWindow({
     title: 'Bloom',

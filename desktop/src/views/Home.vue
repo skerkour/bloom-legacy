@@ -23,10 +23,21 @@ export default class Home extends Vue {
   // call: any = null;
   result = '';
   count = 0;
+  eventCb: Function | null= null;
 
   async created() {
-    native.on('event', (event: any) => { this.count = event.Tick.count; });
-    this.result = (await native.call()).Tick.count;
+    this.eventCb = (event: any) => {
+      console.log(event);
+      this.count = event.data.count;
+    };
+    native.on('event', this.eventCb);
+    this.result = (await native.call()).count;
+  }
+
+  beforeDestroy() {
+    if (this.eventCb) {
+      native.off('event', this.eventCb);
+    }
   }
 
   // get hello(): string {

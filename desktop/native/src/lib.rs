@@ -104,7 +104,6 @@ use neon::result::JsResult;
 use neon::task::Task;
 use neon::types::{JsFunction, JsUndefined, JsValue};
 use neon::{class_definition, declare_types, impl_managed, register_module};
-use serde::{Serialize, Deserialize};
 
 /// Placeholder to represent work being done on a Rust thread. It could be
 /// reading from a socket or any other long running task.
@@ -158,7 +157,7 @@ use serde::{Serialize, Deserialize};
 // }
 
 
-fn app_thread(app_receiver: mpsc::Receiver<bloom_desktop_core::JsEvent>) -> mpsc::Receiver<bloom_desktop_core::JsEvent> {
+fn app_thread(app_receiver: mpsc::Receiver<bloom_desktop_core::MessageIn>) -> mpsc::Receiver<bloom_desktop_core::MessageOut> {
     // Create sending and receiving channels for the event data
     let (gui_sender, gui_receiver) = mpsc::channel();
 
@@ -173,12 +172,12 @@ fn app_thread(app_receiver: mpsc::Receiver<bloom_desktop_core::JsEvent>) -> mpsc
 /// Reading from a channel `Receiver` is a blocking operation. This struct
 /// wraps the data required to perform a read asynchronously from a libuv
 /// thread.
-pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<bloom_desktop_core::JsEvent>>>);
+pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<bloom_desktop_core::MessageOut>>>);
 
 /// Implementation of a neon `Task` for `NativeAdaptaterTask`. This task reads
 /// from the events channel and calls a JS callback with the data.
 impl Task for NativeAdaptaterTask {
-    type Output = Option<bloom_desktop_core::JsEvent>;
+    type Output = Option<bloom_desktop_core::MessageOut>;
     type Error = String;
     type JsEvent = JsValue;
 
@@ -252,10 +251,10 @@ pub struct NativeAdaptater {
     // `Send + Sync`. Since, correct usage of the `poll` interface should
     // only have a single concurrent consume, we guard the channel with a
     // `Mutex`.
-    events: Arc<Mutex<mpsc::Receiver<bloom_desktop_core::JsEvent>>>,
+    events: Arc<Mutex<mpsc::Receiver<bloom_desktop_core::MessageOut>>>,
 
     // Channel used to perform a controlled shutdown of the work thread.
-    app_sender: mpsc::Sender<bloom_desktop_core::JsEvent>,
+    app_sender: mpsc::Sender<bloom_desktop_core::MessageIn>,
 }
 
 // Implementation of the `JsNativeAdaptater` class. This is the only public
@@ -302,12 +301,11 @@ declare_types! {
             let this = cx.this();
 
             // Unwrap the shutdown channel and send a shutdown command
-            let event = bloom_desktop_core::JsEvent{
+            let message = bloom_desktop_core::MessageIn{
                 id: Some("1".to_string()),
-                data: bloom_desktop_core::Event::Tick{ count: 42 },
-                error: None,
+                data: bloom_desktop_core::MessageData::Tick{ count: 42 },
             };
-            cx.borrow(&this, |emitter| emitter.app_sender.send(event))
+            cx.borrow(&this, |emitter| emitter.app_sender.send(message))
                 .or_else(|err| cx.throw_error(&err.to_string()))?;
 
             Ok(JsUndefined::new().upcast())

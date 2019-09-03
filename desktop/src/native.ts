@@ -75,15 +75,18 @@ class NativeAdaptater extends EventEmitter {
             }
 
             const { id, data, error } = event;
+            // console.log(event);
 
             if (this.inflightCalls.has(id)) {
               const { resolve, reject } = this.inflightCalls.get(id)!;
               this.inflightCalls.delete(id);
-              // check if the event returns data or error
+
+              // check if the event hilds data or error
               if (error) {
                 reject(error);
               } else {
-                resolve(data);
+                // here, data.type does not interest us
+                resolve(data.data);
               }
               return;
             }
