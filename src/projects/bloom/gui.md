@@ -47,6 +47,13 @@ notifications ?
 global events/stream ?
 
 
+question: ls "rpc" stub entre Rust est JS on le met de quel cote? Rust ou JS?
+
+Comment on organise rust pour qu'il puisse emettre des events?
+
+threads?
+
+
 -----------------
 
 # Apps

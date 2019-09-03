@@ -44,6 +44,7 @@
 * https://hackaday.io/project/159811-esp32-wiphone
 * https://www.motherjones.com/politics/2013/08/mesh-internet-privacy-nsa-isp/
 * https://medium.com/s/story/why-decentralization-matters-5e3f79f7638e
+* https://news.ycombinator.com/item?id=20861948
 
 
 # Raspberry Pi

@@ -7,3 +7,5 @@ Bloom organization. He has all rights within this organization. Being an human h
 
 By being [INTJ](https://www.16personalities.com/intj-personality) his sens of focus is really intense.
 He may not respond to you because it does not find what you say intersting enough.
+
+You don't have to trust him, you have to believe in him. You have to have faith.
