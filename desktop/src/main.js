@@ -4,8 +4,7 @@ const {
   Tray,
   Menu,
 } = require('electron');
-const path = require('path');
-
+const config = require('./config');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow = null;
@@ -28,7 +27,7 @@ function toggleWindow() {
 
 function createWindow() {
   // create tray icon
-  tray = new Tray(path.join('public', 'tray_icon.png'));
+  tray = new Tray(config.TRAY_ICON);
   // tray.on('right-click', toggleWindow);
   tray.on('right-click', (event, bounds) => {
     const contextMenu = Menu.buildFromTemplate([
@@ -45,16 +44,17 @@ function createWindow() {
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
-    title: 'Bloom',
+    title: config.WINDOW_TITLE,
     width: 800,
     height: 600,
     webPreferences: {
       nodeIntegration: true,
     },
+    icon: config.WINDOW_ICON,
   });
 
   // and load the index.html of the app.
-  mainWindow.loadURL('http://localhost:8080');
+  mainWindow.loadURL(config.WINDOW_URL);
 
   // Open the DevTools.
   // mainWindow.webContents.openDevTools()
