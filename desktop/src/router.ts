@@ -1,10 +1,14 @@
 import Vue from 'vue';
 import Router from 'vue-router';
-import Home from './views/Home.vue';
+
+import AuthRouter from '@/bloom/auth/router';
+
+import Home from '@/views/Home.vue';
+import store from '@/store';
 
 Vue.use(Router);
 
-export default new Router({
+const router = new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   routes: [
@@ -21,5 +25,33 @@ export default new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
+    ...AuthRouter,
+    {
+      redirect: '/',
+      path: '**',
+    },
   ],
 });
+
+
+router.beforeEach((to, _, next) => {
+  if (to.meta.auth && to.meta.auth.required === true) {
+    if (store.state.is_authenticated) {
+      next();
+    } else if (to.meta.auth.redirect) {
+      next({ path: to.meta.auth.redirect });
+    } else {
+      next({ path: '/sign-in' });
+    }
+  } else if (to.meta.auth && to.meta.auth.forbidden) {
+    if (store.state.is_authenticated) {
+      next({ path: '/' });
+    } else {
+      next();
+    }
+  } else {
+    next();
+  }
+});
+
+export default router;
