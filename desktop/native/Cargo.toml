@@ -1,0 +1,21 @@
+[package]
+name = "bloom_desktop_native"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+
+
+[lib]
+name = "bloom_desktop_native"
+crate-type = ["cdylib"]
+
+[build-dependencies]
+neon-build = "0.3.1"
+
+[dependencies]
+neon = "0.3.1"
+lazy_static = "1.4.0"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+neon-serde = "0.2.0"
+bloom_desktop_core = { path = "./bloom/core" }

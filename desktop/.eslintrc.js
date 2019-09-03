@@ -13,6 +13,7 @@ module.exports = {
     'no-debugger': process.env.NODE_ENV === 'production' ? 'error' : 'off',
     'lines-between-class-members': 'off',
     'class-methods-use-this': 'off',
+    'import/no-unresolved': [2, { ignore: ['bloom_native'] }],
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
@@ -28,6 +29,6 @@ module.exports = {
     },
   ],
   settings: {
-    'import/core-modules': [ 'electron' ],
+    'import/core-modules': [ 'electron', 'bloom_native' ],
   }
 };
