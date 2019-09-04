@@ -45,8 +45,8 @@
 
       <v-flex xs12 sm8 offset-sm2 md6 offset-md3 class="text-xs-left disclaimer mb-4">
         By creating an account, I agree to the
-        <a href="/terms" target="_blank" rel="noopener">Terms of Service</a>
-        and <a href="/privacy" target="_blank" rel="noopener">Privacy policy</a>.
+        <a @click="openTermsOfService">Terms of Service</a>
+        and <a @click="openPrivacyPolicy">Privacy policy</a>.
       </v-flex>
 
       <v-flex xs12 text-xs-center id="flex-btn">
@@ -62,6 +62,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import router from '@/router'; // eslint-disable-line import/no-cycle
+
+const { shell } = (window as any).require('electron');
+const config = require('@/config');
 
 
 @Component
@@ -105,6 +108,14 @@ export default class RegisterForm extends Vue {
 
   lowercaseEmail() {
     this.email = this.email.toLowerCase();
+  }
+
+  openTermsOfService() {
+    shell.openExternal(config.TERMS_URL);
+  }
+
+  openPrivacyPolicy() {
+    shell.openExternal(config.PRIVACY_URL);
   }
 }
 </script>

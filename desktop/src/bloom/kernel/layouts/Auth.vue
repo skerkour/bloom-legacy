@@ -1,24 +1,26 @@
 <template>
-  <v-container grid-list-xl text-xs-center>
-    <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
-      <div id="main-card" class="elevation-0">
+  <v-content>
+    <v-container grid-list-xl text-xs-center>
+      <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
+        <div id="main-card">
 
-        <v-tabs fixed-tabs>
-          <v-tab ripple to="/sign-in">Sign in</v-tab>
-          <v-tab ripple to="/register">Create account</v-tab>
-        </v-tabs>
-        <router-view></router-view>
+          <v-tabs fixed-tabs class="mb-5">
+            <v-tab ripple to="/sign-in">Sign in</v-tab>
+            <v-tab ripple to="/register">Create account</v-tab>
+          </v-tabs>
+          <router-view></router-view>
 
-      <div id="forgot-link">
-        <router-link to="/myaccount/recovery/request">Forgot account?</router-link>
-      </div>
-      <div id="help-link">
-        <router-link to="/help">Help</router-link>
-      </div>
+        <div class="mb-5 mt-5">
+          <router-link to="/myaccount/recovery/request">Forgot account?</router-link>
+        </div>
+        <div>
+          <router-link to="/help">Help</router-link>
+        </div>
 
-      </div>
-    </v-flex>
-  </v-container>
+        </div>
+      </v-flex>
+    </v-container>
+  </v-content>
 </template>
 
 
@@ -49,17 +51,6 @@ export default class Auth extends Vue {
   text-transform: none; /* overwrite default 'uppercase' */
 }
 
-#main-card {
-  border-radius: 4px;
-}
-
-a {
-  text-decoration: none;
-}
-a:hover {
-  text-decoration: underline;
-}
-
 #main {
   margin-bottom: 20px;
 }
@@ -76,8 +67,7 @@ a:hover {
   text-decoration: none;
 }
 
-#forgot-link {
-  margin-top: 8px;
-  margin-bottom: 30px;
+.theme--light.v-tabs>.v-tabs-bar {
+  background-color: transparent;
 }
 </style>

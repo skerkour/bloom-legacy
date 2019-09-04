@@ -56,4 +56,12 @@ export default class App extends Vue {
     }
   }
 }
+
+a {
+  text-decoration: none;
+}
+
+.blm-underline-hover:hover {
+  text-decoration: underline;
+}
 </style>

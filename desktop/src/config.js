@@ -9,4 +9,6 @@ module.exports = {
   WINDOW_DEFAULT_HEIGHT: 610,
   WINDOW_MIN_WIDTH: 640,
   WINDOW_MIN_HEIGHT: 550,
+  TERMS_URL: 'https://bloom.sh/terms',
+  PRIVACY_URL: 'https://bloom.sh/privacy',
 };
