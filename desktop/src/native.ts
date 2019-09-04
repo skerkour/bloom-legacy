@@ -1,30 +1,25 @@
-// const util = require('util');
-// const native = require('bloom_native');
+import { Subject } from 'rxjs';
 
-// class Native {
-//   // call: Function = util.promisify(native.call);
-//   // hello: Function = native.hello;
-// }
-
-// export default new Native();
-
-const { EventEmitter } = require('events');
+// const { EventEmitter } = require('events');
 const { promisify } = require('util');
 const { NativeAdaptater: Native } = require('bloom_native');
+
 
 // The `NativeAdaptater` class provides glue code to abstract the `poll`
 // interface provided by the Neon class. It may be constructed and used
 // as a normal `EventEmitter`, including use by multiple subscribers.
-class NativeAdaptater extends EventEmitter {
+class NativeAdaptater { // extends EventEmitter {
   // This map contains all our { resolve, reject } promises object for our in flight calls from the
   // call method.
-  inflightCalls = new Map<string, any>();
+  private inflightCalls = new Map<string, any>();
 
   // native is our Native class instancied once
-  native: any = null;
+  private native: any = null;
+
+  notification: Subject<any> = new Subject<any>();
 
   constructor() {
-    super();
+    // super();
 
     // Create an instance of the Neon class
     this.native = new Native();
@@ -68,20 +63,19 @@ class NativeAdaptater extends EventEmitter {
       // }
       return (
         poll()
-          .then((event: any) => {
+          .then((message: any) => {
             // Timeout on poll, no data to emit
-            if (!event) {
+            if (!message) {
               return;
             }
 
-            const { id, data, error } = event;
-            // console.log(event);
+            const { id, data, error } = message;
 
             if (this.inflightCalls.has(id)) {
               const { resolve, reject } = this.inflightCalls.get(id)!;
               this.inflightCalls.delete(id);
 
-              // check if the event hilds data or error
+              // check if the message holds data or error
               if (error) {
                 reject(error);
               } else {
@@ -91,11 +85,12 @@ class NativeAdaptater extends EventEmitter {
               return;
             }
 
-            // Emit the event
-            this.emit('event', data);
+            // Emit the notification
+            this.notify(data);
           })
           // Emit errors
-          .catch((err: any) => this.emit('error', err))
+          // .catch((err: any) => this.emit('error', err))
+          .catch((err: any) => this.notification.error(err))
           // Schedule the next iteration of the loop. This is performed with
           // a `setImmediate` to extending the promise chain indefinitely
           // and causing a memory leak.
@@ -113,6 +108,12 @@ class NativeAdaptater extends EventEmitter {
       this.inflightCalls.set(callUuid, { resolve, reject });
       this.native.call({ id: callUuid, data });
     });
+  }
+
+  // this method is called when received messages does not contains an 'id' field
+  private notify(message: any) {
+    // this.emit('notification', data);
+    this.notification.next(message);
   }
 }
 

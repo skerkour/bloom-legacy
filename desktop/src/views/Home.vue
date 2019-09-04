@@ -9,6 +9,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Subscription } from 'rxjs';
 import HelloWorld from '@/components/HelloWorld.vue';
 import native from '@/native';
 
@@ -23,25 +24,20 @@ export default class Home extends Vue {
   // call: any = null;
   result = '';
   count = 0;
-  eventCb: Function | null= null;
+  subscription: Subscription | null = null;
 
   async created() {
-    this.eventCb = (event: any) => {
+    this.subscription = native.notification.subscribe((event: any) => {
       console.log(event);
       this.count = event.data.count;
-    };
-    native.on('event', this.eventCb);
+    });
     this.result = (await native.call()).count;
   }
 
   beforeDestroy() {
-    if (this.eventCb) {
-      native.off('event', this.eventCb);
+    if (this.subscription) {
+      this.subscription.unsubscribe();
     }
   }
-
-  // get hello(): string {
-  //   return native.hello();
-  // }
 }
 </script>
