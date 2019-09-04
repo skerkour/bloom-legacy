@@ -11,4 +11,5 @@ module.exports = {
   WINDOW_MIN_HEIGHT: 550,
   TERMS_URL: 'https://bloom.sh/terms',
   PRIVACY_URL: 'https://bloom.sh/privacy',
+  HELP_URL: 'https://bloom.sh/help',
 };

@@ -14,7 +14,7 @@
           <router-link to="/myaccount/recovery/request">Forgot account?</router-link>
         </div>
         <div>
-          <router-link to="/help">Help</router-link>
+          <a @click="openHelp">Help</a>
         </div>
 
         </div>
@@ -27,6 +27,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 
+const { shell } = (window as any).require('electron');
+const config = require('@/config');
+
 
 @Component
 export default class Auth extends Vue {
@@ -36,6 +39,9 @@ export default class Auth extends Vue {
   // lifecycle
   // watch
   // methods
+  openHelp() {
+    shell.openExternal(config.HELP_URL);
+  }
 }
 </script>
 
