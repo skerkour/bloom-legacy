@@ -45,8 +45,10 @@ function createWindow() {
   // Create the browser window.
   mainWindow = new BrowserWindow({
     title: config.WINDOW_TITLE,
-    width: 800,
-    height: 600,
+    width: config.WINDOW_DEFAULT_WIDTH,
+    height: config.WINDOW_DEFAULT_HEIGHT,
+    minWidth: config.WINDOW_MIN_WIDTH,
+    minHeight: config.WINDOW_MIN_HEIGHT,
     webPreferences: {
       nodeIntegration: true,
     },

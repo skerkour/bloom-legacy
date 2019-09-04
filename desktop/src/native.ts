@@ -71,7 +71,7 @@ class NativeAdaptater { // extends EventEmitter {
 
             const { id, data, error } = message;
 
-            if (this.inflightCalls.has(id)) {
+            if (id !== undefined && this.inflightCalls.has(id)) {
               const { resolve, reject } = this.inflightCalls.get(id)!;
               this.inflightCalls.delete(id);
 
@@ -98,7 +98,7 @@ class NativeAdaptater { // extends EventEmitter {
       );
     };
 
-    // // Start the polling loop
+    // Start the polling loop
     loop();
   }
 
@@ -110,7 +110,8 @@ class NativeAdaptater { // extends EventEmitter {
     });
   }
 
-  // this method is called when received messages does not contains an 'id' field
+  // this method is called when received messages does not contains an 'id' field and thus are not
+  // responses to async calls
   private notify(message: any) {
     // this.emit('notification', data);
     this.notification.next(message);

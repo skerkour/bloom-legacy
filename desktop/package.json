@@ -8,7 +8,7 @@
     "email": "hello@bloom.sh"
   },
   "private": true,
-  "main": "src/main.js",
+  "main": "src/main_electron.js",
   "scripts": {
     "start": "electron .",
     "serve": "vue-cli-service serve",

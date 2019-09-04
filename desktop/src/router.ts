@@ -25,6 +25,7 @@ const router = new Router({
       // which is lazy-loaded when the route is visited.
       component: () => import(/* webpackChunkName: "about" */ './views/About.vue'),
     },
+
     ...AuthRouter,
     {
       redirect: '/',
@@ -35,23 +36,33 @@ const router = new Router({
 
 
 router.beforeEach((to, _, next) => {
-  if (to.meta.auth && to.meta.auth.required === true) {
-    if (store.state.is_authenticated) {
+  if (store.state.is_authenticated === false) {
+    if (to.path === '/sign-in' || to.path === '/register') {
       next();
-    } else if (to.meta.auth.redirect) {
-      next({ path: to.meta.auth.redirect });
     } else {
       next({ path: '/sign-in' });
-    }
-  } else if (to.meta.auth && to.meta.auth.forbidden) {
-    if (store.state.is_authenticated) {
-      next({ path: '/' });
-    } else {
-      next();
     }
   } else {
     next();
   }
+
+  // if (to.meta.auth && to.meta.auth.required === true) {
+  //   if (store.state.is_authenticated) {
+  //     next();
+  //   } else if (to.meta.auth.redirect) {
+  //     next({ path: to.meta.auth.redirect });
+  //   } else {
+  //     next({ path: '/sign-in' });
+  //   }
+  // } else if (to.meta.auth && to.meta.auth.forbidden) {
+  //   if (store.state.is_authenticated) {
+  //     next({ path: '/' });
+  //   } else {
+  //     next();
+  //   }
+  // } else {
+  //   next();
+  // }
 });
 
 export default router;
