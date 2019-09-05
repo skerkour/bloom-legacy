@@ -25,7 +25,7 @@ $ make dev
 2. Use our pinned Rust version
 ```sh
 $ rustup default nightly-2019-08-21
-# rustup component add clippy rls rust-analysis rust-src
+# rustup component add clippy rls rust-analysis rust-src rustfmt
 ```
 
 3. Install [cargo-watch](https://github.com/passcod/cargo-watch)
