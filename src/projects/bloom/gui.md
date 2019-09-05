@@ -246,3 +246,37 @@ https://github.com/keybase/client/tree/master/go
 * https://www.behance.net/gallery/79789491/Perfect-Apps-WEB-Workspace
 * https://rambox.pro/#home
 * https://wavebox.io/
+
+
+* 2 sidebar, 1 pour les apps, 1 pour l'app en cours, avec une AppBar, icon de compte dans sidebar
+
+comment on change de groupe ?
+en cliquant sur notre profile, s'affiche la liste des groupes
+
+
+comment on change de compte ?
+
+combien de click pour aller d'une app d'un groupe, vers une autre d'une autre groupe ?
+1 click sur notre profile, 1 click sur le groupe, 1 click sur l'app
+
+* 2 sidebars, 1 pour les groupes, 1 pour l'app en cours, avec une Appbar, icon de compte dans AppBar
+
+comment on change de compte ?
+
+
+combien de click pour aller d'une app d'un groupe, vers une autre d'une autre groupe ?
+1 click sur le groupe, 1 click sur la liste des apps, 1 click sur l'app
+
+* 1 sidebar, ave cun bouton pour afficher les apps, icon de compte dans AppBar
+
+Mais comment on change de groupe ?
+en cliquant sur notre profile, s'affiche la liste des groupes
+
+1 click sur notre profile, 1 click sur le groupe, 1 click sur l'app
+
+
+le plus important:
+
+* Changer d'app ? -> productivity (station, rambox)
+
+* Changer de groupe ? -> social (slack, discord)
