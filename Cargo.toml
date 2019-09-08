@@ -50,7 +50,6 @@ members = [
     "libs/diesel-enum-derive",
 
     "bloom/kernel",
-    # "bloom/api",
     "bloom/drive",
     "bloom/notes",
     "bloom/contacts",
