@@ -2,4 +2,4 @@
 # see diesel.rs/guides/configuring-diesel-cli
 
 [print_schema]
-file = "kernel/src/db/schema.rs"
+file = "bloom/kernel/src/db/schema.rs"

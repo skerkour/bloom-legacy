@@ -36,7 +36,7 @@ fn main() {
 
     let (_log_guard, logger) = log::setup_slog();
 
-    let sys = System::new("kernel");
+    let sys = System::new("bloom_server");
     let db_actor_addr = db::init(&cfg);
     let binding_addr = format!("0.0.0.0:{}", &cfg.port);
 
@@ -74,7 +74,7 @@ fn main() {
         )
 
         .configure(app::config(cfg.clone()))
-        .default_service(web::route().to(app::p404))
+        .default_service(web::route().to(api::route_404))
     })
     .backlog(8192)
     .keep_alive(60)

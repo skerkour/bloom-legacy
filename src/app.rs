@@ -1,5 +1,4 @@
-use actix_files;
-use actix_web::{web, Result as ActixResult};
+use actix_web::{web};
 
 use admin::api::v1 as adminv1;
 use bitflow::api::v1 as bitflowv1;
@@ -12,20 +11,11 @@ use music::api::v1 as musicv1;
 use notes::api::v1 as notesv1;
 use phaser::api::v1 as phaserv1;
 
-// 404
-pub fn p404() -> ActixResult<actix_files::NamedFile> {
-    Ok(actix_files::NamedFile::open("public/index.html")?
-        .set_status_code(http::StatusCode::NOT_FOUND))
-}
-
 pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {
     return move |cfg| {
-        cfg.service(
-            web::scope("/api")
-                .route("", web::get().to(api::index))
-                .default_service(web::route().to(api::route_404))
+        cfg.route("", web::get().to(api::index))
                 // kernel
-                .route("/kernel/config.js", web::get().to(api::webapp_env))
+                // .route("/kernel/config.js", web::get().to(api::webapp_env))
                 // myaccount
                 .service(
                     web::scope("/myaccount")
@@ -357,13 +347,13 @@ pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {
                                 .route(web::get().to_async(adminv1::accounts::account::get))
                                 .route(web::delete().to_async(adminv1::accounts::account::delete)),
                         ),
-                ),
-        )
-        .service(
-            // serve webapp
-            actix_files::Files::new("/", "public/")
-                .index_file("index.html")
-                .default_handler(web::route().to(p404)),
-        );
+                );
+        // );
+        // .service(
+        //     // serve webapp
+        //     actix_files::Files::new("/", "public/")
+        //         .index_file("index.html")
+        //         .default_handler(web::route().to(p404)),
+        // );
     };
 }
