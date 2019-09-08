@@ -61,7 +61,6 @@ DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
-shell cat Cargo.toml  | grep version | cut -d '"' -f4
 
 all: build
 
