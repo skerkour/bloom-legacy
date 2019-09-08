@@ -8,9 +8,9 @@ publish = false
 
 [dependencies]
 kernel = { path = "../kernel" }
-diesel_as_jsonb = { path = "../rust_crates/diesel_as_jsonb" }
-eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
-mimesniff = { path = "../rust_crates/mimesniff-rs" }
+diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
+eventsourcing = { path = "../../libs/eventsourcing-rs" }
+mimesniff = { path = "../../libs/mimesniff-rs" }
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

@@ -8,12 +8,12 @@ publish = false
 
 
 [dependencies]
-diesel_as_jsonb = { path = "../rust_crates/diesel_as_jsonb" }
-bcrypt = { path = "../rust_crates/bcrypt-rs" }
-eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
-mimesniff = { path = "../rust_crates/mimesniff-rs" }
-hex = { path = "../rust_crates/hex-rs" }
-try_future = { path = "../rust_crates/rust-try-future" }
+diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
+bcrypt = { path = "../../libs/bcrypt-rs" }
+eventsourcing = { path = "../../libs/eventsourcing-rs" }
+mimesniff = { path = "../../libs/mimesniff-rs" }
+hex = { path = "../../libs/hex-rs" }
+try_future = { path = "../../libs/rust-try-future" }
 
 regex = "1"
 failure = "0.1.5"

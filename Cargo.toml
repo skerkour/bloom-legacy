@@ -1,15 +1,36 @@
-# [package]
-# name = "kernel"
-# version = "0.1.3"
-# authors = ["z0mbie42 <sylvain@kerkour.fr>"]
-# edition = "2018"
-# homepage = "https://bloom.sh"
-# repository = "https://github.com/bloom42/kernel.git"
-# description = "Open internet services"
-# keywords = ["bloom"]
-# license = "MPL-2.0"
-# publish = false
+[package]
+name = "api"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+license = "AGPL-3.0"
 
+[dependencies]
+eventsourcing = { path = "libs/eventsourcing-rs" }
+
+
+kernel = { path = "bloom/kernel" }
+notes = { path = "bloom/notes" }
+contacts = { path = "bloom/contacts" }
+drive = { path = "bloom/drive" }
+gallery = { path = "bloom/gallery" }
+music = { path = "bloom/music" }
+bitflow = { path = "bloom/bitflow" }
+phaser = { path = "bloom/phaser" }
+# billing = { path = "../billing" }
+admin = { path = "bloom/admin" }
+calendar = { path = "bloom/calendar" }
+
+
+actix-web = "1.0.0"
+actix = "0.8"
+actix-files = "0.1.1"
+rusoto_core = "0.39"
+rusoto_s3 = "0.39"
+num_cpus = "1.0"
+http = "0.1.0"
+sentry = "0.15.2"
+sentry-actix = "0.15.5"
 
 [profile.release]
 # for error tracking
@@ -17,27 +38,28 @@ debug = true
 lto = true
 
 
+
 [workspace]
 members = [
-    "rust_crates/diesel_as_jsonb",
-    "rust_crates/bcrypt-rs",
-    "rust_crates/hex-rs",
-    "rust_crates/eventsourcing-rs",
-    "rust_crates/eventsourcing_derive",
-    "rust_crates/mimesniff-rs",
-    "rust_crates/diesel-derive-enum",
-    "rust_crates/diesel-enum-derive",
+    "libs/diesel_as_jsonb",
+    "libs/bcrypt-rs",
+    "libs/hex-rs",
+    "libs/eventsourcing-rs",
+    "libs/eventsourcing_derive",
+    "libs/mimesniff-rs",
+    "libs/diesel-derive-enum",
+    "libs/diesel-enum-derive",
 
-    "kernel",
-    "api",
-    "drive",
-    "notes",
-    "contacts",
-    "gallery",
-    "music",
-    "bitflow",
-    "phaser",
+    "bloom/kernel",
+    # "bloom/api",
+    "bloom/drive",
+    "bloom/notes",
+    "bloom/contacts",
+    "bloom/gallery",
+    "bloom/music",
+    "bloom/bitflow",
+    "bloom/phaser",
     # "billing",
-    "admin",
-    "calendar",
+    "bloom/admin",
+    "bloom/calendar",
 ]

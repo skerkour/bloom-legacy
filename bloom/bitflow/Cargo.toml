@@ -9,10 +9,10 @@ publish = false
 
 [dependencies]
 kernel = { path = "../kernel" }
-diesel_as_jsonb = { path = "../rust_crates/diesel_as_jsonb" }
-eventsourcing = { path = "../rust_crates/eventsourcing-rs" }
+diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
+eventsourcing = { path = "../../libs/eventsourcing-rs" }
 drive = { path = "../drive" }
-diesel_enum_derive = { path = "../rust_crates/diesel-enum-derive" }
+diesel_enum_derive = { path = "../../libs/diesel-enum-derive" }
 
 
 regex = "1"
