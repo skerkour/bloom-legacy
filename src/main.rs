@@ -2,9 +2,10 @@ mod app;
 
 use actix::System;
 use actix_web::{
-    http::header, middleware, middleware::cors::Cors, middleware::Logger,
+    http::header, middleware, middleware::Logger,
     middleware::NormalizePath, web, App, HttpServer,
 };
+use actix_cors::Cors;
 use kernel::{
     api, config, db, log,
     log::macros::{slog_info, slog_o},
