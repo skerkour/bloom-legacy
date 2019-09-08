@@ -77,7 +77,7 @@ impl From<ConfigFile> for Config {
             });
         }
 
-        let version = include_str!("../../../VERSION.txt").trim().to_string();
+        let version = env!("CARGO_PKG_VERSION").trim().to_string();
 
         let mut disabled = DisabledConfig::default();
 
