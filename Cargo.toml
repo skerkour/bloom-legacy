@@ -22,14 +22,14 @@ admin = { path = "bloom/admin" }
 calendar = { path = "bloom/calendar" }
 
 
-actix-web = "1.0.0"
+actix-web = "1.0.7"
 actix = "0.8"
 rusoto_core = "0.39"
 rusoto_s3 = "0.39"
 num_cpus = "1.0"
 http = "0.1.0"
-sentry = "0.15.2"
-sentry-actix = "0.15.5"
+sentry = "0.17"
+sentry-actix = "0.17"
 
 [profile.release]
 # for error tracking

@@ -346,13 +346,5 @@ pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {
                         .route(web::delete().to_async(adminv1::accounts::account::delete)),
                 ),
         );
-        // .default_service(web::route().to(api::route_404));
-        // );
-        // .service(
-        //     // serve webapp
-        //     actix_files::Files::new("/", "public/")
-        //         .index_file("index.html")
-        //         .default_handler(web::route().to(p404)),
-        // );
     };
 }
