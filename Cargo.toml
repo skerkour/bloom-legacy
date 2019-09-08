@@ -4,6 +4,11 @@ version = "0.14.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
 license = "AGPL-3.0"
+homepage = "https://bloom.sh"
+repository = "https://gitlab.com/bloom42/server.git"
+description = "Empowering the world with open technologies 🌍"
+keywords = ["bloom42", "bloom"]
+
 
 [dependencies]
 eventsourcing = { path = "libs/eventsourcing-rs" }
