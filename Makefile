@@ -34,30 +34,13 @@
 # 	git push origin v$(VERSION)
 
 
-
-# docker_build:
-# 	docker build -t $(DOCKER_IMAGE):latest .
-# 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
-
-# docker_login:
-# 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
-
-# docker_release:
-# 	docker push $(DOCKER_IMAGE):$(VERSION)
-# 	docker push $(DOCKER_IMAGE):latest
-
-# docker_release_nightly:
-# 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
-# 	docker push $(DOCKER_IMAGE):nightly-$(DATE)
-
-
 .PHONY: build clean re dev test build_static
 .PHONY: disposable_emails lint fmt fmt_check lint
 
 DIST_DIR = dist
 NAME := bloom
 VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
-DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
+DOCKER_IMAGE = registry.gitlab.com/bloom42/server
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
@@ -114,3 +97,25 @@ crates_publish:
 
 disposable_emails:
 	cd scripts && ./disposable_emails.sh
+
+
+build_from_artifacts:
+	mkdir -p $(DIST_DIR)
+	cp -r server/dist/* $(DIST_DIR)
+	cp -r webapp/dist $(DIST_DIR)/public
+
+
+docker_build:
+	docker build -t $(DOCKER_IMAGE):latest .
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
+
+docker_login:
+	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+
+docker_release:
+	docker push $(DOCKER_IMAGE):$(VERSION)
+	docker push $(DOCKER_IMAGE):latest
+
+docker_release_nightly:
+	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
+	docker push $(DOCKER_IMAGE):nightly-$(DATE)
