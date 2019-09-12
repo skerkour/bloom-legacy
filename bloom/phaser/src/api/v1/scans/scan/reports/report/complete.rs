@@ -68,7 +68,7 @@ pub fn post(
     );
 }
 
-fn handle_upload(report_path: &str, field: Field) -> Box<Stream<Item = (), Error = Error>> {
+fn handle_upload(report_path: &str, field: Field) -> Box<dyn Stream<Item = (), Error = Error>> {
     let file = match fs::File::create(report_path) {
         Ok(file) => file,
         Err(e) => return Box::new(future::err(error::ErrorInternalServerError(e)).into_stream()),

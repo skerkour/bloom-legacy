@@ -1,11 +1,10 @@
 mod app;
 
 use actix::System;
-use actix_web::{
-    http::header, middleware, middleware::Logger,
-    middleware::NormalizePath, web, App, HttpServer,
-};
 use actix_cors::Cors;
+use actix_web::{
+    http::header, middleware, middleware::Logger, middleware::NormalizePath, web, App, HttpServer,
+};
 use kernel::{
     api, config, db, log,
     log::macros::{slog_info, slog_o},

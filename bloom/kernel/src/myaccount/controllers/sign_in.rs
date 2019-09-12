@@ -31,7 +31,7 @@ impl Handler<SignIn> for DbActor {
             if msg.username.contains('@') {
                 return Err(KernelError::Validation(
                     "You need to sign in with your username, not your email.".to_string(),
-                ))?;
+                ));
             }
 
             let account: Account = kernel_accounts::dsl::kernel_accounts
@@ -63,7 +63,7 @@ impl Handler<SignIn> for DbActor {
             if account.disabled_at.is_some() {
                 return Err(KernelError::Unauthorized(
                     "Account is disabled. Please contact support.".to_string(),
-                ))?;
+                ));
             }
 
             // start Session

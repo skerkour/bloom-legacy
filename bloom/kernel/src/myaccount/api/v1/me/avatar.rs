@@ -62,11 +62,11 @@ pub fn put(
     );
 }
 
-fn handle_multipart_item(field: Field) -> Box<Stream<Item = Vec<u8>, Error = Error>> {
+fn handle_multipart_item(field: Field) -> Box<dyn Stream<Item = Vec<u8>, Error = Error>> {
     return Box::new(read_file(field).into_stream());
 }
 
-fn read_file(field: Field) -> Box<Future<Item = Vec<u8>, Error = Error>> {
+fn read_file(field: Field) -> Box<dyn Future<Item = Vec<u8>, Error = Error>> {
     Box::new(
         field
             .fold(
