@@ -609,6 +609,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "bloom_messages"
+version = "0.1.0"
+dependencies = [
+ "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
 name = "bloom_server"
 version = "0.14.0"
 dependencies = [

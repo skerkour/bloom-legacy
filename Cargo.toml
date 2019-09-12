@@ -66,5 +66,6 @@ members = [
     # "billing",
     "bloom/admin",
     "bloom/calendar",
+    "bloom/messages",
     ".",
 ]
