@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 52.6 (67491) - http://www.bohemiancoding.com/sketch -->
+    <title>notes_icon2_256</title>
+    <desc>Created with Sketch.</desc>
+    <g id="notes_icon2_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(45.000000, 28.000000)">
+            <path d="M166.666667,45.9152362 L166.666667,171 C166.666667,187.016258 153.682924,200 137.666667,200 L29,200 C12.9837423,200 1.96142588e-15,187.016258 0,171 L0,29 C-1.96142588e-15,12.9837423 12.9837423,2.94213882e-15 29,0 L120.991048,-3.00752628e-15 L166.666667,45.9152362 Z" id="Combined-Shape" fill="#FFE15F"></path>
+            <polygon id="Path-3" fill="#FFECB4" points="166.666667 45.8333333 120.833333 0 120.833333 45.8333333"></polygon>
+            <path d="M39.5833333,81.25 L127.083333,81.25" id="Line" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square"></path>
+            <path d="M39.5833333,102.083333 L127.083333,102.083333" id="Line" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square"></path>
+            <path d="M39.5833333,122.916667 L127.083333,122.916667" id="Line" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square"></path>
+            <path d="M39.5833333,143.75 L83.3333333,143.75" id="Line" stroke="#FFFFFF" stroke-width="4" stroke-linecap="square"></path>
+        </g>
+    </g>
+</svg>
