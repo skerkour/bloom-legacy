@@ -46,7 +46,7 @@ test:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-08-15
+    - rustup default nightly-2019-08-21
     - rustup component add rustfmt clippy
     - cp bloom.default.sane bloom.sane
     - make fmt_check
@@ -62,7 +62,7 @@ build:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-08-15
+    - rustup default nightly-2019-08-21
     - make build
   artifacts:
     paths:
