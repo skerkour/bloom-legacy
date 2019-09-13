@@ -15,13 +15,13 @@ class _TabChatsViewState extends State<TabChatsView> {
   Widget build(BuildContext context) {
     return ListView.separated(
       itemCount: _conversations.length,
-      separatorBuilder: (BuildContext context, int index) => Divider(),
+      separatorBuilder: (BuildContext context, int index) => const Divider(),
       itemBuilder: (BuildContext context, int i) {
         return ListTile(
           leading: CircleAvatar(
             foregroundColor: Theme.of(context).primaryColor,
             backgroundColor: Colors.grey,
-            backgroundImage: NetworkImage(_conversations[i].avatar),
+            backgroundImage: AssetImage(_conversations[i].avatar),
           ),
           title: Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -32,7 +32,7 @@ class _TabChatsViewState extends State<TabChatsView> {
               ),
               Text(
                 timeToString(_conversations[i].time),
-                style: TextStyle(color: Colors.grey, fontSize: 14.0),
+                style: const TextStyle(color: Colors.grey, fontSize: 14.0),
               ),
             ],
           ),
@@ -40,7 +40,7 @@ class _TabChatsViewState extends State<TabChatsView> {
             padding: const EdgeInsets.only(top: 5.0),
             child: Text(
               _conversations[i].message,
-              style: TextStyle(color: Colors.grey, fontSize: 15.0),
+              style: const TextStyle(color: Colors.grey, fontSize: 15.0),
             ),
           ),
           onTap: () {
@@ -73,64 +73,38 @@ class _Conversation {
   DateTime time;
 }
 
+const String _avatar = 'assets/images/sylvain.jpg';
+
 List<_Conversation> getConversations() {
   return <_Conversation>[
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
     _Conversation(
-        avatar: 'https://www.kerkour.fr/about/sylvain.jpg',
-        name: 'Sylvain Kerkour',
-        message: 'Hello world!'),
+        avatar: _avatar, name: 'Sylvain Kerkour', message: 'Hello world!'),
   ];
 }
 

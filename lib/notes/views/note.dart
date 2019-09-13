@@ -123,7 +123,7 @@ class _NoteState extends State<NoteView> {
                   backgroundCursorColor: Colors.blue,
                 ),
               ),
-              Divider(color: Colors.grey),
+              const Divider(color: Colors.grey),
               Expanded(
                 child: Container(
                   padding: const EdgeInsets.all(5),

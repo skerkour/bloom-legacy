@@ -49,7 +49,7 @@ class _CreateGroupState extends State<CreateGroupView> {
           Row(
             crossAxisAlignment: CrossAxisAlignment.center,
             children: <Widget>[
-              CircleAvatar(
+              const CircleAvatar(
                 child: Icon(Icons.person),
                 backgroundColor: Colors.blue,
                 radius: 32,

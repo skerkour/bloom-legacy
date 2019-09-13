@@ -8,7 +8,7 @@ class TabMeView extends StatefulWidget {
 }
 
 class _TabMeViewState extends State<TabMeView> {
-  static const String _avatar = 'https://www.kerkour.fr/about/sylvain.jpg';
+  static const String _avatar = 'assets/images/sylvain.jpg';
 
   @override
   Widget build(BuildContext context) {
@@ -21,11 +21,12 @@ class _TabMeViewState extends State<TabMeView> {
       children: <Widget>[
         const SizedBox(height: 10),
         Center(
-            child: CircleAvatar(
-          backgroundColor: Colors.grey,
-          backgroundImage: NetworkImage(_avatar),
-          radius: 42,
-        )),
+          child: const CircleAvatar(
+            backgroundColor: Colors.grey,
+            backgroundImage: AssetImage(_avatar),
+            radius: 42,
+          ),
+        ),
         const SizedBox(height: 21),
         Center(child: const Text('My Name', style: TextStyle(fontSize: 21))),
         const SizedBox(height: 5),
@@ -42,7 +43,7 @@ class _TabMeViewState extends State<TabMeView> {
           children: mainApps,
         ),
         const SizedBox(height: 10),
-        Divider(),
+        const Divider(),
         const SizedBox(height: 21),
         Expanded(
           child: GridView.count(

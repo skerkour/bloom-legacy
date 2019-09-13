@@ -100,7 +100,7 @@ class _ChatViewState extends State<ChatView> {
         Flexible(
           child: Text(
             widget.chatEntity.name,
-            style: TextStyle(fontSize: 19),
+            style: const TextStyle(fontSize: 19),
           ),
         ),
       ],
@@ -216,7 +216,7 @@ class _ChatViewState extends State<ChatView> {
             decoration: InputDecoration(
               border: InputBorder.none,
               hintText: 'Type message',
-              hintStyle: TextStyle(color: Colors.grey),
+              hintStyle: const TextStyle(color: Colors.grey),
               prefixIcon: Icon(
                 Icons.tag_faces,
                 color: Colors.grey,
@@ -309,7 +309,7 @@ class _ChatMessages extends StatelessWidget {
         Padding(
           padding: const EdgeInsets.only(right: 52.0),
           child: Text(chatMessage.message,
-              style: TextStyle(
+              style: const TextStyle(
                 fontSize: 18.0,
               )),
         ),
