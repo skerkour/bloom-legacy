@@ -37,6 +37,7 @@ variables:
 cache:
   paths:
     - cargo_home/
+    - target/
 
 
 test:
