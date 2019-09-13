@@ -18,6 +18,7 @@ variables:
   POSTGRES_HOST: postgres
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   RUST_ENV: test
+  RUST_VERSION: nightly-2019-09-11
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
   AWS_ACCESS_KEY_ID: test
@@ -36,7 +37,6 @@ variables:
 cache:
   paths:
     - cargo_home/
-    - target/
 
 
 test:
@@ -46,7 +46,7 @@ test:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-08-21
+    - rustup default $RUST_VERSION
     - rustup component add rustfmt clippy
     - cp bloom.default.sane bloom.sane
     - make fmt_check
@@ -62,7 +62,7 @@ build:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-08-21
+    - rustup default $RUST_VERSION
     - make build
   artifacts:
     paths:

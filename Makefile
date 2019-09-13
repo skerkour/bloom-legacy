@@ -101,8 +101,7 @@ disposable_emails:
 
 build_from_artifacts:
 	mkdir -p $(DIST_DIR)
-	cp -r server/dist/* $(DIST_DIR)
-	cp -r webapp/dist $(DIST_DIR)/public
+	cp -r dist/* $(DIST_DIR)
 
 
 docker_build:
