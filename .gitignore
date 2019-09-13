@@ -66,6 +66,7 @@ node_modules/
 .pub-cache/
 .pub/
 /build/
+ios/Flutter/flutter_export_environment.sh
 
 # Android related
 **/android/**/gradle-wrapper.jar
