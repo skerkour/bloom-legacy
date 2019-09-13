@@ -24,7 +24,7 @@ $ make dev
 
 2. Use our pinned Rust version
 ```sh
-$ rustup default nightly-2019-08-21
+$ rustup default nightly-2019-09-11
 # rustup component add clippy rls rust-analysis rust-src rustfmt
 ```
 
