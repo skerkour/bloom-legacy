@@ -79,7 +79,6 @@ package:docker:
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
 
 
@@ -95,7 +94,6 @@ release:docker:nightly:
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
     - make docker_login
     - make docker_release_nightly
@@ -112,7 +110,6 @@ release:docker:stable:
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
     - make docker_login
     - make docker_release

@@ -99,11 +99,6 @@ disposable_emails:
 	cd scripts && ./disposable_emails.sh
 
 
-build_from_artifacts:
-	mkdir -p $(DIST_DIR)
-	cp -r dist/* $(DIST_DIR)
-
-
 docker_build:
 	docker build -t $(DOCKER_IMAGE):latest .
 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
