@@ -177,3 +177,9 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://www.robertputt.co.uk/learn-from-your-attackers-ssh-honeypot.html
 * https://blog.varonis.fr/pourquoi-un-honeypot-nest-pas-une-solution-de-securite-complete/
 * https://www.supinfo.com/articles/single/772-configuration-utilisation-honeypot-test-failles-avec-metasploit
+
+
+## Cryptography
+
+* https://blog.trailofbits.com/2019/09/11/crypto-2019-takeaways/
+* http://loup-vaillant.fr/tutorials/chacha20-design
