@@ -180,3 +180,39 @@ Le worker renvoie un message pour dire que le message a bien été mis sur s3
 * https://docs.rs/reqwest/0.6.2/reqwest/header/struct.ContentDisposition.html
 * https://github.com/nukeop/nuclear
 * https://github.com/jakubroztocil/cloudtunes
+
+
+## Build
+
+```sh
+$ make
+```
+
+## Development
+
+```sh
+$ make dev_docker_build
+$ make dev_docker_run
+```
+
+
+## Run
+
+
+1. Pull latest Docker image
+```sh
+$ docker pull registry.gitlab.com/bloom42/bitflow:latest
+```
+
+2. Get the latest `bitflow.template.sane` file and move it to `bitflow.sane`
+```sh
+$ wget https://gitlab.com/bloom42/bitflow/raw/dev/bitflow.template.sane?inline=false
+$ mv bitflow.template.sane bitflow.sane
+```
+
+3. Edit `bitflow.sane` with correct values
+
+4. Launch Docker container
+```sh
+$ docker run -d -v `pwd`/bitflow.sane:/bitflow/bitflow.sane:ro registry.gitlab.com/bloom42/bitflow:latest
+```

@@ -207,3 +207,36 @@ http/apifuzz -> on donne un schema openapi -> et ca fuzz l’api
 
 http/graphql/fuzz -> on donne un schema graphie, et ca fuzz l’api
 
+# Run
+
+1. Pull latest Docker image
+```sh
+$ docker pull registry.gitlab.com/bloom42/phaser:latest
+```
+
+2. Get the latest `phaser.template.sane` file and move it to `phaser.sane`
+```sh
+$ wget https://gitlab.com/bloom42/phaser/raw/dev/phaser.template.sane?inline=false
+$ mv phaser.template.sane phaser.sane
+```
+
+3. Edit `phaser.sane` with correct values
+
+4. Launch Docker container
+```sh
+$ docker run -d -v `pwd`/phaser.sane:/phaser/phaser.sane:ro registry.gitlab.com/bloom42/phaser:latest
+```
+
+
+# Build
+
+```sh
+$ make
+```
+
+# Development
+
+```sh
+$ make dev_docker_build
+$ make dev_docker_run
+```
