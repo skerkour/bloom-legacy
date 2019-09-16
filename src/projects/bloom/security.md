@@ -183,3 +183,12 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 
 * https://blog.trailofbits.com/2019/09/11/crypto-2019-takeaways/
 * http://loup-vaillant.fr/tutorials/chacha20-design
+* https://www.cryptologie.net
+* https://www.imperialviolet.org/posts-index.html
+* https://support.1password.com/1password-security/
+* https://support.1password.com/secret-key-security/
+* http://loup-vaillant.fr/articles/implemented-my-own-crypto
+* https://latacora.singles/2018/04/03/cryptographic-right-answers.html
+* https://medium.com/vitelabs/the-selection-of-security-algorithm-of-vite-28180fd986c8
+* https://bettercrypto.org
+
