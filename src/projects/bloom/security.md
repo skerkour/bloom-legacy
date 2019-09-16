@@ -191,4 +191,5 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://latacora.singles/2018/04/03/cryptographic-right-answers.html
 * https://medium.com/vitelabs/the-selection-of-security-algorithm-of-vite-28180fd986c8
 * https://bettercrypto.org
-
+* https://www.reddit.com/r/crypto/comments/d4itki/is_eddsa_with_blake2b_as_hashing_function_secure/
+* https://www.lawfareblog.com/snowden-revelations

@@ -19,11 +19,12 @@ Streaming AEAD)
 
 | Primitive          | Implementations                            |
 | ------------------ | ----------------------------------------------- |
-| AEAD               | CHACHA20_POLY1305, CHACHA20_POLY1305_IETF, XCHACHA20_POLY1305_IETF, AES_256_GCM |
+| AEAD               | XCHACHA20_POLY1305 |
 | Streaming AEAD     | XCHACHA20_POLY1305 |
-<!-- | Digital Signatures | ED25519, EDDSA_BLAKE2B_ED25519 | -->
 | Hash               | BLAKE2B, SHA2_256, SHA2_512, (SHA3_256, SHA3_512) |
 | Key Derivation Functions | SCRYPT, ARGON2I |
+
+<!-- | Digital Signatures | ED25519, EDDSA_BLAKE2B_ED25519 | -->
 <!-- | Hybrid Encryption  | ECIES with AEAD and HKDF                        | -->
 <!-- | Streaming AEAD     | AES-GCM-HKDF-STREAMING, AES-CTR-HMAC-STREAMING  | -->
 <!-- | MAC                | HMAC-SHA2                                       | -->
