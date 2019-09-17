@@ -193,3 +193,11 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://bettercrypto.org
 * https://www.reddit.com/r/crypto/comments/d4itki/is_eddsa_with_blake2b_as_hashing_function_secure/
 * https://www.lawfareblog.com/snowden-revelations
+* https://github.com/wireapp/melissa
+* https://github.com/trailofbits/molasses
+* https://tools.ietf.org/html/draft-irtf-cfrg-xchacha-01
+* https://tools.ietf.org/html/rfc8439
+* https://geti2p.net/spec/proposals/148-eddsa-blake2b-ed25519
+* https://github.com/libra/libra/tree/master/crypto/crypto
+* https://github.com/google/tink/blob/master/docs/PRIMITIVES.md
+* https://github.com/google/tink/blob/master/docs/JAVA-HOWTO.md

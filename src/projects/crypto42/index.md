@@ -1,21 +1,30 @@
-# crypto42-rs overview
+# crypto42
 
-`crypto42-rs` is a cross-platform, secure, easy to use, and hard to misuse Rust cryptographic library.
+[![pipeline status](https://gitlab.com/bloom42/libs/crypto42/badges/dev/pipeline.svg)](https://gitlab.com/bloom42/libs/crypto42/commits/dev)
+
+
+`crypto42` is a cross-platform, secure, easy to use, and hard to misuse cryptographic library in Rust.
 It uses [libsodium](https://github.com/jedisct1/libsodium) as backend.
+
+Repository: https://gitlab.com/bloom42/libs/crypto42
+
+The goal of `crypto42` is to keep it's API surface as minial as possible and to implement the less ciphers
+as possible.
+
+
 
 ## Primitives
 
 - Authenticated Encryption with Associated Data (primitive: AEAD)
-- *streaming* authenticated encryption with associated data (primitive:
+- Streaming Authenticated Encryption with Associated Data (primitive:
 Streaming AEAD)
+- One-way hash function (primitives: Hash).
+- Key Derivation Functions (primitive: KDF)
 <!-- - *deterministic* authenticated encryption with associated data (primitive: -->
 <!-- Deterministic Aead) -->
 <!-- - message authentication codes (primitive: MAC), -->
-- Digital signatures (primitives: PublicKeySign and PublicKeyVerify)
+<!-- - Digital signatures (primitives: PublicKeySign and PublicKeyVerify) -->
 <!-- - hybrid encryption (primitives: HybridEncrypt and HybridDecrypt). -->
-- One-way hash function (primitives: Hash).
-- Key Derivation Functions (primitive: KDF)
-
 
 | Primitive          | Implementations                            |
 | ------------------ | ----------------------------------------------- |
@@ -61,9 +70,8 @@ fn pull(ciphertext) | read()
 ```
 
 
-## Resources
+## Libsodium
 
-* https://geti2p.net/spec/proposals/148-eddsa-blake2b-ed25519
-* https://github.com/libra/libra/tree/master/crypto/crypto
-* https://github.com/google/tink/blob/master/docs/PRIMITIVES.md
-* https://github.com/google/tink/blob/master/docs/JAVA-HOWTO.md
+`crypto42` uses `libsodium` as backend.
+
+`libsodium` documentation: https://libsodium.gitbook.io
