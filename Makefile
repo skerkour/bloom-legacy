@@ -29,9 +29,6 @@
 
 # re: clean build
 
-# release:
-# 	git tag v$(VERSION)
-# 	git push origin v$(VERSION)
 
 
 .PHONY: build clean re dev test build_static
@@ -72,6 +69,10 @@ clean:
 	rm -rf $(DIST_DIR) target/
 
 re: clean build
+
+release:
+	git tag v$(VERSION)
+	git push origin v$(VERSION)
 
 test:
 	cargo test

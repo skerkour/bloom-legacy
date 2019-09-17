@@ -617,7 +617,7 @@ dependencies = [
 
 [[package]]
 name = "bloom_server"
-version = "0.14.0"
+version = "0.15.0"
 dependencies = [
  "actix 0.8.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-cors 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
