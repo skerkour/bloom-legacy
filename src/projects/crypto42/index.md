@@ -11,6 +11,7 @@ Repository: https://gitlab.com/bloom42/libs/crypto42
 The goal of `crypto42` is to keep it's API surface as minial as possible and to implement the less ciphers
 as possible.
 
+Only safe to use/implement ciphers are in the library.
 
 
 ## Primitives
@@ -26,7 +27,7 @@ Streaming AEAD)
 <!-- - Digital signatures (primitives: PublicKeySign and PublicKeyVerify) -->
 <!-- - hybrid encryption (primitives: HybridEncrypt and HybridDecrypt). -->
 
-| Primitive          | Implementations                            |
+| Primitive          | Algorithms                            |
 | ------------------ | ----------------------------------------------- |
 | AEAD               | XCHACHA20_POLY1305 |
 | Streaming AEAD     | XCHACHA20_POLY1305 |
@@ -39,14 +40,6 @@ Streaming AEAD)
 <!-- | MAC                | HMAC-SHA2                                       | -->
 <!-- | Deterministic AEAD | AES-SIV | -->
 
-
-## AEAD
-
-```rust
-fn encrypt() | fn seal()
-fn decrypt() | fn open()
-
-```
 
 ## Hash
 

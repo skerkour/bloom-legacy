@@ -188,7 +188,7 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://support.1password.com/1password-security/
 * https://support.1password.com/secret-key-security/
 * http://loup-vaillant.fr/articles/implemented-my-own-crypto
-* https://latacora.singles/2018/04/03/cryptographic-right-answers.html
+* https://latacora.singles/2018/04/03/cryptographic-right-answers.html (https://news.ycombinator.com/item?id=16748400)
 * https://medium.com/vitelabs/the-selection-of-security-algorithm-of-vite-28180fd986c8
 * https://bettercrypto.org
 * https://www.reddit.com/r/crypto/comments/d4itki/is_eddsa_with_blake2b_as_hashing_function_secure/
@@ -201,3 +201,4 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://github.com/libra/libra/tree/master/crypto/crypto
 * https://github.com/google/tink/blob/master/docs/PRIMITIVES.md
 * https://github.com/google/tink/blob/master/docs/JAVA-HOWTO.md
+* https://news.ycombinator.com/item?id=13364424 (the design of ChaCha20)
