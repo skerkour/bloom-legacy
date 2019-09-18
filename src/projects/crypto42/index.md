@@ -31,35 +31,15 @@ Only safe to use/implement ciphers are available in `crypto42`.
 | Primitive          | Algorithms                            |
 | ------------------ | ----------------------------------------------- |
 | AEAD               | XCHACHA20_POLY1305 |
-| Hash               | BLAKE2B, SHA2_512, SHA2_256, (SHA3_256, SHA3_512) |
+| Hash               | BLAKE2B, SHA2_512, SHA2_256, (SHA3_512, SHA3_256) |
 | Key Derivation Functions | ARGON2ID, ARGON2I, SCRYPT |
 | Public-key signatures | ED25519 |
+
 <!-- | Streaming AEAD     | XCHACHA20_POLY1305 | -->
 <!-- | Hybrid Encryption  | ECIES with AEAD and HKDF                        | -->
 <!-- | MAC                | HMAC-SHA2                                       | -->
 <!-- | Deterministic AEAD | AES-SIV | -->
 
-
-## Hash
-
-```rust
-hash::new()
-fn update() | fn input() | fn write()
-fn finalize() | fn digest((encoding)) | result() | final()
-
-hash::hash(data);
-```
-
-## Streaming AEAD
-
-```rust
-fn init(_push)(key)
-fn push(plaintext) | write(data)
-
-fn init(_pull_)(key)
-fn pull(ciphertext) | read()
-
-```
 
 
 ## Libsodium
