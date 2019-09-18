@@ -47,3 +47,9 @@ Only safe to use/implement ciphers are available in `crypto42`.
 `crypto42` uses `libsodium` as backend.
 
 `libsodium` documentation: https://libsodium.gitbook.io
+
+
+## Fuzzing
+
+In the library's folder, use `make fuzz` to list fuzzing targets and then `cargo fuzz run [target]`
+to run a specific target.
