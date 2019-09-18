@@ -18,8 +18,7 @@ image: python:alpine
 
 before_script:
   - apk add --update make
-  - pip install mkdocs
-
+  - pip install mkdocs pymdown-extensions
 
 build:
   stage: build
