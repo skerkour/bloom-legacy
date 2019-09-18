@@ -203,3 +203,15 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://github.com/google/tink/blob/master/docs/PRIMITIVES.md
 * https://github.com/google/tink/blob/master/docs/JAVA-HOWTO.md
 * https://news.ycombinator.com/item?id=13364424 (the design of ChaCha20)
+* https://www.cossacklabs.com/blog/end-to-end-encryption-in-bear-app.html
+* https://docs.rs/rust_sodium/0.10.2/rust_sodium/
+* https://docs.rs/sodiumoxide/0.2.4/sodiumoxide/
+* https://docs.rs/safe_crypto/0.8.0/safe_crypto/
+
+### SRP
+* https://medium.com/@intermediation/secure-remote-password-protocol-31ba8c2ab0b
+* https://medium.com/@harwoeck/password-and-credential-management-in-2018-56f43669d588
+* https://blog.1password.com/developers-how-we-use-srp-and-you-can-too/
+* https://www.cossacklabs.com/blog/zero-knowledge-protocols-without-magic.html
+* http://srp.stanford.edu/ndss.html
+* https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
