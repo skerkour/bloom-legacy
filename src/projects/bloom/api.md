@@ -124,6 +124,16 @@ session_id
      // ...
     }
 }
+
+{
+    "id": "unique_id",
+    "message": {
+        "type": "com.bloom42.package.message_type",
+        "data": {
+            // ...
+        }
+    },
+}
 ```
 
 
