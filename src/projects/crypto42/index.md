@@ -2,8 +2,8 @@
 
 [![pipeline status](https://gitlab.com/bloom42/libs/crypto42/badges/dev/pipeline.svg)](https://gitlab.com/bloom42/libs/crypto42/commits/dev)
 
-`crypto42` is a cross-platform, secure, easy to use, and hard to misuse cryptographic library in Rust.
-It uses [libsodium](https://github.com/jedisct1/libsodium) as backend.
+`crypto42` is cross-platform, secure, easy to use, and hard to misuse cryptographic library in Rust,
+using [libsodium](https://github.com/jedisct1/libsodium) as backend.
 
 This document presents the high level design of the library, you can find detailed code documentation here: https://bloom42.gitlab.io/libs/crypto42/crypto42
 

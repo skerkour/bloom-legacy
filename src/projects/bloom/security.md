@@ -207,6 +207,8 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://docs.rs/rust_sodium/0.10.2/rust_sodium/
 * https://docs.rs/sodiumoxide/0.2.4/sodiumoxide/
 * https://docs.rs/safe_crypto/0.8.0/safe_crypto/
+* https://docs.nano.org/protocol-design/signing-hashing-and-key-derivation/
+* https://crypto.stackexchange.com/questions/48136/blake2b-as-a-kdf
 
 ### SRP
 * https://medium.com/@intermediation/secure-remote-password-protocol-31ba8c2ab0b
