@@ -209,11 +209,3 @@ Please note that Bloom's threat model accept that this encryption in transit is 
 * https://docs.rs/safe_crypto/0.8.0/safe_crypto/
 * https://docs.nano.org/protocol-design/signing-hashing-and-key-derivation/
 * https://crypto.stackexchange.com/questions/48136/blake2b-as-a-kdf
-
-### SRP
-* https://medium.com/@intermediation/secure-remote-password-protocol-31ba8c2ab0b
-* https://medium.com/@harwoeck/password-and-credential-management-in-2018-56f43669d588
-* https://blog.1password.com/developers-how-we-use-srp-and-you-can-too/
-* https://www.cossacklabs.com/blog/zero-knowledge-protocols-without-magic.html
-* http://srp.stanford.edu/ndss.html
-* https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
