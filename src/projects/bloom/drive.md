@@ -253,6 +253,7 @@ ou public
 * https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
 * https://www.linux.com/blog/learn/2019/2/5-linux-gui-cloud-backup-tools
 * https://filebrowser.github.io/
+* https://help.backblaze.com/hc/en-us/articles/217665318-How-does-Backblaze-upload-modified-files-
 
 Pouvoir convertir des fichiers (audio, video)
 
