@@ -12,13 +12,14 @@ include:
 
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  RUST_VERSION: nightly-2019-09-13
+  RUST_BACKTRACE: 1
+  RUST_ENV: test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
-  RUST_ENV: test
-  RUST_VERSION: nightly-2019-09-11
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
   AWS_ACCESS_KEY_ID: test
