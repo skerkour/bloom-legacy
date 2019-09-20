@@ -1,5 +1,11 @@
 # Authentication
 
+## Goals
+
+* The server **NEVER** see the plaintext password
+* 512 bits tokens
+* CPU and mamoery hard hashing function
+
 ## Register
 
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
