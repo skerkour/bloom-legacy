@@ -1,4 +1,4 @@
-# Auth
+# Authentication
 
 ## Register
 

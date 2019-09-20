@@ -65,7 +65,7 @@ nav:
       - GUI: projects/bloom/gui.md
       - Build: projects/bloom/build.md
       - Self hosting: projects/bloom/self_hosting.md
-      - Auth: projects/bloom/auth.md
+      - Authentication: projects/bloom/authentication.md
       - Billing: projects/bloom/billing.md
       - Bitflow: projects/bloom/bitflow.md
       - Calculator: projects/bloom/calculator.md
