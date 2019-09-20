@@ -9,7 +9,11 @@
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random, per user `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
-4. if correct, server issue a `session_token`
+4. server verify that `auth_key` match stored `hashed_auth_key` using `crypto42::kdf::argon2id::verify_password`
+5. if ok, server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
+6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
+7. both `session_id` and `session_token_hash` are stored in the Database
+8. `base64(session_id+":"+session_token)` is sent back to client to be used as authitencation token.
 
 ![architecture](assets/bloom_auth_sign_in.jpg)
 
