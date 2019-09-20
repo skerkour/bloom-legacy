@@ -28,12 +28,12 @@
 
 ## Sign out
 
-1. client send `com.bloom42.messages.auth.sign_out` message to server
+1. client send `com.bloom42.auth.sign_out` message to server
 2. sever DELETE the session associated with the received message
 
 ## Revoke session
 
-1. client send `com.bloom42.messages.auth.revoke_session` message to the server which contain the `session_id` field.
+1. client send `com.bloom42.auth.revoke_session` message to the server which contain the `session_id` field.
 2. sever DELETE the session associated with `session_id`
 
 ## Resources
