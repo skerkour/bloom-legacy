@@ -44,6 +44,7 @@
 * https://medium.com/@harwoeck/password-and-credential-management-in-2018-56f43669d588
 * https://medium.com/@mpreziuso/password-hashing-pbkdf2-scrypt-bcrypt-and-argon2-e25aaf41598e
 * https://blog.filippo.io/the-scrypt-parameters/
+* https://news.ycombinator.com/item?id=18446278 *(Private by Design: How We Built Firefox Sync)*
 
 
 ## See also
