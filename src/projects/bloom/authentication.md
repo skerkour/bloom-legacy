@@ -6,7 +6,7 @@
 * 512 bits tokens
 * CPU and mamoery hard hashing function
 
-## Register
+## Registration
 
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
@@ -18,7 +18,7 @@
 8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
 9. client save both `client_salt` and `auth_token` fot future use
 
-## Sign in
+## Signin in
 
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and the saved `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
@@ -32,20 +32,25 @@
 ![architecture](assets/bloom_auth_sign_in.jpg)
 
 
-## Sign out
+## Signin out
 
 1. client send `com.bloom42.auth.sign_out` message to server
 2. sever DELETE the session associated with the received message
 
-## Revoke session
+## Revoking a session
 
 1. client send `com.bloom42.auth.revoke_session` message to the server which contain the `session_id` field.
 2. sever DELETE the session associated with `session_id`
 
+
+## Changing the Password
+
 ## Resources
 
+* https://github.com/mozilla/fxa-auth-server/wiki/onepw-protocol#changing-the-password
 * https://blog.mozilla.org/warner/2014/05/23/the-new-sync-protocol/
 * https://hacks.mozilla.org/2018/11/firefox-sync-privacy/
+* https://docs.google.com/document/d/1IvQJFEBFz0PnL4uVlIvt8fBS_IPwSK-avK0BRIHucxQ/edit (*Scoped Encryption Keys for Firefox Accounts*)
 * https://blogs.dropbox.com/tech/2016/09/how-dropbox-securely-stores-your-passwords/
 * https://medium.com/@harwoeck/password-and-credential-management-in-2018-56f43669d588
 * https://medium.com/@mpreziuso/password-hashing-pbkdf2-scrypt-bcrypt-and-argon2-e25aaf41598e
