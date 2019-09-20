@@ -57,7 +57,6 @@
 * https://infosec-handbook.eu/blog/limits-e2ee/
 * https://github.com/matrix-org/matrix-doc/blob/hs/hash-identity/proposals/2134-identity-hash-lookup.md
 * https://docs.google.com/document/d/1ni4LnC_vafX4h4K4sYNpmccS7QeHEFpAcYcbLS-J21Q/edit#heading=h.8qfidi5t91ba
-* https://hacks.mozilla.org/2018/11/firefox-sync-privacy/
 * https://mobile-security.gitbook.io/mobile-security-testing-guide/android-testing-guide/0x05e-testing-cryptography
 * https://doridori.github.io/Android-Security-Beware-of-the-default-IV/?source=post_page---------------------------#sthash.jymTOnIq.ZpVHf4Be.dpbs
 * https://blog.1password.com/guess-why-were-moving-to-256-bit-aes-keys/
