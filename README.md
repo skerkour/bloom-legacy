@@ -1,40 +1,32 @@
 <p align="center">
-  <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bloom_256.png" height="180" />
+  <img alt="bloom logo" src="bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
-  <p align="center">Empowering the world with open technologies</p>
+  <p align="center">Empowering people with open technologies</p>
 </p>
 
-[Try it online for free](https://bloom.sh)
+[Try it for free](https://bloom.sh/download)
 
 --------
 
-[![pipeline status](https://gitlab.com/bloom42/server/badges/master/pipeline.svg)](https://gitlab.com/bloom42/server/commits/master)
-
+Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 
 1. [Documentation](#documentation)
-2. [Docker image](#docker-image)
-3. [Contributing](#contributing)
-4. [Licensing](#licensing)
-5. [Sponsoring](#sponsoring)
-6. [Security](#security)
+2. [Contributing](#contributing)
+3. [Licensing](#licensing)
+4. [Sponsoring](#sponsoring)
+5. [Security](#security)
 
 --------
 
 ## Documentation
 
-See [https://gitlab.com/bloom42/docs](https://gitlab.com/bloom42/docs).
-
-
-## Docker image
-
-[registry.gitlab.com/bloom42/server](https://gitlab.com/bloom42/server/container_registry)
+See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/projects/bloom).
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://bloom.sh/contribute](https://bloom.sh/contribute) for guidance.
-
+[https://theguide.bloom.sh/organization/contributing.html](https://theguide.bloom.sh/organization/contributing.html) for guidance.
 
 
 ## Licensing
@@ -46,7 +38,7 @@ See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 
 Bloom is a free and open source project. If you are interested in supporting this project, the core team
 and the contributors please visit our
-[sponsoring page](https://bloom.sh/become-a-sponsor) ✌️
+[dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
 
 
 ## Security

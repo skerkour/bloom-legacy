@@ -30,5 +30,16 @@ yarn-error.log*
 .sass-cache/
 node_modules/
 
-/dist
+
+# Project specific
 /db
+
+target/
+tmp/
+assets/GeoLite2-City.mmdb
+.env
+.env.local
+.env.*.local
+.tmp/
+dist/
+bloom.sane

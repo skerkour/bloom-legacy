@@ -12,12 +12,14 @@ include:
 
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  RUST_VERSION: nightly-2019-09-13
+  RUST_BACKTRACE: 1
+  RUST_ENV: test
   POSTGRES_USER: postgres
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
-  RUST_ENV: test
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
   AWS_ACCESS_KEY_ID: test
@@ -36,80 +38,49 @@ variables:
 cache:
   paths:
     - cargo_home/
-    - server/target/
-    - webapp/node_modules/
+    - target/
 
 
-test:server:
+test:
   stage: test
   image: 'rust:1.36'
   tags:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-05-10
+    - rustup default $RUST_VERSION
     - rustup component add rustfmt clippy
-    - cp bloom.default.sane server/bloom.sane
-    - make -C server fmt_check
-    - make -C server lint
-    - make -C server test
+    - cp bloom.default.sane bloom.sane
+    - make fmt_check
+    - make lint
+    - make test
   services:
     - postgres:11
 
-test:webapp:
-  stage: test
-  image: 'node:lts'
-  tags:
-    - docker
-  script:
-    - make -C webapp install
-    - make -C webapp test
-
-
-build:server:
+build:
   stage: build
   image: 'rust:1.36'
   tags:
     - docker
   script:
     - apt update && apt install -y gcc make git
-    - rustup default nightly-2019-05-10
-    - make -C server build
+    - rustup default $RUST_VERSION
+    - make build
   artifacts:
     paths:
-    - server/dist
-
-build:webapp:
-  stage: build
-  image: 'node:lts'
-  tags:
-    - docker
-  script:
-    - make -C webapp install
-    - make -C webapp build
-    # - docker login -u gitlab-ci-token -p $CI_JOB_TOKEN $CI_REGISTRY
-    # - make docker
-    # - make docker_push
-  artifacts:
-    paths:
-    - webapp/dist
-
-
+    - dist
 
 package:docker:
   stage: package
   dependencies:
-    - build:server
-    - build:webapp
+    - build
   image: docker:stable
   tags:
     - docker
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
-
 
 
 release:docker:nightly:
@@ -117,15 +88,13 @@ release:docker:nightly:
     - schedules
   stage: release
   dependencies:
-    - build:server
-    - build:webapp
+    - build
   image: docker:stable
   tags:
     - docker
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
     - make docker_login
     - make docker_release_nightly
@@ -135,15 +104,13 @@ release:docker:stable:
     - tags
   stage: release
   dependencies:
-    - build:server
-    - build:webapp
+    - build
   image: docker:stable
   tags:
     - docker
   cache: {}
   script:
     - apk update && apk add make
-    - make build_from_artifacts
     - make docker_build
     - make docker_login
     - make docker_release

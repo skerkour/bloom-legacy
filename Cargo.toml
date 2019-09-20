@@ -1,0 +1,71 @@
+[package]
+name = "bloom_server"
+version = "0.15.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+license = "AGPL-3.0"
+homepage = "https://bloom.sh"
+repository = "https://gitlab.com/bloom42/server.git"
+description = "Empowering the world with open technologies 🌍"
+keywords = ["bloom42", "bloom"]
+
+
+[dependencies]
+eventsourcing = { path = "libs/eventsourcing-rs" }
+
+
+kernel = { path = "bloom/kernel" }
+notes = { path = "bloom/notes" }
+contacts = { path = "bloom/contacts" }
+drive = { path = "bloom/drive" }
+gallery = { path = "bloom/gallery" }
+music = { path = "bloom/music" }
+bitflow = { path = "bloom/bitflow" }
+phaser = { path = "bloom/phaser" }
+# billing = { path = "../billing" }
+admin = { path = "bloom/admin" }
+calendar = { path = "bloom/calendar" }
+
+
+actix-web = "1.0.7"
+actix-cors = "0.1.0"
+actix = "0.8"
+rusoto_core = "0.39"
+rusoto_s3 = "0.39"
+num_cpus = "1.0"
+http = "0.1.0"
+sentry = "0.17"
+sentry-actix = "0.17"
+
+[profile.release]
+# for error tracking
+debug = true
+lto = true
+
+
+
+[workspace]
+members = [
+    "libs/diesel_as_jsonb",
+    "libs/bcrypt-rs",
+    "libs/hex-rs",
+    "libs/eventsourcing-rs",
+    "libs/eventsourcing_derive",
+    "libs/mimesniff-rs",
+    "libs/diesel-derive-enum",
+    "libs/diesel-enum-derive",
+
+    "bloom/kernel",
+    "bloom/drive",
+    "bloom/notes",
+    "bloom/contacts",
+    "bloom/gallery",
+    "bloom/music",
+    "bloom/bitflow",
+    "bloom/phaser",
+    # "billing",
+    "bloom/admin",
+    "bloom/calendar",
+    "bloom/messages",
+    ".",
+]
