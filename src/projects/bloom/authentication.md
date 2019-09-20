@@ -2,29 +2,43 @@
 
 ## Register
 
-1. An
+1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
+2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
+3. `username` is sent with `auth_key` to server
+4. server hash `auth_key` to `hashed_auth_key` using `crypto42::kdf::argon2id::hash_password`
+5. server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
+6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
+7. both `session_id` and `session_token_hash` are stored in the Database
+8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
+9. client save both `client_salt` and `auth_token` fot future use
 
 ## Sign in
 
-1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random, per user `client_salt`
+1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and the saved `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
 4. server verify that `auth_key` match stored `hashed_auth_key` using `crypto42::kdf::argon2id::verify_password`
 5. if ok, server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
 6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
 7. both `session_id` and `session_token_hash` are stored in the Database
-8. `base64(session_id+":"+session_token)` is sent back to client to be used as authitencation token.
+8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
 
 ![architecture](assets/bloom_auth_sign_in.jpg)
 
 
 ## Sign out
 
+1. client send `com.bloom42.messages.auth.sign_out` message to server
+2. sever DELETE the session associated with the received message
+
+## Revoke session
+
+1. client send `com.bloom42.messages.auth.revoke_session` message to the server which contain the `session_id` field.
+2. sever DELETE the session associated with `session_id`
 
 ## Resources
 
-
-### See also
+## See also
 
 ### SRP
 
