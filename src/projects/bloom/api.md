@@ -204,3 +204,18 @@ https://developer.atlassian.com/server/confluence/pagination-in-the-rest-api/
 * https://docs.syncthing.net/dev/events.html
 * https://gitlab.com/gitlab-org/gitlab-ce/issues/26396
 * https://latacora.micro.blog/2018/06/12/a-childs-garden.html
+
+
+# Polling / websockets
+* https://medium.com/@hendrikwallbaum/polling-using-rxjs-54f23eb78ded
+* https://journal.willhackett.com/im-polling-spotify-because-they-have-no-websockets-ws-scaling-battery-drain-3cb7d3f5f2ad
+* https://journal.willhackett.com/roll-your-own-platform-as-a-service-will-hackett-6867a49ee471
+* https://thedebuggers.com/client-server-communication-http-polling-sse-websockets-comets/
+* https://dev.to/nwtgck/simple-chat-over-only-http-without-websocket-and-webrtc-1n4m
+* https://news.ycombinator.com/item?id=4030816
+* https://news.ycombinator.com/item?id=18460037
+* https://www.ably.io/concepts/long-polling
+* https://www.reddit.com/r/rust/comments/cj0ofp/has_anyone_written_a_gitea_like_in_rust_yet/
+* https://github.com/matrix-org/dendrite/blob/master/DESIGN.md
+* https://github.com/matrix-org/dendrite/blob/master/WIRING.md
+* https://matrix.org/docs/spec/client_server/latest#syncing
