@@ -7,6 +7,11 @@ For security reasons, all operations / authentication are done on the native app
 
 * [https://gitlab.com/bloom42/website](https://gitlab.com/bloom42/website)
 
+## Devlopment
+
+1. [Install NodeJS](/engineering/setup.html#nodejs)
+
+
 # Footer
 
 ## About
