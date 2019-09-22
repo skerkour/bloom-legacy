@@ -58,19 +58,19 @@ nav:
     - Authenticator: projects/authenticator/index.md
     - Bloom:
       - Overview: projects/bloom/index.md
+      - Development: projects/bloom/development.md
       - Architecture: projects/bloom/architecture.md
-      - Design: projects/bloom/design.md
       - Security: projects/bloom/security.md
-      - API: projects/bloom/api.md
+      - Design: projects/bloom/design.md
       - GUI: projects/bloom/gui.md
-      - Build: projects/bloom/build.md
+      - API: projects/bloom/api.md
       - Self hosting: projects/bloom/self_hosting.md
       - Authentication: projects/bloom/authentication.md
       - Billing: projects/bloom/billing.md
       - Bitflow: projects/bloom/bitflow.md
       - Calculator: projects/bloom/calculator.md
       - Calendar: projects/bloom/calendar.md
-      - Chats: projects/bloom/chats.md
+      - Chat: projects/bloom/chat.md
       - Contacts: projects/bloom/contacts.md
       - Discover: projects/bloom/discover.md
       - Drive: projects/bloom/drive.md
