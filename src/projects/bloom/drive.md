@@ -16,7 +16,8 @@ Sylvain wants to send a file from his computer to his phone. he uplaods the file
 Marina wants to backup her holidays pictures. She create a folder, She Select all her photos on her computer and upload it to her drive.
 
 ### 3
-After having uploaded some files, zinedine wants to search amongs them. He uses the search bar.
+At first I thought "Well, Dropbox storage is 5x as expensive as hard drive space, so what's the point?". What I didn't see was the team use case: It's actually brilliant to have access to every document of all of my colleagues at all times, without saving all that stuff locally, or taking forever sync. This is really amazing.
+
 
 ## Goal
 
@@ -117,6 +118,9 @@ FUSE is not implemented yet but may be in the future, under the name **Smart Syn
 * https://rclone.org/commands/rclone_mount/
 * https://www.dropboxforum.com/t5/Dropbox/When-will-Smart-Sync-work-on-linux/idi-p/262171
 * https://github.com/pydio
+* https://news.ycombinator.com/item?id=11570888 (Dropbox Project Infinite)
+* https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive
+
 
 ### Delta sync
 
@@ -130,7 +134,7 @@ compress, encrypt, upload
 * https://owncloud.org/news/welcome-delta-sync-for-owncloud/
 * https://github.com/keybase/client/tree/master/go/kbfs
 * https://serverfault.com/questions/52861/how-does-dropbox-version-upload-large-files
-
+* https://github.com/owncloud/client/issues/179
 
 
 ### File explorer integration
@@ -194,6 +198,9 @@ path: `/drive/trash`
 * https://filebrowser.xyz
 * https://wiki.archlinux.org/index.php/Dropbox
 * https://stackoverflow.com/questions/1960799/using-git-and-dropbox-together-effectively?rq=1
+* https://news.ycombinator.com/item?id=12463338 (How Dropbox Hacks Your Mac)
+* https://news.ycombinator.com/item?id=12619722 (Dropbox Hasn't Learned Their Lesson)
+* https://news.ycombinator.com/item?id=18750797 (My one-liner Linux Dropbox client)
 
 -------------------
 
@@ -212,7 +219,6 @@ path: `/drive/trash`
 
 ### Resources
 
-* [https://news.ycombinator.com/item?id=18750797](https://news.ycombinator.com/item?id=18750797)
 * [http://lpan.io/one-liner-dropbox-client/](http://lpan.io/one-liner-dropbox-client/)
 * [https://raymii.org/s/articles/Set_up_your_own_truly_secure_encrypted_shared_storage_aka_Dropbox_clone.html](https://raymii.org/s/articles/Set_up_your_own_truly_secure_encrypted_shared_storage_aka_Dropbox_clone.html)
 * [https://docs.nextcloud.com/server/13/user_manual/files/desktop_mobile_sync.html](https://docs.nextcloud.com/server/13/user_manual/files/desktop_mobile_sync.html)
