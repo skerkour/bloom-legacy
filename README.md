@@ -11,16 +11,22 @@
 Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 
 1. [Documentation](#documentation)
-2. [Contributing](#contributing)
-3. [Licensing](#licensing)
-4. [Sponsoring](#sponsoring)
-5. [Security](#security)
+2. [Development](#development)
+3. [Contributing](#contributing)
+4. [Licensing](#licensing)
+5. [Sponsoring](#sponsoring)
+6. [Security](#security)
 
 --------
 
 ## Documentation
 
 See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/projects/bloom).
+
+
+## Development
+
+See [https://theguide.bloom.sh/projects/bloom/development.html](https://theguide.bloom.sh/projects/bloom/development.html).
 
 
 ## Contributing
