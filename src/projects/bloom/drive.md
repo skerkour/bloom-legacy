@@ -1,6 +1,101 @@
 # Drive
 
-1. [Overviw](#overviw)
+## Sync
+
+Files synchronization is in reality 2 challenges:
+1. detect files changes
+2. upload/download these changes
+
+
+### Changes detection
+
+There is 2 ways to detect files changes
+
+1. Using a Filesystem in USErspace (FUSE)
+2. Using (i)notify
+
+Using FUSE requires kernel extensions on non Linux platforms and thus is not a good option regarding security
+when devlopment resources are limited. This is
+
+#### Notify
+
+Notify is the first method used by Bloom drive as it's the safest.
+
+##### +
+
+* does not requires a kernel extension
+* easier to predict the local place occupied
+* easier to predict what will be available offline (only the check folders).
+
+##### -
+
+* requires a little bit more effort as we need to check which files we want to sync
+
+
+##### Resources
+
+* https://stackoverflow.com/questions/35711897/dropbox-fs-inotify-error
+
+
+
+#### FUSE
+
+FUSE is not implemented yet but may be in the future, under the name **Smart Sync**.
+
+##### +
+
+* easier to use: allow to list all files/folders and local cache only tose which are used
+
+##### -
+
+* requires a kernel extension on non linux platofrms
+* local cache should be smart. (or we allow user to sync only what he selects)
+
+##### Resources
+
+* https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync
+* https://github.com/osxfuse/osxfuse/wiki/FAQ
+* https://news.ycombinator.com/item?id=11037257 (Introducing the Keybase filesystem)
+* https://keybase.io/docs/crypto/kbfs
+* https://rclone.org/commands/rclone_mount/
+
+
+### Delta sync
+
+
+#### Resources
+
+* https://help.backblaze.com/hc/en-us/articles/217665318-How-does-Backblaze-upload-modified-files-
+* https://github.com/owncloud/client/wiki/DeltaSync
+* https://owncloud.org/news/welcome-delta-sync-for-owncloud/
+* https://github.com/keybase/client/tree/master/go/kbfs
+
+
+### File explorer integration
+
+File synchronization is one thing, but you also need to provide a way for the user to see if files
+are currently synching, or synched whene navigating in his filesystem.
+
+Depending of the Operating system, there is the possibility to provide a 'file explorer extension'
+which allow to add icons to folders/files when they are in a particular state (synched, synching...).
+
+#### Resources
+
+* https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
+* https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/Finder.html
+
+
+## Resources
+
+* https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
+* https://www.linux.com/tutorials/5-linux-gui-cloud-backup-tools/
+* https://filebrowser.xyz
+
+-------------------
+
+
+
+1. [Overview](#overview)
 2. [Scenarios](#scenarios)
 
 -------------------
@@ -102,38 +197,7 @@ path: `/drive/trash`
 ---------------
 
 
-# Drive
 
-fuse ?
-
-+:
-+ facile d'utilisation: permet de lister tous les fichiers, et ensuite on cache que ceux qui sont necessaires
-
-
--:
-* necessite une extension kernel sur
-* gestion du cache doit se faire intelligement, ou alors on permet a l'utilisateur de choisir ce qu'il veut sync, et les autres ont les cache au besoin
-
-notify ?
-
-+:
-* pas besoin de kernel extension -> ++++ safe
-* plus previsible pour savoir la place que ca va prendre, et donc ce qui sera accessible hors ligne
--:
-* un peut plsu dur de choisir quels fichiers on sync
-
-
-
-le mieux est peut etre de faire le plus safe, avec la possibilite d'activer une option "SmartDrive"
-
-directement dans l'app:
-
-
-https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/Finder.html
-https://github.com/osxfuse/osxfuse/wiki/Mount-options
-https://github.com/osxfuse/osxfuse/wiki/FAQ
-https://news.ycombinator.com/item?id=11037257
-https://keybase.io/docs/crypto/kbfs
 
 * DropBox (seems to use notify, https://www.dropboxforum.com/t5/Files-folders/Dropbox-does-not-automatically-sync-FUSE-directory/td-p/280902, https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync)
 * OneDrive
@@ -141,7 +205,6 @@ https://keybase.io/docs/crypto/kbfs
 * SyncThings (use periodic scans, with optional notify)
 * rclone, FUSE avec mount (https://rclone.org/commands/rclone_mount/) et inotify
 * gocryptfs / cryptomator (https://nuetzlich.net/gocryptfs/comparison/)
-* KeyBase: FUSE (https://github.com/keybase/client/tree/master/go/kbfs)
 * Tresorit: utulise selective sync (https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync) et FUSE (https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive)
 * https://librevault.com/
 * https://github.com/haiwen/seafile: les 2, inotify, et FUSE avec DRIVE (https://help.seafile.com/en/sharing_collaboration/sharing_files_and_folders.html)
@@ -151,6 +214,7 @@ https://keybase.io/docs/crypto/kbfs
 
 
 ## Drive
+
 - quelque part ou se passent les actions cote serveur (upload s3, conversion...)
 - download/move multiple files / folders (zip)
 - supression des subfiles
@@ -203,57 +267,6 @@ partage:
 - collaboraterus
 ou public
 
-
-
-## Resources
-
-* https://stackoverflow.com/questions/35711897/dropbox-fs-inotify-error
-* https://stackoverflow.com/questions/1960799/using-git-and-dropbox-together-effectively?rq=1
-* https://www.dropboxforum.com/t5/Dropbox/When-will-Smart-Sync-work-on-linux/idi-p/262171
-* https://rclone.org/commands/rclone_mount/#file-caching
-* https://www.smartsync.com/
-* https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync
-* https://www.dropboxforum.com/t5/Files-folders/Can-you-explain-the-difference-between-Smart-Sync-and-Selective/td-p/319218
-* https://news.ycombinator.com/item?id=16743055
-* https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync
-* https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive
-* https://support.tresorit.com/hc/en-us/articles/216114367-How-is-my-password-managed-in-Tresorit-
-* https://support.tresorit.com/hc/en-us/articles/360002172334-Installing-and-Updating-FUSE-on-Mac#
-* https://support.tresorit.com/hc/en-us/articles/216114397-Third-party-services
-* https://support.tresorit.com/hc/en-us/articles/360000936353-Glossary
-* https://wiki.archlinux.org/index.php/Dropbox
-* https://help.nextcloud.com/t/solved-multiple-folder-sync-across-drives/13639
-* https://help.nextcloud.com/t/how-to-sync-a-folder-on-a-server/12901
-* https://help.nextcloud.com/t/to-be-clear-no-way-to-have-2way-sync-with-android-client/35027
-* https://gladinet.com/CloudEnterprise/SelfHostedDropbox.aspx
-* https://docs.nextcloud.com/desktop/2.5/installing.html
-* https://docs.nextcloud.com/desktop/2.3/navigating.html
-* https://github.com/syncany/syncany
-* https://github.com/pydio
-* https://github.com/pydio/cells
-* https://github.com/pydio/cells-client
-* https://www.dropbox.com/developers-v1/datastore/docs/http
-* https://www.dropbox.com/developers/documentation/http/documentation
-* https://en.wikipedia.org/wiki/Rsync#Variations
-* http://librsync.sourceforge.net/
-* https://en.wikipedia.org/wiki/Solid_compression
-* https://serverfault.com/questions/52861/how-does-dropbox-version-upload-large-files
-* https://blogs.dropbox.com/tech/2016/05/inside-the-magic-pocket/
-* https://www.pcloud.com/download-free-online-cloud-file-storage.html
-* https://news.ycombinator.com/item?id=20163389
-* https://news.ycombinator.com/item?id=12619722
-* https://news.ycombinator.com/item?id=12463338&p=2
-* https://news.ycombinator.com/item?id=11570888
-* https://librevault.com/
-* https://www.seafile.com/en/features/
-* https://owncloud.org/news/welcome-delta-sync-for-owncloud/
-* https://github.com/owncloud/client/wiki/DeltaSync
-* https://neon-bindings.com/docs/functions
-* https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
-* https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
-* https://www.linux.com/blog/learn/2019/2/5-linux-gui-cloud-backup-tools
-* https://filebrowser.github.io/
-* https://help.backblaze.com/hc/en-us/articles/217665318-How-does-Backblaze-upload-modified-files-
 
 Pouvoir convertir des fichiers (audio, video)
 
