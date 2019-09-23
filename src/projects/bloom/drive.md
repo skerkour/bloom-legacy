@@ -1,5 +1,20 @@
 # Drive
 
+## Competitive Landscape
+
+* DropBox (seems to use notify, https://www.dropboxforum.com/t5/Files-folders/Dropbox-does-not-automatically-sync-FUSE-directory/td-p/280902, https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync)
+* OneDrive
+* GoogleDrive
+* SyncThings (use periodic scans, with optional notify)
+* rclone, FUSE avec mount (https://rclone.org/commands/rclone_mount/) et inotify
+* gocryptfs / cryptomator (https://nuetzlich.net/gocryptfs/comparison/)
+* Tresorit: utulise selective sync (https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync) et FUSE (https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive)
+* https://librevault.com/
+* https://github.com/haiwen/seafile: les 2, inotify, et FUSE avec DRIVE (https://help.seafile.com/en/sharing_collaboration/sharing_files_and_folders.html)
+* rsync (https://en.wikipedia.org/wiki/Rsync, https://rsync.samba.org/, https://www.quora.com/How-does-the-rsync-algorithm-work) and zsync (http://zsync.moria.org.uk/)
+* OwnCloud
+* NextCloud
+
 ## Sync
 
 Files synchronization is in reality 2 challenges:
@@ -197,20 +212,6 @@ path: `/drive/trash`
 ---------------
 
 
-
-
-* DropBox (seems to use notify, https://www.dropboxforum.com/t5/Files-folders/Dropbox-does-not-automatically-sync-FUSE-directory/td-p/280902, https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync)
-* OneDrive
-* GoogleDrive
-* SyncThings (use periodic scans, with optional notify)
-* rclone, FUSE avec mount (https://rclone.org/commands/rclone_mount/) et inotify
-* gocryptfs / cryptomator (https://nuetzlich.net/gocryptfs/comparison/)
-* Tresorit: utulise selective sync (https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync) et FUSE (https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive)
-* https://librevault.com/
-* https://github.com/haiwen/seafile: les 2, inotify, et FUSE avec DRIVE (https://help.seafile.com/en/sharing_collaboration/sharing_files_and_folders.html)
-* rsync (https://en.wikipedia.org/wiki/Rsync, https://rsync.samba.org/, https://www.quora.com/How-does-the-rsync-algorithm-work) and zsync (http://zsync.moria.org.uk/)
-* OwnCloud
-* NextCloud
 
 
 ## Drive
