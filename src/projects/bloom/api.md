@@ -219,3 +219,8 @@ https://developer.atlassian.com/server/confluence/pagination-in-the-rest-api/
 * https://github.com/matrix-org/dendrite/blob/master/DESIGN.md
 * https://github.com/matrix-org/dendrite/blob/master/WIRING.md
 * https://matrix.org/docs/spec/client_server/latest#syncing
+
+
+# Sync
+
+* https://wiki.mozilla.org/CloudServices/Sync/FAQ

@@ -1,12 +1,38 @@
 # Architecture
 
+
 ## Infrastructure
 
 ![architecture](assets/architecture.jpg)
 
-## Server architecture
+
+## Server
 
 ![architecture](assets/server_design.jpg)
+
+
+## Desktop
+
+Bloom desktop uses Electron for the GUI layer and Rust for the business logic layer.
+
+It communicates between layers using [Neon bindings](https://neon-bindings.com/docs/intro).
+
+### Messages format
+
+```json
+{
+    "id": "unique_id",
+    "message": {
+        "type": "com.bloom42.package.message_type",
+        "data": {
+            // ...
+        }
+    },
+}
+```
+## Mobile
+
+Bloom mobile uses Flutter as GUI framework and Rust for cryptographic operations
 
 
 # Actor vs ES

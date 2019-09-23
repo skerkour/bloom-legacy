@@ -95,6 +95,9 @@ Notify is the first method used by Bloom drive as it's the safest.
 * https://stackoverflow.com/questions/35711897/dropbox-fs-inotify-error
 * https://news.ycombinator.com/item?id=18750797 (My one-liner Linux Dropbox client)
 * http://lpan.io/one-liner-dropbox-client/
+* https://help.seafile.com/en/syncing_client/install_sync.html
+* https://support.tresorit.com/hc/en-us/articles/216114247-Using-selective-sync
+* https://help.nextcloud.com/t/to-be-clear-no-way-to-have-2way-sync-with-android-client/35027/2
 
 
 #### FUSE
@@ -121,6 +124,9 @@ FUSE is not implemented yet but may be in the future, under the name **Smart Syn
 * https://github.com/pydio
 * https://news.ycombinator.com/item?id=11570888 (Dropbox Project Infinite)
 * https://support.tresorit.com/hc/en-us/articles/219312887-Set-up-Tresorit-Drive
+* https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
+* https://blogs.seafile.com/2016/09/02/announcing-seafile-drive-client-a-new-way-to-map-seafile-storage-as-virtual-drive/
+* https://help.seafile.com/en/drive_client/using_drive_client.html
 
 
 ### Delta sync
@@ -203,6 +209,13 @@ path: `/drive/trash`
 * https://news.ycombinator.com/item?id=12619722 (Dropbox Hasn't Learned Their Lesson)
 * https://news.ycombinator.com/item?id=18750797 (My one-liner Linux Dropbox client)
 * https://raymii.org/s/articles/Set_up_your_own_truly_secure_encrypted_shared_storage_aka_Dropbox_clone.html#toc_1
+* https://www.dropboxforum.com/t5/Files-folders/Can-you-explain-the-difference-between-Smart-Sync-and-Selective/td-p/319218
+* https://gladinet.com/CloudEnterprise/SelfHostedDropbox.aspx
+* https://github.com/syncany/syncany
+* https://news.ycombinator.com/item?id=20163389 (The new Dropbox)
+* https://librevault.com/
+* https://www.pcloud.com/download-free-online-cloud-file-storage.html
+* https://github.com/haiwen/seafile
 
 
 <!--

@@ -62,7 +62,6 @@ nav:
       - Architecture: projects/bloom/architecture.md
       - Security: projects/bloom/security.md
       - Design: projects/bloom/design.md
-      - GUI: projects/bloom/gui.md
       - API: projects/bloom/api.md
       - Self hosting: projects/bloom/self_hosting.md
       - Authentication: projects/bloom/authentication.md
