@@ -1,6 +1,42 @@
 # Drive
 
-## Competitive Landscape
+## Overview
+
+The drive service is a user friendly cloud storage/backup/file synching solution.
+
+<!-- An user should be able to upload files, create folders to organise his files, download files, rename files or folders -->
+
+## Scenarios
+
+### 1
+Sylvain wants to send a file from his computer to his phone. he uplaods the file from his computer and can download it later from his phone.
+
+
+### 2
+Marina wants to backup her holidays pictures. She create a folder, She Select all her photos on her computer and upload it to her drive.
+
+### 3
+After having uploaded some files, zinedine wants to search amongs them. He uses the search bar.
+
+## Goal
+
+## Non goals
+
+- file convertion
+- copies
+- apps binding
+- drag and drop
+- downlaod multiple files
+- file edition or reading
+- file sharing
+- billing
+- starred
+
+
+- is it possible to have files with same name in the same folder ? no
+
+
+## Competitive landscape
 
 * DropBox (seems to use notify, https://www.dropboxforum.com/t5/Files-folders/Dropbox-does-not-automatically-sync-FUSE-directory/td-p/280902, https://help.dropbox.com/installs-integrations/sync-uploads/smart-sync)
 * OneDrive
@@ -14,6 +50,12 @@
 * rsync (https://en.wikipedia.org/wiki/Rsync, https://rsync.samba.org/, https://www.quora.com/How-does-the-rsync-algorithm-work) and zsync (http://zsync.moria.org.uk/)
 * OwnCloud
 * NextCloud
+
+<!-- ## Analyst landscape
+## Top Customer Success/Sales issue(s)
+## Top user issue(s)
+## Top internal customer issue(s)
+## Top Vision Item(s) -->
 
 ## Sync
 
@@ -73,9 +115,12 @@ FUSE is not implemented yet but may be in the future, under the name **Smart Syn
 * https://news.ycombinator.com/item?id=11037257 (Introducing the Keybase filesystem)
 * https://keybase.io/docs/crypto/kbfs
 * https://rclone.org/commands/rclone_mount/
-
+* https://www.dropboxforum.com/t5/Dropbox/When-will-Smart-Sync-work-on-linux/idi-p/262171
+* https://github.com/pydio
 
 ### Delta sync
+
+compress, encrypt, upload
 
 
 #### Resources
@@ -84,6 +129,8 @@ FUSE is not implemented yet but may be in the future, under the name **Smart Syn
 * https://github.com/owncloud/client/wiki/DeltaSync
 * https://owncloud.org/news/welcome-delta-sync-for-owncloud/
 * https://github.com/keybase/client/tree/master/go/kbfs
+* https://serverfault.com/questions/52861/how-does-dropbox-version-upload-large-files
+
 
 
 ### File explorer integration
@@ -98,55 +145,9 @@ which allow to add icons to folders/files when they are in a particular state (s
 
 * https://nihaocloud.zendesk.com/hc/en-us/articles/115003155753-How-to-Setup-and-use-Seafile-Drive-Client-on-Mac-Windows
 * https://developer.apple.com/library/archive/documentation/General/Conceptual/ExtensibilityPG/Finder.html
+* https://docs.nextcloud.com/desktop/2.3/navigating.html
 
 
-## Resources
-
-* https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
-* https://www.linux.com/tutorials/5-linux-gui-cloud-backup-tools/
-* https://filebrowser.xyz
-
--------------------
-
-
-
-1. [Overview](#overview)
-2. [Scenarios](#scenarios)
-
--------------------
-
-## Overview
-
-The drive service is a user friendly cloud storage solution.
-
-An user should be able to upload files, create folders to organise his files, download files, rename files or folders
-
-
-## Scenarios
-
-### 1
-Sylvain wants to send a file from his computer to his phone. he uplaods the file from his computer and can download it later from his phone.
-
-
-### 2
-Marina wants to backup her holidays pictures. She create a folder, She Select all her photos on her computer and upload it to her drive.
-
-### 3
-After having uploaded some files, zinedine wants to search amongs them. He uses the search bar.
-
-## Non goals
-- file convertion
-- copies
-- apps binding
-- drag and drop
-- downlaod multiple files
-- file edition or reading
-- file sharing
-- billing
-- starred
-
-
--is it possible to have files with same name in the same folder ? no
 
 ## Models
 `file`
@@ -154,15 +155,6 @@ After having uploaded some files, zinedine wants to search amongs them. He uses 
 `drive_profile`
 - space -> used space
 - home -> home directory (file)
-
-### initial folders
-- Downloads
-- Documents
-- Music
-- Pictures
-- Books
-- Videos
-- Projects
 
 
 
@@ -193,6 +185,31 @@ path: `/drive/folders/{folder_id}`
 path: `/drive/trash`
 
 
+
+
+## Resources
+
+* https://www.networkworld.com/article/3142390/down-the-rabbit-hole-part-6-secure-and-private-online-file-storage.html
+* https://www.linux.com/tutorials/5-linux-gui-cloud-backup-tools/
+* https://filebrowser.xyz
+* https://wiki.archlinux.org/index.php/Dropbox
+* https://stackoverflow.com/questions/1960799/using-git-and-dropbox-together-effectively?rq=1
+
+-------------------
+
+
+
+### initial folders
+- Downloads
+- Documents
+- Music
+- Pictures
+- Books
+- Videos
+- Projects
+
+
+
 ### Resources
 
 * [https://news.ycombinator.com/item?id=18750797](https://news.ycombinator.com/item?id=18750797)
@@ -209,7 +226,7 @@ path: `/drive/trash`
 
 
 
----------------
+<!-- ---------------
 
 
 
@@ -275,4 +292,4 @@ Pouvoir convertir des fichiers (audio, video)
 3 etats:
 - local mais pas cloud
 - cloud mais pas local
-- synchronized
+- synchronized -->
