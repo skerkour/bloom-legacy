@@ -1,6 +1,30 @@
 # Api
 
-API should be transport agnostic and based on messages (or events).
+
+API is transport agnostic and based on messages (or events).
+
+
+## Messages
+
+```json
+{
+    "id": "unique_id",
+    "message": {
+        "type": "com.bloom42.package.message_type",
+        "data": {
+            // ...
+        }
+    },
+}
+```
+
+## Routes
+
+* `/wss` It's the websocket endpoints
+* `/upload` handles files uplaods for all apps. Some metadata are attached alongside the file
+
+
+
 
 we register handlers like
 
@@ -104,26 +128,26 @@ session_id
 # Messages
 
 ```json
-// Adjacently tagged)
-{
-    "type": "com.bloom42.package.message_type",
-    "message": { // or data
-        // ...
-    }
-}
+// // Adjacently tagged)
+// {
+//     "type": "com.bloom42.package.message_type",
+//     "message": { // or data
+//         // ...
+//     }
+// }
 
-// Internally tagged)
-{
-    "type": "com.bloom42.package.message_type",
-     // ...
-}
+// // Internally tagged)
+// {
+//     "type": "com.bloom42.package.message_type",
+//      // ...
+// }
 
-// Externally tagged
-{
-    "com.bloom42.package.message_type": {
-     // ...
-    }
-}
+// // Externally tagged
+// {
+//     "com.bloom42.package.message_type": {
+//      // ...
+//     }
+// }
 
 {
     "id": "unique_id",

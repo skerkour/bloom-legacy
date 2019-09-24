@@ -133,6 +133,57 @@ FUSE is not implemented yet but may be in the future, under the name **Smart Syn
 
 compress, encrypt, upload
 
+#### Blocks
+
+Files are divided into blocks (or *chunks*).
+The blocks are currently fixed size (1MB? 512kB?, dropbox uses 4MB) except the last one in the file which may be smaller.
+Each file is sliced into a number of these blocks, and the `blake2b` hash of each block is computed
+This results in a block list containing the offset, size and hash of all blocks in the file.
+
+Each block is compressed using (??) then encrypted using a per (block/file) key, using the `XChachaPoly1305` AEAD cipher.
+
+To update a file, Bloom Drive compares the block list of the current version of the file to the block
+list of the desired version of the file. It then tries to find a source for each block that differs.
+This might be locally, if another file already has a block with the same hash, or it may be from
+another device in local network, or from the server. In the first case the block is simply copied
+on disk, in the second case it is requested over the network.
+
+When a block is copied or received from another source, its `blake2b` hash is computed and compared
+with the expected value. If it matches the block is written to a temporary copy of the file, otherwise
+it is discarded and Bloom Drive tries to find another source for the block.
+
+#### Temporary Files
+
+Bloom Drive never writes directly to a destination file. Instead all changes are made to a temporary
+copy which is then moved in place over the old version. If an error occurs during the copying or syncing,
+such as a necessary block not being available, the temporary file is kept around for up to a day.
+This is to avoid needlessly requesting data over the network.
+
+The temporary files are named `.drive.original_filename.ext.tmp` or, on Windows, `~drive~original_filename.ext.tmp`
+where `original_filename.ext` is the destination filename. The temporary file is normally hidden.
+If the temporary file name would be too long due to the addition of the prefix and extra extension,
+a hash of the original file name is used instead of the actual original file name.
+
+#### Conflicts
+
+#### File metadata
+
+```json
+{
+  "path": "",
+  "name": "",
+  "hash_blake2b": "",
+  "blocks": [
+    {
+      "id": "",
+      "comrpession_algo": "",
+      "offset": 0,
+      "hash_blake2b": "",
+      "size": 0
+    }
+  ]
+}
+```
 
 #### Resources
 
@@ -142,7 +193,7 @@ compress, encrypt, upload
 * https://github.com/keybase/client/tree/master/go/kbfs
 * https://serverfault.com/questions/52861/how-does-dropbox-version-upload-large-files
 * https://github.com/owncloud/client/issues/179
-
+* https://docs.syncthing.net/users/syncing.html
 
 ### File explorer integration
 
@@ -216,6 +267,7 @@ path: `/drive/trash`
 * https://librevault.com/
 * https://www.pcloud.com/download-free-online-cloud-file-storage.html
 * https://github.com/haiwen/seafile
+* https://blogs.dropbox.com/tech/2016/05/inside-the-magic-pocket/
 
 
 <!--
