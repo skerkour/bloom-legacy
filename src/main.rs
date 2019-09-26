@@ -8,7 +8,7 @@ use actix_web::{
 use kernel::{
     api, config, db, log,
     log::macros::{slog_info, slog_o},
-    myaccount::domain::account,
+    // myaccount::domain::account,
 };
 use rusoto_core::Region;
 use rusoto_s3::S3Client;
@@ -17,12 +17,12 @@ use std::env;
 use std::str::FromStr;
 
 fn register_reactors() {
-    eventsourcing::subscribe::<_, account::Created, _>(Box::new(
-        drive::reactors::AccountCreated {},
-    ));
-    eventsourcing::subscribe::<_, account::Created, _>(Box::new(
-        bitflow::reactors::AccountCreated {},
-    ));
+    // eventsourcing::subscribe::<_, account::Created, _>(Box::new(
+    //     drive::reactors::AccountCreated {},
+    // ));
+    // eventsourcing::subscribe::<_, account::Created, _>(Box::new(
+    //     bitflow::reactors::AccountCreated {},
+    // ));
     // eventsourcing::subscribe::<_, account::Event, _>(Box::new(
     //     billing::reactors::AccountCreated {},
     // ));

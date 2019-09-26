@@ -21,7 +21,6 @@ pub struct Session {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
-    pub version: i64,
 
     pub device: Device,
     pub ip: String,

@@ -3,7 +3,6 @@ use eventsourcing::{Aggregate, Event, EventTs};
 pub struct Account {
     id: u64,
     balance: i64,
-    version: i64,
     updated_at: chrono::DateTime<chrono::Utc>,
 }
 

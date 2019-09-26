@@ -1,5 +1,5 @@
 table! {
-    bitflow_downloads (id) {
+    bitflow_downloads_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -15,7 +15,7 @@ table! {
 }
 
 table! {
-    bitflow_profiles (id) {
+    bitflow_profiles_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -26,7 +26,7 @@ table! {
 }
 
 table! {
-    calendar_events (id) {
+    calendar_events_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -40,7 +40,7 @@ table! {
 }
 
 table! {
-    contacts_contacts (id) {
+    contacts_contacts_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -61,7 +61,7 @@ table! {
 }
 
 table! {
-    drive_files (id) {
+    drive_files_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -78,7 +78,7 @@ table! {
 }
 
 table! {
-    drive_profiles (id) {
+    drive_profiles_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -91,7 +91,7 @@ table! {
 }
 
 table! {
-    drive_uploads (id) {
+    drive_uploads_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -107,7 +107,15 @@ table! {
 }
 
 table! {
-    gallery_albums (id) {
+    gallery_albums_files_legacy (id) {
+        id -> Uuid,
+        album_id -> Uuid,
+        file_id -> Uuid,
+    }
+}
+
+table! {
+    gallery_albums_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -118,15 +126,25 @@ table! {
 }
 
 table! {
-    gallery_albums_files (id) {
+    kernel_accounts (id) {
         id -> Uuid,
-        album_id -> Uuid,
-        file_id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
+        avatar_id -> Nullable<Text>,
+        username -> Text,
+        display_name -> Text,
+        bio -> Text,
+        email -> Text,
+        first_name -> Text,
+        last_name -> Text,
+        is_admin -> Bool,
+        disabled_at -> Nullable<Timestamptz>,
+        auth_key_hash -> Text,
     }
 }
 
 table! {
-    kernel_accounts (id) {
+    kernel_accounts_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -157,6 +175,19 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        email -> Text,
+        display_name -> Text,
+        auth_key_hash -> Text,
+        token_hash -> Text,
+        trials -> Int8,
+    }
+}
+
+table! {
+    kernel_pending_accounts_legacy (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
         version -> Int8,
         email -> Text,
         password -> Text,
@@ -168,7 +199,7 @@ table! {
 }
 
 table! {
-    kernel_pending_emails (id) {
+    kernel_pending_emails_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -185,6 +216,18 @@ table! {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
+        account_id -> Uuid,
+        token_hash -> Text,
+        ip -> Text,
+        user_agent -> Text,
+    }
+}
+
+table! {
+    kernel_sessions_legacy (id) {
+        id -> Uuid,
+        created_at -> Timestamptz,
+        updated_at -> Timestamptz,
         version -> Int8,
         device -> Jsonb,
         ip -> Text,
@@ -195,7 +238,15 @@ table! {
 }
 
 table! {
-    music_playlists (id) {
+    music_playlists_files_legacy (id) {
+        id -> Uuid,
+        playlist_id -> Uuid,
+        file_id -> Uuid,
+    }
+}
+
+table! {
+    music_playlists_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -206,15 +257,7 @@ table! {
 }
 
 table! {
-    music_playlists_files (id) {
-        id -> Uuid,
-        playlist_id -> Uuid,
-        file_id -> Uuid,
-    }
-}
-
-table! {
-    notes_notes (id) {
+    notes_notes_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -228,7 +271,7 @@ table! {
 }
 
 table! {
-    phaser_reports (id) {
+    phaser_reports_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -251,7 +294,7 @@ table! {
 }
 
 table! {
-    phaser_scans (id) {
+    phaser_scans_legacy (id) {
         id -> Uuid,
         created_at -> Timestamptz,
         updated_at -> Timestamptz,
@@ -268,46 +311,50 @@ table! {
     }
 }
 
-joinable!(bitflow_downloads -> kernel_accounts (owner_id));
-joinable!(bitflow_profiles -> drive_files (download_folder_id));
-joinable!(bitflow_profiles -> kernel_accounts (account_id));
-joinable!(calendar_events -> kernel_accounts (owner_id));
-joinable!(contacts_contacts -> kernel_accounts (owner_id));
-joinable!(drive_files -> kernel_accounts (owner_id));
-joinable!(drive_profiles -> drive_files (home_id));
-joinable!(drive_profiles -> kernel_accounts (account_id));
-joinable!(drive_uploads -> drive_files (parent_id));
-joinable!(drive_uploads -> kernel_accounts (owner_id));
-joinable!(gallery_albums -> kernel_accounts (owner_id));
-joinable!(gallery_albums_files -> drive_files (file_id));
-joinable!(gallery_albums_files -> gallery_albums (album_id));
-joinable!(kernel_pending_emails -> kernel_accounts (account_id));
+joinable!(bitflow_downloads_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(bitflow_profiles_legacy -> drive_files_legacy (download_folder_id));
+joinable!(bitflow_profiles_legacy -> kernel_accounts_legacy (account_id));
+joinable!(calendar_events_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(contacts_contacts_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(drive_files_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(drive_profiles_legacy -> drive_files_legacy (home_id));
+joinable!(drive_profiles_legacy -> kernel_accounts_legacy (account_id));
+joinable!(drive_uploads_legacy -> drive_files_legacy (parent_id));
+joinable!(drive_uploads_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(gallery_albums_files_legacy -> drive_files_legacy (file_id));
+joinable!(gallery_albums_files_legacy -> gallery_albums_legacy (album_id));
+joinable!(gallery_albums_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(kernel_pending_emails_legacy -> kernel_accounts_legacy (account_id));
 joinable!(kernel_sessions -> kernel_accounts (account_id));
-joinable!(music_playlists -> kernel_accounts (owner_id));
-joinable!(music_playlists_files -> drive_files (file_id));
-joinable!(music_playlists_files -> music_playlists (playlist_id));
-joinable!(notes_notes -> kernel_accounts (owner_id));
-joinable!(phaser_reports -> phaser_scans (scan_id));
-joinable!(phaser_scans -> kernel_accounts (owner_id));
+joinable!(kernel_sessions_legacy -> kernel_accounts_legacy (account_id));
+joinable!(music_playlists_files_legacy -> drive_files_legacy (file_id));
+joinable!(music_playlists_files_legacy -> music_playlists_legacy (playlist_id));
+joinable!(music_playlists_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(notes_notes_legacy -> kernel_accounts_legacy (owner_id));
+joinable!(phaser_reports_legacy -> phaser_scans_legacy (scan_id));
+joinable!(phaser_scans_legacy -> kernel_accounts_legacy (owner_id));
 
 allow_tables_to_appear_in_same_query!(
-    bitflow_downloads,
-    bitflow_profiles,
-    calendar_events,
-    contacts_contacts,
-    drive_files,
-    drive_profiles,
-    drive_uploads,
-    gallery_albums,
-    gallery_albums_files,
+    bitflow_downloads_legacy,
+    bitflow_profiles_legacy,
+    calendar_events_legacy,
+    contacts_contacts_legacy,
+    drive_files_legacy,
+    drive_profiles_legacy,
+    drive_uploads_legacy,
+    gallery_albums_files_legacy,
+    gallery_albums_legacy,
     kernel_accounts,
+    kernel_accounts_legacy,
     kernel_deleted_usernames,
     kernel_pending_accounts,
-    kernel_pending_emails,
+    kernel_pending_accounts_legacy,
+    kernel_pending_emails_legacy,
     kernel_sessions,
-    music_playlists,
-    music_playlists_files,
-    notes_notes,
-    phaser_reports,
-    phaser_scans,
+    kernel_sessions_legacy,
+    music_playlists_files_legacy,
+    music_playlists_legacy,
+    notes_notes_legacy,
+    phaser_reports_legacy,
+    phaser_scans_legacy,
 );

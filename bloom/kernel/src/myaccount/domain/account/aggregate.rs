@@ -20,20 +20,17 @@ pub struct Account {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
-    pub version: i64,
 
-    pub avatar_url: String,
+    pub avatar_id: Option<String>,
+    pub username: String,
+    pub display_name: String,
+    pub bio: String,
     pub email: String,
     pub first_name: String,
-    pub is_admin: bool,
     pub last_name: String,
-    pub password: String, // hashed password
-    pub password_reset_id: Option<uuid::Uuid>,
-    pub password_reset_token: Option<String>,
-    pub username: String,
-    pub bio: String,
-    pub display_name: String,
+    pub is_admin: bool,
     pub disabled_at: Option<chrono::DateTime<chrono::Utc>>,
+    pub auth_key_hash: String,
 }
 
 impl Account {
@@ -44,20 +41,17 @@ impl Account {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
-            version: 0,
 
-            avatar_url: String::new(),
+            avatar_id: None,
+            username: String::new(),
+            display_name: String::new(),
+            bio: String::new(),
             email: String::new(),
             first_name: String::new(),
-            is_admin: false,
             last_name: String::new(),
-            password: String::new(),
-            password_reset_id: None,
-            password_reset_token: None,
-            username: String::new(),
-            bio: String::new(),
-            display_name: String::new(),
+            is_admin: bool,
             disabled_at: None,
+            auth_key_hash: String::new(),
         };
     }
 }

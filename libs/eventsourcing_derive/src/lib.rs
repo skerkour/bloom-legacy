@@ -45,10 +45,6 @@ pub fn aggregate_derive(input: TokenStream) -> TokenStream {
 
     let expanded = quote! {
         impl #impl_generics eventsourcing::AggregateData for #name #ty_generics #where_clause {
-            fn increment_version(&mut self) {
-                self.version += 1;
-            }
-
             fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>) {
                 self.updated_at = timestamp;
             }

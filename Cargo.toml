@@ -15,16 +15,16 @@ eventsourcing = { path = "libs/eventsourcing-rs" }
 
 
 kernel = { path = "bloom/kernel" }
-notes = { path = "bloom/notes" }
-contacts = { path = "bloom/contacts" }
-drive = { path = "bloom/drive" }
-gallery = { path = "bloom/gallery" }
-music = { path = "bloom/music" }
-bitflow = { path = "bloom/bitflow" }
-phaser = { path = "bloom/phaser" }
-# billing = { path = "../billing" }
-admin = { path = "bloom/admin" }
-calendar = { path = "bloom/calendar" }
+# notes = { path = "bloom/notes" }
+# contacts = { path = "bloom/contacts" }
+# drive = { path = "bloom/drive" }
+# gallery = { path = "bloom/gallery" }
+# music = { path = "bloom/music" }
+# bitflow = { path = "bloom/bitflow" }
+# phaser = { path = "bloom/phaser" }
+# # billing = { path = "../billing" }
+# admin = { path = "bloom/admin" }
+# calendar = { path = "bloom/calendar" }
 
 
 actix-web = "1.0.7"

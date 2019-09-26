@@ -5,7 +5,7 @@
 
 
 # OpenSSL settings
-ENCRYPTION_CIPHER=${ENCRYPTION_CIPHER:-"aes-256-cbc"}
+ENCRYPTION_CIPHER=${ENCRYPTION_CIPHER:-"aes-256-gcm"} # old: aes-256-cbc
 : ${ENCRYPTION_KEY:?"ENCRYPTION_KEY not specified"}
 
 

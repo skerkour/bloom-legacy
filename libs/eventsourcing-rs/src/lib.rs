@@ -5,7 +5,6 @@ use std::collections::HashMap;
 pub use eventsourcing_derive::{Aggregate, EventTs};
 
 pub trait AggregateData {
-    fn increment_version(&mut self);
     fn update_updated_at(&mut self, timestamp: chrono::DateTime<chrono::Utc>);
 }
 
@@ -161,7 +160,6 @@ where
     cmd.validate(ctx, &aggregate)?;
     let event = cmd.build_event(ctx, &aggregate)?;
     let mut aggregate = event.apply(aggregate);
-    aggregate.increment_version();
     aggregate.update_updated_at(event.timestamp());
     // violates foreign key constraint  because they are called before the insert
     // publish::<_, _, Err>(ctx, &event)?;
