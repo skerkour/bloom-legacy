@@ -18,3 +18,60 @@ ALTER TABLE music_playlists_files RENAME TO music_playlists_files_legacy;
 ALTER TABLE notes_notes RENAME TO notes_notes_legacy;
 ALTER TABLE phaser_reports RENAME TO phaser_reports_legacy;
 ALTER TABLE phaser_scans RENAME TO phaser_scans_legacy;
+
+
+CREATE TABLE kernel_accounts (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    avatar_id TEXT,
+    username TEXT NOT NULL,
+    display_name TEXT NOT NULL,
+    bio TEXT NOT NULL,
+
+    email TEXT NOT NULL,
+    first_name TEXT NOT NULL,
+    last_name TEXT NOT NULL,
+
+    is_admin BOOLEAN NOT NULL,
+    disabled_at TIMESTAMP WITH TIME ZONE,
+    auth_key_hash TEXT NOT NULL,
+    -- password_reset_id TEXT,
+    -- password_reset_token_hash TEXT,
+
+    PRIMARY KEY(id)
+);
+
+CREATE UNIQUE INDEX idx_kernel_accounts_username ON kernel_accounts (username);
+CREATE UNIQUE INDEX idx_kernel_accounts_avatar_id ON kernel_accounts (avatar_id);
+
+CREATE TABLE kernel_sessions (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    account_id UUID NOT NULL REFERENCES kernel_accounts(id) ON DELETE CASCADE,
+
+    token_hash TEXT NOT NULL,
+    ip TEXT NOT NULL,
+    user_agent TEXT NOT NULL,
+
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE kernel_pending_accounts (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    email TEXT NOT NULL,
+    display_name TEXT NOT NULL,
+
+    auth_key_hash TEXT NOT NULL,
+    token_hash TEXT NOT NULL,
+    trials BIGINT NOT NULL,
+
+    PRIMARY KEY(id)
+);
+

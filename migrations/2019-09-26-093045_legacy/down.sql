@@ -1,5 +1,10 @@
 -- This file should undo anything in `up.sql`
 
+DROP TABLE kernel_sessions;
+DROP TABLE kernel_accounts;
+DROP TABLE kernel_pending_accounts;
+
+
 ALTER TABLE bitflow_downloads_legacy RENAME TO bitflow_downloads;
 ALTER TABLE bitflow_profiles_legacy RENAME TO bitflow_profiles;
 ALTER TABLE calendar_events_legacy RENAME TO calendar_events;
