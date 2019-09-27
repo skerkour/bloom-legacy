@@ -13,7 +13,6 @@ keywords = ["bloom42", "bloom"]
 [dependencies]
 eventsourcing = { path = "libs/eventsourcing-rs" }
 
-
 kernel = { path = "bloom/kernel" }
 # notes = { path = "bloom/notes" }
 # contacts = { path = "bloom/contacts" }
@@ -26,7 +25,7 @@ kernel = { path = "bloom/kernel" }
 # admin = { path = "bloom/admin" }
 # calendar = { path = "bloom/calendar" }
 
-
+futures = "0.1"
 actix-web = "1.0.7"
 actix-cors = "0.1.0"
 actix = "0.8"
@@ -66,6 +65,5 @@ members = [
     # "billing",
     "bloom/admin",
     "bloom/calendar",
-    "bloom/messages",
     ".",
 ]

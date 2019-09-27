@@ -609,13 +609,6 @@ dependencies = [
 ]
 
 [[package]]
-name = "bloom_messages"
-version = "0.1.0"
-dependencies = [
- "serde 1.0.89 (registry+https://github.com/rust-lang/crates.io-index)",
-]
-
-[[package]]
 name = "bloom_server"
 version = "0.17.0"
 dependencies = [
@@ -623,6 +616,7 @@ dependencies = [
  "actix-cors 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.7 (registry+https://github.com/rust-lang/crates.io-index)",
  "eventsourcing 0.3.0",
+ "futures 0.1.27 (registry+https://github.com/rust-lang/crates.io-index)",
  "http 0.1.17 (registry+https://github.com/rust-lang/crates.io-index)",
  "kernel 0.1.0",
  "num_cpus 1.10.0 (registry+https://github.com/rust-lang/crates.io-index)",

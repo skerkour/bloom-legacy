@@ -1,4 +1,4 @@
-use actix_web::web;
+// use actix_web::web;
 
 // use admin::api::v1 as adminv1;
 // use bitflow::api::v1 as bitflowv1;
@@ -6,19 +6,87 @@ use actix_web::web;
 // use contacts::api::v1 as contactsv1;
 // use drive::api::v1 as drivev1;
 // use gallery::api::v1 as galleryv1;
-use kernel::{config::Config};
+use kernel::{
+    api,
+    messages,
+    config::Config,
+    api::middlewares::{GetRequestAuth, GetRequestLogger},
+    KernelError,
+    myaccount::controllers,
+    log::macros::*,
+};
 // use music::api::v1 as musicv1;
 // use notes::api::v1 as notesv1;
 // use phaser::api::v1 as phaserv1;
 
+use actix_web::{web, Error, HttpRequest, HttpResponse, ResponseError};
+use futures::future::{ok, Either, Future}; // , IntoFuture};
+
+
+pub fn post(
+    message_wrapped: web::Json<messages::Message>,
+    state: web::Data<api::State>,
+    req: HttpRequest,
+) -> impl Future<Item = HttpResponse, Error = Error> {
+    let logger = req.logger();
+    let config = state.config.clone();
+    let auth = req.request_auth();
+
+    if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
+        return Either::A(ok(KernelError::Unauthorized(
+            "Must not be authenticated".to_string(),
+        )
+        .error_response()));
+    }
+
+    if let messages::Message::AuthStartRegistration(message) = message_wrapped.into_inner() {
+
+        return Either::B(
+        state
+            .db
+            .send(controllers::StartRegistration {
+                message,
+                config,
+            })
+            .map_err(|_| KernelError::ActixMailbox)
+            .from_err()
+            .and_then(move |res| match res {
+                Ok(pending_account) => {
+                    let res = messages::Message::AuthRegistrationStarted(messages::auth::RegistrationStarted {
+                        id: pending_account.id,
+                    });
+                    let res = api::Response::data(res);
+                    ok(HttpResponse::Ok().json(&res))
+                },
+                Err(err) => {
+                    slog_error!(logger, "{}", err);
+                    ok(err.error_response())
+                }
+            }),
+    );
+
+    } else {
+        return Either::A(ok(KernelError::Validation(
+            "message is not valdi".to_string(),
+        )
+        .error_response()));
+    }
+}
+
+
 pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
-   return move |_cfg| {
+   return move |cfg| {
+       cfg.service(
+            web::resource("/")
+            .route(web::get().to(api::index))
+            .route(web::post().to_async(post)),
+        );
    };
 }
 
 // pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {
 //     return move |cfg| {
-//         cfg.service(web::resource("/").route(web::get().to(api::index)))
+        // cfg.service(web::resource("/").route(web::get().to(api::index)))
 //             .service(
 //                 web::scope("/myaccount")
 //                     .route(

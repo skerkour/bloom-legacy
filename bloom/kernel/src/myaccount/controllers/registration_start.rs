@@ -2,16 +2,14 @@ use crate::{
     config::Config, db::DbActor, error::KernelError, myaccount::domain,
     myaccount::domain::pending_account,
     myaccount::notifications::emails::send_account_verification_code,
+    messages,
 };
 use actix::{Handler, Message};
 
 #[derive(Clone, Debug)]
 pub struct StartRegistration {
-    pub display_name: String,
-    pub email: String,
-    pub auth_key: String,
+    pub message: messages::auth::StartRegistration,
     pub config: Config,
-    pub request_id: uuid::Uuid,
 }
 
 impl Message for StartRegistration {
@@ -31,9 +29,9 @@ impl Handler<StartRegistration> for DbActor {
             let config = msg.config.clone();
 
             let create_cmd = pending_account::Create {
-                display_name: msg.display_name.clone(),
-                email: msg.email.clone(),
-                auth_key: msg.auth_key.clone(),
+                display_name: msg.message.display_name.clone(),
+                email: msg.message.email.clone(),
+                auth_key: msg.message.auth_key.clone(),
                 config: msg.config.clone(),
             };
             let (new_pending_account, event) =
@@ -46,7 +44,7 @@ impl Handler<StartRegistration> for DbActor {
             send_account_verification_code(
                 &config,
                 new_pending_account.email.as_str(),
-                &msg.display_name,
+                &msg.message.display_name,
                 new_pending_account.id.to_string().as_str(),
                 &event.verification_code,
             )
