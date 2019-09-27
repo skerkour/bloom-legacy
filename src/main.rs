@@ -39,6 +39,8 @@ fn main() {
 
     let (_log_guard, logger) = log::setup_slog();
 
+    crypto42::init().expect("error initializing crypto42");
+
     let sys = System::new("bloom_server");
     let db_actor_addr = db::init(&cfg);
     let binding_addr = format!("0.0.0.0:{}", &cfg.port);

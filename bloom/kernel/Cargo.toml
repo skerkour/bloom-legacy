@@ -15,7 +15,7 @@ mimesniff = { path = "../../libs/mimesniff-rs" }
 hex = { path = "../../libs/hex-rs" }
 try_future = { path = "../../libs/rust-try-future" }
 
-
+crypto42 = { version = "0.4", git = "https://gitlab.com/bloom42/libs/crypto42" }
 regex = "1"
 failure = "0.1.5"
 actix-web = "1.0.0"
