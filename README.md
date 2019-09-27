@@ -1,6 +1,6 @@
 <p align="center">
   <img alt="bloom logo" src="bloom_256.png" height="180" />
-  <h3 align="center">Bloom</h3>
+  <h3 align="center">Bloom Mobile (Android, IOS)</h3>
   <p align="center">Empowering people with open technologies</p>
 </p>
 
@@ -12,10 +12,11 @@ Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 
 1. [Download](#download)
 2. [Documentation](#documentation)
-3. [Contributing](#contributing)
-4. [Licensing](#licensing)
-5. [Sponsoring](#sponsoring)
-6. [Security](#security)
+3. [Development](#development)
+4. [Contributing](#contributing)
+5. [Licensing](#licensing)
+6. [Sponsoring](#sponsoring)
+7. [Security](#security)
 
 --------
 
@@ -27,6 +28,11 @@ Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 ## Documentation
 
 See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/projects/bloom).
+
+
+## Development
+
+See [https://theguide.bloom.sh/projects/bloom/development.html#desktop](https://theguide.bloom.sh/projects/bloom/development.html#desktop).
 
 
 ## Contributing
