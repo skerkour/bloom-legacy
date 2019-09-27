@@ -60,6 +60,23 @@ pub fn post_index(
                     }
                 }),
         );
+    } else if let messages::Message::AuthRegistrationVerify(message) = message_wrapped.into_inner()
+    {
+        return Either::B(
+            state
+                .db
+                .send(controllers::VerifyPendingAccount { message })
+                .map_err(|_| KernelError::ActixMailbox)
+                .from_err()
+                .and_then(move |res| match res {
+                    Ok(message) => ok(api::response(message)),
+                    Err(err) => {
+                        slog_error!(logger, "{}", err);
+                        let err: messages::kernel::Error = err.into();
+                        return ok(api::response(err));
+                    }
+                }),
+        );
     } else {
         let err: messages::kernel::Error =
             KernelError::Validation("message is not valdi".to_string()).into();

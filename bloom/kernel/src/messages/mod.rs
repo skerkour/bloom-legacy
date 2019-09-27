@@ -13,10 +13,12 @@ pub enum Message {
     #[serde(rename = "bloom.error")]
     KernelError(kernel::Error),
 
-    #[serde(rename = "auth.start_registration")]
+    #[serde(rename = "auth.registration_start")]
     AuthStartRegistration(auth::StartRegistration),
     #[serde(rename = "auth.registration_started")]
     AuthRegistrationStarted(auth::RegistrationStarted),
+    #[serde(rename = "auth.registration_verify")]
+    AuthRegistrationVerify(auth::VerifyPendingAccount),
 }
 
 impl From<kernel::NoData> for Message {

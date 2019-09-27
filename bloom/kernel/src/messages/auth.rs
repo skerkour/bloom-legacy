@@ -11,3 +11,9 @@ pub struct StartRegistration {
 pub struct RegistrationStarted {
     pub id: uuid::Uuid,
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct VerifyPendingAccount {
+    pub id: uuid::Uuid,
+    pub code: String,
+}
