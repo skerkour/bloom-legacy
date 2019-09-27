@@ -18,3 +18,31 @@ like IoT...
 
 
 packages: Using ONLY the package manager, semver
+
+
+-------------------------
+
+What if android was a pure linux distro?
+
+Gestion des mises a jour
+
+Gestion des notifications
+
+Sandboxing
+
+Gui libs
+
+App ecosystem
+
+Licensing
+
+Gaming
+
+
+Other OS
+
+Convergence
+
+Pro tools (adobe….)
+
+Other devices (tablets, e book readers…)
