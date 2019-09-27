@@ -7,7 +7,6 @@ pub struct StartRegistration {
     pub auth_key: String,
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegistrationStarted {
     pub id: uuid::Uuid,

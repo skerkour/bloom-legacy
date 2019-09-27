@@ -52,11 +52,10 @@ pub fn post(
             .from_err()
             .and_then(move |res| match res {
                 Ok(pending_account) => {
-                    let res = messages::Message::AuthRegistrationStarted(messages::auth::RegistrationStarted {
+                    let res = api::response(messages::auth::RegistrationStarted {
                         id: pending_account.id,
                     });
-                    let res = api::Response::data(res);
-                    ok(HttpResponse::Ok().json(&res))
+                    ok(res)
                 },
                 Err(err) => {
                     slog_error!(logger, "{}", err);
