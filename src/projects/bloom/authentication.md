@@ -11,7 +11,7 @@
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
-4. server hash `auth_key` to `hashed_auth_key` using `crypto42::kdf::argon2id::hash_password`
+4. server hash `auth_key` to `auth_key_hash` using `crypto42::kdf::argon2id::hash_password`
 5. server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
 6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
 7. both `session_id` and `session_token_hash` are stored in the Database
@@ -23,7 +23,7 @@
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and the saved `client_salt`
 2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
-4. server verify that `auth_key` match stored `hashed_auth_key` using `crypto42::kdf::argon2id::verify_password`
+4. server verify that `auth_key` match stored `auth_key_hash` using `crypto42::kdf::argon2id::verify_password`
 5. if ok, server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
 6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
 7. both `session_id` and `session_token_hash` are stored in the Database
@@ -44,6 +44,12 @@
 
 
 ## Changing the Password
+
+## Resetting password
+
+**Because of the encryption used to protect the data, resetting the password in Bloom is different
+from other, less secure services. The password is used to decrypt the data, and we do not have access to it.
+Therefore, a user resetting his password will lose all his data**
 
 ## Resources
 

@@ -15,3 +15,6 @@ like AnBox or *a la* ChromeOS.
 
 Other OS support Android Apps and may be more appropriated for resoruce constrained environements
 like IoT...
+
+
+packages: Using ONLY the package manager, semver

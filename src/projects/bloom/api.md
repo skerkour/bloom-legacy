@@ -20,8 +20,10 @@ API is transport agnostic and based on messages (or events).
 
 ## Routes
 
-* `/wss` It's the websocket endpoints
-* `/upload` handles files uplaods for all apps. Some metadata are attached alongside the file
+* `GET /` Hello world message
+* `POST /` handle any messages (like websocket, but using plain HTTP insteadapi)
+* `/ws` The websocket endpoint
+* `POST /upload` handles files uplaods for all apps. Some metadata are attached alongside the file
 
 
 
