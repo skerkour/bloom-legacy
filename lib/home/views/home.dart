@@ -111,10 +111,10 @@ class _HomeViewState extends State<HomeView> {
           icon: Icon(Icons.people),
           title: Text('Groups'),
         ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.explore),
-          title: Text('Discover'),
-        ),
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.explore),
+        //   title: Text('Discover'),
+        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           title: Text('Me'),
@@ -133,8 +133,8 @@ class _HomeViewState extends State<HomeView> {
         return const TabChatsView();
       case 1:
         return const TabGroupsView();
-      case 2:
-        return const TabDiscoverView();
+      // case 2:
+      //   return const TabDiscoverView();
       default:
         return const TabMeView();
     }
