@@ -6,13 +6,13 @@ use actix_web::web;
 // use contacts::api::v1 as contactsv1;
 // use drive::api::v1 as drivev1;
 // use gallery::api::v1 as galleryv1;
-use kernel::{api, config::Config, myaccount::api::v1 as myaccountv1};
+use kernel::{config::Config};
 // use music::api::v1 as musicv1;
 // use notes::api::v1 as notesv1;
 // use phaser::api::v1 as phaserv1;
 
-pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {
-   return move |cfg| {
+pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
+   return move |_cfg| {
    };
 }
 

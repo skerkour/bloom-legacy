@@ -1,7 +1,7 @@
 mod aggregate;
 mod commands;
 
-pub use aggregate::{Device, Location, RevokedReason, Session};
+pub use aggregate::{Session};
 pub use commands::{
     revoke::{Revoke, Revoked},
     sign_out::{SignOut, SignedOut},

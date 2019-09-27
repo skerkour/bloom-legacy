@@ -9,7 +9,7 @@ use actix::{Handler, Message};
 pub struct StartRegistration {
     pub display_name: String,
     pub email: String,
-    pub password: String,
+    pub auth_key: String,
     pub config: Config,
     pub request_id: uuid::Uuid,
 }
@@ -33,7 +33,7 @@ impl Handler<StartRegistration> for DbActor {
             let create_cmd = pending_account::Create {
                 display_name: msg.display_name.clone(),
                 email: msg.email.clone(),
-                password: msg.password.clone(),
+                auth_key: msg.auth_key.clone(),
                 config: msg.config.clone(),
             };
             let (new_pending_account, event) =
@@ -48,7 +48,7 @@ impl Handler<StartRegistration> for DbActor {
                 new_pending_account.email.as_str(),
                 &msg.display_name,
                 new_pending_account.id.to_string().as_str(),
-                &event.code,
+                &event.verification_code,
             )
             .expect("error sending email");
 

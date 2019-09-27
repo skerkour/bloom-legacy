@@ -13,7 +13,7 @@ pub struct CompleteRegistration {
     pub username: String,
     pub config: Config,
     pub ip: String,
-    pub request_id: uuid::Uuid,
+    pub user_agent: String,
 }
 
 impl Message for CompleteRegistration {
@@ -53,9 +53,8 @@ impl Handler<CompleteRegistration> for DbActor {
             let create_cmd = account::Create {
                 display_name: pending_account_to_update.display_name.clone(),
                 email: pending_account_to_update.email.clone(),
-                password: pending_account_to_update.password.clone(),
+                auth_key_hash: pending_account_to_update.auth_key_hash.clone(),
                 username: msg.username.clone(),
-                host: msg.config.host,
             };
             let (new_account, event) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
 
@@ -69,7 +68,7 @@ impl Handler<CompleteRegistration> for DbActor {
             let start_cmd = session::Start {
                 account_id: new_account.id,
                 ip: msg.ip,
-                user_agent: "".to_string(), // TODO
+                user_agent: msg.user_agent,
             };
 
             let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;

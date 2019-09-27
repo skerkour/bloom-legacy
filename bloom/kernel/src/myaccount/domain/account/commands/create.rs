@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::account};
+use crate::{error::KernelError, myaccount::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -10,9 +10,8 @@ use serde::{Deserialize, Serialize};
 pub struct Create {
     pub display_name: String,
     pub email: String,
-    pub password: String,
+    pub auth_key_hash: String,
     pub username: String,
-    pub host: String,
 }
 
 impl eventsourcing::Command for Create {
@@ -81,10 +80,8 @@ impl eventsourcing::Command for Create {
             id: uuid::Uuid::new_v4(),
             display_name: self.display_name.clone(),
             email: self.email.clone(),
-            password: self.password.clone(),
-            avatar_url: myaccount::AVATAR_DEFAULT_PATH.to_string(),
+            auth_key_hash: self.auth_key_hash.clone(),
             username: self.username.clone(),
-            is_admin: false,
         });
     }
 }
@@ -96,10 +93,8 @@ pub struct Created {
     pub id: uuid::Uuid,
     pub display_name: String,
     pub email: String,
-    pub password: String,
-    pub avatar_url: String,
+    pub auth_key_hash: String,
     pub username: String,
-    pub is_admin: bool,
 }
 
 impl Event for Created {
@@ -110,15 +105,12 @@ impl Event for Created {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            version: 0,
-            avatar_url: self.avatar_url.clone(),
+            avatar_id: None,
             email: self.email.clone(),
-            is_admin: self.is_admin,
+            is_admin: false,
             last_name: String::new(),
             first_name: String::new(),
-            password: self.password.clone(),
-            password_reset_id: None,
-            password_reset_token: None,
+            auth_key_hash: self.auth_key_hash.clone(),
             username: self.username.clone(),
             disabled_at: None,
             bio: String::new(),

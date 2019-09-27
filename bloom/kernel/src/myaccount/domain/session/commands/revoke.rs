@@ -9,7 +9,6 @@ use serde::{Deserialize, Serialize};
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Revoke {
     pub current_session_id: Option<uuid::Uuid>,
-    pub reason: session::RevokedReason,
 }
 
 impl eventsourcing::Command for Revoke {
@@ -41,7 +40,6 @@ impl eventsourcing::Command for Revoke {
     ) -> Result<Self::Event, Self::Error> {
         return Ok(Revoked {
             timestamp: chrono::Utc::now(),
-            reason: self.reason,
         });
     }
 }
@@ -49,7 +47,6 @@ impl eventsourcing::Command for Revoke {
 // Event
 #[derive(Clone, Debug, Deserialize, EventTs, Serialize)]
 pub struct Revoked {
-    pub reason: session::RevokedReason,
     pub timestamp: chrono::DateTime<chrono::Utc>,
 }
 

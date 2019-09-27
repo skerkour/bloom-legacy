@@ -1,6 +1,6 @@
 use crate::db::schema::kernel_sessions;
 use diesel::Queryable;
-use diesel_as_jsonb::AsJsonb;
+// use diesel_as_jsonb::AsJsonb;
 use eventsourcing::Aggregate;
 use serde::{Deserialize, Serialize};
 

@@ -40,7 +40,8 @@ impl eventsourcing::Command for Verify {
             return Err(KernelError::Validation(
                 pending_account::VerificationFailedReason::TooManyTrials.to_string(),
             ));
-        } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
+        } else if !bcrypt::verify(&self.code, &aggregate.verification_code_hash)
+            .map_err(|_| KernelError::Bcrypt)? {
             // verify given code
             return Err(KernelError::Validation(
                 pending_account::VerificationFailedReason::CodeNotValid.to_string(),

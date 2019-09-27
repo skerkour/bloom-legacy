@@ -15,7 +15,7 @@ use eventsourcing::{Event, EventTs};
 pub struct Create {
     pub display_name: String,
     pub email: String,
-    pub password: String,
+    pub auth_key: String,
     pub config: Config,
 }
 
@@ -34,14 +34,8 @@ impl eventsourcing::Command for Create {
         use diesel::prelude::*;
 
         account::validators::display_name(&self.display_name)?;
-        account::validators::password(self.config.basic_passwords.clone(), &self.password)?;
+        // account::validators::password(self.config.basic_passwords.clone(), &self.password)?;
         account::validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
-
-        if self.password == self.email {
-            return Err(KernelError::Validation(
-                "password must be different than your email address".to_string(),
-            ));
-        }
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts
@@ -64,10 +58,10 @@ impl eventsourcing::Command for Create {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let new_pending_account_id = uuid::Uuid::new_v4();
-        let code = utils::random_digit_string(8);
-        let hashed_password = bcrypt::hash(&self.password, myaccount::PASSWORD_BCRYPT_COST)
+        let verification_code = utils::random_digit_string(8);
+        let auth_key_hash = bcrypt::hash(&self.auth_key, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
-        let token = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
+        let verification_code_hash = bcrypt::hash(&verification_code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         return Ok(Created {
@@ -75,9 +69,9 @@ impl eventsourcing::Command for Create {
             id: new_pending_account_id,
             display_name: self.display_name.clone(),
             email: self.email.clone(),
-            password: hashed_password,
-            token,
-            code,
+            auth_key_hash,
+            verification_code_hash,
+            verification_code,
         });
     }
 }
@@ -89,9 +83,9 @@ pub struct Created {
     pub id: uuid::Uuid,
     pub display_name: String,
     pub email: String,
-    pub password: String,
-    pub token: String,
-    pub code: String,
+    pub auth_key_hash: String,
+    pub verification_code_hash: String,
+    pub verification_code: String,
 }
 
 impl Event for Created {
@@ -102,11 +96,10 @@ impl Event for Created {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            version: 0,
             email: self.email.clone(),
             display_name: self.display_name.clone(),
-            password: self.password.clone(),
-            token: self.token.clone(),
+            auth_key_hash: self.auth_key_hash.clone(),
+            verification_code_hash: self.verification_code_hash.clone(),
             trials: 0,
             verified: false,
         };

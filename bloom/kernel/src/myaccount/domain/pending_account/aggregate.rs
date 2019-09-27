@@ -20,14 +20,13 @@ pub struct PendingAccount {
     pub id: uuid::Uuid,
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
-    pub version: i64,
 
     pub email: String,
-    pub password: String, // hashed password
-    pub token: String,    // hashed verification code
+    pub display_name: String,
+    pub auth_key_hash: String,
+    pub verification_code_hash: String,
     pub trials: i64,
     pub verified: bool,
-    pub display_name: String,
 }
 
 impl PendingAccount {
@@ -38,12 +37,11 @@ impl PendingAccount {
             id: uuid::Uuid::new_v4(),
             created_at: now,
             updated_at: now,
-            version: 0,
 
             email: String::new(),
             display_name: String::new(),
-            password: String::new(),
-            token: String::new(),
+            auth_key_hash: String::new(),
+            verification_code_hash: String::new(),
             trials: 0,
             verified: false,
         };

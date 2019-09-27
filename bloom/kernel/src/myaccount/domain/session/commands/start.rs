@@ -25,11 +25,6 @@ impl eventsourcing::Command for Start {
         _ctx: &Self::Context,
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if aggregate.version != 0 {
-            return Err(KernelError::Validation(
-                "Session is already started.".to_string(),
-            ));
-        }
         return Ok(());
     }
 
@@ -54,8 +49,7 @@ impl eventsourcing::Command for Start {
             token_hash: hashed_token,
             token_plaintext: token,
             ip: self.ip.clone(),
-            device: session::Device {},
-            location: session::Location {},
+            user_agent: self.user_agent.clone(),
         });
     }
 }
@@ -69,8 +63,7 @@ pub struct Started {
     pub token_hash: String,
     pub token_plaintext: String,
     pub ip: String,
-    pub location: session::Location,
-    pub device: session::Device,
+    pub user_agent: String,
 }
 
 impl Event for Started {
@@ -81,11 +74,9 @@ impl Event for Started {
             id: self.id,
             created_at: self.timestamp,
             updated_at: self.timestamp,
-            version: 0,
-            device: self.device.clone(),
+            user_agent: self.user_agent.clone(),
             ip: self.ip.clone(),
-            location: Some(self.location.clone()),
-            token: self.token_hash.clone(),
+            token_hash: self.token_hash.clone(),
             account_id: self.account_id,
         };
     }

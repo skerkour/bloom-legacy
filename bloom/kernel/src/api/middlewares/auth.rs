@@ -303,7 +303,7 @@ impl Handler<CheckAuth> for DbActor {
                         })?;
 
                 // verify session token
-                let is_valid = bcrypt::verify(&msg.token, &session.token).map_err(|_| {
+                let is_valid = bcrypt::verify(&msg.token, &session.token_hash).map_err(|_| {
                     KernelError::Validation("Authorization HTTP header is not valid".to_string())
                 })?;
                 if !is_valid {

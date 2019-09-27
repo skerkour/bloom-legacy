@@ -36,12 +36,12 @@ impl eventsourcing::Command for SendNewCode {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let code = utils::random_digit_string(8);
-        let token_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
+        let verification_code_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
 
         return Ok(NewCodeSent {
             timestamp: chrono::Utc::now(),
-            token_hash,
+            verification_code_hash,
             code,
         });
     }
@@ -51,7 +51,7 @@ impl eventsourcing::Command for SendNewCode {
 #[derive(Clone, Debug, EventTs)]
 pub struct NewCodeSent {
     pub timestamp: chrono::DateTime<chrono::Utc>,
-    pub token_hash: String,
+    pub verification_code_hash: String,
     pub code: String,
 }
 
@@ -60,7 +60,7 @@ impl Event for NewCodeSent {
 
     fn apply(&self, aggregate: Self::Aggregate) -> Self::Aggregate {
         return Self::Aggregate {
-            token: self.token_hash.clone(),
+            verification_code_hash: self.verification_code_hash.clone(),
             ..aggregate
         };
     }
