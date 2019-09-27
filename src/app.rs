@@ -19,10 +19,17 @@ use kernel::{
 // use notes::api::v1 as notesv1;
 // use phaser::api::v1 as phaserv1;
 
-use actix_web::{web, Error, HttpRequest, HttpResponse, ResponseError};
+use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
 use futures::future::{ok, Either, Future}; // , IntoFuture};
 
-pub fn post(
+pub fn get_index() -> ActixResult<HttpResponse> {
+    let res = api::response(messages::kernel::HelloWorld {
+        hello: "world".to_string(),
+    });
+    return Ok(res);
+}
+
+pub fn post_index(
     message_wrapped: web::Json<messages::Message>,
     state: web::Data<api::State>,
     req: HttpRequest,
@@ -32,10 +39,9 @@ pub fn post(
     let auth = req.request_auth();
 
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
-        return Either::A(ok(KernelError::Unauthorized(
-            "Must not be authenticated".to_string(),
-        )
-        .error_response()));
+        let err: messages::kernel::Error =
+            KernelError::Unauthorized("Must not be authenticated".to_string()).into();
+        return Either::A(ok(api::response(err)));
     }
 
     if let messages::Message::AuthStartRegistration(message) = message_wrapped.into_inner() {
@@ -49,15 +55,15 @@ pub fn post(
                     Ok(message) => ok(api::response(message)),
                     Err(err) => {
                         slog_error!(logger, "{}", err);
-                        ok(err.error_response())
+                        let err: messages::kernel::Error = err.into();
+                        return ok(api::response(err));
                     }
                 }),
         );
     } else {
-        return Either::A(ok(KernelError::Validation(
-            "message is not valdi".to_string(),
-        )
-        .error_response()));
+        let err: messages::kernel::Error =
+            KernelError::Validation("message is not valdi".to_string()).into();
+        return Either::A(ok(api::response(err)));
     }
 }
 
@@ -65,8 +71,8 @@ pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
     return move |cfg| {
         cfg.service(
             web::resource("/")
-                .route(web::get().to(api::index))
-                .route(web::post().to_async(post)),
+                .route(web::get().to(get_index))
+                .route(web::post().to_async(post_index)),
         );
     };
 }
