@@ -5,13 +5,12 @@ use crate::{
     myaccount::domain::{account, pending_account},
     utils,
 };
+use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-use crypto42::kdf::argon2id;
-
 
 #[derive(Clone, Debug)]
 pub struct Create {
@@ -62,11 +61,12 @@ impl eventsourcing::Command for Create {
         let new_pending_account_id = uuid::Uuid::new_v4();
         let verification_code = utils::random_digit_string(8);
         let auth_key_hash = argon2id::hash_password(
-                self.auth_key.as_bytes(),
-                argon2id::OPSLIMIT_INTERACTIVE,
-                argon2id::MEMLIMIT_INTERACTIVE,
-            ).expect("error hashing auth_key").to_string(); // TODO: handle error
-        println!("auth_key_hash HASH: {}", auth_key_hash);
+            self.auth_key.as_bytes(),
+            argon2id::OPSLIMIT_INTERACTIVE,
+            argon2id::MEMLIMIT_INTERACTIVE,
+        )
+        .expect("error hashing auth_key")
+        .to_string(); // TODO: handle error
         let verification_code_hash = bcrypt::hash(
             &verification_code,
             myaccount::PENDING_USER_TOKEN_BCRYPT_COST,
