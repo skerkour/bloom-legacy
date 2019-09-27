@@ -49,7 +49,7 @@ impl Account {
             email: String::new(),
             first_name: String::new(),
             last_name: String::new(),
-            is_admin: bool,
+            is_admin: false,
             disabled_at: None,
             auth_key_hash: String::new(),
         };

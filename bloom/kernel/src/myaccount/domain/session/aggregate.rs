@@ -22,12 +22,11 @@ pub struct Session {
     pub created_at: chrono::DateTime<chrono::Utc>,
     pub updated_at: chrono::DateTime<chrono::Utc>,
 
-    pub device: Device,
-    pub ip: String,
-    pub location: Option<Location>,
-    pub token: String,
-
     pub account_id: uuid::Uuid,
+
+    pub token_hash: String,
+    pub ip: String,
+    pub user_agent: String,
 }
 
 impl Session {
@@ -38,12 +37,10 @@ impl Session {
             id: uuid,
             created_at: now,
             updated_at: now,
-            version: 0,
 
-            device: Device {},
-            ip: "".to_string(),
-            location: None,
-            token: "".to_string(),
+            token_hash: String::new(),
+            ip: String::new(),
+            user_agent: String::new(),
 
             account_id: uuid,
         };
@@ -54,18 +51,4 @@ impl Default for Session {
     fn default() -> Self {
         Self::new()
     }
-}
-
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub struct Device {}
-
-#[derive(AsJsonb, Clone, Debug, Deserialize, Serialize)]
-pub struct Location {}
-
-#[derive(Copy, Clone, Debug, Deserialize, Serialize)]
-pub enum RevokedReason {
-    Manually,
-    PasswordUpdated,
-    PasswordReseted,
-    AccountDisabled,
 }
