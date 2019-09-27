@@ -1,3 +1,13 @@
+# Design
+
+Bloom uses [Material design](https://material.io) because it's the most complete and pertinent
+open source design system today. Also, it have a lot of implementations in a lot of languages.
+Using an open source design system allows to win a lot of time.
+
+
+--------------------------------
+
+
 ## Icons
 
 in apps icons are provided as png images, 256x256, as square with 8px corner radius.
