@@ -9,10 +9,10 @@ pub use error::KernelError;
 pub mod api;
 pub mod config;
 pub mod db;
+pub mod messages;
 pub mod myaccount;
 pub mod notifications;
 pub mod utils;
-pub mod messages;
 
 pub static ADDRESS_HELLO: &str = "hello@bloom.sh";
 pub static ADDRESS_WELCOME: &str = "welcome@bloom.sh";

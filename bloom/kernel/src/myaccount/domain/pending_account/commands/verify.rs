@@ -41,7 +41,8 @@ impl eventsourcing::Command for Verify {
                 pending_account::VerificationFailedReason::TooManyTrials.to_string(),
             ));
         } else if !bcrypt::verify(&self.code, &aggregate.verification_code_hash)
-            .map_err(|_| KernelError::Bcrypt)? {
+            .map_err(|_| KernelError::Bcrypt)?
+        {
             // verify given code
             return Err(KernelError::Validation(
                 pending_account::VerificationFailedReason::CodeNotValid.to_string(),

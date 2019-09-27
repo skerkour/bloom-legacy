@@ -1,8 +1,6 @@
 use crate::{
-    config::Config, db::DbActor, error::KernelError, myaccount::domain,
-    myaccount::domain::pending_account,
+    config::Config, db::DbActor, error::KernelError, messages, myaccount::domain::pending_account,
     myaccount::notifications::emails::send_account_verification_code,
-    messages,
 };
 use actix::{Handler, Message};
 
@@ -13,11 +11,11 @@ pub struct StartRegistration {
 }
 
 impl Message for StartRegistration {
-    type Result = Result<domain::PendingAccount, KernelError>;
+    type Result = Result<messages::auth::RegistrationStarted, KernelError>;
 }
 
 impl Handler<StartRegistration> for DbActor {
-    type Result = Result<domain::PendingAccount, KernelError>;
+    type Result = Result<messages::auth::RegistrationStarted, KernelError>;
 
     fn handle(&mut self, msg: StartRegistration, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
@@ -50,7 +48,9 @@ impl Handler<StartRegistration> for DbActor {
             )
             .expect("error sending email");
 
-            return Ok(new_pending_account);
+            return Ok(messages::auth::RegistrationStarted {
+                id: new_pending_account.id,
+            });
         })?);
     }
 }

@@ -3,7 +3,6 @@ use serde::{Deserialize, Serialize};
 pub mod auth;
 pub mod kernel;
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
 pub enum Message {

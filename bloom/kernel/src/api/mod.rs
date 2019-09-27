@@ -50,7 +50,9 @@ pub fn response<D: Into<messages::Message>>(data: D) -> HttpResponse {
 }
 
 pub fn index() -> ActixResult<HttpResponse> {
-    let res = response(messages::kernel::HelloWorld{ hello: "world".to_string() });
+    let res = response(messages::kernel::HelloWorld {
+        hello: "world".to_string(),
+    });
     return Ok(res);
 }
 

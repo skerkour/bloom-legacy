@@ -61,8 +61,11 @@ impl eventsourcing::Command for Create {
         let verification_code = utils::random_digit_string(8);
         let auth_key_hash = bcrypt::hash(&self.auth_key, myaccount::PASSWORD_BCRYPT_COST)
             .map_err(|_| KernelError::Bcrypt)?;
-        let verification_code_hash = bcrypt::hash(&verification_code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let verification_code_hash = bcrypt::hash(
+            &verification_code,
+            myaccount::PENDING_USER_TOKEN_BCRYPT_COST,
+        )
+        .map_err(|_| KernelError::Bcrypt)?;
 
         return Ok(Created {
             timestamp: chrono::Utc::now(),
