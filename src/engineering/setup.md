@@ -40,3 +40,8 @@ $ make dev
 ## Flutter
 
 https://flutter.dev/docs/get-started/install
+
+
+## Visual Studio Code
+
+https://code.visualstudio.com

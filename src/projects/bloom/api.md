@@ -10,9 +10,24 @@ API is transport agnostic and based on messages (or events).
 {
     "id": "unique_id",
     "message": {
-        "type": "com.bloom42.package.message_type",
+        "type": "service.message_type",
         "data": {
             // ...
+        }
+    },
+}
+```
+
+### Errors
+
+```json
+{
+    "id": "unique_id",
+    "message": {
+        "type": "error",
+        "data": {
+            "code": "MY_ERROR",
+            "message": "user friendly error message",
         }
     },
 }
