@@ -73,6 +73,10 @@ async fn execute(
             must_not_be_authenticated(auth)?;
 
             let config = state.config.clone();
+            let when = tokio::clock::now()
+                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
+
+            delay(when).await;
 
             state
                 .db
@@ -82,6 +86,11 @@ async fn execute(
         }
         messages::Message::AuthRegistrationVerify(message) => {
             must_not_be_authenticated(auth)?;
+
+            let when = tokio::clock::now()
+                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
+
+            delay(when).await;
 
             state
                 .db
