@@ -14,11 +14,15 @@ pub enum Message {
     KernelError(kernel::Error),
 
     #[serde(rename = "auth.registration_start")]
-    AuthStartRegistration(auth::StartRegistration),
+    AuthRegistrationStart(auth::StartRegistration),
     #[serde(rename = "auth.registration_started")]
     AuthRegistrationStarted(auth::RegistrationStarted),
     #[serde(rename = "auth.registration_verify")]
-    AuthRegistrationVerify(auth::VerifyPendingAccount),
+    AuthRegistrationVerify(auth::RegistrationVerify),
+    #[serde(rename = "auth.registration_complete")]
+    AuthRegistrationComplete(auth::RegistrationComplete),
+    #[serde(rename = "auth.session_started")]
+    AuthSessionStarted(auth::Session),
 }
 
 impl From<kernel::NoData> for Message {
@@ -41,12 +45,30 @@ impl From<kernel::Error> for Message {
 
 impl From<auth::StartRegistration> for Message {
     fn from(data: auth::StartRegistration) -> Self {
-        Message::AuthStartRegistration(data)
+        Message::AuthRegistrationStart(data)
     }
 }
 
 impl From<auth::RegistrationStarted> for Message {
     fn from(data: auth::RegistrationStarted) -> Self {
         Message::AuthRegistrationStarted(data)
+    }
+}
+
+impl From<auth::RegistrationVerify> for Message {
+    fn from(data: auth::RegistrationVerify) -> Self {
+        Message::AuthRegistrationVerify(data)
+    }
+}
+
+impl From<auth::RegistrationComplete> for Message {
+    fn from(data: auth::RegistrationComplete) -> Self {
+        Message::AuthRegistrationComplete(data)
+    }
+}
+
+impl From<auth::Session> for Message {
+    fn from(data: auth::Session) -> Self {
+        Message::AuthSessionStarted(data)
     }
 }

@@ -2,6 +2,7 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
+    messages,
     myaccount::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};
@@ -9,19 +10,18 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
-    pub id: uuid::Uuid,
-    pub username: String,
+    pub message: messages::auth::RegistrationComplete,
     pub config: Config,
     pub ip: String,
     pub user_agent: String,
 }
 
 impl Message for CompleteRegistration {
-    type Result = Result<(Session, String), KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 }
 
 impl Handler<CompleteRegistration> for DbActor {
-    type Result = Result<(Session, String), KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
@@ -33,7 +33,7 @@ impl Handler<CompleteRegistration> for DbActor {
         return Ok(conn.transaction::<_, KernelError, _>(|| {
             let pending_account_to_update: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
-                    .filter(kernel_pending_accounts::dsl::id.eq(msg.id))
+                    .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
                     .for_update()
                     .first(&conn)?;
 
@@ -54,7 +54,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 display_name: pending_account_to_update.display_name.clone(),
                 email: pending_account_to_update.email.clone(),
                 auth_key_hash: pending_account_to_update.auth_key_hash.clone(),
-                username: msg.username.clone(),
+                username: msg.message.username.clone(),
             };
             let (new_account, event) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
 
@@ -76,7 +76,11 @@ impl Handler<CompleteRegistration> for DbActor {
                 .values(&new_session)
                 .execute(&conn)?;
 
-            return Ok((new_session, event.token_plaintext));
+            return Ok(messages::auth::Session {
+                id: new_session.id,
+                token: event.token_plaintext,
+            }
+            .into());
         })?);
     }
 }

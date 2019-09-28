@@ -13,7 +13,19 @@ pub struct RegistrationStarted {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyPendingAccount {
+pub struct RegistrationVerify {
     pub id: uuid::Uuid,
     pub code: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RegistrationComplete {
+    pub id: uuid::Uuid,
+    pub username: String,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct Session {
+    pub id: uuid::Uuid,
+    pub token: String,
 }

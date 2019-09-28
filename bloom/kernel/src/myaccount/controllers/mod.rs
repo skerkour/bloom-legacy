@@ -21,7 +21,7 @@ mod registration_verify;
 // pub use find_user::FindUser;
 pub use registration_complete::CompleteRegistration;
 pub use registration_start::StartRegistration;
-pub use registration_verify::VerifyPendingAccount;
+pub use registration_verify::RegistrationVerify;
 // pub use request_password_reset::RequestPasswordReset;
 // pub use reset_password::ResetPassword;
 // pub use revoke_session::RevokeSession;

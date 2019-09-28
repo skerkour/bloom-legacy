@@ -9,18 +9,18 @@ use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct VerifyPendingAccount {
-    pub message: messages::auth::VerifyPendingAccount,
+pub struct RegistrationVerify {
+    pub message: messages::auth::RegistrationVerify,
 }
 
-impl Message for VerifyPendingAccount {
+impl Message for RegistrationVerify {
     type Result = Result<messages::Message, KernelError>;
 }
 
-impl Handler<VerifyPendingAccount> for DbActor {
+impl Handler<RegistrationVerify> for DbActor {
     type Result = Result<messages::Message, KernelError>;
 
-    fn handle(&mut self, msg: VerifyPendingAccount, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: RegistrationVerify, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 

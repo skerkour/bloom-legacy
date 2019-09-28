@@ -33,15 +33,23 @@ pub fn post_index(
     state: web::Data<api::State>,
     req: HttpRequest,
 ) -> impl Future<Item = HttpResponse, Error = Error> {
-    return execute(
-        state.into_inner(),
-        req.request_auth(),
-        message_wrapped.into_inner(),
-    )
-    .boxed()
-    .compat()
-    .from_err()
-    .and_then(move |res| ok(api::response(res)));
+    let connection_info = req.connection_info();
+    let remote = connection_info.remote();
+    let auth = req.request_auth();
+    let ip = match remote {
+        Some(ref remote) => remote
+            .split(':')
+            .nth(0)
+            .expect("Error accessing session ip")
+            .to_string(),
+        _ => "".to_string(),
+    };
+
+    return execute(state.into_inner(), auth, ip, message_wrapped.into_inner())
+        .boxed()
+        .compat()
+        .from_err()
+        .and_then(move |res| ok(api::response(res)));
 }
 // match res {
 //             Ok(message) => ok(api::response(message)),
@@ -54,10 +62,12 @@ pub fn post_index(
 async fn execute(
     state: std::sync::Arc<api::State>,
     auth: Auth,
+    ip: String,
     message: messages::Message,
 ) -> Result<messages::Message, KernelError> {
     match message {
-        messages::Message::AuthStartRegistration(message) => {
+        // Auth
+        messages::Message::AuthRegistrationStart(message) => {
             must_not_be_authenticated(auth)?;
             let config = state.config.clone();
             state
@@ -71,7 +81,23 @@ async fn execute(
             must_not_be_authenticated(auth)?;
             state
                 .db
-                .send(controllers::VerifyPendingAccount { message })
+                .send(controllers::RegistrationVerify { message })
+                .map_err(|_| KernelError::ActixMailbox)
+                .compat()
+                .await?
+        }
+        messages::Message::AuthRegistrationComplete(message) => {
+            must_not_be_authenticated(auth)?;
+            let config = state.config.clone();
+
+            state
+                .db
+                .send(controllers::CompleteRegistration {
+                    message,
+                    ip,
+                    user_agent: "".to_string(), // TODO
+                    config,
+                })
                 .map_err(|_| KernelError::ActixMailbox)
                 .compat()
                 .await?
