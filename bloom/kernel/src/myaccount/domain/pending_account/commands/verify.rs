@@ -42,7 +42,7 @@ impl eventsourcing::Command for Verify {
                 pending_account::VerificationFailedReason::TooManyTrials.to_string(),
             ));
         } else if !argon2id::verify_password(
-            &aggregate.verification_code_hash.clone().into(),
+            &aggregate.verification_code_hash.as_str().into(),
             self.code.as_bytes(),
         ) {
             // verify given code

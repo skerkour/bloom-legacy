@@ -305,7 +305,7 @@ impl Handler<CheckAuth> for DbActor {
 
                 // verify session token
                 if !argon2id::verify_password(
-                    &session.token_hash.clone().into(),
+                    &session.token_hash.as_str().into(),
                     msg.token.as_bytes(),
                 ) {
                     return Err(KernelError::Validation(

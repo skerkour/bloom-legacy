@@ -45,7 +45,7 @@ impl Handler<SignIn> for DbActor {
 
             // verify auth_key
             if !argon2id::verify_password(
-                &account.auth_key_hash.into(),
+                &account.auth_key_hash.as_str().into(),
                 msg.message.auth_key.as_bytes(),
             ) {
                 // // store a SignInFailed event

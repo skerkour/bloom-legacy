@@ -40,7 +40,7 @@ impl eventsourcing::Command for UpdatePassword {
             ));
         }
 
-        if !argon2id::verify_password(aggregate.password.clone().into(), self.current_password.clone().as_bytes()) {
+        if !argon2id::verify_password(aggregate.password.as_str().into(), self.current_password.clone().as_bytes()) {
             return Err(KernelError::Validation(
                 "Current password is not valid".to_string(),
             ));
