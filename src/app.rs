@@ -1,26 +1,26 @@
-// use actix_web::web;
-
-// use admin::api::v1 as adminv1;
-// use bitflow::api::v1 as bitflowv1;
-// use calendar::api::v1 as calendarv1;
-// use contacts::api::v1 as contactsv1;
-// use drive::api::v1 as drivev1;
-// use gallery::api::v1 as galleryv1;
 use kernel::{
     api,
-    api::middlewares::{GetRequestAuth, GetRequestLogger},
+    api::middlewares::{Auth, GetRequestAuth},
     config::Config,
-    log::macros::*,
     messages,
     myaccount::controllers,
     KernelError,
 };
-// use music::api::v1 as musicv1;
-// use notes::api::v1 as notesv1;
-// use phaser::api::v1 as phaserv1;
 
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
-use futures::future::{ok, Either, Future}; // , IntoFuture};
+use futures::future::{ok, Future}; // , IntoFuture};
+use futures_preview::future::FutureExt;
+use futures_preview::{compat::Future01CompatExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future // compat() converts futures::future::Future into a std::future::Future
+
+pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
+    return move |cfg| {
+        cfg.service(
+            web::resource("/")
+                .route(web::get().to(get_index))
+                .route(web::post().to_async(post_index)),
+        );
+    };
+}
 
 pub fn get_index() -> ActixResult<HttpResponse> {
     let res = api::response(messages::kernel::HelloWorld {
@@ -34,64 +34,66 @@ pub fn post_index(
     state: web::Data<api::State>,
     req: HttpRequest,
 ) -> impl Future<Item = HttpResponse, Error = Error> {
-    let logger = req.logger();
-    let config = state.config.clone();
+    // let logger = req.logger();
     let auth = req.request_auth();
 
-    if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
-        let err: messages::kernel::Error =
-            KernelError::Unauthorized("Must not be authenticated".to_string()).into();
-        return Either::A(ok(api::response(err)));
-    }
+    // if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
+    //     let err: messages::kernel::Error =
+    //         KernelError::Unauthorized("Must not be authenticated".to_string()).into();
+    //     return Either::A(ok(api::response(err)));
+    // }
 
-    if let messages::Message::AuthStartRegistration(message) = message_wrapped.into_inner() {
-        return Either::B(
+    return execute(state.into_inner(), auth, message_wrapped.into_inner())
+        .boxed()
+        .compat()
+        .from_err()
+        .and_then(move |res| ok(api::response(res)));
+}
+// match res {
+//             Ok(message) => ok(api::response(message)),
+//             Err(err) => {
+//                 slog_error!(logger, "{}", err);
+//                 let err: messages::kernel::Error = err.into();
+//                 return ok(api::response(err));
+//             }
+//         })
+async fn execute(
+    state: std::sync::Arc<api::State>,
+    auth: Auth,
+    message: messages::Message,
+) -> Result<messages::Message, KernelError> {
+    match message {
+        messages::Message::AuthStartRegistration(message) => {
+            must_not_be_authenticated(auth)?;
+            let config = state.config.clone();
             state
                 .db
                 .send(controllers::StartRegistration { message, config })
                 .map_err(|_| KernelError::ActixMailbox)
-                .from_err()
-                .and_then(move |res| match res {
-                    Ok(message) => ok(api::response(message)),
-                    Err(err) => {
-                        slog_error!(logger, "{}", err);
-                        let err: messages::kernel::Error = err.into();
-                        return ok(api::response(err));
-                    }
-                }),
-        );
-    } else if let messages::Message::AuthRegistrationVerify(message) = message_wrapped.into_inner()
-    {
-        return Either::B(
+                .compat()
+                .await?
+        }
+        messages::Message::AuthRegistrationVerify(message) => {
+            must_not_be_authenticated(auth)?;
             state
                 .db
                 .send(controllers::VerifyPendingAccount { message })
                 .map_err(|_| KernelError::ActixMailbox)
-                .from_err()
-                .and_then(move |res| match res {
-                    Ok(message) => ok(api::response(message)),
-                    Err(err) => {
-                        slog_error!(logger, "{}", err);
-                        let err: messages::kernel::Error = err.into();
-                        return ok(api::response(err));
-                    }
-                }),
-        );
-    } else {
-        let err: messages::kernel::Error =
-            KernelError::Validation("message is not valdi".to_string()).into();
-        return Either::A(ok(api::response(err)));
+                .compat()
+                .await?
+        }
+        _ => Err(KernelError::Validation("message is not valdi".to_string())),
     }
 }
 
-pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
-    return move |cfg| {
-        cfg.service(
-            web::resource("/")
-                .route(web::get().to(get_index))
-                .route(web::post().to_async(post_index)),
-        );
-    };
+fn must_not_be_authenticated(auth: Auth) -> Result<(), KernelError> {
+    if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
+        return Err(KernelError::Unauthorized(
+            "Must not be authenticated".to_string(),
+        ));
+    } else {
+        return Ok(());
+    }
 }
 
 // pub fn config(config: Config) -> impl Fn(&mut web::ServiceConfig) {

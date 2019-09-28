@@ -14,11 +14,11 @@ pub struct VerifyPendingAccount {
 }
 
 impl Message for VerifyPendingAccount {
-    type Result = Result<NoData, KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 }
 
 impl Handler<VerifyPendingAccount> for DbActor {
-    type Result = Result<NoData, KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 
     fn handle(&mut self, msg: VerifyPendingAccount, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
@@ -46,9 +46,9 @@ impl Handler<VerifyPendingAccount> for DbActor {
                 .set(&pending_account_to_verify)
                 .execute(&conn)?;
 
-            return Ok(NoData {});
+            return Ok(messages::Message::from(NoData {}));
         }) {
-            Ok(_) => return Ok(NoData {}),
+            Ok(_) => return Ok(NoData {}.into()),
             Err(err) => match err {
                 KernelError::Validation(_) => {
                     let pending_account_to_verify: PendingAccount =

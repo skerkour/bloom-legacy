@@ -11,11 +11,11 @@ pub struct StartRegistration {
 }
 
 impl Message for StartRegistration {
-    type Result = Result<messages::auth::RegistrationStarted, KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 }
 
 impl Handler<StartRegistration> for DbActor {
-    type Result = Result<messages::auth::RegistrationStarted, KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 
     fn handle(&mut self, msg: StartRegistration, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
@@ -50,7 +50,8 @@ impl Handler<StartRegistration> for DbActor {
 
             return Ok(messages::auth::RegistrationStarted {
                 id: new_pending_account.id,
-            });
+            }
+            .into());
         })?);
     }
 }
