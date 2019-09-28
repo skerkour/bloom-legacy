@@ -1,11 +1,8 @@
 use crypto42::rand as crypto42rand;
-use rand::Rng;
 
 pub fn random_digit_string(n: usize) -> String {
-    let mut rng = rand::thread_rng();
-
     return (0..n)
-        .map(|_| rng.gen_range(0, 10))
+        .map(|_| crypto42rand::uniform(10))
         .map(|x| x.to_string())
         .collect();
 }

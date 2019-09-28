@@ -30,7 +30,6 @@ diesel = { version = "1.4", features = ["postgres", "chrono", "serde_json", "r2d
 futures = "0.1"
 image = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
-rand = "0.7"
 base64 = "0.10.1"
 mime = "0.3"
 url = "1.7"
