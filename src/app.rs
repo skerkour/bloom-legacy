@@ -10,7 +10,6 @@ use kernel::{
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
 use futures::future::{ok, Future};
 use futures_preview::{compat::Future01CompatExt, FutureExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future
-use rand::Rng;
 use std::time::Duration;
 use tokio::timer::delay;
 
@@ -110,8 +109,8 @@ async fn execute(
             must_not_be_authenticated(auth)?;
 
             let config = state.config.clone();
-            let mut rng = rand::thread_rng();
-            let when = tokio::clock::now() + Duration::from_millis(rng.gen_range(400, 650));
+            let when = tokio::clock::now()
+                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
 
             delay(when).await;
             state
