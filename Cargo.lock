@@ -634,7 +634,7 @@ dependencies = [
  "actix 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-cors 0.1.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
- "crypto42 0.4.7 (git+https://gitlab.com/bloom42/libs/crypto42)",
+ "crypto42 0.5.0 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "eventsourcing 0.3.0",
  "futures 0.1.29 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.18 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -927,8 +927,8 @@ dependencies = [
 
 [[package]]
 name = "crypto42"
-version = "0.4.7"
-source = "git+https://gitlab.com/bloom42/libs/crypto42#be1e204cc547d28da5d5541045bdb200ccf8eb57"
+version = "0.5.0"
+source = "git+https://gitlab.com/bloom42/libs/crypto42#674c145d58e21da8dc603035151546db7dc6d1db"
 dependencies = [
  "crypto42_libsodium_sys 0.2.4 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "libc 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -937,7 +937,7 @@ dependencies = [
 [[package]]
 name = "crypto42_libsodium_sys"
 version = "0.2.4"
-source = "git+https://gitlab.com/bloom42/libs/crypto42#be1e204cc547d28da5d5541045bdb200ccf8eb57"
+source = "git+https://gitlab.com/bloom42/libs/crypto42#674c145d58e21da8dc603035151546db7dc6d1db"
 dependencies = [
  "cc 1.0.45 (registry+https://github.com/rust-lang/crates.io-index)",
  "libc 0.2.62 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -1761,7 +1761,7 @@ dependencies = [
  "base64 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
  "bcrypt 0.3.0",
  "chrono 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
- "crypto42 0.4.7 (git+https://gitlab.com/bloom42/libs/crypto42)",
+ "crypto42 0.5.0 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "diesel 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "diesel_as_jsonb 0.1.0",
  "eventsourcing 0.3.0",
@@ -4180,7 +4180,7 @@ dependencies = [
 "checksum crossbeam-queue 0.1.2 (registry+https://github.com/rust-lang/crates.io-index)" = "7c979cd6cfe72335896575c6b5688da489e420d36a27a0b9eb0c73db574b4a4b"
 "checksum crossbeam-utils 0.6.6 (registry+https://github.com/rust-lang/crates.io-index)" = "04973fa96e96579258a5091af6003abde64af786b860f18622b82e026cca60e6"
 "checksum crypto-mac 0.5.2 (registry+https://github.com/rust-lang/crates.io-index)" = "0999b4ff4d3446d4ddb19a63e9e00c1876e75cd7000d20e57a693b4b3f08d958"
-"checksum crypto42 0.4.7 (git+https://gitlab.com/bloom42/libs/crypto42)" = "<none>"
+"checksum crypto42 0.5.0 (git+https://gitlab.com/bloom42/libs/crypto42)" = "<none>"
 "checksum crypto42_libsodium_sys 0.2.4 (git+https://gitlab.com/bloom42/libs/crypto42)" = "<none>"
 "checksum debugid 0.4.0 (registry+https://github.com/rust-lang/crates.io-index)" = "088c9627adec1e494ff9dea77377f1e69893023d631254a0ec68b16ee20be3e9"
 "checksum deflate 0.7.20 (registry+https://github.com/rust-lang/crates.io-index)" = "707b6a7b384888a70c8d2e8650b3e60170dfc6a67bb4aa67b6dfca57af4bedb4"

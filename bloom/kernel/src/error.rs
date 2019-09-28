@@ -20,6 +20,9 @@ pub enum KernelError {
     #[fail(display = "BcryptError")]
     Bcrypt,
 
+    #[fail(display = "Crypto42: {}", 0)]
+    Crypto42(String),
+
     #[fail(display = "Not valid: {}", 0)]
     Validation(String),
 
@@ -144,6 +147,12 @@ impl std::convert::From<lettre_email::error::Error> for KernelError {
 impl std::convert::From<lettre::smtp::error::Error> for KernelError {
     fn from(err: lettre::smtp::error::Error) -> Self {
         KernelError::LettreSmtp(format!("{:?}", err))
+    }
+}
+
+impl std::convert::From<crypto42::Error> for KernelError {
+    fn from(err: crypto42::Error) -> Self {
+        KernelError::Crypto42(format!("{:?}", err))
     }
 }
 

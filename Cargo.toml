@@ -37,7 +37,7 @@ http = "0.1.0"
 sentry = "0.17"
 sentry-actix = "0.17"
 tokio = "0.2.0-alpha.5"
-crypto42 = { version = "0.4", git = "https://gitlab.com/bloom42/libs/crypto42" }
+crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 
 [profile.release]
 # for error tracking
