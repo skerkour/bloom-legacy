@@ -157,6 +157,19 @@ async fn execute(
                 .compat()
                 .await?
         }
+        messages::Message::AuthRevokeSession(message) => {
+            authentication_required(&auth)?;
+
+            state
+                .db
+                .send(controllers::RevokeSession {
+                    message,
+                    actor: auth.account.expect("error getting account from auth"),
+                    current_session_id: auth.session.expect("error getting session from auth").id,
+                })
+                .compat()
+                .await?
+        }
         _ => Err(KernelError::Validation("message is not valid".to_string())),
     }
 }

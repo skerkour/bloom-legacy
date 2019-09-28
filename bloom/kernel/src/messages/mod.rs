@@ -29,4 +29,6 @@ pub enum Message {
     AuthSignIn(auth::SignIn),
     #[serde(rename = "auth.sign_out")]
     AuthSignOut(kernel::NoData),
+    #[serde(rename = "auth.revoke_session")]
+    AuthRevokeSession(auth::RevokeSesison),
 }
