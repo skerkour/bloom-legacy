@@ -8,9 +8,8 @@ use kernel::{
 };
 
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
-use futures::future::{ok, Future}; // , IntoFuture};
-use futures_preview::future::FutureExt;
-use futures_preview::{compat::Future01CompatExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future // compat() converts futures::future::Future into a std::future::Future
+use futures::future::{ok, Future};
+use futures_preview::{compat::Future01CompatExt, FutureExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future
 
 pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
     return move |cfg| {
