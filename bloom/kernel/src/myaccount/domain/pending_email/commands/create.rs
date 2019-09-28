@@ -61,8 +61,7 @@ impl eventsourcing::Command for Create {
             code.as_bytes(),
             myaccount::PENDING_EMAIL_CODE_ARGON2_OPSLIMIT,
             myaccount::PENDING_EMAIL_CODE_ARGON2_MEMLIMIT,
-        )?
-        .to_string();
+        )?.to_string();
 
         return Ok(Created {
             timestamp: chrono::Utc::now(),
