@@ -1,5 +1,6 @@
 use crate::{error::KernelError, myaccount, myaccount::domain::pending_account, utils};
 use chrono::Duration;
+use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -36,8 +37,12 @@ impl eventsourcing::Command for SendNewCode {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let code = utils::random_digit_string(8);
-        let verification_code_hash = bcrypt::hash(&code, myaccount::PENDING_USER_TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let verification_code_hash = argon2id::hash_password(
+            code.as_bytes(),
+            myaccount::PENDING_USER_CODE_ARGON2_OPSLIMIT,
+            myaccount::PENDING_USER_CODE_ARGON2_MEMLIMIT,
+        )?
+        .to_string();
 
         return Ok(NewCodeSent {
             timestamp: chrono::Utc::now(),

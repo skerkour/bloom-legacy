@@ -1,10 +1,10 @@
 use crate::{error::KernelError, myaccount, myaccount::domain::session, utils};
+use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -33,14 +33,13 @@ impl eventsourcing::Command for Start {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(
-            myaccount::SESSION_TOKEN_MIN_LENGTH,
-            myaccount::SESSION_TOKEN_MAX_LENGTH,
-        );
-        let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, myaccount::SESSION_TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let token = utils::random_base64_string(myaccount::SESSION_TOKEN_BYTES as usize);
+        let hashed_token = argon2id::hash_password(
+            token.as_bytes(),
+            myaccount::SESSION_TOKEN_ARGON2_OPSLIMIT,
+            myaccount::SESSION_TOKEN_ARGON2_MEMLIMIT,
+        )?
+        .to_string();
 
         return Ok(Started {
             id: uuid::Uuid::new_v4(),

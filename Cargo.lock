@@ -1759,7 +1759,6 @@ dependencies = [
  "actix-service 0.4.2 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-web 1.0.8 (registry+https://github.com/rust-lang/crates.io-index)",
  "base64 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
- "bcrypt 0.3.0",
  "chrono 0.4.9 (registry+https://github.com/rust-lang/crates.io-index)",
  "crypto42 0.5.0 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "diesel 1.4.2 (registry+https://github.com/rust-lang/crates.io-index)",

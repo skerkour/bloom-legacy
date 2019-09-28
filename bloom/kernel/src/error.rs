@@ -102,12 +102,6 @@ impl std::convert::From<diesel::r2d2::Error> for KernelError {
     }
 }
 
-impl std::convert::From<bcrypt::BcryptError> for KernelError {
-    fn from(_err: bcrypt::BcryptError) -> Self {
-        KernelError::Bcrypt
-    }
-}
-
 impl std::convert::From<url::ParseError> for KernelError {
     fn from(err: url::ParseError) -> Self {
         KernelError::UrlParseError(err)

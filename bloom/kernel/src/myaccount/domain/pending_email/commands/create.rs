@@ -56,8 +56,13 @@ impl eventsourcing::Command for Create {
     ) -> Result<Self::Event, Self::Error> {
         let new_pending_email_id = uuid::Uuid::new_v4();
         let code = utils::random_digit_string(8);
-        let token = bcrypt::hash(&code, myaccount::PENDING_EMAIL_TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+
+        let token = argon2id::hash_password(
+            code.as_bytes(),
+            myaccount::PENDING_EMAIL_CODE_ARGON2_OPSLIMIT,
+            myaccount::PENDING_EMAIL_CODE_ARGON2_MEMLIMIT,
+        )?
+        .to_string();
 
         return Ok(Created {
             timestamp: chrono::Utc::now(),

@@ -11,6 +11,7 @@ use actix_web::{
     http::header,
     web, Error, HttpMessage, HttpRequest, ResponseError,
 };
+use crypto42::kdf::argon2id;
 use futures::Future;
 use futures::{
     future::{ok, Either, FutureResult},
@@ -303,10 +304,10 @@ impl Handler<CheckAuth> for DbActor {
                         })?;
 
                 // verify session token
-                let is_valid = bcrypt::verify(&msg.token, &session.token_hash).map_err(|_| {
-                    KernelError::Validation("Authorization HTTP header is not valid".to_string())
-                })?;
-                if !is_valid {
+                if !argon2id::verify_password(
+                    &session.token_hash.clone().into(),
+                    msg.token.as_bytes(),
+                ) {
                     return Err(KernelError::Validation(
                         "Authorization token is not valid".to_string(),
                     ));

@@ -47,10 +47,7 @@ impl eventsourcing::Command for ResetPassword {
         }
 
         // we can unwrap because if we are here it means that we found the account with it's password_reset_id
-        if !bcrypt::verify(
-            &self.token,
-            aggregate.password_reset_token.as_ref().unwrap(),
-        )? {
+        if !argon2id::verify_password(aggregate.password_reset_token.unwrap().into(), self.token.as_bytes()) {
             return Err(KernelError::Validation("Token is not valid".to_string()));
         }
 
@@ -62,8 +59,11 @@ impl eventsourcing::Command for ResetPassword {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let hashed_password = argon2id::hash_password(
+            self.new_password.as_bytes(),
+            myaccount::PASSWORD_ARGON2_OPSLIMIT,
+            myaccount::PASSWORD_ARGON2_MEMLIMIT,
+        )?.to_string();
 
         return Ok(PasswordReseted {
             timestamp: chrono::Utc::now(),

@@ -62,16 +62,16 @@ impl eventsourcing::Command for Create {
         let verification_code = utils::random_digit_string(8);
         let auth_key_hash = argon2id::hash_password(
             self.auth_key.as_bytes(),
-            argon2id::OPSLIMIT_INTERACTIVE,
-            argon2id::MEMLIMIT_INTERACTIVE,
-        )
-        .expect("error hashing auth_key")
-        .to_string(); // TODO: handle error
-        let verification_code_hash = bcrypt::hash(
-            &verification_code,
-            myaccount::PENDING_USER_TOKEN_BCRYPT_COST,
-        )
-        .map_err(|_| KernelError::Bcrypt)?;
+            myaccount::PASSWORD_ARGON2_OPSLIMIT,
+            myaccount::PASSWORD_ARGON2_MEMLIMIT,
+        )?
+        .to_string();
+        let verification_code_hash = argon2id::hash_password(
+            verification_code.as_bytes(),
+            myaccount::PENDING_USER_CODE_ARGON2_OPSLIMIT,
+            myaccount::PENDING_USER_CODE_ARGON2_MEMLIMIT,
+        )?
+        .to_string();
 
         return Ok(Created {
             timestamp: chrono::Utc::now(),

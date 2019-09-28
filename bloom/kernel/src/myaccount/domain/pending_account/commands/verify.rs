@@ -1,6 +1,7 @@
 use crate::error::KernelError;
 use crate::myaccount::domain::pending_account;
 use chrono::Utc;
+use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -40,9 +41,10 @@ impl eventsourcing::Command for Verify {
             return Err(KernelError::Validation(
                 pending_account::VerificationFailedReason::TooManyTrials.to_string(),
             ));
-        } else if !bcrypt::verify(&self.code, &aggregate.verification_code_hash)
-            .map_err(|_| KernelError::Bcrypt)?
-        {
+        } else if !argon2id::verify_password(
+            &aggregate.verification_code_hash.clone().into(),
+            self.code.as_bytes(),
+        ) {
             // verify given code
             return Err(KernelError::Validation(
                 pending_account::VerificationFailedReason::CodeNotValid.to_string(),

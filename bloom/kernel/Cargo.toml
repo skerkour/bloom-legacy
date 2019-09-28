@@ -9,7 +9,6 @@ publish = false
 
 [dependencies]
 diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
-bcrypt = { path = "../../libs/bcrypt-rs" }
 eventsourcing = { path = "../../libs/eventsourcing-rs" }
 mimesniff = { path = "../../libs/mimesniff-rs" }
 hex = { path = "../../libs/hex-rs" }

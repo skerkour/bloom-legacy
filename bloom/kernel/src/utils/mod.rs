@@ -1,3 +1,4 @@
+use crypto42::rand as crypto42rand;
 use rand::Rng;
 
 pub fn random_digit_string(n: usize) -> String {
@@ -9,13 +10,14 @@ pub fn random_digit_string(n: usize) -> String {
         .collect();
 }
 
-pub fn random_bytes(n: usize) -> Vec<u8> {
-    return (0..n).map(|_| rand::random::<u8>()).collect();
+pub fn random_hex_string(n: usize) -> String {
+    let bytes = crypto42rand::bytes(n);
+    return hex::encode(bytes);
 }
 
-pub fn random_hex_string(n: usize) -> String {
-    let bytes = random_bytes(n);
-    return hex::encode(bytes);
+pub fn random_base64_string(n: usize) -> String {
+    let bytes = crypto42rand::bytes(n);
+    return base64::encode(&bytes);
 }
 
 pub fn encode_session(session_id: &str, token: &str) -> String {

@@ -4,7 +4,6 @@ use diesel::{
     PgConnection,
 };
 use eventsourcing::{Event, EventTs};
-use rand::Rng;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug)]
@@ -30,14 +29,12 @@ impl eventsourcing::Command for RequestPasswordReset {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let password_reset_id = uuid::Uuid::new_v4();
-        let mut rng = rand::thread_rng();
-        let token_length = rng.gen_range(
-            myaccount::PASSWORD_RESET_TOKEN_MIN_LENGTH,
-            myaccount::PASSWORD_RESET_TOKEN_MAX_LENGTH,
-        );
-        let token = utils::random_hex_string(token_length as usize);
-        let hashed_token = bcrypt::hash(&token, myaccount::PASSWORD_RESET_TOKEN_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let token = utils::random_base64_string(myaccount::PASSWORD_RESET_TOKEN_BYTES as usize);
+        let hashed_token = argon2id::hash_password(
+            token.as_bytes(),
+            myaccount::PASSWORD_RESET_TOKEN_ARGON2_OPSLIMIT,
+            myaccount::PASSWORD_RESET_TOKEN_ARGON2_MEMLIMIT,
+        )?.to_string();
 
         return Ok(PasswordResetRequested {
             timestamp: chrono::Utc::now(),

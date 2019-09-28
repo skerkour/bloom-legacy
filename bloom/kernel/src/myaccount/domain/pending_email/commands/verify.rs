@@ -6,6 +6,8 @@ use diesel::{
 };
 use eventsourcing::{Event, EventTs};
 use serde::{Deserialize, Serialize};
+use crypto42::kdf::argon2id;
+
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Verify {
@@ -56,7 +58,7 @@ impl eventsourcing::Command for Verify {
             return Err(KernelError::Validation(
                 pending_email::VerificationFailedReason::TooManyTrials.to_string(),
             ));
-        } else if !bcrypt::verify(&self.code, &aggregate.token).map_err(|_| KernelError::Bcrypt)? {
+        } else if !argon2id::verify_password(&self.code.clone().into(), aggregate.token.as_bytes()) {
             // verify given code
             return Err(KernelError::Validation(
                 pending_email::VerificationFailedReason::CodeNotValid.to_string(),

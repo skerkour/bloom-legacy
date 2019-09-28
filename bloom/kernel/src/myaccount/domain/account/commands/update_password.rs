@@ -5,6 +5,8 @@ use diesel::{
 };
 use eventsourcing::{Event, EventTs};
 use serde::{Deserialize, Serialize};
+use crypto42::kdf::argon2id;
+
 
 #[derive(Clone, Debug)]
 pub struct UpdatePassword {
@@ -38,9 +40,7 @@ impl eventsourcing::Command for UpdatePassword {
             ));
         }
 
-        if !bcrypt::verify(&self.current_password, &aggregate.password)
-            .map_err(|_| KernelError::Bcrypt)?
-        {
+        if !argon2id::verify_password(&self.current_password.clone().into(), aggregate.password.as_bytes()) {
             return Err(KernelError::Validation(
                 "Current password is not valid".to_string(),
             ));
@@ -54,8 +54,11 @@ impl eventsourcing::Command for UpdatePassword {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let hashed_password = bcrypt::hash(&self.new_password, myaccount::PASSWORD_BCRYPT_COST)
-            .map_err(|_| KernelError::Bcrypt)?;
+        let hashed_password = argon2id::hash_password(
+            self.new_password.as_bytes(),
+            myaccount::PASSWORD_ARGON2_OPSLIMIT,
+            myaccount::PASSWORD_ARGON2_MEMLIMIT,
+        )?.to_string();
 
         return Ok(PasswordUpdated {
             timestamp: chrono::Utc::now(),
