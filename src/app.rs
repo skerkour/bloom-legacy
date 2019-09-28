@@ -34,20 +34,15 @@ pub fn post_index(
     state: web::Data<api::State>,
     req: HttpRequest,
 ) -> impl Future<Item = HttpResponse, Error = Error> {
-    // let logger = req.logger();
-    let auth = req.request_auth();
-
-    // if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
-    //     let err: messages::kernel::Error =
-    //         KernelError::Unauthorized("Must not be authenticated".to_string()).into();
-    //     return Either::A(ok(api::response(err)));
-    // }
-
-    return execute(state.into_inner(), auth, message_wrapped.into_inner())
-        .boxed()
-        .compat()
-        .from_err()
-        .and_then(move |res| ok(api::response(res)));
+    return execute(
+        state.into_inner(),
+        req.request_auth(),
+        message_wrapped.into_inner(),
+    )
+    .boxed()
+    .compat()
+    .from_err()
+    .and_then(move |res| ok(api::response(res)));
 }
 // match res {
 //             Ok(message) => ok(api::response(message)),
