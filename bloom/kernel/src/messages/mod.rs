@@ -25,58 +25,8 @@ pub enum Message {
     AuthRegistrationNewCode(auth::RegistrationSendNewCode),
     #[serde(rename = "auth.session_started")]
     AuthSessionStarted(auth::Session),
-}
-
-impl From<kernel::NoData> for Message {
-    fn from(data: kernel::NoData) -> Self {
-        Message::KernelNoData(data)
-    }
-}
-
-impl From<kernel::HelloWorld> for Message {
-    fn from(data: kernel::HelloWorld) -> Self {
-        Message::KernelHelloWorld(data)
-    }
-}
-
-impl From<kernel::Error> for Message {
-    fn from(data: kernel::Error) -> Self {
-        Message::KernelError(data)
-    }
-}
-
-impl From<auth::StartRegistration> for Message {
-    fn from(data: auth::StartRegistration) -> Self {
-        Message::AuthRegistrationStart(data)
-    }
-}
-
-impl From<auth::RegistrationStarted> for Message {
-    fn from(data: auth::RegistrationStarted) -> Self {
-        Message::AuthRegistrationStarted(data)
-    }
-}
-
-impl From<auth::RegistrationVerify> for Message {
-    fn from(data: auth::RegistrationVerify) -> Self {
-        Message::AuthRegistrationVerify(data)
-    }
-}
-
-impl From<auth::RegistrationComplete> for Message {
-    fn from(data: auth::RegistrationComplete) -> Self {
-        Message::AuthRegistrationComplete(data)
-    }
-}
-
-impl From<auth::Session> for Message {
-    fn from(data: auth::Session) -> Self {
-        Message::AuthSessionStarted(data)
-    }
-}
-
-impl From<auth::RegistrationSendNewCode> for Message {
-    fn from(data: auth::RegistrationSendNewCode) -> Self {
-        Message::AuthRegistrationNewCode(data)
-    }
+    #[serde(rename = "auth.sign_in")]
+    AuthSignIn(auth::SignIn),
+    #[serde(rename = "auth.sign_out")]
+    AuthSignOut(kernel::NoData),
 }

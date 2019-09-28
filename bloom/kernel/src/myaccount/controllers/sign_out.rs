@@ -1,6 +1,7 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
+    messages,
     myaccount::domain::{session, Account, Session},
 };
 use actix::{Handler, Message};
@@ -10,15 +11,14 @@ use serde::{Deserialize, Serialize};
 pub struct SignOut {
     pub actor: Account,
     pub session: Session,
-    pub request_id: uuid::Uuid,
 }
 
 impl Message for SignOut {
-    type Result = Result<(), KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 }
 
 impl Handler<SignOut> for DbActor {
-    type Result = Result<(), KernelError>;
+    type Result = Result<messages::Message, KernelError>;
 
     fn handle(&mut self, msg: SignOut, _: &mut Self::Context) -> Self::Result {
         use diesel::prelude::*;
@@ -33,7 +33,7 @@ impl Handler<SignOut> for DbActor {
             // update session
             diesel::delete(&session).execute(&conn)?;
 
-            return Ok(());
+            return Ok(messages::kernel::NoData {}.into());
         })?);
     }
 }

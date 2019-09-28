@@ -70,7 +70,7 @@ async fn execute(
     match message {
         // Auth
         messages::Message::AuthRegistrationStart(message) => {
-            must_not_be_authenticated(auth)?;
+            must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
             let when = tokio::clock::now()
@@ -85,7 +85,7 @@ async fn execute(
                 .await?
         }
         messages::Message::AuthRegistrationVerify(message) => {
-            must_not_be_authenticated(auth)?;
+            must_not_be_authenticated(&auth)?;
 
             let when = tokio::clock::now()
                 + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
@@ -99,7 +99,7 @@ async fn execute(
                 .await?
         }
         messages::Message::AuthRegistrationComplete(message) => {
-            must_not_be_authenticated(auth)?;
+            must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
 
@@ -115,7 +115,7 @@ async fn execute(
                 .await?
         }
         messages::Message::AuthRegistrationNewCode(message) => {
-            must_not_be_authenticated(auth)?;
+            must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
             let when = tokio::clock::now()
@@ -128,14 +128,53 @@ async fn execute(
                 .compat()
                 .await?
         }
-        _ => Err(KernelError::Validation("message is not valdi".to_string())),
+        messages::Message::AuthSignIn(message) => {
+            must_not_be_authenticated(&auth)?;
+
+            let when = tokio::clock::now()
+                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
+
+            delay(when).await;
+            state
+                .db
+                .send(controllers::SignIn {
+                    message,
+                    ip,
+                    user_agent: "".to_string(), // TODO
+                })
+                .compat()
+                .await?
+        }
+        messages::Message::AuthSignOut(_) => {
+            authentication_required(&auth)?;
+
+            state
+                .db
+                .send(controllers::SignOut {
+                    actor: auth.account.expect("error getting account from auth"),
+                    session: auth.session.expect("error getting session from auth"),
+                })
+                .compat()
+                .await?
+        }
+        _ => Err(KernelError::Validation("message is not valid".to_string())),
     }
 }
 
-fn must_not_be_authenticated(auth: Auth) -> Result<(), KernelError> {
+fn must_not_be_authenticated(auth: &Auth) -> Result<(), KernelError> {
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
         return Err(KernelError::Unauthorized(
             "Must not be authenticated".to_string(),
+        ));
+    } else {
+        return Ok(());
+    }
+}
+
+fn authentication_required(auth: &Auth) -> Result<(), KernelError> {
+    if auth.session.is_none() || auth.account.is_none() {
+        return Err(KernelError::Unauthorized(
+            "Authentication required".to_string(),
         ));
     } else {
         return Ok(());

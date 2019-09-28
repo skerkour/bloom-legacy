@@ -1,3 +1,4 @@
+use super::Message;
 use crate::error::KernelError;
 use serde::{Deserialize, Serialize};
 
@@ -39,5 +40,23 @@ impl From<KernelError> for Error {
             code,
             message: format!("{}", err),
         }
+    }
+}
+
+impl From<NoData> for Message {
+    fn from(data: NoData) -> Self {
+        Message::KernelNoData(data)
+    }
+}
+
+impl From<HelloWorld> for Message {
+    fn from(data: HelloWorld) -> Self {
+        Message::KernelHelloWorld(data)
+    }
+}
+
+impl From<Error> for Message {
+    fn from(data: Error) -> Self {
+        Message::KernelError(data)
     }
 }
