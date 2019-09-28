@@ -58,7 +58,7 @@ impl eventsourcing::Command for Verify {
             return Err(KernelError::Validation(
                 pending_email::VerificationFailedReason::TooManyTrials.to_string(),
             ));
-        } else if !argon2id::verify_password(&self.code.clone().into(), aggregate.token.as_bytes()) {
+        } else if !argon2id::verify_password(aggregate.token.clonse().into(), &self.code.as_bytes()) {
             // verify given code
             return Err(KernelError::Validation(
                 pending_email::VerificationFailedReason::CodeNotValid.to_string(),

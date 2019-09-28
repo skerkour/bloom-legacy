@@ -49,7 +49,6 @@ lto = true
 [workspace]
 members = [
     "libs/diesel_as_jsonb",
-    "libs/bcrypt-rs",
     "libs/hex-rs",
     "libs/eventsourcing-rs",
     "libs/eventsourcing_derive",
