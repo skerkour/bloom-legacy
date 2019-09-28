@@ -25,6 +25,11 @@ pub struct RegistrationComplete {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RegistrationSendNewCode {
+    pub id: uuid::Uuid,
+}
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct Session {
     pub id: uuid::Uuid,
     pub token: String,

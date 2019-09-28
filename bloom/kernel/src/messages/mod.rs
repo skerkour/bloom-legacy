@@ -21,6 +21,8 @@ pub enum Message {
     AuthRegistrationVerify(auth::RegistrationVerify),
     #[serde(rename = "auth.registration_complete")]
     AuthRegistrationComplete(auth::RegistrationComplete),
+    #[serde(rename = "auth.registration_new_code")]
+    AuthRegistrationNewCode(auth::RegistrationSendNewCode),
     #[serde(rename = "auth.session_started")]
     AuthSessionStarted(auth::Session),
 }
@@ -70,5 +72,11 @@ impl From<auth::RegistrationComplete> for Message {
 impl From<auth::Session> for Message {
     fn from(data: auth::Session) -> Self {
         Message::AuthSessionStarted(data)
+    }
+}
+
+impl From<auth::RegistrationSendNewCode> for Message {
+    fn from(data: auth::RegistrationSendNewCode) -> Self {
+        Message::AuthRegistrationNewCode(data)
     }
 }

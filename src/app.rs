@@ -10,6 +10,9 @@ use kernel::{
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
 use futures::future::{ok, Future};
 use futures_preview::{compat::Future01CompatExt, FutureExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future
+use rand::Rng;
+use std::time::Duration;
+use tokio::timer::delay;
 
 pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
     return move |cfg| {
@@ -69,25 +72,27 @@ async fn execute(
         // Auth
         messages::Message::AuthRegistrationStart(message) => {
             must_not_be_authenticated(auth)?;
+
             let config = state.config.clone();
+
             state
                 .db
                 .send(controllers::StartRegistration { message, config })
-                .map_err(|_| KernelError::ActixMailbox)
                 .compat()
                 .await?
         }
         messages::Message::AuthRegistrationVerify(message) => {
             must_not_be_authenticated(auth)?;
+
             state
                 .db
                 .send(controllers::RegistrationVerify { message })
-                .map_err(|_| KernelError::ActixMailbox)
                 .compat()
                 .await?
         }
         messages::Message::AuthRegistrationComplete(message) => {
             must_not_be_authenticated(auth)?;
+
             let config = state.config.clone();
 
             state
@@ -98,7 +103,20 @@ async fn execute(
                     user_agent: "".to_string(), // TODO
                     config,
                 })
-                .map_err(|_| KernelError::ActixMailbox)
+                .compat()
+                .await?
+        }
+        messages::Message::AuthRegistrationNewCode(message) => {
+            must_not_be_authenticated(auth)?;
+
+            let config = state.config.clone();
+            let mut rng = rand::thread_rng();
+            let when = tokio::clock::now() + Duration::from_millis(rng.gen_range(400, 650));
+
+            delay(when).await;
+            state
+                .db
+                .send(controllers::RegistrationSendNewCode { message, config })
                 .compat()
                 .await?
         }

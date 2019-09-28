@@ -2,6 +2,7 @@ use crate::error::KernelError;
 use crate::{
     config::Config,
     db::DbActor,
+    messages,
     myaccount::domain::{pending_account, PendingAccount},
     myaccount::notifications::emails::send_account_verification_code,
 };
@@ -9,20 +10,19 @@ use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct SendNewVerificationCode {
-    pub pending_account_id: uuid::Uuid,
-    pub request_id: uuid::Uuid,
+pub struct RegistrationSendNewCode {
+    pub message: messages::auth::RegistrationSendNewCode,
     pub config: Config,
 }
 
-impl Message for SendNewVerificationCode {
-    type Result = Result<(), KernelError>;
+impl Message for RegistrationSendNewCode {
+    type Result = Result<messages::Message, KernelError>;
 }
 
-impl Handler<SendNewVerificationCode> for DbActor {
-    type Result = Result<(), KernelError>;
+impl Handler<RegistrationSendNewCode> for DbActor {
+    type Result = Result<messages::Message, KernelError>;
 
-    fn handle(&mut self, msg: SendNewVerificationCode, _: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: RegistrationSendNewCode, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
@@ -33,7 +33,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
 
             let pending_account: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
-                    .filter(kernel_pending_accounts::dsl::id.eq(msg.pending_account_id))
+                    .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
                     .for_update()
                     .first(&conn)?;
 
@@ -55,7 +55,7 @@ impl Handler<SendNewVerificationCode> for DbActor {
             )
             .expect("error sending email");
 
-            return Ok(());
+            return Ok(messages::kernel::NoData {}.into());
         })?);
     }
 }
