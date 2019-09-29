@@ -31,9 +31,9 @@ $ make dev
 ## Desktop
 
 1. [Install NodeJS](/engineering/setup.html#nodejs)
-2. Clone Bloom [desktop](https://gitlab.com/bloom42/desktop) and `cd` in the folder
+2. Go to the `desktop` in the folder
 ```sh
-git clone git@gitlab.com:bloom42/desktop.git && cd desktop
+cd desktop
 ```
 3. in shell 1, go to the `native` directory, export env vars and run `make dev`
 ```sh
@@ -57,33 +57,15 @@ npm start
 ```
 
 
-
 ## Mobile
 
 1. [Install Flutter](/engineering/setup.html#flutter)
-2. Clone Bloom [mobile](https://gitlab.com/bloom42/mobile) and `cd` in the folder
+2. go to the `mobile` folder
 ```sh
-git clone git@gitlab.com:bloom42/mobile.git && cd mobile
+cd mobile
 ```
-3. Installa dependencies
+3. Install dependencies
 ```sh
 make install
 ```
 4. Run the project in [Visual Studio Code](/engineering/setup.html#visual-studio-code)
-
-
-<!--
-## Build
-
-
-### Build locally
-
-```sh
-$ make
-```
-
-### Build Docker image
-
-```sh
-$ make docker_build
-``` -->
