@@ -10,6 +10,14 @@ Bloom's official language is **English**.
 ### Core team
 
 
+#### Open Roles
+
+* User support
+* Mobile developer (Flutter + Rust)
+* Desktop developer (Electron + Rust)
+* Server developer (Rust + PostgreSQL)
+
+
 ## Community
 
 ## The foundation

@@ -29,7 +29,7 @@
 7. both `session_id` and `session_token_hash` are stored in the Database
 8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
 
-![architecture](assets/bloom_auth_sign_in.jpg)
+![architecture](../assets/bloom_auth_sign_in.jpg)
 
 
 ## Signin out
