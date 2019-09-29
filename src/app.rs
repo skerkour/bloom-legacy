@@ -46,7 +46,7 @@ pub fn post_index(
         _ => "".to_string(),
     };
 
-    return execute(state.into_inner(), auth, ip, message_wrapped.into_inner())
+    return handle_message(state.into_inner(), auth, ip, message_wrapped.into_inner())
         .boxed()
         .compat()
         .from_err()
@@ -60,7 +60,7 @@ pub fn post_index(
 //                 return ok(api::response(err));
 //             }
 //         })
-async fn execute(
+async fn handle_message(
     state: std::sync::Arc<api::State>,
     auth: Auth,
     ip: String,
