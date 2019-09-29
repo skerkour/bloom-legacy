@@ -89,6 +89,8 @@
 //     Ok(())
 // });
 
+mod kernel;
+
 // use std::sync::mpsc::{self, RecvTimeoutError, TryRecvError};
 use std::sync::mpsc::{self, RecvTimeoutError};
 use std::sync::{Arc, Mutex};
@@ -154,14 +156,14 @@ use neon::{class_definition, declare_types, impl_managed, register_module};
 // }
 
 fn app_thread(
-    app_receiver: mpsc::Receiver<bloom_desktop_kernel::MessageIn>,
-) -> mpsc::Receiver<bloom_desktop_kernel::MessageOut> {
+    app_receiver: mpsc::Receiver<kernel::MessageIn>,
+) -> mpsc::Receiver<kernel::MessageOut> {
     // Create sending and receiving channels for the event data
     let (gui_sender, gui_receiver) = mpsc::channel();
 
     // Spawn a thead to continue running after this method has returned.
     thread::spawn(move || {
-        let mut app = bloom_desktop_kernel::App::new(gui_sender, app_receiver);
+        let mut app = kernel::App::new(gui_sender, app_receiver);
         app.run();
     });
     gui_receiver
@@ -170,12 +172,12 @@ fn app_thread(
 /// Reading from a channel `Receiver` is a blocking operation. This struct
 /// wraps the data required to perform a read asynchronously from a libuv
 /// thread.
-pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<bloom_desktop_kernel::MessageOut>>>);
+pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<kernel::MessageOut>>>);
 
 /// Implementation of a neon `Task` for `NativeAdaptaterTask`. This task reads
 /// from the events channel and calls a JS callback with the data.
 impl Task for NativeAdaptaterTask {
-    type Output = Option<bloom_desktop_kernel::MessageOut>;
+    type Output = Option<kernel::MessageOut>;
     type Error = String;
     type JsEvent = JsValue;
 
@@ -249,10 +251,10 @@ pub struct NativeAdaptater {
     // `Send + Sync`. Since, correct usage of the `poll` interface should
     // only have a single concurrent consume, we guard the channel with a
     // `Mutex`.
-    events: Arc<Mutex<mpsc::Receiver<bloom_desktop_kernel::MessageOut>>>,
+    events: Arc<Mutex<mpsc::Receiver<kernel::MessageOut>>>,
 
     // Channel used to perform a controlled shutdown of the work thread.
-    app_sender: mpsc::Sender<bloom_desktop_kernel::MessageIn>,
+    app_sender: mpsc::Sender<kernel::MessageIn>,
 }
 
 // Implementation of the `JsNativeAdaptater` class. This is the only public
@@ -299,9 +301,9 @@ declare_types! {
             let this = cx.this();
 
             // Unwrap the shutdown channel and send a shutdown command
-            let message = bloom_desktop_kernel::MessageIn{
+            let message = kernel::MessageIn{
                 id: Some("1".to_string()),
-                data: bloom_desktop_kernel::MessageData::Tick{ count: 42 },
+                data: kernel::MessageData::Tick{ count: 42 },
             };
             cx.borrow(&this, |emitter| emitter.app_sender.send(message))
                 .or_else(|err| cx.throw_error(&err.to_string()))?;

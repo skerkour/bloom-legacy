@@ -16,11 +16,5 @@ neon-build = "0.3.1"
 neon = "0.3.1"
 lazy_static = "1.4.0"
 neon-serde = "0.2.0"
-bloom_desktop_kernel = { path = "bloom/kernel" }
-
-
-[workspace]
-members = [
-    ".",
-    "bloom/kernel",
-]
+serde = { version = "1.0", features = ["derive"] }
+crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
