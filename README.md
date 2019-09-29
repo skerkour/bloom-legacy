@@ -1,6 +1,6 @@
 <p align="center">
   <img alt="bloom logo" src="bloom_256.png" height="180" />
-  <h3 align="center">Bloom Mobile (Android, IOS)</h3>
+  <h3 align="center">Bloom Mobile (Android, IOS, Linux, MacOS, Windows)</h3>
   <p align="center">Empowering people with open technologies</p>
 </p>
 
@@ -32,7 +32,7 @@ See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/project
 
 ## Development
 
-See [https://theguide.bloom.sh/projects/bloom/development.html#desktop](https://theguide.bloom.sh/projects/bloom/development.html#desktop).
+See [https://theguide.bloom.sh/projects/bloom/development.html](https://theguide.bloom.sh/projects/bloom/development.html).
 
 
 ## Contributing

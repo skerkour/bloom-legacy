@@ -1,0 +1,69 @@
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+
+include:
+  template: Dependency-Scanning.gitlab-ci.yml
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  RUST_ENV: test
+  RUST_VERSION: nightly-2019-07-19
+  NODE_ENV: test
+  HOST: http://localhost:8000
+
+cache:
+  paths:
+    - cargo_home/
+    - native/target/
+    - node_modules/
+
+
+test:electron:
+  stage: test
+  image: 'node:lts'
+  tags:
+    - docker
+  script:
+    - make install
+    - make vue_lint
+
+
+# test:native:
+#   stage: test
+#   image: 'rust:1.36'
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default nightly-2019-08-15
+#     - rustup component add rustfmt clippy
+#     - make -C native fmt_check
+#     - make -C native lint
+#     - make -C native test
+
+
+build:electron:
+  stage: build
+  image: 'node:lts'
+  tags:
+    - docker
+  script:
+    - make install
+    - make electron_build
+
+# build:native:
+#   stage: build
+#   image: 'rust:1.36'
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default nightly-2019-08-15
+#     - make -C native build
+  # artifacts:
+  #   paths:
+  #   - server/dist
