@@ -1,6 +1,6 @@
 import 'package:bloom/group/views/create.dart';
 import 'package:bloom/home/views/chats_search.dart';
-import 'package:bloom/home/views/tab_chats.dart';
+import 'package:bloom/home/views/tab_chat.dart';
 import 'package:bloom/home/views/tab_groups.dart';
 import 'package:bloom/home/views/tab_me.dart';
 import 'package:bloom/home/widgets/bottom_sheet_chats.dart';
@@ -110,10 +110,6 @@ class _HomeViewState extends State<HomeView> {
           icon: Icon(Icons.people),
           title: Text('Groups'),
         ),
-        // BottomNavigationBarItem(
-        //   icon: Icon(Icons.explore),
-        //   title: Text('Discover'),
-        // ),
         BottomNavigationBarItem(
           icon: Icon(Icons.person),
           title: Text('Me'),
@@ -129,11 +125,9 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildBody(BuildContext context) {
     switch (_selectedIndex) {
       case 0:
-        return const TabChatsView();
+        return const TabChatView();
       case 1:
         return const TabGroupsView();
-      // case 2:
-      //   return const TabDiscoverView();
       default:
         return const TabMeView();
     }

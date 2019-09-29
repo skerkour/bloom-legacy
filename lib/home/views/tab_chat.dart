@@ -1,14 +1,14 @@
 import 'package:bloom/chat/views/chat.dart';
 import 'package:flutter/material.dart';
 
-class TabChatsView extends StatefulWidget {
-  const TabChatsView({Key key}) : super(key: key);
+class TabChatView extends StatefulWidget {
+  const TabChatView({Key key}) : super(key: key);
 
   @override
-  _TabChatsViewState createState() => _TabChatsViewState();
+  _TabChatViewState createState() => _TabChatViewState();
 }
 
-class _TabChatsViewState extends State<TabChatsView> {
+class _TabChatViewState extends State<TabChatView> {
   static final List<_Conversation> _conversations = getConversations();
 
   @override
