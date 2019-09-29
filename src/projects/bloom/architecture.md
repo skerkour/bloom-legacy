@@ -8,7 +8,14 @@
 
 ## Server
 
-![architecture](assets/server_design.jpg)
+![server architecture](assets/server_architecture.jpg)
+
+
+## Apps
+
+![apps architecture](assets/apps_architecture.jpg)
+
+
 
 
 ## Desktop
