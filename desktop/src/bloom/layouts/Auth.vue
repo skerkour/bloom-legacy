@@ -43,14 +43,14 @@
         <span>Help</span>
       </v-tooltip>
 
-      <v-tooltip top>
+      <!-- <v-tooltip top>
         <template v-slot:activator="{ on }">
           <v-btn icon @click="openSettingsDialog" v-on="on">
             <v-icon>mdi-settings</v-icon>
           </v-btn>
         </template>
         <span>Settings</span>
-      </v-tooltip>
+      </v-tooltip> -->
 
       <!-- <div>&copy; {{ new Date().getFullYear() }}</div> -->
     </v-footer>
