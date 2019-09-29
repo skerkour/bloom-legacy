@@ -1,7 +1,6 @@
 // use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{self, RecvTimeoutError};
 // use std::thread;
-use rand::prelude::*;
 use serde::{Deserialize, Serialize};
 use std::time;
 
@@ -65,9 +64,8 @@ impl App {
                 // use select instead
                 Ok(event) => self.handle_js_event(event),
                 Err(RecvTimeoutError::Timeout) => {
-                    let mut rng = rand::thread_rng();
-                    let n: f64 = rng.gen();
-                    if n > 0.5 {
+                    let n = crypto42::rand::uniform(100);
+                    if n > 50 {
                         self.gui_sender
                             .send(MessageOut {
                                 id: None,
