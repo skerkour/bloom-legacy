@@ -1,4 +1,4 @@
-use crate::{api, messages};
+use crate::api;
 use actix_web::{error, HttpResponse};
 use failure::Fail;
 use std::io;
@@ -67,6 +67,33 @@ pub enum KernelError {
 
     #[fail(display = "LettreSmtp: {:?}", 0)]
     LettreSmtp(String),
+}
+
+impl From<KernelError> for messages::kernel::Error {
+    fn from(err: KernelError) -> Self {
+        let code = match &err {
+            // 400
+            KernelError::Validation(_)
+            | KernelError::UrlParseError(_)
+            | KernelError::LettreEmail(_)
+            | KernelError::LettreSmtp(_) => "VALIDATION".to_string(),
+            // 401
+            KernelError::Unauthorized(_) => "UNAUTHORIZED".to_string(),
+            // 403
+            KernelError::Forbidden(_) => "FORBIDDEN".to_string(),
+            // 404
+            KernelError::RouteNotFound => "ROUTE_NOT_FOUND".to_string(),
+            KernelError::NotFound(_) => "ROUTE_NOT_FOUND".to_string(),
+            // 408
+            KernelError::Timeout => "TIMEOUT".to_string(),
+            // 500
+            _ => "INTERNAL".to_string(),
+        };
+        messages::kernel::Error {
+            code,
+            message: format!("{}", err),
+        }
+    }
 }
 
 impl std::convert::From<actix::MailboxError> for KernelError {

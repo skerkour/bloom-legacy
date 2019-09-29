@@ -2,7 +2,6 @@ use kernel::{
     api,
     api::middlewares::{Auth, GetRequestAuth},
     config::Config,
-    messages,
     myaccount::controllers,
     KernelError,
 };

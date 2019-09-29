@@ -1,5 +1,5 @@
 [package]
-name = "bitflow"
+name = "bloom_bitflow"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
@@ -8,12 +8,12 @@ publish = false
 
 
 [dependencies]
-kernel = { path = "../kernel" }
+kernel = { package = "bloom_kernel", path = "../kernel" }
+drive = { package = "bloom_drive", path = "../drive" }
+
 diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
 eventsourcing = { path = "../../libs/eventsourcing-rs" }
-drive = { path = "../drive" }
 diesel_enum_derive = { path = "../../libs/diesel-enum-derive" }
-
 
 regex = "1"
 url = "1.7"

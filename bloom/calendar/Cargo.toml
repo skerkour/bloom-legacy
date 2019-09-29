@@ -1,5 +1,5 @@
 [package]
-name = "calendar"
+name = "bloom_calendar"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
@@ -9,10 +9,10 @@ publish = false
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-kernel = { path = "../kernel" }
+kernel = { package = "bloom_kernel", path = "../kernel" }
+
 diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
 eventsourcing = { path = "../../libs/eventsourcing-rs" }
-
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

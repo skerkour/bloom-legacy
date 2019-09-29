@@ -1,5 +1,5 @@
 use crate::{
-    config::Config, db::DbActor, error::KernelError, messages, myaccount::domain::pending_account,
+    config::Config, db::DbActor, error::KernelError, myaccount::domain::pending_account,
     myaccount::notifications::emails::send_account_verification_code,
 };
 use actix::{Handler, Message};

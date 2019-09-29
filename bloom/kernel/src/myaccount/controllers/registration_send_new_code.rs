@@ -2,7 +2,6 @@ use crate::error::KernelError;
 use crate::{
     config::Config,
     db::DbActor,
-    messages,
     myaccount::domain::{pending_account, PendingAccount},
     myaccount::notifications::emails::send_account_verification_code,
 };

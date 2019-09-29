@@ -1,5 +1,5 @@
 [package]
-name = "phaser"
+name = "bloom_phaser"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
@@ -7,12 +7,12 @@ license = "AGPL-3.0"
 publish = false
 
 [dependencies]
-kernel = { path = "../kernel" }
+kernel = { package = "bloom_kernel", path = "../kernel" }
+
 diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
 eventsourcing = { path = "../../libs/eventsourcing-rs" }
 diesel_enum_derive = { path = "../../libs/diesel-enum-derive" }
 mimesniff = { path = "../../libs/mimesniff-rs" }
-
 
 serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"

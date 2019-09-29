@@ -1,5 +1,5 @@
 [package]
-name = "kernel"
+name = "bloom_kernel"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
@@ -13,6 +13,7 @@ eventsourcing = { path = "../../libs/eventsourcing-rs" }
 mimesniff = { path = "../../libs/mimesniff-rs" }
 hex = { path = "../../libs/hex-rs" }
 try_future = { path = "../../libs/rust-try-future" }
+messages = { package = "bloom_messages", path = "../messages" }
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 regex = "1"

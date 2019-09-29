@@ -2,7 +2,6 @@ use crate::{
     config::Config,
     db::DbActor,
     error::KernelError,
-    messages,
     myaccount::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};

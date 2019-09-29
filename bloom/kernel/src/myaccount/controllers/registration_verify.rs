@@ -1,11 +1,10 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    messages,
-    messages::kernel::NoData,
     myaccount::domain::{pending_account, PendingAccount},
 };
 use actix::{Handler, Message};
+use messages::kernel::NoData;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

@@ -1,7 +1,6 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    messages,
     myaccount::domain::{session, Account, Session},
 };
 use actix::{Handler, Message};

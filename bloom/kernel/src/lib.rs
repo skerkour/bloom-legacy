@@ -9,7 +9,7 @@ pub use error::KernelError;
 pub mod api;
 pub mod config;
 pub mod db;
-pub mod messages;
+// pub mod messages;
 pub mod myaccount;
 pub mod notifications;
 pub mod utils;
