@@ -549,3 +549,22 @@ comment etre alerte ?
 
 key term:
 operator
+
+
+# Random thoughts
+
+
+static site cms:
+on plug un repo git le path avec le contenu et un fichier de config,
+custom themes…
+quand on push, ca build le site, a la vuepress, avec du build time rendering et produit un site statique
+
+
+dashboard avec la liste des projets et leurs “badges” (status des dependances, status cicd, version….)
+
+
+dns service backed by un git repo
+
+donc on a besoin d’un repo git
+un service qui s’y connecte et se connecte au provider
+dashboard et cli seulement pour inspect
