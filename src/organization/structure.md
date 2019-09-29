@@ -14,7 +14,7 @@ Bloom's official language is **English**.
 
 * User support
 * Mobile developer (Flutter + Rust)
-* Desktop developer (Electron + Rust)
+* Desktop developer (Electron + VueJS + Typescript + Rust)
 * Server developer (Rust + PostgreSQL)
 
 
