@@ -522,3 +522,30 @@
 * https://termius.com/
 * https://github.com/SonarSource/sonarqube
 * https://webhint.io/
+
+
+# GitOps
+
+* https://www.weave.works/blog/gitops-operations-by-pull-request
+* https://blog.alexellis.io/introducing-openfaas-cloud/
+* https://www.weave.works/blog/kubernetes-anti-patterns-let-s-do-gitops-not-ciops -> workflowws
+* https://www.weave.works/blog/what-is-gitops-really -> workflows / branch
+* https://medium.com/weaveworks/gitops-part-3-observability-b6b2825e29f
+* https://www.weave.works/blog/grafana-dashboards-as-code/
+* https://www.kitchensoap.com/2012/09/21/a-mature-role-for-automation-part-i/
+* https://queue.acm.org/detail.cfm?id=3237207 -> scalability of gitops
+
+
+DNS is an obvious place to start, as are VM creation, container maintenance and orchestration,
+firewall rules, website updates, blog posts, email aliases and mailing lists, and just about any
+virtual infrastructure or one with a configuration file or API.
+
+declarative,
+versionned,
+audit log
+
+comment s’assurer que ce qui tourne est sync avec le git ?
+comment etre alerte ?
+
+key term:
+operator
