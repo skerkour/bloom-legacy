@@ -7,7 +7,8 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-messages = { package = "bloom_messages", path = "../messages" }
+api_messages = { package = "bloom_api_messages", path = "../api_messages" }
+gui_messages = { package = "bloom_gui_messages", path = "../gui_messages" }
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 uuid = { version = "0.7", features = ["serde", "v4"] }

@@ -7,15 +7,13 @@ pub const KDF_CONTEXT: &str = "__auth__";
 ///
 /// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
 pub fn registration_start(
-    display_name: &str,
-    email: &str,
-    password: &str,
-) -> messages::auth::RegistrationStarted {
+    input: gui_messages::auth::RegistrationStart,
+) -> api_messages::auth::RegistrationStarted {
     let salt = argon2id::gen_salt();
 
     let pw_key = argon2id::derive_from_password(
         32,
-        password.as_bytes(),
+        input.password.as_bytes(),
         &salt,
         argon2id::OPSLIMIT_INTERACTIVE,
         argon2id::MEMLIMIT_INTERACTIVE,
@@ -25,9 +23,9 @@ pub fn registration_start(
     let auth_key = blake2b::derive_from_key(64, 1, KDF_CONTEXT, &pw_key.as_slice().into())
         .expect("error deriving auth_key from pw_key");
 
-    let message: messages::Message = messages::auth::StartRegistration {
-        display_name: display_name.to_string(),
-        email: email.to_string(),
+    let message: api_messages::Message = api_messages::auth::StartRegistration {
+        display_name: input.display_name,
+        email: input.email,
         auth_key: base64::encode(&auth_key),
     }
     .into();
@@ -39,12 +37,12 @@ pub fn registration_start(
         .send()
         .expect("error posting to API");
 
-    let message_res: messages::Message = api_res
+    let message_res: api_messages::Message = api_res
         .json()
         .expect("error converting api response back to JSON");
 
     let res = match message_res {
-        messages::Message::AuthRegistrationStarted(res) => res,
+        api_messages::Message::AuthRegistrationStarted(res) => res,
         err @ _ => panic!("bad message received {:?}", err),
     };
 
