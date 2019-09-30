@@ -81,7 +81,8 @@ test:mobile:
     - make lint
     - make test
 
-pages:
+test:desktop:
+  stage: test
   image: node:lts
   tags:
     - docker
