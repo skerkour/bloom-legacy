@@ -72,7 +72,7 @@ class NativeAdaptater { // extends EventEmitter {
 
             const { id, message } = nativeMessage;
 
-            if (!id && this.inflightCalls.has(id!)) {
+            if (id && this.inflightCalls.has(id!)) {
               const { resolve, reject } = this.inflightCalls.get(id!)!;
               this.inflightCalls.delete(id!);
 

@@ -85,6 +85,11 @@ impl App {
                 let res = bloom_auth::registration_start(message);
                 self.gui_sender.send(res.into()).expect("Send failed"); // send response back
             },
+            gui_messages::Message::AuthRegistrationVerify(message) => {
+                let res = bloom_auth::registration_verify(message);
+                self.gui_sender.send(res.into()).expect("Send failed"); // send response back
+            },
+            // TODO: handle message not implemented
             _ => self.gui_sender.send(message.into()).expect("Send failed"), // send back message
         };
     }

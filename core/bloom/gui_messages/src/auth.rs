@@ -30,3 +30,24 @@ impl From<api_messages::auth::RegistrationStarted> for RegistrationStarted {
         RegistrationStarted { id: data.id }
     }
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RegistrationVerify {
+    pub id: uuid::Uuid,
+    pub code: String,
+}
+
+impl From<RegistrationVerify> for Message {
+    fn from(data: RegistrationVerify) -> Self {
+        Message::AuthRegistrationVerify(data)
+    }
+}
+
+impl From<RegistrationVerify> for api_messages::auth::RegistrationVerify {
+    fn from(data: RegistrationVerify) -> Self {
+        api_messages::auth::RegistrationVerify {
+            id: data.id,
+            code: data.code,
+        }
+    }
+}

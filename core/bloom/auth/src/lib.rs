@@ -49,6 +49,29 @@ pub fn registration_start(
     return res.into();
 }
 
+pub fn registration_verify(input: gui_messages::auth::RegistrationVerify) -> gui_messages::NoData {
+    let message: api_messages::auth::RegistrationVerify = input.into();
+    let message: api_messages::Message = message.into();
+
+    let client = reqwest::Client::new();
+    let mut api_res = client
+        .post(API_URL)
+        .json(&message)
+        .send()
+        .expect("error posting to API");
+
+    let message_res: api_messages::Message = api_res
+        .json()
+        .expect("error converting api response back to JSON");
+
+    let res = match message_res {
+        api_messages::Message::KernelNoData(res) => res,
+        err @ _ => panic!("bad message received {:?}", err),
+    };
+
+    return res.into();
+}
+
 #[cfg(test)]
 mod tests {
     #[test]

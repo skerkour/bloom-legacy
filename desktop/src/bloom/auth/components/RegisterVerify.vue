@@ -1,6 +1,7 @@
 <template>
   <v-container grid-list-xl text-xs-center>
     <v-layout row wrap text-xs-center>
+      <h1>Verify</h1>
 
     </v-layout>
 </v-container>

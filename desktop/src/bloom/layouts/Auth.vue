@@ -5,8 +5,8 @@
       <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
         <div id="main-card">
 
-          <v-tabs fixed-tabs class="mb-5" background-color="transparent">
-            <v-tab ripple to="/auth/register">Create account</v-tab>
+          <v-tabs fixed-tabs class="mb-5" background-color="transparent" v-if="showTabs">
+            <v-tab ripple to="/auth/welcome">Create account</v-tab>
             <v-tab ripple to="/auth/sign-in">Sign in</v-tab>
           </v-tabs>
           <router-view></router-view>
@@ -82,8 +82,15 @@ export default class Auth extends Vue {
   // data
   showSettingsDialog = false;
 
-
   // computed
+  get showTabs(): boolean {
+    const route = this.$route.path;
+    if (route === '/auth/welcome' || route === '/auth/sign-in') {
+      return true;
+    }
+
+    return false;
+  }
   // lifecycle
   // watch
   // methods
