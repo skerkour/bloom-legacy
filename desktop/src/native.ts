@@ -72,13 +72,13 @@ class NativeAdaptater { // extends EventEmitter {
 
             const { id, message } = nativeMessage;
 
-            if (id !== undefined && this.inflightCalls.has(id!)) {
+            if (!id && this.inflightCalls.has(id!)) {
               const { resolve, reject } = this.inflightCalls.get(id!)!;
               this.inflightCalls.delete(id!);
 
               // check if the message holds data or error
-              if (message.error) {
-                reject(message.error.message);
+              if (message.type === 'gui.error') {
+                reject(message.data.message);
               } else {
                 // here, data.type does not interest us
                 resolve(message);
@@ -103,7 +103,7 @@ class NativeAdaptater { // extends EventEmitter {
     loop();
   }
 
-  call(message: Message = {}): Promise<Message> {
+  call(message: Message): Promise<Message> {
     return new Promise((resolve, reject) => {
       const callUuid: string = '1';
       this.inflightCalls.set(callUuid, { resolve, reject });
@@ -124,7 +124,10 @@ class NativeAdaptater { // extends EventEmitter {
   }
 }
 
-type Message = any;
+interface Message {
+  type: string,
+  data: any,
+}
 
 interface NativeMessage {
   id: string | null,

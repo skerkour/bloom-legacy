@@ -1,18 +1,29 @@
 import SignInForm from './components/SignInForm.vue';
-import RegisterForm from './components/RegisterForm.vue';
+import RegisterStart from './components/RegisterStart.vue';
+import RegisterVerify from './components/RegisterVerify.vue';
+
 
 export default [
   // registration
   {
-    component: RegisterForm,
+    component: RegisterStart,
     meta: {
       layout: 'auth',
     },
-    path: '/auth/register',
+    path: '/auth/welcome',
   },
-  { path: '/auth/signup', redirect: '/auth/register' },
-  { path: '/auth/sign-up', redirect: '/auth/register' },
-  { path: '/auth/sign_up', redirect: '/auth/register' },
+  { path: '/auth/register', redirect: '/auth/welcome' },
+  { path: '/auth/signup', redirect: '/auth/welcome' },
+  { path: '/auth/sign-up', redirect: '/auth/welcome' },
+  { path: '/auth/sign_up', redirect: '/auth/welcome' },
+
+  {
+    component: RegisterVerify,
+    meta: {
+      layout: 'auth',
+    },
+    path: '/auth/welcome/verify',
+  },
 
   // SignIn
   {

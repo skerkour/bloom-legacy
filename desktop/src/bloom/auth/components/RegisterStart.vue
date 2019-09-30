@@ -62,6 +62,7 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Native } from '@/native';
+import { StorePendingAccount } from '../models';
 
 const { shell } = (window as any).require('electron');
 const config = require('@/config');
@@ -107,7 +108,13 @@ export default class RegisterForm extends Vue {
         },
       };
       const res = await Native.call(message);
-      console.log('register clicked: ', res);
+
+      const pendingAccount: StorePendingAccount = {
+        email: this.email,
+        id: res.data.id,
+      };
+      this.$store.commit('set_pending_account', pendingAccount);
+      this.$router.push({ path: '/auth/welcome/verify', query: this.$route.query });
     } catch (err) {
       this.error = err.message;
     } finally {
