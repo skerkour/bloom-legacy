@@ -14,6 +14,10 @@ variables:
   RUST_VERSION: nightly-2019-09-13
   RUST_BACKTRACE: 1
 
+cache:
+  paths:
+    - cargo_home/
+    - core/target/
 
 test:core:
   stage: test
