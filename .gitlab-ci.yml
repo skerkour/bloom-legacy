@@ -119,6 +119,7 @@ build:desktop:
     - docker
   script:
     - cd desktop
+    - make install
     - make build
 
 build:mobile:
