@@ -1,8 +1,9 @@
 import { Subject } from 'rxjs';
+import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 // const { EventEmitter } = require('events');
 const { promisify } = require('util');
-const { NativeAdaptater: Native } = require('bloom_native');
+const { NativeAdaptater: BloomNative } = require('bloom_native');
 
 
 // The `NativeAdaptater` class provides glue code to abstract the `poll`
@@ -22,7 +23,7 @@ class NativeAdaptater { // extends EventEmitter {
     // super();
 
     // Create an instance of the Neon class
-    this.native = new Native();
+    this.native = new BloomNative();
 
     // Neon does not provide `Promise` return values from asynchronous
     // tasks, but it does use node style callbacks that may be trivially
@@ -63,30 +64,30 @@ class NativeAdaptater { // extends EventEmitter {
       // }
       return (
         poll()
-          .then((message: any) => {
+          .then((nativeMessage: NativeMessage | null) => {
             // Timeout on poll, no data to emit
-            if (!message) {
+            if (!nativeMessage) {
               return;
             }
 
-            const { id, data, error } = message;
+            const { id, message } = nativeMessage;
 
-            if (id !== undefined && this.inflightCalls.has(id)) {
-              const { resolve, reject } = this.inflightCalls.get(id)!;
-              this.inflightCalls.delete(id);
+            if (id !== undefined && this.inflightCalls.has(id!)) {
+              const { resolve, reject } = this.inflightCalls.get(id!)!;
+              this.inflightCalls.delete(id!);
 
               // check if the message holds data or error
-              if (error) {
-                reject(error);
+              if (message.error) {
+                reject(message.error.message);
               } else {
                 // here, data.type does not interest us
-                resolve(data.data);
+                resolve(message);
               }
               return;
             }
 
             // Emit the notification
-            this.notify(data);
+            this.notify(message);
           })
           // Emit errors
           // .catch((err: any) => this.emit('error', err))
@@ -102,11 +103,16 @@ class NativeAdaptater { // extends EventEmitter {
     loop();
   }
 
-  call(data: any = {}): Promise<any> {
+  call(message: Message = {}): Promise<Message> {
     return new Promise((resolve, reject) => {
       const callUuid: string = '1';
       this.inflightCalls.set(callUuid, { resolve, reject });
-      this.native.call({ id: callUuid, data });
+      const nativeMessage = {
+        id: callUuid,
+        message,
+      };
+      console.log('nativeMessage: ', nativeMessage);
+      this.native.call(nativeMessage);
     });
   }
 
@@ -118,4 +124,13 @@ class NativeAdaptater { // extends EventEmitter {
   }
 }
 
-export default new NativeAdaptater();
+type Message = any;
+
+interface NativeMessage {
+  id: string | null,
+  message: Message,
+}
+
+const Native = new NativeAdaptater();
+
+export { Native, Message, NativeMessage };

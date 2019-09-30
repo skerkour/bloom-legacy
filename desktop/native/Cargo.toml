@@ -13,6 +13,10 @@ crate-type = ["cdylib"] # required by neon
 neon-build = "0.3.1"
 
 [dependencies]
+bloom_core = { path = "../../core" }
+gui_messages = { package = "bloom_gui_messages", path = "../../core/bloom/gui_messages" }
+bloom_auth = { path = "../../core/bloom/auth" }
+
 neon = "0.3.1"
 lazy_static = "1.4.0"
 neon-serde = "0.2.0"

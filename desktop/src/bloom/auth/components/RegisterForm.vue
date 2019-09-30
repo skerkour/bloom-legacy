@@ -6,7 +6,7 @@
         <v-text-field
           label="Full name"
           type="text"
-          v-model="fullName"
+          v-model="displayName"
           :rules="fulleNameRules"
           :disabled="isLoading"
            hint="This will be public, 'Sylvain kerkour' for example"
@@ -61,6 +61,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Native } from '@/native';
 
 const { shell } = (window as any).require('electron');
 const config = require('@/config');
@@ -69,7 +70,7 @@ const config = require('@/config');
 @Component
 export default class RegisterForm extends Vue {
   showPassword = false;
-  fullName = '';
+  displayName = '';
   fulleNameRules = [
     (v: string) => !!v || 'Name is required',
   ];
@@ -93,11 +94,20 @@ export default class RegisterForm extends Vue {
     this.error = '';
     const payload = {
       email: this.email,
-      fullName: this.fullName,
+      displayName: this.displayName,
       password: this.password,
     };
     try {
-      console.log('register clicked');
+      const message = {
+        type: 'gui.auth.registration_start',
+        data: {
+          display_name: this.displayName,
+          email: this.email,
+          password: this.password,
+        },
+      };
+      const res = await Native.call(message);
+      console.log('register clicked: ', res);
     } catch (err) {
       this.error = err.message;
     } finally {

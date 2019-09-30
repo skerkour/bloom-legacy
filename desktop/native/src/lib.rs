@@ -103,6 +103,7 @@ use neon::result::JsResult;
 use neon::task::Task;
 use neon::types::{JsFunction, JsUndefined, JsValue};
 use neon::{class_definition, declare_types, impl_managed, register_module};
+use serde::{Serialize, Deserialize};
 
 /// Placeholder to represent work being done on a Rust thread. It could be
 /// reading from a socket or any other long running task.
@@ -156,8 +157,8 @@ use neon::{class_definition, declare_types, impl_managed, register_module};
 // }
 
 fn app_thread(
-    app_receiver: mpsc::Receiver<kernel::MessageIn>,
-) -> mpsc::Receiver<kernel::MessageOut> {
+    app_receiver: mpsc::Receiver<gui_messages::Message>,
+) -> mpsc::Receiver<gui_messages::Message> {
     // Create sending and receiving channels for the event data
     let (gui_sender, gui_receiver) = mpsc::channel();
 
@@ -172,12 +173,12 @@ fn app_thread(
 /// Reading from a channel `Receiver` is a blocking operation. This struct
 /// wraps the data required to perform a read asynchronously from a libuv
 /// thread.
-pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<kernel::MessageOut>>>);
+pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<gui_messages::Message>>>);
 
 /// Implementation of a neon `Task` for `NativeAdaptaterTask`. This task reads
 /// from the events channel and calls a JS callback with the data.
 impl Task for NativeAdaptaterTask {
-    type Output = Option<kernel::MessageOut>;
+    type Output = Option<gui_messages::Message>;
     type Error = String;
     type JsEvent = JsValue;
 
@@ -193,9 +194,9 @@ impl Task for NativeAdaptaterTask {
 
         // Attempt to read from the channel. Block for at most 100 ms.
         match rx.recv_timeout(Duration::from_millis(100)) {
-            Ok(event) => Ok(Some(event)),
+            Ok(message) => Ok(Some(message)),
             Err(RecvTimeoutError::Timeout) => Ok(None),
-            Err(RecvTimeoutError::Disconnected) => Err("Failed to receive event".to_string()),
+            Err(RecvTimeoutError::Disconnected) => Err("Failed to receive message".to_string()),
         }
     }
 
@@ -205,18 +206,23 @@ impl Task for NativeAdaptaterTask {
     fn complete(
         self,
         mut cx: TaskContext,
-        event: Result<Self::Output, Self::Error>,
+        message: Result<Self::Output, Self::Error>,
     ) -> JsResult<Self::JsEvent> {
-        // Receive the event or return early with the error
-        let event = event.or_else(|err| cx.throw_error(&err.to_string()))?;
+        // Receive the message or return early with the error
+        let message = message.or_else(|err| cx.throw_error(&err.to_string()))?;
 
         // Timeout occured, return early with `undefined
-        let event = match event {
-            Some(event) => event,
+        let message = match message {
+            Some(message) => message,
             None => return Ok(JsUndefined::new().upcast()),
         };
 
-        let js_value = neon_serde::to_value(&mut cx, &event)?;
+        let message = NativeMessage{
+            id: "1".to_string(),
+            message,
+        };
+
+        let js_value = neon_serde::to_value(&mut cx, &message)?;
         Ok(js_value)
 
         // // Create an empty object `{}`
@@ -251,10 +257,17 @@ pub struct NativeAdaptater {
     // `Send + Sync`. Since, correct usage of the `poll` interface should
     // only have a single concurrent consume, we guard the channel with a
     // `Mutex`.
-    events: Arc<Mutex<mpsc::Receiver<kernel::MessageOut>>>,
+    events: Arc<Mutex<mpsc::Receiver<gui_messages::Message>>>,
 
     // Channel used to perform a controlled shutdown of the work thread.
-    app_sender: mpsc::Sender<kernel::MessageIn>,
+    app_sender: mpsc::Sender<gui_messages::Message>,
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct NativeMessage{
+    pub id: String,
+    pub message: gui_messages::Message,
 }
 
 // Implementation of the `JsNativeAdaptater` class. This is the only public
@@ -299,13 +312,15 @@ declare_types! {
         // will error if the thread has already been destroyed.
         method call(mut cx) {
             let this = cx.this();
+            let message = cx.argument::<JsValue>(0)?;
 
             // Unwrap the shutdown channel and send a shutdown command
-            let message = kernel::MessageIn{
-                id: Some("1".to_string()),
-                data: kernel::MessageData::Tick{ count: 42 },
-            };
-            cx.borrow(&this, |emitter| emitter.app_sender.send(message))
+            let message: NativeMessage = neon_serde::from_value(&mut cx, message)?;
+            // let message = kernel::MessageIn{
+            //     id: Some("1".to_string()),
+            //     data: kernel::MessageData::Tick{ count: 42 },
+            // };
+            cx.borrow(&this, |emitter| emitter.app_sender.send(message.message))
                 .or_else(|err| cx.throw_error(&err.to_string()))?;
 
             Ok(JsUndefined::new().upcast())

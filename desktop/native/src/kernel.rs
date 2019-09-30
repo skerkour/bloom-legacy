@@ -4,28 +4,28 @@ use std::sync::mpsc::{self, RecvTimeoutError};
 use serde::{Deserialize, Serialize};
 use std::time;
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct MessageIn {
-    pub id: Option<String>,
-    pub data: MessageData,
-}
+// #[derive(Serialize, Deserialize, Debug)]
+// pub struct MessageIn {
+//     pub id: Option<String>,
+//     pub data: MessageData,
+// }
 
-#[derive(Serialize, Deserialize, Debug)]
-pub struct MessageOut {
-    pub id: Option<String>,
-    pub data: Option<MessageData>,
-    pub error: Option<String>,
-}
+// #[derive(Serialize, Deserialize, Debug)]
+// pub struct MessageOut {
+//     pub id: Option<String>,
+//     pub data: Option<MessageData>,
+//     pub error: Option<String>,
+// }
 
-impl From<MessageIn> for MessageOut {
-    fn from(message: MessageIn) -> Self {
-        return MessageOut {
-            id: message.id,
-            data: Some(message.data),
-            error: None,
-        };
-    }
-}
+// impl From<MessageIn> for MessageOut {
+//     fn from(message: MessageIn) -> Self {
+//         return MessageOut {
+//             id: message.id,
+//             data: Some(message.data),
+//             error: None,
+//         };
+//     }
+// }
 
 /// Represents the data that will be received by the `poll` method. It may
 /// include different types of data or be replaced with a more simple type,
@@ -38,14 +38,14 @@ pub enum MessageData {
 
 pub struct App {
     counter: u64,
-    gui_sender: mpsc::Sender<MessageOut>,
-    gui_receiver: mpsc::Receiver<MessageIn>,
+    gui_sender: mpsc::Sender<gui_messages::Message>,
+    gui_receiver: mpsc::Receiver<gui_messages::Message>,
 }
 
 impl App {
     pub fn new(
-        gui_sender: mpsc::Sender<MessageOut>,
-        gui_receiver: mpsc::Receiver<MessageIn>,
+        gui_sender: mpsc::Sender<gui_messages::Message>,
+        gui_receiver: mpsc::Receiver<gui_messages::Message>,
     ) -> App {
         return App {
             counter: 0,
@@ -62,28 +62,30 @@ impl App {
             // self.counter += 1;
             match self.gui_receiver.recv_timeout(time::Duration::from_secs(1)) {
                 // use select instead
-                Ok(event) => self.handle_js_event(event),
+                Ok(message) => self.handle_gui_message(message),
                 Err(RecvTimeoutError::Timeout) => {
                     let n = crypto42::rand::uniform(100);
                     if n > 50 {
                         self.gui_sender
-                            .send(MessageOut {
-                                id: None,
-                                data: Some(MessageData::Tick {
+                            .send(gui_messages::to_remove::Tick{
                                     count: self.counter,
-                                }),
-                                error: None,
-                            })
+                            }.into())
                             .expect("Send failed");
                     }
                     self.counter += 1;
                 }
-                Err(RecvTimeoutError::Disconnected) => panic!("Failed to receive event"),
+                Err(RecvTimeoutError::Disconnected) => panic!("Failed to receive message"),
             }
         }
     }
 
-    fn handle_js_event(&self, event: MessageIn) {
-        self.gui_sender.send(event.into()).expect("Send failed"); // send back event
+    fn handle_gui_message(&self, message: gui_messages::Message) {
+        match message {
+            gui_messages::Message::AuthRegistrationStart(message) => {
+                let res = bloom_auth::registration_start(message);
+                self.gui_sender.send(res.into()).expect("Send failed"); // send response back
+            },
+            _ => self.gui_sender.send(message.into()).expect("Send failed"), // send back message
+        };
     }
 }

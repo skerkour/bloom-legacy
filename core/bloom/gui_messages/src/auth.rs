@@ -13,3 +13,20 @@ impl From<RegistrationStart> for Message {
         Message::AuthRegistrationStart(data)
     }
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct RegistrationStarted {
+    pub id: uuid::Uuid,
+}
+
+impl From<RegistrationStarted> for Message {
+    fn from(data: RegistrationStarted) -> Self {
+        Message::AuthRegistrationStarted(data)
+    }
+}
+
+impl From<api_messages::auth::RegistrationStarted> for RegistrationStarted {
+    fn from(data: api_messages::auth::RegistrationStarted) -> Self {
+        RegistrationStarted { id: data.id }
+    }
+}

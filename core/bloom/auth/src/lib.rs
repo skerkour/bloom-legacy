@@ -8,7 +8,7 @@ pub const KDF_CONTEXT: &str = "__auth__";
 /// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
 pub fn registration_start(
     input: gui_messages::auth::RegistrationStart,
-) -> api_messages::auth::RegistrationStarted {
+) -> gui_messages::auth::RegistrationStarted {
     let salt = argon2id::gen_salt();
 
     let pw_key = argon2id::derive_from_password(
@@ -46,7 +46,7 @@ pub fn registration_start(
         err @ _ => panic!("bad message received {:?}", err),
     };
 
-    return res;
+    return res.into();
 }
 
 #[cfg(test)]
