@@ -29,6 +29,11 @@ cache:
   paths:
     - cargo_home/
     - core/target/
+    - desktop/node_modules/
+
+####################################################################################################
+## Test
+####################################################################################################
 
 test:core:
   stage: test
@@ -44,12 +49,14 @@ test:core:
     - make lint
     - make test
 
+
 test:mobile:
   stage: test
   image: openjdk:8-jdk
   tags:
     - docker
   script:
+    - cd mobile
     - apt-get --quiet update --yes
     - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 build-essential
     - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
@@ -70,11 +77,29 @@ test:mobile:
     - echo flutter.sdk=$HOME/flutter > android/local.properties
     - chmod +x ./android/gradlew
     - flutter config --no-analytics
-    - cd mobile
     - make fmt_check
     - make lint
     - make test
 
+pages:
+  image: node:lts
+  tags:
+    - docker
+  script:
+    - cd desktop
+    - make install
+    #- make test
+    - make lint
+  artifacts:
+    paths:
+    - public
+
+
+####################################################################################################
+## Build
+####################################################################################################
+
+# TODO
 
 # test:android:
 #   stage: test

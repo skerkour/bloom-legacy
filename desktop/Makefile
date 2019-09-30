@@ -1,5 +1,5 @@
 .PHONY: dev install clean
-.PHONY: electron_test vue_lint electron_build vue_build
+.PHONY: test lint electron_build vue_build
 
 
 dev:
@@ -11,10 +11,10 @@ clean:
 install:
 	npm install
 
-electron_test: vue_lint
+test:
 	npm run test:unit
 
-vue_lint:
+lint:
 	npm run lint
 
 electron_build: vue_build
