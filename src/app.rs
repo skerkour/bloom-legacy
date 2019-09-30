@@ -9,8 +9,8 @@ use kernel::{
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
 use futures::future::{ok, Future};
 use futures_preview::{compat::Future01CompatExt, FutureExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future
+use futures_timer::Delay;
 use std::time::Duration;
-use tokio::timer::delay;
 
 pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
     return move |cfg| {
@@ -72,10 +72,11 @@ async fn handle_message(
             must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
-            let when = tokio::clock::now()
-                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
 
-            delay(when).await;
+            let _ = Delay::new(Duration::from_millis(
+                (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
+            ))
+            .await;
 
             state
                 .db
@@ -86,10 +87,10 @@ async fn handle_message(
         messages::Message::AuthRegistrationVerify(message) => {
             must_not_be_authenticated(&auth)?;
 
-            let when = tokio::clock::now()
-                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
-
-            delay(when).await;
+            let _ = Delay::new(Duration::from_millis(
+                (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
+            ))
+            .await;
 
             state
                 .db
@@ -117,10 +118,12 @@ async fn handle_message(
             must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
-            let when = tokio::clock::now()
-                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
 
-            delay(when).await;
+            let _ = Delay::new(Duration::from_millis(
+                (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
+            ))
+            .await;
+
             state
                 .db
                 .send(controllers::RegistrationSendNewCode { message, config })
@@ -130,10 +133,11 @@ async fn handle_message(
         messages::Message::AuthSignIn(message) => {
             must_not_be_authenticated(&auth)?;
 
-            let when = tokio::clock::now()
-                + Duration::from_millis((400 + crypto42::rand::uniform(200)).into()); // 400-600
+            let _ = Delay::new(Duration::from_millis(
+                (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
+            ))
+            .await;
 
-            delay(when).await;
             state
                 .db
                 .send(controllers::SignIn {

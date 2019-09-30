@@ -38,7 +38,7 @@ num_cpus = "1.0"
 http = "0.1.0"
 sentry = "0.17"
 sentry-actix = "0.17"
-tokio = "0.2.0-alpha.5"
+futures-timer = "0.3"
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 
 [profile.release]
