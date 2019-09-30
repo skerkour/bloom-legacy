@@ -1,5 +1,5 @@
 [package]
-name = "bloom_auth"
+name = "bloom_messages"
 version = "0.1.0"
 authors = ["z0mbie42 <sylvain@kerkour.fr>"]
 edition = "2018"
@@ -7,9 +7,5 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-messages = { package = "bloom_messages", path = "../messages" }
-
-crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
+serde = { version = "1.0", features = ["derive"] }
 uuid = { version = "0.7", features = ["serde", "v4"] }
-reqwest = "0.9"
-base64 = "0.10"

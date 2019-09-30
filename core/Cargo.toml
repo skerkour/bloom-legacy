@@ -13,4 +13,5 @@ edition = "2018"
 [workspace]
 members = [
     "bloom/auth",
+     "bloom/messages",
 ]
