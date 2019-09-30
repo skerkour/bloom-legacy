@@ -1,4 +1,7 @@
-.PHONY: lint fmt fmt_check test icon dev
+.PHONY: lint fmt fmt_check test icon dev build
+
+build:
+	build apk --release
 
 lint:
 	flutter analyze
