@@ -78,7 +78,7 @@ class NativeAdaptater { // extends EventEmitter {
 
               // check if the message holds data or error
               if (message.type === 'gui.error') {
-                reject(message.data.message);
+                reject(message.data);
               } else {
                 // here, data.type does not interest us
                 resolve(message);

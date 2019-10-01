@@ -7,8 +7,8 @@ pub const KDF_CONTEXT: &str = "__auth__";
 ///
 /// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
 pub fn registration_start(
-    input: gui_messages::auth::RegistrationStart,
-) -> gui_messages::auth::RegistrationStarted {
+    input: messages::auth::GuiRegistrationStart,
+) -> messages::auth::RegistrationStarted {
     let salt = argon2id::gen_salt();
 
     let pw_key = argon2id::derive_from_password(
@@ -23,7 +23,7 @@ pub fn registration_start(
     let auth_key = blake2b::derive_from_key(64, 1, KDF_CONTEXT, &pw_key.as_slice().into())
         .expect("error deriving auth_key from pw_key");
 
-    let message: api_messages::Message = api_messages::auth::StartRegistration {
+    let message: messages::Message = messages::auth::StartRegistration {
         display_name: input.display_name,
         email: input.email,
         auth_key: base64::encode(&auth_key),
@@ -37,21 +37,21 @@ pub fn registration_start(
         .send()
         .expect("error posting to API");
 
-    let message_res: api_messages::Message = api_res
+    let message_res: messages::Message = api_res
         .json()
         .expect("error converting api response back to JSON");
 
     let res = match message_res {
-        api_messages::Message::AuthRegistrationStarted(res) => res,
+        messages::Message::AuthRegistrationStarted(res) => res,
         err @ _ => panic!("bad message received {:?}", err),
     };
 
     return res.into();
 }
 
-pub fn registration_verify(input: gui_messages::auth::RegistrationVerify) -> gui_messages::NoData {
-    let message: api_messages::auth::RegistrationVerify = input.into();
-    let message: api_messages::Message = message.into();
+pub fn registration_verify(input: messages::auth::RegistrationVerify) -> messages::kernel::NoData {
+    let message: messages::auth::RegistrationVerify = input.into();
+    let message: messages::Message = message.into();
 
     let client = reqwest::Client::new();
     let mut api_res = client
@@ -60,12 +60,12 @@ pub fn registration_verify(input: gui_messages::auth::RegistrationVerify) -> gui
         .send()
         .expect("error posting to API");
 
-    let message_res: api_messages::Message = api_res
+    let message_res: messages::Message = api_res
         .json()
         .expect("error converting api response back to JSON");
 
     let res = match message_res {
-        api_messages::Message::KernelNoData(res) => res,
+        messages::Message::KernelNoData(res) => res,
         err @ _ => panic!("bad message received {:?}", err),
     };
 

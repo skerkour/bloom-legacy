@@ -1,5 +1,5 @@
 fn main() {
-    let input = gui_messages::auth::RegistrationStart {
+    let input = messages::auth::GuiRegistrationStart {
         display_name: "some display name".to_string(),
         email: "some.email@protonmail.com".to_string(),
         password: "some password".to_string(),

@@ -1,3 +1,6 @@
+pub use auth;
+pub use messages;
+
 #[cfg(test)]
 mod tests {
     #[test]

@@ -7,12 +7,13 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
+auth = { package = "bloom_auth", path = "bloom/auth" }
+messages = { package = "bloom_messages", path = "bloom/messages" }
 
 
 
 [workspace]
 members = [
     "bloom/auth",
-    "bloom/api_messages",
-    "bloom/gui_messages",
+    "bloom/messages",
 ]

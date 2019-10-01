@@ -2,6 +2,7 @@ use serde::{Deserialize, Serialize};
 
 pub mod auth;
 pub mod kernel;
+pub mod to_remove;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
@@ -13,6 +14,7 @@ pub enum Message {
     #[serde(rename = "bloom.error")]
     KernelError(kernel::Error),
 
+    // auth
     #[serde(rename = "auth.registration_start")]
     AuthRegistrationStart(auth::StartRegistration),
     #[serde(rename = "auth.registration_started")]
@@ -31,4 +33,10 @@ pub enum Message {
     AuthSignOut(kernel::NoData),
     #[serde(rename = "auth.revoke_session")]
     AuthRevokeSession(auth::RevokeSesison),
+
+    #[serde(rename = "auth.gui.registration_start")]
+    AuthGuiRegistrationStart(auth::GuiRegistrationStart),
+
+    #[serde(rename = "gui.to_remove.tick")]
+    ToRemoveTick(to_remove::Tick),
 }

@@ -100,7 +100,7 @@ export default class RegisterForm extends Vue {
     };
     try {
       const message = {
-        type: 'gui.auth.registration_start',
+        type: 'auth.gui.registration_start',
         data: {
           display_name: this.displayName,
           email: this.email,

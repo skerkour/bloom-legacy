@@ -3,6 +3,7 @@ use std::sync::mpsc::{self, RecvTimeoutError};
 // use std::thread;
 use serde::{Deserialize, Serialize};
 use std::time;
+use bloom_core::{messages, auth};
 
 // #[derive(Serialize, Deserialize, Debug)]
 // pub struct MessageIn {
@@ -38,14 +39,14 @@ pub enum MessageData {
 
 pub struct App {
     counter: u64,
-    gui_sender: mpsc::Sender<gui_messages::Message>,
-    gui_receiver: mpsc::Receiver<gui_messages::Message>,
+    gui_sender: mpsc::Sender<messages::Message>,
+    gui_receiver: mpsc::Receiver<messages::Message>,
 }
 
 impl App {
     pub fn new(
-        gui_sender: mpsc::Sender<gui_messages::Message>,
-        gui_receiver: mpsc::Receiver<gui_messages::Message>,
+        gui_sender: mpsc::Sender<messages::Message>,
+        gui_receiver: mpsc::Receiver<messages::Message>,
     ) -> App {
         return App {
             counter: 0,
@@ -67,7 +68,7 @@ impl App {
                     let n = crypto42::rand::uniform(100);
                     if n > 50 {
                         self.gui_sender
-                            .send(gui_messages::to_remove::Tick{
+                            .send(messages::to_remove::Tick{
                                     count: self.counter,
                             }.into())
                             .expect("Send failed");
@@ -79,14 +80,14 @@ impl App {
         }
     }
 
-    fn handle_gui_message(&self, message: gui_messages::Message) {
+    fn handle_gui_message(&self, message: messages::Message) {
         match message {
-            gui_messages::Message::AuthRegistrationStart(message) => {
-                let res = bloom_auth::registration_start(message);
+            messages::Message::AuthGuiRegistrationStart(message) => {
+                let res = auth::registration_start(message);
                 self.gui_sender.send(res.into()).expect("Send failed"); // send response back
             },
-            gui_messages::Message::AuthRegistrationVerify(message) => {
-                let res = bloom_auth::registration_verify(message);
+            messages::Message::AuthRegistrationVerify(message) => {
+                let res = auth::registration_verify(message);
                 self.gui_sender.send(res.into()).expect("Send failed"); // send response back
             },
             // TODO: handle message not implemented

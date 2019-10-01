@@ -94,3 +94,20 @@ impl From<RevokeSesison> for Message {
         Message::AuthRevokeSession(data)
     }
 }
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+/// GUI
+////////////////////////////////////////////////////////////////////////////////////////////////////
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiRegistrationStart {
+    pub display_name: String,
+    pub email: String,
+    pub password: String,
+}
+
+impl From<GuiRegistrationStart> for Message {
+    fn from(data: GuiRegistrationStart) -> Self {
+        Message::AuthGuiRegistrationStart(data)
+    }
+}

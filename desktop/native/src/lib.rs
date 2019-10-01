@@ -104,6 +104,7 @@ use neon::task::Task;
 use neon::types::{JsFunction, JsUndefined, JsValue};
 use neon::{class_definition, declare_types, impl_managed, register_module};
 use serde::{Serialize, Deserialize};
+use bloom_core::messages;
 
 /// Placeholder to represent work being done on a Rust thread. It could be
 /// reading from a socket or any other long running task.
@@ -157,8 +158,8 @@ use serde::{Serialize, Deserialize};
 // }
 
 fn app_thread(
-    app_receiver: mpsc::Receiver<gui_messages::Message>,
-) -> mpsc::Receiver<gui_messages::Message> {
+    app_receiver: mpsc::Receiver<messages::Message>,
+) -> mpsc::Receiver<messages::Message> {
     // Create sending and receiving channels for the event data
     let (gui_sender, gui_receiver) = mpsc::channel();
 
@@ -173,12 +174,12 @@ fn app_thread(
 /// Reading from a channel `Receiver` is a blocking operation. This struct
 /// wraps the data required to perform a read asynchronously from a libuv
 /// thread.
-pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<gui_messages::Message>>>);
+pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<messages::Message>>>);
 
 /// Implementation of a neon `Task` for `NativeAdaptaterTask`. This task reads
 /// from the events channel and calls a JS callback with the data.
 impl Task for NativeAdaptaterTask {
-    type Output = Option<gui_messages::Message>;
+    type Output = Option<messages::Message>;
     type Error = String;
     type JsEvent = JsValue;
 
@@ -257,17 +258,17 @@ pub struct NativeAdaptater {
     // `Send + Sync`. Since, correct usage of the `poll` interface should
     // only have a single concurrent consume, we guard the channel with a
     // `Mutex`.
-    events: Arc<Mutex<mpsc::Receiver<gui_messages::Message>>>,
+    events: Arc<Mutex<mpsc::Receiver<messages::Message>>>,
 
     // Channel used to perform a controlled shutdown of the work thread.
-    app_sender: mpsc::Sender<gui_messages::Message>,
+    app_sender: mpsc::Sender<messages::Message>,
 }
 
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NativeMessage{
     pub id: String,
-    pub message: gui_messages::Message,
+    pub message: messages::Message,
 }
 
 // Implementation of the `JsNativeAdaptater` class. This is the only public
