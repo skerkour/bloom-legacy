@@ -3,7 +3,7 @@ use std::sync::mpsc::{self, RecvTimeoutError};
 // use std::thread;
 use serde::{Deserialize, Serialize};
 use std::time;
-use bloom_core::{messages, auth};
+use bloom_core::{messages};
 
 // #[derive(Serialize, Deserialize, Debug)]
 // pub struct MessageIn {
@@ -63,7 +63,7 @@ impl App {
             // self.counter += 1;
             match self.gui_receiver.recv_timeout(time::Duration::from_secs(1)) {
                 // use select instead
-                Ok(message) => self.handle_gui_message(message),
+                Ok(message) => self.gui_sender.send(bloom_core::handle_message(message)).expect("error sending message back"),
                 Err(RecvTimeoutError::Timeout) => {
                     let n = crypto42::rand::uniform(100);
                     if n > 50 {
@@ -78,20 +78,5 @@ impl App {
                 Err(RecvTimeoutError::Disconnected) => panic!("Failed to receive message"),
             }
         }
-    }
-
-    fn handle_gui_message(&self, message: messages::Message) {
-        match message {
-            messages::Message::AuthGuiRegistrationStart(message) => {
-                let res = auth::registration_start(message);
-                self.gui_sender.send(res.into()).expect("Send failed"); // send response back
-            },
-            messages::Message::AuthRegistrationVerify(message) => {
-                let res = auth::registration_verify(message);
-                self.gui_sender.send(res.into()).expect("Send failed"); // send response back
-            },
-            // TODO: handle message not implemented
-            _ => self.gui_sender.send(message.into()).expect("Send failed"), // send back message
-        };
     }
 }

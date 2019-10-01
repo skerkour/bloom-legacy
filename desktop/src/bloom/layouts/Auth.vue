@@ -5,13 +5,13 @@
       <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
         <div id="main-card">
 
-          <v-tabs fixed-tabs class="mb-5" background-color="transparent" v-if="showTabs">
+          <v-tabs fixed-tabs class="mb-5" background-color="transparent" v-if="showSurroundings">
             <v-tab ripple to="/auth/welcome">Create account</v-tab>
             <v-tab ripple to="/auth/sign-in">Sign in</v-tab>
           </v-tabs>
           <router-view></router-view>
 
-        <div class="mb-5 mt-5">
+        <div class="mb-5 mt-5" v-if="showSurroundings">
           <router-link to="/myaccount/recovery/request">Forgot account?</router-link>
         </div>
         <!-- <div>
@@ -83,7 +83,7 @@ export default class Auth extends Vue {
   showSettingsDialog = false;
 
   // computed
-  get showTabs(): boolean {
+  get showSurroundings(): boolean {
     const route = this.$route.path;
     if (route === '/auth/welcome' || route === '/auth/sign-in') {
       return true;

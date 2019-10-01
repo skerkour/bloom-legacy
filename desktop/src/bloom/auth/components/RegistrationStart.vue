@@ -69,7 +69,7 @@ const config = require('@/config');
 
 
 @Component
-export default class RegisterForm extends Vue {
+export default class RegistrationStart extends Vue {
   showPassword = false;
   displayName = '';
   fulleNameRules = [
@@ -93,20 +93,15 @@ export default class RegisterForm extends Vue {
   async register() {
     this.isLoading = true;
     this.error = '';
-    const payload = {
-      email: this.email,
-      displayName: this.displayName,
-      password: this.password,
+    const message = {
+      type: 'auth.gui.registration_start',
+      data: {
+        display_name: this.displayName,
+        email: this.email,
+        password: this.password,
+      },
     };
     try {
-      const message = {
-        type: 'auth.gui.registration_start',
-        data: {
-          display_name: this.displayName,
-          email: this.email,
-          password: this.password,
-        },
-      };
       const res = await Native.call(message);
 
       const pendingAccount: StorePendingAccount = {

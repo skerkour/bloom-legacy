@@ -1,0 +1,195 @@
+<template>
+  <v-container grid-list-xl text-xs-center>
+    <v-layout row wrap text-xs-center>
+
+      <v-flex xs12 v-if="!email">
+        <v-progress-circular
+          :size="50"
+          color="primary"
+          indeterminate
+          v-if="isLoading"
+        />
+      </v-flex>
+      <v-flex xs12 v-if="email">
+        <h2>Check your email</h2>
+        <p class="mt-3">
+          We've sent a 8 digit confirmation code to {{ email }}.<br/>
+          The code will only be valid for 30 minutes.
+        </p>
+      </v-flex>
+
+      <v-flex xs12 sm6 offset-sm3 v-if="email">
+        <v-text-field
+          v-model="code"
+          label="Your confirmation code"
+          :disabled="isLoading"
+          outlined
+          v-mask="codeMask"
+          @keyup="checkCodeLength"
+        />
+      </v-flex>
+
+      <v-flex xs12 text-xs-center v-if="error || success">
+        <v-alert icon="mdi-alert-circle" :value="error" type="error">
+          {{ error }}
+        </v-alert>
+        <v-alert icon="mdi-check-circle" :value="success" type="success">
+          {{ success }}
+        </v-alert>
+      </v-flex>
+
+      <v-flex xs12 v-if="email">
+        <v-btn color="primary" @click="verify" :loading="isLoading" :disabled="!canVerify">
+          Verify
+        </v-btn>
+      </v-flex>
+
+      <v-flex xs12 class="spam" v-if="email">
+        <p>Can't find it? Check your spam folder!</p>
+        <v-btn text color="primary"
+          v-if="showSendNewCode"
+          @click="sendNewCode"
+          :loading="isLoading">
+          Send a new code
+        </v-btn>
+      </v-flex>
+
+    </v-layout>
+  </v-container>
+</template>
+
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import { mask } from 'vue-the-mask';
+import { Native } from '@/native';
+
+
+const RESEND_TIMEOUT = 15_000;
+const CODE_LENGTH = 9;
+
+@Component({
+  directives: {
+    mask,
+  },
+})
+export default class RegistrationVerify extends Vue {
+  // props
+  // data
+  isLoading = false;
+  isValid = false;
+  error = '';
+  code = '';
+  pendingAccountId = '';
+  email = '';
+  success = '';
+  showSendNewCode = false;
+  codeMask = '####-####';
+
+  // computed
+  get canVerify(): boolean {
+    return this.code.length === CODE_LENGTH;
+  }
+
+  // lifecycle
+  created() {
+    if (this.$route.query.code) {
+      this.code = this.$route.query.code as string;
+    }
+    if (this.$route.query.id) {
+      this.pendingAccountId = this.$route.query.id as string;
+    }
+    if (this.$store.state.pending_account) {
+      if (this.$store.state.pending_account.email) {
+        this.email = this.$store.state.pending_account.email;
+      }
+      if (this.$store.state.pending_account.id) {
+        this.pendingAccountId = this.$store.state.pending_account.id;
+      }
+    }
+
+    if (!this.pendingAccountId && !this.code) {
+      this.$router.push({ path: '/register' });
+    }
+
+    if (this.pendingAccountId) {
+      setTimeout(() => {
+        this.showSendNewCode = true;
+      }, RESEND_TIMEOUT);
+    }
+
+    if (this.pendingAccountId && this.code) {
+      this.verify();
+    }
+  }
+
+  // watch
+  // methods
+  async verify() {
+    this.error = '';
+    this.success = '';
+    this.showSendNewCode = false;
+    this.isLoading = true;
+    const code = this.cleanCode();
+    const message = {
+      type: 'auth.registration_verify',
+      data: {
+        id: this.pendingAccountId,
+        code,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      // this.is_loading = true;
+      // const res = await api.post(`${api.MYACCOUNT}/v1/registration/verify`, pending_account);
+      // this.$store.commit('set_pending_account', pending_account);
+      this.$router.push({ path: '/auth/welcome/complete' });
+    } catch (err) {
+      this.error = err.message;
+      setTimeout(() => {
+        this.showSendNewCode = true;
+      }, RESEND_TIMEOUT);
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  checkCodeLength() {
+    if (this.canVerify) {
+      this.verify();
+    }
+  }
+
+  cleanCode(): string {
+    return this.code.slice(0, 4) + this.code.slice(5);
+  }
+
+  async sendNewCode() {
+    if (!this.pendingAccountId) {
+      return;
+    }
+    // this.error = '';
+    // this.success = '';
+    // const payload = {
+    //   id: this.pendingAccountId,
+    // };
+    // this.isLoading = true;
+    // try {
+    //   const res = await api.post(`${api.MYACCOUNT}/v1/registration/new-code`, payload);
+    //   this.success = 'A new code will arrive shortly';
+    this.showSendNewCode = false;
+    setTimeout(() => {
+      this.showSendNewCode = true;
+    }, RESEND_TIMEOUT);
+    // } catch (err) {
+    //   this.error = err.message;
+    // } finally {
+    //   this.is_loading = false;
+    // }
+  }
+}
+</script>
+
+
+<style lang="scss" scoped>
+</style>

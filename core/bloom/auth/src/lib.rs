@@ -6,9 +6,7 @@ pub const KDF_CONTEXT: &str = "__auth__";
 /// `registration_start` sends
 ///
 /// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
-pub fn registration_start(
-    input: messages::auth::GuiRegistrationStart,
-) -> messages::auth::RegistrationStarted {
+pub fn registration_start(input: messages::auth::GuiRegistrationStart) -> messages::Message {
     let salt = argon2id::gen_salt();
 
     let pw_key = argon2id::derive_from_password(
@@ -37,20 +35,14 @@ pub fn registration_start(
         .send()
         .expect("error posting to API");
 
-    let message_res: messages::Message = api_res
+    let ret: messages::Message = api_res
         .json()
         .expect("error converting api response back to JSON");
 
-    let res = match message_res {
-        messages::Message::AuthRegistrationStarted(res) => res,
-        err @ _ => panic!("bad message received {:?}", err),
-    };
-
-    return res.into();
+    return ret;
 }
 
-pub fn registration_verify(input: messages::auth::RegistrationVerify) -> messages::kernel::NoData {
-    let message: messages::auth::RegistrationVerify = input.into();
+pub fn registration_verify(message: messages::auth::RegistrationVerify) -> messages::Message {
     let message: messages::Message = message.into();
 
     let client = reqwest::Client::new();
@@ -60,16 +52,28 @@ pub fn registration_verify(input: messages::auth::RegistrationVerify) -> message
         .send()
         .expect("error posting to API");
 
-    let message_res: messages::Message = api_res
+    let ret: messages::Message = api_res
         .json()
         .expect("error converting api response back to JSON");
 
-    let res = match message_res {
-        messages::Message::KernelNoData(res) => res,
-        err @ _ => panic!("bad message received {:?}", err),
-    };
+    return ret;
+}
 
-    return res.into();
+pub fn registration_complete(message: messages::auth::RegistrationComplete) -> messages::Message {
+    let message: messages::Message = message.into();
+
+    let client = reqwest::Client::new();
+    let mut api_res = client
+        .post(API_URL)
+        .json(&message)
+        .send()
+        .expect("error posting to API");
+
+    let ret: messages::Message = api_res
+        .json()
+        .expect("error converting api response back to JSON");
+
+    return ret;
 }
 
 #[cfg(test)]
