@@ -10,6 +10,7 @@ edition = "2018"
 auth = { package = "bloom_auth", path = "bloom/auth" }
 messages = { package = "bloom_messages", path = "bloom/messages" }
 
+serde = { version = "1.0", features = ["derive"] }
 
 
 [workspace]

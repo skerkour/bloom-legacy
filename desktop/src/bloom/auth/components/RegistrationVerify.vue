@@ -29,11 +29,11 @@
         />
       </v-flex>
 
-      <v-flex xs12 text-xs-center v-if="error || success">
-        <v-alert icon="mdi-alert-circle" :value="error" type="error">
+      <v-flex xs12 text-xs-center v-if="error !== ''|| success !== ''">
+        <v-alert icon="mdi-alert-circle" type="error">
           {{ error }}
         </v-alert>
-        <v-alert icon="mdi-check-circle" :value="success" type="success">
+        <v-alert icon="mdi-check-circle" type="success">
           {{ success }}
         </v-alert>
       </v-flex>
@@ -65,7 +65,7 @@ import { mask } from 'vue-the-mask';
 import { Native } from '@/native';
 
 
-const RESEND_TIMEOUT = 15_000;
+const RESEND_TIMEOUT = 42_000;
 const CODE_LENGTH = 9;
 
 @Component({

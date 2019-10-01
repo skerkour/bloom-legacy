@@ -4,8 +4,17 @@ import router from '@/router';
 import store from '@/store';
 import vuetify from '@/plugins/vuetify';
 
+const { log, Level } = require('@bloom42/astro');
 
-Vue.config.productionTip = false;
+
+if (process.env === 'development') {
+  Vue.config.productionTip = true;
+} else {
+  Vue.config.productionTip = false;
+  if (process.env === 'production') {
+    log.config({ level: Level.INFO });
+  }
+}
 
 new Vue({
   router,

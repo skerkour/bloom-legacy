@@ -22,8 +22,8 @@
         />
       </v-flex>
 
-      <v-flex xs12 text-xs-center v-if="error">
-        <v-alert icon="mdi-alert-circle" :value="error" type="error">
+      <v-flex xs12 text-xs-center v-if="error !== ''">
+        <v-alert icon="mdi-alert-circle" type="error">
           {{ error }}
         </v-alert>
       </v-flex>
@@ -43,6 +43,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Native } from '@/native';
 
+const { log } = require('@bloom42/astro');
 
 @Component
 export default class RegistrationComplete extends Vue {
@@ -90,7 +91,7 @@ export default class RegistrationComplete extends Vue {
       // api.sign_in(res);
       // router.push({ path: '/' });
       console.log('success');
-      console.log(res);
+      log.debug(res);
     } catch (err) {
       this.error = err.message;
     } finally {

@@ -1,9 +1,9 @@
 // use std::sync::{Arc, Mutex};
 use std::sync::mpsc::{self, RecvTimeoutError};
 // use std::thread;
+use bloom_core::messages;
 use serde::{Deserialize, Serialize};
 use std::time;
-use bloom_core::{messages};
 
 // #[derive(Serialize, Deserialize, Debug)]
 // pub struct MessageIn {
@@ -39,14 +39,14 @@ pub enum MessageData {
 
 pub struct App {
     counter: u64,
-    gui_sender: mpsc::Sender<messages::Message>,
-    gui_receiver: mpsc::Receiver<messages::Message>,
+    gui_sender: mpsc::Sender<bloom_core::NativeMessage>,
+    gui_receiver: mpsc::Receiver<bloom_core::NativeMessage>,
 }
 
 impl App {
     pub fn new(
-        gui_sender: mpsc::Sender<messages::Message>,
-        gui_receiver: mpsc::Receiver<messages::Message>,
+        gui_sender: mpsc::Sender<bloom_core::NativeMessage>,
+        gui_receiver: mpsc::Receiver<bloom_core::NativeMessage>,
     ) -> App {
         return App {
             counter: 0,
@@ -57,20 +57,24 @@ impl App {
 
     pub fn run(&mut self) {
         loop {
-            // thread::sleep(time::Duration::from_secs(1));
-            // self.gui_sender.send(format!("hello from eventloop_thread {}", self.counter));
-            // self.gui_sender.send(Event::Tick { count: self.counter }).expect("Send failed");
-            // self.counter += 1;
             match self.gui_receiver.recv_timeout(time::Duration::from_secs(1)) {
                 // use select instead
-                Ok(message) => self.gui_sender.send(bloom_core::handle_message(message)).expect("error sending message back"),
+                Ok(message) => {
+                    let id = message.id;
+                    let message = bloom_core::handle_message(message.message);
+                    self.gui_sender
+                        .send(bloom_core::NativeMessage { id, message })
+                        .expect("error sending message back");
+                }
                 Err(RecvTimeoutError::Timeout) => {
                     let n = crypto42::rand::uniform(100);
                     if n > 50 {
+                        let message = messages::to_remove::Tick {
+                            count: self.counter,
+                        }
+                        .into();
                         self.gui_sender
-                            .send(messages::to_remove::Tick{
-                                    count: self.counter,
-                            }.into())
+                            .send(bloom_core::NativeMessage { id: None, message })
                             .expect("Send failed");
                     }
                     self.counter += 1;

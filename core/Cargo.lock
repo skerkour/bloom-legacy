@@ -76,6 +76,7 @@ version = "0.1.0"
 dependencies = [
  "bloom_auth 0.1.0",
  "bloom_messages 0.1.0",
+ "serde 1.0.101 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

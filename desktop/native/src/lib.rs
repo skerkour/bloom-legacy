@@ -89,7 +89,7 @@
 //     Ok(())
 // });
 
-mod kernel;
+mod app;
 
 // use std::sync::mpsc::{self, RecvTimeoutError, TryRecvError};
 use std::sync::mpsc::{self, RecvTimeoutError};
@@ -103,8 +103,6 @@ use neon::result::JsResult;
 use neon::task::Task;
 use neon::types::{JsFunction, JsUndefined, JsValue};
 use neon::{class_definition, declare_types, impl_managed, register_module};
-use serde::{Serialize, Deserialize};
-use bloom_core::messages;
 
 /// Placeholder to represent work being done on a Rust thread. It could be
 /// reading from a socket or any other long running task.
@@ -158,14 +156,14 @@ use bloom_core::messages;
 // }
 
 fn app_thread(
-    app_receiver: mpsc::Receiver<messages::Message>,
-) -> mpsc::Receiver<messages::Message> {
+    app_receiver: mpsc::Receiver<bloom_core::NativeMessage>,
+) -> mpsc::Receiver<bloom_core::NativeMessage> {
     // Create sending and receiving channels for the event data
     let (gui_sender, gui_receiver) = mpsc::channel();
 
     // Spawn a thead to continue running after this method has returned.
     thread::spawn(move || {
-        let mut app = kernel::App::new(gui_sender, app_receiver);
+        let mut app = app::App::new(gui_sender, app_receiver);
         app.run();
     });
     gui_receiver
@@ -174,12 +172,12 @@ fn app_thread(
 /// Reading from a channel `Receiver` is a blocking operation. This struct
 /// wraps the data required to perform a read asynchronously from a libuv
 /// thread.
-pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<messages::Message>>>);
+pub struct NativeAdaptaterTask(Arc<Mutex<mpsc::Receiver<bloom_core::NativeMessage>>>);
 
 /// Implementation of a neon `Task` for `NativeAdaptaterTask`. This task reads
 /// from the events channel and calls a JS callback with the data.
 impl Task for NativeAdaptaterTask {
-    type Output = Option<messages::Message>;
+    type Output = Option<bloom_core::NativeMessage>;
     type Error = String;
     type JsEvent = JsValue;
 
@@ -218,11 +216,6 @@ impl Task for NativeAdaptaterTask {
             None => return Ok(JsUndefined::new().upcast()),
         };
 
-        let message = NativeMessage{
-            id: "1".to_string(),
-            message,
-        };
-
         let js_value = neon_serde::to_value(&mut cx, &message)?;
         Ok(js_value)
 
@@ -258,17 +251,10 @@ pub struct NativeAdaptater {
     // `Send + Sync`. Since, correct usage of the `poll` interface should
     // only have a single concurrent consume, we guard the channel with a
     // `Mutex`.
-    events: Arc<Mutex<mpsc::Receiver<messages::Message>>>,
+    events: Arc<Mutex<mpsc::Receiver<bloom_core::NativeMessage>>>,
 
     // Channel used to perform a controlled shutdown of the work thread.
-    app_sender: mpsc::Sender<messages::Message>,
-}
-
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct NativeMessage{
-    pub id: String,
-    pub message: messages::Message,
+    app_sender: mpsc::Sender<bloom_core::NativeMessage>,
 }
 
 // Implementation of the `JsNativeAdaptater` class. This is the only public
@@ -316,12 +302,9 @@ declare_types! {
             let message = cx.argument::<JsValue>(0)?;
 
             // Unwrap the shutdown channel and send a shutdown command
-            let message: NativeMessage = neon_serde::from_value(&mut cx, message)?;
-            // let message = kernel::MessageIn{
-            //     id: Some("1".to_string()),
-            //     data: kernel::MessageData::Tick{ count: 42 },
-            // };
-            cx.borrow(&this, |emitter| emitter.app_sender.send(message.message))
+            let message: bloom_core::NativeMessage = neon_serde::from_value(&mut cx, message)?;
+
+            cx.borrow(&this, |emitter| emitter.app_sender.send(message))
                 .or_else(|err| cx.throw_error(&err.to_string()))?;
 
             Ok(JsUndefined::new().upcast())

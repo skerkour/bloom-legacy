@@ -1,8 +1,10 @@
 import { Subject } from 'rxjs';
-import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
+// import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 // const { EventEmitter } = require('events');
 const { promisify } = require('util');
+const uuidv4 = require('uuid/v4');
+const { log } = require('@bloom42/astro');
 const { NativeAdaptater: BloomNative } = require('bloom_native');
 
 
@@ -71,13 +73,16 @@ class NativeAdaptater { // extends EventEmitter {
             }
 
             const { id, message } = nativeMessage;
+            if (message.type !== 'gui.to_remove.tick') {
+              log.debug(nativeMessage);
+            }
 
             if (id && this.inflightCalls.has(id!)) {
               const { resolve, reject } = this.inflightCalls.get(id!)!;
               this.inflightCalls.delete(id!);
 
               // check if the message holds data or error
-              if (message.type === 'gui.error') {
+              if (message.type === 'error') {
                 reject(message.data);
               } else {
                 // here, data.type does not interest us
@@ -105,7 +110,7 @@ class NativeAdaptater { // extends EventEmitter {
 
   call(message: Message): Promise<Message> {
     return new Promise((resolve, reject) => {
-      const callUuid: string = '1';
+      const callUuid: string = uuidv4();
       this.inflightCalls.set(callUuid, { resolve, reject });
       const nativeMessage = {
         id: callUuid,

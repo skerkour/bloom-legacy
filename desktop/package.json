@@ -17,9 +17,11 @@
     "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
+    "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "=4.4.95",
     "core-js": "^2.6.5",
     "rxjs": "=6.5.3",
+    "uuid": "^3.3.3",
     "vue": "=2.6.10",
     "vue-class-component": "=7.1.0",
     "vue-property-decorator": "=8.2.2",

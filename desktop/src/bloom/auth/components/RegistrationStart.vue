@@ -37,7 +37,7 @@
         />
       </v-flex>
 
-      <v-flex xs12 text-xs-center v-if="error">
+      <v-flex xs12 text-xs-center v-if="error !== ''">
         <v-alert icon="mdi-alert-circle" type="error">
           {{ error }}
         </v-alert>
