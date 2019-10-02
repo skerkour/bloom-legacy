@@ -4,6 +4,7 @@ use kernel::{
     config::Config,
     myaccount::controllers,
     KernelError,
+    // log::macros::slog_error,
 };
 
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
@@ -37,6 +38,8 @@ pub fn post_index(
     let connection_info = req.connection_info();
     let remote = connection_info.remote();
     let auth = req.request_auth();
+    // let logger = req.logger();
+
     let ip = match remote {
         Some(ref remote) => remote
             .split(':')
@@ -49,8 +52,16 @@ pub fn post_index(
     return handle_message(state.into_inner(), auth, ip, message_wrapped.into_inner())
         .boxed()
         .compat()
-        .from_err()
-        .and_then(move |res| ok(api::response(res)));
+        .then(move |res| {
+            match res {
+                Ok(res) => ok(api::response(res)),
+                Err(err) => {
+                    // slog_error!(logger, "{}", &err);
+                    let err: messages::kernel::Error = err.into();
+                    return ok(api::response(err));
+                },
+            }
+        });
 }
 // match res {
 //             Ok(message) => ok(api::response(message)),
@@ -103,7 +114,11 @@ async fn handle_message(
 
             let config = state.config.clone();
 
-            state
+            let _ = Delay::new(Duration::from_millis(
+                (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
+            )).await;
+
+                state
                 .db
                 .send(controllers::CompleteRegistration {
                     message,

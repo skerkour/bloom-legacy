@@ -2,17 +2,20 @@ use serde::{Deserialize, Serialize};
 
 pub mod auth;
 pub mod kernel;
+pub mod to_remove;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
 pub enum Message {
-    #[serde(rename = "bloom.no_data")]
-    KernelNoData(kernel::NoData),
-    #[serde(rename = "bloom.hello_world")]
-    KernelHelloWorld(kernel::HelloWorld),
-    #[serde(rename = "bloom.error")]
-    KernelError(kernel::Error),
+    // kernel
+    #[serde(rename = "empty")]
+    Empty(kernel::Empty),
+    #[serde(rename = "hello_world")]
+    HelloWorld(kernel::HelloWorld),
+    #[serde(rename = "error")]
+    Error(kernel::Error),
 
+    // auth
     #[serde(rename = "auth.registration_start")]
     AuthRegistrationStart(auth::StartRegistration),
     #[serde(rename = "auth.registration_started")]
@@ -28,7 +31,13 @@ pub enum Message {
     #[serde(rename = "auth.sign_in")]
     AuthSignIn(auth::SignIn),
     #[serde(rename = "auth.sign_out")]
-    AuthSignOut(kernel::NoData),
+    AuthSignOut(kernel::Empty),
     #[serde(rename = "auth.revoke_session")]
     AuthRevokeSession(auth::RevokeSesison),
+    // auth gui
+    #[serde(rename = "auth.gui.registration_start")]
+    AuthGuiRegistrationStart(auth::GuiRegistrationStart),
+
+    #[serde(rename = "gui.to_remove.tick")]
+    ToRemoveTick(to_remove::Tick),
 }

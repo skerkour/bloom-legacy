@@ -54,7 +54,7 @@ impl Handler<RegistrationSendNewCode> for DbActor {
             )
             .expect("error sending email");
 
-            return Ok(messages::kernel::NoData {}.into());
+            return Ok(messages::kernel::Empty {}.into());
         })?);
     }
 }

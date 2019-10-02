@@ -83,7 +83,7 @@ impl From<KernelError> for messages::kernel::Error {
             KernelError::Forbidden(_) => "FORBIDDEN".to_string(),
             // 404
             KernelError::RouteNotFound => "ROUTE_NOT_FOUND".to_string(),
-            KernelError::NotFound(_) => "ROUTE_NOT_FOUND".to_string(),
+            KernelError::NotFound(_) => "NOT_FOUND".to_string(),
             // 408
             KernelError::Timeout => "TIMEOUT".to_string(),
             // 500
@@ -96,19 +96,13 @@ impl From<KernelError> for messages::kernel::Error {
     }
 }
 
-impl std::convert::From<actix::MailboxError> for KernelError {
+impl From<actix::MailboxError> for KernelError {
     fn from(_e: actix::MailboxError) -> Self {
         KernelError::ActixMailbox
     }
 }
 
-impl std::convert::From<tokio_timer::Error> for KernelError {
-    fn from(err: tokio_timer::Error) -> Self {
-        KernelError::TokioTimer(format!("{:?}", err))
-    }
-}
-
-impl std::convert::From<diesel::result::Error> for KernelError {
+impl From<diesel::result::Error> for KernelError {
     fn from(err: diesel::result::Error) -> Self {
         match err {
             e @ diesel::result::Error::NotFound => KernelError::NotFound(format!("{}", e)),
@@ -117,61 +111,61 @@ impl std::convert::From<diesel::result::Error> for KernelError {
     }
 }
 
-impl std::convert::From<image::ImageError> for KernelError {
+impl From<image::ImageError> for KernelError {
     fn from(err: image::ImageError) -> Self {
         KernelError::Image(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<diesel::r2d2::Error> for KernelError {
+impl From<diesel::r2d2::Error> for KernelError {
     fn from(_err: diesel::r2d2::Error) -> Self {
         KernelError::R2d2
     }
 }
 
-impl std::convert::From<url::ParseError> for KernelError {
+impl From<url::ParseError> for KernelError {
     fn from(err: url::ParseError) -> Self {
         KernelError::UrlParseError(err)
     }
 }
 
-impl std::convert::From<io::Error> for KernelError {
+impl From<io::Error> for KernelError {
     fn from(err: io::Error) -> Self {
         KernelError::Io(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<zip::result::ZipError> for KernelError {
+impl From<zip::result::ZipError> for KernelError {
     fn from(err: zip::result::ZipError) -> Self {
         KernelError::Zip(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<walkdir::Error> for KernelError {
+impl From<walkdir::Error> for KernelError {
     fn from(err: walkdir::Error) -> Self {
         KernelError::Walkdir(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<serde_json::Error> for KernelError {
+impl From<serde_json::Error> for KernelError {
     fn from(err: serde_json::Error) -> Self {
         KernelError::SerdeJson(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<lettre_email::error::Error> for KernelError {
+impl From<lettre_email::error::Error> for KernelError {
     fn from(err: lettre_email::error::Error) -> Self {
         KernelError::LettreEmail(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<lettre::smtp::error::Error> for KernelError {
+impl From<lettre::smtp::error::Error> for KernelError {
     fn from(err: lettre::smtp::error::Error) -> Self {
         KernelError::LettreSmtp(format!("{:?}", err))
     }
 }
 
-impl std::convert::From<crypto42::Error> for KernelError {
+impl From<crypto42::Error> for KernelError {
     fn from(err: crypto42::Error) -> Self {
         KernelError::Crypto42(format!("{:?}", err))
     }

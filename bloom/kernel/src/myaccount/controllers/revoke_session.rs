@@ -43,7 +43,7 @@ impl Handler<RevokeSession> for DbActor {
             // delete session
             diesel::delete(&session).execute(&conn)?;
 
-            return Ok(messages::kernel::NoData {}.into());
+            return Ok(messages::kernel::Empty {}.into());
         })?);
     }
 }

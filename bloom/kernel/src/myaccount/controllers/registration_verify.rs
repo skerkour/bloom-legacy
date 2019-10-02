@@ -4,7 +4,7 @@ use crate::{
     myaccount::domain::{pending_account, PendingAccount},
 };
 use actix::{Handler, Message};
-use messages::kernel::NoData;
+use messages::kernel::Empty;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -45,9 +45,9 @@ impl Handler<RegistrationVerify> for DbActor {
                 .set(&pending_account_to_verify)
                 .execute(&conn)?;
 
-            return Ok(messages::Message::from(NoData {}));
+            return Ok(messages::Message::from(Empty {}));
         }) {
-            Ok(_) => return Ok(NoData {}.into()),
+            Ok(_) => return Ok(Empty {}.into()),
             Err(err) => match err {
                 KernelError::Validation(_) => {
                     let pending_account_to_verify: PendingAccount =

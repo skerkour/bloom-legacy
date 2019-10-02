@@ -32,7 +32,7 @@ impl Handler<SignOut> for DbActor {
             // update session
             diesel::delete(&session).execute(&conn)?;
 
-            return Ok(messages::kernel::NoData {}.into());
+            return Ok(messages::kernel::Empty {}.into());
         })?);
     }
 }
