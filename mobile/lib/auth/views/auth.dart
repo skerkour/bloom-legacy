@@ -1,5 +1,5 @@
-import 'package:bloom/kernel/widgets/register.dart';
-import 'package:bloom/kernel/widgets/sign_in.dart';
+import 'package:bloom/auth/widgets/register.dart';
+import 'package:bloom/auth/widgets/sign_in.dart';
 import 'package:flutter/material.dart';
 
 class AuthView extends StatefulWidget {
@@ -30,13 +30,14 @@ class _AuthViewState extends State<AuthView> {
           ),
         ),
         body: _buildBody(),
+        // resizeToAvoidBottomInset: false,
       ),
     );
   }
 
   Widget _buildBody() {
-    return TabBarView(
-      children: const <Widget>[
+    return const TabBarView(
+      children: <Widget>[
         Register(),
         SignIn(),
       ],

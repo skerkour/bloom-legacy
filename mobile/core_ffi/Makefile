@@ -1,6 +1,9 @@
-.PHONY: build build_debug
+.PHONY: build build_debug clean
 
 all: build
+
+clean:
+	cargo clean
 
 build:
 	cargo build --target i686-linux-android --release
@@ -8,3 +11,6 @@ build:
 
 build_debug:
 	cargo build --target i686-linux-android
+	cp target/i686-linux-android/debug/libcore_ffi.so ../android/app/src/main/jniLibs/x86/libcore_ffi.so
+# OPENSSL_LIB_DIR=/usr/local/opt/openssl/lib OPENSSL_INCLUDE_DIR=/usr/local/opt/openssl/includ
+# e  OPENSSL_STATIC=1 make build_debug

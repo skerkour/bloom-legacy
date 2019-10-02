@@ -8,6 +8,7 @@ import 'package:bloom/phaser/views/phaser.dart';
 import 'package:bloom/platform/views/platform.dart';
 import 'package:flutter/material.dart';
 
+import 'auth/views/auth.dart';
 import 'kernel/widgets/route_observer.dart';
 
 void main() => runApp(MyApp());
@@ -31,6 +32,7 @@ class MyApp extends StatelessWidget {
         '/platform': (BuildContext context) => const PlatformView(),
         '/phaser': (BuildContext context) => const PhaserView(),
         '/bitflow': (BuildContext context) => const BitflowView(),
+        '/auth': (BuildContext context) => const AuthView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

@@ -21,10 +21,15 @@ class _TabMeViewState extends State<TabMeView> {
       children: <Widget>[
         const SizedBox(height: 10),
         Center(
-          child: const CircleAvatar(
-            backgroundColor: Colors.grey,
-            backgroundImage: AssetImage(_avatar),
-            radius: 42,
+          child: GestureDetector(
+            child: const CircleAvatar(
+              backgroundColor: Colors.grey,
+              backgroundImage: AssetImage(_avatar),
+              radius: 42,
+            ),
+            onTap: () {
+              Navigator.pushNamed(context, '/auth');
+            },
           ),
         ),
         const SizedBox(height: 21),
