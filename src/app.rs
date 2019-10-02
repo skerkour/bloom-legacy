@@ -59,7 +59,7 @@ pub fn post_index(
                     // slog_error!(logger, "{}", &err);
                     let err: messages::kernel::Error = err.into();
                     return ok(api::response(err));
-                },
+                }
             }
         });
 }
@@ -116,9 +116,10 @@ async fn handle_message(
 
             let _ = Delay::new(Duration::from_millis(
                 (400 + crypto42::rand::uniform(200)).into(), // 400-600 ms
-            )).await;
+            ))
+            .await;
 
-                state
+            state
                 .db
                 .send(controllers::CompleteRegistration {
                     message,
