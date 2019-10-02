@@ -27,7 +27,7 @@ dependencies:
   uuid: ^2.0.2
   permission_handler: '^3.2.0'
   contacts_service: ^0.2.8
-  web_socket_channel: ^1.0.15
+  ffi: ^0.1.1
 
   shared_preferences: ^0.5.3+4
   sqflite: ^1.1.6+3
