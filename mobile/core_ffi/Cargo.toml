@@ -1,0 +1,11 @@
+[package]
+name = "core_ffi"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+
+[lib]
+name = "core_ffi"
+crate-type = ["cdylib"] # C dynamic library
+
+[dependencies]
