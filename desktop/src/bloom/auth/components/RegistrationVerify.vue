@@ -62,7 +62,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mask } from 'vue-the-mask';
-import { Native } from '@/native';
+import { Native, Message } from '@/native';
 
 
 const RESEND_TIMEOUT = 42_000;
@@ -131,7 +131,7 @@ export default class RegistrationVerify extends Vue {
     this.showSendNewCode = false;
     this.isLoading = true;
     const code = this.cleanCode();
-    const message = {
+    const message: Message = {
       type: 'auth.registration_verify',
       data: {
         id: this.pendingAccountId,

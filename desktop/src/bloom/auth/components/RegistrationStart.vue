@@ -61,7 +61,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Native } from '@/native';
+import { Native, Message } from '@/native';
+import { RegistrationStarted } from '@/native/messages/auth';
+
 import { StorePendingAccount } from '../models';
 
 const { shell } = (window as any).require('electron');
@@ -93,7 +95,7 @@ export default class RegistrationStart extends Vue {
   async register() {
     this.isLoading = true;
     this.error = '';
-    const message = {
+    const message: Message = {
       type: 'auth.gui.registration_start',
       data: {
         display_name: this.displayName,
@@ -106,7 +108,7 @@ export default class RegistrationStart extends Vue {
 
       const pendingAccount: StorePendingAccount = {
         email: this.email,
-        id: res.data.id,
+        id: (res.data as RegistrationStarted).id,
       };
       this.$store.commit('set_pending_account', pendingAccount);
       this.$router.push({ path: '/auth/welcome/verify', query: this.$route.query });

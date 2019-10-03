@@ -41,7 +41,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Native } from '@/native';
+import { Native, Message } from '@/native';
 
 const { log } = require('@bloom42/astro');
 
@@ -79,7 +79,7 @@ export default class RegistrationComplete extends Vue {
   async completeRegistration() {
     this.error = '';
     this.isLoading = true;
-    const message = {
+    const message: Message = {
       type: 'auth.registration_complete',
       data: {
         id: this.pendingAccountId,

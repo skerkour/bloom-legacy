@@ -1,4 +1,5 @@
 import { Subject } from 'rxjs';
+import { Message } from './messages';
 // import { connectableObservableDescriptor } from 'rxjs/internal/observable/ConnectableObservable';
 
 // const { EventEmitter } = require('events');
@@ -82,7 +83,7 @@ class NativeAdaptater { // extends EventEmitter {
               this.inflightCalls.delete(id!);
 
               // check if the message holds data or error
-              if (message.type === 'error') {
+              if (message.type) {
                 reject(message.data);
               } else {
                 // here, data.type does not interest us
@@ -116,7 +117,7 @@ class NativeAdaptater { // extends EventEmitter {
         id: callUuid,
         message,
       };
-      console.log('nativeMessage: ', nativeMessage);
+      log.debug(nativeMessage);
       this.native.call(nativeMessage);
     });
   }
@@ -129,10 +130,10 @@ class NativeAdaptater { // extends EventEmitter {
   }
 }
 
-interface Message {
-  type: string,
-  data: any,
-}
+// interface Message {
+//   type: string,
+//   data: any,
+// }
 
 interface NativeMessage {
   id: string | null,
