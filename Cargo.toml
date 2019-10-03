@@ -14,7 +14,7 @@ keywords = ["bloom42", "bloom"]
 eventsourcing = { path = "libs/eventsourcing-rs" }
 
 kernel = {  package = "bloom_kernel", path = "bloom/kernel" }
-messages = { package = "bloom_messages", path = "bloom/messages" }
+messages = { package = "bloom_messages", git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
 
 # notes = { path = "bloom/notes" }
 # contacts = { path = "bloom/contacts" }
@@ -27,6 +27,7 @@ messages = { package = "bloom_messages", path = "bloom/messages" }
 # admin = { path = "bloom/admin" }
 # calendar = { path = "bloom/calendar" }
 
+crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 futures = "0.1"
 futures_preview = { package ="futures-preview",  version = "0.3.0-alpha.16", features = ["compat"] }
 actix-web = "1.0.7"
@@ -39,7 +40,6 @@ http = "0.1.0"
 sentry = "0.17"
 sentry-actix = "0.17"
 futures-timer = "0.3"
-crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 
 [profile.release]
 # for error tracking
@@ -69,6 +69,5 @@ members = [
     # "billing",
     "bloom/admin",
     "bloom/calendar",
-    "bloom/messages",
     ".",
 ]
