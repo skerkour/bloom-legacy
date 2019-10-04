@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi' as ffi;
 
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
+import 'package:bloom/libs/masked_text.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:ffi/ffi.dart';
@@ -53,7 +54,9 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            TextFormField(
+            MaskedTextField(
+              escapeCharacter: '#',
+              mask: '####-####',
               maxLength: 9,
               controller: codeController,
               decoration: const InputDecoration(labelText: 'Verifycation code'),
