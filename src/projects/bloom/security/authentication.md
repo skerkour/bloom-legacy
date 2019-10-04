@@ -8,25 +8,25 @@
 
 ## Registration
 
-1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
-2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
+1. A 512 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
+2. A 256 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
-4. server hash `auth_key` to `auth_key_hash` using `crypto42::kdf::argon2id::hash_password`
-5. server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
+4. Server hash `auth_key` to `auth_key_hash` using `crypto42::kdf::argon2id::hash_password`
+5. Server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
 6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
-7. both `session_id` and `session_token_hash` are stored in the Database
+7. Both `session_id` and `session_token_hash` are stored in the Database
 8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
-9. client save both `client_salt` and `auth_token` fot future use
+9. Client save both `client_salt` and `auth_token` fot future use
 
 ## Signin in
 
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and the saved `client_salt`
-2. a 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
+2. A 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
 3. `username` is sent with `auth_key` to server
-4. server verify that `auth_key` match stored `auth_key_hash` using `crypto42::kdf::argon2id::verify_password`
-5. if ok, server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
+4. Server verify that `auth_key` match stored `auth_key_hash` using `crypto42::kdf::argon2id::verify_password`
+5. If ok, server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
 6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
-7. both `session_id` and `session_token_hash` are stored in the Database
+7. Both `session_id` and `session_token_hash` are stored in the Database
 8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
 
 ![architecture](../assets/bloom_auth_sign_in.jpg)
