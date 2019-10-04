@@ -76,7 +76,6 @@ test:mobile:
         && tar -xf flutter-sdk.tar.xz && export PATH=$PATH:$HOME/flutter/bin
         && cd -
     - echo flutter.sdk=$HOME/flutter > android/local.properties
-    - chmod +x ./android/gradlew
     - flutter config --no-analytics
     - make fmt_check
     - make lint
