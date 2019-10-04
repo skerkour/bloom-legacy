@@ -1,15 +1,15 @@
-import 'package:bloom/bitflow/views/bitflow.dart';
-import 'package:bloom/calendar/views/calendar.dart';
-import 'package:bloom/contacts/views/contacts.dart';
-import 'package:bloom/drive/views/drive.dart';
-import 'package:bloom/home/views/home.dart';
-import 'package:bloom/notes/views/notes.dart';
-import 'package:bloom/phaser/views/phaser.dart';
-import 'package:bloom/platform/views/platform.dart';
+import 'package:bloom/bloom/bitflow/views/bitflow.dart';
+import 'package:bloom/bloom/calendar/views/calendar.dart';
+import 'package:bloom/bloom/contacts/views/contacts.dart';
+import 'package:bloom/bloom/drive/views/drive.dart';
+import 'package:bloom/bloom/home/views/home.dart';
+import 'package:bloom/bloom/notes/views/notes.dart';
+import 'package:bloom/bloom/phaser/views/phaser.dart';
+import 'package:bloom/bloom/platform/views/platform.dart';
 import 'package:flutter/material.dart';
 
-import 'auth/views/auth.dart';
-import 'kernel/widgets/route_observer.dart';
+import 'package:bloom/bloom/auth/views/auth.dart';
+import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
 
 void main() => runApp(MyApp());
 
