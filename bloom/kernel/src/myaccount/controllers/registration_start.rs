@@ -43,10 +43,8 @@ impl Handler<StartRegistration> for DbActor {
                 &config,
                 new_pending_account.email.as_str(),
                 &msg.message.display_name,
-                new_pending_account.id.to_string().as_str(),
                 &event.verification_code,
-            )
-            .expect("error sending email");
+            )?;
 
             return Ok(messages::auth::RegistrationStarted {
                 id: new_pending_account.id,

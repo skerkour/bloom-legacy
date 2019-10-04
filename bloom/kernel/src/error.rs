@@ -69,6 +69,7 @@ pub enum KernelError {
     LettreSmtp(String),
 }
 
+// TODO: improve...
 impl From<KernelError> for messages::kernel::Error {
     fn from(err: KernelError) -> Self {
         let code = match &err {

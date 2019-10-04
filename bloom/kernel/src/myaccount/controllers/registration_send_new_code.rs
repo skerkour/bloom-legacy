@@ -49,10 +49,8 @@ impl Handler<RegistrationSendNewCode> for DbActor {
                 &config,
                 pending_account.email.as_str(),
                 &pending_account.display_name,
-                pending_account.id.to_string().as_str(),
                 &event.code,
-            )
-            .expect("error sending email");
+            )?;
 
             return Ok(messages::kernel::Empty {}.into());
         })?);

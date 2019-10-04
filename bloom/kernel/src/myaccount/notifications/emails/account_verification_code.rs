@@ -8,31 +8,22 @@ Your confirmation code is: <br/>
 <h2>{{formatted_code}}</h2> <br/>
 This code will only be valid for 30 minutes. <br/>
 If you did not ask for a code, please ignore this email.
-<hr>
-You can also use the following link to verify your account: <br/>
-<a href="{{url}}">{{url}}</a>
 "#;
 
 pub fn send_account_verification_code(
     config: &Config,
     email: &str,
     recipient_name: &str,
-    pending_account_id: &str,
     code: &str,
 ) -> Result<(), KernelError> {
     let mut formatted_code = code.to_string();
     formatted_code.insert(4, '-');
     let handlebars = Handlebars::new();
-    let url = format!(
-        "{}/welcome/verify?id={}&code={}",
-        config.host, pending_account_id, code
-    );
 
     let subject = format!("Confirmation code: {}", formatted_code);
 
     let mut data = BTreeMap::new();
     data.insert("formatted_code".to_string(), formatted_code.clone());
-    data.insert("url".to_string(), url);
 
     emails::send_email(
         config,
