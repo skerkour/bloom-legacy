@@ -111,3 +111,15 @@ impl From<GuiRegistrationStart> for Message {
         Message::AuthGuiRegistrationStart(data)
     }
 }
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiSignIn {
+    pub username: String,
+    pub password: String,
+}
+
+impl From<GuiSignIn> for Message {
+    fn from(data: GuiSignIn) -> Self {
+        Message::AuthGuiSignIn(data)
+    }
+}

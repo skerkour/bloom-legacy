@@ -37,6 +37,8 @@ pub enum Message {
     // auth gui
     #[serde(rename = "auth.gui.registration_start")]
     AuthGuiRegistrationStart(auth::GuiRegistrationStart),
+    #[serde(rename = "auth.gui.sign_in")]
+    AuthGuiSignIn(auth::GuiSignIn),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),
