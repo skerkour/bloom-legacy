@@ -19,6 +19,12 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildBody(context),
+    );
+  }
+
+  Container _buildBody(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(36.0),
@@ -55,9 +61,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          _onVerifyButtonPressed();
-        },
+        onPressed: _onCompleteButtonPressed,
         child: Text(
           'Complete registration',
           textAlign: TextAlign.center,
@@ -67,7 +71,12 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     );
   }
 
-  Future<void> _onVerifyButtonPressed() async {
-    debugPrint('Verify pressed');
+  Future<void> _onCompleteButtonPressed() async {
+    debugPrint('complete pressed');
+    Navigator.pushNamedAndRemoveUntil(
+      context,
+      '/',
+      (Route<dynamic> route) => false,
+    );
   }
 }

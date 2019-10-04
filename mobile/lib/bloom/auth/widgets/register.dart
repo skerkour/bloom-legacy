@@ -86,9 +86,7 @@ class _RegisterState extends State<Register> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          _onRegisterButtonPressed();
-        },
+        onPressed: _onRegisterButtonPressed,
         child: Text(
           'Register',
           textAlign: TextAlign.center,
@@ -114,6 +112,7 @@ class _RegisterState extends State<Register> {
     setState(() {
       isLoading = false;
     });
+    Navigator.pushNamed(context, '/auth/registration/verify');
   }
 
   static String lol(String message) {

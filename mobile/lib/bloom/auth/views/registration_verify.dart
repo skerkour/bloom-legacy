@@ -18,6 +18,12 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
 
   @override
   Widget build(BuildContext context) {
+    return Scaffold(
+      body: _buildBody(context),
+    );
+  }
+
+  Container _buildBody(BuildContext context) {
     return Container(
       child: Padding(
         padding: const EdgeInsets.all(36.0),
@@ -54,9 +60,7 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: () {
-          _onVerifyButtonPressed();
-        },
+        onPressed: _onVerifyButtonPressed,
         child: Text(
           'Verify code',
           textAlign: TextAlign.center,
@@ -68,5 +72,6 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
 
   Future<void> _onVerifyButtonPressed() async {
     debugPrint('Verify pressed');
+    Navigator.pushNamed(context, '/auth/registration/complete');
   }
 }
