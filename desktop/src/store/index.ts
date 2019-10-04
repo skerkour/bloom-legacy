@@ -22,7 +22,6 @@ export default new Vuex.Store<AppState>({
   state: {
     is_authenticated: false,
     dark_mode: false,
-    pending_account: undefined,
   },
   mutations: {
     [Mutations.SIGN_IN](state) {
