@@ -1,11 +1,9 @@
 import 'dart:convert';
-import 'dart:ffi' as ffi;
 
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
-import 'package:bloom/libs/masked_text.dart';
+import 'package:bloom/libs/masked_text_controller.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
-import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -29,7 +27,8 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       fontSize: 20.0,
       color: Colors.white,
       fontWeight: FontWeight.bold);
-  TextEditingController codeController = TextEditingController();
+  TextEditingController codeController =
+      MaskedTextController(mask: '0000-0000');
   bool isLoading = false;
   String pendingAccountEmail;
   String pendingAccountId;
@@ -54,9 +53,7 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            MaskedTextField(
-              escapeCharacter: '#',
-              mask: '####-####',
+            TextField(
               maxLength: 9,
               controller: codeController,
               decoration: const InputDecoration(labelText: 'Verifycation code'),
@@ -102,9 +99,11 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       isLoading = true;
     });
 
+    final String code = _cleanCode(codeController.text);
+
     final String message = jsonEncode(AuthGuiRegistrationVerify(
       id: pendingAccountId,
-      code: codeController.text,
+      code: code,
     ));
 
     final String res =
@@ -123,8 +122,8 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
   static String _nativeCall(String message) {
     return coreFfi.call(message);
   }
-}
 
-typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>);
-typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
+  String _cleanCode(String code) {
+    return code.substring(0, 4) + code.substring(5);
+  }
+}

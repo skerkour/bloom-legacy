@@ -1,9 +1,7 @@
 import 'dart:convert';
-import 'dart:ffi' as ffi;
 
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
-import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -117,7 +115,3 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     return coreFfi.call(message);
   }
 }
-
-typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>);
-typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);

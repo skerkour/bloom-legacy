@@ -1,10 +1,8 @@
 import 'dart:convert';
-import 'dart:ffi' as ffi;
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
-import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -124,7 +122,3 @@ class _RegistrationStartState extends State<RegistrationStart> {
     return coreFfi.call(message);
   }
 }
-
-typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>);
-typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
