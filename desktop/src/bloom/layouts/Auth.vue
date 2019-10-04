@@ -6,7 +6,7 @@
         <div id="main-card">
 
           <v-tabs fixed-tabs class="mb-5" background-color="transparent" v-if="showSurroundings">
-            <v-tab ripple to="/auth/welcome">Create account</v-tab>
+            <v-tab ripple to="/auth/registration/start">Create account</v-tab>
             <v-tab ripple to="/auth/sign-in">Sign in</v-tab>
           </v-tabs>
           <router-view></router-view>
@@ -85,7 +85,7 @@ export default class Auth extends Vue {
   // computed
   get showSurroundings(): boolean {
     const route = this.$route.path;
-    if (route === '/auth/welcome' || route === '/auth/sign-in') {
+    if (route === '/auth/registration/start' || route === '/auth/sign-in') {
       return true;
     }
 

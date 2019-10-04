@@ -111,7 +111,7 @@ export default class RegistrationStart extends Vue {
         id: (res.data as RegistrationStarted).id,
       };
       this.$store.commit('set_pending_account', pendingAccount);
-      this.$router.push({ path: '/auth/welcome/verify', query: this.$route.query });
+      this.$router.push({ path: '/auth/registration/verify', query: this.$route.query });
     } catch (err) {
       this.error = err.message;
     } finally {

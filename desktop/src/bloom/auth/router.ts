@@ -11,25 +11,27 @@ export default [
     meta: {
       layout: 'auth',
     },
-    path: '/auth/welcome',
+    path: '/auth/registration/start',
   },
-  { path: '/auth/register', redirect: '/auth/welcome' },
-  { path: '/auth/signup', redirect: '/auth/welcome' },
-  { path: '/auth/sign-up', redirect: '/auth/welcome' },
-  { path: '/auth/sign_up', redirect: '/auth/welcome' },
+  { path: '/auth/register', redirect: '/auth/registration/start' },
+  { path: '/auth/signup', redirect: '/auth/registration/start' },
+  { path: '/auth/sign-up', redirect: '/auth/registration/start' },
+  { path: '/auth/sign_up', redirect: '/auth/registration/start' },
+  { path: '/auth/registration', redirect: '/auth/registration/start' },
+  { path: '/auth/welcome', redirect: '/auth/registration/start' },
   {
     component: RegistrationVerify,
     meta: {
       layout: 'auth',
     },
-    path: '/auth/welcome/verify',
+    path: '/auth/registration/verify',
   },
   {
     component: RegistrationComplete,
     meta: {
       layout: 'auth',
     },
-    path: '/auth/welcome/complete',
+    path: '/auth/registration/complete',
   },
 
   // SignIn

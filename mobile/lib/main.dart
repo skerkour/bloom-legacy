@@ -1,3 +1,5 @@
+import 'package:bloom/bloom/auth/views/registration_complete.dart';
+import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/bloom/bitflow/views/bitflow.dart';
 import 'package:bloom/bloom/calendar/views/calendar.dart';
 import 'package:bloom/bloom/contacts/views/contacts.dart';
@@ -33,6 +35,10 @@ class MyApp extends StatelessWidget {
         '/phaser': (BuildContext context) => const PhaserView(),
         '/bitflow': (BuildContext context) => const BitflowView(),
         '/auth': (BuildContext context) => const AuthView(),
+        '/auth/registration/verify': (BuildContext context) =>
+            const RegistrationVerifyView(),
+        '/auth/registration/complete': (BuildContext context) =>
+            const RegistrationCompleteView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

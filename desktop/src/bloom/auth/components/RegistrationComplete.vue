@@ -70,7 +70,7 @@ export default class RegistrationComplete extends Vue {
     }
 
     if (!this.pendingAccountId) {
-      this.$router.push({ path: '/auth/welcome' });
+      this.$router.push({ path: '/auth/registration/start' });
     }
   }
 

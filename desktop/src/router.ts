@@ -48,7 +48,7 @@ router.beforeEach((to, _, next) => {
     if (to.path.startsWith('/auth')) {
       next();
     } else {
-      next({ path: '/auth/welcome' });
+      next({ path: '/auth/registration/start' });
     }
   } else {
     next();

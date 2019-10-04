@@ -143,7 +143,7 @@ export default class RegistrationVerify extends Vue {
       // this.is_loading = true;
       // const res = await api.post(`${api.MYACCOUNT}/v1/registration/verify`, pending_account);
       // this.$store.commit('set_pending_account', pending_account);
-      this.$router.push({ path: '/auth/welcome/complete' });
+      this.$router.push({ path: '/auth/registration/complete' });
     } catch (err) {
       this.error = err.message;
       setTimeout(() => {

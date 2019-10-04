@@ -1,7 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi' as ffi;
 // import 'package:bloom/bloom/chat/views/chat.dart';
-import 'package:bloom/bloom/messages/auth.dart';
+import 'package:bloom/native/messages/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
@@ -20,7 +20,11 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
-  TextStyle style = const TextStyle(fontFamily: 'Montserrat', fontSize: 20.0);
+  TextStyle style = const TextStyle(
+      fontFamily: 'Montserrat',
+      fontSize: 20.0,
+      color: Colors.white,
+      fontWeight: FontWeight.bold);
   bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
@@ -85,10 +89,11 @@ class _RegisterState extends State<Register> {
         onPressed: () {
           _onRegisterButtonPressed();
         },
-        child: Text('Register',
-            textAlign: TextAlign.center,
-            style: style.copyWith(
-                color: Colors.white, fontWeight: FontWeight.bold)),
+        child: Text(
+          'Register',
+          textAlign: TextAlign.center,
+          style: style,
+        ),
       ),
     );
   }
