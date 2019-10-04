@@ -42,6 +42,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
+import { Mutations } from '@/store';
 
 const { log } = require('@bloom42/astro');
 
@@ -63,11 +64,9 @@ export default class RegistrationComplete extends Vue {
   // lifecycle
   created() {
     // collect value from route params
-    if (this.$route.params.pendingAccountId) {
-      this.pendingAccountId = this.$route.params.pendingAccountId;
-    }
-
-    if (!this.pendingAccountId) {
+    if (this.$store.state.pending_account) {
+      this.pendingAccountId = this.$store.state.pending_account.id;
+    } else {
       this.$router.push({ path: '/auth/registration/start' });
     }
   }
@@ -86,10 +85,10 @@ export default class RegistrationComplete extends Vue {
     };
     try {
       const res = await Native.call(message);
-      // api.sign_in(res);
-      // router.push({ path: '/' });
+      this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
       console.log('success');
       log.debug(res);
+      this.$router.push({ path: '/' });
     } catch (err) {
       this.error = err.message;
     } finally {

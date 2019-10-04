@@ -30,10 +30,10 @@
       </v-flex>
 
       <v-flex xs12 text-xs-center v-if="error !== ''|| success !== ''">
-        <v-alert icon="mdi-alert-circle" type="error">
+        <v-alert icon="mdi-alert-circle" type="error" v-if="error !== ''">
           {{ error }}
         </v-alert>
-        <v-alert icon="mdi-check-circle" type="success">
+        <v-alert icon="mdi-check-circle" type="success" v-if="success !== ''">
           {{ success }}
         </v-alert>
       </v-flex>
@@ -100,15 +100,11 @@ export default class RegistrationVerify extends Vue {
     // if (this.$route.query.id) {
     //   this.pendingAccountId = this.$route.query.id as string;
     // }
-    if (this.$route.params.pendingAccountId) {
-      this.pendingAccountId = this.$route.params.pendingAccountId;
-    }
-    if (this.$route.params.pendingAccountEmail) {
-      this.email = this.$route.params.pendingAccountEmail;
-    }
-
-    if (!this.pendingAccountId && !this.code) {
-      this.$router.push({ path: '/register' });
+    if (this.$store.state.pending_account) {
+      this.pendingAccountId = this.$store.state.pending_account.id;
+      this.email = this.$store.state.pending_account.email;
+    } else {
+      this.$router.push({ path: '/auth/registration/start' });
     }
 
     if (this.pendingAccountId) {

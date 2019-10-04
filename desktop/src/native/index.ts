@@ -83,7 +83,7 @@ class NativeAdaptater { // extends EventEmitter {
               this.inflightCalls.delete(id!);
 
               // check if the message holds data or error
-              if (message.type) {
+              if (message.type === 'error') {
                 reject(message.data);
               } else {
                 // here, data.type does not interest us

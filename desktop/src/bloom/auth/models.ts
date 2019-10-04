@@ -1,4 +1,4 @@
-// export interface StorePendingAccount {
-//   email: string,
-//   id: string,
-// }
+export interface StorePendingAccount {
+  email: string,
+  id: string,
+}
