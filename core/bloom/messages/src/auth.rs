@@ -85,6 +85,16 @@ impl From<SignIn> for Message {
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct SignOut {}
+
+impl From<SignOut> for Message {
+    fn from(data: SignOut) -> Self {
+        Message::AuthSignOut(data)
+    }
+}
+
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RevokeSesison {
     pub id: uuid::Uuid,
 }

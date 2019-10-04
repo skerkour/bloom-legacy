@@ -31,7 +31,7 @@ pub enum Message {
     #[serde(rename = "auth.sign_in")]
     AuthSignIn(auth::SignIn),
     #[serde(rename = "auth.sign_out")]
-    AuthSignOut(kernel::Empty),
+    AuthSignOut(auth::SignOut),
     #[serde(rename = "auth.revoke_session")]
     AuthRevokeSession(auth::RevokeSesison),
     // auth gui
