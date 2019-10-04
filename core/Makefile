@@ -1,12 +1,15 @@
 .PHONY: build clean re test build_debug
 .PHONY: lint fmt fmt_check audit
 
-NAME := crypto42
+NAME := bloom_core
 VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
 all: build
+
+dev:
+	cargo watch -x 'check'
 
 build:
 	cargo build --release

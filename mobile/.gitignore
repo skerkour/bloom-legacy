@@ -17,8 +17,8 @@ ios/Flutter/flutter_export_environment.sh
 **/android/**/gradle-wrapper.jar
 **/android/.gradle
 **/android/captures/
-# **/android/gradlew
-# **/android/gradlew.bat
+**/android/gradlew
+**/android/gradlew.bat
 **/android/local.properties
 **/android/**/GeneratedPluginRegistrant.java
 
