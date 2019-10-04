@@ -568,3 +568,48 @@ dns service backed by un git repo
 donc on a besoin d’un repo git
 un service qui s’y connecte et se connecte au provider
 dashboard et cli seulement pour inspect
+
+
+Phaser (security scans)
+list targets
+history
+profiles (network, application…)
+resultats par scan
+resultat / target
+recommandations
+stats -> evolution dans le temps
+
+
+
+RBAC
+resource
+permission
+role = collection de permissions
+identity (user account +service account (api credentials))
+
+
+forms,
+
+
+pubusub message:
+data
+metdata
+id
+publish_time
+topic
+quality_of_service
+
+
+pubsub
+queue
+RPC
+
+
+Bloom Home:
+(home pour les entreprises pour gerer les locaux)
+- lights
+multimedia (audio, video, video games)
+security
+consommation (eau, electircite, gaz_
+portes, portails
+thermostat
