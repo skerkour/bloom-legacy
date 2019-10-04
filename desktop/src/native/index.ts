@@ -67,7 +67,7 @@ class NativeAdaptater { // extends EventEmitter {
       // }
       return (
         poll()
-          .then((nativeMessage: NativeMessage | null) => {
+          .then((nativeMessage?: NativeMessage) => {
             // Timeout on poll, no data to emit
             if (!nativeMessage) {
               return;
@@ -136,7 +136,7 @@ class NativeAdaptater { // extends EventEmitter {
 // }
 
 interface NativeMessage {
-  id: string | null,
+  id?: string,
   message: Message,
 }
 

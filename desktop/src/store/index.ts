@@ -8,7 +8,7 @@ Vue.use(Vuex);
 interface AppState {
   is_authenticated: boolean,
   dark_mode: boolean,
-  pending_account: StorePendingAccount | null,
+  pending_account?: StorePendingAccount,
 }
 
 export enum Mutations {
@@ -22,7 +22,7 @@ export default new Vuex.Store<AppState>({
   state: {
     is_authenticated: false,
     dark_mode: false,
-    pending_account: null,
+    pending_account: undefined,
   },
   mutations: {
     [Mutations.SIGN_IN](state) {
@@ -35,7 +35,7 @@ export default new Vuex.Store<AppState>({
       state.pending_account = pendginAccount;
     },
     [Mutations.CLEAR_PENDING_ACCOUNT](state: AppState) {
-      state.pending_account = null;
+      state.pending_account = undefined;
     },
   },
   actions: {

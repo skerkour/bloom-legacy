@@ -24,7 +24,7 @@
         />
       </v-flex>
 
-      <v-flex xs12 text-xs-center v-if="error">
+      <v-flex xs12 text-xs-center v-if="error !== ''">
         <v-alert icon="mdi-alert-circle" type="error">
           {{ error }}
         </v-alert>
@@ -54,7 +54,7 @@ export default class SignInForm extends Vue {
   isLoading = false;
   username = '';
   password = '';
-  error: string | null = null;
+  error: string = '';
 
 
   // computed
