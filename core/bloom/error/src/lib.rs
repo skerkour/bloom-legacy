@@ -1,5 +1,9 @@
 use failure::Fail;
 
+mod code;
+
+pub use code::ErrorCode;
+
 #[derive(Debug, Fail)]
 pub enum BloomError {
     #[fail(display = "Reqwest: {}", 0)]
@@ -7,18 +11,26 @@ pub enum BloomError {
 
     #[fail(display = "Crypto42: {:?}", 0)]
     Crypto42(crypto42::Error),
+
+    #[fail(display = "Unknown message type")]
+    UnknownMessageType,
 }
 
 // TODO: improve...
 impl From<BloomError> for bloom_messages::kernel::Error {
     fn from(err: BloomError) -> Self {
         let code = match &err {
-            _ => "INTERNAL",
-        }
-        .to_string();
+            BloomError::UnknownMessageType => ErrorCode::UKNOWN_MESSAGE_TYPE,
+            _ => ErrorCode::INTERNAL,
+        };
+        let message = match code {
+            ErrorCode::INTERNAL => "Internal error".to_string(),
+            _ => format!("{}", err),
+        };
+
         bloom_messages::kernel::Error {
-            code,
-            message: format!("{}", err),
+            code: code.to_string(),
+            message,
         }
     }
 }
