@@ -93,7 +93,6 @@ impl From<SignOut> for Message {
     }
 }
 
-
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RevokeSesison {
     pub id: uuid::Uuid,

@@ -1,7 +1,8 @@
 use serde::{Deserialize, Serialize};
 
-pub use auth;
-pub use messages;
+pub use bloom_auth as auth;
+pub use bloom_error as error;
+pub use bloom_messages as messages;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NativeMessage {
@@ -27,7 +28,13 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         }
     };
 
-    return res;
+    match res {
+        Ok(message) => message,
+        Err(err) => {
+            let err: messages::kernel::Error = err.into();
+            err.into()
+        }
+    }
 }
 
 #[cfg(test)]
