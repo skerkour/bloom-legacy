@@ -1,4 +1,16 @@
+import 'dart:convert';
+import 'dart:ffi' as ffi;
+
+import 'package:bloom/native/messages/auth.dart';
+import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+class RegistrationCompleteArguments {
+  RegistrationCompleteArguments(this.id);
+
+  final String id;
+}
 
 class RegistrationCompleteView extends StatefulWidget {
   const RegistrationCompleteView({Key key}) : super(key: key);
@@ -14,11 +26,16 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
       fontSize: 20.0,
       color: Colors.white,
       fontWeight: FontWeight.bold);
-  TextEditingController codeController = TextEditingController();
+  TextEditingController usernameController = TextEditingController();
   bool isLoading = false;
+  String pendingAccountId;
 
   @override
   Widget build(BuildContext context) {
+    final RegistrationCompleteArguments args =
+        ModalRoute.of(context).settings.arguments;
+    pendingAccountId = args.id;
+
     return Scaffold(
       body: _buildBody(context),
     );
@@ -33,7 +50,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
-              controller: codeController,
+              controller: usernameController,
               decoration: const InputDecoration(labelText: 'Username'),
             ),
             const SizedBox(
@@ -72,11 +89,48 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
   }
 
   Future<void> _onCompleteButtonPressed() async {
-    debugPrint('complete pressed');
+    setState(() {
+      isLoading = true;
+    });
+
+    final String message = jsonEncode(AuthGuiRegistrationComplete(
+      id: pendingAccountId,
+      username: usernameController.text,
+    ));
+
+    final String res =
+        await compute(_RegistrationCompleteViewState.lol, message);
+    debugPrint(res);
+
+    setState(() {
+      isLoading = false;
+    });
     Navigator.pushNamedAndRemoveUntil(
       context,
       '/',
       (Route<dynamic> route) => false,
     );
   }
+
+  static String lol(String message) {
+    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libcore_ffi.so');
+    final RusthandleMessageFunction handleMessage = dylib.lookupFunction<
+        RusthandleMessageFunction,
+        RusthandleMessageFunction>('core_handle_message');
+    final RustFreeFunction coreFree =
+        dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
+
+    final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
+
+    final ffi.Pointer<Utf8> res = handleMessage(cMessage);
+    cMessage.free();
+
+    final String ret = Utf8.fromUtf8(res);
+    coreFree(res);
+    return ret;
+  }
 }
+
+typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
+    ffi.Pointer<Utf8>);
+typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);

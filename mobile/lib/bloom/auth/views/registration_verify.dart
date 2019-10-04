@@ -1,4 +1,18 @@
+import 'dart:convert';
+import 'dart:ffi' as ffi;
+
+import 'package:bloom/bloom/auth/views/registration_complete.dart';
+import 'package:bloom/native/messages/auth.dart';
+import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+
+class RegistrationVerifyArguments {
+  RegistrationVerifyArguments(this.id, this.email);
+
+  final String id;
+  final String email;
+}
 
 class RegistrationVerifyView extends StatefulWidget {
   const RegistrationVerifyView({Key key}) : super(key: key);
@@ -15,9 +29,16 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       fontWeight: FontWeight.bold);
   TextEditingController codeController = TextEditingController();
   bool isLoading = false;
+  String pendingAccountEmail;
+  String pendingAccountId;
 
   @override
   Widget build(BuildContext context) {
+    final RegistrationVerifyArguments args =
+        ModalRoute.of(context).settings.arguments;
+    pendingAccountId = args.id;
+    pendingAccountEmail = args.email;
+
     return Scaffold(
       body: _buildBody(context),
     );
@@ -71,7 +92,46 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
   }
 
   Future<void> _onVerifyButtonPressed() async {
-    debugPrint('Verify pressed');
-    Navigator.pushNamed(context, '/auth/registration/complete');
+    setState(() {
+      isLoading = true;
+    });
+
+    final String message = jsonEncode(AuthGuiRegistrationVerify(
+      id: pendingAccountId,
+      code: codeController.text,
+    ));
+
+    final String res = await compute(_RegistrationVerifyViewState.lol, message);
+    debugPrint(res);
+    final RegistrationCompleteArguments args =
+        RegistrationCompleteArguments(pendingAccountId);
+
+    setState(() {
+      isLoading = false;
+    });
+    Navigator.pushNamed(context, '/auth/registration/complete',
+        arguments: args);
+  }
+
+  static String lol(String message) {
+    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libcore_ffi.so');
+    final RusthandleMessageFunction handleMessage = dylib.lookupFunction<
+        RusthandleMessageFunction,
+        RusthandleMessageFunction>('core_handle_message');
+    final RustFreeFunction coreFree =
+        dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
+
+    final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
+
+    final ffi.Pointer<Utf8> res = handleMessage(cMessage);
+    cMessage.free();
+
+    final String ret = Utf8.fromUtf8(res);
+    coreFree(res);
+    return ret;
   }
 }
+
+typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
+    ffi.Pointer<Utf8>);
+typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);

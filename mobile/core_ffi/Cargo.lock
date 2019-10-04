@@ -64,6 +64,7 @@ name = "bloom_auth"
 version = "0.1.0"
 dependencies = [
  "base64 0.10.1 (registry+https://github.com/rust-lang/crates.io-index)",
+ "bloom_error 0.1.0",
  "bloom_messages 0.1.0",
  "crypto42 0.5.2 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "reqwest 0.9.20 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -75,8 +76,19 @@ name = "bloom_core"
 version = "0.1.0"
 dependencies = [
  "bloom_auth 0.1.0",
+ "bloom_error 0.1.0",
  "bloom_messages 0.1.0",
  "serde 1.0.101 (registry+https://github.com/rust-lang/crates.io-index)",
+]
+
+[[package]]
+name = "bloom_error"
+version = "0.1.0"
+dependencies = [
+ "bloom_messages 0.1.0",
+ "crypto42 0.5.2 (git+https://gitlab.com/bloom42/libs/crypto42)",
+ "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
+ "reqwest 0.9.20 (registry+https://github.com/rust-lang/crates.io-index)",
 ]
 
 [[package]]

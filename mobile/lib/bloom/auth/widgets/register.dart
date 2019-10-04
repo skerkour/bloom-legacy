@@ -1,16 +1,11 @@
 import 'dart:convert';
 import 'dart:ffi' as ffi;
-// import 'package:bloom/bloom/chat/views/chat.dart';
+import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
-    ffi.Pointer<Utf8>);
-typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
-// typedef NativeDoubleInputFunction= int Function(int);
 
 class Register extends StatefulWidget {
   const Register({Key key}) : super(key: key);
@@ -101,18 +96,26 @@ class _RegisterState extends State<Register> {
       isLoading = true;
     });
 
+    final String email = emailController.text;
+
     final String message = jsonEncode(AuthGuiRegistrationStart(
       displayName: displayNameController.text,
       password: passwordController.text,
-      email: emailController.text,
+      email: email,
     ));
 
-    final String res = await compute(_RegisterState.lol, message);
-    debugPrint(res);
+    final String json = await compute(_RegisterState.lol, message);
+    debugPrint(json);
+    final Map<String, dynamic> jsonMap = jsonDecode(json);
+    final AuthGuiRegistrationStarted messageRes =
+        AuthGuiRegistrationStarted.fromJson(jsonMap);
+    final RegistrationVerifyArguments args =
+        RegistrationVerifyArguments(messageRes.id, email);
+
     setState(() {
       isLoading = false;
     });
-    Navigator.pushNamed(context, '/auth/registration/verify');
+    Navigator.pushNamed(context, '/auth/registration/verify', arguments: args);
   }
 
   static String lol(String message) {
@@ -133,3 +136,7 @@ class _RegisterState extends State<Register> {
     return ret;
   }
 }
+
+typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
+    ffi.Pointer<Utf8>);
+typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
