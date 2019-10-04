@@ -64,7 +64,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
 import { RegistrationStarted } from '@/native/messages/auth';
 
-import { StorePendingAccount } from '../models';
+// import { StorePendingAccount } from '../models';
 
 const { shell } = (window as any).require('electron');
 const config = require('@/config');
@@ -106,12 +106,9 @@ export default class RegistrationStart extends Vue {
     try {
       const res = await Native.call(message);
 
-      const pendingAccount: StorePendingAccount = {
-        email: this.email,
-        id: (res.data as RegistrationStarted).id,
-      };
-      this.$store.commit('set_pending_account', pendingAccount);
-      this.$router.push({ path: '/auth/registration/verify', query: this.$route.query });
+      const pendingAccountId = (res.data as RegistrationStarted).id;
+      const pendingAccountEmail = this.email;
+      this.$router.push({ path: '/auth/registration/verify', params: { pendingAccountId, pendingAccountEmail } });
     } catch (err) {
       this.error = err.message;
     } finally {

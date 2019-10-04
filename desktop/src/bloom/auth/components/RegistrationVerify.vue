@@ -93,19 +93,18 @@ export default class RegistrationVerify extends Vue {
 
   // lifecycle
   created() {
-    if (this.$route.query.code) {
-      this.code = this.$route.query.code as string;
+    // no longer relevant because as a native app, we do not rely on links
+    // if (this.$route.query.code) {
+    //   this.code = this.$route.query.code as string;
+    // }
+    // if (this.$route.query.id) {
+    //   this.pendingAccountId = this.$route.query.id as string;
+    // }
+    if (this.$route.params.pendingAccountId) {
+      this.pendingAccountId = this.$route.params.pendingAccountId;
     }
-    if (this.$route.query.id) {
-      this.pendingAccountId = this.$route.query.id as string;
-    }
-    if (this.$store.state.pending_account) {
-      if (this.$store.state.pending_account.email) {
-        this.email = this.$store.state.pending_account.email;
-      }
-      if (this.$store.state.pending_account.id) {
-        this.pendingAccountId = this.$store.state.pending_account.id;
-      }
+    if (this.$route.params.pendingAccountEmail) {
+      this.email = this.$route.params.pendingAccountEmail;
     }
 
     if (!this.pendingAccountId && !this.code) {
@@ -140,10 +139,7 @@ export default class RegistrationVerify extends Vue {
     };
     try {
       const res = await Native.call(message);
-      // this.is_loading = true;
-      // const res = await api.post(`${api.MYACCOUNT}/v1/registration/verify`, pending_account);
-      // this.$store.commit('set_pending_account', pending_account);
-      this.$router.push({ path: '/auth/registration/complete' });
+      this.$router.push({ path: '/auth/registration/complete', params: { pendingAccountId: this.pendingAccountId } });
     } catch (err) {
       this.error = err.message;
       setTimeout(() => {

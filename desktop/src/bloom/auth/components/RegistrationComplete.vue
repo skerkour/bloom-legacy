@@ -62,11 +62,9 @@ export default class RegistrationComplete extends Vue {
   // computed
   // lifecycle
   created() {
-    // verify that we have the correct values in store
-    if (this.$store.state.pending_account) {
-      if (this.$store.state.pending_account.id) {
-        this.pendingAccountId = this.$store.state.pending_account.id;
-      }
+    // collect value from route params
+    if (this.$route.params.pendingAccountId) {
+      this.pendingAccountId = this.$route.params.pendingAccountId;
     }
 
     if (!this.pendingAccountId) {

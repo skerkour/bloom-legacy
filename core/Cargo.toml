@@ -17,4 +17,5 @@ serde = { version = "1.0", features = ["derive"] }
 members = [
     "bloom/auth",
     "bloom/messages",
+    "bloom/error",
 ]
