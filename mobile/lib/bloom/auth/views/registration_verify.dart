@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'dart:ffi' as ffi;
 
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
+import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
@@ -53,8 +54,10 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             TextFormField(
+              maxLength: 9,
               controller: codeController,
               decoration: const InputDecoration(labelText: 'Verifycation code'),
+              keyboardType: TextInputType.number,
             ),
             const SizedBox(
               height: 35.0,
@@ -101,7 +104,8 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       code: codeController.text,
     ));
 
-    final String res = await compute(_RegistrationVerifyViewState.lol, message);
+    final String res =
+        await compute(_RegistrationVerifyViewState._nativeCall, message);
     debugPrint(res);
     final RegistrationCompleteArguments args =
         RegistrationCompleteArguments(pendingAccountId);
@@ -113,22 +117,8 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
         arguments: args);
   }
 
-  static String lol(String message) {
-    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libcore_ffi.so');
-    final RusthandleMessageFunction handleMessage = dylib.lookupFunction<
-        RusthandleMessageFunction,
-        RusthandleMessageFunction>('core_handle_message');
-    final RustFreeFunction coreFree =
-        dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
-
-    final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
-
-    final ffi.Pointer<Utf8> res = handleMessage(cMessage);
-    cMessage.free();
-
-    final String ret = Utf8.fromUtf8(res);
-    coreFree(res);
-    return ret;
+  static String _nativeCall(String message) {
+    return coreFfi.call(message);
   }
 }
 

@@ -1,6 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi' as ffi;
 
+import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
@@ -99,7 +100,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     ));
 
     final String res =
-        await compute(_RegistrationCompleteViewState.lol, message);
+        await compute(_RegistrationCompleteViewState._nativeCall, message);
     debugPrint(res);
 
     setState(() {
@@ -112,22 +113,8 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     );
   }
 
-  static String lol(String message) {
-    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libcore_ffi.so');
-    final RusthandleMessageFunction handleMessage = dylib.lookupFunction<
-        RusthandleMessageFunction,
-        RusthandleMessageFunction>('core_handle_message');
-    final RustFreeFunction coreFree =
-        dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
-
-    final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
-
-    final ffi.Pointer<Utf8> res = handleMessage(cMessage);
-    cMessage.free();
-
-    final String ret = Utf8.fromUtf8(res);
-    coreFree(res);
-    return ret;
+  static String _nativeCall(String message) {
+    return coreFfi.call(message);
   }
 }
 

@@ -1,20 +1,21 @@
 import 'dart:convert';
 import 'dart:ffi' as ffi;
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
+import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
-class Register extends StatefulWidget {
-  const Register({Key key}) : super(key: key);
+class RegistrationStart extends StatefulWidget {
+  const RegistrationStart({Key key}) : super(key: key);
 
   @override
-  _RegisterState createState() => _RegisterState();
+  _RegistrationStartState createState() => _RegistrationStartState();
 }
 
-class _RegisterState extends State<Register> {
+class _RegistrationStartState extends State<RegistrationStart> {
   TextStyle style = const TextStyle(
       fontFamily: 'Montserrat',
       fontSize: 20.0,
@@ -104,7 +105,8 @@ class _RegisterState extends State<Register> {
       email: email,
     ));
 
-    final String json = await compute(_RegisterState.lol, message);
+    final String json =
+        await compute(_RegistrationStartState._nativeCall, message);
     debugPrint(json);
     final Map<String, dynamic> jsonMap = jsonDecode(json);
     final AuthGuiRegistrationStarted messageRes =
@@ -118,22 +120,8 @@ class _RegisterState extends State<Register> {
     Navigator.pushNamed(context, '/auth/registration/verify', arguments: args);
   }
 
-  static String lol(String message) {
-    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libcore_ffi.so');
-    final RusthandleMessageFunction handleMessage = dylib.lookupFunction<
-        RusthandleMessageFunction,
-        RusthandleMessageFunction>('core_handle_message');
-    final RustFreeFunction coreFree =
-        dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
-
-    final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
-
-    final ffi.Pointer<Utf8> res = handleMessage(cMessage);
-    cMessage.free();
-
-    final String ret = Utf8.fromUtf8(res);
-    coreFree(res);
-    return ret;
+  static String _nativeCall(String message) {
+    return coreFfi.call(message);
   }
 }
 

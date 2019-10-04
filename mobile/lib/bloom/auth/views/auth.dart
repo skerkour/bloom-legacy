@@ -1,4 +1,4 @@
-import 'package:bloom/bloom/auth/widgets/register.dart';
+import 'package:bloom/bloom/auth/widgets/registration_start.dart';
 import 'package:bloom/bloom/auth/widgets/sign_in.dart';
 import 'package:flutter/material.dart';
 
@@ -38,7 +38,7 @@ class _AuthViewState extends State<AuthView> {
   Widget _buildBody() {
     return const TabBarView(
       children: <Widget>[
-        Register(),
+        RegistrationStart(),
         SignIn(),
       ],
     );
