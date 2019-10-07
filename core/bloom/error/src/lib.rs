@@ -150,8 +150,8 @@ impl From<diesel::result::Error> for BloomError {
 }
 
 #[cfg(feature = "url")]
-impl From<url::ParseError> for BloomError {
-    fn from(err: url::ParseError) -> Self {
+impl From<url::parser::ParseError> for BloomError {
+    fn from(err: url::parser::ParseError) -> Self {
         BloomError::UrlParseError(err)
     }
 }
