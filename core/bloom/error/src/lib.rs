@@ -59,7 +59,7 @@ pub enum BloomError {
 
     #[cfg(feature = "url")]
     #[fail(display = "URL parse error: {}", 0)]
-    UrlParseError(url::parser::ParseError),
+    UrlParseError(url::ParseError),
 
     #[fail(display = "Zip: {:?}", 0)]
     Zip(String),
@@ -150,8 +150,8 @@ impl From<diesel::result::Error> for BloomError {
 }
 
 #[cfg(feature = "url")]
-impl From<url::parser::ParseError> for BloomError {
-    fn from(err: url::parser::ParseError) -> Self {
+impl From<url::ParseError> for BloomError {
+    fn from(err: url::ParseError) -> Self {
         BloomError::UrlParseError(err)
     }
 }
