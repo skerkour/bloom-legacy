@@ -193,10 +193,10 @@ impl From<lettre::smtp::error::Error> for BloomError {
 use actix_web::{error, HttpResponse};
 
 #[cfg(feature = "actix-web")]
-impl error::ResponseError for KernelError {
+impl error::ResponseError for BloomError {
     fn error_response(&self) -> HttpResponse {
         let res: bloom_messages::kernel::Error = self.clone().into();
-        let message: bloom_messages::Message = data.into();
+        let message: bloom_messages::Message = res.into();
         HttpResponse::Ok().json(&message)
         // let res: Response<()> = Response::error(self.clone());
         // match *self {
