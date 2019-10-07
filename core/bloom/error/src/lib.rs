@@ -7,6 +7,7 @@ pub use code::ErrorCode;
 
 #[derive(Debug, Fail)]
 pub enum BloomError {
+    #[cfg(feature = "reqwest")]
     #[fail(display = "Reqwest: {}", 0)]
     Reqwest(reqwest::Error),
 
