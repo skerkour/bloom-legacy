@@ -1,4 +1,6 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::pending_account, utils};
+use crate::{myaccount::domain::pending_account, utils};
+use bloom_const::myaccount;
+use bloom_error::BloomError;
 use chrono::Duration;
 use crypto42::kdf::argon2id;
 use diesel::{
@@ -14,7 +16,7 @@ impl eventsourcing::Command for SendNewCode {
     type Aggregate = pending_account::PendingAccount;
     type Event = NewCodeSent;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -23,7 +25,7 @@ impl eventsourcing::Command for SendNewCode {
     ) -> Result<(), Self::Error> {
         let now = chrono::Utc::now();
         if now.signed_duration_since(aggregate.updated_at) < Duration::seconds(20) {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Please wait at least for 20 seconds beffore requesting a new code".to_string(),
             ));
         }

@@ -1,4 +1,5 @@
-use crate::{error::KernelError, myaccount::domain::session};
+use crate::myaccount::domain::session;
+use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -13,7 +14,7 @@ impl eventsourcing::Command for SignOut {
     type Aggregate = session::Session;
     type Event = SignedOut;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,

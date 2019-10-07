@@ -1,4 +1,5 @@
-use crate::{error::KernelError, myaccount::domain::pending_account};
+use crate::myaccount::domain::pending_account;
+use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -13,7 +14,7 @@ impl eventsourcing::Command for Delete {
     type Aggregate = pending_account::PendingAccount;
     type Event = Deleted;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -21,14 +22,14 @@ impl eventsourcing::Command for Delete {
         aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
         if aggregate.trials + 1 >= 10 {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Maximum number of trials reached. Please create another account.".to_string(),
             ));
         }
 
         // verify given code
         if !aggregate.verified {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Please verify your email before.".to_string(),
             ));
         }

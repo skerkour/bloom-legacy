@@ -1,4 +1,5 @@
-use crate::{error::KernelError, myaccount::domain::account};
+use crate::myaccount::domain::account;
+use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -18,7 +19,7 @@ impl eventsourcing::Command for Create {
     type Aggregate = account::Account;
     type Event = account::Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -28,7 +29,7 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::{kernel_accounts, kernel_deleted_usernames};
         use diesel::prelude::*;
 
-        account::validators::username(&self.username)?;
+        bloom_validators::myaccount::username(&self.username)?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts::dsl::kernel_accounts
@@ -36,7 +37,7 @@ impl eventsourcing::Command for Create {
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
-            return Err(KernelError::Validation(format!(
+            return Err(BloomError::Validation(format!(
                 "Email: {} is already in use.",
                 &self.email
             )));
@@ -48,7 +49,7 @@ impl eventsourcing::Command for Create {
             .count()
             .get_result(ctx)?;
         if existing_username != 0 {
-            return Err(KernelError::Validation(format!(
+            return Err(BloomError::Validation(format!(
                 "Username: {} is already in use.",
                 &self.username
             )));
@@ -61,7 +62,7 @@ impl eventsourcing::Command for Create {
                 .count()
                 .get_result(ctx)?;
         if existing_deleted_username != 0 {
-            return Err(KernelError::Validation(format!(
+            return Err(BloomError::Validation(format!(
                 "Username: {} is already in use.",
                 &self.username
             )));

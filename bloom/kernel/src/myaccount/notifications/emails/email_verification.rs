@@ -1,4 +1,5 @@
-use crate::{config::Config, error::KernelError, notifications::emails};
+use crate::{config::Config, notifications::emails};
+use bloom_error::BloomError;
 use handlebars::Handlebars;
 use std::collections::BTreeMap;
 
@@ -16,7 +17,7 @@ pub fn send_email_verification_code(
     recipient_name: &str,
     new_email: &str,
     code: &str,
-) -> Result<(), KernelError> {
+) -> Result<(), BloomError> {
     let mut formatted_code = code.to_string();
     formatted_code.insert(4, '-');
     let handlebars = Handlebars::new();

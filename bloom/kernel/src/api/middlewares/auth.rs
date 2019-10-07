@@ -3,7 +3,7 @@
 //     middleware::{Middleware, Started},
 //     http::header,
 // };
-use crate::{api, db::DbActor, error::KernelError, myaccount::domain};
+use crate::{api, db::DbActor, myaccount::domain};
 use actix::{Handler, Message};
 use actix_service::{Service as ActixService, Transform};
 use actix_web::{
@@ -11,6 +11,7 @@ use actix_web::{
     http::header,
     web, Error, HttpMessage, HttpRequest, ResponseError,
 };
+use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use futures::Future;
 use futures::{
@@ -97,23 +98,24 @@ where
             try_future_box!(auth_header
                 .unwrap()
                 .to_str()
-                .map_err(|_| KernelError::Validation(
+                .map_err(|_| BloomError::Validation(
                     "Authorization HTTP header is not valid".to_string()
                 )));
-        let msg = if auth_header.starts_with("Basic ") {
-            try_future_box!(extract_authorization_header(auth_header).map_err(|_| {
-                KernelError::Validation("Authorization HTTP header is not valid".to_string())
-            }))
-        } else if auth_header.starts_with("Secret ") {
-            try_future_box!(extract_secret_header(auth_header).map_err(
-                |_| KernelError::Validation("Authorization HTTP header is not valid".to_string())
-            ))
-        } else {
-            return Box::new(ok(req.error_response(
-                KernelError::Validation("Authorization HTTP header is not valid".to_string())
-                    .error_response(),
-            )));
-        };
+        let msg =
+            if auth_header.starts_with("Basic ") {
+                try_future_box!(extract_authorization_header(auth_header).map_err(|_| {
+                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
+                }))
+            } else if auth_header.starts_with("Secret ") {
+                try_future_box!(extract_secret_header(auth_header).map_err(|_| {
+                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
+                }))
+            } else {
+                return Box::new(ok(req.error_response(
+                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
+                        .error_response(),
+                )));
+            };
 
         // TODO: improve...
         // the problem is: req.extensions_mut().insert(auth);
@@ -124,9 +126,9 @@ where
             state
                 .db
                 .send(msg)
-                .map_err(|_| KernelError::ActixMailbox)
+                .map_err(|_| BloomError::ActixMailbox)
                 .from_err()
-                .and_then(move |res: Result<_, KernelError>| match res {
+                .and_then(move |res: Result<_, BloomError>| match res {
                     Ok(auth) => {
                         req.extensions_mut().insert(auth);
                         return Either::A(service.call(req));
@@ -152,15 +154,15 @@ where
 //         }
 
 //         let auth_header = auth_header.unwrap().to_str()
-//             .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?;
+//             .map_err(|_| BloomError::Validation("Authorization HTTP header is not valid".to_string()))?;
 //         let msg = if auth_header.starts_with("Basic ") {
 //             extract_authorization_header(auth_header)
-//                 .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+//                 .map_err(|_| BloomError::Validation("Authorization HTTP header is not valid".to_string()))?
 //         } else if auth_header.starts_with("Secret ") {
 //             extract_secret_header(auth_header)
-//                 .map_err(|_| KernelError::Validation("Authorization HTTP header is not valid".to_string()))?
+//                 .map_err(|_| BloomError::Validation("Authorization HTTP header is not valid".to_string()))?
 //         } else {
-//             return Err(KernelError::Validation("Authorization HTTP header is not valid".to_string()).into());
+//             return Err(BloomError::Validation("Authorization HTTP header is not valid".to_string()).into());
 //         };
 
 //         // TODO: improve...
@@ -185,30 +187,30 @@ where
 //     }
 // }
 
-fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
+fn extract_authorization_header(value: &str) -> Result<CheckAuth, BloomError> {
     let parts: Vec<&str> = value.split("Basic ").collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Authorization HTTP header is not valid".to_string(),
         ));
     }
 
     let decoded = base64::decode(parts[1].trim()).map_err(|_| {
-        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+        BloomError::Validation("Authorization HTTP header is not valid".to_string())
     })?;
     let decoded = String::from_utf8(decoded).map_err(|_| {
-        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+        BloomError::Validation("Authorization HTTP header is not valid".to_string())
     })?;
     let parts: Vec<String> = decoded.split(':').map(String::from).collect();
 
     if parts.len() != 2 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Authorization HTTP header is not valid".to_string(),
         ));
     }
 
     let session_id = uuid::Uuid::parse_str(&parts[0]).map_err(|_| {
-        KernelError::Validation("Authorization HTTP header is not valid".to_string())
+        BloomError::Validation("Authorization HTTP header is not valid".to_string())
     })?;
     return Ok(CheckAuth::Account(CheckAuthAccount {
         session_id,
@@ -216,16 +218,16 @@ fn extract_authorization_header(value: &str) -> Result<CheckAuth, KernelError> {
     }));
 }
 
-fn extract_secret_header(value: &str) -> Result<CheckAuth, KernelError> {
+fn extract_secret_header(value: &str) -> Result<CheckAuth, BloomError> {
     let parts: Vec<&str> = value.split("Secret ").collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Authorization HTTP header is not valid".to_string(),
         ));
     }
     let parts: Vec<&str> = parts[1].split(':').collect();
     if parts.len() != 2 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Authorization HTTP header is not valid".to_string(),
         ));
     }
@@ -234,7 +236,7 @@ fn extract_secret_header(value: &str) -> Result<CheckAuth, KernelError> {
         "phaser" => Service::Phaser,
         "bitflow" => Service::Bitflow,
         _ => {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Authorization HTTP header is not valid".to_string(),
             ))
         }
@@ -279,17 +281,17 @@ struct CheckAuthService {
 }
 
 impl Message for CheckAuth {
-    type Result = Result<Auth, KernelError>;
+    type Result = Result<Auth, BloomError>;
 }
 
 impl Handler<CheckAuth> for DbActor {
-    type Result = Result<Auth, KernelError>;
+    type Result = Result<Auth, BloomError>;
 
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::{kernel_accounts, kernel_sessions};
         use diesel::prelude::*;
 
-        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get()?;
 
         let auth = match msg {
             CheckAuth::Account(msg) => {
@@ -300,7 +302,7 @@ impl Handler<CheckAuth> for DbActor {
                         .inner_join(kernel_accounts::table)
                         .first(&conn)
                         .map_err(|_| {
-                            KernelError::Unauthorized("Session is not valid".to_string())
+                            BloomError::Unauthorized("Session is not valid".to_string())
                         })?;
 
                 // verify session token
@@ -308,7 +310,7 @@ impl Handler<CheckAuth> for DbActor {
                     &session.token_hash.as_str().into(),
                     msg.token.as_bytes(),
                 ) {
-                    return Err(KernelError::Validation(
+                    return Err(BloomError::Validation(
                         "Authorization token is not valid".to_string(),
                     ));
                 }
@@ -336,7 +338,7 @@ impl Handler<CheckAuth> for DbActor {
                         service: Some(Service::Bitflow),
                     },
                     _ => {
-                        return Err(KernelError::Validation(
+                        return Err(BloomError::Validation(
                             "Authorization secret is not valid".to_string(),
                         ))
                     }

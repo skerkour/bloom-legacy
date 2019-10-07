@@ -1,4 +1,6 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::session, utils};
+use crate::{myaccount::domain::session, utils};
+use bloom_const::myaccount;
+use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -18,7 +20,7 @@ impl eventsourcing::Command for Start {
     type Aggregate = session::Session;
     type Event = Started;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,

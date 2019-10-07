@@ -1,4 +1,5 @@
-use crate::{error::KernelError, myaccount::domain::session};
+use crate::myaccount::domain::session;
+use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -15,7 +16,7 @@ impl eventsourcing::Command for Revoke {
     type Aggregate = session::Session;
     type Event = Revoked;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -24,7 +25,7 @@ impl eventsourcing::Command for Revoke {
     ) -> Result<(), Self::Error> {
         if let Some(current_session_id) = self.current_session_id {
             if current_session_id == aggregate.id {
-                return Err(KernelError::Validation(
+                return Err(BloomError::Validation(
                     "Revoking current session is not permitted".to_string(),
                 ));
             }

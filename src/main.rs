@@ -5,7 +5,7 @@ use actix_cors::Cors;
 use actix_web::{
     http::header, middleware, middleware::Logger, middleware::NormalizePath, web, App, HttpServer,
 };
-use kernel::{
+use bloom_kernel::{
     api,
     config,
     db,

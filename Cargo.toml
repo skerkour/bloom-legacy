@@ -13,8 +13,9 @@ keywords = ["bloom42", "bloom"]
 [dependencies]
 eventsourcing = { path = "libs/eventsourcing-rs" }
 
-kernel = {  package = "bloom_kernel", path = "bloom/kernel" }
-messages = { package = "bloom_messages", git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
+bloom_kernel = { path = "bloom/kernel" }
+bloom_messages = { git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
+bloom_error = { git = "https://gitlab.com/bloom42/bloom", branch = "dev" }
 
 # notes = { path = "bloom/notes" }
 # contacts = { path = "bloom/contacts" }

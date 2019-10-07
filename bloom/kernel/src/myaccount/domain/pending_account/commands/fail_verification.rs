@@ -1,4 +1,5 @@
-use crate::{error::KernelError, myaccount::domain::pending_account};
+use crate::myaccount::domain::pending_account;
+use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -13,7 +14,7 @@ impl eventsourcing::Command for FailVerification {
     type Aggregate = pending_account::PendingAccount;
     type Event = VerificationFailed;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,

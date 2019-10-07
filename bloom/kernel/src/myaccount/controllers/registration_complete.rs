@@ -1,35 +1,35 @@
 use crate::{
     config::Config,
     db::DbActor,
-    error::KernelError,
     myaccount::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};
+use bloom_error::BloomError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct CompleteRegistration {
-    pub message: messages::auth::RegistrationComplete,
+    pub message: bloom_messages::auth::RegistrationComplete,
     pub config: Config,
     pub ip: String,
     pub user_agent: String,
 }
 
 impl Message for CompleteRegistration {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 }
 
 impl Handler<CompleteRegistration> for DbActor {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
         use crate::db::schema::{kernel_accounts, kernel_pending_accounts, kernel_sessions};
         use diesel::prelude::*;
 
-        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get()?;
 
-        return Ok(conn.transaction::<_, KernelError, _>(|| {
+        return Ok(conn.transaction::<_, BloomError, _>(|| {
             let pending_account_to_update: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
                     .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
@@ -61,7 +61,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 .values(&new_account)
                 .execute(&conn)?;
 
-            eventsourcing::publish::<_, _, KernelError>(&conn, &event)?;
+            eventsourcing::publish::<_, _, BloomError>(&conn, &event)?;
 
             // start Session
             let start_cmd = session::Start {
@@ -75,7 +75,7 @@ impl Handler<CompleteRegistration> for DbActor {
                 .values(&new_session)
                 .execute(&conn)?;
 
-            return Ok(messages::auth::Session {
+            return Ok(bloom_messages::auth::Session {
                 id: new_session.id,
                 token: event.token_plaintext,
             }

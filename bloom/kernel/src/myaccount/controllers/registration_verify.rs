@@ -1,31 +1,31 @@
-use crate::error::KernelError;
 use crate::{
     db::DbActor,
     myaccount::domain::{pending_account, PendingAccount},
 };
 use actix::{Handler, Message};
-use messages::kernel::Empty;
+use bloom_error::BloomError;
+use bloom_messages::kernel::Empty;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegistrationVerify {
-    pub message: messages::auth::RegistrationVerify,
+    pub message: bloom_messages::auth::RegistrationVerify,
 }
 
 impl Message for RegistrationVerify {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 }
 
 impl Handler<RegistrationVerify> for DbActor {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: RegistrationVerify, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
-        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get()?;
 
-        match conn.transaction::<_, KernelError, _>(|| {
+        match conn.transaction::<_, BloomError, _>(|| {
             let verify_cmd = pending_account::Verify {
                 id: msg.message.id,
                 code: msg.message.code.clone(),
@@ -45,11 +45,11 @@ impl Handler<RegistrationVerify> for DbActor {
                 .set(&pending_account_to_verify)
                 .execute(&conn)?;
 
-            return Ok(messages::Message::from(Empty {}));
+            return Ok(bloom_messages::Message::from(Empty {}));
         }) {
             Ok(_) => return Ok(Empty {}.into()),
             Err(err) => match err {
-                KernelError::Validation(_) => {
+                BloomError::Validation(_) => {
                     let pending_account_to_verify: PendingAccount =
                         kernel_pending_accounts::dsl::kernel_pending_accounts
                             .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))

@@ -1,5 +1,5 @@
-use crate::error::KernelError;
 use crate::myaccount::domain::pending_account;
+use bloom_error::BloomError;
 use chrono::Utc;
 use crypto42::kdf::argon2id;
 use diesel::{
@@ -19,7 +19,7 @@ impl eventsourcing::Command for Verify {
     type Aggregate = pending_account::PendingAccount;
     type Event = Verified;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -38,7 +38,7 @@ impl eventsourcing::Command for Verify {
         let duration = aggregate.created_at.signed_duration_since(timestamp);
 
         if aggregate.trials + 1 >= 10 {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 pending_account::VerificationFailedReason::TooManyTrials.to_string(),
             ));
         } else if !argon2id::verify_password(
@@ -46,12 +46,12 @@ impl eventsourcing::Command for Verify {
             self.code.as_bytes(),
         ) {
             // verify given code
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 pending_account::VerificationFailedReason::CodeNotValid.to_string(),
             ));
         } else if duration.num_minutes() > 30 {
             // verify code expiration
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 pending_account::VerificationFailedReason::CodeExpired.to_string(),
             ));
         }

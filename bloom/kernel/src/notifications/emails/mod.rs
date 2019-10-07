@@ -1,6 +1,7 @@
 mod default_template;
 
-use crate::{config::Config, KernelError};
+use crate::config::Config;
+use bloom_error::BloomError;
 use lettre::{smtp::authentication::Credentials, SmtpClient, Transport};
 use lettre_email::EmailBuilder;
 
@@ -12,7 +13,7 @@ pub fn send_email(
     to: (&str, &str),
     subject: &str,
     content: &str,
-) -> Result<(), KernelError> {
+) -> Result<(), BloomError> {
     // Useful in development mode when you haven't a smtp configured
     if config.smtp.host == "" {
         println!("=============\n{}\n=============", content);

@@ -1,4 +1,4 @@
-use crate::KernelError;
+use bloom_error::BloomError;
 use regex::Regex;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
@@ -118,30 +118,31 @@ impl From<ConfigFile> for Config {
 }
 
 impl Config {
-    pub fn validate(&self) -> Result<(), KernelError> {
+    pub fn validate(&self) -> Result<(), BloomError> {
         // phaser and bitflow secret length
         if self.phaser.secret.len() < 64 {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Phaser secret length must be at least 64.".to_string(),
             ));
         }
         if self.bitflow.secret.len() < 64 {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Bitflow secret length must be at least 64.".to_string(),
             ));
         }
 
         // host have scheme
-        let parsed_host = Url::parse(&self.host)?;
+        let parsed_host =
+            Url::parse(&self.host).map_err(|err| BloomError::UrlParseError(err.to_string()))?;
         if parsed_host.scheme().is_empty() {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Host musht have a URL scheme. eg. http://localhost:8080.".to_string(),
             ));
         }
 
         // others are not empty
         if self.database.url.is_empty() {
-            return Err(KernelError::Validation(
+            return Err(BloomError::Validation(
                 "Database URL must not be empty.".to_string(),
             ));
         }

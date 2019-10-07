@@ -1,4 +1,3 @@
-use crate::error::KernelError;
 use crate::{
     config::Config,
     db::DbActor,
@@ -6,28 +5,29 @@ use crate::{
     myaccount::notifications::emails::send_account_verification_code,
 };
 use actix::{Handler, Message};
+use bloom_error::BloomError;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct RegistrationSendNewCode {
-    pub message: messages::auth::RegistrationSendNewCode,
+    pub message: bloom_messages::auth::RegistrationSendNewCode,
     pub config: Config,
 }
 
 impl Message for RegistrationSendNewCode {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 }
 
 impl Handler<RegistrationSendNewCode> for DbActor {
-    type Result = Result<messages::Message, KernelError>;
+    type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: RegistrationSendNewCode, _: &mut Self::Context) -> Self::Result {
         use crate::db::schema::kernel_pending_accounts;
         use diesel::prelude::*;
 
-        let conn = self.pool.get().map_err(|_| KernelError::R2d2)?;
+        let conn = self.pool.get()?;
 
-        return Ok(conn.transaction::<_, KernelError, _>(|| {
+        return Ok(conn.transaction::<_, BloomError, _>(|| {
             let resend_code_cmd = pending_account::SendNewCode {};
 
             let pending_account: PendingAccount =
@@ -52,7 +52,7 @@ impl Handler<RegistrationSendNewCode> for DbActor {
                 &event.code,
             )?;
 
-            return Ok(messages::kernel::Empty {}.into());
+            return Ok(bloom_messages::kernel::Empty {}.into());
         })?);
     }
 }

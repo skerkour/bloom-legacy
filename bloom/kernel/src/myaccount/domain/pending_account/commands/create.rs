@@ -1,10 +1,6 @@
-use crate::{
-    config::Config,
-    error::KernelError,
-    myaccount,
-    myaccount::domain::{account, pending_account},
-    utils,
-};
+use crate::{config::Config, myaccount::domain::pending_account, utils};
+use bloom_const::myaccount;
+use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
@@ -24,7 +20,7 @@ impl eventsourcing::Command for Create {
     type Aggregate = pending_account::PendingAccount;
     type Event = Created;
     type Context = PooledConnection<ConnectionManager<PgConnection>>;
-    type Error = KernelError;
+    type Error = BloomError;
 
     fn validate(
         &self,
@@ -34,9 +30,11 @@ impl eventsourcing::Command for Create {
         use crate::db::schema::kernel_accounts::dsl::*;
         use diesel::prelude::*;
 
-        account::validators::display_name(&self.display_name)?;
-        // account::validators::password(self.config.basic_passwords.clone(), &self.password)?;
-        account::validators::email(self.config.disposable_email_domains.clone(), &self.email)?;
+        bloom_validators::myaccount::display_name(&self.display_name)?;
+        bloom_validators::myaccount::email(
+            self.config.disposable_email_domains.clone(),
+            &self.email,
+        )?;
 
         // verify that an email isn't already in use
         let existing_email: i64 = kernel_accounts
@@ -44,7 +42,7 @@ impl eventsourcing::Command for Create {
             .count()
             .get_result(ctx)?;
         if existing_email != 0 {
-            return Err(KernelError::Validation(format!(
+            return Err(BloomError::Validation(format!(
                 "Email: {} is already in use.",
                 &self.email
             )));

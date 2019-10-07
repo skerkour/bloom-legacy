@@ -1,4 +1,5 @@
-use crate::{config::Config, error::KernelError, notifications::emails};
+use crate::{config::Config, notifications::emails};
+use bloom_error::BloomError;
 use handlebars::Handlebars;
 use std::collections::BTreeMap;
 
@@ -13,7 +14,7 @@ pub fn send_password_reset(
     recipient_name: &str,
     password_reset_id: &str,
     token: &str,
-) -> Result<(), KernelError> {
+) -> Result<(), BloomError> {
     let password_reset_url = format!(
         "{}/myaccount/recovery?id={}&token={}",
         config.host, password_reset_id, token

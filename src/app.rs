@@ -1,13 +1,14 @@
-use kernel::{
+use bloom_kernel::{
     api,
     api::middlewares::{Auth, GetRequestAuth},
     config::Config,
     myaccount::controllers,
-    KernelError,
     // log::macros::slog_error,
 };
 
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};
+use bloom_error::BloomError;
+use bloom_messages::Message;
 use futures::future::{ok, Future};
 use futures_preview::{compat::Future01CompatExt, FutureExt, TryFutureExt}; // compat() converts futures::future::Future into a std::future::Future
 use futures_timer::Delay;
@@ -24,14 +25,14 @@ pub fn config(_config: Config) -> impl Fn(&mut web::ServiceConfig) {
 }
 
 pub fn get_index() -> ActixResult<HttpResponse> {
-    let res = api::response(messages::kernel::HelloWorld {
+    let res = api::response(bloom_messages::kernel::HelloWorld {
         hello: "world".to_string(),
     });
     return Ok(res);
 }
 
 pub fn post_index(
-    message_wrapped: web::Json<messages::Message>,
+    message_wrapped: web::Json<Message>,
     state: web::Data<api::State>,
     req: HttpRequest,
 ) -> impl Future<Item = HttpResponse, Error = Error> {
@@ -57,7 +58,7 @@ pub fn post_index(
                 Ok(res) => ok(api::response(res)),
                 Err(err) => {
                     // slog_error!(logger, "{}", &err);
-                    let err: messages::kernel::Error = err.into();
+                    let err: bloom_messages::kernel::Error = err.into();
                     return ok(api::response(err));
                 }
             }
@@ -68,11 +69,11 @@ async fn handle_message(
     state: std::sync::Arc<api::State>,
     auth: Auth,
     ip: String,
-    message: messages::Message,
-) -> Result<messages::Message, KernelError> {
+    message: Message,
+) -> Result<Message, BloomError> {
     match message {
         // Auth
-        messages::Message::AuthRegistrationStart(message) => {
+        Message::AuthRegistrationStart(message) => {
             must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
@@ -88,7 +89,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthRegistrationVerify(message) => {
+        Message::AuthRegistrationVerify(message) => {
             must_not_be_authenticated(&auth)?;
 
             let _ = Delay::new(Duration::from_millis(
@@ -102,7 +103,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthRegistrationComplete(message) => {
+        Message::AuthRegistrationComplete(message) => {
             must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
@@ -123,7 +124,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthRegistrationNewCode(message) => {
+        Message::AuthRegistrationNewCode(message) => {
             must_not_be_authenticated(&auth)?;
 
             let config = state.config.clone();
@@ -139,7 +140,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthSignIn(message) => {
+        Message::AuthSignIn(message) => {
             must_not_be_authenticated(&auth)?;
 
             let _ = Delay::new(Duration::from_millis(
@@ -157,7 +158,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthSignOut(_) => {
+        Message::AuthSignOut(_) => {
             authentication_required(&auth)?;
 
             state
@@ -169,7 +170,7 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        messages::Message::AuthRevokeSession(message) => {
+        Message::AuthRevokeSession(message) => {
             authentication_required(&auth)?;
 
             state
@@ -182,13 +183,13 @@ async fn handle_message(
                 .compat()
                 .await?
         }
-        _ => Err(KernelError::Validation("message is not valid".to_string())),
+        _ => Err(BloomError::Validation("message is not valid".to_string())),
     }
 }
 
-fn must_not_be_authenticated(auth: &Auth) -> Result<(), KernelError> {
+fn must_not_be_authenticated(auth: &Auth) -> Result<(), BloomError> {
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
-        return Err(KernelError::Unauthorized(
+        return Err(BloomError::Unauthorized(
             "Must not be authenticated".to_string(),
         ));
     } else {
@@ -196,9 +197,9 @@ fn must_not_be_authenticated(auth: &Auth) -> Result<(), KernelError> {
     }
 }
 
-fn authentication_required(auth: &Auth) -> Result<(), KernelError> {
+fn authentication_required(auth: &Auth) -> Result<(), BloomError> {
     if auth.session.is_none() || auth.account.is_none() {
-        return Err(KernelError::Unauthorized(
+        return Err(BloomError::Unauthorized(
             "Authentication required".to_string(),
         ));
     } else {
