@@ -59,7 +59,7 @@ pub enum BloomError {
 
     #[cfg(feature = "url")]
     #[fail(display = "URL parse error: {}", 0)]
-    UrlParseError(url::ParseError),
+    UrlParseError(url::parser::ParseError),
 
     #[fail(display = "Zip: {:?}", 0)]
     Zip(String),
