@@ -57,8 +57,9 @@ pub enum BloomError {
     #[fail(display = "Internal error")]
     Internal(String),
 
+    #[cfg(feature = "url")]
     #[fail(display = "URL parse error: {}", 0)]
-    UrlParseError(String),
+    UrlParseError(url::ParseError),
 
     #[fail(display = "Zip: {:?}", 0)]
     Zip(String),
@@ -124,16 +125,6 @@ impl From<actix::MailboxError> for BloomError {
     }
 }
 
-#[cfg(feature = "diesel")]
-impl From<diesel::result::Error> for BloomError {
-    fn from(err: diesel::result::Error) -> Self {
-        match err {
-            e @ diesel::result::Error::NotFound => BloomError::NotFound(format!("{}", e)),
-            e => BloomError::Diesel(format!("{:?}", e)),
-        }
-    }
-}
-
 #[cfg(feature = "image")]
 impl From<image::ImageError> for BloomError {
     fn from(err: image::ImageError) -> Self {
@@ -145,6 +136,16 @@ impl From<image::ImageError> for BloomError {
 impl From<diesel::r2d2::Error> for BloomError {
     fn from(err: diesel::r2d2::Error) -> Self {
         BloomError::R2d2(format!("{:?}", err))
+    }
+}
+
+#[cfg(feature = "diesel")]
+impl From<diesel::result::Error> for BloomError {
+    fn from(err: diesel::result::Error) -> Self {
+        match err {
+            e @ diesel::result::Error::NotFound => BloomError::NotFound(format!("{}", e)),
+            e => BloomError::Diesel(format!("{:?}", e)),
+        }
     }
 }
 
