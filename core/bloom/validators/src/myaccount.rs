@@ -1,32 +1,31 @@
 use bloom_const::myaccount;
+use bloom_error::BloomError;
 use regex::Regex;
 use std::collections::HashSet;
 
-pub fn first_name(first_name: &str) -> Result<(), KernelError> {
+pub fn first_name(first_name: &str) -> Result<(), BloomError> {
     if first_name.is_empty() {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "first_name cannot be empty".to_string(),
         ));
     }
 
     if first_name.len() > 64 {
-        return Err(KernelError::Validation(
-            "first_name is too long".to_string(),
-        ));
+        return Err(BloomError::Validation("first_name is too long".to_string()));
     }
 
     return Ok(());
 }
 
-pub fn last_name(last_name: &str) -> Result<(), KernelError> {
+pub fn last_name(last_name: &str) -> Result<(), BloomError> {
     if last_name.is_empty() {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "last_name cannot be empty".to_string(),
         ));
     }
 
     if last_name.len() > 64 {
-        return Err(KernelError::Validation("last_name is too long".to_string()));
+        return Err(BloomError::Validation("last_name is too long".to_string()));
     }
 
     return Ok(());
@@ -35,22 +34,22 @@ pub fn last_name(last_name: &str) -> Result<(), KernelError> {
 pub fn password<S: std::hash::BuildHasher>(
     basic_passwords: HashSet<String, S>,
     password: &str,
-) -> Result<(), KernelError> {
+) -> Result<(), BloomError> {
     let length = password.len();
 
     if length < 8 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Password must be longer than 7 characters".to_string(),
         ));
     } else if length > 128 {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "Password must be shorter than 128 characters".to_string(),
         ));
     } else if basic_passwords
         .iter()
         .any(|basic_password| basic_password == password)
     {
-        return Err(KernelError::Validation("Password is too weak".to_string()));
+        return Err(BloomError::Validation("Password is too weak".to_string()));
     }
 
     return Ok(());
@@ -59,32 +58,32 @@ pub fn password<S: std::hash::BuildHasher>(
 pub fn email<S: std::hash::BuildHasher>(
     disposable_emails: HashSet<String, S>,
     email: &str,
-) -> Result<(), KernelError> {
+) -> Result<(), BloomError> {
     if email.is_empty() || !email.contains('@') {
-        return Err(KernelError::Validation("email is not valid".to_string()));
+        return Err(BloomError::Validation("email is not valid".to_string()));
     }
 
     let parts: Vec<&str> = email.split('@').collect();
 
     if parts.len() != 2 {
-        return Err(KernelError::Validation("email is not valid".to_string()));
+        return Err(BloomError::Validation("email is not valid".to_string()));
     }
 
     let user_part = parts[1];
     let domain_part = parts[0];
 
     if user_part.is_empty() || domain_part.is_empty() {
-        return Err(KernelError::Validation("email is not valid".to_string()));
+        return Err(BloomError::Validation("email is not valid".to_string()));
     }
 
     if email.trim() != email {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "email must not contains whitesapces".to_string(),
         ));
     }
 
     if email.len() > 128 {
-        return Err(KernelError::Validation("email is too long".to_string()));
+        return Err(BloomError::Validation("email is too long".to_string()));
     }
 
     let user_re = Regex::new(r"^(?i)[a-z0-9.!#$%&'*+/=?^_`{|}~-]+\z")
@@ -95,14 +94,14 @@ pub fn email<S: std::hash::BuildHasher>(
     .expect("error compiling domain email regex");
 
     if !user_re.is_match(user_part) {
-        return Err(KernelError::Validation("email is not valid".to_string()));
+        return Err(BloomError::Validation("email is not valid".to_string()));
     }
     if !domain_re.is_match(domain_part) {
-        return Err(KernelError::Validation("email is not valid".to_string()));
+        return Err(BloomError::Validation("email is not valid".to_string()));
     }
 
     if disposable_emails.contains(&domain_part.to_string()) {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "email domain is not valid".to_string(),
         ));
     }
@@ -110,23 +109,23 @@ pub fn email<S: std::hash::BuildHasher>(
     return Ok(());
 }
 
-pub fn username(username: &str) -> Result<(), KernelError> {
+pub fn username(username: &str) -> Result<(), BloomError> {
     if username.is_empty() {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "username cannot be empty".to_string(),
         ));
     }
 
     if username.len() < 4 {
-        return Err(KernelError::Validation("username is too short".to_string()));
+        return Err(BloomError::Validation("username is too short".to_string()));
     }
 
     if username.len() > 16 {
-        return Err(KernelError::Validation("username is too long".to_string()));
+        return Err(BloomError::Validation("username is too long".to_string()));
     }
 
     if username.to_lowercase() != username {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "username must be lowercase".to_string(),
         ));
     }
@@ -151,15 +150,15 @@ pub fn username(username: &str) -> Result<(), KernelError> {
     ];
 
     if invalid_usernames.contains(&username) {
-        return Err(KernelError::Validation("username is not valid".to_string()));
+        return Err(BloomError::Validation("username is not valid".to_string()));
     }
 
     if username.contains("administrator") {
-        return Err(KernelError::Validation("username is not valid".to_string()));
+        return Err(BloomError::Validation("username is not valid".to_string()));
     }
 
     if !username.chars().all(char::is_alphanumeric) || !username.is_ascii() {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "username must contains only alphanumeric characters".to_string(),
         ));
     }
@@ -167,23 +166,23 @@ pub fn username(username: &str) -> Result<(), KernelError> {
     return Ok(());
 }
 
-pub fn bio(bio: &str) -> Result<(), KernelError> {
+pub fn bio(bio: &str) -> Result<(), BloomError> {
     if bio.len() > myaccount::BIO_MAX_LENGTH {
-        return Err(KernelError::Validation("bio is too long".to_string()));
+        return Err(BloomError::Validation("bio is too long".to_string()));
     }
 
     return Ok(());
 }
 
-pub fn display_name(display_name: &str) -> Result<(), KernelError> {
+pub fn display_name(display_name: &str) -> Result<(), BloomError> {
     if display_name.is_empty() {
-        return Err(KernelError::Validation(
+        return Err(BloomError::Validation(
             "display_name cannot be empty".to_string(),
         ));
     }
 
     if display_name.len() > myaccount::DISPLAY_NAME_MAX_LENGTH {
-        return Err(KernelError::Validation(format!(
+        return Err(BloomError::Validation(format!(
             "display_name is too long ({} characters max)",
             myaccount::DISPLAY_NAME_MAX_LENGTH
         )));

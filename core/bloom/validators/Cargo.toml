@@ -8,5 +8,7 @@ edition = "2018"
 
 [dependencies]
 bloom_const = { path = "../const" }
+bloom_error = { path = "../error" }
+
 
 regex = "1"
