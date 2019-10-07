@@ -1,4 +1,5 @@
 pub mod myaccount;
+pub mod db;
 
 pub static ADDRESS_HELLO: &str = "hello@bloom.sh";
 pub static ADDRESS_WELCOME: &str = "welcome@bloom.sh";
