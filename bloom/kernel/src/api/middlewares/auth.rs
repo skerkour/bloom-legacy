@@ -101,21 +101,20 @@ where
                 .map_err(|_| BloomError::Validation(
                     "Authorization HTTP header is not valid".to_string()
                 )));
-        let msg =
-            if auth_header.starts_with("Basic ") {
-                try_future_box!(extract_authorization_header(auth_header).map_err(|_| {
-                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
-                }))
-            } else if auth_header.starts_with("Secret ") {
-                try_future_box!(extract_secret_header(auth_header).map_err(|_| {
-                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
-                }))
-            } else {
-                return Box::new(ok(req.error_response(
-                    BloomError::Validation("Authorization HTTP header is not valid".to_string())
-                        .error_response(),
-                )));
-            };
+        let msg = if auth_header.starts_with("Basic ") {
+            try_future_box!(extract_authorization_header(auth_header).map_err(|_| {
+                BloomError::Validation("Authorization HTTP header is not valid".to_string())
+            }))
+        } else if auth_header.starts_with("Secret ") {
+            try_future_box!(extract_secret_header(auth_header).map_err(|_| {
+                BloomError::Validation("Authorization HTTP header is not valid".to_string())
+            }))
+        } else {
+            return Box::new(ok(req.error_response(
+                BloomError::Validation("Authorization HTTP header is not valid".to_string())
+                    .error_response(),
+            )));
+        };
 
         // TODO: improve...
         // the problem is: req.extensions_mut().insert(auth);

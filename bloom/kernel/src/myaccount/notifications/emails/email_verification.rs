@@ -30,7 +30,7 @@ pub fn send_email_verification_code(
 
     emails::send_email(
         config,
-        (crate::ADDRESS_NOTIFY, "Bloom"),
+        (bloom_const::ADDRESS_NOTIFY, "Bloom"),
         (email, recipient_name),
         &subject,
         handlebars

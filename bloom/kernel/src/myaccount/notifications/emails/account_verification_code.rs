@@ -28,7 +28,7 @@ pub fn send_account_verification_code(
 
     emails::send_email(
         config,
-        (crate::ADDRESS_HELLO, "Bloom"),
+        (bloom_const::ADDRESS_HELLO, "Bloom"),
         (email, recipient_name),
         &subject,
         handlebars

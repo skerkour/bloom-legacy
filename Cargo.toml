@@ -15,7 +15,7 @@ eventsourcing = { path = "libs/eventsourcing-rs" }
 
 bloom_kernel = { path = "bloom/kernel" }
 bloom_messages = { git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
-bloom_error = { git = "https://gitlab.com/bloom42/bloom", branch = "dev" }
+bloom_error = { git = "https://gitlab.com/bloom42/bloom", branch = "dev", features = ["actix"]}
 
 # notes = { path = "bloom/notes" }
 # contacts = { path = "bloom/contacts" }
