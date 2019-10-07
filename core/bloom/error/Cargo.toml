@@ -9,7 +9,21 @@ edition = "2018"
 [dependencies]
 bloom_messages = { path = "../messages" }
 
-crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
-
 failure = "0.1"
-reqwest = { version = "0.9", default-features = false, features = ["rustls-tls"] }
+
+crypto42 = { version = "*", git = "https://gitlab.com/bloom42/libs/crypto42", optional = true }
+reqwest = { version = "*", optional = true }
+lettre = { version = "*", optional = true }
+lettre_email = { version = "*", optional = true }
+serde_json = { version = "*", optional = true }
+walkdir = { version = "*", optional = true }
+zip = { version = "*", optional = true }
+url = { version = "*", optional = true }
+diesel = { version = "*", optional = true }
+image = { version = "*", optional = true }
+actix = { version = "*", optional = true }
+
+
+[features]
+default = []
+
