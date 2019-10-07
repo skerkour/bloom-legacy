@@ -132,9 +132,9 @@ impl From<image::ImageError> for BloomError {
     }
 }
 
-#[cfg(feature = "diesel")]
-impl From<diesel::r2d2::Error> for BloomError {
-    fn from(err: diesel::r2d2::Error) -> Self {
+#[cfg(feature = "r2d2")]
+impl From<r2d2::Error> for BloomError {
+    fn from(err: r2d2::Error) -> Self {
         BloomError::R2d2(format!("{:?}", err))
     }
 }
