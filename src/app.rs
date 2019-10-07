@@ -63,14 +63,7 @@ pub fn post_index(
             }
         });
 }
-// match res {
-//             Ok(message) => ok(api::response(message)),
-//             Err(err) => {
-//                 slog_error!(logger, "{}", err);
-//                 let err: messages::kernel::Error = err.into();
-//                 return ok(api::response(err));
-//             }
-//         })
+
 async fn handle_message(
     state: std::sync::Arc<api::State>,
     auth: Auth,
