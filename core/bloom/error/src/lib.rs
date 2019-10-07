@@ -199,10 +199,10 @@ impl From<lettre::smtp::error::Error> for BloomError {
 
 #[cfg(feature = "actix-http")]
 impl actix_http::error::ResponseError for BloomError {
-    fn error_response(&self) -> actix_http::HttpResponse {
+    fn error_response(&self) -> actix_http::Response {
         let res: bloom_messages::kernel::Error = self.clone().into();
         let message: bloom_messages::Message = res.into();
-        actix_http::HttpResponse::Ok().json(&message)
+        actix_http::Response::Ok().json(&message)
         // let res: Response<()> = Response::error(self.clone());
         // match *self {
         //     // 400
