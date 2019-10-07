@@ -1,6 +1,4 @@
 use failure::Fail;
-
-#[cfg(feature = "io")]
 use std::io;
 
 mod code;
@@ -149,7 +147,6 @@ impl From<url::ParseError> for BloomError {
     }
 }
 
-#[cfg(feature = "std")]
 impl From<io::Error> for BloomError {
     fn from(err: io::Error) -> Self {
         BloomError::Io(format!("{:?}", err))
