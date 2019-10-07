@@ -80,6 +80,7 @@ nav:
       - Drive: projects/bloom/drive.md
       - Gallery: projects/bloom/gallery.md
       - Groups: projects/bloom/groups.md
+      - Music: projects/bloom/music.md
       - MyAccount: projects/bloom/myaccount.md
       - Notes: projects/bloom/notes.md
       - Phaser: projects/bloom/phaser.md
@@ -90,8 +91,6 @@ nav:
     - crypto42: projects/crypto42/index.md
 
     - SANE: projects/sane/index.md
-
-    - Ideas: projects/ideas/index.md
 
   - Engineering:
     - Setup: engineering/setup.md
