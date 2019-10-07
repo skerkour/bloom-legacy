@@ -188,3 +188,41 @@ impl From<lettre::smtp::error::Error> for BloomError {
         BloomError::LettreSmtp(format!("{:?}", err))
     }
 }
+
+#[cfg(feature = "actix-web")]
+use actix_web::{error, HttpResponse};
+
+#[cfg(feature = "actix-web")]
+impl error::ResponseError for KernelError {
+    fn error_response(&self) -> HttpResponse {
+        let res: bloom_messages::kernel::Error = self.clone().into();
+        let message: bloom_messages::Message = data.into();
+        HttpResponse::Ok().json(&message)
+        // let res: Response<()> = Response::error(self.clone());
+        // match *self {
+        //     // 400
+        //     KernelError::Validation(_)
+        //     | KernelError::UrlParseError(_)
+        //     | KernelError::LettreEmail(_)
+        //     | KernelError::LettreSmtp(_) => HttpResponse::BadRequest().json(&res),
+        //     // 401
+        //     KernelError::Unauthorized(_) => HttpResponse::Unauthorized().json(&res),
+        //     // 403
+        //     KernelError::Forbidden(_) => HttpResponse::Forbidden().json(&res),
+        //     // 404
+        //     KernelError::NotFound(_) | KernelError::RouteNotFound => {
+        //         HttpResponse::NotFound().json(&res)
+        //     }
+        //     // 408
+        //     KernelError::Timeout => HttpResponse::RequestTimeout().json(&res),
+        //     // 500
+        //     // KernelError::ActixMailbox | KernelError::Diesel(_) | KernelError::R2d2 | KernelError::TokioTimer(_)
+        //     // | KernelError::Bcrypt | KernelError::Io(_) | KernelError::Image(_) | KernelError::Internal(_)
+        //     // | KernelError::Zip(_) | KernelError::Walkdir(_) => {
+        //     _ => {
+        //         let res: bloom_messages::kernel::Error = KernelError::Internal(String::new()).into();
+        //         HttpResponse::InternalServerError().json(&api::responseres)
+        //     }
+        // }
+    }
+}

@@ -22,6 +22,7 @@ url = { version = "*", optional = true }
 diesel = { version = "*", optional = true }
 image = { version = "*", optional = true }
 actix = { version = "*", optional = true }
+actix-web = { version = "*", optional = true }
 
 
 [features]
