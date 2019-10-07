@@ -11,6 +11,7 @@ pub enum BloomError {
     #[fail(display = "Reqwest: {}", 0)]
     Reqwest(reqwest::Error),
 
+    #[cfg(feature = "crypto42")]
     #[fail(display = "Crypto42: {:?}", 0)]
     Crypto42(crypto42::Error),
 
@@ -78,9 +79,9 @@ pub enum BloomError {
 // TODO: improve...
 // TODO(z0mbie42):
 // * into message
-impl From<BloomError> for bloom_messages::kernel::Error {
-    fn from(err: BloomError) -> Self {
-        let code = match &err {
+impl From<&BloomError> for bloom_messages::kernel::Error {
+    fn from(err: &BloomError) -> Self {
+        let code = match err {
             BloomError::UnknownMessageType => ErrorCode::UKNOWN_MESSAGE_TYPE,
             _ => ErrorCode::INTERNAL,
         };
@@ -93,6 +94,12 @@ impl From<BloomError> for bloom_messages::kernel::Error {
             code: code.to_string(),
             message,
         }
+    }
+}
+
+impl From<BloomError> for bloom_messages::kernel::Error {
+    fn from(err: BloomError) -> Self {
+        return (&err).into();
     }
 }
 
@@ -190,14 +197,11 @@ impl From<lettre::smtp::error::Error> for BloomError {
 }
 
 #[cfg(feature = "actix-web")]
-use actix_web::{error, HttpResponse};
-
-#[cfg(feature = "actix-web")]
-impl error::ResponseError for BloomError {
-    fn error_response(&self) -> HttpResponse {
+impl actix_web::error::ResponseError for BloomError {
+    fn error_response(&self) -> actix_web::HttpResponse {
         let res: bloom_messages::kernel::Error = self.clone().into();
         let message: bloom_messages::Message = res.into();
-        HttpResponse::Ok().json(&message)
+        actix_web::HttpResponse::Ok().json(&message)
         // let res: Response<()> = Response::error(self.clone());
         // match *self {
         //     // 400
