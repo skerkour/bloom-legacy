@@ -1,0 +1,12 @@
+[package]
+name = "bloom_validators"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bloom_const = { path = "../const" }
+
+regex = "1"

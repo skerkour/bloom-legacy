@@ -19,4 +19,6 @@ members = [
     "bloom/auth",
     "bloom/messages",
     "bloom/error",
+    "bloom/validators",
+    "bloom/const",
 ]
