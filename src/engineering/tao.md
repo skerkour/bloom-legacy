@@ -1,4 +1,4 @@
-# Technology
+# Tao of Bloom
 
 Exceptinal technology leadership is whats gives Bloom an edge over it's competitors.
 

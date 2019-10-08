@@ -53,7 +53,6 @@ nav:
     - Roadmap: organization/roadmap.md
     - Contributing: organization/contributing.md
     - Social media: organization/social_media.md
-    - Technology: organization/technology.md
 
   - Projects:
     # - Overview: projects/index.md
@@ -94,6 +93,7 @@ nav:
     - SANE: projects/sane/index.md
 
   - Engineering:
+    - Tao: engineering/tao.md
     - Setup: engineering/setup.md
     - Cryptography: engineering/cryptography.md
     - Mobile: engineering/mobile.md
