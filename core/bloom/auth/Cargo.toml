@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 bloom_messages = { path = "../messages" }
-bloom_error = { path = "../error" }
+bloom_error = { path = "../error", features = ["reqwest", "crypto42"]}
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 uuid = { version = "0.7", features = ["serde", "v4"] }
