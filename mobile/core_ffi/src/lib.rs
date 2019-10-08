@@ -15,9 +15,9 @@ pub extern "C" fn core_handle_message(message_char: *const c_char) -> *const c_c
     let message_out = serde_json::to_string(&message_out).expect("lol3");
     let ret = CString::new(message_out).expect("lol4");
 
-    let ret_prt = ret.as_ptr();
-    std::mem::forget(ret);
-    return ret_prt;
+    // let ret_prt = ret.as_ptr();
+    // std::mem::forget(ret);
+    return ret.into_raw();
 }
 
 #[no_mangle]
