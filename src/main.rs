@@ -17,6 +17,7 @@ use rusoto_core::Region;
 use rusoto_s3::S3Client;
 use sentry::integrations::panic::register_panic_handler;
 use std::env;
+use std::error::Error;
 use std::str::FromStr;
 
 fn register_reactors() {
@@ -31,7 +32,7 @@ fn register_reactors() {
     // ));
 }
 
-fn main() {
+fn main() -> Result<(), Box<dyn Error>> {
     let cfg = config::init();
     let _sentry_guard = sentry::init(cfg.sentry.server_url.clone());
     env::set_var("RUST_BACKTRACE", "1");
@@ -39,7 +40,7 @@ fn main() {
 
     let (_log_guard, logger) = log::setup_slog();
 
-    crypto42::init().expect("error initializing crypto42");
+    crypto42::init()?;
 
     let sys = System::new("bloom_server");
     let db_actor_addr = db::init(&cfg);
@@ -47,7 +48,7 @@ fn main() {
 
     register_reactors();
 
-    let region = Region::from_str(&cfg.aws.region).expect("AWS region not valid");
+    let region = Region::from_str(&cfg.aws.region)?;
     let api_state = api::State {
         db: db_actor_addr,
         config: cfg.clone(),
@@ -85,10 +86,11 @@ fn main() {
     .keep_alive(60)
     .shutdown_timeout(2)
     .workers(num_cpus::get() * 2)
-    .bind(&binding_addr)
-    .expect("error binding server")
+    .bind(&binding_addr)?
     .start();
 
     slog_info!(logger, "server started"; slog_o!("address" => binding_addr));
     let _ = sys.run();
+
+    return Ok(());
 }
