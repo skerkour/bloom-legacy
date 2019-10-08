@@ -57,7 +57,6 @@ pub enum BloomError {
     #[fail(display = "Internal error")]
     Internal(String),
 
-    #[cfg(feature = "url")]
     #[fail(display = "URL parse error: {}", 0)]
     UrlParseError(String),
 
