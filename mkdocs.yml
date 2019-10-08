@@ -110,6 +110,9 @@ nav:
       - Flux: engineering/patterns/flux.md
     - Templates:
       - Git: engineering/templates/git.md
+      - GitLab:
+        - Issues: engineering/templates/gitlab/issues.md
+        - Merge requests: engineering/templates/gitlab/merge_requests.md
       - Editor Config: engineering/templates/editor_config.md
       - Vue: engineering/templates/vue.md
       - Docker: engineering/templates/docker.md
