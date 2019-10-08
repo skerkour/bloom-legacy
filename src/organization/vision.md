@@ -361,7 +361,7 @@ for proofreading (of the [French version](/blog/bloom-un-google-libre-et-open-so
  And to all the other enthusiasts of sharing without whom it would not have been possible.
 
 
- ## In summary
+## In summary
 
 In summary the master plan is as follows:
 
@@ -374,6 +374,7 @@ In summary the master plan is as follows:
 **Our values​​?** Cooperation, Acuity, Transparency, Simplicity (CATS 🐱).
 
 Roadmap:
+
 * 2018 - Failed to find our <a href="/blog/the-just-cause-and-the-infinite-game/" target="_blank" rel="noopener">THE *why?*</a>
 * Q1 / Q2 2019 - <a href="https://bloom.sh" target="_blank" rel="noopener">Beta</a>
 * Q3 2019 - <a href="https://www.inkandswitch.com/local-first.html" target="_blank" rel="noopener">Offline first</a> + self-hosting
