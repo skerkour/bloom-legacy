@@ -36,7 +36,6 @@ image = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
 base64 = "0.10.1"
 mime = "0.3"
-url = "1.7"
 zip = "0.5"
 walkdir = "2"
 

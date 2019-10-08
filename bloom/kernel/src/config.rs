@@ -6,7 +6,6 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::{BufRead, BufReader};
-use url::Url;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 struct ConfigFile {
@@ -119,33 +118,12 @@ impl From<ConfigFile> for Config {
 
 impl Config {
     pub fn validate(&self) -> Result<(), BloomError> {
-        // phaser and bitflow secret length
-        if self.phaser.secret.len() < 64 {
-            return Err(BloomError::Validation(
-                "Phaser secret length must be at least 64.".to_string(),
-            ));
-        }
-        if self.bitflow.secret.len() < 64 {
-            return Err(BloomError::Validation(
-                "Bitflow secret length must be at least 64.".to_string(),
-            ));
-        }
+        bloom_validators::config::phaser_secret(&self.phaser.secret)?;
+        bloom_validators::config::bitflow_secret(&self.bitflow.secret)?;
 
-        // host have scheme
-        let parsed_host =
-            Url::parse(&self.host).map_err(|err| BloomError::UrlParseError(err.to_string()))?;
-        if parsed_host.scheme().is_empty() {
-            return Err(BloomError::Validation(
-                "Host musht have a URL scheme. eg. http://localhost:8080.".to_string(),
-            ));
-        }
+        bloom_validators::config::host(&self.host)?;
+        bloom_validators::config::db_url(&self.database.url)?;
 
-        // others are not empty
-        if self.database.url.is_empty() {
-            return Err(BloomError::Validation(
-                "Database URL must not be empty.".to_string(),
-            ));
-        }
         return Ok(());
     }
 }
