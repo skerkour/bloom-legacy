@@ -98,3 +98,15 @@ class AuthGuiSignIn {
     return data;
   }
 }
+
+class AuthSignOut {
+  AuthSignOut();
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'type': 'auth.sign_out',
+      'data': <String, dynamic>{},
+    };
+    return data;
+  }
+}

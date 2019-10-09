@@ -43,8 +43,10 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import store from '@/store';
+import { Mutations } from '@/store';
+import { Native, Message } from '@/native';
 
+const { log } = require('@bloom42/astro');
 
 @Component
 export default class SignInForm extends Vue {
@@ -62,8 +64,27 @@ export default class SignInForm extends Vue {
   // watch
   // methods
   async signIn() {
-    store.commit('sign_in');
-    this.$router.push({ path: '/' });
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'auth.gui.sign_in',
+      data: {
+        username: this.username,
+        password: this.password,
+      },
+    };
+
+    try {
+      const res = await Native.call(message);
+      log.debug('success');
+      log.debug(res);
+      this.$store.commit(Mutations.SIGN_IN.toString());
+      this.$router.push({ path: '/' });
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   lowercaseUsername() {

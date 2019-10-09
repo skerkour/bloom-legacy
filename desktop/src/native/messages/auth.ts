@@ -1,9 +1,8 @@
 /* eslint-disable camelcase */
 
-export interface GuiRegistrationStart {
+export interface RegistrationStart {
   email: string,
   display_name: string,
-  password: string,
 }
 
 export interface RegistrationStarted {
@@ -15,7 +14,13 @@ export interface RegistrationVerify {
   code: string,
 }
 
-export interface RegistrationComplete{
+export interface GuiRegistrationComplete {
   id: string,
   username: string,
+  password: string,
+}
+
+export interface GuiSignIn {
+  username: string,
+  password: string,
 }

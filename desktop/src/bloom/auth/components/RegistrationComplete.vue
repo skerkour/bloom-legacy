@@ -9,16 +9,28 @@
         </p>
       </v-flex>
 
-      <v-flex xs12 sm6 offset-sm3>
+      <v-flex xs12 sm8 offset-sm2>
         <v-text-field
           v-model="username"
           label="Your username"
           :rules="usernameRules"
           :disabled="isLoading"
-          outlined
           prefix="@"
           @keyup="usernameLower"
           @keyup.enter.native="completeRegistration"
+        />
+      </v-flex>
+
+      <v-flex xs12 sm8 offset-sm2>
+        <v-text-field
+          label="Password"
+          v-model="password"
+          :rules="passwordRules"
+          :type="showPassword ? 'text' : 'password'"
+          :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
+          @click:append="showPassword = !showPassword"
+          :disabled="isLoading"
+          @keyup.enter.native="register"
         />
       </v-flex>
 
@@ -59,6 +71,12 @@ export default class RegistrationComplete extends Vue {
     (v: string) => !!v || 'Username is required',
     (v: string) => (v && v.length > 3) || 'Username must be at least 4 characters',
   ];
+  password = '';
+  passwordRules = [
+    (v: string) => !!v || 'Password is required',
+    (v: string) => (v && v.length > 7) || 'Password must be at least 8 characters',
+  ];
+  showPassword = false;
 
   // computed
   // lifecycle
@@ -77,16 +95,17 @@ export default class RegistrationComplete extends Vue {
     this.error = '';
     this.isLoading = true;
     const message: Message = {
-      type: 'auth.registration_complete',
+      type: 'auth.gui.registration_complete',
       data: {
         id: this.pendingAccountId,
         username: this.username,
+        password: this.password,
       },
     };
     try {
       const res = await Native.call(message);
       this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
-      console.log('success');
+      log.debug('success');
       log.debug(res);
       this.$router.push({ path: '/' });
     } catch (err) {

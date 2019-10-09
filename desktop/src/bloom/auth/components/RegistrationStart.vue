@@ -24,19 +24,6 @@
         />
       </v-flex>
 
-      <v-flex xs12 sm8 offset-sm2>
-        <v-text-field
-          label="Password"
-          v-model="password"
-          :rules="passwordRules"
-          :type="showPassword ? 'text' : 'password'"
-          :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
-          @click:append="showPassword = !showPassword"
-          :disabled="isLoading"
-          @keyup.enter.native="register"
-        />
-      </v-flex>
-
       <v-flex xs12 text-xs-center v-if="error !== ''">
         <v-alert icon="mdi-alert-circle" type="error">
           {{ error }}
@@ -72,7 +59,6 @@ const config = require('@/config');
 
 @Component
 export default class RegistrationStart extends Vue {
-  showPassword = false;
   displayName = '';
   fulleNameRules = [
     (v: string) => !!v || 'Name is required',
@@ -81,11 +67,6 @@ export default class RegistrationStart extends Vue {
   emailRules = [
     (v: string) => !!v || 'Email is required',
     (v: string) => v.indexOf('@') !== -1 || 'Email is not valid',
-  ];
-  password = '';
-  passwordRules = [
-    (v: string) => !!v || 'Password is required',
-    (v: string) => (v && v.length > 7) || 'Password must be at least 8 characters',
   ];
   isLoading = false;
   isValid = false;
@@ -96,11 +77,10 @@ export default class RegistrationStart extends Vue {
     this.isLoading = true;
     this.error = '';
     const message: Message = {
-      type: 'auth.gui.registration_start',
+      type: 'auth.registration_start',
       data: {
         display_name: this.displayName,
         email: this.email,
-        password: this.password,
       },
     };
     try {
