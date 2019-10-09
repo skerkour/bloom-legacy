@@ -2,14 +2,13 @@ use super::Message;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct StartRegistration {
+pub struct RegistrationStart {
     pub display_name: String,
     pub email: String,
-    pub auth_key: String,
 }
 
-impl From<StartRegistration> for Message {
-    fn from(data: StartRegistration) -> Self {
+impl From<RegistrationStart> for Message {
+    fn from(data: RegistrationStart) -> Self {
         Message::AuthRegistrationStart(data)
     }
 }
@@ -41,6 +40,7 @@ impl From<RegistrationVerify> for Message {
 pub struct RegistrationComplete {
     pub id: uuid::Uuid,
     pub username: String,
+    pub auth_key: String,
 }
 
 impl From<RegistrationComplete> for Message {
@@ -109,15 +109,15 @@ impl From<RevokeSesison> for Message {
 ////////////////////////////////////////////////////////////////////////////////////////////////////
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct GuiRegistrationStart {
-    pub display_name: String,
-    pub email: String,
+pub struct GuiRegistrationComplete {
+    pub id: uuid::Uuid,
+    pub username: String,
     pub password: String,
 }
 
-impl From<GuiRegistrationStart> for Message {
-    fn from(data: GuiRegistrationStart) -> Self {
-        Message::AuthGuiRegistrationStart(data)
+impl From<GuiRegistrationComplete> for Message {
+    fn from(data: GuiRegistrationComplete) -> Self {
+        Message::AuthGuiRegistrationComplete(data)
     }
 }
 

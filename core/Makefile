@@ -24,6 +24,7 @@ re: clean build
 
 test:
 	cargo test
+	cd bloom/auth && cargo test
 
 fmt:
 	cargo fmt

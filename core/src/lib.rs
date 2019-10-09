@@ -12,9 +12,9 @@ pub struct NativeMessage {
 
 pub fn handle_message(message: messages::Message) -> messages::Message {
     let res = match message {
-        messages::Message::AuthGuiRegistrationStart(message) => auth::registration_start(message),
+        messages::Message::AuthRegistrationStart(message) => auth::registration_start(message),
         messages::Message::AuthRegistrationVerify(message) => auth::registration_verify(message),
-        messages::Message::AuthRegistrationComplete(message) => {
+        messages::Message::AuthGuiRegistrationComplete(message) => {
             auth::registration_complete(message)
         }
         // TODO: handle message not implemented

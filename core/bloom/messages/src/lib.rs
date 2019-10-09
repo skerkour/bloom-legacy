@@ -17,7 +17,7 @@ pub enum Message {
 
     // auth
     #[serde(rename = "auth.registration_start")]
-    AuthRegistrationStart(auth::StartRegistration),
+    AuthRegistrationStart(auth::RegistrationStart),
     #[serde(rename = "auth.registration_started")]
     AuthRegistrationStarted(auth::RegistrationStarted),
     #[serde(rename = "auth.registration_verify")]
@@ -35,8 +35,8 @@ pub enum Message {
     #[serde(rename = "auth.revoke_session")]
     AuthRevokeSession(auth::RevokeSesison),
     // auth gui
-    #[serde(rename = "auth.gui.registration_start")]
-    AuthGuiRegistrationStart(auth::GuiRegistrationStart),
+    #[serde(rename = "auth.gui.registration_complete")]
+    AuthGuiRegistrationComplete(auth::GuiRegistrationComplete),
     #[serde(rename = "auth.gui.sign_in")]
     AuthGuiSignIn(auth::GuiSignIn),
 
