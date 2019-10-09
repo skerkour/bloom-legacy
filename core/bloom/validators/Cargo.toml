@@ -11,4 +11,4 @@ bloom_const = { path = "../const" }
 bloom_error = { path = "../error" }
 
 regex = "1"
-url = "1.7"
+url = "2.0"
