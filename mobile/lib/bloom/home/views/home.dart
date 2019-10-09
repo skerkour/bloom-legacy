@@ -104,7 +104,7 @@ class _HomeViewState extends State<HomeView> {
       items: const <BottomNavigationBarItem>[
         BottomNavigationBarItem(
           icon: Icon(Icons.chat),
-          title: Text('Chats'),
+          title: Text('Chat'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
