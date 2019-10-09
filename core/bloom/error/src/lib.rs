@@ -81,18 +81,19 @@ pub enum BloomError {
 // * into message
 impl From<&BloomError> for bloom_messages::kernel::Error {
     fn from(err: &BloomError) -> Self {
-        let code = match err {
-            BloomError::UnknownMessageType => ErrorCode::UKNOWN_MESSAGE_TYPE,
-            _ => ErrorCode::INTERNAL,
-        };
-        let message = match code {
-            ErrorCode::INTERNAL => "Internal error".to_string(),
-            _ => format!("{}", err),
-        };
-
-        bloom_messages::kernel::Error {
-            code: code.to_string(),
-            message,
+        match err {
+            BloomError::UnknownMessageType => bloom_messages::kernel::Error {
+                code: ErrorCode::UKNOWN_MESSAGE_TYPE.to_string(),
+                message: "Unknown message type".to_string(),
+            },
+            BloomError::Unauthorized(message) => bloom_messages::kernel::Error {
+                code: ErrorCode::UNAUTHORIZED.to_string(),
+                message: message.clone(),
+            },
+            _ => bloom_messages::kernel::Error {
+                code: ErrorCode::INTERNAL.to_string(),
+                message: "Internal error".to_string(),
+            },
         }
     }
 }

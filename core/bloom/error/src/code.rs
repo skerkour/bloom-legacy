@@ -3,6 +3,7 @@
 pub enum ErrorCode {
     INTERNAL,
     UKNOWN_MESSAGE_TYPE,
+    UNAUTHORIZED,
 }
 
 impl std::fmt::Display for ErrorCode {
