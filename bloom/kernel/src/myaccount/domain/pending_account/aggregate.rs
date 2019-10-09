@@ -23,7 +23,7 @@ pub struct PendingAccount {
 
     pub email: String,
     pub display_name: String,
-    pub auth_key_hash: String,
+    // pub auth_key_hash: String,
     pub verification_code_hash: String,
     pub trials: i64,
     pub verified: bool,
@@ -40,7 +40,7 @@ impl PendingAccount {
 
             email: String::new(),
             display_name: String::new(),
-            auth_key_hash: String::new(),
+            // auth_key_hash: String::new(),
             verification_code_hash: String::new(),
             trials: 0,
             verified: false,

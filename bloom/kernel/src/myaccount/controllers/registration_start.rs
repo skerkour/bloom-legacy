@@ -7,7 +7,7 @@ use bloom_error::BloomError;
 
 #[derive(Clone, Debug)]
 pub struct StartRegistration {
-    pub message: bloom_messages::auth::StartRegistration,
+    pub message: bloom_messages::auth::RegistrationStart,
     pub config: Config,
 }
 
@@ -30,7 +30,7 @@ impl Handler<StartRegistration> for DbActor {
             let create_cmd = pending_account::Create {
                 display_name: msg.message.display_name.clone(),
                 email: msg.message.email.clone(),
-                auth_key: msg.message.auth_key.clone(),
+                // auth_key: msg.message.auth_key.clone(),
                 config: msg.config.clone(),
             };
             let (new_pending_account, event) =

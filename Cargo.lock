@@ -628,7 +628,7 @@ dependencies = [
 [[package]]
 name = "bloom_const"
 version = "0.1.0"
-source = "git+https://gitlab.com/bloom42/bloom?branch=dev#91620da8bd37c59efe0c324285fbb04a0c57f6ac"
+source = "git+https://gitlab.com/bloom42/bloom?branch=dev#1908ff4c71604d13c248e7527324107cf477c68e"
 dependencies = [
  "crypto42 0.5.3 (git+https://gitlab.com/bloom42/libs/crypto42)",
 ]
@@ -676,7 +676,7 @@ dependencies = [
 [[package]]
 name = "bloom_error"
 version = "0.1.0"
-source = "git+https://gitlab.com/bloom42/bloom?branch=dev#91620da8bd37c59efe0c324285fbb04a0c57f6ac"
+source = "git+https://gitlab.com/bloom42/bloom?branch=dev#1908ff4c71604d13c248e7527324107cf477c68e"
 dependencies = [
  "actix 0.8.3 (registry+https://github.com/rust-lang/crates.io-index)",
  "actix-http 0.2.10 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -756,7 +756,7 @@ dependencies = [
 [[package]]
 name = "bloom_messages"
 version = "0.1.0"
-source = "git+https://gitlab.com/bloom42/bloom?branch=dev#91620da8bd37c59efe0c324285fbb04a0c57f6ac"
+source = "git+https://gitlab.com/bloom42/bloom?branch=dev#1908ff4c71604d13c248e7527324107cf477c68e"
 dependencies = [
  "serde 1.0.101 (registry+https://github.com/rust-lang/crates.io-index)",
  "uuid 0.7.4 (registry+https://github.com/rust-lang/crates.io-index)",
@@ -852,7 +852,7 @@ dependencies = [
 [[package]]
 name = "bloom_validators"
 version = "0.1.0"
-source = "git+https://gitlab.com/bloom42/bloom?branch=dev#91620da8bd37c59efe0c324285fbb04a0c57f6ac"
+source = "git+https://gitlab.com/bloom42/bloom?branch=dev#1908ff4c71604d13c248e7527324107cf477c68e"
 dependencies = [
  "bloom_const 0.1.0 (git+https://gitlab.com/bloom42/bloom?branch=dev)",
  "bloom_error 0.1.0 (git+https://gitlab.com/bloom42/bloom?branch=dev)",

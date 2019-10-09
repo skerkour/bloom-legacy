@@ -177,7 +177,6 @@ table! {
         updated_at -> Timestamptz,
         email -> Text,
         display_name -> Text,
-        auth_key_hash -> Text,
         verification_code_hash -> Text,
         trials -> Int8,
         verified -> Bool,

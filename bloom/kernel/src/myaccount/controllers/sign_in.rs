@@ -39,7 +39,7 @@ impl Handler<SignIn> for DbActor {
                 .for_update()
                 .first(&conn)
                 .map_err(|_| {
-                    BloomError::Unauthorized("Invalid username/password combination".to_string())
+                    BloomError::Forbidden("Invalid username/password combination".to_string())
                 })?;
 
             // verify auth_key
@@ -58,13 +58,13 @@ impl Handler<SignIn> for DbActor {
                 // diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
                 //     .values(&event)
                 //     .execute(&conn)?;
-                return Err(BloomError::Unauthorized(
+                return Err(BloomError::Forbidden(
                     "Invalid username/password combination".to_string(),
                 ));
             }
 
             if account.disabled_at.is_some() {
-                return Err(BloomError::Unauthorized(
+                return Err(BloomError::Forbidden(
                     "Account is disabled. Please contact support.".to_string(),
                 ));
             }

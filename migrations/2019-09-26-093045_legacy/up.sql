@@ -68,7 +68,6 @@ CREATE TABLE kernel_pending_accounts (
     email TEXT NOT NULL,
     display_name TEXT NOT NULL,
 
-    auth_key_hash TEXT NOT NULL,
     verification_code_hash TEXT NOT NULL,
     trials BIGINT NOT NULL,
     verified BOOLEAN NOT NULL,

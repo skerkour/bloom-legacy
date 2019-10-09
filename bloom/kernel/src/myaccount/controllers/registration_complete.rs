@@ -4,7 +4,9 @@ use crate::{
     myaccount::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};
+use bloom_const::myaccount;
 use bloom_error::BloomError;
+use crypto42::kdf::argon2id;
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -48,11 +50,18 @@ impl Handler<CompleteRegistration> for DbActor {
                 .set(&pending_account_to_update)
                 .execute(&conn)?;
 
+            let auth_key_hash = argon2id::hash_password(
+                msg.message.auth_key.as_bytes(),
+                myaccount::PASSWORD_ARGON2_OPSLIMIT,
+                myaccount::PASSWORD_ARGON2_MEMLIMIT,
+            )?
+            .to_string();
+
             // create account
             let create_cmd = account::Create {
                 display_name: pending_account_to_update.display_name.clone(),
                 email: pending_account_to_update.email.clone(),
-                auth_key_hash: pending_account_to_update.auth_key_hash.clone(),
+                auth_key_hash,
                 username: msg.message.username.clone(),
             };
             let (new_account, event) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;

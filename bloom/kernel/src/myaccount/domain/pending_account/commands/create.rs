@@ -12,7 +12,7 @@ use eventsourcing::{Event, EventTs};
 pub struct Create {
     pub display_name: String,
     pub email: String,
-    pub auth_key: String,
+    // pub auth_key: String,
     pub config: Config,
 }
 
@@ -58,12 +58,12 @@ impl eventsourcing::Command for Create {
     ) -> Result<Self::Event, Self::Error> {
         let new_pending_account_id = uuid::Uuid::new_v4();
         let verification_code = utils::random_digit_string(8);
-        let auth_key_hash = argon2id::hash_password(
-            self.auth_key.as_bytes(),
-            myaccount::PASSWORD_ARGON2_OPSLIMIT,
-            myaccount::PASSWORD_ARGON2_MEMLIMIT,
-        )?
-        .to_string();
+        // let auth_key_hash = argon2id::hash_password(
+        //     self.auth_key.as_bytes(),
+        //     myaccount::PASSWORD_ARGON2_OPSLIMIT,
+        //     myaccount::PASSWORD_ARGON2_MEMLIMIT,
+        // )?
+        // .to_string();
         let verification_code_hash = argon2id::hash_password(
             verification_code.as_bytes(),
             myaccount::PENDING_USER_CODE_ARGON2_OPSLIMIT,
@@ -76,7 +76,7 @@ impl eventsourcing::Command for Create {
             id: new_pending_account_id,
             display_name: self.display_name.clone(),
             email: self.email.clone(),
-            auth_key_hash,
+            // auth_key_hash,
             verification_code_hash,
             verification_code,
         });
@@ -90,7 +90,7 @@ pub struct Created {
     pub id: uuid::Uuid,
     pub display_name: String,
     pub email: String,
-    pub auth_key_hash: String,
+    // pub auth_key_hash: String,
     pub verification_code_hash: String,
     pub verification_code: String,
 }
@@ -105,7 +105,7 @@ impl Event for Created {
             updated_at: self.timestamp,
             email: self.email.clone(),
             display_name: self.display_name.clone(),
-            auth_key_hash: self.auth_key_hash.clone(),
+            // auth_key_hash: self.auth_key_hash.clone(),
             verification_code_hash: self.verification_code_hash.clone(),
             trials: 0,
             verified: false,

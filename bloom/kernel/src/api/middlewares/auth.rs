@@ -300,9 +300,7 @@ impl Handler<CheckAuth> for DbActor {
                         .filter(kernel_sessions::dsl::id.eq(msg.session_id))
                         .inner_join(kernel_accounts::table)
                         .first(&conn)
-                        .map_err(|_| {
-                            BloomError::Unauthorized("Session is not valid".to_string())
-                        })?;
+                        .map_err(|_| BloomError::Forbidden("Session is not valid".to_string()))?;
 
                 // verify session token
                 if !argon2id::verify_password(
