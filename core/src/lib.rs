@@ -17,7 +17,8 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::AuthGuiRegistrationComplete(message) => {
             auth::registration_complete(message)
         }
-        // TODO: handle message not implemented
+        messages::Message::AuthGuiSignIn(message) => auth::sign_in(message),
+        messages::Message::AuthSignOut(_) => auth::sign_out(),
         _ => {
             println!("unknown message: {:?}. sending back", &message);
             return messages::kernel::Error {

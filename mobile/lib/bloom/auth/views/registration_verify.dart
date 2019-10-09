@@ -84,7 +84,7 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: _onVerifyButtonPressed,
+        onPressed: isLoading ? null : _onVerifyButtonPressed,
         child: Text(
           'Verify code',
           textAlign: TextAlign.center,

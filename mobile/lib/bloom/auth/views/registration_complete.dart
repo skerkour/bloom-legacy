@@ -1,5 +1,6 @@
 import 'dart:convert';
 
+import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
 import 'package:flutter/foundation.dart';
@@ -26,6 +27,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
       color: Colors.white,
       fontWeight: FontWeight.bold);
   TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
   bool isLoading = false;
   String pendingAccountId;
 
@@ -55,6 +57,13 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
             const SizedBox(
               height: 35.0,
             ),
+            PasswordField(
+              controller: passwordController,
+              labelText: 'Password',
+            ),
+            const SizedBox(
+              height: 35.0,
+            ),
             _buildCompleteButton(context),
             const SizedBox(
               height: 15.0,
@@ -77,7 +86,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: _onCompleteButtonPressed,
+        onPressed: isLoading ? null : _onCompleteButtonPressed,
         child: Text(
           'Complete registration',
           textAlign: TextAlign.center,
@@ -95,6 +104,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     final String message = jsonEncode(AuthGuiRegistrationComplete(
       id: pendingAccountId,
       username: usernameController.text,
+      password: passwordController.text,
     ));
 
     final String res =

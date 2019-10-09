@@ -2,7 +2,6 @@ import 'dart:convert';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/native/messages/auth.dart';
-import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +20,6 @@ class _RegistrationStartState extends State<RegistrationStart> {
       fontWeight: FontWeight.bold);
   bool isLoading = false;
   TextEditingController emailController = TextEditingController();
-  TextEditingController passwordController = TextEditingController();
   TextEditingController displayNameController = TextEditingController();
 
   @override
@@ -50,11 +48,6 @@ class _RegistrationStartState extends State<RegistrationStart> {
               controller: emailController,
               decoration: const InputDecoration(labelText: 'Email'),
             ),
-            const SizedBox(height: 25.0),
-            PasswordField(
-              controller: passwordController,
-              labelText: 'Password',
-            ),
             const SizedBox(
               height: 35.0,
             ),
@@ -80,7 +73,7 @@ class _RegistrationStartState extends State<RegistrationStart> {
       child: MaterialButton(
         minWidth: MediaQuery.of(context).size.width,
         padding: const EdgeInsets.fromLTRB(20.0, 15.0, 20.0, 15.0),
-        onPressed: _onRegisterButtonPressed,
+        onPressed: isLoading ? null : _onRegisterButtonPressed,
         child: Text(
           'Register',
           textAlign: TextAlign.center,
@@ -97,9 +90,8 @@ class _RegistrationStartState extends State<RegistrationStart> {
 
     final String email = emailController.text;
 
-    final String message = jsonEncode(AuthGuiRegistrationStart(
+    final String message = jsonEncode(AuthRegistrationStart(
       displayName: displayNameController.text,
-      password: passwordController.text,
       email: email,
     ));
 
