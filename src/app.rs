@@ -189,7 +189,7 @@ async fn handle_message(
 
 fn must_not_be_authenticated(auth: &Auth) -> Result<(), BloomError> {
     if auth.session.is_some() || auth.account.is_some() || auth.service.is_some() {
-        return Err(BloomError::Unauthorized(
+        return Err(BloomError::Forbidden(
             "Must not be authenticated".to_string(),
         ));
     } else {
@@ -199,7 +199,7 @@ fn must_not_be_authenticated(auth: &Auth) -> Result<(), BloomError> {
 
 fn authentication_required(auth: &Auth) -> Result<(), BloomError> {
     if auth.session.is_none() || auth.account.is_none() {
-        return Err(BloomError::Unauthorized(
+        return Err(BloomError::Forbidden(
             "Authentication required".to_string(),
         ));
     } else {
