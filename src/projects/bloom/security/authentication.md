@@ -1,24 +1,27 @@
 # Authentication
 
-## Goals
+## Requirements
 
-* The server **NEVER** see the plaintext password
-* 512 bits tokens
-* CPU and mamoery hard hashing function
+* The server **NEVER** see the plaintext password, nor any recoverable form
+* at least 512 bits tokens
+* CPU and memory hard hashing function
 
 ## Registration
 
-1. A 512 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
-2. A 256 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
-3. `username` is sent with `auth_key` to server
-4. Server hash `auth_key` to `auth_key_hash` using `crypto42::kdf::argon2id::hash_password`
-5. Server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
-6. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
-7. Both `session_id` and `session_token_hash` are stored in the Database
-8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
-9. Client save both `client_salt` and `auth_token` fot future use
+1. A `display_name` and an `email` is asked to user and sent to server to initiate registration
+2. a 8 digits `verification_code` is sent to `email`
+3. `verification_code` is asked to user and sent to server to be verified
+4. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and a random `client_salt`
+5. A 512 bits key `auth_key` is derived from `pw_key` using `blake2b` from `crypto42::kdf`
+6. `username` is sent with `auth_key` to server
+7. Server hash `auth_key` to `auth_key_hash` using `crypto42::kdf::argon2id::hash_password`
+8. Server generate a random UUIDv4 `session_id` and a 512 bits `session_token`
+9. `session_token` is hashed using `crypto42::kdf::argon2id::hash_password` to product `session_token_hash`
+10. Both `session_id` and `session_token_hash` are stored in the Database
+11. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
+12. Client save both `client_salt` and `auth_token` fot future use
 
-## Signin in
+## Sign in
 
 1. A 256 bits key `pw_key` is derived from `password` using the `argon2id` KDF and the saved `client_salt`
 2. A 512 bits key `auth_key` is derived from `pwd_key` using `blake2b` from `crypto42::kdf`
@@ -32,18 +35,24 @@
 ![architecture](../assets/bloom_auth_sign_in.jpg)
 
 
-## Signin out
+## Sign out
 
-1. client send `com.bloom42.auth.sign_out` message to server
+1. client send `auth.sign_out` message to server
 2. sever DELETE the session associated with the received message
 
 ## Revoking a session
 
-1. client send `com.bloom42.auth.revoke_session` message to the server which contain the `session_id` field.
+1. client send `auth.revoke_session` message to the server which contain the `session_id` field.
 2. sever DELETE the session associated with `session_id`
 
 
 ## Changing the Password
+
+## Changing the Username
+
+Because the `client_salt` is derived from `username`, changing `username` has the same effect as
+changing `password`: all other clients are disconnected.
+
 
 ## Resetting password
 

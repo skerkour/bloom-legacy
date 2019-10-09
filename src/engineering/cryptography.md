@@ -1,5 +1,10 @@
 # Cryptography
 
+*Encryption works. Properly implemented strong crypto systems are one of the few things that you can
+rely on. Unfortunately, endpoint security is so terrifically weak that NSA can frequently find ways around it.*
+Edward Snowden
+
+
 ## Resources
 
 * http://engineering.mindlinksoft.com/end-to-end-encryption-with-the-signal-protocol/
