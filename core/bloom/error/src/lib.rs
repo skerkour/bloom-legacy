@@ -33,9 +33,6 @@ pub enum BloomError {
     #[fail(display = "Not valid: {}", 0)]
     Validation(String),
 
-    #[fail(display = "Unauthorized: {}", 0)]
-    Unauthorized(String),
-
     #[fail(display = "Forbidden: {}", 0)]
     Forbidden(String),
 
@@ -86,8 +83,8 @@ impl From<&BloomError> for bloom_messages::kernel::Error {
                 code: ErrorCode::UKNOWN_MESSAGE_TYPE.to_string(),
                 message: "Unknown message type".to_string(),
             },
-            BloomError::Unauthorized(message) => bloom_messages::kernel::Error {
-                code: ErrorCode::UNAUTHORIZED.to_string(),
+            BloomError::Forbidden(message) => bloom_messages::kernel::Error {
+                code: ErrorCode::FORBIDDEN.to_string(),
                 message: message.clone(),
             },
             _ => bloom_messages::kernel::Error {
