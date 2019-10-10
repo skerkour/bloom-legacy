@@ -38,7 +38,7 @@ cd desktop
 3. in shell 1, go to the `native` directory, export env vars and run `make dev`
 ```sh
 cd native
-export npm_config_target=6.0.10
+export npm_config_target=6.0.12
 export npm_config_arch=x64
 export npm_config_target_arch=x64
 export npm_config_disturl=https://electronjs.org/headers
