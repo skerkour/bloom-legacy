@@ -18,11 +18,12 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::AuthRegistrationVerify(msg) => auth::registration_verify(msg),
         messages::Message::AuthGuiRegistrationComplete(msg) => auth::registration_complete(msg),
         messages::Message::AuthGuiSignIn(msg) => auth::sign_in(msg),
-        messages::Message::AuthSignOut(_) => auth::sign_out(),
+        messages::Message::AuthSignOut(msg) => auth::sign_out(msg),
 
         // notes
-        messages::Message::NotesGuiListNotes(_) => notes::list_notes(),
-        messages::Message::NoteGuiDeleteNote(msg) => notes::delete_note(msg),
+        messages::Message::NotesGuiListNotes(msg) => notes::list_notes(msg),
+        messages::Message::NotesGuiDeleteNote(msg) => notes::delete_note(msg),
+        messages::Message::NotesGuiGetArchive(msg) => notes::get_archive(msg),
 
         // fallback
         _ => {
