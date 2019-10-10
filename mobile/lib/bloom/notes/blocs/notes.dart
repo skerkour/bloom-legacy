@@ -2,13 +2,14 @@ import 'dart:async';
 
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 import 'package:bloom/bloom/notes/models/db/note.dart';
+import 'package:bloom/bloom/notes/models/gui.dart';
 
 class NotesBloc extends BlocBase {
   NotesBloc();
 
-  final StreamController<List<Note>> _notesController =
-      StreamController<List<Note>>.broadcast();
-  Stream<List<Note>> get notesOut => _notesController.stream;
+  final StreamController<List<DBNote>> _notesController =
+      StreamController<List<DBNote>>.broadcast();
+  Stream<List<DBNote>> get notesOut => _notesController.stream;
 
   @override
   void dispose() {
@@ -20,7 +21,7 @@ class NotesBloc extends BlocBase {
   }
 
   Future<void> getArchive() async {
-    _notesController.sink.add(await Note.findArchived());
+    _notesController.sink.add(await Note.find());
   }
 }
 

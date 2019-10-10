@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:bloom/bloom/notes/blocs/note.dart';
 import 'package:bloom/bloom/notes/models/db/note.dart';
+import 'package:bloom/bloom/notes/models/gui.dart';
 import 'package:bloom/bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
@@ -14,7 +15,7 @@ enum NoteViewResult {
 class NoteView extends StatefulWidget {
   const NoteView({this.note});
 
-  final Note note;
+  final DBNote note;
 
   @override
   _NoteState createState() => _NoteState();

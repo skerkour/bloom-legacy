@@ -1,5 +1,11 @@
+import 'dart:convert';
+
 import 'package:bloom/bloom/kernel/blocs/app.dart';
 import 'package:bloom/bloom/kernel/services/db.dart';
+import 'package:bloom/bloom/notes/models/gui.dart';
+import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/native/messages/notes.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
@@ -123,20 +129,31 @@ class Note {
     return this;
   }
 
-  static Future<List<Note>> find() async {
+  static Future<List<DBNote>> find() async {
     // Get a reference to the database.
-    debugPrint('Note.find called');
-    final Database db = await appBloc.db.db;
+    // debugPrint('Note.find called');
+    // final Database db = await appBloc.db.db;
 
-    // Query the table for all The Notes.
-    final List<Map<String, dynamic>> results = await db.query(
-      DB.notesTable,
-      where: 'archived_at IS NULL',
-      orderBy: 'is_pinned DESC, created_at ASC',
-    );
-    debugPrint('fetched: ${results.length} notes');
+    // // Query the table for all The Notes.
+    // final List<Map<String, dynamic>> results = await db.query(
+    //   DB.notesTable,
+    //   where: 'archived_at IS NULL',
+    //   orderBy: 'is_pinned DESC, created_at ASC',
+    // );
+    // debugPrint('fetched: ${results.length} notes');
 
-    return results.map(Note.fromMap).toList();
+    // return results.map(Note.fromMap).toList();
+
+    final String message = jsonEncode(NotesGuiListNotes());
+    final String res = await compute(Note._nativeCall, message);
+    final Map<String, dynamic> jsonMap = jsonDecode(res);
+    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(jsonMap);
+
+    return resMsg.notes;
+  }
+
+  static String _nativeCall(String message) {
+    return coreFfi.call(message);
   }
 
   static Future<List<Note>> findArchived() async {
