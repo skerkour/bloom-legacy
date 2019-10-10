@@ -71,6 +71,10 @@ pub enum BloomError {
 
     #[fail(display = "LettreSmtp: {:?}", 0)]
     LettreSmtp(String),
+
+    #[cfg(feature = "rusqlite")]
+    #[fail(display = "Rusqlite: {:?}", 0)]
+    Rusqlite(rusqlite::Error),
 }
 
 // TODO: improve...
@@ -191,6 +195,13 @@ impl From<lettre_email::error::Error> for BloomError {
 impl From<lettre::smtp::error::Error> for BloomError {
     fn from(err: lettre::smtp::error::Error) -> Self {
         BloomError::LettreSmtp(format!("{:?}", err))
+    }
+}
+
+#[cfg(feature = "rustqlite")]
+impl From<rustqlite::Error> for BloomError {
+    fn from(err: rustqlite::Error) -> Self {
+        BloomError::Rusqlite(err)
     }
 }
 
