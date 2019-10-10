@@ -24,7 +24,6 @@ dependencies:
   path: ^1.6.2
   intl: ^0.15.8
   share: ^0.6.1
-  uuid: ^2.0.2
   permission_handler: '^3.2.0'
   contacts_service: ^0.2.8
   ffi: ^0.1.1

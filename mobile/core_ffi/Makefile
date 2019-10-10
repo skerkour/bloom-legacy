@@ -1,4 +1,4 @@
-.PHONY: build build_debug clean dev
+.PHONY: build build_debug clean  fmt
 
 all: build
 
@@ -18,3 +18,6 @@ build_debug:
 
 dev:
 	cargo watch -s 'make build_debug'
+
+fmt:
+	cargo fmt

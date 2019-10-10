@@ -1,7 +1,6 @@
 import 'dart:async';
 
 import 'package:bloom/bloom/notes/blocs/note.dart';
-import 'package:bloom/bloom/notes/models/db/note.dart';
 import 'package:bloom/bloom/notes/models/gui.dart';
 import 'package:bloom/bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
@@ -36,7 +35,7 @@ class _NoteState extends State<NoteView> {
       _bloc ?? _bloc.save(_titleController.text, _bodyController.text);
     });
 
-    final Note note = widget.note ?? Note();
+    final DBNote note = widget.note ?? DBNote();
 
     _bloc = NoteBloc(note: note);
 
@@ -72,12 +71,12 @@ class _NoteState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<Note>(
+    return StreamBuilder<DBNote>(
         initialData: _bloc.note,
         stream: _bloc.noteStream,
-        builder: (BuildContext context, AsyncSnapshot<Note> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<DBNote> snapshot) {
           if (snapshot.hasData) {
-            final Note note = snapshot.data;
+            final DBNote note = snapshot.data;
             return WillPopScope(
               child: Scaffold(
                 appBar: AppBar(
@@ -99,7 +98,7 @@ class _NoteState extends State<NoteView> {
         });
   }
 
-  Widget _buildBody(BuildContext ctx, Note note) {
+  Widget _buildBody(BuildContext ctx, DBNote note) {
     return Container(
         color: note.color,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
@@ -148,7 +147,7 @@ class _NoteState extends State<NoteView> {
         ));
   }
 
-  List<Widget> _buildAppBarActions(BuildContext context, Note note) {
+  List<Widget> _buildAppBarActions(BuildContext context, DBNote note) {
     final List<Widget> list = <Widget>[
       IconButton(
         icon: Container(
@@ -183,7 +182,7 @@ class _NoteState extends State<NoteView> {
     return actions;
   }
 
-  void _bottomSheet(BuildContext context, Note note) {
+  void _bottomSheet(BuildContext context, DBNote note) {
     showModalBottomSheet<MoreOptionsSheet>(
       context: context,
       builder: (BuildContext ctx) {

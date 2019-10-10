@@ -2,7 +2,6 @@ import 'package:bloom/bloom/kernel/blocs/app.dart';
 import 'package:bloom/bloom/kernel/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 class Contact {
   //   Note({
@@ -80,7 +79,7 @@ class Contact {
     final Database db = await appBloc.db.db;
 
     final Contact contact = Contact(name: name ?? '', deviceId: deviceId);
-    contact.id = Uuid().v4();
+    // contact.id = Uuid().v4();
 
     final Map<String, dynamic> data = contact.toMap();
     debugPrint('contact: $data');

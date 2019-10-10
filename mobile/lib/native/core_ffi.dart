@@ -1,6 +1,7 @@
 import 'dart:ffi' as ffi;
 
 import 'package:ffi/ffi.dart';
+import 'package:flutter/foundation.dart';
 
 typedef RusthandleMessageFunction = ffi.Pointer<Utf8> Function(
     ffi.Pointer<Utf8>);
@@ -20,6 +21,7 @@ class _Native {
 
   String call(String message) {
     final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
+    debugPrint('cmessage: $cMessage');
 
     final ffi.Pointer<Utf8> res = _handleMessage(cMessage);
     cMessage.free();

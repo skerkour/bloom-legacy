@@ -25,14 +25,15 @@ class DBNote {
   bool isPinned;
 
   static DBNote fromJson(Map<String, dynamic> json) {
+    final String archivedAt = json['archived_at'];
     return DBNote(
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: json['created_at'],
-      updatedAt: json['updated_at'],
-      color: json['color'],
-      archivedAt: json['archived_at'],
+      createdAt: DateTime.parse(json['created_at']),
+      updatedAt: DateTime.parse(json['updated_at']),
+      color: Color(json['color']),
+      archivedAt: archivedAt == null ? null : DateTime.parse(archivedAt),
       isPinned: json['is_pinned'],
     );
   }

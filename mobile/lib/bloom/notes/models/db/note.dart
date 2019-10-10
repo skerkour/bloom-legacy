@@ -8,7 +8,6 @@ import 'package:bloom/native/messages/notes.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:uuid/uuid.dart';
 
 class Note {
   Note({
@@ -82,21 +81,25 @@ class Note {
     }
   }
 
-  static Future<Note> create(String title, String body, Color color) async {
+  static Future<DBNote> create(String title, String body, Color color) async {
     // Get a reference to the database
     debugPrint('Note.create called');
-    final Database db = await appBloc.db.db;
+    // final Database db = await appBloc.db.db;
 
-    final Note note = Note(title: title, body: body, color: color);
-    note.id = Uuid().v4();
-    note.createdAt = DateTime.now();
-    note.updatedAt = DateTime.now();
+    // final Note note = Note(title: title, body: body, color: color);
+    // note.id = Uuid().v4();
+    // note.createdAt = DateTime.now();
+    // note.updatedAt = DateTime.now();
 
-    final Map<String, dynamic> data = note.toMap();
-    debugPrint('note: $data');
-    // Insert the Note into the correct table.
-    await db.insert(DB.notesTable, data);
-    return note;
+    final Map<String, dynamic> res = await compute(
+        Note._nativeCall, NotesGuiCreateNote(title, body, color.value));
+    final NotesGuiNoteCreated ret = NotesGuiNoteCreated.fromJson(res);
+
+    // final Map<String, dynamic> data = note.toMap();
+    // debugPrint('note: $data');
+    // // Insert the Note into the correct table.
+    // await db.insert(DB.notesTable, data);
+    return ret.note;
   }
 
   Future<Note> update() async {
@@ -144,17 +147,19 @@ class Note {
 
     // return results.map(Note.fromMap).toList();
 
-    final String message = jsonEncode(NotesGuiListNotes());
-    final String res = await compute(Note._nativeCall, message);
-    debugPrint(res);
-    final Map<String, dynamic> jsonMap = jsonDecode(res);
-    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(jsonMap);
+    final Map<String, dynamic> res =
+        await compute(Note._nativeCall, NotesGuiListNotes());
+    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(res);
 
     return resMsg.notes;
   }
 
-  static String _nativeCall(String message) {
-    return coreFfi.call(message);
+  static Map<String, dynamic> _nativeCall<T>(T message) {
+    final String jsonPayload = jsonEncode(message);
+    debugPrint('input: $jsonPayload');
+    final String res = coreFfi.call(jsonPayload);
+    debugPrint('output: $res');
+    return jsonDecode(res);
   }
 
   static Future<List<DBNote>> findArchived() async {
@@ -169,10 +174,9 @@ class Note {
     //   orderBy: 'is_pinned DESC, created_at ASC',
     // );
 
-    final String message = jsonEncode(NotesGuiListNotes());
-    final String res = await compute(Note._nativeCall, message);
-    final Map<String, dynamic> jsonMap = jsonDecode(res);
-    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(jsonMap);
+    final Map<String, dynamic> res =
+        await compute(Note._nativeCall, NotesGuiListNotes());
+    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(res);
     final List<DBNote> results = resMsg.notes;
 
     debugPrint('fetched: ${results.length} notes');
