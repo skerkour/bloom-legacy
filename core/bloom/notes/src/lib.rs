@@ -40,3 +40,27 @@ pub fn list_notes() -> Result<Message, BloomError> {
 
     return Ok(ret);
 }
+
+pub fn delete_note(input: notes::GuiDeleteNote) -> Result<Message, BloomError> {
+    let conn = Connection::open_in_memory()?;
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS notes (
+        id TEXT PRIMARY KEY NOT NULL,
+        created_at INTEGER NOT NULL,
+        updated_at INTEGER NOT NULL,
+        archived_at INTEGER,
+        title TEXT NOT NULL,
+        body TEXT NOT NULL,
+        color INTEGER NOT NULL,
+        is_pinned INTEGER
+    )",
+        NO_PARAMS,
+    )?;
+
+    conn.execute("DELETE FROM notes WHERE id = $1", &[input.id])?;
+
+    let ret: Message = bloom_messages::kernel::Empty {}.into();
+
+    return Ok(ret);
+}
