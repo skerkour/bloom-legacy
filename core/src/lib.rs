@@ -14,16 +14,15 @@ pub struct NativeMessage {
 pub fn handle_message(message: messages::Message) -> messages::Message {
     let res = match message {
         // auth
-        messages::Message::AuthRegistrationStart(message) => auth::registration_start(message),
-        messages::Message::AuthRegistrationVerify(message) => auth::registration_verify(message),
-        messages::Message::AuthGuiRegistrationComplete(message) => {
-            auth::registration_complete(message)
-        }
-        messages::Message::AuthGuiSignIn(message) => auth::sign_in(message),
+        messages::Message::AuthRegistrationStart(msg) => auth::registration_start(msg),
+        messages::Message::AuthRegistrationVerify(msg) => auth::registration_verify(msg),
+        messages::Message::AuthGuiRegistrationComplete(msg) => auth::registration_complete(msg),
+        messages::Message::AuthGuiSignIn(msg) => auth::sign_in(msg),
         messages::Message::AuthSignOut(_) => auth::sign_out(),
 
         // notes
         messages::Message::NotesGuiListNotes(_) => notes::list_notes(),
+        messages::Message::NoteGuiDeleteNote(msg) => notes::delete_note(msg),
 
         // fallback
         _ => {
