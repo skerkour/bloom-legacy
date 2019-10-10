@@ -156,20 +156,26 @@ class Note {
     return coreFfi.call(message);
   }
 
-  static Future<List<Note>> findArchived() async {
+  static Future<List<DBNote>> findArchived() async {
     // Get a reference to the database.
     debugPrint('Note.findArchived called');
-    final Database db = await appBloc.db.db;
+    // final Database db = await appBloc.db.db;
 
-    // Query the table for all The archived Notes.
-    final List<Map<String, dynamic>> results = await db.query(
-      DB.notesTable,
-      where: 'archived_at IS NOT NULL',
-      orderBy: 'is_pinned DESC, created_at ASC',
-    );
+    // // Query the table for all The archived Notes.
+    // final List<Map<String, dynamic>> results = await db.query(
+    //   DB.notesTable,
+    //   where: 'archived_at IS NOT NULL',
+    //   orderBy: 'is_pinned DESC, created_at ASC',
+    // );
+
+    final String message = jsonEncode(NotesGuiListNotes());
+    final String res = await compute(Note._nativeCall, message);
+    final Map<String, dynamic> jsonMap = jsonDecode(res);
+    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(jsonMap);
+    final List<DBNote> results = resMsg.notes;
 
     debugPrint('fetched: ${results.length} notes');
 
-    return results.map(Note.fromMap).toList();
+    return results;
   }
 }

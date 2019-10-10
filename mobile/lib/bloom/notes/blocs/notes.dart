@@ -21,7 +21,7 @@ class NotesBloc extends BlocBase {
   }
 
   Future<void> getArchive() async {
-    _notesController.sink.add(await Note.find());
+    _notesController.sink.add(await Note.findArchived());
   }
 }
 

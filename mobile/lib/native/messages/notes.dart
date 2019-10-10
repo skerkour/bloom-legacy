@@ -1,5 +1,4 @@
 import 'package:bloom/bloom/notes/models/gui.dart';
-import 'package:flutter/cupertino.dart';
 
 class NotesGuiListNotes {
   NotesGuiListNotes();
@@ -7,6 +6,18 @@ class NotesGuiListNotes {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'type': 'notes.gui.list_notes',
+      'data': <String, dynamic>{},
+    };
+    return data;
+  }
+}
+
+class NotesGetArchive {
+  NotesGetArchive();
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'type': 'notes.gui.get_archive',
       'data': <String, dynamic>{},
     };
     return data;
