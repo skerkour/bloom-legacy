@@ -19,12 +19,10 @@ class _NotesDrawerState extends State<NotesDrawer> {
             title: const Text('Notes'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push<dynamic>(
+              Navigator.pushNamedAndRemoveUntil(
                 context,
-                MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => const NotesView(),
-                ),
-                // (Route<dynamic> route) => false,
+                '/notes',
+                (Route<dynamic> route) => route.settings.name == '/',
               );
             },
           ),
@@ -33,12 +31,13 @@ class _NotesDrawerState extends State<NotesDrawer> {
             title: const Text('Archive'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.push<dynamic>(
+              Navigator.pushAndRemoveUntil<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) =>
                       const NotesView(archive: true),
                 ),
+                (Route<dynamic> route) => route.settings.name == '/notes',
               );
             },
           ),
