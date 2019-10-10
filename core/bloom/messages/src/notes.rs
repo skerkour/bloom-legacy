@@ -30,6 +30,12 @@ from_message!(GuiGetArchive, Message::NotesGuiGetArchive);
 pub struct GuiCreateNote {
     pub title: String,
     pub body: String,
-    pub color: i32,
+    pub color: i64,
 }
 from_message!(GuiCreateNote, Message::NotesGuiCreateNote);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiNoteCreated {
+    pub note: notes::db::Note,
+}
+from_message!(GuiNoteCreated, Message::NotesGuiNoteCreated);

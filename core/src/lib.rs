@@ -12,6 +12,10 @@ pub struct NativeMessage {
 }
 
 pub fn handle_message(message: messages::Message) -> messages::Message {
+    // use log::Level;
+    // use log::debug;
+    // android_logger::init_once(android_logger::Config::default().with_min_level(Level::Trace));
+    // debug!("Rust handle message");
     let res = match message {
         // auth
         messages::Message::AuthRegistrationStart(msg) => auth::registration_start(msg),
@@ -24,6 +28,7 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::NotesGuiListNotes(msg) => notes::list_notes(msg),
         messages::Message::NotesGuiDeleteNote(msg) => notes::delete_note(msg),
         messages::Message::NotesGuiGetArchive(msg) => notes::get_archive(msg),
+        messages::Message::NotesGuiCreateNote(msg) => notes::create_note(msg),
 
         // fallback
         _ => {

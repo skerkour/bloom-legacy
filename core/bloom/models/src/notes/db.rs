@@ -8,6 +8,6 @@ pub struct Note {
     pub archived_at: Option<chrono::DateTime<chrono::Utc>>,
     pub title: String,
     pub body: String,
-    pub color: i32,
+    pub color: i64,
     pub is_pinned: bool,
 }

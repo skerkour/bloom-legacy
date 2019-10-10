@@ -1,8 +1,7 @@
 use bloom_error::BloomError;
 use bloom_messages::{notes, Message};
 use bloom_models::notes::db;
-use rusqlite::types::ToSql;
-use rusqlite::{Connection, NO_PARAMS};
+use rusqlite::{params, Connection, NO_PARAMS};
 
 pub fn list_notes(_: notes::GuiListNotes) -> Result<Message, BloomError> {
     let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
@@ -10,9 +9,9 @@ pub fn list_notes(_: notes::GuiListNotes) -> Result<Message, BloomError> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
             id TEXT PRIMARY KEY NOT NULL,
-            created_at INTEGER NOT NULL,
-            updated_at INTEGER NOT NULL,
-            archived_at INTEGER,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            archived_at TEXT,
             title TEXT NOT NULL,
             body TEXT NOT NULL,
             color INTEGER NOT NULL,
@@ -50,9 +49,9 @@ pub fn get_archive(_: notes::GuiGetArchive) -> Result<Message, BloomError> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
             id TEXT PRIMARY KEY NOT NULL,
-            created_at INTEGER NOT NULL,
-            updated_at INTEGER NOT NULL,
-            archived_at INTEGER,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            archived_at TEXT,
             title TEXT NOT NULL,
             body TEXT NOT NULL,
             color INTEGER NOT NULL,
@@ -88,9 +87,9 @@ pub fn delete_note(input: notes::GuiDeleteNote) -> Result<Message, BloomError> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
         id TEXT PRIMARY KEY NOT NULL,
-        created_at INTEGER NOT NULL,
-        updated_at INTEGER NOT NULL,
-        archived_at INTEGER,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        archived_at TEXT,
         title TEXT NOT NULL,
         body TEXT NOT NULL,
         color INTEGER NOT NULL,
@@ -99,7 +98,7 @@ pub fn delete_note(input: notes::GuiDeleteNote) -> Result<Message, BloomError> {
         NO_PARAMS,
     )?;
 
-    conn.execute("DELETE FROM notes WHERE id = $1", &[input.id])?;
+    conn.execute("DELETE FROM notes WHERE id = ?", params![input.id])?;
 
     let ret: Message = bloom_messages::kernel::Empty {}.into();
 
@@ -112,9 +111,9 @@ pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
         id TEXT PRIMARY KEY NOT NULL,
-        created_at INTEGER NOT NULL,
-        updated_at INTEGER NOT NULL,
-        archived_at INTEGER,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        archived_at TEXT,
         title TEXT NOT NULL,
         body TEXT NOT NULL,
         color INTEGER NOT NULL,
@@ -134,12 +133,13 @@ pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
         color: input.color,
         is_pinned: false,
     };
+
     conn.execute(
         "INSERT INTO notes (id, created_at, updated_at, archived_at, title, body, color, is_pinned)
-                  VALUES (?1, ?2, ?3, ?4, ?5, ?6, ?7, ?8)",
-        &[
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        params![
             &note.id,
-            &note.created_at as &dyn ToSql,
+            &note.created_at,
             &note.updated_at,
             &note.archived_at,
             &note.title,
@@ -149,7 +149,7 @@ pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
         ],
     )?;
 
-    let ret: Message = bloom_messages::kernel::Empty {}.into();
+    let ret: Message = notes::GuiNoteCreated { note }.into();
 
     return Ok(ret);
 }
