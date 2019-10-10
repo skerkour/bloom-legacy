@@ -3,7 +3,6 @@ const {
   BrowserWindow,
   Tray,
   Menu,
-  globalShortcut,
 } = require('electron');
 const config = require('./config');
 
@@ -98,3 +97,12 @@ app.on('activate', () => {
     createWindow();
   }
 });
+
+// const { Native } = require('./native/main');
+
+// ipcMain.handle('message', async (event, someArgument) => {
+//   console.log('IPCMain received: ', someArgument);
+//   const res = await Native.call(someArgument);
+//   console.log('IPCMain response received: ', res);
+//   return res;
+// });

@@ -7,11 +7,11 @@ import vuetify from '@/plugins/vuetify';
 const { log, Level } = require('@bloom42/astro');
 
 
-if (process.env === 'development') {
+if (process.env.NODE_ENV === 'development') {
   Vue.config.productionTip = true;
 } else {
   Vue.config.productionTip = false;
-  if (process.env === 'production') {
+  if (process.env.NODE_ENV === 'production') {
     log.config({ level: Level.INFO });
   }
 }
