@@ -1,4 +1,4 @@
-use super::Message;
+use super::{from_message, Message};
 use bloom_models::notes;
 use serde::{Deserialize, Serialize};
 
@@ -8,20 +8,16 @@ use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GuiListNotes {}
-
-impl From<GuiListNotes> for Message {
-    fn from(data: GuiListNotes) -> Self {
-        Message::NotesGuiListNotes(data)
-    }
-}
+from_message!(GuiListNotes, Message::NotesGuiListNotes);
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GuiNotes {
     pub notes: Vec<notes::db::Note>,
 }
+from_message!(GuiNotes, Message::NotesGuiNotes);
 
-impl From<GuiNotes> for Message {
-    fn from(data: GuiNotes) -> Self {
-        Message::NotesGuiNotes(data)
-    }
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiDeleteNote {
+    pub id: String,
 }
+from_message!(GuiDeleteNote, Message::NoteGuiDeleteNote);

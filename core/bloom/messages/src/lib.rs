@@ -48,7 +48,21 @@ pub enum Message {
     NotesGuiListNotes(notes::GuiListNotes),
     #[serde(rename = "notes.gui.notes")]
     NotesGuiNotes(notes::GuiNotes),
+    #[serde(rename = "notes.gui.delete_note")]
+    NoteGuiDeleteNote(notes::GuiDeleteNote),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),
+}
+
+/// A macro to make it easy to create From impls for Message
+#[macro_export]
+macro_rules! from_message {
+    ($t:ty, $m:expr) => {
+        impl From<$t> for Message {
+            fn from(data: $t) -> Message {
+                $m(data)
+            }
+        }
+    };
 }
