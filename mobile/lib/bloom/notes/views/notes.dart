@@ -1,5 +1,4 @@
 import 'package:bloom/bloom/notes/blocs/notes.dart';
-import 'package:bloom/bloom/notes/models/db/note.dart';
 import 'package:bloom/bloom/notes/models/gui.dart';
 import 'package:bloom/bloom/notes/views/note.dart';
 import 'package:bloom/bloom/notes/widgets/drawer.dart';

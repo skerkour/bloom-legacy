@@ -146,6 +146,7 @@ class Note {
 
     final String message = jsonEncode(NotesGuiListNotes());
     final String res = await compute(Note._nativeCall, message);
+    debugPrint(res);
     final Map<String, dynamic> jsonMap = jsonDecode(res);
     final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(jsonMap);
 

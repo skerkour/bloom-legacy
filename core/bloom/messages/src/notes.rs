@@ -20,4 +20,16 @@ from_message!(GuiNotes, Message::NotesGuiNotes);
 pub struct GuiDeleteNote {
     pub id: String,
 }
-from_message!(GuiDeleteNote, Message::NoteGuiDeleteNote);
+from_message!(GuiDeleteNote, Message::NotesGuiDeleteNote);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiGetArchive {}
+from_message!(GuiGetArchive, Message::NotesGuiGetArchive);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiCreateNote {
+    pub title: String,
+    pub body: String,
+    pub color: i32,
+}
+from_message!(GuiCreateNote, Message::NotesGuiCreateNote);

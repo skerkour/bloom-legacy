@@ -49,7 +49,11 @@ pub enum Message {
     #[serde(rename = "notes.gui.notes")]
     NotesGuiNotes(notes::GuiNotes),
     #[serde(rename = "notes.gui.delete_note")]
-    NoteGuiDeleteNote(notes::GuiDeleteNote),
+    NotesGuiDeleteNote(notes::GuiDeleteNote),
+    #[serde(rename = "notes.gui.get_archive")]
+    NotesGuiGetArchive(notes::GuiGetArchive),
+    #[serde(rename = "notes.gui.create_note")]
+    NotesGuiCreateNote(notes::GuiCreateNote),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),

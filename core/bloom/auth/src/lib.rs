@@ -89,7 +89,7 @@ pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
     return Ok(ret);
 }
 
-pub fn sign_out() -> Result<Message, BloomError> {
+pub fn sign_out(_: auth::SignOut) -> Result<Message, BloomError> {
     let message: Message = auth::SignOut {}.into();
 
     let client = reqwest::Client::new();
