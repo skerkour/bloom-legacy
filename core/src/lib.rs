@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub use bloom_auth as auth;
 pub use bloom_error as error;
 pub use bloom_messages as messages;
+pub use bloom_notes as notes;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NativeMessage {
@@ -12,6 +13,7 @@ pub struct NativeMessage {
 
 pub fn handle_message(message: messages::Message) -> messages::Message {
     let res = match message {
+        // auth
         messages::Message::AuthRegistrationStart(message) => auth::registration_start(message),
         messages::Message::AuthRegistrationVerify(message) => auth::registration_verify(message),
         messages::Message::AuthGuiRegistrationComplete(message) => {
@@ -19,6 +21,11 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         }
         messages::Message::AuthGuiSignIn(message) => auth::sign_in(message),
         messages::Message::AuthSignOut(_) => auth::sign_out(),
+
+        // notes
+        messages::Message::NotesGuiListNotes(_) => notes::list_notes(),
+
+        // fallback
         _ => {
             println!("unknown message: {:?}. sending back", &message);
             return messages::kernel::Error {

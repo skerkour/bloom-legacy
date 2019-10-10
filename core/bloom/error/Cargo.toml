@@ -24,7 +24,7 @@ image = { version = "*", optional = true }
 actix = { version = "0.8", optional = true }
 actix-http = { version = "*", optional = true }
 r2d2 = { version = "*", optional = true }
-rusqlite = { version = "*", optional = true }
+rusqlite = { version = "*", optional = true, features = ["bundled", "chrono"] }
 
 
 [features]

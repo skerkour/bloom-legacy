@@ -7,18 +7,24 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-bloom_auth = { path = "bloom/auth" }
 bloom_messages = { path = "bloom/messages" }
 bloom_error = { path = "bloom/error" }
+bloom_auth = { path = "bloom/auth" }
+bloom_notes = { path = "bloom/notes" }
+
 
 serde = { version = "1.0", features = ["derive"] }
 
 
 [workspace]
 members = [
-    "bloom/auth",
     "bloom/messages",
     "bloom/error",
     "bloom/validators",
     "bloom/const",
+    "bloom/models",
+
+    # services
+    "bloom/auth",
+    "bloom/notes",
 ]

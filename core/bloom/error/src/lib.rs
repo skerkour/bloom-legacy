@@ -77,6 +77,18 @@ pub enum BloomError {
     Rusqlite(rusqlite::Error),
 }
 
+// see https://github.com/turtl/core-rs/blob/9b2d93285ce07f1bb6de829a0dfc99a0bb382f71/clouseau/src/lib.rs
+// /// A macro to make it easy to create From impls for CError
+// macro_rules! from_err {
+//     ($t:ty) => (
+//         impl From<$t> for BloomError {
+//             fn from(err: $t) -> CError {
+//                 CError::Boxed(Box::new(err))
+//             }
+//         }
+//     )
+// }
+
 // TODO: improve...
 // TODO(z0mbie42):
 // * into message
@@ -198,9 +210,9 @@ impl From<lettre::smtp::error::Error> for BloomError {
     }
 }
 
-#[cfg(feature = "rustqlite")]
-impl From<rustqlite::Error> for BloomError {
-    fn from(err: rustqlite::Error) -> Self {
+#[cfg(feature = "rusqlite")]
+impl From<rusqlite::Error> for BloomError {
+    fn from(err: rusqlite::Error) -> Self {
         BloomError::Rusqlite(err)
     }
 }

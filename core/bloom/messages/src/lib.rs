@@ -1,8 +1,11 @@
 use serde::{Deserialize, Serialize};
 
-pub mod auth;
 pub mod kernel;
 pub mod to_remove;
+
+// services
+pub mod auth;
+pub mod notes;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 #[serde(tag = "type", content = "data")]
@@ -39,6 +42,12 @@ pub enum Message {
     AuthGuiRegistrationComplete(auth::GuiRegistrationComplete),
     #[serde(rename = "auth.gui.sign_in")]
     AuthGuiSignIn(auth::GuiSignIn),
+
+    // notes gui
+    #[serde(rename = "notes.gui.list_notes")]
+    NotesGuiListNotes(notes::GuiListNotes),
+    #[serde(rename = "notes.gui.notes")]
+    NotesGuiNotes(notes::GuiNotes),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),
