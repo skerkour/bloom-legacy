@@ -1,7 +1,8 @@
 <template>
   <v-dialog
     v-model="show"
-    @keydown.esc="show = false"
+    @keydown.esc="close()"
+    @click:outside="close()"
     scrollable
     width="50%"
     :fullscreen="$vuetify.breakpoint.smAndDown"
@@ -19,25 +20,54 @@
           {{ error }}
         </v-alert>
         <v-textarea
-          ref="notebody"
           v-model="body"
           placeholder="Take a note..."
           auto-grow
           color="white"
+          autofocus
         ></v-textarea>
       </v-card-text>
 
-      <!-- <v-card-actions>
-        <v-spacer></v-spacer>
-        <v-btn text @click="close" :disabled="isLoading">Cancel</v-btn>
-        <v-btn
-          color="primary"
-          :loading="isLoading"
-          @click="save"
+      <v-card-actions v-if="note">
+        <v-spacer />
+
+        <v-tooltip
+          bottom
+          v-if="note.is_pinned"
         >
-          Save
-        </v-btn>
-      </v-card-actions> -->
+          <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            icon
+            slot="activator"
+            color="blue-grey"
+            @click="unpinNote(note)"
+            v-on="on"
+          >
+            <v-icon>mdi-pin</v-icon>
+          </v-btn>
+          </template>
+          <span>Unpin</span>
+        </v-tooltip>
+        <v-tooltip
+          bottom
+          v-else
+        >
+        <template v-slot:activator="{ on }">
+          <v-btn
+            text
+            icon
+            slot="activator"
+            color="blue-grey"
+            @click="pinNote(note)"
+            v-on="on"
+          >
+            <v-icon>mdi-pin-outline</v-icon>
+          </v-btn>
+        </template>
+          <span>Pin</span>
+        </v-tooltip>
+      </v-card-actions>
     </v-card>
   </v-dialog>
 </template>
@@ -74,8 +104,8 @@ export default class NoteDialog extends Vue {
 
   set show(value) {
     if (!value) {
-      this.save();
-      this.$emit('close');
+      // this.save();
+      this.$emit('closed');
     }
   }
 
@@ -120,7 +150,7 @@ export default class NoteDialog extends Vue {
     };
     try {
       const res = await Native.call(message);
-      this.$emit('create', (res.data as GuiNote).note);
+      this.$emit('created', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -142,7 +172,7 @@ export default class NoteDialog extends Vue {
     };
     try {
       const res = await Native.call(message);
-      this.$emit('update', (res.data as GuiNote).note);
+      this.$emit('updated', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -150,12 +180,55 @@ export default class NoteDialog extends Vue {
     }
   }
 
-  close() {
+  async close() {
+    await this.save();
     if (this.note === null) {
       this.title = '';
       this.body = '';
     }
     this.show = false;
+  }
+
+  async pinNote() {
+    this.error = '';
+    this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.is_pinned = true;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiNote).note);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async unpinNote() {
+    this.error = '';
+    this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.is_pinned = false;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiNote).note);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>

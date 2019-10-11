@@ -1,5 +1,5 @@
 <template>
-  <blm-notes />
+  <blm-notes archive />
 </template>
 
 

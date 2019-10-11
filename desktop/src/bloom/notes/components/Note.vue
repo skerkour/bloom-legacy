@@ -4,24 +4,24 @@
       <v-card-title
         primary-title
         @click="update"
-        class="pointer"
+        class="blm-pointer"
       >
         <div class="headline">{{ note.title }}</div>
       </v-card-title>
       <v-card-text
         @click="update"
-        class="pointer"
+        class="blm-pointer"
       >
         <p class="blm-note-body">{{ note.body }}</p>
       </v-card-text>
       <v-divider light></v-divider>
       <v-card-actions>
         <v-spacer />
+
         <v-tooltip
           bottom
           v-if="note.archived_at === null"
         >
-          <!--  && note.removed_at == null" -->
           <template v-slot:activator="{ on }">
           <v-btn
             text
@@ -38,10 +38,9 @@
         </v-tooltip>
         <v-tooltip
           bottom
-          v-else-if="note.archived_at !== null"
+          v-else
         >
         <template v-slot:activator="{ on }">
-          <!-- // && note.removed_at == null" -->
           <v-btn
             text
             icon
@@ -55,36 +54,45 @@
         </template>
           <span>Unarchive</span>
         </v-tooltip>
-        <!-- <v-tooltip
+
+
+        <v-tooltip
           bottom
-          v-if="note.removed_at === null"
+          v-if="note.is_pinned"
         >
+          <template v-slot:activator="{ on }">
           <v-btn
             text
             icon
             slot="activator"
             color="blue-grey"
-            @click="removeNote(note)"
+            @click="unpinNote(note)"
+            v-on="on"
           >
-            <v-icon>mdi-delete</v-icon>
+            <v-icon>mdi-pin</v-icon>
           </v-btn>
-          <span>Delete</span>
+          </template>
+          <span>Unpin</span>
         </v-tooltip>
         <v-tooltip
           bottom
           v-else
         >
+        <template v-slot:activator="{ on }">
           <v-btn
             text
             icon
             slot="activator"
             color="blue-grey"
-            @click="restoreNote(note)"
+            @click="pinNote(note)"
+            v-on="on"
           >
-            <v-icon>mdi-delete-restore</v-icon>
+            <v-icon>mdi-pin-outline</v-icon>
           </v-btn>
-          <span>Restore</span>
-        </v-tooltip> -->
+        </template>
+          <span>Pin</span>
+        </v-tooltip>
+
         <v-tooltip bottom>
           <template v-slot:activator="{ on: tooltip }">
           <v-menu slot="activator">
@@ -114,8 +122,8 @@
     <blm-notes-dialog-note
       :visible="dialog"
       :note="note"
-      @close="dialogClosed"
-      @update="noteUpdated"
+      @closed="dialogClosed"
+      @updated="noteUpdated"
     />
   </div>
 </template>
@@ -148,10 +156,17 @@ export default class Note extends Vue {
   async archiveNote() {
     this.error = '';
     this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.archived_at = new Date().toISOString() as unknown as Date;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
     try {
-      // await api.post(`${api.NOTES}/v1/notes/${this.note.id}/archive`);
-      // this.$emit('archive', this.note);
-      console.log('archiveNote');
+      const res = await Native.call(message);
+      this.$emit('archived', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -162,10 +177,17 @@ export default class Note extends Vue {
   async unarchiveNote() {
     this.error = '';
     this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.archived_at = null;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
     try {
-      // await api.post(`${api.NOTES}/v1/notes/${this.note.id}/unarchive`);
-      // this.$emit('unarchive', this.note);
-      console.log('unarchiveNote');
+      const res = await Native.call(message);
+      this.$emit('unarchived', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -173,13 +195,20 @@ export default class Note extends Vue {
     }
   }
 
-  async removeNote() {
+  async pinNote() {
     this.error = '';
     this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.is_pinned = true;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
     try {
-      // await api.post(`${api.NOTES}/v1/notes/${this.note.id}/remove`);
-      // this.$emit('remove', this.note);
-      console.log('removeNote');
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -187,13 +216,20 @@ export default class Note extends Vue {
     }
   }
 
-  async restoreNote() {
+  async unpinNote() {
     this.error = '';
     this.isLoading = true;
+    const note = { ...this.note } as NoteModel;
+    note.is_pinned = false;
+    const message: Message = {
+      type: 'notes.gui.update_note',
+      data: {
+        note,
+      },
+    };
     try {
-      // await api.post(`${api.NOTES}/v1/notes/${this.note.id}/restore`);
-      // this.$emit('restore', this.note);
-      console.log('restoreNote');
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiNote).note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -212,7 +248,7 @@ export default class Note extends Vue {
     };
     try {
       const res = await Native.call(message);
-      this.$emit('delete', this.note);
+      this.$emit('deleted', this.note);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -229,7 +265,7 @@ export default class Note extends Vue {
   }
 
   noteUpdated(note: any) {
-    this.$emit('update', note);
+    this.$emit('updated', note);
   }
 }
 </script>

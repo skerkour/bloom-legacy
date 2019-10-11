@@ -1,12 +1,14 @@
+/* eslint-disable camelcase */
+
 export interface Note {
   id: string,
   title: string,
   body: string,
-  createdAt: Date,
-  updatedAt: Date,
+  created_at: Date,
+  updated_at: Date,
   color: number,
-  archivedAt: Date | null,
-  isPinned: boolean,
+  archived_at: Date | null,
+  is_pinned: boolean,
 }
 
 export interface GuiNote {

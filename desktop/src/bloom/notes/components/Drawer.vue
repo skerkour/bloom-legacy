@@ -19,15 +19,6 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item exact link to="/notes/trash">
-      <v-list-item-icon>
-        <v-icon>mdi-delete</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Trash</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
   </v-list>
 </template>
 

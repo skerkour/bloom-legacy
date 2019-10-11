@@ -1,0 +1,140 @@
+<template>
+  <div>
+    <v-container fluid grid-list-lg>
+      <v-layout align-center justify-center v-if="!archive">
+        <v-flex xs12 sm6>
+          <v-text-field placeholder="Take a note..." solo @click="openNoteDialog" readonly/>
+        </v-flex>
+      </v-layout>
+      <v-layout row wrap justify-left class="mt-1">
+        <v-flex v-for="note in notes" :key="note.id" xs12 sm4 md3>
+          <blm-notes-note
+            :note="note"
+            @archived="noteArchived"
+            @unarchived="noteUnarchived"
+            @updated="noteUpdated"
+            @deleted="noteDeleted"
+          />
+        </v-flex>
+    </v-layout>
+    </v-container>
+
+  <blm-notes-dialog-note
+    :visible="noteDialog"
+    @closed="noteDialogClosed"
+    @created="noteCreated"
+  />
+  </div>
+</template>
+
+
+<script lang="ts">
+import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Native, Message } from '@/native';
+import Note from './Note.vue';
+import NoteDialog from './NoteDialog.vue';
+import { Note as NoteModel, GuiNotes } from '@/native/messages/notes';
+
+const { log } = require('@bloom42/astro');
+
+@Component({
+  components: {
+    'blm-notes-dialog-note': NoteDialog,
+    'blm-notes-note': Note,
+  },
+})
+export default class Index extends Vue {
+  // props
+  @Prop({ type: Boolean, default: false }) archive!: boolean;
+
+  // data
+  error = '';
+  isLoading = false;
+  notes: NoteModel[] = [];
+  noteDialog = false;
+
+  // computed
+  // lifecycle
+  async created() {
+    if (this.archive) {
+      this.fetchArchive();
+    } else {
+      this.fetchNotes();
+    }
+  }
+
+  async fetchNotes() {
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'notes.gui.list_notes',
+      data: {},
+    };
+    try {
+      const res = await Native.call(message);
+      this.notes = (res.data as GuiNotes).notes;
+    } catch (err) {
+      log.error(err);
+    }
+  }
+
+  async fetchArchive() {
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'notes.gui.get_archive',
+      data: {},
+    };
+    try {
+      const res = await Native.call(message);
+      this.notes = (res.data as GuiNotes).notes;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  // watch
+  // methods
+  openNoteDialog() {
+    this.noteDialog = true;
+  }
+
+  noteDialogClosed() {
+    this.noteDialog = false;
+  }
+
+  noteCreated(note: NoteModel) {
+    this.notes = [note, ...this.notes];
+  }
+
+  noteUpdated(updatedNote: NoteModel) {
+    const pos = this.notes.map((note: NoteModel) => note.id).indexOf(updatedNote.id);
+    this.notes.splice(pos, 1);
+    this.notes = [updatedNote, ...this.notes];
+    // this.notes = this.notes.map((note: any) => {
+    //   if (note.id === updatedNote.id) {
+    //     return updatedNote;
+    //   }
+    //   return note;
+    // });
+  }
+
+  noteArchived(archivedNote: NoteModel) {
+    this.notes = this.notes.filter((note: NoteModel) => note.id !== archivedNote.id);
+  }
+
+  noteUnarchived(unarchivedNote: NoteModel) {
+    this.notes = this.notes.filter((note: NoteModel) => note.id !== unarchivedNote.id);
+  }
+
+  noteDeleted(deletedNote: NoteModel) {
+    this.notes = this.notes.filter((note: NoteModel) => note.id !== deletedNote.id);
+  }
+}
+</script>
+
+
+<style lang="scss" scoped>
+</style>

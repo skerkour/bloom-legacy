@@ -25,6 +25,7 @@ export type Message =
   | { 'type': 'auth.sign_out', 'data': {} }
   // notes
   | { 'type': 'notes.gui.list_notes', 'data': {} }
+  | { 'type': 'notes.gui.get_archive', 'data': {} }
   | { 'type': 'notes.gui.notes', 'data': GuiNotes }
   | { 'type': 'notes.gui.note', 'data': GuiNote }
   | { 'type': 'notes.gui.create_note', 'data': GuiCreateNote }
