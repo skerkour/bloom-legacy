@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:bloom/bloom/notes/blocs/note.dart';
-import 'package:bloom/bloom/notes/models/gui.dart';
+import 'package:bloom/bloom/notes/models/note.dart';
 import 'package:bloom/bloom/notes/widgets/bottom_sheet.dart';
 import 'package:flutter/material.dart';
 import 'package:share/share.dart';
@@ -14,7 +14,7 @@ enum NoteViewResult {
 class NoteView extends StatefulWidget {
   const NoteView({this.note});
 
-  final DBNote note;
+  final Note note;
 
   @override
   _NoteState createState() => _NoteState();
@@ -35,7 +35,7 @@ class _NoteState extends State<NoteView> {
       _bloc ?? _bloc.save(_titleController.text, _bodyController.text);
     });
 
-    final DBNote note = widget.note ?? DBNote();
+    final Note note = widget.note ?? Note();
 
     _bloc = NoteBloc(note: note);
 
@@ -71,12 +71,12 @@ class _NoteState extends State<NoteView> {
 
   @override
   Widget build(BuildContext context) {
-    return StreamBuilder<DBNote>(
+    return StreamBuilder<Note>(
         initialData: _bloc.note,
         stream: _bloc.noteStream,
-        builder: (BuildContext context, AsyncSnapshot<DBNote> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<Note> snapshot) {
           if (snapshot.hasData) {
-            final DBNote note = snapshot.data;
+            final Note note = snapshot.data;
             return WillPopScope(
               child: Scaffold(
                 appBar: AppBar(
@@ -98,7 +98,7 @@ class _NoteState extends State<NoteView> {
         });
   }
 
-  Widget _buildBody(BuildContext ctx, DBNote note) {
+  Widget _buildBody(BuildContext ctx, Note note) {
     return Container(
         color: note.color,
         padding: const EdgeInsets.only(left: 16, right: 16, top: 12),
@@ -147,7 +147,7 @@ class _NoteState extends State<NoteView> {
         ));
   }
 
-  List<Widget> _buildAppBarActions(BuildContext context, DBNote note) {
+  List<Widget> _buildAppBarActions(BuildContext context, Note note) {
     final List<Widget> list = <Widget>[
       IconButton(
         icon: Container(
@@ -182,7 +182,7 @@ class _NoteState extends State<NoteView> {
     return actions;
   }
 
-  void _bottomSheet(BuildContext context, DBNote note) {
+  void _bottomSheet(BuildContext context, Note note) {
     showModalBottomSheet<MoreOptionsSheet>(
       context: context,
       builder: (BuildContext ctx) {

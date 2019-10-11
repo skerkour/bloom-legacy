@@ -1,5 +1,5 @@
 import 'package:bloom/bloom/notes/blocs/notes.dart';
-import 'package:bloom/bloom/notes/models/gui.dart';
+import 'package:bloom/bloom/notes/models/note.dart';
 import 'package:bloom/bloom/notes/views/note.dart';
 import 'package:bloom/bloom/notes/widgets/drawer.dart';
 import 'package:bloom/bloom/notes/widgets/staggered_tile.dart';
@@ -43,9 +43,9 @@ class _NotesState extends State<NotesView> {
       appBar: AppBar(
         title: Text(_archive ? 'Archive' : 'Notes'),
       ),
-      body: StreamBuilder<List<DBNote>>(
+      body: StreamBuilder<List<Note>>(
         stream: _bloc.notesOut,
-        builder: (BuildContext context, AsyncSnapshot<List<DBNote>> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<List<Note>> snapshot) {
           if (snapshot.hasData) {
             return _buildBody(context, snapshot.data);
           } else {
@@ -63,7 +63,7 @@ class _NotesState extends State<NotesView> {
     );
   }
 
-  Widget _buildBody(BuildContext ctx, List<DBNote> notes) {
+  Widget _buildBody(BuildContext ctx, List<Note> notes) {
     return Container(
       child: Padding(
         padding: _paddingForView(context),
@@ -85,7 +85,7 @@ class _NotesState extends State<NotesView> {
     return MediaQuery.of(context).size.width > 600 ? 3 : 2;
   }
 
-  List<StaggeredTile> _tilesForView(List<DBNote> notes) {
+  List<StaggeredTile> _tilesForView(List<Note> notes) {
     // Generate staggered tiles for the view based on the current preference.
     return List<StaggeredTile>.generate(notes.length, (int index) {
       return const StaggeredTile.fit(1);

@@ -1,4 +1,4 @@
-import 'package:bloom/bloom/notes/models/gui.dart';
+import 'models/note.dart';
 
 class NotesGuiListNotes {
   NotesGuiListNotes();
@@ -27,12 +27,11 @@ class NotesGetArchive {
 class NotesGuiNotes {
   NotesGuiNotes({this.notes});
 
-  final List<DBNote> notes;
+  final List<Note> notes;
 
   static NotesGuiNotes fromJson(Map<String, dynamic> json) {
     final List<dynamic> list = json['data']['notes'];
-    final List<DBNote> notes =
-        list.map((dynamic i) => DBNote.fromJson(i)).toList();
+    final List<Note> notes = list.map((dynamic i) => Note.fromJson(i)).toList();
     return NotesGuiNotes(notes: notes);
   }
 }
@@ -60,10 +59,10 @@ class NotesGuiCreateNote {
 class NotesGuiNote {
   NotesGuiNote({this.note});
 
-  final DBNote note;
+  final Note note;
 
   static NotesGuiNote fromJson(Map<String, dynamic> json) {
-    final DBNote note = DBNote.fromJson(json['data']['note']);
+    final Note note = Note.fromJson(json['data']['note']);
     return NotesGuiNote(note: note);
   }
 }
@@ -71,7 +70,7 @@ class NotesGuiNote {
 class NotesGuiUpdateNote {
   NotesGuiUpdateNote(this.note);
 
-  final DBNote note;
+  final Note note;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{

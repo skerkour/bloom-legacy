@@ -1,11 +1,11 @@
-import 'package:bloom/bloom/notes/models/gui.dart';
+import 'package:bloom/bloom/notes/models/note.dart';
 import 'package:bloom/libs/auto_size_text/auto_size_text.dart';
 import 'package:bloom/bloom/notes/views/note.dart';
 import 'package:flutter/material.dart';
 
 class BlmStaggeredTile extends StatefulWidget {
   const BlmStaggeredTile({this.note});
-  final DBNote note;
+  final Note note;
 
   @override
   _MyStaggeredTileState createState() => _MyStaggeredTileState();

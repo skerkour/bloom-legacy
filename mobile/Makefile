@@ -6,7 +6,6 @@ build:
 
 lint:
 	flutter analyze
-	make -C core_ffi lint
 
 dev:
 	flutter run
