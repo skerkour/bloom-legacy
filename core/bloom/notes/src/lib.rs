@@ -4,7 +4,12 @@ use bloom_models::notes::db;
 use rusqlite::{params, Connection, NO_PARAMS};
 
 pub fn list_notes(_: notes::GuiListNotes) -> Result<Message, BloomError> {
-    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+    let contents = std::fs::read_to_string("/proc/self/cmdline")?;
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    std::fs::create_dir_all(&db_dir)?;
+    let db_path = format!("{}/bloom42.db", &db_dir);
+    let conn = Connection::open(&db_path)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
@@ -44,7 +49,12 @@ pub fn list_notes(_: notes::GuiListNotes) -> Result<Message, BloomError> {
 }
 
 pub fn get_archive(_: notes::GuiGetArchive) -> Result<Message, BloomError> {
-    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+    let contents = std::fs::read_to_string("/proc/self/cmdline")?;
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    std::fs::create_dir_all(&db_dir)?;
+    let db_path = format!("{}/bloom42.db", &db_dir);
+    let conn = Connection::open(&db_path)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
@@ -82,7 +92,12 @@ pub fn get_archive(_: notes::GuiGetArchive) -> Result<Message, BloomError> {
 }
 
 pub fn delete_note(input: notes::GuiDeleteNote) -> Result<Message, BloomError> {
-    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+    let contents = std::fs::read_to_string("/proc/self/cmdline")?;
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    std::fs::create_dir_all(&db_dir)?;
+    let db_path = format!("{}/bloom42.db", &db_dir);
+    let conn = Connection::open(&db_path)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
@@ -106,7 +121,12 @@ pub fn delete_note(input: notes::GuiDeleteNote) -> Result<Message, BloomError> {
 }
 
 pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
-    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+    let contents = std::fs::read_to_string("/proc/self/cmdline")?;
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    std::fs::create_dir_all(&db_dir)?;
+    let db_path = format!("{}/bloom42.db", &db_dir);
+    let conn = Connection::open(&db_path)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (
@@ -155,7 +175,12 @@ pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
 }
 
 pub fn update_note(input: notes::GuiUpdateNote) -> Result<Message, BloomError> {
-    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+    let contents = std::fs::read_to_string("/proc/self/cmdline")?;
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    std::fs::create_dir_all(&db_dir)?;
+    let db_path = format!("{}/bloom42.db", &db_dir);
+    let conn = Connection::open(&db_path)?;
 
     conn.execute(
         "CREATE TABLE IF NOT EXISTS notes (

@@ -12,6 +12,15 @@ pub unsafe extern "C" fn core_handle_message(message_char: *const c_char) -> *co
     use log::{debug, error};
     android_logger::init_once(android_logger::Config::default().with_min_level(Level::Trace));
     debug!("Rust core_handle_message");
+    debug!(
+        "current dir: {:?}",
+        std::env::current_dir().expect("error getting currentdir")
+    );
+    let contents = std::fs::read_to_string("/proc/self/cmdline")
+        .expect("Something went wrong reading the file");
+    let contents = contents.trim_end_matches('\x00');
+    let db_dir = format!("/data/data/{}/databases", &contents);
+    debug!("DB_DIR: {}", db_dir);
     let c_str: &CStr = CStr::from_ptr(message_char);
 
     let message_in: bloom_core::messages::Message =

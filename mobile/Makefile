@@ -1,7 +1,8 @@
 .PHONY: lint fmt fmt_check test icon dev build
 
 build:
-	flutter build apk --release
+	make -C core_ffi build
+	flutter build apk --release --target-platform android-arm,android-arm64 --split-per-abi
 
 lint:
 	flutter analyze

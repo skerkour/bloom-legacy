@@ -10,6 +10,15 @@ build:
 	i686-linux-android-strip -s target/i686-linux-android/release/libcore_ffi.so
 	cp target/i686-linux-android/release/libcore_ffi.so ../android/app/src/main/jniLibs/x86/libcore_ffi.so
 
+	cargo build --target armv7-linux-androideabi --release
+	arm-linux-androideabi-strip -s target/armv7-linux-androideabi/release/libcore_ffi.so
+	cp target/armv7-linux-androideabi/release/libcore_ffi.so ../android/app/src/main/jniLibs/armeabi-v7a/libcore_ffi.so
+
+	cargo build --target aarch64-linux-android --release
+	aarch64-linux-android-strip -s target/aarch64-linux-android/release/libcore_ffi.so
+	cp target/aarch64-linux-android/release/libcore_ffi.so ../android/app/src/main/jniLibs/arm64-v8a/libcore_ffi.so
+
+
 build_debug:
 	cargo build --target i686-linux-android
 	cp target/i686-linux-android/debug/libcore_ffi.so ../android/app/src/main/jniLibs/x86/libcore_ffi.so
