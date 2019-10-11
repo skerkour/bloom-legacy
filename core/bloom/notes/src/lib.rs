@@ -15,7 +15,7 @@ fn home_dir() -> String {
 fn home_dir() -> String {
     let home = dirs::home_dir();
     match home {
-        Some(res) => res.to_str().unwrap().to_string(),
+        Some(res) => format!("{}/.bloom", res.to_str().unwrap()),
         None => "".to_string(),
     }
 }
