@@ -3,7 +3,6 @@ use bloom_messages::{notes, Message};
 use bloom_models::notes::db;
 use rusqlite::{params, Connection, NO_PARAMS};
 
-
 #[cfg(target_os = "android")]
 fn home_dir() -> String {
     let contents = std::fs::read_to_string("/proc/self/cmdline").unwrap();
