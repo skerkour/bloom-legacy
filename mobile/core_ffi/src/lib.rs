@@ -7,11 +7,21 @@ pub extern "C" fn double_input(input: u64) -> u64 {
 }
 
 #[no_mangle]
-pub extern "C" fn core_handle_message(message_char: *const c_char) -> *const c_char {
-    let c_str: &CStr = unsafe { CStr::from_ptr(message_char) };
+pub unsafe extern "C" fn core_handle_message(message_char: *const c_char) -> *const c_char {
+    use log::Level;
+    use log::{debug, error};
+    android_logger::init_once(android_logger::Config::default().with_min_level(Level::Trace));
+    debug!("Rust core_handle_message");
+    let c_str: &CStr = CStr::from_ptr(message_char);
 
     let message_in: bloom_core::messages::Message =
-        serde_json::from_str(c_str.to_str().expect("lol1")).expect("lol2");
+        match serde_json::from_str(c_str.to_str().expect("lol1")) {
+            Ok(res) => res,
+            Err(err) => {
+                error!("error deserialazing json: {}", err);
+                panic!("error deserialazing json");
+            }
+        };
     let message_out = bloom_core::handle_message(message_in);
     let message_out = serde_json::to_string(&message_out).expect("lol3");
 
@@ -21,11 +31,9 @@ pub extern "C" fn core_handle_message(message_char: *const c_char) -> *const c_c
 }
 
 #[no_mangle]
-pub extern "C" fn core_free(s: *mut c_char) {
-    unsafe {
-        if s.is_null() {
-            return;
-        }
-        CString::from_raw(s)
-    };
+pub unsafe extern "C" fn core_free(s: *mut c_char) {
+    if s.is_null() {
+        return;
+    }
+    CString::from_raw(s);
 }

@@ -57,13 +57,45 @@ class NotesGuiCreateNote {
   }
 }
 
-class NotesGuiNoteCreated {
-  NotesGuiNoteCreated({this.note});
+class NotesGuiNote {
+  NotesGuiNote({this.note});
 
   final DBNote note;
 
-  static NotesGuiNoteCreated fromJson(Map<String, dynamic> json) {
+  static NotesGuiNote fromJson(Map<String, dynamic> json) {
     final DBNote note = DBNote.fromJson(json['data']['note']);
-    return NotesGuiNoteCreated(note: note);
+    return NotesGuiNote(note: note);
+  }
+}
+
+class NotesGuiUpdateNote {
+  NotesGuiUpdateNote(this.note);
+
+  final DBNote note;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'type': 'notes.gui.update_note',
+      'data': <String, dynamic>{
+        'note': note.toJson(),
+      },
+    };
+    return data;
+  }
+}
+
+class NotesGuiDeleteNote {
+  NotesGuiDeleteNote(this.id);
+
+  final String id;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'type': 'notes.gui.delete_note',
+      'data': <String, dynamic>{
+        'id': id,
+      },
+    };
+    return data;
   }
 }

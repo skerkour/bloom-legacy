@@ -1,4 +1,4 @@
-.PHONY: build build_debug clean  fmt
+.PHONY: build build_debug clean fmt lint
 
 all: build
 
@@ -21,3 +21,6 @@ dev:
 
 fmt:
 	cargo fmt
+
+lint:
+	cargo clippy -- -D warnings -A clippy::needless_return

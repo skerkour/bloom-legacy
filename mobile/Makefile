@@ -5,12 +5,14 @@ build:
 
 lint:
 	flutter analyze
+	make -C core_ffi lint
 
 dev:
 	flutter run
 
 fmt:
 	flutter format lib/**
+	make -C core_ffi fmt
 
 fmt_check:
 	flutter format -n lib/**

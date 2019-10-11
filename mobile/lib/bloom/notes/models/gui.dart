@@ -10,10 +10,7 @@ class DBNote {
     this.updatedAt,
     this.archivedAt,
     this.isPinned = false,
-  }) {
-    createdAt = DateTime.now();
-    updatedAt = DateTime.now();
-  }
+  });
 
   String id;
   String title;
@@ -30,11 +27,27 @@ class DBNote {
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: DateTime.parse(json['created_at']),
-      updatedAt: DateTime.parse(json['updated_at']),
+      createdAt: DateTime.parse(json['created_at']).toUtc(),
+      updatedAt: DateTime.parse(json['updated_at']).toUtc(),
       color: Color(json['color']),
-      archivedAt: archivedAt == null ? null : DateTime.parse(archivedAt),
+      archivedAt:
+          archivedAt == null ? null : DateTime.parse(archivedAt).toUtc(),
       isPinned: json['is_pinned'],
     );
+  }
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'id': id,
+      'title': title,
+      'body': body,
+      'created_at': createdAt.toUtc().toIso8601String(),
+      'updated_at': updatedAt.toUtc().toIso8601String(),
+      'color': color.value,
+      'archived_at':
+          archivedAt == null ? null : archivedAt.toUtc().toIso8601String(),
+      'is_pinned': isPinned,
+    };
+    return data;
   }
 }
