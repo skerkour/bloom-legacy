@@ -149,7 +149,52 @@ pub fn create_note(input: notes::GuiCreateNote) -> Result<Message, BloomError> {
         ],
     )?;
 
-    let ret: Message = notes::GuiNoteCreated { note }.into();
+    let ret: Message = notes::GuiNote { note }.into();
+
+    return Ok(ret);
+}
+
+pub fn update_note(input: notes::GuiUpdateNote) -> Result<Message, BloomError> {
+    let conn = Connection::open("/data/data/com.bloom42.bloom/databases/bloom42.db")?;
+
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS notes (
+        id TEXT PRIMARY KEY NOT NULL,
+        created_at TEXT NOT NULL,
+        updated_at TEXT NOT NULL,
+        archived_at TEXT,
+        title TEXT NOT NULL,
+        body TEXT NOT NULL,
+        color INTEGER NOT NULL,
+        is_pinned INTEGER
+    )",
+        NO_PARAMS,
+    )?;
+
+    let mut note = input.note;
+    note.updated_at = chrono::Utc::now();
+
+    conn.execute(
+        "UPDATE notes SET
+            updated_at = ?,
+            archived_at = ?,
+            title = ?,
+            body = ?,
+            color = ?,
+            is_pinned = ?
+        WHERE id = ?",
+        params![
+            &note.updated_at,
+            &note.archived_at,
+            &note.title,
+            &note.body,
+            &note.color,
+            &note.is_pinned,
+            &note.id,
+        ],
+    )?;
+
+    let ret: Message = notes::GuiNote { note }.into();
 
     return Ok(ret);
 }

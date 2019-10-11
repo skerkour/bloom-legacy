@@ -48,14 +48,16 @@ pub enum Message {
     NotesGuiListNotes(notes::GuiListNotes),
     #[serde(rename = "notes.gui.notes")]
     NotesGuiNotes(notes::GuiNotes),
+    #[serde(rename = "notes.gui.note")]
+    NotesGuiNote(notes::GuiNote),
     #[serde(rename = "notes.gui.delete_note")]
     NotesGuiDeleteNote(notes::GuiDeleteNote),
     #[serde(rename = "notes.gui.get_archive")]
     NotesGuiGetArchive(notes::GuiGetArchive),
     #[serde(rename = "notes.gui.create_note")]
     NotesGuiCreateNote(notes::GuiCreateNote),
-    #[serde(rename = "notes.gui.note_created")]
-    NotesGuiNoteCreated(notes::GuiNoteCreated),
+    #[serde(rename = "notes.gui.update_note")]
+    NotesGuiUpdateNote(notes::GuiUpdateNote),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),

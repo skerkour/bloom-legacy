@@ -35,7 +35,13 @@ pub struct GuiCreateNote {
 from_message!(GuiCreateNote, Message::NotesGuiCreateNote);
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct GuiNoteCreated {
+pub struct GuiNote {
     pub note: notes::db::Note,
 }
-from_message!(GuiNoteCreated, Message::NotesGuiNoteCreated);
+from_message!(GuiNote, Message::NotesGuiNote);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiUpdateNote {
+    pub note: notes::db::Note,
+}
+from_message!(GuiUpdateNote, Message::NotesGuiUpdateNote);
