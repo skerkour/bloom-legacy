@@ -12,7 +12,7 @@ variables:
   # Rust (core)
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
   RUST_ENV: test
-  RUST_VERSION: nightly-2019-09-13
+  RUST_VERSION: nightly-2019-10-13
   RUST_BACKTRACE: 1
 
   # Flutter (mobile)
