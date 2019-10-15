@@ -8,11 +8,11 @@ Bloom use the following platforms to develop it's products:
 
 ## Rust
 
-1. Install [Rust](https://rustup.rs/)
+1. Install [Rustup](https://rustup.rs/)
 
 2. Use our pinned Rust version
 ```sh
-$ rustup default nightly-2019-09-13
+$ rustup default nightly-2019-10-13
 # rustup component add clippy rls rust-analysis rust-src rustfmt
 ```
 
