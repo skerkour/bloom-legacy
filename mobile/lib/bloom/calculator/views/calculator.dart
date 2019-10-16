@@ -100,7 +100,11 @@ class _CalculatorState extends State<CalculatorView> {
       expr += ' $key ';
     } else if (digits.contains(key)) {
       // Handle as an operand
-      expr += key;
+      if (_result.isNotEmpty) {
+        expr = key;
+      } else {
+        expr += key;
+      }
     } else if (key == 'C') {
       // Delete all characters and reset result
       expr = '';
