@@ -11,12 +11,15 @@ bloom_messages = { path = "bloom/messages" }
 bloom_error = { path = "bloom/error" }
 bloom_auth = { path = "bloom/auth" }
 bloom_notes = { path = "bloom/notes" }
+bloom_calculator = { path = "bloom/calculator" }
 
 serde = { version = "1.0", features = ["derive"] }
 
 
 [workspace]
 members = [
+    "libs/caldyn",
+
     "bloom/messages",
     "bloom/error",
     "bloom/validators",
@@ -26,4 +29,5 @@ members = [
     # services
     "bloom/auth",
     "bloom/notes",
+    "bloom/calculator",
 ]

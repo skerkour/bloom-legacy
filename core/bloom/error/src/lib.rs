@@ -75,6 +75,10 @@ pub enum BloomError {
     #[cfg(feature = "rusqlite")]
     #[fail(display = "Rusqlite: {:?}", 0)]
     Rusqlite(rusqlite::Error),
+
+    #[cfg(feature = "caldyn")]
+    #[fail(display = "Caldyn: {:?}", 0)]
+    Caldyn(caldyn::Error),
 }
 
 // see https://github.com/turtl/core-rs/blob/9b2d93285ce07f1bb6de829a0dfc99a0bb382f71/clouseau/src/lib.rs
@@ -214,6 +218,13 @@ impl From<lettre::smtp::error::Error> for BloomError {
 impl From<rusqlite::Error> for BloomError {
     fn from(err: rusqlite::Error) -> Self {
         BloomError::Rusqlite(err)
+    }
+}
+
+#[cfg(feature = "caldyn")]
+impl From<caldyn::Error> for BloomError {
+    fn from(err: caldyn::Error) -> Self {
+        BloomError::Caldyn(err)
     }
 }
 

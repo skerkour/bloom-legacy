@@ -1,6 +1,7 @@
 use serde::{Deserialize, Serialize};
 
 pub use bloom_auth as auth;
+pub use bloom_calculator as calculator;
 pub use bloom_error as error;
 pub use bloom_messages as messages;
 pub use bloom_notes as notes;
@@ -26,6 +27,9 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::NotesGuiGetArchive(msg) => notes::get_archive(msg),
         messages::Message::NotesGuiCreateNote(msg) => notes::create_note(msg),
         messages::Message::NotesGuiUpdateNote(msg) => notes::update_note(msg),
+
+        // calculator
+        messages::Message::CalculatorGuiExpression(msg) => calculator::evaluate(msg),
 
         // fallback
         _ => {
