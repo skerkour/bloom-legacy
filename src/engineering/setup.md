@@ -13,7 +13,8 @@ Bloom use the following platforms to develop it's products:
 2. Use our pinned Rust version
 ```sh
 $ rustup default nightly-2019-10-13
-# rustup component add clippy rls rust-analysis rust-src rustfmt
+$ rustup component add clippy rls rust-analysis rust-src rustfmt
+$ rustup target add aarch64-linux-android armv7-linux-androideabi i686-linux-android
 ```
 
 3. Install [cargo-watch](https://github.com/passcod/cargo-watch)
