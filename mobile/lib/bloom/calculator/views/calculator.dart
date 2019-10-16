@@ -1,5 +1,9 @@
 // import 'package:bloom/bloom/calculator/widgets/drawer.dart';
-import 'package:bloom/bloom/calculator/widgets/parser.dart';
+import 'dart:convert';
+
+import 'package:bloom/bloom/calculator/native/messages.dart';
+import 'package:bloom/native/core_ffi.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorView extends StatefulWidget {
@@ -80,33 +84,35 @@ class _CalculatorState extends State<CalculatorView> {
         ));
   }
 
-  void _addKey(String key) {
+  Future<void> _addKey(String key) async {
     String expr = _expression;
     String result = '';
-    if (result.isNotEmpty) {
-      expr = '';
-      result = '';
-    }
+    // if (result.isNotEmpty) {
+    //   expr = '';
+    //   result = '';
+    // }
 
     if (operators.contains(key)) {
       // Handle as an operator
       if (expr.isNotEmpty && operators.contains(expr[expr.length - 1])) {
         expr = expr.substring(0, expr.length - 1);
       }
-      expr += key;
+      expr += ' $key ';
     } else if (digits.contains(key)) {
       // Handle as an operand
       expr += key;
     } else if (key == 'C') {
-      // Delete all character
+      // Delete all characters and reset result
       expr = '';
-      // if (expr.isNotEmpty) {
-      //   expr = expr.substring(0, expr.length - 1);
-      // }
+      result = '';
     } else if (key == '=') {
       try {
-        const Parser parser = Parser();
-        result = parser.parseExpression(expr).toString();
+        final Map<String, dynamic> res = await compute(
+          _CalculatorState._nativeCall,
+          CalculatorGuiExpression(expression: expr),
+        );
+        final CalculatorGuiResult ret = CalculatorGuiResult.fromJson(res);
+        result = ret.result;
       } on Error {
         result = 'Error';
       }
@@ -161,4 +167,26 @@ class _CalculatorState extends State<CalculatorView> {
       },
     );
   }
+
+  static Map<String, dynamic> _nativeCall<T>(T message) {
+    final String jsonPayload = jsonEncode(message);
+    debugPrint('input: $jsonPayload');
+    final String res = coreFfi.call(jsonPayload);
+    debugPrint('output: $res');
+    return jsonDecode(res);
+  }
 }
+
+List<String> digits = <String>[
+  '0',
+  '1',
+  '2',
+  '3',
+  '4',
+  '5',
+  '6',
+  '7',
+  '8',
+  '9'
+];
+List<String> operators = <String>['+', '-', '*', '/'];
