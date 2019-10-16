@@ -15,6 +15,11 @@ import {
   GuiDeleteNote,
 } from './notes';
 
+import {
+  GuiExpression,
+  GuiResult,
+} from './calculator';
+
 export type Message =
   // auth
   | { 'type': 'auth.registration_start', 'data': RegistrationStart }
@@ -23,6 +28,7 @@ export type Message =
   | { 'type': 'auth.gui.registration_complete', 'data': GuiRegistrationComplete }
   | { 'type': 'auth.gui.sign_in', 'data': GuiSignIn }
   | { 'type': 'auth.sign_out', 'data': {} }
+
   // notes
   | { 'type': 'notes.gui.list_notes', 'data': {} }
   | { 'type': 'notes.gui.get_archive', 'data': {} }
@@ -31,6 +37,10 @@ export type Message =
   | { 'type': 'notes.gui.create_note', 'data': GuiCreateNote }
   | { 'type': 'notes.gui.update_note', 'data': GuiNote }
   | { 'type': 'notes.gui.delete_note', 'data': GuiDeleteNote }
+
+  // calculator
+  | { 'type': 'calculator.gui.expression', 'data': GuiExpression }
+  | { 'type': 'calculator.gui.result', 'data': GuiResult }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
   | { 'type': 'error', 'data': { 'code': string, 'message': string, } }

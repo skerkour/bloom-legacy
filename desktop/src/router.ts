@@ -13,6 +13,7 @@ import DriveRouter from '@/bloom/drive/router';
 import BitflowRouter from '@/bloom/bitflow/router';
 import ContactsRouter from '@/bloom/contacts/router';
 import GalleryRouter from '@/bloom/gallery/router';
+import CalculatorRouter from '@/bloom/calculator/router';
 
 
 import store from '@/store';
@@ -35,6 +36,7 @@ const router = new Router({
     ...BitflowRouter,
     ...ContactsRouter,
     ...GalleryRouter,
+    ...CalculatorRouter,
     {
       path: '**',
       redirect: '/chat',

@@ -45,7 +45,7 @@ export default class NavigationDrawer extends Vue {
   // data
   // computed
   get showDrawer() {
-    return this.app !== 'chat' && this.app !== 'arcade';
+    return this.app !== 'chat' && this.app !== 'arcade' && this.app !== 'calculator';
   }
 
 

@@ -177,6 +177,11 @@ export default class LeftBar extends Vue {
       path: '/drive',
       icon: '/kernel/imgs/icons/drive_512.jpg',
     },
+    {
+      name: 'Calculator',
+      path: '/calculator',
+      icon: '/kernel/imgs/icons/calculator_512.jpg',
+    },
   ];
 
 
