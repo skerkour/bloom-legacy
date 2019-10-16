@@ -1,7 +1,7 @@
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/bloom/bitflow/views/bitflow.dart';
-import 'package:bloom/bloom/calculator/views/platform.dart';
+import 'package:bloom/bloom/calculator/views/calculator.dart';
 import 'package:bloom/bloom/calendar/views/calendar.dart';
 import 'package:bloom/bloom/contacts/views/contacts.dart';
 import 'package:bloom/bloom/drive/views/drive.dart';
