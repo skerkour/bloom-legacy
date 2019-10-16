@@ -5,6 +5,7 @@ use bloom_const::{
 use bloom_error::BloomError;
 use bloom_messages::{auth, Message};
 use crypto42::kdf::{argon2id, blake2b};
+use std::cmp::Ordering;
 
 /// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
 pub fn registration_start(input: auth::RegistrationStart) -> Result<Message, BloomError> {
@@ -58,17 +59,17 @@ fn username_to_salt(username: &str) -> argon2id::Salt {
 fn pad_or_cut_str(s: &str, size: usize) -> String {
     let len = s.len();
 
-    if len == size {
-        return s.to_owned();
-    } else if len < size {
-        let mut out = String::new();
-        out.push_str(s);
-        for _ in 0..size - len {
-            out.push(0x0 as char);
+    match len.cmp(&size) {
+        Ordering::Equal => s.to_owned(),
+        Ordering::Less => {
+            let mut out = String::new();
+            out.push_str(s);
+            for _ in 0..size - len {
+                out.push(0x0 as char);
+            }
+            out
         }
-        return out;
-    } else {
-        return s[..size].to_owned();
+        Ordering::Greater => s[..size].to_owned(),
     }
 }
 
