@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/const.dart';
 import 'package:flutter/material.dart';
 
 class GroupHomeView extends StatefulWidget {
@@ -77,8 +78,7 @@ class _BlmApp {
 
 List<_BlmApp> getApps() {
   return <_BlmApp>[
-    const _BlmApp(
-        icon: 'assets/images/notes_128.png', name: 'Notes', route: '/notes'),
+    const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: 'assets/images/calendar_128.png',
         name: 'Calendar',

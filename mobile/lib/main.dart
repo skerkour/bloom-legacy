@@ -1,6 +1,7 @@
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/bloom/bitflow/views/bitflow.dart';
+import 'package:bloom/bloom/calculator/views/platform.dart';
 import 'package:bloom/bloom/calendar/views/calendar.dart';
 import 'package:bloom/bloom/contacts/views/contacts.dart';
 import 'package:bloom/bloom/drive/views/drive.dart';
@@ -32,6 +33,7 @@ class MyApp extends StatelessWidget {
         '/calendar': (BuildContext context) => const CalendarView(),
         '/drive': (BuildContext context) => const DriveView(),
         '/platform': (BuildContext context) => const PlatformView(),
+        '/calculator': (BuildContext context) => const CalculatorView(),
         '/phaser': (BuildContext context) => const PhaserView(),
         '/bitflow': (BuildContext context) => const BitflowView(),
         '/auth': (BuildContext context) => const AuthView(),
