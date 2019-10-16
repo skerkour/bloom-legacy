@@ -38,7 +38,7 @@ impl Handler<RegistrationVerify> for DbActor {
                     .first(&conn)?;
 
             let (pending_account_to_verify, _) =
-                eventsourcing::execute(&conn, pending_account_to_verify.clone(), &verify_cmd)?;
+                eventsourcing::execute(&conn, pending_account_to_verify, &verify_cmd)?;
 
             // update pending_account
             diesel::update(&pending_account_to_verify)

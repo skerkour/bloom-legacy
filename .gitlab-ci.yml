@@ -13,6 +13,7 @@ include:
 variables:
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
   RUST_VERSION: nightly-2019-10-13
+  RUST_IMAGE: rust:latest
   RUST_BACKTRACE: 1
   RUST_ENV: test
   POSTGRES_USER: postgres
@@ -43,7 +44,7 @@ cache:
 
 test:
   stage: test
-  image: 'rust:1.36'
+  image: $RUST_IMAGE
   tags:
     - docker
   script:
@@ -59,7 +60,7 @@ test:
 
 build:
   stage: build
-  image: 'rust:1.36'
+  image: $RUST_IMAGE
   tags:
     - docker
   script:

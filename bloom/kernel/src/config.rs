@@ -419,7 +419,5 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
 }
 
 pub fn get_env(var: &str) -> String {
-    env::var(var)
-        .unwrap_or_else(|_| panic!("Missing environment variable: {}", var))
-        .to_string()
+    env::var(var).unwrap_or_else(|_| panic!("Missing environment variable: {}", var))
 }

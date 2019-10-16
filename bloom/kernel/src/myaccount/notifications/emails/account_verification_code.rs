@@ -24,7 +24,7 @@ pub fn send_account_verification_code(
     let subject = format!("Confirmation code: {}", formatted_code);
 
     let mut data = BTreeMap::new();
-    data.insert("formatted_code".to_string(), formatted_code.clone());
+    data.insert("formatted_code".to_string(), formatted_code);
 
     emails::send_email(
         config,
