@@ -84,13 +84,124 @@ class _CalculatorState extends State<CalculatorView> {
         ));
   }
 
+  Widget _buildKeyboard(BuildContext context) {
+    // return Expanded(
+    //   flex: 4,
+    //   child: Center(
+    //     child: AspectRatio(
+    //       aspectRatio: 1, // To center the GridView
+    //       child: Column(
+    // 	  children: <Widget>[
+    //         Row(
+    // 			  children: <Widget>[
+    //              _buildKeyboardKey(context, '7'),
+    //              _buildKeyboardKey(context, '8'),
+    //              _buildKeyboardKey(context, '9'),
+    //              _buildKeyboardKey(context, '/'),
+    //           ],
+    //         ),
+    //         Row(
+    // 			  children: <Widget>[
+    //              _buildKeyboardKey(context, '4'),
+    //              _buildKeyboardKey(context, '5'),
+    //              _buildKeyboardKey(context, '6'),
+    //              _buildKeyboardKey(context, '*'),
+    //           ],
+    //         ),
+    //         Row(
+    // 			  children: <Widget>[
+    //              _buildKeyboardKey(context, '1'),
+    //              _buildKeyboardKey(context, '2'),
+    //              _buildKeyboardKey(context, '3'),
+    //              _buildKeyboardKey(context, '-'),
+    //           ],
+    //         ),
+    //         Row(
+    // 			  children: <Widget>[
+    //              _buildKeyboardKey(context, '.'),
+    //              _buildKeyboardKey(context, '0'),
+    //              _buildKeyboardKey(context, 'C'),
+    //              _buildKeyboardKey(context, '+'),
+    //           ],
+    //         ),
+
+    //          Row(
+    // 			  children: <Widget>[
+    //              _buildKeyboardKey(context, '='),
+    //           ],
+    //         ),
+    //       ],
+    //       ),
+    //   ),
+    // ),
+    // );
+    return Expanded(
+      flex: 4,
+      child: Center(
+        child: AspectRatio(
+          aspectRatio: 1, // To center the GridView
+          child: GridView.count(
+            crossAxisCount: 4,
+            // childAspectRatio: 1.0,
+            padding: const EdgeInsets.all(4.0),
+            mainAxisSpacing: 4.0,
+            crossAxisSpacing: 4.0,
+            children: <String>[
+              // @formatter:off
+              '7', '8', '9', '/',
+              '4', '5', '6', '*',
+              '1', '2', '3', '-',
+              '.', '0', '=', '+',
+              // 'C', '', '', '=',
+              // 'C', '', '', '=',
+              // @formatter:on
+            ].map((String key) {
+              return GridTile(
+                child: _buildKeyboardKey(context, key),
+              );
+            }).toList(),
+          ),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildKeyboardKey(BuildContext context, String keyValue) {
+    return Padding(
+      padding: const EdgeInsets.all(12.0),
+      child: GestureDetector(
+        child: FlatButton(
+          child: Text(
+            keyValue == '=' ? '=/c' : keyValue,
+            style: const TextStyle(
+              fontWeight: FontWeight.bold,
+              fontSize: 26.0,
+              color: Colors.black,
+            ),
+          ),
+          color: Theme.of(context).scaffoldBackgroundColor,
+          onPressed: () {
+            _addKey(keyValue);
+          },
+        ),
+        onTap: () {
+          _addKey(keyValue);
+        },
+        onLongPress: keyValue == '=' ? _clear : null,
+      ),
+    );
+  }
+
+  void _clear() {
+    setState(() {
+      _expression = '';
+      _result = '';
+    });
+  }
+
   Future<void> _addKey(String key) async {
     String expr = _expression;
     String result = '';
-    // if (result.isNotEmpty) {
-    //   expr = '';
-    //   result = '';
-    // }
 
     if (operators.contains(key)) {
       // Handle as an operator
@@ -127,51 +238,6 @@ class _CalculatorState extends State<CalculatorView> {
     });
   }
 
-  Widget _buildKeyboard(BuildContext context) {
-    return Expanded(
-        flex: 4,
-        child: Center(
-            child: AspectRatio(
-          aspectRatio: 1.0, // To center the GridView
-          child: GridView.count(
-            crossAxisCount: 4,
-            childAspectRatio: 1.0,
-            padding: const EdgeInsets.all(4.0),
-            mainAxisSpacing: 4.0,
-            crossAxisSpacing: 4.0,
-            children: <String>[
-              // @formatter:off
-              '7', '8', '9', '/',
-              '4', '5', '6', '*',
-              '1', '2', '3', '-',
-              'C', '0', '=', '+',
-              // @formatter:on
-            ].map((String key) {
-              return GridTile(
-                child: _buildKeyboardKey(context, key),
-              );
-            }).toList(),
-          ),
-        )));
-  }
-
-  Widget _buildKeyboardKey(BuildContext context, dynamic keyValue) {
-    return FlatButton(
-      child: Text(
-        keyValue,
-        style: const TextStyle(
-          fontWeight: FontWeight.bold,
-          fontSize: 26.0,
-          color: Colors.black,
-        ),
-      ),
-      color: Theme.of(context).scaffoldBackgroundColor,
-      onPressed: () {
-        _addKey(keyValue);
-      },
-    );
-  }
-
   static Map<String, dynamic> _nativeCall<T>(T message) {
     final String jsonPayload = jsonEncode(message);
     debugPrint('input: $jsonPayload');
@@ -191,6 +257,7 @@ List<String> digits = <String>[
   '6',
   '7',
   '8',
-  '9'
+  '9',
+  '.',
 ];
 List<String> operators = <String>['+', '-', '*', '/'];
