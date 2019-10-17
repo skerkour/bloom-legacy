@@ -63,7 +63,7 @@ build_static:
 	cp -r assets $(DIST_DIR)/
 
 dev:
-	cargo watch -x 'run'
+	cargo watch -x 'run -- server'
 
 clean:
 	rm -rf $(DIST_DIR) target/

@@ -43,4 +43,4 @@ WORKDIR /bloom
 USER bloom
 
 EXPOSE 8000
-CMD ["./bloom"]
+CMD ["./bloom", "server"]
