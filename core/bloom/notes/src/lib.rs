@@ -20,7 +20,7 @@ fn home_dir() -> String {
 }
 
 fn db_dir() -> String {
-    let path = format!("{}/databases", home_dir());
+    let path = format!("{}/db", home_dir());
     let _ = std::fs::create_dir_all(&path);
     return path;
 }
