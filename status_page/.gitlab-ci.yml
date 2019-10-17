@@ -1,0 +1,13 @@
+services:
+  - docker:dind
+
+build:
+  image: docker:stable
+  stage: build
+  tags:
+    - docker
+  script:
+    - apk update && apk add make
+    - make build
+    - make docker_login
+    - make release
