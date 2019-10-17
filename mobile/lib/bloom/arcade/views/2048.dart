@@ -184,7 +184,7 @@ class _A2048ViewState extends State<A2048View> {
     return Scaffold(
       appBar: AppBar(
         centerTitle: true,
-        title: Text(
+        title: const Text(
           '2048',
           style: TextStyle(fontSize: 25.0, fontWeight: FontWeight.bold),
         ),
@@ -206,9 +206,9 @@ class _A2048ViewState extends State<A2048View> {
                   height: 82.0,
                   child: Column(
                     children: <Widget>[
-                      Padding(
-                        padding: const EdgeInsets.only(top: 10.0, bottom: 2.0),
-                        child: Text(
+                      const Padding(
+                        padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
+                        child:  Text(
                           'Score',
                           style: TextStyle(
                               fontSize: 15.0,

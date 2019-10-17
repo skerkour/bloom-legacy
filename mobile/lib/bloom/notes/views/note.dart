@@ -81,9 +81,7 @@ class _NoteState extends State<NoteView> {
               child: Scaffold(
                 appBar: AppBar(
                   brightness: Brightness.light,
-                  leading: BackButton(
-                    color: Colors.black,
-                  ),
+                  leading: const BackButton(color: Colors.black),
                   actions: _buildAppBarActions(context, note),
                   elevation: 1,
                   backgroundColor: note.color,
@@ -114,7 +112,7 @@ class _NoteState extends State<NoteView> {
                   maxLines: 1,
                   controller: _titleController,
                   focusNode: _titleFocus,
-                  style: TextStyle(
+                  style: const TextStyle(
                     color: Colors.black,
                     fontSize: 22,
                     fontWeight: FontWeight.bold,
@@ -132,7 +130,7 @@ class _NoteState extends State<NoteView> {
                     maxLines: null,
                     controller: _bodyController,
                     focusNode: _bodyFocus,
-                    style: TextStyle(color: Colors.black, fontSize: 20),
+                    style: const TextStyle(color: Colors.black, fontSize: 20),
                     backgroundCursorColor: Colors.red,
                     cursorColor: Colors.blue,
                   ),
