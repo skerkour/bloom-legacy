@@ -847,6 +847,7 @@ dependencies = [
  "clap 2.33.0 (registry+https://github.com/rust-lang/crates.io-index)",
  "crypto42 0.5.5 (git+https://gitlab.com/bloom42/libs/crypto42)",
  "eventsourcing 0.3.0",
+ "failure 0.1.5 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures 0.1.29 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-preview 0.3.0-alpha.18 (registry+https://github.com/rust-lang/crates.io-index)",
  "futures-timer 0.3.0 (registry+https://github.com/rust-lang/crates.io-index)",

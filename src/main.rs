@@ -1,5 +1,6 @@
 mod app;
 mod info;
+mod jobs;
 mod server;
 
 use bloom_kernel::{
@@ -7,7 +8,7 @@ use bloom_kernel::{
     log,
     // myaccount::domain::account,
 };
-use clap::{App as ClapApp, SubCommand};
+use clap::{App as ClapApp, Arg, SubCommand};
 use sentry::integrations::panic::register_panic_handler;
 use std::env;
 use std::error::Error;
@@ -43,10 +44,39 @@ fn main() -> Result<(), Box<dyn Error>> {
         .author(info::AUTHOR)
         .about(info::ABOUT)
         .subcommand(SubCommand::with_name("server").about("run the server"))
+        .subcommand(
+            SubCommand::with_name("jobs")
+                .about("list all jobs")
+                .subcommand(SubCommand::with_name("ls").about("list all jobs"))
+                .subcommand(
+                    SubCommand::with_name("run")
+                        .about("run the specific job")
+                        .arg(Arg::with_name("job_name").required(true)),
+                ),
+        )
         .get_matches();
 
     if matches.subcommand_matches("server").is_some() {
         return server::run(cfg, logger);
+    } else if let Some(matches) = matches.subcommand_matches("jobs") {
+        if matches.subcommand_matches("ls").is_some() {
+            return jobs::list_jobs();
+        } else if let Some(matches) = matches.subcommand_matches("run") {
+            return jobs::run_job(
+                cfg,
+                &matches
+                    .value_of("job_name")
+                    .expect("error getting job_name argument"),
+            );
+        } else {
+            println!(
+                "{}",
+                matches
+                    .usage
+                    .as_ref()
+                    .expect("error getting jobs command usage")
+            );
+        }
     }
 
     return Ok(());

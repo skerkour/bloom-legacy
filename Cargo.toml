@@ -43,6 +43,7 @@ sentry-actix = "0.17"
 futures-timer = "0.3"
 clap = "2.33"
 slog = "2.4"
+failure = "0.1"
 
 
 [profile.release]
