@@ -41,7 +41,7 @@ class _HomeViewState extends State<HomeView> {
               );
             }));
         break;
-      case 2:
+      case 1:
         actions.add(IconButton(
             icon: Icon(Icons.search),
             onPressed: () {

@@ -126,6 +126,7 @@ List<_BlmApp> getApps() {
     const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
     const _BlmApp(
         icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
+    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
     const _BlmApp(
         icon: 'assets/images/calendar_128.png',
         name: 'Calendar',

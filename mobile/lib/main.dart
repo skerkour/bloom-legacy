@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/arcade/views/arcade.dart';
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/bloom/bitflow/views/bitflow.dart';
@@ -28,19 +29,20 @@ class MyApp extends StatelessWidget {
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
         '/': (BuildContext context) => const HomeView(),
-        '/notes': (BuildContext context) => const NotesView(),
-        '/contacts': (BuildContext context) => ContactsView(),
-        '/calendar': (BuildContext context) => const CalendarView(),
-        '/drive': (BuildContext context) => const DriveView(),
-        '/platform': (BuildContext context) => const PlatformView(),
-        '/calculator': (BuildContext context) => const CalculatorView(),
-        '/phaser': (BuildContext context) => const PhaserView(),
-        '/bitflow': (BuildContext context) => const BitflowView(),
+        '/arcade': (BuildContext context) => const ArcadeView(),
         '/auth': (BuildContext context) => const AuthView(),
         '/auth/registration/verify': (BuildContext context) =>
             const RegistrationVerifyView(),
         '/auth/registration/complete': (BuildContext context) =>
             const RegistrationCompleteView(),
+        '/bitflow': (BuildContext context) => const BitflowView(),
+        '/calculator': (BuildContext context) => const CalculatorView(),
+        '/calendar': (BuildContext context) => const CalendarView(),
+        '/contacts': (BuildContext context) => ContactsView(),
+        '/drive': (BuildContext context) => const DriveView(),
+        '/notes': (BuildContext context) => const NotesView(),
+        '/phaser': (BuildContext context) => const PhaserView(),
+        '/platform': (BuildContext context) => const PlatformView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );
