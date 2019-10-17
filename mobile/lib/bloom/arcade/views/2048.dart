@@ -208,7 +208,7 @@ class _A2048ViewState extends State<A2048View> {
                     children: <Widget>[
                       const Padding(
                         padding: EdgeInsets.only(top: 10.0, bottom: 2.0),
-                        child:  Text(
+                        child: Text(
                           'Score',
                           style: TextStyle(
                               fontSize: 15.0,
