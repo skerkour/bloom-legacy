@@ -220,7 +220,7 @@ class _A2048ViewState extends State<A2048View> {
                         padding: const EdgeInsets.only(bottom: 10.0),
                         child: Text(
                           '$score',
-                          style: TextStyle(
+                          style: const TextStyle(
                               fontSize: 20.0,
                               color: Colors.white,
                               fontWeight: FontWeight.bold),
