@@ -40,7 +40,6 @@ pub fn list_events(input: calendar::GuiListEvents) -> Result<Message, BloomError
     bloom_validators::calendar::event_dates(start_at, end_at)?;
 
     let conn = Connection::open(db_path())?;
-
     conn.execute(
         "CREATE TABLE IF NOT EXISTS calendar_events (
             id TEXT PRIMARY KEY NOT NULL,
@@ -75,6 +74,53 @@ pub fn list_events(input: calendar::GuiListEvents) -> Result<Message, BloomError
     let events = events?;
 
     let ret: Message = calendar::GuiEvents { events }.into();
+
+    return Ok(ret);
+}
+
+pub fn create_event(input: calendar::GuiCreateEvent) -> Result<Message, BloomError> {
+    bloom_validators::calendar::event_dates(input.start_at, input.end_at)?;
+
+    let conn = Connection::open(db_path())?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS calendar_events (
+            id TEXT PRIMARY KEY NOT NULL,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            start_at TEXT NOT NULL,
+            end_at TEXT NOT NULL
+        )",
+        NO_PARAMS,
+    )?;
+
+    let now = chrono::Utc::now();
+    let event = db::Event {
+        id: uuid::Uuid::new_v4().to_hyphenated().to_string(),
+        created_at: now,
+        updated_at: now,
+        title: input.title,
+        description: input.description,
+        start_at: input.start_at,
+        end_at: input.end_at,
+    };
+
+    conn.execute(
+        "INSERT INTO calendar_events (id, created_at, updated_at, title, description, start_at, end_at)
+            VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+        params![
+            &event.id,
+            &event.created_at,
+            &event.updated_at,
+            &event.title,
+            &event.description,
+            &event.start_at,
+            &event.end_at,
+        ],
+    )?;
+
+    let ret: Message = calendar::GuiEvent { event }.into();
 
     return Ok(ret);
 }
