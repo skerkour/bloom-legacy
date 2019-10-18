@@ -4,6 +4,7 @@ services:
 stages:
   - test
   - build
+  - release
 
 include:
   template: Dependency-Scanning.gitlab-ci.yml
@@ -19,7 +20,7 @@ variables:
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
-  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.9.1+hotfix.2-stable.tar.xz"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/stable/linux/flutter_linux_v1.10.14-dev.tar.xz"
 
   # NodeJS (desktop)
   NODE_ENV: test
@@ -148,6 +149,28 @@ build:mobile:
     - echo flutter.sdk=$HOME/flutter > android/local.properties
     - flutter config --no-analytics
     - make build
+
+
+####################################################################################################
+## Build
+####################################################################################################
+
+
+release:status_page:
+  image: docker:stable
+  stage: release
+  tags:
+    - docker
+  only:
+    changes:
+      - status_page/*
+  script:
+    - cd status_page/
+    - apk update && apk add make
+    - make build
+    - make docker_login
+    - make release
+
 
 # test:android:
 #   stage: test
