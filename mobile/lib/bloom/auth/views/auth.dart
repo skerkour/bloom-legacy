@@ -20,9 +20,9 @@ class _AuthViewState extends State<AuthView> {
           child: Container(
             margin: const EdgeInsets.only(top: 25.0),
             height: 50.0,
-            child: TabBar(
+            child: const TabBar(
               labelColor: Colors.black,
-              tabs: const <Widget>[
+              tabs: <Widget>[
                 Tab(text: 'Register'),
                 Tab(text: 'Sign in'),
               ],
