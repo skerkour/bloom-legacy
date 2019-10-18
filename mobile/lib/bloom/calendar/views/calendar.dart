@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/calendar/widgets/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
 
@@ -121,7 +122,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
       appBar: AppBar(
         title: const Text('Calendar'),
       ),
-      body: _buildBody(),
+      body: _buildBody(context),
       floatingActionButton: FloatingActionButton(
         onPressed: () => _newEventPressed(context),
         child: Icon(Icons.add),
@@ -130,13 +131,11 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
     );
   }
 
-  Widget _buildBody() {
+  Widget _buildBody(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.max,
       children: <Widget>[
-        // Switch out 2 lines below to play with TableCalendar's settings
-        //-----------------------
-        _buildTableCalendar(),
+        _buildTableCalendar(context),
         // _buildTableCalendarWithBuilders(),
         const SizedBox(height: 8.0),
         Expanded(child: _buildEventList()),
@@ -146,10 +145,42 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
 
   Future<void> _newEventPressed(BuildContext ctx) async {
     debugPrint('new event pressed');
+    final NoteViewResult res = await Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const EventView(),
+      ),
+    );
+
+    if (res != null) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Note ${res.toString().split('.').last}')),
+        );
+    }
+  }
+
+  Future<void> _eventPressed(BuildContext ctx) async {
+    debugPrint('new event pressed');
+    final NoteViewResult res = await Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const EventView(),
+      ),
+    );
+
+    if (res != null) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Note ${res.toString().split('.').last}')),
+        );
+    }
   }
 
   // Simple TableCalendar configuration (using Styles)
-  Widget _buildTableCalendar() {
+  Widget _buildTableCalendar(BuildContext context) {
     return TableCalendar(
       calendarController: _calendarController,
       events: _events,
@@ -158,7 +189,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
       calendarStyle: CalendarStyle(
         selectedColor: Colors.blue[400],
         todayColor: Colors.blue[200],
-        markersColor: Colors.red,
+        markersColor: Colors.blue[800],
         outsideDaysVisible: false,
       ),
       headerStyle: const HeaderStyle(
@@ -173,7 +204,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
   // // More advanced TableCalendar configuration (using Builders & Styles)
   // Widget _buildTableCalendarWithBuilders() {
   //   return TableCalendar(
-  //     locale: 'pl_PL',
+  //     // locale: 'pl_PL',
   //     calendarController: _calendarController,
   //     events: _events,
   //     holidays: _holidays,
@@ -306,7 +337,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
                     const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
                 child: ListTile(
                   title: Text(event.toString()),
-                  onTap: () => print('$event tapped!'),
+                  onTap: () => _eventPressed(context),
                 ),
               ))
           .toList(),
