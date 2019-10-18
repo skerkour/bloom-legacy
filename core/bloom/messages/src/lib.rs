@@ -78,6 +78,8 @@ pub enum Message {
     CalendarGuiCreateEvent(calendar::GuiCreateEvent),
     #[serde(rename = "calendar.gui.delete_event")]
     CalendarGuiDeleteEvent(calendar::GuiDeleteEvent),
+    #[serde(rename = "calendar.gui.update_event")]
+    CalendarGuiUpdateEvent(calendar::GuiUpdateEvent),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),

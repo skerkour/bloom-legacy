@@ -125,7 +125,7 @@ pub fn create_event(input: calendar::GuiCreateEvent) -> Result<Message, BloomErr
     return Ok(ret);
 }
 
-pub fn delete_note(input: calendar::GuiDeleteEvent) -> Result<Message, BloomError> {
+pub fn delete_event(input: calendar::GuiDeleteEvent) -> Result<Message, BloomError> {
     let conn = Connection::open(db_path())?;
     conn.execute(
         "CREATE TABLE IF NOT EXISTS calendar_events (
@@ -146,6 +146,47 @@ pub fn delete_note(input: calendar::GuiDeleteEvent) -> Result<Message, BloomErro
     )?;
 
     let ret: Message = bloom_messages::kernel::Empty {}.into();
+
+    return Ok(ret);
+}
+
+pub fn update_event(input: calendar::GuiUpdateEvent) -> Result<Message, BloomError> {
+    let conn = Connection::open(db_path())?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS calendar_events (
+            id TEXT PRIMARY KEY NOT NULL,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            start_at TEXT NOT NULL,
+            end_at TEXT NOT NULL
+        )",
+        NO_PARAMS,
+    )?;
+
+    let mut event = input.event;
+    event.updated_at = chrono::Utc::now();
+
+    conn.execute(
+        "UPDATE calendar_events SET
+            updated_at = ?,
+            title = ?,
+            description = ?,
+            start_at = ?,
+            end_at = ?
+        WHERE id = ?",
+        params![
+            &event.updated_at,
+            &event.title,
+            &event.description,
+            &event.start_at,
+            &event.end_at,
+            &event.id,
+        ],
+    )?;
+
+    let ret: Message = calendar::GuiEvent { event }.into();
 
     return Ok(ret);
 }

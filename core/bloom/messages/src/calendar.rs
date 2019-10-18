@@ -39,3 +39,9 @@ pub struct GuiDeleteEvent {
     pub id: String,
 }
 from_message!(GuiDeleteEvent, Message::CalendarGuiDeleteEvent);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiUpdateEvent {
+    pub event: calendar::db::Event,
+}
+from_message!(GuiUpdateEvent, Message::CalendarGuiUpdateEvent);
