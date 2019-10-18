@@ -14,7 +14,7 @@
           large
           color="primary"
           class="mb-4"
-          @click="openEventDialog"
+          @click="createEvent"
         >
           <v-icon left>mdi-plus</v-icon> New Event
         </v-btn>
@@ -44,13 +44,13 @@
           <v-icon dark>mdi-chevron-right</v-icon>
         </v-btn>
 
-        <br /><br />
+        <!-- <br /><br />
 
         <v-select
           outlined
           v-model="type"
           :items="typeOptions"
-        />
+        /> -->
 
       </v-col>
 
@@ -184,6 +184,11 @@ export default class Index extends Vue {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  createEvent() {
+    this.currentEvent = null;
+    this.openEventDialog();
   }
 
   centerToday() {
