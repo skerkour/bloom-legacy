@@ -15,9 +15,9 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     final List<GridTile> apps =
         getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
-    final List<GridTile> mainApps = getMainApps()
-        .map((_BlmMainApp app) => _buildMainGridItem(context, app))
-        .toList();
+    // final List<GridTile> mainApps = getMainApps()
+    // .map((_BlmMainApp app) => _buildMainGridItem(context, app))
+    // .toList();
     return Column(
       children: <Widget>[
         const SizedBox(height: 10),
@@ -40,14 +40,14 @@ class _TabMeViewState extends State<TabMeView> {
           child: Text('@user:domain.com', style: TextStyle(fontSize: 18)),
         ),
         const SizedBox(height: 21),
-        GridView.count(
-          padding: const EdgeInsets.only(left: 12, right: 12),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 4,
-          shrinkWrap: true,
-          crossAxisCount: 4,
-          children: mainApps,
-        ),
+        // GridView.count(
+        //   padding: const EdgeInsets.only(left: 12, right: 12),
+        //   mainAxisSpacing: 8,
+        //   crossAxisSpacing: 4,
+        //   shrinkWrap: true,
+        //   crossAxisCount: 4,
+        //   children: mainApps,
+        // ),
         const SizedBox(height: 10),
         const Divider(),
         const SizedBox(height: 21),
@@ -87,30 +87,29 @@ class _TabMeViewState extends State<TabMeView> {
       ),
     );
   }
-
-  GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
-    return GridTile(
-      child: GestureDetector(
-        child: Column(
-          children: <Widget>[
-            CircleAvatar(
-              child: Icon(app.icon),
-              backgroundColor: app.backgroundColor,
-              foregroundColor: app.foregroundColor,
-              radius: 25,
-            ),
-            const SizedBox(height: 5),
-            Text(app.name, style: const TextStyle(fontSize: 16)),
-          ],
-        ),
-        onTap: () => Navigator.pushNamed(
-          context,
-          app.route,
-          // (Route<dynamic> route) => false,
-        ),
-      ),
-    );
-  }
+  // GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
+  //   return GridTile(
+  //     child: GestureDetector(
+  //       child: Column(
+  //         children: <Widget>[
+  //           CircleAvatar(
+  //             child: Icon(app.icon),
+  //             backgroundColor: app.backgroundColor,
+  //             foregroundColor: app.foregroundColor,
+  //             radius: 25,
+  //           ),
+  //           const SizedBox(height: 5),
+  //           Text(app.name, style: const TextStyle(fontSize: 16)),
+  //         ],
+  //       ),
+  //       onTap: () => Navigator.pushNamed(
+  //         context,
+  //         app.route,
+  //         // (Route<dynamic> route) => false,
+  //       ),
+  //     ),
+  //   );
+  // }
 }
 
 class _BlmApp {
@@ -128,19 +127,7 @@ List<_BlmApp> getApps() {
         icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
     const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
     const _BlmApp(
-        icon: 'assets/images/calendar_128.png',
-        name: 'Calendar',
-        route: '/calendar'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png', name: 'Drive', route: '/drive'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png',
-        name: 'Platform',
-        route: '/platform'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png',
-        name: 'Bitflow',
-        route: '/bitflow'),
+        icon: ICON_CALENDAR_256, name: 'Calendar', route: '/calendar'),
   ];
 }
 

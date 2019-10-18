@@ -200,7 +200,6 @@ export default class Index extends Vue {
     this.openEventDialog();
   }
 
-
   openEventDialog() {
     this.showEventDialog = true;
   }
