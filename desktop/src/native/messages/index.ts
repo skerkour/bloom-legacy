@@ -25,6 +25,7 @@ import {
   GuiEvent,
   GuiDeleteEvent,
   GuiCreateEvent,
+  ListEvents,
 } from './calendar';
 
 export type Message =
@@ -50,7 +51,7 @@ export type Message =
   | { 'type': 'calculator.gui.result', 'data': GuiResult }
 
   // calendar
-  | { 'type': 'calendar.gui.list_events', 'data': {} }
+  | { 'type': 'calendar.gui.list_events', 'data': ListEvents }
   | { 'type': 'calendar.gui.events', 'data': GuiEvents }
   | { 'type': 'calendar.gui.event', 'data': GuiEvent }
   | { 'type': 'calendar.gui.create_event', 'data': GuiCreateEvent }

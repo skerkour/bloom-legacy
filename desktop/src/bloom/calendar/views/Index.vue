@@ -66,6 +66,7 @@
           :start="start"
           :end="end"
           :now="now"
+          @change="calendarChanged"
         >
 
         <template v-slot:day="{ date }">
@@ -164,12 +165,15 @@ export default class Index extends Vue {
 
   // watch
   // methods
-  async fetchData(startAt?: string, endAt?: string) {
+  async fetchData(startAt?: Date, endAt?: Date) {
     this.error = '';
     this.isLoading = true;
     const message: Message = {
       type: 'calendar.gui.list_events',
-      data: {},
+      data: {
+        start_at: startAt,
+        end_at: endAt,
+      },
     };
     try {
       const res = await Native.call(message);
@@ -215,6 +219,13 @@ export default class Index extends Vue {
       }
       return event;
     });
+  }
+
+  calendarChanged(to: any) {
+    this.fetchData(
+      new Date(to.start.date).toISOString() as unknown as Date,
+      new Date(to.end.date).toISOString() as unknown as Date,
+    );
   }
 }
 </script>

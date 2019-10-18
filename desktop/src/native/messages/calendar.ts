@@ -14,6 +14,11 @@ export interface GuiEvents {
   events: Event[],
 }
 
+export interface ListEvents {
+  start_at: Date | undefined,
+  end_at: Date | undefined,
+}
+
 export interface GuiEvent {
   event: Event,
 }
