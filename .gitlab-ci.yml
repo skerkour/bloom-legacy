@@ -32,6 +32,7 @@ cache:
     - cargo_home/
     - core/target/
     - desktop/node_modules/
+    - website/node_modules/
 
 ####################################################################################################
 ## Test
@@ -155,7 +156,6 @@ build:mobile:
 ## Build
 ####################################################################################################
 
-
 release:status_page:
   image: docker:stable
   stage: release
@@ -170,6 +170,24 @@ release:status_page:
     - make build
     - make docker_login
     - make release
+
+pages: # release:website
+  image: node:lts
+  stage: release
+  tags:
+    - docker
+  only:
+    - /^website-v.*$/
+  except:
+    - branches
+  script:
+    - cd status_page/
+    - make install
+    - make build
+    - mv dist public
+  artifacts:
+    paths:
+      - public
 
 
 # test:android:
