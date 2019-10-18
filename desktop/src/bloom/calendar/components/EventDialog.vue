@@ -1,8 +1,8 @@
 <template>
   <v-dialog
     v-model="show"
-    @keydown.esc="close()"
-    @click:outside="close()"
+    @keydown.esc="close(false)"
+    @click:outside="close(false)"
     persistent
     scrollable
     width="50%"
@@ -19,16 +19,28 @@
         </h3>
         <v-spacer />
         <v-tooltip bottom>
-          <v-menu slot="activator">
-            <v-btn slot="activator" flat color="white" icon>
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
+          <template v-slot:activator="{ on: tooltip }">
+            <v-menu slot="activator">
+              <template v-slot:activator="{ on: menu }">
+              <v-btn
+                slot="activator"
+                text
+                color="white"
+                icon
+                v-on="{ ...tooltip, ...menu }"
+              >
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+              </template>
 
-            <v-list>
-              <v-list-tile @click="deleteEvent">Delete</v-list-tile>
-            </v-list>
-          </v-menu>
-        <span>More actions</span>
+              <v-list>
+                <v-list-item @click="deleteEvent">
+                  <v-list-item-title>Delete Event</v-list-item-title>
+                </v-list-item>
+              </v-list>
+            </v-menu>
+          </template>
+          <span>More actions</span>
         </v-tooltip>
       </v-card-title>
 
@@ -117,6 +129,7 @@ import {
 } from 'vue-property-decorator';
 import { Event as EventModel, GuiEvent } from '@/native/messages/calendar';
 import { Native, Message } from '@/native';
+import { GuiExpression } from '../../../native/messages/calculator';
 
 @Component
 export default class EventDialog extends Vue {
@@ -148,6 +161,18 @@ export default class EventDialog extends Vue {
 
   // lifecycle
   // watch
+  @Watch('event')
+  onEventChanged(event: any) {
+    if (event !== null) {
+      this.title = event.title;
+      this.description = event.description;
+      this.startAt = event.start_at;
+      this.endAt = event.end_at;
+    } else {
+      this.clearFields();
+    }
+  }
+
   @Watch('startAt')
   onStartAtChanged(newStartAt: string) {
     const startAtTime = new Date(newStartAt).getTime();
@@ -158,8 +183,10 @@ export default class EventDialog extends Vue {
   }
 
   // methods
-  async close() {
-    await this.save();
+  async close(deleted: boolean) {
+    if (!deleted) {
+      await this.save();
+    }
     if (this.error !== '') {
       console.log('error not empty');
       return;
@@ -188,21 +215,6 @@ export default class EventDialog extends Vue {
     this.endAt = this.now;
   }
 
-  async deleteEvent() {
-    this.error = '';
-    console.log('delete Event');
-    // this.is_loading = true;
-    // try {
-    //   await api.delete(`${api.CALENDAR}/v1/events/${event.id}`);
-    //   this.$emit('delete', event);
-    //   this.close();
-    // } catch (err) {
-    //   this.error = err.message;
-    // } finally {
-    //   this.is_loading = false;
-    // }
-  }
-
   async createEvent() {
     this.error = '';
     this.isLoading = true;
@@ -226,8 +238,49 @@ export default class EventDialog extends Vue {
   }
 
   async updateEvent() {
-    console.log('update Event');
+    this.error = '';
+    this.isLoading = true;
+    const event = { ...this.event } as EventModel;
+    event.title = this.title;
+    event.description = this.description;
+    event.start_at = new Date(this.startAt).toISOString() as unknown as Date;
+    event.end_at = new Date(this.endAt).toISOString() as unknown as Date;
+    const message: Message = {
+      type: 'calendar.gui.update_event',
+      data: {
+        event,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiEvent).event);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
+
+  async deleteEvent() {
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'calendar.gui.delete_event',
+      data: {
+        id: this.event!.id,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('deleted', this.event);
+      this.close(true);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
 
   formatDate(date: string) {
     if (!date) {

@@ -66,14 +66,33 @@
           :start="start"
           :end="end"
           :now="now"
-        />
+        >
+
+        <template v-slot:day="{ date }">
+        <template v-for="event in eventsMap[date]">
+          <div
+            v-ripple
+            class="blm-event"
+            :key="`${event.id}${event.date}`"
+            @click="editEvent(event)"
+            >{{ event.title || '(No title)' }}</div>
+
+        </template>
+      </template>
+
+
+        </v-calendar>
       </v-col>
 
     </v-row>
 
     <blm-calendar-dialog-event
       :visible="showEventDialog"
+      :event="currentEvent"
       @closed="closeEventDialog"
+      @created="eventCreated"
+      @updated="eventUpdated"
+      @deleted="eventDeleted"
     />
   </div>
 </template>
@@ -83,7 +102,9 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import EventDialog from '../components/EventDialog.vue';
-import { Event as EventModel } from '@/native/messages/calendar';
+import { Native, Message } from '@/native';
+import { Event as EventModel, GuiEvents } from '@/native/messages/calendar';
+
 
 @Component({
   components: {
@@ -110,14 +131,66 @@ export default class Index extends Vue {
     .endOf('month')
     .format('YYYY-MM-DD');
   showEventDialog = false;
+  isLoading = false;
+  error = '';
+  events: EventModel[] = [];
+  currentEvent: EventModel | null = null;
 
   // computed
+  get eventsMap() {
+    const map: any = {};
+    this.events.forEach((e: any) => {
+      e.start_at = new Date(e.start_at).toISOString().substr(0, 10);
+      e.end_at = new Date(e.end_at).toISOString().substr(0, 10);
+      e.date = new Date(e.start_at).toISOString().substr(0, 10);
+      (map[e.date] = map[e.date] || []).push(e);
+
+      // because vuetify does not support multi day events
+      const diff = moment(e.end_at).diff(e.start_at, 'days');
+      for (let i = 1; i <= diff; i += 1) {
+        const e2 = Object.assign({}, e);
+        e2.date = new Date(new Date(e2.start_at).setDate(new Date(e2.start_at).getDate() + i))
+          .toISOString().substr(0, 10);
+        (map[e2.date] = map[e2.date] || []).push(e);
+      }
+    });
+    return map;
+  }
+
   // lifecycle
+  async created() {
+    this.fetchData();
+  }
+
   // watch
   // methods
+  async fetchData(startAt?: string, endAt?: string) {
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'calendar.gui.list_events',
+      data: {},
+    };
+    try {
+      const res = await Native.call(message);
+      this.events = (res.data as GuiEvents).events;
+      console.log(this.events);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
   centerToday() {
     this.focus = this.now;
   }
+
+  editEvent(event: EventModel) {
+    this.currentEvent = event;
+    this.openEventDialog();
+  }
+
 
   openEventDialog() {
     this.showEventDialog = true;
@@ -128,8 +201,20 @@ export default class Index extends Vue {
   }
 
   eventCreated(event: EventModel) {
-    // this.events.push(event);
-    console.log('event created: ', event);
+    this.events.push(event);
+  }
+
+  eventDeleted(event: EventModel) {
+    this.events = this.events.filter((c: EventModel) => c.id !== event.id);
+  }
+
+  eventUpdated(updatedEvent: EventModel) {
+    this.events = this.events.map((event: any) => {
+      if (event.id === updatedEvent.id) {
+        return updatedEvent;
+      }
+      return event;
+    });
   }
 }
 </script>
@@ -142,5 +227,20 @@ export default class Index extends Vue {
 
 .col-no-padding {
   padding: 0;
+}
+
+.blm-event {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  border-radius: 2px;
+  background-color: #1867c0;
+  color: #ffffff;
+  border: 1px solid #1867c0;
+  width: 100%;
+  font-size: 12px;
+  padding: 3px;
+  cursor: pointer;
+  margin-bottom: 1px;
 }
 </style>
