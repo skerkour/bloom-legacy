@@ -20,6 +20,7 @@
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "=4.4.95",
     "core-js": "^2.6.5",
+    "moment": "^2.24.0",
     "rxjs": "=6.5.3",
     "uuid": "^3.3.3",
     "vue": "=2.6.10",

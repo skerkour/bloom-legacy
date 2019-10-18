@@ -28,6 +28,7 @@ import BitflowDrawer from '@/bloom/bitflow/components/Drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
 
+const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar'];
 
 @Component({
   components: {
@@ -45,7 +46,7 @@ export default class NavigationDrawer extends Vue {
   // data
   // computed
   get showDrawer() {
-    return this.app !== 'chat' && this.app !== 'arcade' && this.app !== 'calculator';
+    return !APPS_WITHOUT_DRAWER.includes(this.app);
   }
 
 
