@@ -34,6 +34,8 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
 
         // calendar
         messages::Message::CalendarGuiListEvents(msg) => calendar::list_events(msg),
+        messages::Message::CalendarGuiCreateEvent(msg) => calendar::create_event(msg),
+        messages::Message::CalendarGuiDeleteEvent(msg) => calendar::delete_note(msg),
 
         // fallback
         _ => {

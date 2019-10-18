@@ -33,3 +33,9 @@ pub struct GuiCreateEvent {
     pub end_at: chrono::DateTime<chrono::Utc>,
 }
 from_message!(GuiCreateEvent, Message::CalendarGuiCreateEvent);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiDeleteEvent {
+    pub id: String,
+}
+from_message!(GuiDeleteEvent, Message::CalendarGuiDeleteEvent);

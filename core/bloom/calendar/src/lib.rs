@@ -124,3 +124,28 @@ pub fn create_event(input: calendar::GuiCreateEvent) -> Result<Message, BloomErr
 
     return Ok(ret);
 }
+
+pub fn delete_note(input: calendar::GuiDeleteEvent) -> Result<Message, BloomError> {
+    let conn = Connection::open(db_path())?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS calendar_events (
+            id TEXT PRIMARY KEY NOT NULL,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            title TEXT NOT NULL,
+            description TEXT NOT NULL,
+            start_at TEXT NOT NULL,
+            end_at TEXT NOT NULL
+        )",
+        NO_PARAMS,
+    )?;
+
+    conn.execute(
+        "DELETE FROM calendar_events WHERE id = ?",
+        params![input.id],
+    )?;
+
+    let ret: Message = bloom_messages::kernel::Empty {}.into();
+
+    return Ok(ret);
+}
