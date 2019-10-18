@@ -132,21 +132,21 @@ export default class LeftBar extends Vue {
   accountMenu = false;
   showAllAppsDialog = false;
   apps = [
-    {
-      name: 'Chat',
-      path: '/chat',
-      icon: '/kernel/imgs/icons/chat_512.jpg',
-    },
-    {
-      name: 'Music',
-      path: '/music',
-      icon: '/kernel/imgs/icons/music_512.jpg',
-    },
-    {
-      name: 'Gallery',
-      path: '/gallery',
-      icon: '/kernel/imgs/icons/gallery_512.jpg',
-    },
+    // {
+    //   name: 'Chat',
+    //   path: '/chat',
+    //   icon: '/kernel/imgs/icons/chat_512.jpg',
+    // },
+    // {
+    //   name: 'Music',
+    //   path: '/music',
+    //   icon: '/kernel/imgs/icons/music_512.jpg',
+    // },
+    // {
+    //   name: 'Gallery',
+    //   path: '/gallery',
+    //   icon: '/kernel/imgs/icons/gallery_512.jpg',
+    // },
     {
       name: 'Notes',
       path: '/notes',
@@ -157,11 +157,11 @@ export default class LeftBar extends Vue {
       path: '/calendar',
       icon: '/kernel/imgs/icons/calendar_512.jpg',
     },
-    {
-      name: 'Bitflow',
-      path: '/bitflow',
-      icon: '/kernel/imgs/icons/bitflow_512.jpg',
-    },
+    // {
+    //   name: 'Bitflow',
+    //   path: '/bitflow',
+    //   icon: '/kernel/imgs/icons/bitflow_512.jpg',
+    // },
     {
       name: 'Arcade',
       path: '/arcade',
@@ -172,11 +172,11 @@ export default class LeftBar extends Vue {
       path: '/contacts',
       icon: '/kernel/imgs/icons/contacts_512.jpg',
     },
-    {
-      name: 'Drive',
-      path: '/drive',
-      icon: '/kernel/imgs/icons/drive_512.jpg',
-    },
+    // {
+    //   name: 'Drive',
+    //   path: '/drive',
+    //   icon: '/kernel/imgs/icons/drive_512.jpg',
+    // },
     {
       name: 'Calculator',
       path: '/calculator',

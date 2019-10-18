@@ -1,12 +1,10 @@
 <template>
-  <v-container
-    fluid
-    class="fill-height"
-  >
+  <div class="fill-height">
     <v-row class="fill-height">
+
       <v-col
         sm="3"
-        class="mb-4 controls"
+        class="mb-4 pl-5 controls"
       >
 
         <p
@@ -60,9 +58,10 @@
         ></v-select>
 
       </v-col>
+
       <v-col
         sm="9"
-        class="pl-4"
+        class="col-no-padding"
       >
 
         <v-calendar
@@ -74,8 +73,9 @@
           :now="now"
         />
       </v-col>
+
     </v-row>
-  </v-container>
+  </div>
 </template>
 
 
@@ -118,5 +118,9 @@ export default class Index extends Vue {
 <style lang="scss" scoped>
 .controls {
   position: relative;
+}
+
+.col-no-padding {
+  padding: 0;
 }
 </style>

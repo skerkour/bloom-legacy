@@ -22,6 +22,9 @@ import {
 
 import {
   GuiEvents,
+  GuiEvent,
+  GuiDeleteEvent,
+  GuiCreateEvent,
 } from './calendar';
 
 export type Message =
@@ -49,6 +52,10 @@ export type Message =
   // calendar
   | { 'type': 'calendar.gui.list_events', 'data': {} }
   | { 'type': 'calendar.gui.events', 'data': GuiEvents }
+  | { 'type': 'calendar.gui.event', 'data': GuiEvent }
+  | { 'type': 'calendar.gui.create_event', 'data': GuiCreateEvent }
+  | { 'type': 'calendar.gui.delete_event', 'data': GuiDeleteEvent }
+  | { 'type': 'calendar.gui.update_event', 'data': GuiEvent }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
   | { 'type': 'error', 'data': { 'code': string, 'message': string, } }

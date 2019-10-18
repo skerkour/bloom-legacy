@@ -13,3 +13,18 @@ export interface Event {
 export interface GuiEvents {
   notes: Event[],
 }
+
+export interface GuiEvent {
+  note: Event,
+}
+
+export interface GuiCreateEvent {
+  title: string,
+  description: string,
+  start_at: Date,
+  end_at: Date,
+}
+
+export interface GuiDeleteEvent {
+  id: string,
+}
