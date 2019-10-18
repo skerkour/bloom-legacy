@@ -2,10 +2,10 @@ use serde::{Deserialize, Serialize};
 
 pub use bloom_auth as auth;
 pub use bloom_calculator as calculator;
+pub use bloom_calendar as calendar;
 pub use bloom_error as error;
 pub use bloom_messages as messages;
 pub use bloom_notes as notes;
-pub use bloom_calendar as calendar;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NativeMessage {
