@@ -6,6 +6,7 @@ pub mod to_remove;
 // services
 pub mod auth;
 pub mod calculator;
+pub mod calendar;
 pub mod notes;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -60,10 +61,15 @@ pub enum Message {
     #[serde(rename = "notes.gui.update_note")]
     NotesGuiUpdateNote(notes::GuiUpdateNote),
 
+    // calculator gui
     #[serde(rename = "calculator.gui.expression")]
     CalculatorGuiExpression(calculator::GuiExpression),
     #[serde(rename = "calculator.gui.result")]
     CalculatorGuiResult(calculator::GuiResult),
+
+    // calendar gui
+    CalendarGuiListEvents(calendar::GuiListEvents),
+    CalendarGuiEvents(calendar::GuiEvents),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),

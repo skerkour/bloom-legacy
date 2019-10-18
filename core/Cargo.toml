@@ -30,4 +30,5 @@ members = [
     "bloom/auth",
     "bloom/notes",
     "bloom/calculator",
+    "bloom/calendar",
 ]
