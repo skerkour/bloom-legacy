@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="bloom logo" src="bloom_256.png" height="180" />
-  <h3 align="center">Bloom Mobile (Android, IOS, Linux, MacOS, Windows)</h3>
-  <p align="center">Empowering people with open technologies</p>
+  <h3 align="center">Bloom Empowering people with open technologies 🌍</h3>
+  <p align="center">(Android, IOS, Linux, MacOS, Windows)</p>
 </p>
 
 [Try it for free](https://bloom.sh/download)
@@ -49,8 +49,7 @@ See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 
 ## Sponsoring
 
-Bloom is a free and open source project. If you are interested in supporting this project, the core team
-and the contributors please visit our
+Bloom is a free and open source project. If you are interested in supporting this project, please visit our
 [dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
 
 
