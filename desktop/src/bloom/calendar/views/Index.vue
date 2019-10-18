@@ -2,15 +2,9 @@
   <div class="fill-height">
     <v-row class="fill-height">
 
-      <v-col
-        sm="3"
-        class="mb-4 pl-5 controls"
-      >
+      <v-col sm="3" class="mb-4 pl-5 controls">
 
-        <p
-          class="mb-4 blm-pointer"
-          @click="centerToday"
-        >
+        <p class="mb-4 blm-pointer" @click="centerToday">
           {{ today }}
         </p>
 
@@ -20,8 +14,9 @@
           large
           color="primary"
           class="mb-4"
+          @click="openEventDialog"
         >
-          New Event
+          <v-icon left>mdi-plus</v-icon> New Event
         </v-btn>
         <!-- </v-row> -->
 
@@ -55,7 +50,7 @@
           outlined
           v-model="type"
           :items="typeOptions"
-        ></v-select>
+        />
 
       </v-col>
 
@@ -75,6 +70,11 @@
       </v-col>
 
     </v-row>
+
+    <blm-calendar-dialog-event
+      :visible="showEventDialog"
+      @closed="closeEventDialog"
+    />
   </div>
 </template>
 
@@ -82,15 +82,21 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import moment from 'moment';
+import EventDialog from '../components/EventDialog.vue';
+import { Event as EventModel } from '@/native/messages/calendar';
 
-@Component
+@Component({
+  components: {
+    'blm-calendar-dialog-event': EventDialog,
+  },
+})
 export default class Index extends Vue {
   // props
   // data
   type = 'month';
   now = moment().format('YYYY-MM-DD');
   focus = moment().format('YYYY-MM-DD');
-  today = moment().format('LLLL');
+  today = moment().format('dddd ll');
   typeOptions = [
     { text: 'Day', value: 'day' },
     { text: '4 Day', value: '4day' },
@@ -103,6 +109,7 @@ export default class Index extends Vue {
   end = moment()
     .endOf('month')
     .format('YYYY-MM-DD');
+  showEventDialog = false;
 
   // computed
   // lifecycle
@@ -110,6 +117,19 @@ export default class Index extends Vue {
   // methods
   centerToday() {
     this.focus = this.now;
+  }
+
+  openEventDialog() {
+    this.showEventDialog = true;
+  }
+
+  closeEventDialog() {
+    this.showEventDialog = false;
+  }
+
+  eventCreated(event: EventModel) {
+    // this.events.push(event);
+    console.log('event created: ', event);
   }
 }
 </script>

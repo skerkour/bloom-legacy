@@ -302,7 +302,13 @@ declare_types! {
             let message = cx.argument::<JsValue>(0)?;
 
             // Unwrap the shutdown channel and send a shutdown command
-            let message: bloom_core::NativeMessage = neon_serde::from_value(&mut cx, message)?;
+            let message: bloom_core::NativeMessage = match neon_serde::from_value(&mut cx, message) {
+                Ok(msg) => msg,
+                Err(err) => {
+                    println!("ERROR deserialazing: {:?}", &err);
+                    return cx.throw_error(&err.to_string());
+                }
+            };
 
             cx.borrow(&this, |emitter| emitter.app_sender.send(message))
                 .or_else(|err| cx.throw_error(&err.to_string()))?;

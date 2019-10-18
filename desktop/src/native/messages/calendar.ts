@@ -11,11 +11,11 @@ export interface Event {
 }
 
 export interface GuiEvents {
-  notes: Event[],
+  events: Event[],
 }
 
 export interface GuiEvent {
-  note: Event,
+  event: Event,
 }
 
 export interface GuiCreateEvent {

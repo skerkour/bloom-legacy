@@ -108,7 +108,7 @@ pub fn create_event(input: calendar::GuiCreateEvent) -> Result<Message, BloomErr
 
     conn.execute(
         "INSERT INTO calendar_events (id, created_at, updated_at, title, description, start_at, end_at)
-            VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+            VALUES (?, ?, ?, ?, ?, ?, ?)",
         params![
             &event.id,
             &event.created_at,
