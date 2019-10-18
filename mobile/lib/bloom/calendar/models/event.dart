@@ -74,6 +74,16 @@ class Event {
     return ret.event;
   }
 
+  static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
+    debugPrint('Event.find called');
+
+    final Map<String, dynamic> res =
+        await compute(Event._nativeCall, CalendarListEvents(startAt, endAt));
+    final CalendarGuiEvents resMsg = CalendarGuiEvents.fromJson(res);
+
+    return resMsg.events;
+  }
+
   static Map<String, dynamic> _nativeCall<T>(T message) {
     final String jsonPayload = jsonEncode(message);
     debugPrint('input: $jsonPayload');
