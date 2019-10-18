@@ -12,6 +12,7 @@ bloom_error = { path = "bloom/error" }
 bloom_auth = { path = "bloom/auth" }
 bloom_notes = { path = "bloom/notes" }
 bloom_calculator = { path = "bloom/calculator" }
+bloom_calendar = { path = "bloom/calendar" }
 
 serde = { version = "1.0", features = ["derive"] }
 

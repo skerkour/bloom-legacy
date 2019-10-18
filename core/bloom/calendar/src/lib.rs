@@ -1,7 +1,8 @@
 use bloom_error::BloomError;
 use bloom_messages::{calendar, Message};
 use bloom_models::calendar::db;
-use rusqlite::{Connection, NO_PARAMS};
+use rusqlite::{params, Connection, NO_PARAMS};
+use chrono::Datelike;
 
 #[cfg(target_os = "android")]
 fn home_dir() -> String {
@@ -29,7 +30,17 @@ fn db_path() -> String {
     return format!("{}/bloom42.db", db_dir());
 }
 
-pub fn list_events(_: calendar::GuiListEvents) -> Result<Message, BloomError> {
+pub fn list_events(input: calendar::GuiListEvents) -> Result<Message, BloomError> {
+    let now = chrono::Utc::now();
+    let start_at = input
+        .start_at
+        .unwrap_or_else(|| now.with_day(1).unwrap());
+    let end_at = input
+        .end_at
+        .unwrap_or_else(|| start_at + chrono::Duration::days(31));
+
+    bloom_validators::calendar::event_dates(start_at, end_at)?;
+
     let conn = Connection::open(db_path())?;
 
     conn.execute(
@@ -45,8 +56,11 @@ pub fn list_events(_: calendar::GuiListEvents) -> Result<Message, BloomError> {
         NO_PARAMS,
     )?;
 
-    let mut stmt = conn.prepare("SELECT * FROM calendar_events")?;
-    let events_iter = stmt.query_map(NO_PARAMS, |row| {
+    let mut stmt = conn.prepare("SELECT * FROM calendar_events
+        WHERE
+            (strftime('%s', start_at) BETWEEN strftime('%s', $1) AND strftime('%s', $2))
+            OR (strftime('%s', end_at) BETWEEN strftime('%s', $1) AND strftime('%s', $2))")?;
+    let events_iter = stmt.query_map(params![start_at, end_at], |row| {
         Ok(db::Event {
             id: row.get(0)?,
             created_at: row.get(1)?,

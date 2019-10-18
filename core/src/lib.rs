@@ -5,6 +5,7 @@ pub use bloom_calculator as calculator;
 pub use bloom_error as error;
 pub use bloom_messages as messages;
 pub use bloom_notes as notes;
+pub use bloom_calendar as calendar;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct NativeMessage {
@@ -30,6 +31,9 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
 
         // calculator
         messages::Message::CalculatorGuiExpression(msg) => calculator::evaluate(msg),
+
+        // calendar
+        messages::Message::CalendarGuiListEvents(msg) => calendar::list_events(msg),
 
         // fallback
         _ => {

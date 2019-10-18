@@ -20,6 +20,10 @@ import {
   GuiResult,
 } from './calculator';
 
+import {
+  GuiEvents,
+} from './calendar';
+
 export type Message =
   // auth
   | { 'type': 'auth.registration_start', 'data': RegistrationStart }
@@ -41,6 +45,10 @@ export type Message =
   // calculator
   | { 'type': 'calculator.gui.expression', 'data': GuiExpression }
   | { 'type': 'calculator.gui.result', 'data': GuiResult }
+
+  // calendar
+  | { 'type': 'calendar.gui.list_events', 'data': {} }
+  | { 'type': 'calendar.gui.events', 'data': GuiEvents }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
   | { 'type': 'error', 'data': { 'code': string, 'message': string, } }

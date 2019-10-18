@@ -68,7 +68,9 @@ pub enum Message {
     CalculatorGuiResult(calculator::GuiResult),
 
     // calendar gui
+    #[serde(rename = "calendar.gui.list_events")]
     CalendarGuiListEvents(calendar::GuiListEvents),
+    #[serde(rename = "calendar.gui.events")]
     CalendarGuiEvents(calendar::GuiEvents),
 
     #[serde(rename = "gui.to_remove.tick")]

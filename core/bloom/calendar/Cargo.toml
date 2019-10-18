@@ -10,6 +10,8 @@ edition = "2018"
 bloom_messages = { path = "../messages" }
 bloom_error = { path = "../error", features = ["reqwest", "rusqlite"] }
 bloom_models = { path = "../models" }
+bloom_validators = { path = "../validators" }
+
 
 rusqlite = { version = "0.20", features = ["bundled", "chrono"] }
 chrono = "0.4"
