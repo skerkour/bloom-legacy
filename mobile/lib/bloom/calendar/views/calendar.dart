@@ -16,16 +16,9 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
   AnimationController _animationController;
   CalendarBloc _bloc;
 
-  DateTime startOfMonth;
-  DateTime endOfMonth;
-
   @override
   void initState() {
     _bloc = CalendarBloc();
-
-    final DateTime nowUtc = DateTime.now().toUtc();
-    startOfMonth = DateTime(nowUtc.year, nowUtc.month, 0);
-    endOfMonth = startOfMonth.add(const Duration(days: 31));
 
     _calendarController = CalendarController();
     _animationController = AnimationController(
@@ -48,7 +41,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
 
   @override
   Widget build(BuildContext context) {
-    _bloc.findEvents(startOfMonth, endOfMonth);
+    _bloc.findEvents();
     return Scaffold(
       appBar: AppBar(
         title: const Text('Calendar'),
@@ -133,7 +126,6 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
     }
   }
 
-  // Simple TableCalendar configuration (using Styles)
   Widget _buildTableCalendar(
       BuildContext context, Map<DateTime, List<Event>> events) {
     return TableCalendar(
@@ -161,7 +153,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
         return Container(
           decoration: BoxDecoration(
             border: Border.all(width: 0.8),
-            borderRadius: BorderRadius.circular(12.0),
+            borderRadius: BorderRadius.circular(6.0),
           ),
           margin: const EdgeInsets.symmetric(horizontal: 8.0, vertical: 4.0),
           child: ListTile(
@@ -180,6 +172,6 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
 
   void _onVisibleDaysChanged(
       DateTime firstDay, DateTime lastDay, CalendarFormat format) {
-    _bloc.findEvents(firstDay, lastDay);
+    _bloc.updateStartAndEndDates(firstDay, lastDay);
   }
 }

@@ -2,12 +2,17 @@ import 'dart:async';
 
 import 'package:bloom/bloom/calendar/models/event.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
+import 'package:flutter/material.dart';
 
 class CalendarBloc extends BlocBase {
   CalendarBloc() {
     _events = <DateTime, List<Event>>{};
     _selectedDay = _zeroizeDay(DateTime.now().toUtc()); // today
     selectedEvents = <Event>[];
+
+    final DateTime nowUtc = DateTime.now().toUtc();
+    _startDate = DateTime(nowUtc.year, nowUtc.month, 1);
+    _endDate = _startDate.add(const Duration(days: 31));
   }
 
   final StreamController<Map<DateTime, List<Event>>> _eventsController =
@@ -27,14 +32,16 @@ class CalendarBloc extends BlocBase {
   Map<DateTime, List<Event>> _events;
   DateTime _selectedDay;
   List<Event> selectedEvents;
+  DateTime _startDate;
+  DateTime _endDate;
 
   @override
   void dispose() {
     _eventsController.close();
   }
 
-  Future<void> findEvents(DateTime startAt, DateTime endAt) async {
-    final List<Event> events = await Event.find(startAt, endAt);
+  Future<void> findEvents() async {
+    final List<Event> events = await Event.find(_startDate, _endDate);
     _events = _aggregateEvents(events);
 
     _eventStream.add(_events);
@@ -45,28 +52,75 @@ class CalendarBloc extends BlocBase {
 
   Future<void> updateSelectedDay(DateTime day) async {
     _selectedDay = _zeroizeDay(day);
+    debugPrint('updateSelectedDay: $_selectedDay');
 
     selectedEvents = _events[_selectedDay] ?? <Event>[];
     _selectedEventsStream.add(selectedEvents);
   }
 
+  Future<void> updateStartAndEndDates(DateTime start, DateTime end) async {
+    _startDate = start;
+    _endDate = end;
+    await findEvents();
+  }
+
   Map<DateTime, List<Event>> _aggregateEvents(List<Event> events) {
     final Map<DateTime, List<Event>> ret = <DateTime, List<Event>>{};
 
+    final int difference = _endDate.difference(_startDate).inDays + 1;
+
+    debugPrint('START: $_startDate');
+    debugPrint('EEEEEND: $_endDate');
+    debugPrint('DIIFFERENCE: $difference');
+
     for (Event event in events) {
-      List<Event> value = ret[event.startAt];
-      if (value == null) {
-        value = <Event>[event];
-      } else {
-        value.add(event);
+      for (int i = 1; i <= difference; i += 1) {
+        DateTime day = DateTime.utc(_startDate.year, _startDate.month, i);
+        debugPrint('DAYYY: $day');
+        day = _zeroizeDay(day);
+        if ((day.isAtSameMomentAs(event.startAt) ||
+                event.startAt.isBefore(day)) &&
+            (event.endAt.isAfter(day) || day.isAtSameMomentAs(event.endAt))) {
+          List<Event> value = ret[day];
+          if (value == null) {
+            value = <Event>[event];
+          } else {
+            value.add(event);
+          }
+          ret[day] = value;
+        }
+        // for (Event event in events) {
+        //   if ((event.startAt.isBefore(day) ||
+        //       event.startAt.isAtSameMomentAs(day)) && day.i) {
+        //     List<Event> value = ret[day];
+        //     if (value == null) {
+        //       value = <Event>[event];
+        //     } else {
+        //       value.add(event);
+        //     }
+        //     ret[day] = value;
+        //   }
+        // }
       }
-      ret[event.startAt] = value;
     }
+
+    debugPrint('DAAAAYS: $ret');
+
+    // for (Event event in events) {
+    //   List<Event> value = ret[event.startAt];
+    //   if (value == null) {
+    //     value = <Event>[event];
+    //   } else {
+    //     value.add(event);
+    //   }
+    //   ret[event.startAt] = value;
+    // }
     return ret;
   }
 
   DateTime _zeroizeDay(DateTime day) {
-    return DateTime.parse('${day.year}-${day.month}-${day.day}T00:00:00.00Z');
+    return DateTime.parse(
+        '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}T00:00:00.00Z');
   }
 }
 

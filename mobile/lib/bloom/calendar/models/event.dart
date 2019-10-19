@@ -15,7 +15,11 @@ class Event {
     this.updatedAt,
     this.startAt,
     this.endAt,
-  });
+  }) {
+    final DateTime nowZero = _zeroizeDay(DateTime.now());
+    startAt ??= nowZero;
+    endAt ??= startAt;
+  }
 
   String id;
   String title;
@@ -93,5 +97,9 @@ class Event {
     final String res = coreFfi.call(jsonPayload);
     debugPrint('output: $res');
     return jsonDecode(res);
+  }
+
+  DateTime _zeroizeDay(DateTime day) {
+    return DateTime.parse('${day.year}-${day.month}-${day.day}T00:00:00.00Z');
   }
 }
