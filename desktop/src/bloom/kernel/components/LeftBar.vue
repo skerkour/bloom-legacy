@@ -150,12 +150,12 @@ export default class LeftBar extends Vue {
     {
       name: 'Notes',
       path: '/notes',
-      icon: '/kernel/imgs/icons/notes_512.jpg',
+      icon: '/assets/icons/notes_256.jpg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
-      icon: '/kernel/imgs/icons/calendar_512.jpg',
+      icon: '/assets/icons/calendar_256.jpg',
     },
     // {
     //   name: 'Bitflow',
@@ -165,13 +165,13 @@ export default class LeftBar extends Vue {
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/kernel/imgs/icons/arcade_512.jpg',
+      icon: '/assets/icons/arcade_256.jpg',
     },
-    {
-      name: 'Contacts',
-      path: '/contacts',
-      icon: '/kernel/imgs/icons/contacts_512.jpg',
-    },
+    // {
+    //   name: 'Contacts',
+    //   path: '/contacts',
+    //   icon: '/assets/icons/contacts_256.jpg',
+    // },
     // {
     //   name: 'Drive',
     //   path: '/drive',
@@ -180,7 +180,7 @@ export default class LeftBar extends Vue {
     {
       name: 'Calculator',
       path: '/calculator',
-      icon: '/kernel/imgs/icons/calculator_512.jpg',
+      icon: '/assets/icons/calculator_256.jpg',
     },
   ];
 

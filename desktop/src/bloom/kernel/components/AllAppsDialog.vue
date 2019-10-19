@@ -60,58 +60,68 @@ export default class AllAppsDialog extends Vue {
 
   // data
   apps1 = [
-    {
-      name: 'Chat',
-      path: '/chat',
-      icon: '/kernel/imgs/icons/chat_512.jpg',
-    },
-    {
-      name: 'Music',
-      path: '/music',
-      icon: '/kernel/imgs/icons/music_512.jpg',
-    },
+    // {
+    //   name: 'Chat',
+    //   path: '/chat',
+    //   icon: '/assets/icons/chat_256.jpg',
+    // },
+    // {
+    //   name: 'Music',
+    //   path: '/music',
+    //   icon: '/assets/icons/music_256.jpg',
+    // },
     {
       name: 'Notes',
       path: '/notes',
-      icon: '/kernel/imgs/icons/notes_512.jpg',
+      icon: '/assets/icons/notes_256.jpg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
-      icon: '/kernel/imgs/icons/calendar_512.jpg',
-    },
-    {
-      name: 'Bitflow',
-      path: '/bitflow',
-      icon: '/kernel/imgs/icons/bitflow_512.jpg',
-    },
-  ];
-  apps2 = [
-    {
-      name: 'Drive',
-      path: '/drive',
-      icon: '/kernel/imgs/icons/drive_512.jpg',
+      icon: '/assets/icons/calendar_256.jpg',
     },
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/kernel/imgs/icons/arcade_512.jpg',
-    },
-    {
-      name: 'Contacts',
-      path: '/contacts',
-      icon: '/kernel/imgs/icons/contacts_512.jpg',
-    },
-    {
-      name: 'Gallery',
-      path: '/gallery',
-      icon: '/kernel/imgs/icons/gallery_512.jpg',
+      icon: '/assets/icons/arcade_256.jpg',
     },
     {
       name: 'Calculator',
       path: '/calculator',
-      icon: '/kernel/imgs/icons/calculator_512.jpg',
+      icon: '/assets/icons/calculator_256.jpg',
     },
+    // {
+    //   name: 'Bitflow',
+    //   path: '/bitflow',
+    //   icon: '/assets/icons/bitflow_256.jpg',
+    // },
+  ];
+  apps2 = [
+    // {
+    //   name: 'Drive',
+    //   path: '/drive',
+    //   icon: '/assets/icons/drive_256.jpg',
+    // },
+    // {
+    //   name: 'Arcade',
+    //   path: '/arcade',
+    //   icon: '/assets/icons/arcade_256.jpg',
+    // },
+    // {
+    //   name: 'Contacts',
+    //   path: '/contacts',
+    //   icon: '/assets/icons/contacts_256.jpg',
+    // },
+    // {
+    //   name: 'Gallery',
+    //   path: '/gallery',
+    //   icon: '/assets/icons/gallery_256.jpg',
+    // },
+    // {
+    //   name: 'Calculator',
+    //   path: '/calculator',
+    //   icon: '/assets/icons/calculator_256.jpg',
+    // },
   ];
 
   // computed

@@ -1,4 +1,4 @@
-.PHONY: dev install clean
+.PHONY: dev install clean assets
 .PHONY: test lint build
 
 
@@ -19,3 +19,8 @@ lint:
 
 build:
 	npm run build
+
+assets:
+	rm -rf public/assets
+	mkdir -p public/assets
+	cp -r ../assets/icons public/assets/icons
