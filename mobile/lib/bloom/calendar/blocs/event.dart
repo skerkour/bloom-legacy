@@ -30,9 +30,9 @@ class EventBloc extends BlocBase {
 
   Future<void> delete() async {
     debugPrint('EventBloc.delete called');
-    // if (_event.id != null) {
-    //   await _event.delete();
-    // }
+    if (_event.id != null) {
+      await _event.delete();
+    }
     _deletedStream.add(_event);
   }
 

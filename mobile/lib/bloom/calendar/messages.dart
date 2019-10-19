@@ -79,3 +79,19 @@ class CalendarGuiUpdateEvent {
     return data;
   }
 }
+
+class CalendarGuiDeleteEvent {
+  CalendarGuiDeleteEvent(this.id);
+
+  final String id;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'type': 'calendar.gui.delete_event',
+      'data': <String, dynamic>{
+        'id': id,
+      },
+    };
+    return data;
+  }
+}

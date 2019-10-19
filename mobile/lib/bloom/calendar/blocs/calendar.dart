@@ -6,9 +6,7 @@ import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 class CalendarBloc extends BlocBase {
   CalendarBloc() {
     _events = <DateTime, List<Event>>{};
-    final DateTime now = DateTime.now().toUtc();
-    _selectedDay = DateTime.parse(
-        '${now.year}-${now.month}-${now.day}T00:00:00.00Z'); // today
+    _selectedDay = _zeroizeDay(DateTime.now().toUtc()); // today
     selectedEvents = <Event>[];
   }
 
@@ -45,9 +43,11 @@ class CalendarBloc extends BlocBase {
     _selectedEventsStream.add(selectedEvents);
   }
 
-  Future<void> updateSelectedEvents(List<Event> events) async {
-    selectedEvents = events;
-    _selectedEventsStream.add(events);
+  Future<void> updateSelectedDay(DateTime day) async {
+    _selectedDay = _zeroizeDay(day);
+
+    selectedEvents = _events[_selectedDay] ?? <Event>[];
+    _selectedEventsStream.add(selectedEvents);
   }
 
   Map<DateTime, List<Event>> _aggregateEvents(List<Event> events) {
@@ -63,6 +63,10 @@ class CalendarBloc extends BlocBase {
       ret[event.startAt] = value;
     }
     return ret;
+  }
+
+  DateTime _zeroizeDay(DateTime day) {
+    return DateTime.parse('${day.year}-${day.month}-${day.day}T00:00:00.00Z');
   }
 }
 

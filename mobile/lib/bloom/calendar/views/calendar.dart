@@ -15,7 +15,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
   CalendarController _calendarController;
   AnimationController _animationController;
   CalendarBloc _bloc;
-  final DateTime nowUtc = DateTime.now().toUtc();
+
   DateTime startOfMonth;
   DateTime endOfMonth;
 
@@ -23,6 +23,7 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
   void initState() {
     _bloc = CalendarBloc();
 
+    final DateTime nowUtc = DateTime.now().toUtc();
     startOfMonth = DateTime(nowUtc.year, nowUtc.month, 0);
     endOfMonth = startOfMonth.add(const Duration(days: 31));
 
@@ -173,12 +174,8 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
   }
 
   void _onDaySelected(DateTime day, List<dynamic> evts) {
-    print('CALLBACK: _onDaySelected');
-    final List<Event> events = evts.map((dynamic evt) {
-      final Event event = evt;
-      return event;
-    }).toList();
-    _bloc.updateSelectedEvents(events);
+    debugPrint('CALLBACK: _onDaySelected');
+    _bloc.updateSelectedDay(day);
   }
 
   void _onVisibleDaysChanged(

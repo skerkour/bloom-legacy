@@ -71,6 +71,12 @@ class Event {
     return ret.event;
   }
 
+  Future<void> delete() async {
+    debugPrint('Event.delete called (id: $id)');
+
+    await compute(Event._nativeCall, CalendarGuiDeleteEvent(id));
+  }
+
   static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
     debugPrint('Event.find called');
 

@@ -69,14 +69,14 @@ class _EventState extends State<EventView> {
         stream: _bloc.eventStream,
         builder: (BuildContext context, AsyncSnapshot<Event> snapshot) {
           if (snapshot.hasData) {
-            final Event note = snapshot.data;
+            final Event event = snapshot.data;
             return WillPopScope(
               child: Scaffold(
                 appBar: AppBar(
-                  // actions: _buildAppBarActions(context, note),
+                  actions: _buildAppBarActions(context, event),
                   elevation: 1,
                 ),
-                body: _buildBody(context, note),
+                body: _buildBody(context, event),
               ),
               onWillPop: _readyToPop,
             );
@@ -154,11 +154,45 @@ class _EventState extends State<EventView> {
     );
   }
 
+  List<Widget> _buildAppBarActions(BuildContext context, Event event) {
+    final List<Widget> list = <Widget>[
+      IconButton(
+        icon: Icon(Icons.delete),
+        onPressed: _deleteEvent,
+      ),
+    ];
+    return list;
+  }
+
   Future<bool> _readyToPop() async {
     _persistenceTimer?.cancel();
     // save data a last time before quitting
     await _bloc.save(
         _titleController.text, _descriptionController.text, _startAt, _endAt);
     return true;
+  }
+
+  void _deleteEvent() {
+    showDialog<Widget>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: const Text('Confirm ?'),
+            content: const Text('This event will be permanently deleted'),
+            actions: <Widget>[
+              FlatButton(
+                onPressed: () {
+                  // close dialog
+                  Navigator.of(context).pop();
+                },
+                child: const Text('No'),
+              ),
+              FlatButton(
+                onPressed: _bloc.delete,
+                child: const Text('Yes'),
+              ),
+            ],
+          );
+        });
   }
 }
