@@ -2,7 +2,6 @@ import 'dart:async';
 
 import 'package:bloom/bloom/calendar/models/event.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:flutter/material.dart';
 
 class CalendarBloc extends BlocBase {
   CalendarBloc() {
@@ -52,7 +51,6 @@ class CalendarBloc extends BlocBase {
 
   Future<void> updateSelectedDay(DateTime day) async {
     _selectedDay = _zeroizeDay(day);
-    debugPrint('updateSelectedDay: $_selectedDay');
 
     selectedEvents = _events[_selectedDay] ?? <Event>[];
     _selectedEventsStream.add(selectedEvents);
@@ -69,14 +67,9 @@ class CalendarBloc extends BlocBase {
 
     final int difference = _endDate.difference(_startDate).inDays + 1;
 
-    debugPrint('START: $_startDate');
-    debugPrint('EEEEEND: $_endDate');
-    debugPrint('DIIFFERENCE: $difference');
-
     for (Event event in events) {
       for (int i = 1; i <= difference; i += 1) {
         DateTime day = DateTime.utc(_startDate.year, _startDate.month, i);
-        debugPrint('DAYYY: $day');
         day = _zeroizeDay(day);
         if ((day.isAtSameMomentAs(event.startAt) ||
                 event.startAt.isBefore(day)) &&
@@ -89,32 +82,9 @@ class CalendarBloc extends BlocBase {
           }
           ret[day] = value;
         }
-        // for (Event event in events) {
-        //   if ((event.startAt.isBefore(day) ||
-        //       event.startAt.isAtSameMomentAs(day)) && day.i) {
-        //     List<Event> value = ret[day];
-        //     if (value == null) {
-        //       value = <Event>[event];
-        //     } else {
-        //       value.add(event);
-        //     }
-        //     ret[day] = value;
-        //   }
-        // }
       }
     }
 
-    debugPrint('DAAAAYS: $ret');
-
-    // for (Event event in events) {
-    //   List<Event> value = ret[event.startAt];
-    //   if (value == null) {
-    //     value = <Event>[event];
-    //   } else {
-    //     value.add(event);
-    //   }
-    //   ret[event.startAt] = value;
-    // }
     return ret;
   }
 
