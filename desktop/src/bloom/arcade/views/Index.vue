@@ -8,7 +8,7 @@
     >
 
     <v-img
-      src="/kernel/imgs/icons/2048.png"
+      src="/assets/icons/2048.png"
       height="200px"
       width="200px"
     ></v-img>

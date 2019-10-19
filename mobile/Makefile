@@ -28,4 +28,7 @@ icon:
 	- flutter pub run flutter_launcher_icons:main
 
 assets:
-	rm -rf assets/icons && cp -r ../assets/icons assets/icons
+	rm -rf assets
+	mkdir -p assets
+	cp -r ../assets/icons assets/icons
+	cp -r ../assets/mobile/images assets/images

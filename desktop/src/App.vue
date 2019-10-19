@@ -42,7 +42,7 @@ export default class App extends Vue {
 <style lang="scss">
 @font-face {
   font-family: "rounded_elegance";
-  src: url("/kernel/fonts/rounded_elegance.ttf") format("truetype");
+  src: url("/assets/fonts/rounded_elegance.ttf") format("truetype");
 }
 
 #app {

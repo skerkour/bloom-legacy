@@ -9,7 +9,7 @@ class ArcadeView extends StatefulWidget {
 }
 
 class _ArcadeState extends State<ArcadeView> {
-  static const String _2048Icon = 'assets/images/2048.png';
+  static const String _2048Icon = 'assets/icons/2048.png';
 
   @override
   Widget build(BuildContext context) {

@@ -80,18 +80,8 @@ List<_BlmApp> getApps() {
   return <_BlmApp>[
     const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
     const _BlmApp(
-        icon: 'assets/images/calendar_128.png',
-        name: 'Calendar',
-        route: '/calendar'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png', name: 'Drive', route: '/drive'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png',
-        name: 'Platform',
-        route: '/platform'),
-    const _BlmApp(
-        icon: 'assets/images/drive_128.png',
-        name: 'Bitflow',
-        route: '/bitflow'),
+        icon: ICON_CALENDAR_256, name: 'Calendar', route: '/calendar'),
+    const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
+    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
   ];
 }

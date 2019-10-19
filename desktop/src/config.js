@@ -3,7 +3,7 @@ const path = require('path');
 const WEBSITE_DOMAIN = 'bloom.sh';
 
 module.exports = {
-  TRAY_ICON: path.join('public', 'kernel', 'imgs', 'icons', 'tray.png'),
+  TRAY_ICON: path.join('public', 'assets', 'icons', 'tray.png'),
   WINDOW_TITLE: 'Bloom',
   WINDOW_ICON: path.join('public', 'bloom_1024.png'),
   WINDOW_URL: 'http://localhost:8080',
