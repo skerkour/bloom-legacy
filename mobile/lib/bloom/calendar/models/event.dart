@@ -15,10 +15,7 @@ class Event {
     this.updatedAt,
     this.startAt,
     this.endAt,
-  }) {
-    startAt = DateTime.now().toUtc();
-    endAt = startAt;
-  }
+  });
 
   String id;
   String title;

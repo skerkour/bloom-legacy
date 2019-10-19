@@ -42,6 +42,8 @@ class _EventState extends State<EventView> {
 
     _startAt = _bloc.event.startAt;
     _endAt = _bloc.event.endAt;
+    _titleController.text = _bloc.event.title;
+    _descriptionController.text = _bloc.event.description;
 
     _bloc.deletedStream.listen((_) {
       _persistenceTimer?.cancel();
