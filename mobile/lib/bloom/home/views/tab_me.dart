@@ -124,10 +124,12 @@ List<_BlmApp> getApps() {
   return <_BlmApp>[
     const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
     const _BlmApp(
-        icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
-    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
-    const _BlmApp(
         icon: ICON_CALENDAR_256, name: 'Calendar', route: '/calendar'),
+    const _BlmApp(
+        icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
+    const _BlmApp(
+        icon: ICON_CONTACTS_256, name: 'Contacts', route: '/contacts'),
+    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
   ];
 }
 

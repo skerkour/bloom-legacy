@@ -3,6 +3,7 @@ use serde::{Deserialize, Serialize};
 pub use bloom_auth as auth;
 pub use bloom_calculator as calculator;
 pub use bloom_calendar as calendar;
+pub use bloom_contacts as contacts;
 pub use bloom_error as error;
 pub use bloom_messages as messages;
 pub use bloom_notes as notes;
@@ -37,6 +38,8 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::CalendarGuiCreateEvent(msg) => calendar::create_event(msg),
         messages::Message::CalendarGuiDeleteEvent(msg) => calendar::delete_event(msg),
         messages::Message::CalendarGuiUpdateEvent(msg) => calendar::update_event(msg),
+
+        // contacts
 
         // fallback
         _ => {

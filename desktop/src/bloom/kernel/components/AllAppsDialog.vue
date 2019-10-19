@@ -81,14 +81,19 @@ export default class AllAppsDialog extends Vue {
       icon: '/assets/icons/calendar_256.jpg',
     },
     {
-      name: 'Arcade',
-      path: '/arcade',
-      icon: '/assets/icons/arcade_256.jpg',
-    },
-    {
       name: 'Calculator',
       path: '/calculator',
       icon: '/assets/icons/calculator_256.jpg',
+    },
+    {
+      name: 'Contacts',
+      path: '/contacts',
+      icon: '/assets/icons/contacts_256.jpg',
+    },
+    {
+      name: 'Arcade',
+      path: '/arcade',
+      icon: '/assets/icons/arcade_256.jpg',
     },
     // {
     //   name: 'Bitflow',
@@ -107,11 +112,7 @@ export default class AllAppsDialog extends Vue {
     //   path: '/arcade',
     //   icon: '/assets/icons/arcade_256.jpg',
     // },
-    // {
-    //   name: 'Contacts',
-    //   path: '/contacts',
-    //   icon: '/assets/icons/contacts_256.jpg',
-    // },
+
     // {
     //   name: 'Gallery',
     //   path: '/gallery',

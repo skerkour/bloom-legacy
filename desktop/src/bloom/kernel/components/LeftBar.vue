@@ -167,11 +167,11 @@ export default class LeftBar extends Vue {
       path: '/arcade',
       icon: '/assets/icons/arcade_256.jpg',
     },
-    // {
-    //   name: 'Contacts',
-    //   path: '/contacts',
-    //   icon: '/assets/icons/contacts_256.jpg',
-    // },
+    {
+      name: 'Contacts',
+      path: '/contacts',
+      icon: '/assets/icons/contacts_256.jpg',
+    },
     // {
     //   name: 'Drive',
     //   path: '/drive',
