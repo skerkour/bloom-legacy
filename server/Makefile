@@ -37,7 +37,7 @@
 DIST_DIR = dist
 NAME := bloom
 VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
-DOCKER_IMAGE = registry.gitlab.com/bloom42/server
+DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom/server
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
