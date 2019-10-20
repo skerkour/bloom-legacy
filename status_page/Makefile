@@ -1,7 +1,7 @@
 .PHONY: build docker_login release run
 
 NAME := status_page
-DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
+DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom/$(NAME)
 
 build:
 	docker build -t $(DOCKER_IMAGE):latest .
