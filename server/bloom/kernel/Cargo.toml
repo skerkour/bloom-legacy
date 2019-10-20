@@ -13,11 +13,10 @@ eventsourcing = { path = "../../libs/eventsourcing-rs" }
 mimesniff = { path = "../../libs/mimesniff-rs" }
 hex = { path = "../../libs/hex-rs" }
 try_future = { path = "../../libs/rust-try-future" }
-bloom_messages = { package = "bloom_messages", git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
-bloom_const = { git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
-bloom_validators = { git = "https://gitlab.com/bloom42/bloom", branch = "dev"}
-bloom_error = { git = "https://gitlab.com/bloom42/bloom", branch = "dev", features = ["lettre", "lettre_email", "actix", "crypto42", "diesel", "actix-http", "url", "r2d2"]}
-
+bloom_messages = {  path = "../../../core/bloom/messages" }
+bloom_const = { path = "../../../core/bloom/const" }
+bloom_validators = { path = "../../../core/bloom/validators" }
+bloom_error = {  path = "../../../core/bloom/error", features = ["lettre", "lettre_email", "actix", "crypto42", "diesel", "actix-http", "url", "r2d2"]}
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 regex = "1"

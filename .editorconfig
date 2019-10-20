@@ -18,9 +18,11 @@ max_line_length = 10
 [Makefile]
 indent_style = tab
 
-[*.{js,jsx,ts,tsx,vue,json}]
+[*.{js,jsx,ts,tsx,vue,json,html}]
+indent_style = space
 indent_size = 2
 
 # 4 space indentation
-[{*.rs,*.toml,*.sane,*.json, *.sql}]
+[{*.rs,*.toml,*.sane,*.json, *.sql, *.css, *.scss, *.sass}]
+indent_style = space
 indent_size = 4

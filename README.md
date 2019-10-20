@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="bloom logo" src="bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
-  <p align="center">Empowering people with open technologies 🌍 (Android, IOS, Linux, MacOS, Windows)</p>
+  <p align="center">Empowering people with open technologies 🌍 (Android, IOS, Linux, MacOS, Windows, Server, Website)</p>
 </p>
 
 [Try it for free](https://bloom.sh/download)
