@@ -1,0 +1,11 @@
+[workspace]
+members = [
+    "diesel_as_jsonb",
+    "hex-rs",
+    "eventsourcing-rs",
+    "eventsourcing_derive",
+    "mimesniff-rs",
+    "diesel-derive-enum",
+    "diesel-enum-derive",
+    "caldyn",
+]

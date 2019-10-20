@@ -20,8 +20,6 @@ serde = { version = "1.0", features = ["derive"] }
 
 [workspace]
 members = [
-    "libs/caldyn",
-
     "bloom/messages",
     "bloom/error",
     "bloom/validators",

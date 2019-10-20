@@ -8,15 +8,16 @@ publish = false
 
 
 [dependencies]
-diesel_as_jsonb = { path = "../../libs/diesel_as_jsonb" }
-eventsourcing = { path = "../../libs/eventsourcing-rs" }
-mimesniff = { path = "../../libs/mimesniff-rs" }
-hex = { path = "../../libs/hex-rs" }
-try_future = { path = "../../libs/rust-try-future" }
 bloom_messages = {  path = "../../../core/bloom/messages" }
 bloom_const = { path = "../../../core/bloom/const" }
 bloom_validators = { path = "../../../core/bloom/validators" }
 bloom_error = {  path = "../../../core/bloom/error", features = ["lettre", "lettre_email", "actix", "crypto42", "diesel", "actix-http", "url", "r2d2"]}
+
+diesel_as_jsonb = { path = "../../../core/libs/diesel_as_jsonb" }
+eventsourcing = { path = "../../../core/libs/eventsourcing-rs" }
+mimesniff = { path = "../../../core/libs/mimesniff-rs" }
+hex = { path = "../../../core/libs/hex-rs" }
+try_future = { path = "../../../core/libs/rust-try-future" }
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 regex = "1"

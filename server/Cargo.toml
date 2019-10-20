@@ -11,7 +11,7 @@ keywords = ["bloom42", "bloom"]
 
 
 [dependencies]
-eventsourcing = { path = "libs/eventsourcing-rs" }
+eventsourcing = { path = "../core/libs/eventsourcing-rs" }
 
 bloom_kernel = { path = "bloom/kernel" }
 bloom_messages = { path = "../core/bloom/messages" }
@@ -52,27 +52,18 @@ debug = true
 lto = true
 
 
-
 [workspace]
 members = [
-    "libs/diesel_as_jsonb",
-    "libs/hex-rs",
-    "libs/eventsourcing-rs",
-    "libs/eventsourcing_derive",
-    "libs/mimesniff-rs",
-    "libs/diesel-derive-enum",
-    "libs/diesel-enum-derive",
-
-    "bloom/kernel",
-    "bloom/drive",
-    "bloom/notes",
-    "bloom/contacts",
-    "bloom/gallery",
-    "bloom/music",
-    "bloom/bitflow",
-    "bloom/phaser",
-    # "billing",
-    "bloom/admin",
-    "bloom/calendar",
     ".",
+    "bloom/kernel",
+    # "bloom/drive",
+    # "bloom/notes",
+    # "bloom/contacts",
+    # "bloom/gallery",
+    # "bloom/music",
+    # "bloom/bitflow",
+    # "bloom/phaser",
+    # "billing",
+    # "bloom/admin",
+    # "bloom/calendar",
 ]
