@@ -232,8 +232,9 @@ release:status_page:
   tags:
     - docker
   only:
-    changes:
-      - status_page/*
+    - /^status_page-v.*$/
+  except:
+    - branches
   script:
     - cd status_page/
     - apk update && apk add make
