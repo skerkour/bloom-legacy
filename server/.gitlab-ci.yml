@@ -1,0 +1,117 @@
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - package
+  - release
+
+include:
+  template: Dependency-Scanning.gitlab-ci.yml
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  RUST_VERSION: nightly-2019-10-13
+  RUST_IMAGE: rust:latest
+  RUST_BACKTRACE: 1
+  RUST_ENV: test
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
+  POSTGRES_HOST: postgres
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+  HOST: http://localhost:8000
+  AWS_SECRET_ACCESS_KEY: test
+  AWS_ACCESS_KEY_ID: test
+  AWS_REGION: test
+  S3_BUCKET: test
+  S3_BASE_URL: test
+  SENTRY_SERVER_URL: test
+  SENTRY_WEBAPP_URL: test
+  SMTP_HOST: test
+  SMTP_USERNAME: test
+  SMTP_PASSWORD: test
+  STRIPE_PUBLIC_KEY: test
+  STRIPE_SECRET_KEY: test
+
+
+cache:
+  paths:
+    - cargo_home/
+    - target/
+
+
+test:
+  stage: test
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - rustup component add rustfmt clippy
+    - cp bloom.default.sane bloom.sane
+    - make fmt_check
+    - make lint
+    - make test
+  services:
+    - postgres:11
+
+build:
+  stage: build
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - make build
+  artifacts:
+    paths:
+    - dist
+
+package:docker:
+  stage: package
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+
+
+release:docker:nightly:
+  only:
+    - schedules
+  stage: release
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release_nightly
+
+release:docker:stable:
+  only:
+    - tags
+  stage: release
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release

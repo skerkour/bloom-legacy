@@ -4,114 +4,210 @@ services:
 stages:
   - test
   - build
-  - package
   - release
 
 include:
   template: Dependency-Scanning.gitlab-ci.yml
 
 variables:
+  # Rust (core)
   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
-  RUST_VERSION: nightly-2019-10-13
-  RUST_IMAGE: rust:latest
-  RUST_BACKTRACE: 1
   RUST_ENV: test
-  POSTGRES_USER: postgres
-  POSTGRES_PASSWORD: postgres
-  POSTGRES_DB: postgres
-  POSTGRES_HOST: postgres
-  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
-  HOST: http://localhost:8000
-  AWS_SECRET_ACCESS_KEY: test
-  AWS_ACCESS_KEY_ID: test
-  AWS_REGION: test
-  S3_BUCKET: test
-  S3_BASE_URL: test
-  SENTRY_SERVER_URL: test
-  SENTRY_WEBAPP_URL: test
-  SMTP_HOST: test
-  SMTP_USERNAME: test
-  SMTP_PASSWORD: test
-  STRIPE_PUBLIC_KEY: test
-  STRIPE_SECRET_KEY: test
+  RUST_VERSION: nightly-2019-10-13
+  RUST_BACKTRACE: 1
+
+  # Flutter (mobile)
+  ANDROID_COMPILE_SDK: "28"
+  ANDROID_BUILD_TOOLS: "28.0.2"
+  ANDROID_SDK_TOOLS:   "4333796"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.10.14-dev.tar.xz"
+
+  # NodeJS (desktop)
+  NODE_ENV: test
+  NODE_VERSION: lts
 
 
 cache:
   paths:
     - cargo_home/
-    - target/
+    - core/target/
+    - desktop/node_modules/
+    - website/node_modules/
 
+####################################################################################################
+## Test
+####################################################################################################
 
-test:
+test:core:
   stage: test
-  image: $RUST_IMAGE
+  image: 'rust:stretch'
   tags:
     - docker
   script:
-    - apt update && apt install -y gcc make git
+    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
     - rustup default $RUST_VERSION
     - rustup component add rustfmt clippy
-    - cp bloom.default.sane bloom.sane
+    - cd core
     - make fmt_check
     - make lint
     - make test
-  services:
-    - postgres:11
 
-build:
-  stage: build
-  image: $RUST_IMAGE
+
+test:mobile:
+  stage: test
+  image: openjdk:8-jdk
   tags:
     - docker
   script:
-    - apt update && apt install -y gcc make git
+    - cd mobile
+    - apt-get --quiet update --yes
+    - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 build-essential
+    - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
+    - unzip -d android-sdk-linux android-sdk.zip
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" >/dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" >/dev/null
+    - export ANDROID_HOME=$PWD/android-sdk-linux
+    - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+    # temporarily disable checking for EPIPE error and use yes to accept all licenses
+    - set +o pipefail
+    - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+    - set -o pipefail
+    # flutter sdk setup
+    - cd $HOME && wget --output-document=flutter-sdk.tar.xz $FLUTTER_VERSION
+        && tar -xf flutter-sdk.tar.xz && export PATH=$PATH:$HOME/flutter/bin
+        && cd -
+    - echo flutter.sdk=$HOME/flutter > android/local.properties
+    - flutter config --no-analytics
+    - make fmt_check
+    - make lint
+    - make test
+
+test:desktop:
+  stage: test
+  image: node:$NODE_VERSION
+  tags:
+    - docker
+  script:
+    - cd desktop
+    - make install
+    #- make test
+    - make lint
+
+
+####################################################################################################
+## Build
+####################################################################################################
+
+# TODO
+
+build:core:
+  stage: build
+  image: 'rust:stretch'
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
     - rustup default $RUST_VERSION
+    - cd core
     - make build
+
+
+build:desktop:
+  stage: build
+  image: node:$NODE_VERSION
+  tags:
+    - docker
+  script:
+    - cd desktop
+    - make install
+    - make build
+
+build:mobile:
+  stage: build
+  image: openjdk:8-jdk
+  tags:
+    - docker
+  script:
+    - cd mobile
+    - apt-get --quiet update --yes
+    - apt-get --quiet install --yes wget tar unzip lib32stdc++6 lib32z1 build-essential
+    - wget --quiet --output-document=android-sdk.zip https://dl.google.com/android/repository/sdk-tools-linux-${ANDROID_SDK_TOOLS}.zip
+    - unzip -d android-sdk-linux android-sdk.zip
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platforms;android-${ANDROID_COMPILE_SDK}" >/dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "platform-tools" >/dev/null
+    - echo y | android-sdk-linux/tools/bin/sdkmanager "build-tools;${ANDROID_BUILD_TOOLS}" >/dev/null
+    - export ANDROID_HOME=$PWD/android-sdk-linux
+    - export PATH=$PATH:$PWD/android-sdk-linux/platform-tools/
+    # temporarily disable checking for EPIPE error and use yes to accept all licenses
+    - set +o pipefail
+    - yes | android-sdk-linux/tools/bin/sdkmanager --licenses
+    - set -o pipefail
+    # flutter sdk setup
+    - cd $HOME && wget --output-document=flutter-sdk.tar.xz $FLUTTER_VERSION
+        && tar -xf flutter-sdk.tar.xz && export PATH=$PATH:$HOME/flutter/bin
+        && cd -
+    - echo flutter.sdk=$HOME/flutter > android/local.properties
+    - flutter config --no-analytics
+    - make build
+
+
+####################################################################################################
+## Build
+####################################################################################################
+
+release:status_page:
+  image: docker:stable
+  stage: release
+  tags:
+    - docker
+  only:
+    changes:
+      - status_page/*
+  script:
+    - cd status_page/
+    - apk update && apk add make
+    - make build
+    - make docker_login
+    - make release
+
+pages: # release:website
+  image: node:lts
+  stage: release
+  tags:
+    - docker
+  only:
+    - /^website-v.*$/
+  except:
+    - branches
+  script:
+    - cd status_page/
+    - make install
+    - make build
+    - mv dist public
   artifacts:
     paths:
-    - dist
-
-package:docker:
-  stage: package
-  dependencies:
-    - build
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - apk update && apk add make
-    - make docker_build
+      - public
 
 
-release:docker:nightly:
-  only:
-    - schedules
-  stage: release
-  dependencies:
-    - build
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release_nightly
+# test:android:
+#   stage: test
+#   script:
+#     - cd android
+#     - ./gradlew -Pci --console=plain :app:testDebug
 
-release:docker:stable:
-  only:
-    - tags
-  stage: release
-  dependencies:
-    - build
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release
+# build:apk:
+#   stage: build
+#   script:
+#     - flutter build apk
+#   artifacts:
+#     paths:
+#       - build/app/outputs/apk
+
+# build:bundle:
+#   stage: build
+#   script:
+#     - flutter build appbundle
+#   artifacts:
+#     paths:
+#       - build/app/outputs/bundle

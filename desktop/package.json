@@ -1,0 +1,57 @@
+{
+  "name": "bloom_desktop",
+  "productName": "Bloom",
+  "description": "Empowering people",
+  "version": "0.1.0",
+  "author": {
+    "name": "Bloom",
+    "email": "hello@bloom.sh"
+  },
+  "private": true,
+  "main": "src/main_electron.js",
+  "scripts": {
+    "start": "electron .",
+    "serve": "vue-cli-service serve",
+    "build": "vue-cli-service build --modern",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
+  },
+  "dependencies": {
+    "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
+    "@mdi/font": "=4.4.95",
+    "core-js": "^2.6.5",
+    "moment": "^2.24.0",
+    "rxjs": "=6.5.3",
+    "uuid": "^3.3.3",
+    "vue": "=2.6.10",
+    "vue-class-component": "=7.1.0",
+    "vue-property-decorator": "=8.2.2",
+    "vue-router": "=3.1.3",
+    "vue-the-mask": "^0.11.1",
+    "vuetify": "=2.0.19",
+    "vuex": "=3.1.1"
+  },
+  "devDependencies": {
+    "@types/jest": "^24.0.18",
+    "@types/vue-the-mask": "^0.11.0",
+    "@vue/cli-plugin-babel": "^3.12.0",
+    "@vue/cli-plugin-eslint": "^3.12.0",
+    "@vue/cli-plugin-typescript": "^3.12.0",
+    "@vue/cli-plugin-unit-jest": "^3.12.0",
+    "@vue/cli-service": "^3.12.0",
+    "@vue/eslint-config-airbnb": "^4.0.0",
+    "@vue/eslint-config-typescript": "^4.0.0",
+    "@vue/test-utils": "1.0.0-beta.29",
+    "babel-core": "7.0.0-bridge.0",
+    "babel-eslint": "^10.0.1",
+    "electron": "=6.0.12",
+    "eslint": "^6.5.1",
+    "eslint-plugin-vue": "^5.0.0",
+    "sass": "^1.23.0",
+    "sass-loader": "^8.0.0",
+    "ts-jest": "^23.0.0",
+    "typescript": "^3.6.4",
+    "vue-template-compiler": "^2.6.10",
+    "webpack": "^4.41.0"
+  }
+}

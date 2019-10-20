@@ -31,15 +31,27 @@ yarn-error.log*
 node_modules/
 
 
-# Project specific
-/db
-
-target/
-tmp/
-assets/GeoLite2-City.mmdb
-.env
+# local env files
 .env.local
 .env.*.local
-.tmp/
-dist/
-bloom.sane
+
+
+# Miscellaneous
+*.class
+*.log
+*.pyc
+*.swp
+.DS_Store
+.atom/
+.buildlog/
+.history
+.svn/
+
+# IntelliJ related
+*.iml
+*.ipr
+*.iws
+.idea/
+
+# Database files
+/db

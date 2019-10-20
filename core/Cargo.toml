@@ -1,0 +1,37 @@
+[package]
+name = "bloom_core"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+bloom_messages = { path = "bloom/messages" }
+bloom_error = { path = "bloom/error" }
+bloom_auth = { path = "bloom/auth" }
+bloom_notes = { path = "bloom/notes" }
+bloom_calculator = { path = "bloom/calculator" }
+bloom_calendar = { path = "bloom/calendar" }
+bloom_contacts = { path = "bloom/contacts" }
+
+serde = { version = "1.0", features = ["derive"] }
+
+
+[workspace]
+members = [
+    "libs/caldyn",
+
+    "bloom/messages",
+    "bloom/error",
+    "bloom/validators",
+    "bloom/const",
+    "bloom/models",
+
+    # services
+    "bloom/auth",
+    "bloom/notes",
+    "bloom/calculator",
+    "bloom/calendar",
+    "bloom/contacts",
+]

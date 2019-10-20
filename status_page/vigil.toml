@@ -1,0 +1,78 @@
+# Vigil
+# Microservices Status Page
+# Configuration file
+# Example: https://github.com/valeriansaliou/vigil/blob/master/config.cfg
+
+[server]
+
+log_level = "error"
+inet = "0.0.0.0:8080"
+workers = 4
+reporter_token = "[REPLACE]"
+
+[assets]
+
+path = "./res/assets/"
+
+[branding]
+
+page_title = "Bloom Status"
+page_url = "https://status.bloom.sh/"
+company_name = "Bloom"
+icon_color = "#1972F5"
+icon_url = "https://bloom.sh/kernel/static/imgs/logos/bloom_64.png"
+logo_color = "#1972F5"
+logo_url = "https://bloom.sh/kernel/static/imgs/logos/bloom_256.png"
+website_url = "https://bloom.sh/"
+support_url = "mailto:hello@bloom.sh"
+custom_html = """
+<script>
+var footer = document.getElementsByTagName("footer")[0];
+footer.style.display = "none";
+</script>
+"""
+
+[metrics]
+
+poll_interval = 30
+poll_retry = 2
+
+poll_http_status_healthy_above = 199
+poll_http_status_healthy_below = 400
+
+# poll_delay_dead = 30
+# poll_delay_sick = 10
+
+# push_delay_dead = 20
+
+# push_system_cpu_sick_above = 0.90
+# push_system_ram_sick_above = 0.90
+
+[notify]
+
+# reminder_interval = 300
+
+[notify.email]
+
+from = "notify@bloom.sh"
+to = "hello@bloom.sh"
+
+smtp_host = "[REPLACE]"
+smtp_port = 587
+smtp_username = "[REPLACE]"
+smtp_password = "[REPLACE]"
+
+[probe]
+
+[[probe.service]]
+
+id = "website"
+label = "Website"
+
+[[probe.service.node]]
+
+id = "Web"
+label = "Website"
+mode = "poll"
+replicas = ["https://bloom.sh/api"]
+http_body_healthy_match=".+"

@@ -1,0 +1,18 @@
+[package]
+name = "core_ffi"
+version = "0.1.0"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+
+[lib]
+name = "core_ffi"
+crate-type = ["cdylib"] # C dynamic library
+
+[dependencies]
+bloom_core = { path = "../../core" }
+
+libc = "0.2"
+serde_json = "1.0"
+
+log = "0.4"
+android_logger = "0.8"
