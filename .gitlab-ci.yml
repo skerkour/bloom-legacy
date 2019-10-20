@@ -204,6 +204,17 @@ build:server:
     paths:
     - server/dist
 
+build:the_guide:
+  stage: build
+  image: python:alpine
+  tags:
+    - docker
+  script:
+    - cd the_guide
+    - apk add --update make
+    - pip install mkdocs pymdown-extensions
+    - make build
+
 
 ####################################################################################################
 ## Package
@@ -298,6 +309,31 @@ release:server:stable:
     - make docker_login
     - make docker_release
 
+
+# release the_guide
+# pages:
+#   stage: release
+#   only:
+#     - master
+#   script:
+#     - make build
+#     - mv dist public
+#   artifacts:
+#     paths:
+#       - public
+
+# variables:
+#   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+
+# default:
+#   image: rust:latest
+#   before_script:
+#     - export PATH="$PATH:$CARGO_HOME/bin"
+#     - mdbook --version || cargo install --debug mdbook
+
+# cache:
+#   paths:
+#     - $CARGO_HOME/bin
 
 
 # test:android:

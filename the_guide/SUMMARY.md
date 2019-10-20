@@ -1,0 +1,58 @@
+# Summary
+
+- [Intro](intro/index.md)
+
+- [Organization](organization/index.md)
+  - [Vision](organization/vision.md)
+  - [Mission](organization/mission.md)
+  - [Values](organization/values.md)
+  - [Structure](organization/structure.md)
+  - [Leadership](organization/leadership.md)
+  - [Contributing](organization/contributing.md)
+  - [Technology](organization/technology.md)
+
+- [Projects](projects/index.md)
+  - [Authenticator](projects/authenticator/index.md)
+  - [Bloom](projects/bloom/index.md)
+    - [Architecture](projects/bloom/architecture.md)
+    - [Design](projects/bloom/design.md)
+    - [Security](projects/bloom/security.md)
+    - [API](projects/bloom/api.md)
+    - [GUI](projects/bloom/gui.md)
+    - [Build](projects/bloom/build.md)
+    - [Self hosting](projects/bloom/self_hosting.md)
+    - [Auth](projects/bloom/auth.md)
+    - [Billing](projects/bloom/billing.md)
+    - [Bitflow](projects/bloom/bitflow.md)
+    - [Calculator](projects/bloom/calculator.md)
+    - [Calendar](projects/bloom/calendar.md)
+    - [Chats](projects/bloom/chats.md)
+    - [Contacts](projects/bloom/contacts.md)
+    - [Discover](projects/bloom/discover.md)
+    - [Drive](projects/bloom/drive.md)
+    - [Gallery](projects/bloom/gallery.md)
+    - [Groups](projects/bloom/groups.md)
+    - [MyAccount](projects/bloom/myaccount.md)
+    - [Notes](projects/bloom/notes.md)
+    - [Phaser](projects/bloom/phaser.md)
+    - [Platform](projects/bloom/platform.md)
+  - [Website](projects/website/index.md)
+
+- [People Operations](people_operations/index.md)
+
+- [Engineering](engineering/index.md)
+  - [Setup](engineering/setup.md)
+  - [Templates](engineering/templates/index.md)
+    - [Git](engineering/templates/git.md)
+    - [Editor Config](engineering/templates/editor_config.md)
+    - [Vue](engineering/templates/vue.md)
+  - [Licenses](engineering/licenses/index.md)
+    - [Apache 2.0](engineering/licenses/apache_2.0.md)
+
+- [Marketing](marketing/index.md)
+
+- [Sales](sales/index.md)
+
+- [Finance](finance/index.md)
+
+- [Legal](legal/index.md)
