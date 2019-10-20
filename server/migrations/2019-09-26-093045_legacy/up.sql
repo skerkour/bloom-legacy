@@ -19,6 +19,8 @@ ALTER TABLE notes_notes RENAME TO notes_notes_legacy;
 ALTER TABLE phaser_reports RENAME TO phaser_reports_legacy;
 ALTER TABLE phaser_scans RENAME TO phaser_scans_legacy;
 
+ALTER INDEX idx_kernel_accounts_username RENAME TO idx_kernel_accounts_legacy_username;
+
 
 CREATE TABLE kernel_accounts (
     id UUID NOT NULL,
@@ -44,7 +46,6 @@ CREATE TABLE kernel_accounts (
 );
 
 CREATE UNIQUE INDEX idx_kernel_accounts_username ON kernel_accounts (username);
-CREATE UNIQUE INDEX idx_kernel_accounts_avatar_id ON kernel_accounts (avatar_id);
 
 CREATE TABLE kernel_sessions (
     id UUID NOT NULL,
@@ -59,6 +60,8 @@ CREATE TABLE kernel_sessions (
 
     PRIMARY KEY(id)
 );
+
+CREATE UNIQUE INDEX idx_kernel_sessions_account_id ON kernel_sessions (account_id);
 
 CREATE TABLE kernel_pending_accounts (
     id UUID NOT NULL,
