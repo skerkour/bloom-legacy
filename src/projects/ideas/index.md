@@ -664,6 +664,32 @@ Chaque handler handle one command et result un event
 
 # Federation
 
+## Blogging
+
+* Plume
+* writefreely
+
+## Microblogging
+
+* Mastodon
+
+## Communication
+
+* Matrix
+* Email
+
+## Images sharing
+
+* PixelFed
+
+## Forum
+
+* Lemmy
+
+## Video
+
+* PeerTube
+
 * https://nl.movim.eu/?node/pubsub.movim.eu/Movim
 * https://writefreely.org/
 * https://blog.liw.fi/posts/2018/08/30/federated_ci/
@@ -690,6 +716,10 @@ Chaque handler handle one command et result un event
 * http://beza1e1.tuxen.de/federation_future.html
 * https://tools.ietf.org/html/rfc5694#page-14
 * https://blog.p2pfoundation.net/gnu-social-federation-against-the-social-model-of-twitter/2015/04/25
+* https://github.com/h3poteto/whalebird-desktop
+* https://github.com/dessalines/lemmy
+* https://fediverse.party
+* https://news.ycombinator.com/item?id=19686972 -> spam
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.

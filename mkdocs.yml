@@ -70,6 +70,7 @@ nav:
       - Design: projects/bloom/design.md
       - API: projects/bloom/api.md
       - Self hosting: projects/bloom/self_hosting.md
+      - Status page: projects/bloom/status_page.md
       - Website: projects/bloom/website.md
       - Billing: projects/bloom/billing.md
       - Bitflow: projects/bloom/bitflow.md
