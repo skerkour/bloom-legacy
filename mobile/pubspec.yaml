@@ -30,6 +30,7 @@ dependencies:
 
   shared_preferences: ^0.5.3+4
   sqflite: ^1.1.6+3
+  uuid: ^2.0.1
 
   table_calendar: ^2.1.0
   date_range_picker: ^1.0.5
