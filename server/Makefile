@@ -32,7 +32,7 @@
 
 
 .PHONY: build clean re dev test build_static
-.PHONY: disposable_emails lint fmt fmt_check lint
+.PHONY: disposable_emails lint fmt fmt_check lint assets
 
 DIST_DIR = dist
 NAME := bloom
@@ -114,3 +114,7 @@ docker_release:
 docker_release_nightly:
 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
 	docker push $(DOCKER_IMAGE):nightly-$(DATE)
+
+assets:
+	rm -rf assets
+	cp -r ../assets/server assets/
