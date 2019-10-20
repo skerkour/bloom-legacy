@@ -5,43 +5,6 @@ import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
 
 class Contact {
-  //   Note({
-  //   this.id,
-  //   this.title = '',
-  //   this.body = '',
-  //   this.color = Colors.white,
-  //   this.createdAt,
-  //   this.updatedAt,
-  //   this.archivedAt,
-  //   this.isPinned = false,
-  // }) {
-  //   createdAt = DateTime.now();
-  //   updatedAt = DateTime.now();
-  //   // db = DB();
-  // }
-  // String id;
-  // String title;
-  // String body;
-  // DateTime createdAt;
-  // DateTime updatedAt;
-  // Color color;
-  // DateTime archivedAt;
-  // bool isPinned;
-
-  // Map<String, dynamic> toMap() {
-  //   final Map<String, dynamic> data = <String, dynamic>{
-  //     'id': id,
-  //     'title': title,
-  //     'body': body,
-  //     'created_at': _dateToEpochMs(createdAt),
-  //     'updated_at': _dateToEpochMs(updatedAt),
-  //     'color': color.value,
-  //     'archived_at': _dateToEpochMs(archivedAt),
-  //     'is_pinned': isPinned ? 1 : 0,
-  //   };
-  //   return data;
-  // }
-
   Contact({
     this.id,
     this.name = '',
