@@ -4,6 +4,7 @@ services:
 stages:
   - test
   - build
+  - package
   - release
 
 include:
@@ -15,16 +16,37 @@ variables:
   RUST_ENV: test
   RUST_VERSION: nightly-2019-10-13
   RUST_BACKTRACE: 1
+  RUST_IMAGE: rust:latest
 
-  # Flutter (mobile)
+  # mobile
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
   FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.10.14-dev.tar.xz"
 
-  # NodeJS (desktop)
+  # desktop
   NODE_ENV: test
   NODE_VERSION: lts
+
+  # server
+  POSTGRES_USER: postgres
+  POSTGRES_PASSWORD: postgres
+  POSTGRES_DB: postgres
+  POSTGRES_HOST: postgres
+  DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
+  HOST: http://localhost:8000
+  AWS_SECRET_ACCESS_KEY: test
+  AWS_ACCESS_KEY_ID: test
+  AWS_REGION: test
+  S3_BUCKET: test
+  S3_BASE_URL: test
+  SENTRY_SERVER_URL: test
+  SENTRY_WEBAPP_URL: test
+  SMTP_HOST: test
+  SMTP_USERNAME: test
+  SMTP_PASSWORD: test
+  STRIPE_PUBLIC_KEY: test
+  STRIPE_SECRET_KEY: test
 
 
 cache:
@@ -33,6 +55,7 @@ cache:
     - core/target/
     - desktop/node_modules/
     - website/node_modules/
+    - server/target/
 
 ####################################################################################################
 ## Test
@@ -94,6 +117,22 @@ test:desktop:
     #- make test
     - make lint
 
+test:server:
+  stage: test
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - cd server
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - rustup component add rustfmt clippy
+    - cp bloom.default.sane bloom.sane
+    - make fmt_check
+    - make lint
+    - make test
+  services:
+    - postgres:11
 
 ####################################################################################################
 ## Build
@@ -151,9 +190,40 @@ build:mobile:
     - flutter config --no-analytics
     - make build
 
+build:server:
+  stage: build
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - cd server
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - make build
+  artifacts:
+    paths:
+    - dist
+
 
 ####################################################################################################
-## Build
+## Package
+####################################################################################################
+
+package:server:
+  stage: package
+  dependencies:
+    - build:server
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - cd server
+    - apk update && apk add make
+    - make docker_build
+
+####################################################################################################
+## Release
 ####################################################################################################
 
 release:status_page:
@@ -188,6 +258,45 @@ pages: # release:website
   artifacts:
     paths:
       - public
+
+release:server:nightly:
+  only:
+    - schedules
+  stage: release
+  dependencies:
+    - build:server
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - cd server
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release_nightly
+
+release:server:stable:
+  # only:
+  #   - tags
+  only:
+    - /^server-v.*$/
+  except:
+    - branches
+  stage: release
+  dependencies:
+    - build:server
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - cd server
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release
+
 
 
 # test:android:
