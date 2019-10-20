@@ -202,7 +202,7 @@ build:server:
     - make build
   artifacts:
     paths:
-    - dist
+    - server/dist
 
 
 ####################################################################################################
@@ -258,7 +258,7 @@ pages: # release:website
     - mv dist public
   artifacts:
     paths:
-      - public
+      - website/public
 
 release:server:nightly:
   only:

@@ -229,6 +229,7 @@ impl From<caldyn::Error> for BloomError {
 }
 
 #[cfg(feature = "actix-http")]
+#[allow(clippy::clone_double_ref)]
 impl actix_http::error::ResponseError for BloomError {
     fn error_response(&self) -> actix_http::Response {
         let res: bloom_messages::kernel::Error = self.clone().into();
