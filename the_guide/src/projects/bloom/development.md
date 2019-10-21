@@ -22,6 +22,10 @@ $ cp bloom.default.sane bloom.sane
 $ export DATABASE_URL=XXX # previously set in bloom.sane
 $ diesel migration run
 ```
+7. Copy assets
+```sh
+$ make assets
+```
 8. Run development server
 ```sh
 $ make dev
@@ -35,7 +39,11 @@ $ make dev
 ```sh
 cd desktop
 ```
-3. in shell 1, go to the `native` directory, export env vars and run `make dev`
+3. Copy assets
+```sh
+$ make assets
+```
+4. in shell 1, go to the `native` directory, export env vars and run `make dev`
 ```sh
 cd native
 export npm_config_target=6.0.12
@@ -46,12 +54,12 @@ export npm_config_runtime=electron
 export npm_config_build_from_source=true
 make dev
 ```
-4. In shell 2, install dependencies and run `make dev`
+5. In shell 2, install dependencies and run `make dev`
 ```sh
 make install
 make dev
 ```
-5. In shell 3, run `npm start`
+6. In shell 3, run `npm start`
 ```sh
 npm start
 ```
@@ -64,8 +72,12 @@ npm start
 ```sh
 cd mobile
 ```
-3. Install dependencies
+3. Copy assets
+```sh
+$ make assets
+```
+4. Install dependencies
 ```sh
 make install
 ```
-4. Run the project in [Visual Studio Code](/engineering/setup.html#visual-studio-code)
+5. Run the project in [Visual Studio Code](/engineering/setup.html#visual-studio-code)
