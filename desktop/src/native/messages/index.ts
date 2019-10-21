@@ -28,6 +28,8 @@ import {
   ListEvents,
 } from './calendar';
 
+import { GuiContact, GuiContacts } from './contacts';
+
 export type Message =
   // auth
   | { 'type': 'auth.registration_start', 'data': RegistrationStart }
@@ -57,6 +59,11 @@ export type Message =
   | { 'type': 'calendar.gui.create_event', 'data': GuiCreateEvent }
   | { 'type': 'calendar.gui.delete_event', 'data': GuiDeleteEvent }
   | { 'type': 'calendar.gui.update_event', 'data': GuiEvent }
+
+  // contacts
+  | { 'type': 'contacts.gui.list_contacts', 'data': {} }
+  | { 'type': 'contacts.gui.contact', 'data': GuiContact }
+  | { 'type': 'contacts.gui.contacts', 'data': GuiContacts }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
   | { 'type': 'error', 'data': { 'code': string, 'message': string, } }

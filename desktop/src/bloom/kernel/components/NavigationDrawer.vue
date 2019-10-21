@@ -28,7 +28,7 @@ import BitflowDrawer from '@/bloom/bitflow/components/Drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
 
-const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar'];
+const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar', 'contacts'];
 
 @Component({
   components: {

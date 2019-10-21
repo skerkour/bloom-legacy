@@ -31,16 +31,16 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
-import Note from './Note.vue';
+import BlmNote from './Note.vue';
 import NoteDialog from './NoteDialog.vue';
-import { Note as NoteModel, GuiNotes } from '@/native/messages/notes';
+import { Note, GuiNotes } from '@/native/messages/notes';
 
 const { log } = require('@bloom42/astro');
 
 @Component({
   components: {
     'blm-notes-dialog-note': NoteDialog,
-    'blm-notes-note': Note,
+    'blm-notes-note': BlmNote,
   },
 })
 export default class Index extends Vue {
@@ -50,7 +50,7 @@ export default class Index extends Vue {
   // data
   error = '';
   isLoading = false;
-  notes: NoteModel[] = [];
+  notes: Note[] = [];
   noteDialog = false;
 
   // computed
@@ -75,6 +75,8 @@ export default class Index extends Vue {
       this.notes = (res.data as GuiNotes).notes;
     } catch (err) {
       log.error(err);
+    } finally {
+      this.isLoading = false;
     }
   }
 
@@ -105,12 +107,12 @@ export default class Index extends Vue {
     this.noteDialog = false;
   }
 
-  noteCreated(note: NoteModel) {
+  noteCreated(note: Note) {
     this.notes = [note, ...this.notes];
   }
 
-  noteUpdated(updatedNote: NoteModel) {
-    const pos = this.notes.map((note: NoteModel) => note.id).indexOf(updatedNote.id);
+  noteUpdated(updatedNote: Note) {
+    const pos = this.notes.map((note: Note) => note.id).indexOf(updatedNote.id);
     this.notes.splice(pos, 1);
     this.notes = [updatedNote, ...this.notes];
     // this.notes = this.notes.map((note: any) => {
@@ -121,16 +123,16 @@ export default class Index extends Vue {
     // });
   }
 
-  noteArchived(archivedNote: NoteModel) {
-    this.notes = this.notes.filter((note: NoteModel) => note.id !== archivedNote.id);
+  noteArchived(archivedNote: Note) {
+    this.notes = this.notes.filter((note: Note) => note.id !== archivedNote.id);
   }
 
-  noteUnarchived(unarchivedNote: NoteModel) {
-    this.notes = this.notes.filter((note: NoteModel) => note.id !== unarchivedNote.id);
+  noteUnarchived(unarchivedNote: Note) {
+    this.notes = this.notes.filter((note: Note) => note.id !== unarchivedNote.id);
   }
 
-  noteDeleted(deletedNote: NoteModel) {
-    this.notes = this.notes.filter((note: NoteModel) => note.id !== deletedNote.id);
+  noteDeleted(deletedNote: Note) {
+    this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
   }
 }
 </script>

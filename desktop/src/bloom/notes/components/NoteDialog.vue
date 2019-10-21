@@ -80,7 +80,7 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { Note as NoteModel, GuiNote } from '@/native/messages/notes';
+import { Note, GuiNote } from '@/native/messages/notes';
 import { Native, Message } from '@/native';
 
 const { log } = require('@bloom42/astro');
@@ -89,7 +89,7 @@ const { log } = require('@bloom42/astro');
 export default class NoteDialog extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
-  @Prop({ type: Object, default: null }) note!: NoteModel | null;
+  @Prop({ type: Object, default: null }) note!: Note | null;
 
   // data
   error = '';
@@ -161,7 +161,7 @@ export default class NoteDialog extends Vue {
   async updateNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.title = this.title;
     note.body = this.body;
     const message: Message = {
@@ -192,7 +192,7 @@ export default class NoteDialog extends Vue {
   async pinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.is_pinned = true;
     const message: Message = {
       type: 'notes.gui.update_note',
@@ -213,7 +213,7 @@ export default class NoteDialog extends Vue {
   async unpinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.is_pinned = false;
     const message: Message = {
       type: 'notes.gui.update_note',

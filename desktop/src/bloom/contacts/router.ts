@@ -1,8 +1,8 @@
-const Index = () => import(/* webpackChunkName: "chunk-contacts" */ './views/Index.vue');
+const Contacts = () => import(/* webpackChunkName: "chunk-contacts" */ './views/Contacts.vue');
 
 export default [
   {
-    component: Index,
+    component: Contacts,
     path: '/contacts',
   },
 ];

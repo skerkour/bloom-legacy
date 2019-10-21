@@ -132,7 +132,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import NoteDialog from './NoteDialog.vue';
-import { Note as NoteModel, GuiNote } from '@/native/messages/notes';
+import { Note, GuiNote } from '@/native/messages/notes';
 import { Native, Message } from '@/native';
 
 @Component({
@@ -140,9 +140,9 @@ import { Native, Message } from '@/native';
     'blm-notes-dialog-note': NoteDialog,
   },
 })
-export default class Note extends Vue {
+export default class BlmNote extends Vue {
   // props
-  @Prop({ type: Object, required: true }) note!: NoteModel;
+  @Prop({ type: Object, required: true }) note!: Note;
 
   // data
   dialog = false;
@@ -156,7 +156,7 @@ export default class Note extends Vue {
   async archiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.archived_at = new Date().toISOString() as unknown as Date;
     const message: Message = {
       type: 'notes.gui.update_note',
@@ -177,7 +177,7 @@ export default class Note extends Vue {
   async unarchiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.archived_at = null;
     const message: Message = {
       type: 'notes.gui.update_note',
@@ -198,7 +198,7 @@ export default class Note extends Vue {
   async pinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.is_pinned = true;
     const message: Message = {
       type: 'notes.gui.update_note',
@@ -219,7 +219,7 @@ export default class Note extends Vue {
   async unpinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as NoteModel;
+    const note = { ...this.note } as Note;
     note.is_pinned = false;
     const message: Message = {
       type: 'notes.gui.update_note',
