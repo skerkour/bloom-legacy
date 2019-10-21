@@ -32,7 +32,6 @@ impl Handler<CompleteRegistration> for DbActor {
         let conn = self.pool.get()?;
 
         return Ok(conn.transaction::<_, BloomError, _>(|| {
-            println!("COMPLETE CONTROLLER");
             let pending_account_to_update: PendingAccount =
                 kernel_pending_accounts::dsl::kernel_pending_accounts
                     .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))

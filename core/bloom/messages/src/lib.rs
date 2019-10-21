@@ -7,6 +7,7 @@ pub mod to_remove;
 pub mod auth;
 pub mod calculator;
 pub mod calendar;
+pub mod contacts;
 pub mod notes;
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -80,6 +81,12 @@ pub enum Message {
     CalendarGuiDeleteEvent(calendar::GuiDeleteEvent),
     #[serde(rename = "calendar.gui.update_event")]
     CalendarGuiUpdateEvent(calendar::GuiUpdateEvent),
+
+    // contacts gui
+    #[serde(rename = "contacts.gui.list_contacts")]
+    ContactsGuiListContacts(contacts::GuiListContacts),
+    #[serde(rename = "contacts.gui.contacts")]
+    ContactsGuiContacts(contacts::GuiContacts),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),

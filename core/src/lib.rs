@@ -40,6 +40,7 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
         messages::Message::CalendarGuiUpdateEvent(msg) => calendar::update_event(msg),
 
         // contacts
+        messages::Message::ContactsGuiListContacts(msg) => contacts::list_contacts(msg),
 
         // fallback
         _ => {

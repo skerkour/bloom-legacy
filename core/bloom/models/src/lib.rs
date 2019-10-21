@@ -1,4 +1,5 @@
 pub mod calendar;
+pub mod contacts;
 pub mod notes;
 
 /// https://serde.rs/custom-date-format.html
