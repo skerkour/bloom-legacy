@@ -102,6 +102,7 @@ test:mobile:
         && cd -
     - echo flutter.sdk=$HOME/flutter > android/local.properties
     - flutter config --no-analytics
+    - make assets
     - make fmt_check
     - make lint
     - make test
@@ -113,6 +114,7 @@ test:desktop:
     - docker
   script:
     - cd desktop
+    - make assets
     - make install
     #- make test
     - make lint
@@ -128,6 +130,7 @@ test:server:
     - rustup default $RUST_VERSION
     - rustup component add rustfmt clippy
     - cp bloom.default.sane bloom.sane
+    - make assets
     - make fmt_check
     - make lint
     - make test
@@ -159,6 +162,7 @@ build:desktop:
     - docker
   script:
     - cd desktop
+    - make assets
     - make install
     - make build
 
@@ -188,6 +192,7 @@ build:mobile:
         && cd -
     - echo flutter.sdk=$HOME/flutter > android/local.properties
     - flutter config --no-analytics
+    - make assets
     - make build
 
 build:server:
@@ -199,6 +204,7 @@ build:server:
     - cd server
     - apt update && apt install -y gcc make git
     - rustup default $RUST_VERSION
+    - make assets
     - make build
   artifacts:
     paths:
@@ -213,6 +219,7 @@ build:the_guide:
     - cd the_guide
     - apk add --update make
     - pip install mkdocs pymdown-extensions
+    - make assets
     - make build
 
 
@@ -263,7 +270,7 @@ pages: # release:website
   except:
     - branches
   script:
-    - cd status_page/
+    - cd website/
     - make install
     - make build
     - mv dist public
