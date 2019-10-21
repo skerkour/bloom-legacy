@@ -10,7 +10,7 @@
           outlined
           color="primary"
           class="add-btn"
-          @click="openContactDialog"
+          @click="currentContact = null; openContactDialog()"
         >
           <v-icon left>mdi-plus</v-icon>Create Contact
         </v-btn>
@@ -66,6 +66,15 @@
       </v-data-table>
 
     </v-container>
+
+  <blm-contacts-dialog-contact
+    :contact="currentContact"
+    :visible="showContactDialog"
+    @closed="contactDialogClosed"
+    @created="contactCreated"
+    @updated="contactUpdated"
+    @deleted="contactDeleted"
+  />
   </div>
 </template>
 
@@ -74,17 +83,23 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
 import { Contact, GuiContacts } from '@/native/messages/contacts';
+import ContactDialog from '../components/ContactDialog.vue';
+
 
 const { log } = require('@bloom42/astro');
 
-@Component
+@Component({
+  components: {
+    'blm-contacts-dialog-contact': ContactDialog,
+  },
+})
 export default class Index extends Vue {
   // props
   // data
   error = '';
   isLoading = false;
   contacts: Contact[] = [];
-  contactDialog = false;
+  showContactDialog = false;
   headers = [
     {
       align: 'left',
@@ -135,11 +150,11 @@ export default class Index extends Vue {
   }
 
   openContactDialog() {
-    this.contactDialog = true;
+    this.showContactDialog = true;
   }
 
   contactDialogClosed() {
-    this.contactDialog = false;
+    this.showContactDialog = false;
   }
 
   contactCreated(contact: Contact) {
