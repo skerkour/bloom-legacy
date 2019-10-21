@@ -37,3 +37,15 @@ pub struct GuiCreateContact {
     pub websites: serde_json::Value,
 }
 from_message!(GuiCreateContact, Message::ContactsGuiCreateContact);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiDeleteContact {
+    pub id: String,
+}
+from_message!(GuiDeleteContact, Message::ContactsGuiDeleteContact);
+
+#[derive(Clone, Debug, Deserialize, Serialize)]
+pub struct GuiUpdateContact {
+    pub contact: contacts::db::Conatct,
+}
+from_message!(GuiUpdateContact, Message::ContactsGuiUpdateContact);

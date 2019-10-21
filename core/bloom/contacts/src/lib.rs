@@ -145,3 +145,86 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
 
     return Ok(ret);
 }
+
+pub fn delete_contact(input: contacts::GuiDeleteContact) -> Result<Message, BloomError> {
+    let conn = Connection::open(db_path())?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS contacts (
+            id TEXT PRIMARY KEY NOT NULL,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            addresses TEXT NOT NULL,
+            birthday TEXT,
+            organizations TEXT NOT NULL,
+            emails TEXT NOT NULL,
+            phones TEXT NOT NULL,
+            websites TEXT NOT NULL
+        )",
+        NO_PARAMS,
+    )?;
+
+    conn.execute("DELETE FROM contacts WHERE id = ?", params![input.id])?;
+
+    let ret: Message = bloom_messages::kernel::Empty {}.into();
+
+    return Ok(ret);
+}
+
+pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, BloomError> {
+    let conn = Connection::open(db_path())?;
+    conn.execute(
+        "CREATE TABLE IF NOT EXISTS contacts (
+            id TEXT PRIMARY KEY NOT NULL,
+            created_at TEXT NOT NULL,
+            updated_at TEXT NOT NULL,
+            first_name TEXT NOT NULL,
+            last_name TEXT NOT NULL,
+            notes TEXT NOT NULL,
+            addresses TEXT NOT NULL,
+            birthday TEXT,
+            organizations TEXT NOT NULL,
+            emails TEXT NOT NULL,
+            phones TEXT NOT NULL,
+            websites TEXT NOT NULL
+        )",
+        NO_PARAMS,
+    )?;
+
+    let mut contact = input.contact;
+    contact.updated_at = chrono::Utc::now();
+
+    conn.execute(
+        "UPDATE calendar_events SET
+            updated_at = $1,
+            first_name = $2,
+            last_name = $3,
+            notes = $4,
+            addresses = $5,
+            birthday = $6,
+            organizations = $7,
+            emails = $8,
+            phones = $9,
+            websites = $10,
+        WHERE id = $11",
+        params![
+            &contact.updated_at,
+            &contact.first_name,
+            &contact.last_name,
+            &contact.notes,
+            &contact.addresses,
+            &contact.birthday,
+            &contact.organizations,
+            &contact.emails,
+            &contact.phones,
+            &contact.websites,
+            &contact.id,
+        ],
+    )?;
+
+    let ret: Message = contacts::GuiContact { contact }.into();
+
+    return Ok(ret);
+}

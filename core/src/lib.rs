@@ -41,6 +41,9 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
 
         // contacts
         messages::Message::ContactsGuiListContacts(msg) => contacts::list_contacts(msg),
+        messages::Message::ContactsGuiCreateContact(msg) => contacts::create_contact(msg),
+        messages::Message::ContactsGuiDeleteContact(msg) => contacts::delete_contact(msg),
+        messages::Message::ContactsGuiUpdateContact(msg) => contacts::update_contact(msg),
 
         // fallback
         _ => {
