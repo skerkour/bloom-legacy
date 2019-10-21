@@ -134,12 +134,17 @@ dependencies = [
 ]
 
 [[package]]
+name = "bloom_contacts"
+version = "0.1.0"
+
+[[package]]
 name = "bloom_core"
 version = "0.1.0"
 dependencies = [
  "bloom_auth 0.1.0",
  "bloom_calculator 0.1.0",
  "bloom_calendar 0.1.0",
+ "bloom_contacts 0.1.0",
  "bloom_error 0.1.0",
  "bloom_messages 0.1.0",
  "bloom_notes 0.1.0",
