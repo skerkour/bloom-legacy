@@ -87,6 +87,10 @@ pub enum Message {
     ContactsGuiListContacts(contacts::GuiListContacts),
     #[serde(rename = "contacts.gui.contacts")]
     ContactsGuiContacts(contacts::GuiContacts),
+    #[serde(rename = "contacts.gui.contact")]
+    ContactsGuiContact(contacts::GuiContact),
+    #[serde(rename = "contacts.gui.create_contact")]
+    ContactsGuiCreateContact(contacts::GuiCreateContact),
 
     #[serde(rename = "gui.to_remove.tick")]
     ToRemoveTick(to_remove::Tick),
