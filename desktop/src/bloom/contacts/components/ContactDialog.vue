@@ -82,6 +82,40 @@
           </v-row>
           <!-- /name -->
 
+          <!-- birthday -->
+          <v-row>
+            <v-flex xs12>
+              <v-menu
+                ref="birthdayMenu"
+                :close-on-content-click="false"
+                v-model="birthdayMenu"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-on="on"
+                    v-model="birthdayFormatted"
+                    label="Birthday"
+                    prepend-icon="mdi-calendar"
+                    @blur="birthday = parseDate(birthdayFormatted)"
+                    readonly
+                  />
+                </template>
+                <v-date-picker
+                  ref="birthdayPicker"
+                  v-model="birthday"
+                  :max="new Date().toISOString().substr(0, 10)"
+                  min="1900-01-01"
+                  @change="saveBirthday"
+                ></v-date-picker>
+              </v-menu>
+            </v-flex>
+          </v-row>
+          <!-- /birthday -->
+
           <!-- addresses: TODO(z0mbie42) -->
 
           <!-- organizations -->
@@ -263,7 +297,89 @@
               </v-list>
             </v-col>
           </v-row>
-          <!-- emails -->
+          <!-- /emails -->
+
+          <!-- websites -->
+          <v-row>
+            <v-col cols="12">
+              <v-list class="pt-0 pb-0">
+                <v-list-item
+                  v-for="(website, index) in websites"
+                  :key="index"
+                  class="contacts-add-row"
+                >
+                  <v-row align="center">
+                    <v-col
+                      cols="1"
+                      class="pl-0 pr-0"
+                    >
+                      <v-icon v-if="index === 0">mdi-earth</v-icon>
+                    </v-col>
+                    <v-col cols="5">
+                      <v-text-field
+                        label="Website"
+                        v-model="website.website"
+                      ></v-text-field>
+                    </v-col>
+                    <v-col cols="4">
+                      <v-autocomplete
+                        :items="websiteLabels"
+                        v-model="website.label"
+                        label="Label"
+                        single-line
+                      >
+                      </v-autocomplete>
+                    </v-col>
+                    <v-col
+                      cols="1"
+                      class="pr-0 pl-0"
+                    >
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            text
+                            icon
+                            small
+                            v-on="on"
+                            color="grey"
+                            class="action-button"
+                            @click="removeWebsite(index)"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Remove</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col
+                      cols="1"
+                      class="pl-0 pr-0"
+                    >
+                      <v-tooltip
+                        bottom
+                        v-if="index === websites.length - 1"
+                      >
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            text
+                            icon
+                            small
+                            v-on="on"
+                            color="blue darken-2"
+                            class="ml-0"
+                            @click="addWebsite"
+                          >
+                            <v-icon>mdi-plus-circle</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Add</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
 
           <!-- notes -->
           <v-row>
@@ -284,7 +400,12 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  Watch,
+} from 'vue-property-decorator';
 import {
   Contact,
   Organization,
@@ -309,6 +430,9 @@ export default class ContactDialog extends Vue {
   isLoading = false;
   firstName: string = '';
   lastName: string = '';
+  birthday: any | null = null;
+  birthdayFormatted: any | null = null;
+  birthdayMenu = false;
   notes: string = '';
   organizations: Organization[] = [Object.assign({}, DEFAULT_ORGANIZATION)];
   phones: Phone[] = [Object.assign({}, DEFAULT_PHONE)];
@@ -341,6 +465,11 @@ export default class ContactDialog extends Vue {
 
   // lifecycle
   // watch
+  @Watch('birthday')
+  onBirthdayUpdated(_val: any) {
+    this.birthdayFormatted = this.formatDate(this.birthday);
+  }
+
   // methods
   async close() {
     // await this.save();
@@ -386,6 +515,28 @@ export default class ContactDialog extends Vue {
     if (this.websites.length === 0) {
       this.addWebsite();
     }
+  }
+
+  saveBirthday(date: any) {
+    (this.$refs.birthdayMenu as any).save(date);
+  }
+
+  formatDate(date: any) {
+    if (!date) {
+      return null;
+    }
+
+    const [year, month, day] = date.split('-');
+    return `${year}/${month}/${day}`;
+  }
+
+  parseDate(date: any) {
+    if (!date) {
+      return null;
+    }
+
+    const [year, month, day] = date.split('/');
+    return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 }
 </script>
