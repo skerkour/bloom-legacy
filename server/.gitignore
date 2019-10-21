@@ -41,3 +41,5 @@ assets/GeoLite2-City.mmdb
 .tmp/
 dist/
 bloom.sane
+
+assets/
