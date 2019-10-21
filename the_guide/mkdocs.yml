@@ -9,7 +9,7 @@ use_directory_urls: false
 theme:
   custom_dir: 'themes/material'
   name: null
-  logo: 'icon.png'
+  logo: 'assets/icon.png'
   language: en
   feature:
   font:

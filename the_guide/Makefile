@@ -1,4 +1,4 @@
-.PHONY: dev build release
+.PHONY: dev build release assets
 
 build:
 	mkdocs build
@@ -11,3 +11,7 @@ release:
 	git merge dev
 	git push
 	git checkout dev
+
+assets:
+	rm -rf src/assets
+	cp -r ../assets/the_guide src/assets
