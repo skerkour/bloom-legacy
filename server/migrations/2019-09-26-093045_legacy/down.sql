@@ -4,6 +4,7 @@ DROP TABLE kernel_sessions;
 DROP TABLE kernel_accounts;
 DROP TABLE kernel_pending_accounts;
 
+ALTER INDEX idx_kernel_accounts_legacy_username RENAME TO idx_kernel_accounts_username;
 
 ALTER TABLE bitflow_downloads_legacy RENAME TO bitflow_downloads;
 ALTER TABLE bitflow_profiles_legacy RENAME TO bitflow_profiles;

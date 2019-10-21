@@ -104,9 +104,9 @@ export default class RegistrationComplete extends Vue {
     };
     try {
       const res = await Native.call(message);
-      this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
-      log.debug('success');
       log.debug(res);
+      this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
+      this.$store.commit(Mutations.SIGN_IN.toString());
       this.$router.push({ path: '/' });
     } catch (err) {
       this.error = err.message;

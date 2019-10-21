@@ -53,14 +53,12 @@ pub fn post_index(
     return handle_message(state.into_inner(), auth, ip, message_wrapped.into_inner())
         .boxed()
         .compat()
-        .then(move |res| {
-            match res {
-                Ok(res) => ok(api::response(res)),
-                Err(err) => {
-                    // slog_error!(logger, "{}", &err);
-                    let err: bloom_messages::kernel::Error = err.into();
-                    return ok(api::response(err));
-                }
+        .then(move |res| match res {
+            Ok(res) => ok(api::response(res)),
+            Err(err) => {
+                println!("ERRROR {}", &err);
+                let err: bloom_messages::kernel::Error = err.into();
+                return ok(api::response(err));
             }
         });
 }

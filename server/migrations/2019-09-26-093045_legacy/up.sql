@@ -61,7 +61,7 @@ CREATE TABLE kernel_sessions (
     PRIMARY KEY(id)
 );
 
-CREATE UNIQUE INDEX idx_kernel_sessions_account_id ON kernel_sessions (account_id);
+CREATE INDEX idx_kernel_sessions_account_id ON kernel_sessions (account_id);
 
 CREATE TABLE kernel_pending_accounts (
     id UUID NOT NULL,
