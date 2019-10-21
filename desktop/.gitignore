@@ -3,3 +3,5 @@ dist
 # local env files
 .env.local
 .env.*.local
+
+public/assets/
