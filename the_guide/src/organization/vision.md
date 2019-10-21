@@ -62,7 +62,7 @@ Conversely, reducing the need for production = less work = even more unemploymen
 
 
 <div class="center">
-  <img src="assets/wealth_dsitribution.png" height="500"/>
+  <img src="/assets/organization/wealth_dsitribution.png" height="500"/>
 
   Global wealth distribution. World economic forum.
 </div>
@@ -201,7 +201,7 @@ We believe in a world of sharing and cooperation. That's why we created <a href=
 
 
 <div class="center">
-  <img src="assets/blog.png" height="400"/>
+  <img src="/assets/organization/blog.png" height="400"/>
 </div>
 
 
@@ -314,7 +314,7 @@ This money will be used to finance people who contribute with their time to a mo
 * By making a *Paypal* donation:
 
 <a href="https://paypal.me/z0mbie42" target="_blank" rel="noopener">
-  <img src="assets/paypal_donate.gif" height="42"/>
+  <img src="/assets/organization/paypal_donate.gif" height="42"/>
 </a>
 
 

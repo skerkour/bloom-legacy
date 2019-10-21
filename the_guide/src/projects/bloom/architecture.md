@@ -3,17 +3,17 @@
 
 ## Infrastructure
 
-![architecture](assets/architecture.jpg)
+![architecture](/assets/projects/bloom/architecture.jpg)
 
 
 ## Server
 
-![server architecture](assets/server_architecture.jpg)
+![server architecture](/assets/projects/bloom/server_architecture.jpg)
 
 
 ## Apps
 
-![apps architecture](assets/apps_architecture.jpg)
+![apps architecture](/assets/projects/bloom/apps_architecture.jpg)
 
 
 ### Desktop

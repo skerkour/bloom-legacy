@@ -43,21 +43,21 @@ Source code: [https://gitlab.com/bloom42/authenticator](https://gitlab.com/bloom
 ### Unlock
 
 <p align="center">
-  <img alt="unlock" src="assets/unlock.jpg" width="200" />
-
+  <img alt="unlock" src="/assets/projects/authenticator/authenticator/unlock.jpg" width="200" />
+</p>
 
 ### Accounts list
 
 A view displaying the list of accounts. We do not display the code here, to prevent mass code retrieval with a screenshot for example.
 
 <p align="center">
-  <img alt="accounts" src="assets/accounts.jpg" width="200" />
+  <img alt="accounts" src="/assets/projects/authenticator/authenticator/accounts.jpg" width="200" />
 </p>
 
 ### Add manually
 
 <p align="center">
-  <img alt="add manually" src="assets/add_manually.png" width="200" />
+  <img alt="add manually" src="/assets/projects/authenticator/authenticator/add_manually.png" width="200" />
 </p>
 
 ### Account code
@@ -65,7 +65,7 @@ A view displaying the list of accounts. We do not display the code here, to prev
 Display an individual account code, with the possibility to delete the account (MUST display a confirm dialog).
 
 <p align="center">
-  <img alt="account" src="assets/account.jpg" width="200" />
+  <img alt="account" src="/assets/projects/authenticator/authenticator/account.jpg" width="200" />
 </p>
 
 ### Settings

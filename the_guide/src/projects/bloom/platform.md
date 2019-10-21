@@ -10,11 +10,11 @@ Platform is not really an app, it's just a kind of folder which encapsulate othe
 ## Views
 
 <p align="center">
-  <img src="assets/platform.jpg" width="200" />
+  <img src="/assets/projects/bloom/platform.jpg" width="200" />
 </p>
 
 <p align="center">
-  <img src="assets/platform_drawer.jpg" width="200" />
+  <img src="/assets/projects/bloom/platform_drawer.jpg" width="200" />
 </p>
 
 ------------

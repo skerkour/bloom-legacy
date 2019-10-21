@@ -32,7 +32,7 @@
 7. Both `session_id` and `session_token_hash` are stored in the Database
 8. `base64(session_id+":"+session_token)` is sent back to client to be used as `auth_token`
 
-![architecture](../assets/bloom_auth_sign_in.jpg)
+![architecture](/assets/projects/bloom/bloom_auth_sign_in.jpg)
 
 
 ## Sign out
@@ -87,6 +87,6 @@ SRP, and SPAKE2 were discarded because too complexe (choice of primes...) and so
 * https://blog.cryptographyengineering.com/should-you-use-srp/
 * https://blog.1password.com/developers-how-we-use-srp-and-you-can-too/
 * https://medium.com/@intermediation/secure-remote-password-protocol-31ba8c2ab0b
-* [ProtonMail whitepaper](/assets/resources/protonmail-whitepaper.pdf)
+* [ProtonMail whitepaper](https://protonmail.com/docs/business-whitepaper.pdf)
 * https://docs.rs/spake2
 * https://www.cossacklabs.com/zero-knowledge-protocols-without-magic.html
