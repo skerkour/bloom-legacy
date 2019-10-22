@@ -48,4 +48,4 @@ from_message!(GuiDeleteContact, Message::ContactsGuiDeleteContact);
 pub struct GuiUpdateContact {
     pub contact: contacts::db::Conatct,
 }
-from_message!(GuiUpdateContact, Message::ContactsGuiUpdateContact);
+from_message!(Box<GuiUpdateContact>, Message::ContactsGuiUpdateContact);
