@@ -88,9 +88,9 @@ pub enum Message {
     #[serde(rename = "contacts.gui.contacts")]
     ContactsGuiContacts(contacts::GuiContacts),
     #[serde(rename = "contacts.gui.contact")]
-    ContactsGuiContact(contacts::GuiContact),
+    ContactsGuiContact(Box<contacts::GuiContact>),
     #[serde(rename = "contacts.gui.create_contact")]
-    ContactsGuiCreateContact(contacts::GuiCreateContact),
+    ContactsGuiCreateContact(Box<contacts::GuiCreateContact>),
     #[serde(rename = "contacts.gui.delete_contact")]
     ContactsGuiDeleteContact(contacts::GuiDeleteContact),
     #[serde(rename = "contacts.gui.update_contact")]

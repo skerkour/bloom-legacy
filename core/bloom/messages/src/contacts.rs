@@ -14,7 +14,7 @@ from_message!(GuiListContacts, Message::ContactsGuiListContacts);
 pub struct GuiContact {
     pub contact: contacts::db::Conatct,
 }
-from_message!(GuiContact, Message::ContactsGuiContact);
+from_message!(Box<GuiContact>, Message::ContactsGuiContact);
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GuiContacts {
@@ -36,7 +36,7 @@ pub struct GuiCreateContact {
     pub phones: serde_json::Value,
     pub websites: serde_json::Value,
 }
-from_message!(GuiCreateContact, Message::ContactsGuiCreateContact);
+from_message!(Box<GuiCreateContact>, Message::ContactsGuiCreateContact);
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GuiDeleteContact {

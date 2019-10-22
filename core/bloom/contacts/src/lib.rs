@@ -141,7 +141,7 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
         ],
     )?;
 
-    let ret: Message = contacts::GuiContact { contact }.into();
+    let ret: Message = Box::new(contacts::GuiContact { contact }).into();
 
     return Ok(ret);
 }
@@ -224,7 +224,7 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
         ],
     )?;
 
-    let ret: Message = contacts::GuiContact { contact }.into();
+    let ret: Message = Box::new(contacts::GuiContact { contact }).into();
 
     return Ok(ret);
 }
