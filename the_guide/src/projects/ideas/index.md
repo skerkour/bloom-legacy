@@ -698,6 +698,8 @@ Chaque handler handle one command et result un event
 
 * https://github.com/dining-car/dining-car
 
+* https://github.com/emilebosch/awesome-fediverse
+
 * https://nl.movim.eu/?node/pubsub.movim.eu/Movim
 * https://writefreely.org/
 * https://blog.liw.fi/posts/2018/08/30/federated_ci/
