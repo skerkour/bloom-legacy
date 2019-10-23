@@ -1,6 +1,6 @@
 import 'dart:async';
 
-import 'package:bloom/bloom/contacts/models/db/contact.dart';
+import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 import 'package:flutter/material.dart';
 

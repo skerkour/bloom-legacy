@@ -1,5 +1,5 @@
 import 'package:bloom/bloom/contacts/blocs/contact.dart';
-import 'package:bloom/bloom/contacts/models/db/contact.dart';
+import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactView extends StatefulWidget {
@@ -19,7 +19,7 @@ class _ContactState extends State<ContactView> {
     final Contact contact = widget.contact ?? Contact();
     _bloc = ContactBloc(contact: contact);
 
-    _bloc.deletedStream.listen((_) {
+    _bloc.deletedStream.listen((dynamic _) {
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     });

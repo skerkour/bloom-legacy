@@ -1,7 +1,7 @@
 import 'package:bloom/bloom/contacts/blocs/contacts.dart';
 import 'package:bloom/bloom/contacts/views/contact.dart';
 import 'package:bloom/bloom/contacts/widgets/drawer.dart';
-import 'package:bloom/bloom/contacts/models/db/contact.dart';
+import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:flutter/material.dart';
 
 class ContactsView extends StatefulWidget {
@@ -26,7 +26,7 @@ class _ContactsState extends State<ContactsView> {
 
   @override
   Widget build(BuildContext context) {
-    _bloc.getContacts();
+    _bloc.listContacts();
     return Scaffold(
       endDrawer: const ContactsDrawer(),
       appBar: AppBar(

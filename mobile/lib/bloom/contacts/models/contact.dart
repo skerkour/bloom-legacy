@@ -1,8 +1,12 @@
+import 'dart:convert';
 import 'package:bloom/bloom/kernel/blocs/app.dart';
 import 'package:bloom/bloom/kernel/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:uuid/uuid.dart';
+import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/bloom/contacts/messages.dart';
+import 'package:flutter/foundation.dart';
 
 class Contact {
   Contact({
@@ -15,7 +19,7 @@ class Contact {
   String name;
   String deviceId;
 
-  Map<String, dynamic> toMap() {
+  Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
       'name': name,
@@ -24,7 +28,7 @@ class Contact {
     return data;
   }
 
-  static Contact fromMap(Map<String, dynamic> data) {
+  static Contact fromJson(Map<String, dynamic> data) {
     return Contact(
       id: data['id'],
       name: data['name'],
@@ -34,7 +38,7 @@ class Contact {
 
   @override
   String toString() {
-    return toMap().toString();
+    return toJson().toString();
   }
 
   static Future<Contact> create(String name, String deviceId) async {
@@ -45,7 +49,7 @@ class Contact {
     final Contact contact = Contact(name: name ?? '', deviceId: deviceId);
     contact.id = Uuid().v4();
 
-    final Map<String, dynamic> data = contact.toMap();
+    final Map<String, dynamic> data = contact.toJson();
     debugPrint('contact: $data');
     // Insert the Contact into the correct table.
     await db.insert(DB.contactsTable, data);
@@ -58,7 +62,7 @@ class Contact {
 
     await db.update(
       DB.contactsTable,
-      toMap(),
+      toJson(),
       where: 'id = ?',
       whereArgs: <String>[id],
     );
@@ -80,18 +84,14 @@ class Contact {
     return this;
   }
 
-  static Future<List<Contact>> find() async {
-    // Get a reference to the database.
+  static Future<List<Contact>> list() async {
     debugPrint('Contact.find called');
-    final Database db = await appBloc.db.db;
 
-    // Query the table for all The Contacts.
-    final List<Map<String, dynamic>> results = await db.query(
-      DB.contactsTable,
-    );
-    debugPrint('fetched: ${results.length} contacts');
+    final Map<String, dynamic> res =
+        await compute(Contact._nativeCall, ContactsGuiListContacts());
+    final ContactsGuiContacts resMsg = ContactsGuiContacts.fromJson(res);
 
-    return results.map(Contact.fromMap).toList();
+    return resMsg.contacts;
   }
 
   static Future<List<String>> findDeviceIds() async {
@@ -107,8 +107,16 @@ class Contact {
     debugPrint('fetched: ${results.length} contacts');
 
     return results
-        .map(Contact.fromMap)
+        .map(Contact.fromJson)
         .map((Contact contact) => contact.deviceId)
         .toList();
+  }
+
+  static Map<String, dynamic> _nativeCall<T>(T message) {
+    final String jsonPayload = jsonEncode(message);
+    debugPrint('input: $jsonPayload');
+    final String res = coreFfi.call(jsonPayload);
+    debugPrint('output: $res');
+    return jsonDecode(res);
   }
 }
