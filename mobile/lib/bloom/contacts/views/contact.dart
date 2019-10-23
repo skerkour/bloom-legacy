@@ -1,13 +1,18 @@
 import 'package:bloom/bloom/contacts/blocs/contact.dart';
 import 'package:bloom/bloom/contacts/models/contact.dart';
+import 'package:bloom/bloom/contacts/views/edit_contact.dart';
 import 'package:flutter/material.dart';
 
 enum ContactViewResult {
   Deleted,
 }
 
+enum PopupMenuAction {
+  Deleted,
+}
+
 class ContactView extends StatefulWidget {
-  const ContactView({this.contact});
+  const ContactView({@required this.contact});
 
   final Contact contact;
 
@@ -20,8 +25,7 @@ class _ContactState extends State<ContactView> {
 
   @override
   void initState() {
-    final Contact contact = widget.contact ?? Contact();
-    _bloc = ContactBloc(contact: contact);
+    _bloc = ContactBloc(contact: widget.contact);
 
     _bloc.deletedStream.listen((dynamic _) {
       Navigator.of(context).pop();
@@ -107,10 +111,25 @@ class _ContactState extends State<ContactView> {
     return <Widget>[
       IconButton(
         icon: Icon(
-          Icons.delete,
+          Icons.edit,
           color: Colors.white,
         ),
-        onPressed: () => _onDeleted(context),
+        onPressed: () => _onEditPressed(context),
+      ),
+      PopupMenuButton<PopupMenuAction>(
+        itemBuilder: (BuildContext context) =>
+            <PopupMenuEntry<PopupMenuAction>>[
+          const PopupMenuItem<PopupMenuAction>(
+            value: PopupMenuAction.Deleted,
+            child: Text('Delete'),
+          ),
+        ],
+        onSelected: (PopupMenuAction value) {
+          switch (value) {
+            case PopupMenuAction.Deleted:
+              _onDeleted(context);
+          }
+        },
       ),
     ];
   }
@@ -137,6 +156,16 @@ class _ContactState extends State<ContactView> {
           ],
         );
       },
+    );
+  }
+
+  void _onEditPressed(BuildContext context) {
+    Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) =>
+            EditContactView(contact: _bloc.contact),
+      ),
     );
   }
 }

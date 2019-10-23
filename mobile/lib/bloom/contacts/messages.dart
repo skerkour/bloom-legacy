@@ -62,12 +62,13 @@ class ContactsGuiCreateContact {
         'last_name': lastName,
         'notes': notes,
         'device_id': deviceId,
-        'addresses': <dynamic>[],
-        'birthday': birthday ?? birthday.toUtc().toIso8601String(),
-        'organizations': <dynamic>[],
-        'emails': <dynamic>[],
-        'phones': <dynamic>[],
-        'websites': <dynamic>[],
+        'addresses': <String>[],
+        'birthday':
+            birthday == null ? null : birthday.toUtc().toIso8601String(),
+        'organizations': <String>[],
+        'emails': <String>[],
+        'phones': <String>[],
+        'websites': <String>[],
       },
     };
     return data;

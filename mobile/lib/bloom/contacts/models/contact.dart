@@ -25,12 +25,7 @@ class Contact {
   String notes;
   DateTime birthday;
 
-  // TODO(z0mbie42): see below
-  // pub addresses: serde_json::Value,
-  // pub organizations: serde_json::Value,
-  // pub emails: serde_json::Value,
-  // pub phones: serde_json::Value,
-  // pub websites: serde_json::Value,
+  // TODO(z0mbie42): empty fields
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
@@ -40,7 +35,12 @@ class Contact {
       'first_name': firstName,
       'last_name': lastName,
       'notes': notes,
-      'birthday': birthday ?? birthday.toUtc().toIso8601String(),
+      'birthday': birthday == null ? null : birthday.toUtc().toIso8601String(),
+      'addresses': <String>[],
+      'organizations': <String>[],
+      'emails': <String>[],
+      'phones': <String>[],
+      'websites': <String>[],
     };
     return data;
   }
@@ -55,7 +55,7 @@ class Contact {
       updatedAt: DateTime.parse(data['updated_at']).toUtc(),
       lastName: data['last_name'],
       notes: data['notes'],
-      birthday: birthday ?? DateTime.parse(birthday).toUtc(),
+      birthday: birthday != null ? DateTime.parse(birthday).toUtc() : null,
     );
   }
 

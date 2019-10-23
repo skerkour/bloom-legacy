@@ -1,5 +1,6 @@
 import 'package:bloom/bloom/contacts/blocs/contacts.dart';
 import 'package:bloom/bloom/contacts/views/contact.dart';
+import 'package:bloom/bloom/contacts/views/edit_contact.dart';
 import 'package:bloom/bloom/contacts/widgets/drawer.dart';
 import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:flutter/material.dart';
@@ -84,7 +85,7 @@ class _ContactsState extends State<ContactsView> {
     final ContactView res = await Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => const ContactView(),
+        builder: (BuildContext context) => const EditContactView(),
       ),
     );
 

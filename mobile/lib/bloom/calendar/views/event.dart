@@ -9,6 +9,10 @@ enum NoteViewResult {
   Deleted,
 }
 
+enum PopupMenuAction {
+  Deleted,
+}
+
 class EventView extends StatefulWidget {
   const EventView({this.event});
 
@@ -156,9 +160,20 @@ class _EventState extends State<EventView> {
 
   List<Widget> _buildAppBarActions(BuildContext context, Event event) {
     final List<Widget> list = <Widget>[
-      IconButton(
-        icon: Icon(Icons.delete),
-        onPressed: _deleteEvent,
+      PopupMenuButton<PopupMenuAction>(
+        itemBuilder: (BuildContext context) =>
+            <PopupMenuEntry<PopupMenuAction>>[
+          const PopupMenuItem<PopupMenuAction>(
+            value: PopupMenuAction.Deleted,
+            child: Text('Delete'),
+          ),
+        ],
+        onSelected: (PopupMenuAction value) {
+          switch (value) {
+            case PopupMenuAction.Deleted:
+              _deleteEvent();
+          }
+        },
       ),
     ];
     return list;
