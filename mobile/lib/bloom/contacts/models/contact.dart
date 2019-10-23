@@ -1,6 +1,4 @@
 import 'dart:convert';
-import 'package:bloom/bloom/kernel/blocs/app.dart';
-import 'package:bloom/bloom/kernel/services/db.dart';
 import 'package:flutter/material.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/bloom/contacts/messages.dart';
