@@ -2,6 +2,10 @@ import 'package:bloom/bloom/contacts/blocs/contact.dart';
 import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:flutter/material.dart';
 
+enum ContactViewResult {
+  Deleted,
+}
+
 class ContactView extends StatefulWidget {
   const ContactView({this.contact});
 
@@ -43,7 +47,7 @@ class _ContactState extends State<ContactView> {
       ),
       body: StreamBuilder<Contact>(
         initialData: _bloc.contact,
-        stream: _bloc.contactOut,
+        stream: _bloc.contactStream,
         builder: (BuildContext context, AsyncSnapshot<Contact> snapshot) {
           if (snapshot.hasData) {
             return _buildBody(snapshot.data);

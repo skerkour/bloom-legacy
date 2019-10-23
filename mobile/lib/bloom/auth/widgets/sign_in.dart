@@ -1,10 +1,9 @@
 import 'dart:convert';
-
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:bloom/native/core_ffi.dart';
-import 'package:bloom/native/messages/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../messages.dart';
 
 class SignIn extends StatefulWidget {
   const SignIn({Key key}) : super(key: key);

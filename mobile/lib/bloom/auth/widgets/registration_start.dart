@@ -1,9 +1,9 @@
 import 'dart:convert';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/native/core_ffi.dart';
-import 'package:bloom/native/messages/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../messages.dart';
 
 class RegistrationStart extends StatefulWidget {
   const RegistrationStart({Key key}) : super(key: key);

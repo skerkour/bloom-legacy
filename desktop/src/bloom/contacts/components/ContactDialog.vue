@@ -406,7 +406,7 @@
 
 
 <script lang="ts">
-// TODO(z0mbie42): addresses and birthday
+// TODO(z0mbie42): addresses
 import {
   Component,
   Prop,

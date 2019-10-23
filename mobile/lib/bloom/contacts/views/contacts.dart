@@ -80,6 +80,20 @@ class _ContactsState extends State<ContactsView> {
   }
 
   Future<void> _newContactTapped(BuildContext ctx) async {
-    print('new contact tapped');
+    debugPrint('new contact tapped');
+    final ContactView res = await Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => const ContactView(),
+      ),
+    );
+
+    if (res != null) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(content: Text('Contact ${res.toString().split('.').last}')),
+        );
+    }
   }
 }

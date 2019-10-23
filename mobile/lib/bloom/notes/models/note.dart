@@ -78,7 +78,6 @@ class Note {
 
   Future<void> delete() async {
     debugPrint('Note.delete called (id: $id)');
-
     await compute(Note._nativeCall, NotesGuiDeleteNote(id));
   }
 

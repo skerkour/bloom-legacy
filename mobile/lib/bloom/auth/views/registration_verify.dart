@@ -1,11 +1,10 @@
 import 'dart:convert';
-
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/libs/masked_text_controller.dart';
 import 'package:bloom/native/core_ffi.dart';
-import 'package:bloom/native/messages/auth.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import '../messages.dart';
 
 class RegistrationVerifyArguments {
   RegistrationVerifyArguments(this.id, this.email);
