@@ -33,6 +33,7 @@ pub struct GuiCreateContact {
     pub emails: serde_json::Value,
     pub phones: serde_json::Value,
     pub websites: serde_json::Value,
+    pub device_id: String,
 }
 from_message!(Box<GuiCreateContact>, Message::ContactsGuiCreateContact);
 

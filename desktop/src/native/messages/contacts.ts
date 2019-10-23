@@ -13,6 +13,7 @@ export interface Contact {
   websites: Website[],
   organizations: Organization[],
   addresses: Address[],
+  device_id: string,
 }
 
 export interface Email {
@@ -62,6 +63,7 @@ export interface GuiCreateContact {
   websites: Website[],
   organizations: Organization[],
   addresses: Address[],
+  device_id: string,
 }
 
 export interface GuiDeleteContact {

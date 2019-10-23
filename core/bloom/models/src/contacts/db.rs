@@ -20,4 +20,5 @@ pub struct Conatct {
     pub emails: serde_json::Value,
     pub phones: serde_json::Value,
     pub websites: serde_json::Value,
+    pub device_id: String,
 }

@@ -12,7 +12,6 @@ class ContactsGuiListContacts {
   }
 }
 
-
 class ContactsGuiContacts {
   ContactsGuiContacts({this.contacts});
 
@@ -20,7 +19,8 @@ class ContactsGuiContacts {
 
   static ContactsGuiContacts fromJson(Map<String, dynamic> json) {
     final List<dynamic> list = json['data']['contacts'];
-    final List<Contact> contacts = list.map((dynamic i) => Contact.fromJson(i)).toList();
+    final List<Contact> contacts =
+        list.map((dynamic i) => Contact.fromJson(i)).toList();
     return ContactsGuiContacts(contacts: contacts);
   }
 }

@@ -38,7 +38,7 @@ class _ContactState extends State<ContactView> {
       appBar: AppBar(
         // Here we take the value from the MyHomePage object that was created by
         // the App.build method, and use it to set our appbar title.
-        title: Text(_bloc.contact.name),
+        title: Text(_bloc.contact.firstName),
         actions: _buildAppBarActions(context),
       ),
       body: StreamBuilder<Contact>(
@@ -61,35 +61,35 @@ class _ContactState extends State<ContactView> {
         children: <Widget>[
           ListTile(
             title: const Text('Name'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Middle name'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Family name'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Prefix'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Suffix'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Company'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Job'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           ListTile(
             title: const Text('Note'),
-            trailing: Text(contact.name ?? ''),
+            trailing: Text(contact.firstName ?? ''),
           ),
           // AddressesTile(contact.postalAddresses),
           // ItemsTile('Phones', contact.phones),

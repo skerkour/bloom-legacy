@@ -71,8 +71,8 @@ class _ContactsState extends State<ContactsView> {
             // leading: (contact.avatar != null && contact.avatar.isNotEmpty)
             //     ? CircleAvatar(backgroundImage: MemoryImage(contact.avatar))
             leading: CircleAvatar(
-                child: Text((contact.name[0] ?? '').toUpperCase())),
-            title: Text(contact.name),
+                child: Text((contact.firstName[0] ?? '').toUpperCase())),
+            title: Text(contact.firstName),
           );
         },
       ),

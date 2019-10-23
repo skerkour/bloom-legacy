@@ -54,7 +54,8 @@ class _SettingsState extends State<SettingsView> {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(content: Text('$imported Contacts successfully imported')),
+          const SnackBar(
+              content: Text('$imported Contacts successfully imported')),
         );
     };
   }

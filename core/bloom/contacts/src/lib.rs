@@ -44,7 +44,8 @@ pub fn list_contacts(_: contacts::GuiListContacts) -> Result<Message, BloomError
             organizations TEXT NOT NULL,
             emails TEXT NOT NULL,
             phones TEXT NOT NULL,
-            websites TEXT NOT NULL
+            websites TEXT NOT NULL,
+            device_id TEXT NOT NULL
         )",
         NO_PARAMS,
     )?;
@@ -64,6 +65,7 @@ pub fn list_contacts(_: contacts::GuiListContacts) -> Result<Message, BloomError
             emails: row.get(9)?,
             phones: row.get(10)?,
             websites: row.get(11)?,
+            device_id: row.get(12)?,
         })
     })?;
     let contacts: Result<Vec<db::Conatct>, _> = contacts_iter.collect();
@@ -89,7 +91,8 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
             organizations TEXT NOT NULL,
             emails TEXT NOT NULL,
             phones TEXT NOT NULL,
-            websites TEXT NOT NULL
+            websites TEXT NOT NULL,
+            device_id TEXT NOT NULL
         )",
         NO_PARAMS,
     )?;
@@ -108,6 +111,7 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
         emails: input.emails,
         phones: input.phones,
         websites: input.websites,
+        device_id: input.device_id,
     };
 
     conn.execute(
@@ -123,8 +127,9 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
             organizations,
             emails,
             phones,
-            websites)
-            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)",
+            websites,
+            device_id)
+            VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)",
         params![
             &contact.id,
             &contact.created_at,
@@ -138,6 +143,7 @@ pub fn create_contact(input: contacts::GuiCreateContact) -> Result<Message, Bloo
             &contact.emails,
             &contact.phones,
             &contact.websites,
+            &contact.device_id,
         ],
     )?;
 
@@ -161,7 +167,8 @@ pub fn delete_contact(input: contacts::GuiDeleteContact) -> Result<Message, Bloo
             organizations TEXT NOT NULL,
             emails TEXT NOT NULL,
             phones TEXT NOT NULL,
-            websites TEXT NOT NULL
+            websites TEXT NOT NULL,
+            device_id TEXT NOT NULL
         )",
         NO_PARAMS,
     )?;
@@ -188,7 +195,8 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
             organizations TEXT NOT NULL,
             emails TEXT NOT NULL,
             phones TEXT NOT NULL,
-            websites TEXT NOT NULL
+            websites TEXT NOT NULL,
+            device_id TEXT NOT NULL
         )",
         NO_PARAMS,
     )?;
@@ -207,8 +215,9 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
             organizations = $7,
             emails = $8,
             phones = $9,
-            websites = $10
-        WHERE id = $11",
+            websites = $10,
+            device_id = $11
+        WHERE id = $12",
         params![
             &contact.updated_at,
             &contact.first_name,
@@ -220,6 +229,7 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
             &contact.emails,
             &contact.phones,
             &contact.websites,
+            &contact.device_id,
             &contact.id,
         ],
     )?;

@@ -11,19 +11,25 @@ import 'package:flutter/foundation.dart';
 class Contact {
   Contact({
     this.id,
-    this.name = '',
+    this.firstName = '',
     this.deviceId,
+    this.createdAt,
+    this.updatedAt,
   });
 
   String id;
-  String name;
+  String firstName;
   String deviceId;
+  DateTime createdAt;
+  DateTime updatedAt;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
-      'name': name,
       'device_id': deviceId,
+      'created_at': createdAt.toUtc().toIso8601String(),
+      'updated_at': updatedAt.toUtc().toIso8601String(),
+      'first_name': firstName,
     };
     return data;
   }
@@ -31,8 +37,10 @@ class Contact {
   static Contact fromJson(Map<String, dynamic> data) {
     return Contact(
       id: data['id'],
-      name: data['name'],
+      firstName: data['first_name'],
       deviceId: data['device_id'],
+      createdAt: DateTime.parse(data['created_at']).toUtc(),
+      updatedAt: DateTime.parse(data['updated_at']).toUtc(),
     );
   }
 
@@ -46,7 +54,7 @@ class Contact {
     debugPrint('Contact.create called');
     final Database db = await appBloc.db.db;
 
-    final Contact contact = Contact(name: name ?? '', deviceId: deviceId);
+    final Contact contact = Contact(firstName: name ?? '', deviceId: deviceId);
     contact.id = Uuid().v4();
 
     final Map<String, dynamic> data = contact.toJson();

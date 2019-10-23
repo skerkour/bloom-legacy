@@ -550,6 +550,7 @@ export default class ContactDialog extends Vue {
         websites: this.websites,
         organizations: this.organizations,
         addresses: [],
+        device_id: '',
       },
     };
     try {

@@ -1,10 +1,6 @@
 import 'dart:async';
 
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:contacts_service/contacts_service.dart' as contacts_service;
-import 'package:flutter/material.dart';
-import 'package:permission_handler/permission_handler.dart';
-import 'package:shared_preferences/shared_preferences.dart';
 import 'package:bloom/bloom/contacts/models/contact.dart';
 
 class ContactsBloc extends BlocBase {
