@@ -666,6 +666,15 @@ export default class ContactDialog extends Vue {
   }
 
   isEmpty(): boolean {
+    if (this.firstName.trim().length === 0 && this.lastName.trim().length === 0
+      && this.notes.trim().length === 0 && this.birthday === null
+      && this.emails.length === 1 && this.emails[0].email.trim() === ''
+      && this.websites.length === 1 && this.websites[0].website.trim() === ''
+      && this.phones.length === 1 && this.phones[0].phone.trim() === ''
+      && this.organizations.length === 1
+        && this.organizations[0].name.trim() === '' && this.organizations[0].title.trim() === '') {
+      return true;
+    }
     return false;
   }
 
