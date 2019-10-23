@@ -128,6 +128,13 @@ class NativeAdaptater { // extends EventEmitter {
     // this.emit('notification', data);
     this.notification.next(message);
   }
+
+  toRustDate(date: string | null): Date | null {
+    if (date === null) {
+      return null;
+    }
+    return new Date(date).toISOString() as unknown as Date;
+  }
 }
 
 // interface Message {

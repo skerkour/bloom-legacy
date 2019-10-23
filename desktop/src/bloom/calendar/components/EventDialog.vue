@@ -202,8 +202,7 @@ export default class EventDialog extends Vue {
   async save() {
     if (this.event) {
       await this.updateEvent();
-    } else if (this.title.trim().length !== 0 || this.description.trim().length !== 0
-      || this.startAt !== this.now || this.endAt !== this.now) {
+    } else {
       await this.createEvent();
     }
   }
@@ -216,6 +215,9 @@ export default class EventDialog extends Vue {
   }
 
   async createEvent() {
+    if (this.isEmpty()) {
+      return;
+    }
     this.error = '';
     this.isLoading = true;
     const message: Message = {
@@ -223,8 +225,8 @@ export default class EventDialog extends Vue {
       data: {
         title: this.title,
         description: this.description,
-        start_at: new Date(this.startAt).toISOString() as unknown as Date,
-        end_at: new Date(this.endAt).toISOString() as unknown as Date,
+        start_at: Native.toRustDate(this.startAt)!,
+        end_at: Native.toRustDate(this.endAt)!,
       },
     };
     try {
@@ -243,8 +245,8 @@ export default class EventDialog extends Vue {
     const event = { ...this.event } as EventModel;
     event.title = this.title;
     event.description = this.description;
-    event.start_at = new Date(this.startAt).toISOString() as unknown as Date;
-    event.end_at = new Date(this.endAt).toISOString() as unknown as Date;
+    event.start_at = Native.toRustDate(this.startAt)!;
+    event.end_at = Native.toRustDate(this.endAt)!;
     const message: Message = {
       type: 'calendar.gui.update_event',
       data: {
@@ -298,6 +300,14 @@ export default class EventDialog extends Vue {
 
     const [year, month, day] = date.split('/');
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  isEmpty(): boolean {
+    if (this.title.trim().length !== 0 || this.description.trim().length !== 0
+      || this.startAt !== this.now || this.endAt !== this.now) {
+      return false;
+    }
+    return true;
   }
 }
 </script>

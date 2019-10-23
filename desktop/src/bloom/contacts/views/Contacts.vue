@@ -24,40 +24,37 @@
         hide-default-footer
         :loading="isLoading"
       >
-        <template slot="no-data">
-          <p class="text-xs-center">
+        <template v-slot:no-data>
+          <p class="text-center">
             No Contacts.
           </p>
         </template>
-        <template
-          slot="items"
-          slot-scope="props"
-        >
+       <template v-slot:item="{ item }">
           <tr
             class="blm-pointer"
-            @click="currentContact = props.item; openContactDialog()"
+            @click="currentContact = item; openContactDialog()"
           >
 
-            <td class="text-xs-left">
-              <span>{{ props.item.first_name }} {{ props.item.last_name}}</span>
+            <td class="text-left">
+              <span>{{ item.first_name }} {{ item.last_name}}</span>
             </td>
-            <td class="text-xs-left">
-              <span v-if="props.item.emails.length >= 1">
-                {{ props.item.emails[0].email }}
+            <td class="text-left">
+              <span v-if="item.emails.length >= 1">
+                {{ item.emails[0].email }}
               </span>
             </td>
-            <td class="text-xs-left">
-              <span v-if="props.item.phones.length >= 1">
-                {{ props.item.phones[0].phone }}
+            <td class="text-left">
+              <span v-if="item.phones.length >= 1">
+                {{ item.phones[0].phone }}
               </span>
             </td>
-            <td class="text-xs-left">
-              <span v-if="props.item.organizations.length >= 1">
-                <span v-if="props.item.organizations[0].title !== null">
-                  {{ props.item.organizations[0].title }},
+            <td class="text-left">
+              <span v-if="item.organizations.length >= 1">
+                <span v-if="item.organizations[0].title !== ''">
+                  {{ item.organizations[0].title }},
                 </span>
-                <span v-if="props.item.organizations[0].name !== null">
-                  {{ props.item.organizations[0].name }}
+                <span v-if="item.organizations[0].name !== ''">
+                  {{ item.organizations[0].name }}
                 </span>
               </span>
             </td>
@@ -162,17 +159,19 @@ export default class Index extends Vue {
   }
 
   contactUpdated(updatedContact: Contact) {
-    const pos = this.contacts
-      .map((contact: Contact) => contact.id)
-      .indexOf(updatedContact.id);
-    this.contacts.splice(pos, 1);
-    this.contacts = [updatedContact, ...this.contacts];
+    this.contacts = this.contacts.map((note: any) => {
+      if (note.id === updatedContact.id) {
+        return updatedContact;
+      }
+      return note;
+    });
   }
 
   contactDeleted(deletedContact: Contact) {
     this.contacts = this.contacts.filter(
       (contact: Contact) => contact.id !== deletedContact.id,
     );
+    this.currentContact = null;
   }
 }
 </script>

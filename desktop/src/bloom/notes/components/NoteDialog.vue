@@ -104,7 +104,6 @@ export default class NoteDialog extends Vue {
 
   set show(value) {
     if (!value) {
-      // this.save();
       this.$emit('closed');
     }
   }

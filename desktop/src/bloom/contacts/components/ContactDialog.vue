@@ -13,6 +13,20 @@
         v-if="contact === null"
       >
         <h3 class="headline mb-0">Create new contact</h3>
+        <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ tooltip }">
+            <v-btn
+              slot="activator"
+              text
+              v-on="tooltip"
+              @click="close(true)"
+            >
+              Cancel
+            </v-btn>
+          </template>
+          <span>Delete contact</span>
+        </v-tooltip>
       </v-card-title>
       <v-card-title
         dark
@@ -24,28 +38,18 @@
         </h3>
         <v-spacer />
         <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-            <v-menu slot="activator">
-              <template v-slot:activator="{ on: menu }">
-                <v-btn
-                  slot="activator"
-                  text
-                  color="white"
-                  icon
-                  v-on="{ ...tooltip, ...menu }"
-                >
-                  <v-icon>mdi-dots-vertical</v-icon>
-                </v-btn>
-              </template>
-
-              <v-list>
-                <v-list-item @click="deleteContact">
-                  <v-list-item-title>Delete contact</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+          <template v-slot:activator="{ tooltip }">
+            <v-btn
+              slot="activator"
+              text
+              icon
+              v-on="tooltip"
+              @click="deleteContact"
+            >
+              <v-icon>mdi-delete</v-icon>
+            </v-btn>
           </template>
-          <span>More actions</span>
+          <span>Delete contact</span>
         </v-tooltip>
       </v-card-title>
 
@@ -102,6 +106,8 @@
                     prepend-icon="mdi-calendar"
                     @blur="birthday = parseDate(birthdayFormatted)"
                     readonly
+                    clearable
+                    @click:clear="birthdayCleared"
                   />
                 </template>
                 <v-date-picker
@@ -400,7 +406,7 @@
 
 
 <script lang="ts">
-// TODO(z0mbie42): addresses
+// TODO(z0mbie42): addresses and birthday
 import {
   Component,
   Prop,
@@ -433,8 +439,8 @@ export default class ContactDialog extends Vue {
   isLoading = false;
   firstName: string = '';
   lastName: string = '';
-  birthday: any | null = null;
-  birthdayFormatted: any | null = null;
+  birthday: string | null = null;
+  birthdayFormatted: string | null = null;
   birthdayMenu = false;
   notes: string = '';
   organizations: Organization[] = [Object.assign({}, DEFAULT_ORGANIZATION)];
@@ -473,10 +479,49 @@ export default class ContactDialog extends Vue {
     this.birthdayFormatted = this.formatDate(this.birthday);
   }
 
+  @Watch('birthdayMenu')
+  onBirthdayMenuChanged(birthdayMenu: boolean) {
+    if (birthdayMenu) {
+      // eslint-disable-next-line
+      this.$nextTick(() => ((this.$refs.birthdayPicker) as any).activePicker = 'YEAR');
+    }
+  }
+
+
+  @Watch('contact')
+  onContactChanged(contact: Contact) {
+    if (contact !== null) {
+      this.firstName = contact.first_name;
+      this.lastName = contact.last_name;
+      this.notes = contact.notes;
+      this.birthday = contact.birthday
+        ? new Date(contact.birthday!).toISOString().substr(0, 10) : null;
+      this.birthdayFormatted = this.formatDate(this.birthday);
+      this.emails = contact.emails.length > 0
+        ? contact.emails
+        : [Object.assign({}, DEFAULT_EMAIL)];
+      this.websites = contact.websites.length > 0
+        ? contact.websites
+        : [Object.assign({}, DEFAULT_WEBSITE)];
+      this.phones = contact.phones.length > 0
+        ? contact.phones
+        : [Object.assign({}, DEFAULT_PHONE)];
+      this.organizations = contact.organizations.length > 0
+        ? contact.organizations
+        : [Object.assign({}, DEFAULT_ORGANIZATION)];
+    } else {
+      this.clearFields();
+    }
+  }
+
+
   // methods
-  async close() {
-    await this.save();
+  async close(cancel: boolean = false) {
+    if (!cancel) {
+      await this.save();
+    }
     this.show = false;
+    this.clearFields();
   }
 
   save() {
@@ -490,13 +535,13 @@ export default class ContactDialog extends Vue {
   async createContact() {
     this.error = '';
     this.isLoading = true;
-    if (this.isEmpty()) { // isEmpty
+    if (this.isEmpty()) {
       return;
     }
     const message: Message = {
       type: 'contacts.gui.create_contact',
       data: {
-        birthday: this.birthday,
+        birthday: Native.toRustDate(this.birthday),
         first_name: this.firstName,
         last_name: this.lastName,
         notes: this.notes,
@@ -521,7 +566,7 @@ export default class ContactDialog extends Vue {
     this.error = '';
     this.isLoading = true;
     const contact = { ...this.contact } as Contact;
-    contact.birthday = this.birthday;
+    contact.birthday = Native.toRustDate(this.birthday);
     contact.first_name = this.firstName;
     contact.last_name = this.lastName;
     contact.notes = this.notes;
@@ -533,7 +578,7 @@ export default class ContactDialog extends Vue {
     const message: Message = {
       type: 'contacts.gui.update_contact',
       data: {
-        contact: this.contact!,
+        contact,
       },
     };
     try {
@@ -622,6 +667,23 @@ export default class ContactDialog extends Vue {
 
   isEmpty(): boolean {
     return false;
+  }
+
+  clearFields() {
+    this.firstName = '';
+    this.lastName = '';
+    this.notes = '';
+    this.birthday = null;
+    this.emails = [Object.assign({}, DEFAULT_EMAIL)];
+    this.websites = [Object.assign({}, DEFAULT_WEBSITE)];
+    this.phones = [Object.assign({}, DEFAULT_PHONE)];
+    this.organizations = [Object.assign({}, DEFAULT_ORGANIZATION)];
+    this.error = '';
+  }
+
+  birthdayCleared() {
+    this.birthday = null;
+    this.birthdayFormatted = null;
   }
 }
 </script>

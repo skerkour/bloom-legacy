@@ -197,7 +197,7 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
     contact.updated_at = chrono::Utc::now();
 
     conn.execute(
-        "UPDATE calendar_events SET
+        "UPDATE contacts SET
             updated_at = $1,
             first_name = $2,
             last_name = $3,
@@ -207,7 +207,7 @@ pub fn update_contact(input: contacts::GuiUpdateContact) -> Result<Message, Bloo
             organizations = $7,
             emails = $8,
             phones = $9,
-            websites = $10,
+            websites = $10
         WHERE id = $11",
         params![
             &contact.updated_at,

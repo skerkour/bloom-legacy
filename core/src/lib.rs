@@ -59,6 +59,7 @@ pub fn handle_message(message: messages::Message) -> messages::Message {
     match res {
         Ok(message) => message,
         Err(err) => {
+            println!("ERRRRRRRRR: {}", &err);
             let err: messages::kernel::Error = err.into();
             err.into()
         }
