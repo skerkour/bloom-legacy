@@ -518,7 +518,32 @@ export default class ContactDialog extends Vue {
   }
 
   async updateContact() {
-    // TODO(z0mbie42)
+    this.error = '';
+    this.isLoading = true;
+    const contact = { ...this.contact } as Contact;
+    contact.birthday = this.birthday;
+    contact.first_name = this.firstName;
+    contact.last_name = this.lastName;
+    contact.notes = this.notes;
+    contact.emails = this.emails;
+    contact.phones = this.phones;
+    contact.websites = this.websites;
+    contact.organizations = this.organizations;
+    contact.addresses = [];
+    const message: Message = {
+      type: 'contacts.gui.update_contact',
+      data: {
+        contact: this.contact!,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('updated', (res.data as GuiContact).contact);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 
   async deleteContact() {

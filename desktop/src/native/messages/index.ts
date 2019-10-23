@@ -70,6 +70,7 @@ export type Message =
   | { 'type': 'contacts.gui.contact', 'data': GuiContact }
   | { 'type': 'contacts.gui.contacts', 'data': GuiContacts }
   | { 'type': 'contacts.gui.create_contact', 'data': GuiCreateContact }
+  | { 'type': 'contacts.gui.update_contact', 'data': GuiContact }
   | { 'type': 'contacts.gui.delete_contact', 'data': GuiDeleteContact }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
