@@ -28,7 +28,12 @@ import {
   ListEvents,
 } from './calendar';
 
-import { GuiContact, GuiContacts } from './contacts';
+import {
+  GuiContact,
+  GuiContacts,
+  GuiCreateContact,
+  GuiDeleteContact,
+} from './contacts';
 
 export type Message =
   // auth
@@ -64,6 +69,8 @@ export type Message =
   | { 'type': 'contacts.gui.list_contacts', 'data': {} }
   | { 'type': 'contacts.gui.contact', 'data': GuiContact }
   | { 'type': 'contacts.gui.contacts', 'data': GuiContacts }
+  | { 'type': 'contacts.gui.create_contact', 'data': GuiCreateContact }
+  | { 'type': 'contacts.gui.delete_contact', 'data': GuiDeleteContact }
 
   | { 'type': 'gui.to_remove.tick', 'data': { 'count': number } }
   | { 'type': 'error', 'data': { 'code': string, 'message': string, } }

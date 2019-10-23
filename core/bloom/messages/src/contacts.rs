@@ -24,8 +24,6 @@ from_message!(GuiContacts, Message::ContactsGuiContacts);
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
 pub struct GuiCreateContact {
-    pub created_at: chrono::DateTime<chrono::Utc>,
-    pub updated_at: chrono::DateTime<chrono::Utc>,
     pub first_name: String,
     pub last_name: String,
     pub notes: String,

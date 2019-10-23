@@ -51,3 +51,19 @@ export interface GuiContact {
 export interface GuiContacts {
   contacts: Contact[],
 }
+
+export interface GuiCreateContact {
+  birthday: Date | null,
+  first_name: string,
+  last_name: string,
+  notes: string,
+  emails: Email[],
+  phones: Phone[],
+  websites: Website[],
+  organizations: Organization[],
+  addresses: Address[],
+}
+
+export interface GuiDeleteContact {
+  id: string,
+}

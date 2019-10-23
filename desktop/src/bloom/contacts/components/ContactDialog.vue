@@ -400,6 +400,7 @@
 
 
 <script lang="ts">
+// TODO(z0mbie42): addresses
 import {
   Component,
   Prop,
@@ -412,7 +413,9 @@ import {
   Website,
   Email,
   Phone,
+  GuiContact,
 } from '@/native/messages/contacts';
+import { Native, Message } from '@/native';
 
 const DEFAULT_EMAIL = { email: '', label: 'Other' };
 const DEFAULT_WEBSITE = { website: '', label: 'Other' };
@@ -472,16 +475,69 @@ export default class ContactDialog extends Vue {
 
   // methods
   async close() {
-    // await this.save();
-    if (this.contact === null) {
-      // this.title = '';
-      // this.body = '';
-    }
+    await this.save();
     this.show = false;
   }
 
-  deleteContact() {
-    console.log('delete conatct');
+  save() {
+    if (this.contact) {
+      this.updateContact();
+    } else {
+      this.createContact();
+    }
+  }
+
+  async createContact() {
+    this.error = '';
+    this.isLoading = true;
+    if (this.isEmpty()) { // isEmpty
+      return;
+    }
+    const message: Message = {
+      type: 'contacts.gui.create_contact',
+      data: {
+        birthday: this.birthday,
+        first_name: this.firstName,
+        last_name: this.lastName,
+        notes: this.notes,
+        emails: this.emails,
+        phones: this.phones,
+        websites: this.websites,
+        organizations: this.organizations,
+        addresses: [],
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('created', (res.data as GuiContact).contact);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async updateContact() {
+    // TODO(z0mbie42)
+  }
+
+  async deleteContact() {
+    this.error = '';
+    this.isLoading = true;
+    const message: Message = {
+      type: 'contacts.gui.delete_contact',
+      data: {
+        id: this.contact!.id,
+      },
+    };
+    try {
+      const res = await Native.call(message);
+      this.$emit('deleted', this.contact);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
     this.close();
   }
 
@@ -537,6 +593,10 @@ export default class ContactDialog extends Vue {
 
     const [year, month, day] = date.split('/');
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
+  }
+
+  isEmpty(): boolean {
+    return false;
   }
 }
 </script>
