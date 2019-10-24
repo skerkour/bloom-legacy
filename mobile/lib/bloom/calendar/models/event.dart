@@ -94,9 +94,9 @@ class Event {
   static Map<String, dynamic> _nativeCall<T>(T message) {
     final String jsonPayload = jsonEncode(message);
     debugPrint('input: $jsonPayload');
-    final String res = coreFfi.call(jsonPayload);
+    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
     debugPrint('output: $res');
-    return jsonDecode(res);
+    return res;
   }
 
   DateTime _zeroizeDay(DateTime day) {

@@ -1,3 +1,4 @@
+import 'dart:convert';
 import 'dart:ffi' as ffi;
 
 import 'package:ffi/ffi.dart';
@@ -19,15 +20,20 @@ class _Native {
         dylib.lookupFunction<RustFreeFunction, RustFreeFunction>('core_free');
   }
 
-  String call(String message) {
+  Map<String, dynamic> call(String message) {
     final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(message);
     debugPrint('cmessage: $cMessage');
 
     final ffi.Pointer<Utf8> res = _handleMessage(cMessage);
     cMessage.free();
 
-    final String ret = Utf8.fromUtf8(res);
+    final String retStr = Utf8.fromUtf8(res);
     _coreFree(res);
+
+    final Map<String, dynamic> ret = jsonDecode(retStr);
+    if (ret.containsKey('error')) {
+      throw ret['error']['message'];
+    }
     return ret;
   }
 }

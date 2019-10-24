@@ -95,10 +95,9 @@ class _RegistrationStartState extends State<RegistrationStart> {
       email: email,
     ));
 
-    final String json =
+    final Map<String, dynamic> jsonMap =
         await compute(_RegistrationStartState._nativeCall, message);
-    debugPrint(json);
-    final Map<String, dynamic> jsonMap = jsonDecode(json);
+    debugPrint('$jsonMap');
     final AuthGuiRegistrationStarted messageRes =
         AuthGuiRegistrationStarted.fromJson(jsonMap);
     final RegistrationVerifyArguments args =
@@ -110,7 +109,7 @@ class _RegistrationStartState extends State<RegistrationStart> {
     Navigator.pushNamed(context, '/auth/registration/verify', arguments: args);
   }
 
-  static String _nativeCall(String message) {
+  static Map<String, dynamic> _nativeCall(String message) {
     return coreFfi.call(message);
   }
 }

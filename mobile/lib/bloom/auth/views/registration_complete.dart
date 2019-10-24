@@ -106,9 +106,9 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
       password: passwordController.text,
     ));
 
-    final String res =
+    final Map<String, dynamic> res =
         await compute(_RegistrationCompleteViewState._nativeCall, message);
-    debugPrint(res);
+    debugPrint('$res');
 
     setState(() {
       isLoading = false;
@@ -120,7 +120,7 @@ class _RegistrationCompleteViewState extends State<RegistrationCompleteView> {
     );
   }
 
-  static String _nativeCall(String message) {
+  static Map<String, dynamic> _nativeCall(String message) {
     return coreFfi.call(message);
   }
 }

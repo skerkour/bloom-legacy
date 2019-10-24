@@ -127,7 +127,7 @@ class _ContactState extends State<ContactView> {
               maxLines: 8,
               controller: _notesController,
               readOnly: true,
-              decoration: InputDecoration(
+              decoration: const InputDecoration(
                 border: InputBorder.none,
               ),
             ),

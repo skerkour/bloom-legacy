@@ -105,9 +105,9 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       code: code,
     ));
 
-    final String res =
+    final Map<String, dynamic> res =
         await compute(_RegistrationVerifyViewState._nativeCall, message);
-    debugPrint(res);
+    debugPrint('$res');
     final RegistrationCompleteArguments args =
         RegistrationCompleteArguments(pendingAccountId);
 
@@ -118,7 +118,7 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
         arguments: args);
   }
 
-  static String _nativeCall(String message) {
+  static Map<String, dynamic> _nativeCall(String message) {
     return coreFfi.call(message);
   }
 

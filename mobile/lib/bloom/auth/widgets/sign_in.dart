@@ -88,15 +88,16 @@ class _SignInState extends State<SignIn> {
       password: passwordController.text,
     ));
 
-    final String json = await compute(_SignInState._nativeCall, message);
-    debugPrint(json);
+    final Map<String, dynamic> json =
+        await compute(_SignInState._nativeCall, message);
+    debugPrint('$json');
 
     setState(() {
       isLoading = false;
     });
   }
 
-  static String _nativeCall(String message) {
+  static Map<String, dynamic> _nativeCall(String message) {
     return coreFfi.call(message);
   }
 }
