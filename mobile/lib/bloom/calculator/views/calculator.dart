@@ -228,7 +228,7 @@ class _CalculatorState extends State<CalculatorView> {
         );
         final CalculatorGuiResult ret = CalculatorGuiResult.fromJson(res);
         result = ret.result;
-      } on Error {
+      } catch (err) {
         result = 'Error';
       }
     }

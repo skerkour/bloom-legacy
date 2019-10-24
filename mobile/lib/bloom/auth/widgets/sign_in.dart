@@ -88,13 +88,23 @@ class _SignInState extends State<SignIn> {
       password: passwordController.text,
     ));
 
-    final Map<String, dynamic> json =
-        await compute(_SignInState._nativeCall, message);
-    debugPrint('$json');
-
-    setState(() {
-      isLoading = false;
-    });
+    try {
+      final Map<String, dynamic> json =
+          await compute(_SignInState._nativeCall, message);
+      debugPrint('$json');
+    } catch (err) {
+      Scaffold.of(context)
+        ..removeCurrentSnackBar()
+        ..showSnackBar(
+          SnackBar(
+              content: Text(err.toString(),
+                  style: TextStyle(color: Colors.red[300]))),
+        );
+    } finally {
+      setState(() {
+        isLoading = false;
+      });
+    }
   }
 
   static Map<String, dynamic> _nativeCall(String message) {

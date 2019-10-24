@@ -31,8 +31,9 @@ class _Native {
     _coreFree(res);
 
     final Map<String, dynamic> ret = jsonDecode(retStr);
-    if (ret.containsKey('error')) {
-      throw ret['error']['message'];
+    if (ret['type'] == 'error') {
+      final String errorMessage = ret['data']['message'];
+      throw errorMessage;
     }
     return ret;
   }
