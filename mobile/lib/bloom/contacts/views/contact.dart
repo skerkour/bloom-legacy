@@ -67,59 +67,53 @@ class _ContactState extends State<ContactView> {
   Widget _buildBody(Contact contact) {
     final List<Widget> widgets = <Widget>[];
 
-    widgets.add(Card(
-      child: ListTile(
-        title: Text('${_bloc.contact.firstName} ${_bloc.contact.lastName}'),
-        subtitle: Text(
-          'Name',
-          style: TextStyle(color: Colors.black54),
-        ),
-        leading: Icon(Icons.person),
+    widgets.add(ListTile(
+      title: Text('${_bloc.contact.firstName} ${_bloc.contact.lastName}'),
+      subtitle: Text(
+        'Name',
+        style: TextStyle(color: Colors.black54),
       ),
+      leading: Icon(Icons.person),
     ));
 
     // phone
     if (_bloc.contact.phones.isNotEmpty) {
-      widgets.add(Card(
-        child: ListTile(
-          title: Text(_bloc.contact.phones[0].phone),
-          subtitle: Text(
-            'Phone',
-            style: TextStyle(color: Colors.black54),
-          ),
-          leading: IconButton(
-            icon: Icon(Icons.phone),
-            onPressed: () {
-              // _launchCaller(phoneNumber);
-            },
-          ),
-          // trailing: IconButton(
-          //   icon: Icon(Icons.message),
-          //   // onPressed: () {
-          //   //   _textMe(phoneNumber);
-          //   // },
-          // ),
+      widgets.add(ListTile(
+        title: Text(_bloc.contact.phones[0].phone),
+        subtitle: Text(
+          'Phone',
+          style: TextStyle(color: Colors.black54),
         ),
+        leading: Icon(Icons.phone),
+        // leading: IconButton(
+        //   icon: Icon(Icons.phone),
+        //   onPressed: () {
+        //     // _launchCaller(phoneNumber);
+        //   },
+        // ),
+        // trailing: IconButton(
+        //   icon: Icon(Icons.message),
+        //   // onPressed: () {
+        //   //   _textMe(phoneNumber);
+        //   // },
+        // ),
       ));
     }
 
     // emails
     if (_bloc.contact.emails.isNotEmpty) {
-      widgets.add(Card(
-        child: ListTile(
-          title: Text(_bloc.contact.emails[0].email),
-          subtitle: Text(
-            'Email',
-            style: TextStyle(color: Colors.black54),
-          ),
-          leading: Icon(Icons.email),
+      widgets.add(ListTile(
+        title: Text(_bloc.contact.emails[0].email),
+        subtitle: Text(
+          'Email',
+          style: TextStyle(color: Colors.black54),
         ),
+        leading: Icon(Icons.email),
       ));
     }
 
     if (_bloc.contact.notes.isNotEmpty) {
-      widgets.add(Card(
-          child: Column(
+      widgets.add(Column(
         // mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
@@ -138,7 +132,7 @@ class _ContactState extends State<ContactView> {
             ),
           ),
         ],
-      )));
+      ));
     }
 
     return SafeArea(
