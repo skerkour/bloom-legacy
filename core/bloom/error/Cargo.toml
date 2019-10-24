@@ -27,7 +27,6 @@ r2d2 = { version = "*", optional = true }
 rusqlite = { version = "*", optional = true, features = ["bundled", "chrono"] }
 caldyn = { version = "*", optional = true, path = "../../libs/caldyn" }
 
-
 [features]
 default = []
 

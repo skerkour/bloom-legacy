@@ -8,7 +8,7 @@ edition = "2018"
 
 [dependencies]
 bloom_messages = { path = "bloom/messages" }
-bloom_error = { path = "bloom/error" }
+bloom_error = { path = "bloom/error", features = ["serde_json"] }
 bloom_auth = { path = "bloom/auth" }
 bloom_notes = { path = "bloom/notes" }
 bloom_calculator = { path = "bloom/calculator" }

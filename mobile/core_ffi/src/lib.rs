@@ -15,15 +15,16 @@ pub unsafe extern "C" fn core_handle_message(message_char: *const c_char) -> *co
 
     let c_str: &CStr = CStr::from_ptr(message_char);
 
-    let message_in: bloom_core::messages::Message =
+    let message_out: bloom_core::messages::Message =
         match serde_json::from_str(c_str.to_str().expect("lol1")) {
-            Ok(res) => res,
+            Ok(res) => bloom_core::handle_message(res),
             Err(err) => {
                 error!("error deserialazing json: {}", err);
-                panic!("error deserialazing json");
+                let err: bloom_core::error::BloomError = err.into();
+                let err: bloom_core::messages::kernel::Error = err.into();
+                err.into()
             }
         };
-    let message_out = bloom_core::handle_message(message_in);
     let message_out = serde_json::to_string(&message_out).expect("lol3");
 
     let ret = CString::new(message_out).expect("lol4");
