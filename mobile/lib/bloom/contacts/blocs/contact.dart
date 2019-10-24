@@ -15,7 +15,6 @@ class ContactBloc extends BlocBase {
 
   final StreamController<Contact> _contactController =
       StreamController<Contact>.broadcast();
-  // StreamSink<Contact> get _contactStream => _contactController.sink;
   Stream<Contact> get contactStream => _contactController.stream;
 
   final StreamController<Contact> _contactDeletedController =

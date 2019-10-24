@@ -45,6 +45,11 @@ class _EditContactState extends State<EditContactView> {
   @override
   void dispose() {
     _bloc.dispose();
+    _firstNameController.dispose();
+    _lastNameController.dispose();
+    _notesController.dispose();
+    _phoneController.dispose();
+    _emailController.dispose();
     super.dispose();
   }
 

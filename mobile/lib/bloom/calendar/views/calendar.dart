@@ -2,6 +2,7 @@ import 'package:bloom/bloom/calendar/blocs/calendar.dart';
 import 'package:bloom/bloom/calendar/models/event.dart';
 import 'package:flutter/material.dart';
 import 'package:table_calendar/table_calendar.dart';
+import 'edit_event.dart';
 import 'event.dart';
 
 class CalendarView extends StatefulWidget {
@@ -92,20 +93,12 @@ class _CalendarState extends State<CalendarView> with TickerProviderStateMixin {
 
   Future<void> _newEventPressed(BuildContext ctx) async {
     debugPrint('new event pressed');
-    final NoteViewResult res = await Navigator.push<dynamic>(
+    Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => const EventView(),
+        builder: (BuildContext context) => const EditEventView(),
       ),
     );
-
-    if (res != null) {
-      Scaffold.of(context)
-        ..removeCurrentSnackBar()
-        ..showSnackBar(
-          SnackBar(content: Text('Note ${res.toString().split('.').last}')),
-        );
-    }
   }
 
   Future<void> _eventPressed(BuildContext ctx, Event event) async {

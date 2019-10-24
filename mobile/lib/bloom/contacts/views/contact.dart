@@ -40,6 +40,7 @@ class _ContactState extends State<ContactView> {
   @override
   void dispose() {
     _bloc.dispose();
+    _notesController.dispose();
     super.dispose();
   }
 
@@ -153,6 +154,7 @@ class _ContactState extends State<ContactView> {
         onPressed: () => _onEditPressed(context),
       ),
       PopupMenuButton<PopupMenuAction>(
+        tooltip: 'Edit contact',
         itemBuilder: (BuildContext context) =>
             <PopupMenuEntry<PopupMenuAction>>[
           const PopupMenuItem<PopupMenuAction>(

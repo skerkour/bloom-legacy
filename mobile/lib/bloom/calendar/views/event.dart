@@ -1,9 +1,9 @@
-import 'dart:async';
 import 'package:bloom/bloom/calendar/blocs/event.dart';
 import 'package:flutter/material.dart';
 import 'package:bloom/bloom/calendar/models/event.dart';
-import 'package:bloom/libs/date_range_picker.dart' as date_range_picker;
 import 'package:intl/intl.dart';
+
+import 'edit_event.dart';
 
 enum NoteViewResult {
   Deleted,
@@ -14,7 +14,7 @@ enum PopupMenuAction {
 }
 
 class EventView extends StatefulWidget {
-  const EventView({this.event});
+  const EventView({@required this.event});
 
   final Event event;
 
@@ -24,7 +24,6 @@ class EventView extends StatefulWidget {
 
 class _EventState extends State<EventView> {
   EventBloc _bloc;
-  Timer _persistenceTimer;
   final TextEditingController _titleController = TextEditingController();
   final TextEditingController _descriptionController = TextEditingController();
   DateTime _startAt;
@@ -33,24 +32,9 @@ class _EventState extends State<EventView> {
 
   @override
   void initState() {
-    _persistenceTimer =
-        Timer.periodic(const Duration(seconds: 5), (Timer timer) {
-      _bloc ??
-          _bloc.save(_titleController.text, _descriptionController.text,
-              _startAt, _endAt);
-    });
-
-    final Event event = widget.event ?? Event();
-
-    _bloc = EventBloc(event: event);
-
-    _startAt = _bloc.event.startAt;
-    _endAt = _bloc.event.endAt;
-    _titleController.text = _bloc.event.title;
-    _descriptionController.text = _bloc.event.description;
+    _bloc = EventBloc(event: widget.event);
 
     _bloc.deletedStream.listen((_) {
-      _persistenceTimer?.cancel();
       Navigator.of(context).pop();
       Navigator.of(context).pop();
     });
@@ -68,21 +52,23 @@ class _EventState extends State<EventView> {
 
   @override
   Widget build(BuildContext context) {
+    _startAt = _bloc.event.startAt;
+    _endAt = _bloc.event.endAt;
+    _titleController.text = _bloc.event.title;
+    _descriptionController.text = _bloc.event.description;
+
     return StreamBuilder<Event>(
         initialData: _bloc.event,
         stream: _bloc.eventStream,
         builder: (BuildContext context, AsyncSnapshot<Event> snapshot) {
           if (snapshot.hasData) {
             final Event event = snapshot.data;
-            return WillPopScope(
-              child: Scaffold(
-                appBar: AppBar(
-                  actions: _buildAppBarActions(context, event),
-                  elevation: 1,
-                ),
-                body: _buildBody(context, event),
+            return Scaffold(
+              appBar: AppBar(
+                actions: _buildAppBarActions(context, event),
+                elevation: 1,
               ),
-              onWillPop: _readyToPop,
+              body: _buildBody(context, event),
             );
           } else {
             return Container();
@@ -100,8 +86,12 @@ class _EventState extends State<EventView> {
             Container(
               padding: const EdgeInsets.all(5),
               child: TextFormField(
-                decoration: const InputDecoration(labelText: 'Title'),
+                decoration: const InputDecoration(
+                  labelText: 'Title',
+                  border: InputBorder.none,
+                ),
                 controller: _titleController,
+                readOnly: true,
               ),
             ),
             const SizedBox(height: 25.0),
@@ -117,36 +107,16 @@ class _EventState extends State<EventView> {
                 hintText:
                     '${_dateFormatter.format(_startAt)} - ${_dateFormatter.format(_endAt)}',
               ),
-              onTap: () async {
-                final List<DateTime> picked =
-                    await date_range_picker.showDatePicker(
-                  context: context,
-                  initialFirstDate: _startAt,
-                  initialLastDate: _endAt,
-                  firstDate: DateTime(1900),
-                  lastDate: DateTime(3000),
-                );
-                if (picked != null && picked.isNotEmpty) {
-                  DateTime startAt = picked[0];
-                  startAt = startAt.add(startAt.timeZoneOffset).toUtc();
-                  DateTime endAt = startAt;
-                  if (picked.length == 2) {
-                    endAt = picked[1];
-                    endAt = endAt.add(endAt.timeZoneOffset).toUtc();
-                  }
-                  setState(() {
-                    _startAt = startAt;
-                    _endAt = endAt;
-                  });
-                  debugPrint('dates picked: $startAt, $endAt');
-                }
-              },
             ),
             const SizedBox(height: 25.0),
             TextFormField(
               maxLines: 8,
-              decoration: const InputDecoration(hintText: 'Description'),
+              decoration: const InputDecoration(
+                labelText: 'Description',
+                border: InputBorder.none,
+              ),
               controller: _descriptionController,
+              readOnly: true,
             ),
           ],
         ),
@@ -160,7 +130,15 @@ class _EventState extends State<EventView> {
 
   List<Widget> _buildAppBarActions(BuildContext context, Event event) {
     final List<Widget> list = <Widget>[
+      IconButton(
+        icon: Icon(
+          Icons.edit,
+          color: Colors.white,
+        ),
+        onPressed: () => _onEditPressed(context),
+      ),
       PopupMenuButton<PopupMenuAction>(
+        tooltip: 'Edit event',
         itemBuilder: (BuildContext context) =>
             <PopupMenuEntry<PopupMenuAction>>[
           const PopupMenuItem<PopupMenuAction>(
@@ -177,14 +155,6 @@ class _EventState extends State<EventView> {
       ),
     ];
     return list;
-  }
-
-  Future<bool> _readyToPop() async {
-    _persistenceTimer?.cancel();
-    // save data a last time before quitting
-    await _bloc.save(
-        _titleController.text, _descriptionController.text, _startAt, _endAt);
-    return true;
   }
 
   void _deleteEvent() {
@@ -209,5 +179,18 @@ class _EventState extends State<EventView> {
             ],
           );
         });
+  }
+
+  Future<void> _onEditPressed(BuildContext context) async {
+    final Event res = await Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => EditEventView(event: _bloc.event),
+      ),
+    );
+
+    if (res != null) {
+      _bloc.eventUpdated(res);
+    }
   }
 }

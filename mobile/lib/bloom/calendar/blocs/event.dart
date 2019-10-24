@@ -24,8 +24,8 @@ class EventBloc extends BlocBase {
 
   @override
   void dispose() {
-    _eventController.close();
     _eventDeletedController.close();
+    _eventController.close();
   }
 
   Future<void> delete() async {
@@ -36,35 +36,9 @@ class EventBloc extends BlocBase {
     _deletedStream.add(_event);
   }
 
-  Future<void> save(String title, String description, DateTime startAt,
-      DateTime endAt) async {
-    debugPrint('EventBloc.save called');
-    if (_event.title == title &&
-        _event.description == description &&
-        _event.startAt == startAt &&
-        _event.endAt == endAt) {
-      return;
-    }
-
-    _event.title = title;
-    _event.description = description;
-    _event.startAt = startAt;
-    _event.endAt = endAt;
-
-    if (_event.id == null) {
-      if (_event.title.isEmpty &&
-          _event.description.isEmpty &&
-          _event.startAt == _event.endAt) {
-        debugPrint('event is empty, aborting');
-        return;
-      }
-      _event = await Event.create(
-          _event.title, _event.description, _event.startAt, _event.endAt);
-      debugPrint('event created');
-    } else {
-      _event = await _event.update();
-      debugPrint('event updated');
-    }
+  void eventUpdated(Event event) {
+    debugPrint('EVENT UPDATEDDDDD: ${event.toJson()}');
+    _event = event;
     _eventStream.add(_event);
   }
 }
