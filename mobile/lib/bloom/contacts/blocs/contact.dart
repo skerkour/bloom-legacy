@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 import 'package:flutter/material.dart';
+import 'package:contacts_service/contacts_service.dart' as contacts_service;
 
 class ContactBloc extends BlocBase {
   ContactBloc({@required Contact contact}) {
@@ -30,6 +31,12 @@ class ContactBloc extends BlocBase {
 
   Future<void> delete() async {
     await contact.delete();
+    try {
+      await contacts_service.ContactsService.deleteContact(
+          _contact.toDeviceContact());
+    } catch (err) {
+      debugPrint('Error deleting device contact: $err');
+    }
     _deletedStream.add(_contact);
   }
 }

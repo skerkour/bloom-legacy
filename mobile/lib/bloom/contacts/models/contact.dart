@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:bloom/native/core_ffi.dart';
 import 'package:bloom/bloom/contacts/messages.dart';
 import 'package:flutter/foundation.dart';
+import 'package:contacts_service/contacts_service.dart' as contacts_service;
 
 class Contact {
   Contact({
@@ -74,6 +75,23 @@ class Contact {
       organizations:
           organizations.map((dynamic i) => Organization.fromJson(i)).toList(),
     );
+  }
+
+  static Contact fromDeviceContact(contacts_service.Contact contact) {
+    return Contact(
+      firstName: contact.givenName,
+      lastName: contact.familyName,
+      deviceId: contact.identifier,
+    );
+  }
+
+  contacts_service.Contact toDeviceContact() {
+    final contacts_service.Contact contact = contacts_service.Contact(
+      givenName: firstName,
+      familyName: lastName,
+    );
+    contact.identifier = deviceId;
+    return contact;
   }
 
   @override

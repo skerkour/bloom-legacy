@@ -28,7 +28,6 @@ class ContactsBloc extends BlocBase {
       await importContacts();
     }
 
-    // find contacts in DB
     _contactsController.sink.add(await Contact.list());
   }
 
@@ -36,21 +35,22 @@ class ContactsBloc extends BlocBase {
     int importedCount = 0;
     final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-    final Set<String> existingsContactsDeviceIds =
-        await Contact.findDeviceIds();
-
     // check permission
     final PermissionStatus permissionStatus = await _getContactsPermission();
-    // import contacts from device
 
+    // import contacts from device
     if (permissionStatus == PermissionStatus.granted) {
+      final Set<String> existingsContactsDeviceIds =
+          await Contact.findDeviceIds();
+
       final Iterable<contacts_service.Contact> contacts =
           await contacts_service.ContactsService.getContacts();
-      for (contacts_service.Contact contact in contacts) {
-        if (!existingsContactsDeviceIds.contains(contact.identifier)) {
+
+      for (contacts_service.Contact deviceContact in contacts) {
+        if (!existingsContactsDeviceIds.contains(deviceContact.identifier)) {
           importedCount += 1;
-          final Contact importedConatct = Contact(
-              firstName: contact.displayName, deviceId: contact.identifier);
+          final Contact importedConatct =
+              Contact.fromDeviceContact(deviceContact);
           await importedConatct.create();
         }
       }
