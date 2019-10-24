@@ -249,6 +249,7 @@ package:server:
 
 pages: # release:blog
   image: debian:stretch
+  stage: release
   script:
     - cd blog
     - apt update && apt install curl make -y
