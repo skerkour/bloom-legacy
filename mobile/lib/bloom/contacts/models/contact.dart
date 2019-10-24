@@ -79,9 +79,9 @@ class Contact {
 
   static Contact fromDeviceContact(contacts_service.Contact contact) {
     return Contact(
-      firstName: contact.givenName,
-      lastName: contact.familyName,
-      deviceId: contact.identifier,
+      firstName: contact.givenName ?? '',
+      lastName: contact.familyName ?? '',
+      deviceId: contact.identifier ?? '',
     );
   }
 

@@ -73,7 +73,7 @@ class _ContactState extends State<ContactView> {
         'Name',
         style: TextStyle(color: Colors.black54),
       ),
-      leading: Icon(Icons.person),
+      leading: const Icon(Icons.person),
     ));
 
     // phone
