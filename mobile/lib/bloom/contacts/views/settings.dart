@@ -49,13 +49,11 @@ class _SettingsState extends State<SettingsView> {
 
   Function _onImportTapped(BuildContext context) {
     return () async {
-      // final int imported = await _bloc.importContacts();
-      const int imported = 10;
+      final int imported = await _bloc.importContacts();
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
-          const SnackBar(
-              content: Text('$imported Contacts successfully imported')),
+          SnackBar(content: Text('$imported Contacts imported')),
         );
     };
   }

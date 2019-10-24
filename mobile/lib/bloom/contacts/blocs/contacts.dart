@@ -2,6 +2,10 @@ import 'dart:async';
 
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 import 'package:bloom/bloom/contacts/models/contact.dart';
+import 'package:contacts_service/contacts_service.dart' as contacts_service;
+import 'package:flutter/foundation.dart';
+import 'package:permission_handler/permission_handler.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class ContactsBloc extends BlocBase {
   ContactsBloc();
@@ -16,74 +20,63 @@ class ContactsBloc extends BlocBase {
   }
 
   Future<void> listContacts() async {
-    // final SharedPreferences prefs = await SharedPreferences.getInstance();
-    // final bool isFirstLaunch =
-    //     prefs.getBool('contacts_is_first_launch') ?? true;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final bool isFirstLaunch =
+        prefs.getBool('contacts_is_first_launch') ?? true;
 
-    // if (isFirstLaunch) {
-    //   // check permission
-    //   final PermissionStatus permissionStatus = await _getContactsPermission();
-    //   // import contacts from device
-
-    //   if (permissionStatus == PermissionStatus.granted) {
-    //     final Iterable<contacts_service.Contact> contacts =
-    //         await contacts_service.ContactsService.getContacts();
-    //     // _contactsController.sink.add(contacts.toList());
-    //     for (contacts_service.Contact contact in contacts) {
-    //       await Contact.create(contact.displayName, contact.identifier);
-    //     }
-    //   } else {
-    //     debugPrint('contacts: contacts permission not granted');
-    //   }
-
-    //   await prefs.setBool('contacts_is_first_launch', false);
-    // }
+    if (isFirstLaunch) {
+      await importContacts();
+    }
 
     // find contacts in DB
     _contactsController.sink.add(await Contact.list());
   }
 
-  // Future<int> importContacts() async {
-  //   int importedCount = 0;
-  //   final SharedPreferences prefs = await SharedPreferences.getInstance();
+  Future<int> importContacts() async {
+    int importedCount = 0;
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
 
-  //   // check permission
-  //   final PermissionStatus permissionStatus = await _getContactsPermission();
-  //   // import contacts from device
+    final Set<String> existingsContactsDeviceIds =
+        await Contact.findDeviceIds();
 
-  //   if (permissionStatus == PermissionStatus.granted) {
-  //     final Iterable<contacts_service.Contact> contacts =
-  //         await contacts_service.ContactsService.getContacts();
-  //     final List<String> contactsDevicesIds = await Contact.findDeviceIds();
-  //     for (contacts_service.Contact contact in contacts) {
-  //       if (!contactsDevicesIds.contains(contact.identifier)) {
-  //         importedCount += 1;
-  //         await Contact.create(contact.displayName, contact.identifier);
-  //       }
-  //     }
-  //   } else {
-  //     debugPrint('contacts: contacts permission not granted');
-  //   }
+    // check permission
+    final PermissionStatus permissionStatus = await _getContactsPermission();
+    // import contacts from device
 
-  //   await prefs.setBool('contacts_is_first_launch', false);
+    if (permissionStatus == PermissionStatus.granted) {
+      final Iterable<contacts_service.Contact> contacts =
+          await contacts_service.ContactsService.getContacts();
+      for (contacts_service.Contact contact in contacts) {
+        if (!existingsContactsDeviceIds.contains(contact.identifier)) {
+          importedCount += 1;
+          final Contact importedConatct = Contact(
+              firstName: contact.displayName, deviceId: contact.identifier);
+          await importedConatct.create();
+        }
+      }
+    } else {
+      debugPrint('contacts: contacts permission not granted');
+    }
 
-  //   // find contacts in DB
-  //   _contactsController.sink.add(await Contact.find());
-  //   return importedCount;
-  // }
+    await prefs.setBool('contacts_is_first_launch', false);
 
-  // Future<PermissionStatus> _getContactsPermission() async {
-  //   final PermissionStatus permission = await PermissionHandler()
-  //       .checkPermissionStatus(PermissionGroup.contacts);
-  //   if (permission != PermissionStatus.granted &&
-  //       permission != PermissionStatus.disabled) {
-  //     final Map<PermissionGroup, PermissionStatus> permissionStatus =
-  //         await PermissionHandler()
-  //             .requestPermissions(<PermissionGroup>[PermissionGroup.contacts]);
-  //     return permissionStatus[PermissionGroup.contacts] ??
-  //         PermissionStatus.unknown;
-  //   } else {
-  //     return permission;
-  //   }
-  // }
+    // find contacts in DB
+    _contactsController.sink.add(await Contact.list());
+    return importedCount;
+  }
+
+  Future<PermissionStatus> _getContactsPermission() async {
+    final PermissionStatus permission = await PermissionHandler()
+        .checkPermissionStatus(PermissionGroup.contacts);
+    if (permission != PermissionStatus.granted &&
+        permission != PermissionStatus.disabled) {
+      final Map<PermissionGroup, PermissionStatus> permissionStatus =
+          await PermissionHandler()
+              .requestPermissions(<PermissionGroup>[PermissionGroup.contacts]);
+      return permissionStatus[PermissionGroup.contacts] ??
+          PermissionStatus.unknown;
+    } else {
+      return permission;
+    }
+  }
 }

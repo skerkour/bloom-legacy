@@ -125,23 +125,18 @@ class Contact {
     return resMsg.contacts;
   }
 
-  static Future<List<String>> findDeviceIds() async {
+  static Future<Set<String>> findDeviceIds() async {
     // Get a reference to the database.
     debugPrint('Contact.find called');
-    // final Database db = await appBloc.db.db;
 
-    // // Query the table for all The Contacts.
-    // final List<Map<String, dynamic>> results = await db.query(
-    //   DB.contactsTable,
-    //   where: 'device_id IS NOT NULL',
-    // );
-    // debugPrint('fetched: ${results.length} contacts');
+    final List<Contact> contacts = await Contact.list();
+    // ignore: prefer_collection_literals
+    final Set<String> existingsContactsDeviceIds = Set<String>();
+    for (Contact contact in contacts) {
+      existingsContactsDeviceIds.add(contact.deviceId);
+    }
 
-    // return results
-    //     .map(Contact.fromJson)
-    //     .map((Contact contact) => contact.deviceId)
-    //     .toList();
-    return <String>[];
+    return existingsContactsDeviceIds;
   }
 
   static Map<String, dynamic> _nativeCall<T>(T message) {
