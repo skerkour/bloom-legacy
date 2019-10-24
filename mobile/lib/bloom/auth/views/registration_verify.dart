@@ -1,10 +1,8 @@
-import 'dart:convert';
+import 'package:bloom/bloom/auth/blocs/registration_verify.dart';
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/libs/masked_text_controller.dart';
-import 'package:bloom/native/core_ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../messages.dart';
 
 class RegistrationVerifyArguments {
   RegistrationVerifyArguments(this.id, this.email);
@@ -28,9 +26,21 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
       fontWeight: FontWeight.bold);
   TextEditingController codeController =
       MaskedTextController(mask: '0000-0000');
-  bool isLoading = false;
   String pendingAccountEmail;
   String pendingAccountId;
+  RegistrationVerifyBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = RegistrationVerifyBloc();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -44,38 +54,49 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
     );
   }
 
-  Container _buildBody(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(36.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            TextField(
-              maxLength: 9,
-              controller: codeController,
-              decoration: const InputDecoration(labelText: 'Verifycation code'),
-              keyboardType: TextInputType.number,
+  Widget _buildBody(BuildContext context) {
+    return StreamBuilder<bool>(
+        initialData: false,
+        stream: _bloc.isLoadingStream,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          bool isLoading = false;
+          if (snapshot.hasData) {
+            isLoading = snapshot.data;
+          }
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  TextField(
+                    maxLength: 9,
+                    controller: codeController,
+                    decoration:
+                        const InputDecoration(labelText: 'Verifycation code'),
+                    keyboardType: TextInputType.number,
+                  ),
+                  const SizedBox(
+                    height: 35.0,
+                  ),
+                  _buildVerifyButton(context, isLoading),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : Container(
+                          width: 0,
+                          height: 0), // TODO(z0mbie42): remove ugly hack
+                ],
+              ),
             ),
-            const SizedBox(
-              height: 35.0,
-            ),
-            _buildVerifyButton(context),
-            const SizedBox(
-              height: 15.0,
-            ),
-            isLoading
-                ? const CircularProgressIndicator()
-                : Container(
-                    width: 0, height: 0), // TODO(z0mbie42): remove ugly hack
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
-  Material _buildVerifyButton(BuildContext context) {
+  Material _buildVerifyButton(BuildContext context, bool isLoading) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(6.0),
@@ -94,35 +115,10 @@ class _RegistrationVerifyViewState extends State<RegistrationVerifyView> {
   }
 
   Future<void> _onVerifyButtonPressed() async {
-    setState(() {
-      isLoading = true;
-    });
-
-    final String code = _cleanCode(codeController.text);
-
-    final String message = jsonEncode(AuthGuiRegistrationVerify(
-      id: pendingAccountId,
-      code: code,
-    ));
-
-    final Map<String, dynamic> res =
-        await compute(_RegistrationVerifyViewState._nativeCall, message);
-    debugPrint('$res');
+    await _bloc.verify(pendingAccountId, codeController.text);
     final RegistrationCompleteArguments args =
         RegistrationCompleteArguments(pendingAccountId);
-
-    setState(() {
-      isLoading = false;
-    });
     Navigator.pushNamed(context, '/auth/registration/complete',
         arguments: args);
-  }
-
-  static Map<String, dynamic> _nativeCall(String message) {
-    return coreFfi.call(message);
-  }
-
-  String _cleanCode(String code) {
-    return code.substring(0, 4) + code.substring(5);
   }
 }
