@@ -48,6 +48,9 @@ variables:
   STRIPE_PUBLIC_KEY: test
   STRIPE_SECRET_KEY: test
 
+  # blog
+  ZOLA_VERSION: "v0.9.0"
+
 
 cache:
   paths:
@@ -244,6 +247,21 @@ package:server:
 ## Release
 ####################################################################################################
 
+pages: # release:blog
+  image: debian:stretch
+  # This config will only publish changes that are pushed on the master branch
+  only:
+    - master
+  script:
+    - cd blog
+    - apt update && apt install curl make -y
+    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
+    - tar -xzf zola.tar.gz
+    - make
+  artifacts:
+    paths:
+    - blog/public
+
 release:status_page:
   image: docker:stable
   stage: release
@@ -260,23 +278,23 @@ release:status_page:
     - make docker_login
     - make release
 
-pages: # release:website
-  image: node:lts
-  stage: release
-  tags:
-    - docker
-  only:
-    - /^website-v.*$/
-  except:
-    - branches
-  script:
-    - cd website/
-    - make install
-    - make build
-    - mv dist public
-  artifacts:
-    paths:
-      - website/public
+# pages: # release:website
+#   image: node:lts
+#   stage: release
+#   tags:
+#     - docker
+#   only:
+#     - /^website-v.*$/
+#   except:
+#     - branches
+#   script:
+#     - cd website/
+#     - make install
+#     - make build
+#     - mv dist public
+#   artifacts:
+#     paths:
+#       - website/public
 
 release:server:nightly:
   only:
