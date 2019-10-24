@@ -249,9 +249,6 @@ package:server:
 
 pages: # release:blog
   image: debian:stretch
-  # This config will only publish changes that are pushed on the master branch
-  only:
-    - master
   script:
     - cd blog
     - apt update && apt install curl make -y
