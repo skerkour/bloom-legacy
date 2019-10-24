@@ -1,6 +1,5 @@
-import 'dart:convert';
+import 'package:bloom/bloom/auth/blocs/registration_start.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
-import 'package:bloom/native/core_ffi.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import '../messages.dart';
@@ -18,54 +17,76 @@ class _RegistrationStartState extends State<RegistrationStart> {
       fontSize: 20.0,
       color: Colors.white,
       fontWeight: FontWeight.bold);
-  bool isLoading = false;
   TextEditingController emailController = TextEditingController();
   TextEditingController displayNameController = TextEditingController();
+  RegistrationStartBloc _bloc;
+
+  @override
+  void initState() {
+    _bloc = RegistrationStartBloc();
+    super.initState();
+  }
+
+  @override
+  void dispose() {
+    _bloc.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      child: Padding(
-        padding: const EdgeInsets.all(36.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.center,
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            // SizedBox(
-            //   height: 155.0,
-            //   child: Image.asset(
-            //     "assets/logo.png",
-            //     fit: BoxFit.contain,
-            //   ),
-            // ),
-            // SizedBox(height: 45.0),
-            TextFormField(
-              controller: displayNameController,
-              decoration: const InputDecoration(labelText: 'Full name'),
+    return StreamBuilder<bool>(
+        initialData: false,
+        stream: _bloc.isLoadingStream,
+        builder: (BuildContext context, AsyncSnapshot<bool> snapshot) {
+          bool isLoading = false;
+          if (snapshot.hasData) {
+            isLoading = snapshot.data;
+          }
+          return Container(
+            child: Padding(
+              padding: const EdgeInsets.all(36.0),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.center,
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: <Widget>[
+                  // SizedBox(
+                  //   height: 155.0,
+                  //   child: Image.asset(
+                  //     "assets/logo.png",
+                  //     fit: BoxFit.contain,
+                  //   ),
+                  // ),
+                  // SizedBox(height: 45.0),
+                  TextFormField(
+                    controller: displayNameController,
+                    decoration: const InputDecoration(labelText: 'Full name'),
+                  ),
+                  const SizedBox(height: 25.0),
+                  TextFormField(
+                    controller: emailController,
+                    decoration: const InputDecoration(labelText: 'Email'),
+                  ),
+                  const SizedBox(
+                    height: 35.0,
+                  ),
+                  _buildRegisterButton(context, isLoading),
+                  const SizedBox(
+                    height: 15.0,
+                  ),
+                  isLoading
+                      ? const CircularProgressIndicator()
+                      : Container(
+                          width: 0,
+                          height: 0), // TODO(z0mbie42): remove ugly hack
+                ],
+              ),
             ),
-            const SizedBox(height: 25.0),
-            TextFormField(
-              controller: emailController,
-              decoration: const InputDecoration(labelText: 'Email'),
-            ),
-            const SizedBox(
-              height: 35.0,
-            ),
-            _buildRegisterButton(context),
-            const SizedBox(
-              height: 15.0,
-            ),
-            isLoading
-                ? const CircularProgressIndicator()
-                : Container(
-                    width: 0, height: 0), // TODO(z0mbie42): remove ugly hack
-          ],
-        ),
-      ),
-    );
+          );
+        });
   }
 
-  Material _buildRegisterButton(BuildContext context) {
+  Material _buildRegisterButton(BuildContext context, bool isLoading) {
     return Material(
       elevation: 5.0,
       borderRadius: BorderRadius.circular(6.0),
@@ -84,32 +105,12 @@ class _RegistrationStartState extends State<RegistrationStart> {
   }
 
   Future<void> _onRegisterButtonPressed() async {
-    setState(() {
-      isLoading = true;
-    });
-
     final String email = emailController.text;
-
-    final String message = jsonEncode(AuthRegistrationStart(
-      displayName: displayNameController.text,
-      email: email,
-    ));
-
-    final Map<String, dynamic> jsonMap =
-        await compute(_RegistrationStartState._nativeCall, message);
-    debugPrint('$jsonMap');
     final AuthGuiRegistrationStarted messageRes =
-        AuthGuiRegistrationStarted.fromJson(jsonMap);
+        await _bloc.start(displayNameController.text, email);
     final RegistrationVerifyArguments args =
         RegistrationVerifyArguments(messageRes.id, email);
 
-    setState(() {
-      isLoading = false;
-    });
     Navigator.pushNamed(context, '/auth/registration/verify', arguments: args);
-  }
-
-  static Map<String, dynamic> _nativeCall(String message) {
-    return coreFfi.call(message);
   }
 }

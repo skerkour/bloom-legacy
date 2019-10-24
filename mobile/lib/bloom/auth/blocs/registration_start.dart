@@ -7,8 +7,8 @@ import 'package:flutter/material.dart';
 
 import '../messages.dart';
 
-class SignInBloc extends BlocBase {
-  SignInBloc();
+class RegistrationStartBloc extends BlocBase {
+  RegistrationStartBloc();
 
   final StreamController<bool> _isLoadingController =
       StreamController<bool>.broadcast();
@@ -20,26 +20,29 @@ class SignInBloc extends BlocBase {
     _isLoadingController.close();
   }
 
-  Future<Map<String, dynamic>> signIn(String username, String password) async {
-    debugPrint('SignInBloc.signIn called');
+  Future<AuthGuiRegistrationStarted> start(
+      String displayName, String email) async {
+    debugPrint('RegistrationStartBloc.signIn called');
     _isLoadingController.add(true);
 
-    final String message = jsonEncode(AuthGuiSignIn(
-      username: username,
-      password: password,
+    final String message = jsonEncode(AuthRegistrationStart(
+      displayName: displayName,
+      email: email,
     ));
 
     Map<String, dynamic> json;
+    AuthGuiRegistrationStarted ret;
 
     try {
-      json = await compute(SignInBloc._nativeCall, message);
+      json = await compute(RegistrationStartBloc._nativeCall, message);
+      ret = AuthGuiRegistrationStarted.fromJson(json);
     } catch (err) {
       rethrow;
     } finally {
       _isLoadingStream.add(false);
     }
 
-    return json;
+    return ret;
   }
 
   static Map<String, dynamic> _nativeCall<T>(T message) {

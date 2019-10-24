@@ -1,4 +1,3 @@
-import 'dart:convert';
 import 'package:bloom/bloom/auth/blocs/sign_in.dart';
 import 'package:bloom/bloom/kernel/widgets/password_field.dart';
 import 'package:flutter/foundation.dart';
@@ -101,11 +100,10 @@ class _SignInState extends State<SignIn> {
     );
   }
 
+  // TODO(z0mbie42): sign in
   Future<void> _onSignInButtonPressed() async {
     try {
-      final Map<String, dynamic> json =
-          await _bloc.signIn(usernameController.text, passwordController.text);
-      debugPrint('$json');
+      await _bloc.signIn(usernameController.text, passwordController.text);
     } catch (err) {
       Scaffold.of(context)
         ..removeCurrentSnackBar()
