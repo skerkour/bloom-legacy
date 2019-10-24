@@ -2,7 +2,7 @@ import 'dart:async';
 
 import 'package:bloom/bloom/contacts/models/contact.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:contacts_service/contacts_service.dart' as contacts_service;
+// import 'package:contacts_service/contacts_service.dart' as contacts_service;
 import 'package:flutter/material.dart';
 
 class EditContactBloc extends BlocBase {
@@ -50,22 +50,22 @@ class EditContactBloc extends BlocBase {
       }
 
       _contact = await _contact.create();
-      try {
-        await contacts_service.ContactsService.addContact(
-            _contact.toDeviceContact());
-      } catch (err) {
-        debugPrint('Error creating device contact: $err');
-      }
+      // try {
+      //   await contacts_service.ContactsService.addContact(
+      //       _contact.toDeviceContact());
+      // } catch (err) {
+      //   debugPrint('Error creating device contact: $err');
+      // }
 
       debugPrint('contact created');
     } else {
       _contact = await _contact.update();
-      try {
-        await contacts_service.ContactsService.updateContact(
-            _contact.toDeviceContact());
-      } catch (err) {
-        debugPrint('Error updating device contact: $err');
-      }
+      // try {
+      //   await contacts_service.ContactsService.updateContact(
+      //       _contact.toDeviceContact());
+      // } catch (err) {
+      //   debugPrint('Error updating device contact: $err');
+      // }
       debugPrint('contact updated');
     }
     _contactStream.add(_contact);
