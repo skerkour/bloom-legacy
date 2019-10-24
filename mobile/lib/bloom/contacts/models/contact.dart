@@ -8,12 +8,16 @@ class Contact {
   Contact({
     this.id,
     this.firstName = '',
-    this.deviceId,
+    this.deviceId = '',
     this.createdAt,
     this.updatedAt,
-    this.lastName,
-    this.notes,
+    this.lastName = '',
+    this.notes = '',
     this.birthday,
+    this.emails = const <Email>[],
+    this.phones = const <Phone>[],
+    this.websites = const <Website>[],
+    this.organizations = const <Organization>[],
   });
 
   String id;
@@ -24,8 +28,12 @@ class Contact {
   String lastName;
   String notes;
   DateTime birthday;
+  List<Email> emails;
+  List<Phone> phones;
+  List<Website> websites;
+  List<Organization> organizations;
 
-  // TODO(z0mbie42): empty fields
+  // TODO(z0mbie42): addresses
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
@@ -37,16 +45,20 @@ class Contact {
       'notes': notes,
       'birthday': birthday == null ? null : birthday.toUtc().toIso8601String(),
       'addresses': <String>[],
-      'organizations': <String>[],
-      'emails': <String>[],
-      'phones': <String>[],
-      'websites': <String>[],
+      'organizations': organizations,
+      'emails': emails,
+      'phones': phones,
+      'websites': websites,
     };
     return data;
   }
 
   static Contact fromJson(Map<String, dynamic> data) {
     final String birthday = data['birthday'];
+    final List<dynamic> emails = data['emails'];
+    final List<dynamic> phones = data['phones'];
+    final List<dynamic> websites = data['websites'];
+    final List<dynamic> organizations = data['organizations'];
     return Contact(
       id: data['id'],
       firstName: data['first_name'],
@@ -56,6 +68,11 @@ class Contact {
       lastName: data['last_name'],
       notes: data['notes'],
       birthday: birthday != null ? DateTime.parse(birthday).toUtc() : null,
+      emails: emails.map((dynamic i) => Email.fromJson(i)).toList(),
+      phones: phones.map((dynamic i) => Phone.fromJson(i)).toList(),
+      websites: websites.map((dynamic i) => Website.fromJson(i)).toList(),
+      organizations:
+          organizations.map((dynamic i) => Organization.fromJson(i)).toList(),
     );
   }
 
@@ -133,5 +150,98 @@ class Contact {
     final String res = coreFfi.call(jsonPayload);
     debugPrint('output: $res');
     return jsonDecode(res);
+  }
+}
+
+// export interface Organization {
+//   name: string,
+//   title: string,
+// }
+
+class Email {
+  Email({
+    @required this.email,
+    @required this.label,
+  });
+
+  String email;
+  String label;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'email': email,
+      'label': label,
+    };
+    return data;
+  }
+
+  static Email fromJson(Map<String, dynamic> json) {
+    return Email(email: json['email'], label: json['label']);
+  }
+}
+
+class Phone {
+  Phone({
+    @required this.phone,
+    @required this.label,
+  });
+
+  String phone;
+  String label;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'phone': phone,
+      'label': label,
+    };
+    return data;
+  }
+
+  static Phone fromJson(Map<String, dynamic> json) {
+    return Phone(phone: json['phone'], label: json['label']);
+  }
+}
+
+class Website {
+  Website({
+    @required this.website,
+    @required this.label,
+  });
+
+  String website;
+  String label;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'website': website,
+      'label': label,
+    };
+    return data;
+  }
+
+  static Website fromJson(Map<String, dynamic> json) {
+    return Website(website: json['website'], label: json['label']);
+  }
+}
+
+class Organization {
+  Organization({
+    @required this.name,
+    @required this.title,
+  });
+
+  String name;
+  String title;
+
+  Map<String, dynamic> toJson() {
+    final Map<String, dynamic> data = <String, dynamic>{
+      'name': name,
+      'title': title,
+    };
+    return data;
+  }
+
+  static Organization fromJson(Map<String, dynamic> json) {
+    return Organization(name: json['name'], title: json['title']);
   }
 }

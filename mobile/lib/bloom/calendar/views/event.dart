@@ -2,7 +2,7 @@ import 'dart:async';
 import 'package:bloom/bloom/calendar/blocs/event.dart';
 import 'package:flutter/material.dart';
 import 'package:bloom/bloom/calendar/models/event.dart';
-import 'package:date_range_picker/date_range_picker.dart' as date_range_picker;
+import 'package:bloom/libs/date_range_picker.dart' as date_range_picker;
 import 'package:intl/intl.dart';
 
 enum NoteViewResult {

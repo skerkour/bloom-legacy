@@ -29,12 +29,16 @@ class EditContactBloc extends BlocBase {
     @required String notes,
     @required String deviceId,
     @required DateTime birthday,
+    @required List<Email> emails,
+    @required List<Phone> phones,
   }) async {
     _contact.firstName = firstName;
     _contact.lastName = lastName;
     _contact.notes = notes;
     _contact.deviceId = deviceId;
     _contact.birthday = birthday;
+    _contact.emails = emails;
+    _contact.phones = phones;
 
     if (_contact.id == null) {
       if (_contact.firstName.isEmpty &&

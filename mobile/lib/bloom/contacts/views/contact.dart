@@ -22,10 +22,13 @@ class ContactView extends StatefulWidget {
 
 class _ContactState extends State<ContactView> {
   ContactBloc _bloc;
+  final TextEditingController _notesController = TextEditingController();
 
   @override
   void initState() {
-    _bloc = ContactBloc(contact: widget.contact);
+    final Contact contact = widget.contact;
+    _bloc = ContactBloc(contact: contact);
+    _notesController.text = contact.notes;
 
     _bloc.deletedStream.listen((dynamic _) {
       Navigator.of(context).pop();
@@ -44,8 +47,6 @@ class _ContactState extends State<ContactView> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        // Here we take the value from the MyHomePage object that was created by
-        // the App.build method, and use it to set our appbar title.
         title: Text(_bloc.contact.firstName),
         actions: _buildAppBarActions(context),
       ),
@@ -64,45 +65,86 @@ class _ContactState extends State<ContactView> {
   }
 
   Widget _buildBody(Contact contact) {
-    return SafeArea(
-      child: ListView(
+    final List<Widget> widgets = <Widget>[];
+
+    widgets.add(Card(
+      child: ListTile(
+        title: Text('${_bloc.contact.firstName} ${_bloc.contact.lastName}'),
+        subtitle: Text(
+          'Name',
+          style: TextStyle(color: Colors.black54),
+        ),
+        leading: Icon(Icons.person),
+      ),
+    ));
+
+    // phone
+    if (_bloc.contact.phones.isNotEmpty) {
+      widgets.add(Card(
+        child: ListTile(
+          title: Text(_bloc.contact.phones[0].phone),
+          subtitle: Text(
+            'Phone',
+            style: TextStyle(color: Colors.black54),
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.phone),
+            onPressed: () {
+              // _launchCaller(phoneNumber);
+            },
+          ),
+          // trailing: IconButton(
+          //   icon: Icon(Icons.message),
+          //   // onPressed: () {
+          //   //   _textMe(phoneNumber);
+          //   // },
+          // ),
+        ),
+      ));
+    }
+
+    // emails
+    if (_bloc.contact.emails.isNotEmpty) {
+      widgets.add(Card(
+        child: ListTile(
+          title: Text(_bloc.contact.emails[0].email),
+          subtitle: Text(
+            'Email',
+            style: TextStyle(color: Colors.black54),
+          ),
+          leading: Icon(Icons.email),
+        ),
+      ));
+    }
+
+    if (_bloc.contact.notes.isNotEmpty) {
+      widgets.add(Card(
+          child: Column(
+        // mainAxisSize: MainAxisSize.min,
         children: <Widget>[
           ListTile(
-            title: const Text('Name'),
-            trailing: Text(contact.firstName ?? ''),
+            leading: Icon(Icons.note),
+            title: Text('Notes', style: TextStyle(color: Colors.grey[600])),
           ),
-          ListTile(
-            title: const Text('Middle name'),
-            trailing: Text(contact.firstName ?? ''),
+          Padding(
+            padding: const EdgeInsets.fromLTRB(15, 0, 15, 0),
+            child: TextField(
+              maxLines: 8,
+              controller: _notesController,
+              readOnly: true,
+              decoration: InputDecoration(
+                border: InputBorder.none,
+              ),
+            ),
           ),
-          ListTile(
-            title: const Text('Family name'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          ListTile(
-            title: const Text('Prefix'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          ListTile(
-            title: const Text('Suffix'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          ListTile(
-            title: const Text('Company'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          ListTile(
-            title: const Text('Job'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          ListTile(
-            title: const Text('Note'),
-            trailing: Text(contact.firstName ?? ''),
-          ),
-          // AddressesTile(contact.postalAddresses),
-          // ItemsTile('Phones', contact.phones),
-          // ItemsTile('Emails', contact.emails)
         ],
+      )));
+    }
+
+    return SafeArea(
+      child: Padding(
+        padding: const EdgeInsets.all(8.0),
+        child: Column(children: widgets),
       ),
     );
   }
