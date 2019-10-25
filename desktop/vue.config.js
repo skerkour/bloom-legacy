@@ -7,7 +7,15 @@ module.exports = {
       // JavaScript to implement a stub module.  We can't use `node-loader` for
       // this because it bakes in hard-coded paths and breaks the ability to
       // move compiled Electron apps between systems.
-      bloom_native: "require('../../../../../../../../native')",
+      // bloom_native: "require('../../../../../../../../native')",
+    },
+    module: {
+      rules: [
+        {
+          test: /\.node$/,
+          use: 'node-loader',
+        },
+      ],
     },
   },
   chainWebpack: (config) => {

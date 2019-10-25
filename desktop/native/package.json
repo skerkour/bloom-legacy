@@ -1,0 +1,13 @@
+{
+  "name": "bloom_native",
+  "version": "1.0.0",
+  "description": "This is the bridge between the ElectronJs GUI and the Rust core (see `../core`).",
+  "main": "index.js",
+  "dependencies": {},
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "GPL-3"
+}

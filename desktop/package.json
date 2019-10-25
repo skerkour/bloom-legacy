@@ -23,6 +23,7 @@
     "@mdi/font": "=4.4.95",
     "core-js": "^2.6.5",
     "moment": "^2.24.0",
+    "bloom_native": "file:native",
     "rxjs": "=6.5.3",
     "uuid": "^3.3.3",
     "vue": "=2.6.10",
@@ -48,13 +49,21 @@
     "babel-eslint": "^10.0.1",
     "electron": "=6.1.2",
     "electron-build-env": "file:libs/electron-build-env",
+    "electron-builder": "^21.2.0",
     "eslint": "^6.5.1",
     "eslint-plugin-vue": "^5.0.0",
+    "node-loader": "^0.6.0",
     "sass": "^1.23.0",
     "sass-loader": "^8.0.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.6.4",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.0"
+  },
+  "build": {
+    "appId": "com.bloom42.bloom",
+    "mac": {
+      "category": "your.app.category.type"
+    }
   }
 }
