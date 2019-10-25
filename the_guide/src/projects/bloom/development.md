@@ -17,14 +17,13 @@ $ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] 
 $ cp bloom.default.sane bloom.sane
 ```
 5. Edit `bloom.sane` with correct values
-6. Run migrations
-```sh
-$ export DATABASE_URL=XXX # previously set in bloom.sane
-$ diesel migration run
-```
-7. Copy assets
+6. Copy assets
 ```sh
 $ make assets
+```
+7. Run migrations
+```sh
+$ cargo run -- migrations run
 ```
 8. Run development server
 ```sh
