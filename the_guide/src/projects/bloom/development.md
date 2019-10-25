@@ -46,13 +46,9 @@ $ make assets
 ```sh
 make dev_native
 ```
-5. In shell 2, install dependencies and run `make dev_vue`
+5. In shell 2, install dependencies and run `make dev_electron`
 ```sh
 make install
-make dev_vue
-```
-6. In shell 3, run `make dev_electron`
-```sh
 make dev_electron
 ```
 
