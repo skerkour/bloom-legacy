@@ -102,7 +102,7 @@ use neon::context::{Context, TaskContext};
 use neon::result::JsResult;
 use neon::task::Task;
 use neon::types::{JsFunction, JsUndefined, JsValue};
-use neon::{class_definition, declare_types, impl_managed, register_module};
+use neon::{declare_types, register_module};
 
 /// Placeholder to represent work being done on a Rust thread. It could be
 /// reading from a socket or any other long running task.
