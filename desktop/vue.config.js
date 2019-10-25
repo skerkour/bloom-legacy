@@ -41,6 +41,8 @@ module.exports = {
 
         return options;
       });
+
+    // config.optimization.minimize(false);
   },
   pwa: {
     name: 'Bloom',
@@ -51,6 +53,27 @@ module.exports = {
       appleTouchIcon: 'kernel/imgs/icons/bloom_256.png',
       maskIcon: 'kernel/imgs/icons/bloom_256.png',
       msTileImage: 'kernel/imgs/icons/bloom_256.png',
+    },
+  },
+  pluginOptions: {
+    electronBuilder: {
+      builderOptions: {
+        productName: 'Bloom',
+        appId: 'com.bloom42.bloom',
+        mac: {
+          category: 'public.app-category.productivity', // see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/uid/TP40009250-SW8
+          darkModeSupport: true,
+          hardenedRuntime: true,
+          icon: 'build/icons/mac/icon.icns',
+        },
+        linux: {
+          category: 'Utility,Office', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
+          icon: 'build/icons/png',
+        },
+        win: {
+          icon: 'build/icons/win/icon.ico',
+        },
+      },
     },
   },
 };

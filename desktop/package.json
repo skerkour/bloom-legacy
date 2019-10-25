@@ -1,29 +1,31 @@
 {
   "name": "bloom_desktop",
-  "productName": "Bloom",
-  "description": "Empowering people",
   "version": "0.1.0",
+  "private": true,
+  "description": "Empowering people",
   "author": {
     "name": "Bloom",
     "email": "hello@bloom.sh"
   },
-  "private": true,
-  "main": "src/main_electron.js",
   "scripts": {
-    "dev:electron": "electron .",
-    "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
-    "dev:vue": "vue-cli-service serve",
     "build": "vue-cli-service build --modern",
-    "build:native": "electron-build-env neon build --release",
     "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit"
+    "build:native": "electron-build-env neon build --release",
+    "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
+    "build:electron": "vue-cli-service electron:build",
+    "dev:electron": "vue-cli-service electron:serve",
+    "postinstall": "electron-builder install-app-deps",
+    "postuninstall": "electron-builder install-app-deps",
+    "test:unit": "vue-cli-service test:unit",
+    "icon": "electron-icon-maker --input=public/bloom_1024.png --output=./build"
   },
+  "main": "background.js",
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "=4.4.95",
+    "bloom_native": "file:native",
     "core-js": "^2.6.5",
     "moment": "^2.24.0",
-    "bloom_native": "file:native",
     "rxjs": "=6.5.3",
     "uuid": "^3.3.3",
     "vue": "=2.6.10",
@@ -47,9 +49,9 @@
     "@vue/test-utils": "1.0.0-beta.29",
     "babel-core": "7.0.0-bridge.0",
     "babel-eslint": "^10.0.1",
-    "electron": "=6.1.2",
+    "electron": "6.1.2",
     "electron-build-env": "file:libs/electron-build-env",
-    "electron-builder": "^21.2.0",
+    "electron-icon-maker": "0.0.4",
     "eslint": "^6.5.1",
     "eslint-plugin-vue": "^5.0.0",
     "node-loader": "^0.6.0",
@@ -57,13 +59,9 @@
     "sass-loader": "^8.0.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.6.4",
+    "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10",
     "webpack": "^4.41.0"
   },
-  "build": {
-    "appId": "com.bloom42.bloom",
-    "mac": {
-      "category": "your.app.category.type"
-    }
-  }
+  "productName": "Bloom"
 }

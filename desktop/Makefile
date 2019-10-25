@@ -2,9 +2,6 @@
 .PHONY: test lint build dev_native test_native lint_native
 
 
-dev_vue:
-	npm run dev:vue
-
 dev_native:
 	npm run dev:native
 
