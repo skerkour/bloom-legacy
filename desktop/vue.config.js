@@ -41,8 +41,6 @@ module.exports = {
 
         return options;
       });
-
-    // config.optimization.minimize(false);
   },
   pwa: {
     name: 'Bloom',

@@ -17,7 +17,7 @@
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",
     "test:unit": "vue-cli-service test:unit",
-    "icon": "electron-icon-maker --input=public/bloom_1024.png --output=./build"
+    "icons": "electron-icon-maker --input=public/bloom_1024.png --output=./build"
   },
   "main": "background.js",
   "dependencies": {

@@ -1,4 +1,4 @@
-.PHONY: lint fmt fmt_check test icon dev build assets
+.PHONY: lint fmt fmt_check test icons dev build assets
 
 build:
 	# make -C core_ffi build # commented because currently the mobile CICD job does not have a Rust toolchain installed
@@ -24,7 +24,7 @@ install:
 test:
 	- flutter test
 
-icon:
+icons:
 	- flutter pub run flutter_launcher_icons:main
 
 assets:

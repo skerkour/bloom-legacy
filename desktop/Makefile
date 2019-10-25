@@ -1,4 +1,4 @@
-.PHONY: dev install clean assets dev_vue dev_electron
+.PHONY: dev install clean assets dev_vue dev_electron icons
 .PHONY: test lint build dev_native test_native lint_native
 
 
@@ -39,3 +39,6 @@ assets:
 	cp -r ../assets/icons public/assets/icons
 	cp ../assets/desktop/icons/* public/assets/icons/
 	cp ../assets/fonts/rounded_elegance.ttf public/assets/fonts/
+
+icons:
+	npm run icons
