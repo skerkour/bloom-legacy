@@ -1,9 +1,15 @@
-.PHONY: dev install clean assets
-.PHONY: test lint build
+.PHONY: dev install clean assets start
+.PHONY: test lint build dev_native
 
 
-dev:
-	npm run serve
+dev_vue:
+	npm run dev:vue
+
+dev_native:
+	npm run dev:native
+
+start:
+	npm urn start
 
 clean:
 	rm -rf dist node_modules/

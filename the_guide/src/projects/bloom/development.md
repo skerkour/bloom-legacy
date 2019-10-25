@@ -42,25 +42,18 @@ cd desktop
 ```sh
 $ make assets
 ```
-4. in shell 1, go to the `native` directory, export env vars and run `make dev`
+4. in shell 1, run `make dev_native`
 ```sh
-cd native
-export npm_config_target=6.0.12
-export npm_config_arch=x64
-export npm_config_target_arch=x64
-export npm_config_disturl=https://electronjs.org/headers
-export npm_config_runtime=electron
-export npm_config_build_from_source=true
-make dev
+make dev_native
 ```
-5. In shell 2, install dependencies and run `make dev`
+5. In shell 2, install dependencies and run `make dev_vue`
 ```sh
 make install
-make dev
+make dev_vue
 ```
-6. In shell 3, run `npm start`
+6. In shell 3, run `make start`
 ```sh
-npm start
+make start
 ```
 
 
