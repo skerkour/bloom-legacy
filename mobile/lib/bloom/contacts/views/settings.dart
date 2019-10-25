@@ -49,7 +49,29 @@ class _SettingsState extends State<SettingsView> {
 
   Function _onImportTapped(BuildContext context) {
     return () async {
+      showDialog<dynamic>(
+        context: context,
+        barrierDismissible: false,
+        builder: (BuildContext context) {
+          return Dialog(
+            child: Container(
+              child: Padding(
+                padding: const EdgeInsets.all(42.0),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  children: const <Widget>[
+                    CircularProgressIndicator(),
+                    SizedBox(width: 20),
+                    Text('Importing contacts'),
+                  ],
+                ),
+              ),
+            ),
+          );
+        },
+      );
       final int imported = await _bloc.importContacts();
+      Navigator.pop(context); //pop dialog
       Scaffold.of(context)
         ..removeCurrentSnackBar()
         ..showSnackBar(
