@@ -10,12 +10,13 @@
   "private": true,
   "main": "src/main_electron.js",
   "scripts": {
-    "start": "electron .",
-    "build": "vue-cli-service build --modern",
-    "lint": "vue-cli-service lint",
-    "test:unit": "vue-cli-service test:unit",
+    "dev:electron": "electron .",
     "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
-    "dev:vue": "vue-cli-service serve"
+    "dev:vue": "vue-cli-service serve",
+    "build": "vue-cli-service build --modern",
+    "build:native": "electron-build-env neon build --release",
+    "lint": "vue-cli-service lint",
+    "test:unit": "vue-cli-service test:unit"
   },
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",

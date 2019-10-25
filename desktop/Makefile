@@ -1,5 +1,5 @@
-.PHONY: dev install clean assets start
-.PHONY: test lint build dev_native
+.PHONY: dev install clean assets dev_vue dev_electron
+.PHONY: test lint build dev_native test_native lint_native
 
 
 dev_vue:
@@ -8,8 +8,8 @@ dev_vue:
 dev_native:
 	npm run dev:native
 
-start:
-	npm urn start
+dev_electron:
+	npm urn dev:electron
 
 clean:
 	rm -rf dist node_modules/
@@ -19,6 +19,16 @@ install:
 
 test:
 	npm run test:unit
+
+test_native:
+	cd native && cargo test
+
+lint_native:
+	cd native && cargo fmt --all -- --check
+	cd native && cargo clippy -- -D warnings -A clippy::needless_return
+
+fmt_native:
+	cd native && cargo fmt
 
 lint:
 	npm run lint

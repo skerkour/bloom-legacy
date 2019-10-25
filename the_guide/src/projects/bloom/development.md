@@ -51,9 +51,9 @@ make dev_native
 make install
 make dev_vue
 ```
-6. In shell 3, run `make start`
+6. In shell 3, run `make dev_electron`
 ```sh
-make start
+make dev_electron
 ```
 
 
