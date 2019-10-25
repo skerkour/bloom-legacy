@@ -51,7 +51,7 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
             .header("Content-Security-Policy", "default-src 'self' https://s3.eu-west-3.amazonaws.com https://s3-eu-west-3.amazonaws.com; script-src 'self' 'unsafe-inline' 'unsafe-eval'; style-src 'self' 'unsafe-inline'; img-src 'self' data: https://s3.eu-west-3.amazonaws.com https://s3-eu-west-3.amazonaws.com; connect-src 'self';")
         )
 
-        .configure(super::app::config(cfg.clone()))
+        .configure(crate::app::config(cfg.clone()))
         .default_service(web::route().to(api::route_404))
     })
     .backlog(8192)
@@ -61,7 +61,7 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
     .bind(&binding_addr)?
     .start();
 
-    slog_info!(logger, "server started"; slog_o!("address" => binding_addr, "version" => super::info::VERSION));
+    slog_info!(logger, "server started"; slog_o!("address" => binding_addr, "version" => crate::info::VERSION));
     let _ = sys.run();
 
     return Ok(());

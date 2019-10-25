@@ -1,7 +1,9 @@
+#[macro_use]
+extern crate diesel_migrations;
+
 mod app;
+mod commands;
 mod info;
-mod jobs;
-mod server;
 
 use bloom_kernel::{
     config,
@@ -54,15 +56,21 @@ fn main() -> Result<(), Box<dyn Error>> {
                         .arg(Arg::with_name("job_name").required(true)),
                 ),
         )
+        .subcommand(
+            SubCommand::with_name("migrations")
+                .about("run or reverts migrations")
+                .subcommand(SubCommand::with_name("run").about("run all pending migrations"))
+                .subcommand(SubCommand::with_name("revert").about("revert the latest migration")),
+        )
         .get_matches();
 
     if matches.subcommand_matches("server").is_some() {
-        return server::run(cfg, logger);
+        return commands::server::run(cfg, logger);
     } else if let Some(matches) = matches.subcommand_matches("jobs") {
         if matches.subcommand_matches("ls").is_some() {
-            return jobs::list_jobs();
+            return commands::jobs::list_jobs();
         } else if let Some(matches) = matches.subcommand_matches("run") {
-            return jobs::run_job(
+            return commands::jobs::run_job(
                 cfg,
                 &matches
                     .value_of("job_name")
@@ -75,6 +83,20 @@ fn main() -> Result<(), Box<dyn Error>> {
                     .usage
                     .as_ref()
                     .expect("error getting jobs command usage")
+            );
+        }
+    } else if let Some(matches) = matches.subcommand_matches("migrations") {
+        if matches.subcommand_matches("run").is_some() {
+            return commands::migrations::run(cfg, logger);
+        } else if matches.subcommand_matches("revert").is_some() {
+            return commands::migrations::revert(cfg, logger);
+        } else {
+            println!(
+                "{}",
+                matches
+                    .usage
+                    .as_ref()
+                    .expect("error getting migrations command usage")
             );
         }
     }

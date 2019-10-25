@@ -44,6 +44,8 @@ futures-timer = "0.3"
 clap = "2.33"
 slog = "2.4"
 failure = "0.1"
+diesel_migrations = "1.4"
+diesel = "1.4"
 
 
 [profile.release]
