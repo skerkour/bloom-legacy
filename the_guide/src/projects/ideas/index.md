@@ -730,6 +730,16 @@ Chaque handler handle one command et result un event
 * https://github.com/dessalines/lemmy
 * https://fediverse.party
 * https://news.ycombinator.com/item?id=19686972 -> spam
+* https://indieweb.org/federation
+
+## noteworthy protocols
+
+* https://matrix.org/docs/spec/ (chat)
+* Email (https://tools.ietf.org/html/rfc5321), https://www.interserver.net/tips/kb/exactly-emails-works-steps-explanation/
+* Activitypub (https://www.w3.org/TR/activitypub/): social
+* XMPP: https://en.wikipedia.org/wiki/XMPP
+
+* https://www.w3.org/2005/Incubator/federatedsocialweb/wiki/Protocols
 
 your social graph is not portable between platforms.
 Your identity should not be coupled with the moderation policy of whichever platform you host your social graph on.
