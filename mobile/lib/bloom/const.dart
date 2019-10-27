@@ -6,3 +6,4 @@ const String ICON_CONTACTS_256 = 'assets/icons/contacts_256.jpg';
 const String ICON_DRIVE_256 = 'assets/icons/drive_256.jpg';
 const String ICON_MUSIC_256 = 'assets/icons/music_256.jpg';
 const String ICON_GALLERY_256 = 'assets/icons/gallery_256.jpg';
+const String ICON_BOOKS_256 = 'assets/icons/books_256.jpg';
