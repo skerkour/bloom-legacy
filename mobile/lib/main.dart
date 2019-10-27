@@ -2,11 +2,14 @@ import 'package:bloom/bloom/arcade/views/arcade.dart';
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:bloom/bloom/bitflow/views/bitflow.dart';
+import 'package:bloom/bloom/books/views/books.dart';
 import 'package:bloom/bloom/calculator/views/calculator.dart';
 import 'package:bloom/bloom/calendar/views/calendar.dart';
 import 'package:bloom/bloom/contacts/views/contacts.dart';
 import 'package:bloom/bloom/drive/views/drive.dart';
+import 'package:bloom/bloom/gallery/views/books.dart';
 import 'package:bloom/bloom/home/views/home.dart';
+import 'package:bloom/bloom/music/views/books.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
 import 'package:bloom/bloom/phaser/views/phaser.dart';
 import 'package:bloom/bloom/platform/views/platform.dart';
@@ -14,6 +17,8 @@ import 'package:flutter/material.dart';
 
 import 'package:bloom/bloom/auth/views/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
+
+import 'bloom/const.dart';
 
 void main() => runApp(MyApp());
 
@@ -36,10 +41,13 @@ class MyApp extends StatelessWidget {
         '/auth/registration/complete': (BuildContext context) =>
             const RegistrationCompleteView(),
         '/bitflow': (BuildContext context) => const BitflowView(),
+        PATH_BOOKS: (BuildContext context) => const BooksView(),
         '/calculator': (BuildContext context) => const CalculatorView(),
         '/calendar': (BuildContext context) => const CalendarView(),
         '/contacts': (BuildContext context) => ContactsView(),
-        '/drive': (BuildContext context) => const DriveView(),
+        PATH_DRIVE: (BuildContext context) => const DriveView(),
+        PATH_GALLERY: (BuildContext context) => const GalleryView(),
+        PATH_MUSIC: (BuildContext context) => const MusicView(),
         '/notes': (BuildContext context) => const NotesView(),
         '/phaser': (BuildContext context) => const PhaserView(),
         '/platform': (BuildContext context) => const PlatformView(),
