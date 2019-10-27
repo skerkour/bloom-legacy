@@ -731,6 +731,7 @@ Chaque handler handle one command et result un event
 * https://fediverse.party
 * https://news.ycombinator.com/item?id=19686972 -> spam
 * https://indieweb.org/federation
+* https://docs.joinmastodon.org/development/activitypub/
 
 ## noteworthy protocols
 
