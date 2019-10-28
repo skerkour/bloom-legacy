@@ -1,3 +1,5 @@
+import 'package:bloom/bloom/home/blocs/chat_tab.dart';
+import 'package:bloom/bloom/home/views/barcode.dart';
 import 'package:flutter/material.dart';
 
 class ChatsBottomSheet extends StatelessWidget {
@@ -21,11 +23,6 @@ class ChatsBottomSheet extends StatelessWidget {
             title: const Text('Scan QR code'),
             onTap: () => _onScanQRCodeTapped(context),
           ),
-          ListTile(
-            leading: Icon(Icons.attach_money),
-            title: const Text('Request money'),
-            onTap: () => _onRequestMoneyTapped(context),
-          ),
         ],
       ),
     );
@@ -41,14 +38,17 @@ class ChatsBottomSheet extends StatelessWidget {
     debugPrint('Add contact tapped');
   }
 
-  void _onRequestMoneyTapped(BuildContext context) {
-    Navigator.of(context).pop();
-    debugPrint('Request money tapped');
-  }
-
-  void _onScanQRCodeTapped(BuildContext context) {
-    Navigator.of(context).pop();
+  Future<void> _onScanQRCodeTapped(BuildContext context) async {
     debugPrint('Scan QR code tapped');
+
+    final String barcode = await ChatTabBloc.scan();
+    await Navigator.push<dynamic>(
+      context,
+      MaterialPageRoute<dynamic>(
+        builder: (BuildContext context) => BarcodeView(barcode: barcode),
+      ),
+    );
+    Navigator.of(context).pop();
   }
 }
 
