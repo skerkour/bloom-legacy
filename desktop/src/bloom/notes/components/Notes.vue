@@ -6,8 +6,8 @@
           <v-text-field placeholder="Take a note..." solo @click="openNoteDialog" readonly/>
         </v-flex>
       </v-layout>
-      <v-layout row wrap justify-left class="mt-1">
-        <v-flex v-for="note in notes" :key="note.id" xs12 sm4 md3>
+      <v-row justify="start">
+        <v-col v-for="note in notes" :key="note.id" cols="12" sm="6" md="4" lg="3">
           <blm-notes-note
             :note="note"
             @archived="noteArchived"
@@ -15,8 +15,8 @@
             @updated="noteUpdated"
             @deleted="noteDeleted"
           />
-        </v-flex>
-    </v-layout>
+        </v-col>
+    </v-row>
     </v-container>
 
   <blm-notes-dialog-note
