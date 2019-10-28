@@ -35,7 +35,7 @@ class _BarcodeState extends State<BarcodeView> {
           children: <Widget>[
             Center(
               child: InkWell(
-                child: Text(
+                child: SelectableText(
                   _barcode,
                   style: TextStyle(color: _textColor, fontSize: 21),
                 ),
