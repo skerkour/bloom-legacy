@@ -69,3 +69,8 @@ $ make assets
 make install
 ```
 5. Run the project in [Visual Studio Code](/engineering/setup.html#visual-studio-code)
+
+
+## Resources
+
+* https://medium.com/visly/rust-on-android-19f34a2fb43
