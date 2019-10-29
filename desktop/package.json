@@ -37,13 +37,13 @@
     "vuex": "=3.1.1"
   },
   "devDependencies": {
-    "@types/jest": "^24.0.18",
+    "@types/jest": "^24.0.20",
     "@types/vue-the-mask": "^0.11.0",
-    "@vue/cli-plugin-babel": "^3.12.0",
-    "@vue/cli-plugin-eslint": "^3.12.0",
-    "@vue/cli-plugin-typescript": "^3.12.0",
-    "@vue/cli-plugin-unit-jest": "^3.12.0",
-    "@vue/cli-service": "^3.12.0",
+    "@vue/cli-plugin-babel": "^3.12.1",
+    "@vue/cli-plugin-eslint": "^3.12.1",
+    "@vue/cli-plugin-typescript": "^3.12.1",
+    "@vue/cli-plugin-unit-jest": "^3.12.1",
+    "@vue/cli-service": "^3.12.1",
     "@vue/eslint-config-airbnb": "^4.0.0",
     "@vue/eslint-config-typescript": "^4.0.0",
     "@vue/test-utils": "1.0.0-beta.29",
@@ -52,16 +52,16 @@
     "electron": "7.0.0",
     "electron-build-env": "file:libs/electron-build-env",
     "electron-icon-maker": "0.0.4",
-    "eslint": "^6.5.1",
+    "eslint": "^6.6.0",
     "eslint-plugin-vue": "^5.0.0",
     "node-loader": "^0.6.0",
-    "sass": "^1.23.0",
+    "sass": "^1.23.1",
     "sass-loader": "^8.0.0",
     "ts-jest": "^23.0.0",
     "typescript": "^3.6.4",
     "vue-cli-plugin-electron-builder": "^1.4.0",
     "vue-template-compiler": "^2.6.10",
-    "webpack": "^4.41.0"
+    "webpack": "^4.41.2"
   },
   "productName": "Bloom"
 }

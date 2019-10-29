@@ -92,7 +92,7 @@ class _EditEventState extends State<EditEventView> {
               ),
               decoration: InputDecoration(
                 border: InputBorder.none,
-                prefixIcon: Icon(Icons.calendar_today),
+                prefixIcon: const Icon(Icons.calendar_today),
                 hintText:
                     '${_dateFormatter.format(_startAt)} - ${_dateFormatter.format(_endAt)}',
               ),
