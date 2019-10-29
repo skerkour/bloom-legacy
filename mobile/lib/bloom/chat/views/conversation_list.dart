@@ -1,14 +1,14 @@
-import 'package:bloom/bloom/chat/views/chat.dart';
+import 'package:bloom/bloom/chat/views/conversation.dart';
 import 'package:flutter/material.dart';
 
-class TabChatView extends StatefulWidget {
-  const TabChatView({Key key}) : super(key: key);
+class ConversationListView extends StatefulWidget {
+  const ConversationListView({Key key}) : super(key: key);
 
   @override
-  _TabChatViewState createState() => _TabChatViewState();
+  _ConversationListViewState createState() => _ConversationListViewState();
 }
 
-class _TabChatViewState extends State<TabChatView> {
+class _ConversationListViewState extends State<ConversationListView> {
   static final List<_Conversation> _conversations = getConversations();
 
   @override
@@ -52,7 +52,7 @@ class _TabChatViewState extends State<TabChatView> {
             Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) => ChatView(chatEntity: entity),
+                builder: (BuildContext context) => ConversationView(chatEntity: entity),
               ),
             );
           },

@@ -1,6 +1,6 @@
-import 'package:bloom/bloom/group/views/create.dart';
+import 'package:bloom/bloom/chat/views/conversation_list.dart';
+import 'package:bloom/bloom/groups/views/create.dart';
 import 'package:bloom/bloom/home/views/chats_search.dart';
-import 'package:bloom/bloom/home/views/tab_chat.dart';
 import 'package:bloom/bloom/home/views/tab_groups.dart';
 import 'package:bloom/bloom/home/views/tab_me.dart';
 import 'package:bloom/bloom/home/widgets/bottom_sheet_chats.dart';
@@ -125,7 +125,7 @@ class _HomeViewState extends State<HomeView> {
   Widget _buildBody(BuildContext context) {
     switch (_selectedIndex) {
       case 0:
-        return const TabChatView();
+        return const ConversationListView();
       case 1:
         return const TabGroupsView();
       default:

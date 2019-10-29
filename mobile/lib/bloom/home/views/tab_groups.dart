@@ -1,4 +1,4 @@
-import 'package:bloom/bloom/group/views/home.dart';
+import 'package:bloom/bloom/groups/views/home.dart';
 import 'package:flutter/material.dart';
 
 class TabGroupsView extends StatefulWidget {

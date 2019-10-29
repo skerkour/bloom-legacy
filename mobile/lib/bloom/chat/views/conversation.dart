@@ -1,13 +1,13 @@
 // import 'package:flutter/material.dart';
 
-// class ChatView extends StatefulWidget {
-//   const ChatView();
+// class ConversationView extends StatefulWidget {
+//   const ConversationView();
 
 //   @override
 //   _ChatState createState() => _ChatState();
 // }
 
-// class _ChatState extends State<ChatView> {
+// class _ChatState extends State<ConversationView> {
 //   @override
 //   Widget build(BuildContext context) {
 //     return Scaffold(
@@ -42,16 +42,16 @@ class ChatMessage {
   final String time;
 }
 
-class ChatView extends StatefulWidget {
-  const ChatView({Key key, @required this.chatEntity}) : super(key: key);
+class ConversationView extends StatefulWidget {
+  const ConversationView({Key key, @required this.chatEntity}) : super(key: key);
 
   final ChatEntity chatEntity;
 
   @override
-  State<StatefulWidget> createState() => _ChatViewState();
+  State<StatefulWidget> createState() => _ConversationViewState();
 }
 
-class _ChatViewState extends State<ChatView> {
+class _ConversationViewState extends State<ConversationView> {
   TextEditingController _textEditingController;
   ScrollController _scrollController;
   List<ChatMessage> _chatMessages;
@@ -109,15 +109,15 @@ class _ChatViewState extends State<ChatView> {
 
   List<IconButton> _buildAppBarActionButtons() {
     return <IconButton>[
-      IconButton(
-        icon: Icon(Icons.videocam),
-        padding: const EdgeInsets.all(0),
-        onPressed: () => print('Pressed view call'),
-      ),
-      IconButton(
-        icon: Icon(Icons.call),
-        onPressed: () => print('Pressed phone call'),
-      ),
+      // IconButton(
+      //   icon: Icon(Icons.videocam),
+      //   padding: const EdgeInsets.all(0),
+      //   onPressed: () => print('Pressed view call'),
+      // ),
+      // IconButton(
+      //   icon: Icon(Icons.call),
+      //   onPressed: () => print('Pressed phone call'),
+      // ),
       IconButton(
         icon: Icon(Icons.more_vert),
         onPressed: () => print('Pressed menu'),
@@ -173,7 +173,7 @@ class _ChatViewState extends State<ChatView> {
               shape: const CircleBorder(),
               onPressed: _onPressedSendMessage,
               child: Icon(
-                Icons.add,
+                Icons.send,
                 color: Colors.white,
               ),
             ),
@@ -211,44 +211,45 @@ class _ChatViewState extends State<ChatView> {
           child: TextField(
             expands: false,
             minLines: 1,
-            maxLines: 3,
+            maxLines: 4,
             controller: _textEditingController,
-            decoration: InputDecoration(
+            decoration: const InputDecoration(
               border: InputBorder.none,
-              hintText: 'Type message',
-              hintStyle: const TextStyle(color: Colors.grey),
-              prefixIcon: Icon(
-                Icons.tag_faces,
-                color: Colors.grey,
-              ),
+              hintText: '  Type message',
+              hintStyle: TextStyle(color: Colors.grey),
+              contentPadding: EdgeInsets.fromLTRB(20, 10, 10, 10),
+              // prefixIcon: Icon(
+              //   Icons.tag_faces,
+              //   color: Colors.grey,
+              // ),
             ),
           ),
         ),
-        Row(
-          mainAxisSize: MainAxisSize.min,
-          mainAxisAlignment: MainAxisAlignment.end,
-          crossAxisAlignment: CrossAxisAlignment.center,
-          children: <Widget>[
-            IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              icon: Icon(
-                Icons.attach_file,
-                color: Colors.grey,
-              ),
-              onPressed: () => print('Pressed Attach File'),
-            ),
-            IconButton(
-              splashColor: Colors.transparent,
-              highlightColor: Colors.transparent,
-              icon: Icon(
-                Icons.photo_camera,
-                color: Colors.grey,
-              ),
-              onPressed: () => print('Pressed Camera'),
-            ),
-          ],
-        )
+        // Row(
+        //   mainAxisSize: MainAxisSize.min,
+        //   mainAxisAlignment: MainAxisAlignment.end,
+        //   crossAxisAlignment: CrossAxisAlignment.center,
+        //   children: <Widget>[
+        //     IconButton(
+        //       splashColor: Colors.transparent,
+        //       highlightColor: Colors.transparent,
+        //       icon: Icon(
+        //         Icons.attach_file,
+        //         color: Colors.grey,
+        //       ),
+        //       onPressed: () => print('Pressed Attach File'),
+        //     ),
+        //     IconButton(
+        //       splashColor: Colors.transparent,
+        //       highlightColor: Colors.transparent,
+        //       icon: Icon(
+        //         Icons.photo_camera,
+        //         color: Colors.grey,
+        //       ),
+        //       onPressed: () => print('Pressed Camera'),
+        //     ),
+        //   ],
+        // )
       ],
     );
   }
