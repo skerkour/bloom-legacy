@@ -213,17 +213,38 @@ build:server:
     paths:
     - server/dist
 
-build:the_guide:
+build:website:
   stage: build
-  image: python:alpine
+  image: node:lts
   tags:
     - docker
   script:
+    - apt update && apt install curl make python3 python3-pip -y
+    - pip3 install mkdocs pymdown-extensions # for the-guide
+    - cd website/
+    - make install
+    - make build
+    # build blog
+    - cp -rp ../blog .
+    - cd blog
+    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
+    - tar -xzf zola.tar.gz
+    - ./zola build
+    - cd .. # go back to website folder
+    - mv blog/public/ dist/blog
+    # build the-guide
+    - cp -rp ../the_guide .
     - cd the_guide
-    - apk add --update make
-    - pip install mkdocs pymdown-extensions
     - make assets
     - make build
+    - cd .. # go back to website folder
+    - mv the_guide/dist/ dist/the-guide
+    # deploy website to the good folder
+    - cp -rp dist ../public
+
+  artifacts:
+    paths:
+    - website/dist
 
 
 ####################################################################################################
@@ -262,37 +283,18 @@ package:server:
 #     - public/
 
 pages: # release:website
-  image: node:lts
+  image: alpine:latest
   stage: release
   tags:
     - docker
+  dependencies:
+    - build:website
   # only:
   #   - /^website-v.*$/
   # except:
   #   - branches
   script:
-    - apt update && apt install curl make python3 python3-pip -y
-    - pip3 install mkdocs pymdown-extensions # for the-guide
-    - cd website/
-    - make install
-    - make build
-    # build blog
-    - cp -rp ../blog .
-    - cd blog
-    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
-    - tar -xzf zola.tar.gz
-    - ./zola build
-    - cd .. # go back to website folder
-    - mv blog/public/ dist/blog
-    # build the-guide
-    - cp -rp ../the_guide .
-    - cd the_guide
-    - make assets
-    - make build
-    - cd .. # go back to website folder
-    - mv the_guide/dist/ dist/the-guide
-    # deploy website to the good folder
-    - cp -rp dist ../public
+    - cp -rp website/dist ../public
   artifacts:
     paths:
       - public/
