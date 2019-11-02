@@ -272,7 +272,7 @@ pages: # release:website
   #   - branches
   script:
     - apt update && apt install curl make python3 python3-pip -y
-    - - pip install mkdocs pymdown-extensions # for the-guide
+    - pip install mkdocs pymdown-extensions # for the-guide
     - cd website/
     - make install
     - make build
@@ -296,9 +296,6 @@ pages: # release:website
   artifacts:
     paths:
       - public/
-
-    - make assets
-    - make build
 
 release:status_page:
   image: docker:stable
