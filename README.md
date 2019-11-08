@@ -42,7 +42,6 @@ Thank you for your interest in contributing! Please refer to
 [https://theguide.bloom.sh/organization/contributing.html](https://theguide.bloom.sh/organization/contributing.html) for guidance.
 
 
-
 ## Licensing
 
 See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
