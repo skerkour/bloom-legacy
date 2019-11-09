@@ -277,7 +277,7 @@ pages: # release:website
   # except:
   #   - branches
   script:
-    - cp -rp website/dist ../public
+    - cp -rp website/dist public
   artifacts:
     paths:
       - public/
