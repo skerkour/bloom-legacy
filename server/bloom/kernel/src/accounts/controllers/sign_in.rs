@@ -1,6 +1,6 @@
 use crate::{
     db::DbActor,
-    myaccount::domain::{session, Account, Session},
+    accounts::domain::{session, Account, Session},
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;
@@ -22,7 +22,7 @@ impl Handler<SignIn> for DbActor {
     type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: SignIn, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_accounts, kernel_sessions};
+        use crate::db::schema::{accounts, sessions};
         use diesel::prelude::*;
 
         let conn = self.pool.get()?;
@@ -34,8 +34,8 @@ impl Handler<SignIn> for DbActor {
                 ));
             }
 
-            let account: Account = kernel_accounts::dsl::kernel_accounts
-                .filter(kernel_accounts::dsl::username.eq(&msg.message.username))
+            let account: Account = accounts::dsl::accounts
+                .filter(accounts::dsl::username.eq(&msg.message.username))
                 .for_update()
                 .first(&conn)
                 .map_err(|_| {
@@ -55,7 +55,7 @@ impl Handler<SignIn> for DbActor {
                 // };
                 // let fail_sign_in_cmd = account::FailSignIn { metadata };
                 // let (_, event, _) = eventsourcing::execute(&conn, account, &fail_sign_in_cmd)?;
-                // diesel::insert_into(kernel_accounts_events::dsl::kernel_accounts_events)
+                // diesel::insert_into(accounts_events::dsl::accounts_events)
                 //     .values(&event)
                 //     .execute(&conn)?;
                 return Err(BloomError::Forbidden(
@@ -77,7 +77,7 @@ impl Handler<SignIn> for DbActor {
             };
             let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
 
-            diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
+            diesel::insert_into(sessions::dsl::sessions)
                 .values(&new_session)
                 .execute(&conn)?;
 

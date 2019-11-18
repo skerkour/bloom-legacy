@@ -1,6 +1,6 @@
 use crate::{
     db::DbActor,
-    myaccount::domain::{pending_account, PendingAccount},
+    accounts::domain::{pending_account, PendingAccount},
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;
@@ -20,7 +20,7 @@ impl Handler<RegistrationVerify> for DbActor {
     type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: RegistrationVerify, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::kernel_pending_accounts;
+        use crate::db::schema::pending_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get()?;
@@ -32,8 +32,8 @@ impl Handler<RegistrationVerify> for DbActor {
             };
 
             let pending_account_to_verify: PendingAccount =
-                kernel_pending_accounts::dsl::kernel_pending_accounts
-                    .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
+                pending_accounts::dsl::pending_accounts
+                    .filter(pending_accounts::dsl::id.eq(msg.message.id))
                     .for_update()
                     .first(&conn)?;
 
@@ -51,8 +51,8 @@ impl Handler<RegistrationVerify> for DbActor {
             Err(err) => match err {
                 BloomError::Validation(_) => {
                     let pending_account_to_verify: PendingAccount =
-                        kernel_pending_accounts::dsl::kernel_pending_accounts
-                            .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
+                        pending_accounts::dsl::pending_accounts
+                            .filter(pending_accounts::dsl::id.eq(msg.message.id))
                             .for_update()
                             .first(&conn)?;
                     let fail_cmd = pending_account::FailVerification {};

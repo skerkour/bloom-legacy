@@ -1,6 +1,6 @@
 use crate::{
-    config::Config, db::DbActor, myaccount::domain::pending_account,
-    myaccount::notifications::emails::send_account_verification_code,
+    config::Config, db::DbActor, accounts::domain::pending_account,
+    accounts::notifications::emails::send_account_verification_code,
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;
@@ -19,7 +19,7 @@ impl Handler<StartRegistration> for DbActor {
     type Result = Result<bloom_messages::Message, BloomError>;
 
     fn handle(&mut self, msg: StartRegistration, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::kernel_pending_accounts;
+        use crate::db::schema::pending_accounts;
         use diesel::prelude::*;
 
         let conn = self.pool.get()?;
@@ -36,7 +36,7 @@ impl Handler<StartRegistration> for DbActor {
             let (new_pending_account, event) =
                 eventsourcing::execute(&conn, pending_account::PendingAccount::new(), &create_cmd)?;
 
-            diesel::insert_into(kernel_pending_accounts::dsl::kernel_pending_accounts)
+            diesel::insert_into(pending_accounts::dsl::pending_accounts)
                 .values(&new_pending_account)
                 .execute(&conn)?;
 

@@ -3,7 +3,7 @@
 //     middleware::{Middleware, Started},
 //     http::header,
 // };
-use crate::{api, db::DbActor, myaccount::domain};
+use crate::{api, db::DbActor, accounts::domain};
 use actix::{Handler, Message};
 use actix_service::{Service as ActixService, Transform};
 use actix_web::{

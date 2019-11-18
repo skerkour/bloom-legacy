@@ -1,4 +1,4 @@
-use crate::db::schema::kernel_accounts;
+use crate::db::schema::accounts;
 use diesel::Queryable;
 use eventsourcing::Aggregate;
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
     Queryable,
     Serialize,
 )]
-#[table_name = "kernel_accounts"]
+#[table_name = "accounts"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Account {
     pub id: uuid::Uuid,

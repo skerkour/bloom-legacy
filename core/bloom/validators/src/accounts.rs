@@ -1,4 +1,4 @@
-use bloom_const::myaccount;
+use bloom_const::accounts;
 use bloom_error::BloomError;
 use regex::Regex;
 use std::collections::HashSet;
@@ -167,7 +167,7 @@ pub fn username(username: &str) -> Result<(), BloomError> {
 }
 
 pub fn bio(bio: &str) -> Result<(), BloomError> {
-    if bio.len() > myaccount::BIO_MAX_LENGTH {
+    if bio.len() > accounts::BIO_MAX_LENGTH {
         return Err(BloomError::Validation("bio is too long".to_string()));
     }
 
@@ -181,10 +181,10 @@ pub fn display_name(display_name: &str) -> Result<(), BloomError> {
         ));
     }
 
-    if display_name.len() > myaccount::DISPLAY_NAME_MAX_LENGTH {
+    if display_name.len() > accounts::DISPLAY_NAME_MAX_LENGTH {
         return Err(BloomError::Validation(format!(
             "display_name is too long ({} characters max)",
-            myaccount::DISPLAY_NAME_MAX_LENGTH
+            accounts::DISPLAY_NAME_MAX_LENGTH
         )));
     }
 

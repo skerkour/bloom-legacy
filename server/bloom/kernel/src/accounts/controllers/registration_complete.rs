@@ -1,10 +1,10 @@
 use crate::{
     config::Config,
     db::DbActor,
-    myaccount::domain::{account, pending_account, session, Account, PendingAccount, Session},
+    accounts::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};
-use bloom_const::myaccount;
+use bloom_const::accounts;
 use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use serde::{Deserialize, Serialize};
@@ -26,15 +26,15 @@ impl Handler<CompleteRegistration> for DbActor {
 
     fn handle(&mut self, msg: CompleteRegistration, _: &mut Self::Context) -> Self::Result {
         // verify pending account
-        use crate::db::schema::{kernel_accounts, kernel_pending_accounts, kernel_sessions};
+        use crate::db::schema::{accounts, pending_accounts, sessions};
         use diesel::prelude::*;
 
         let conn = self.pool.get()?;
 
         return Ok(conn.transaction::<_, BloomError, _>(|| {
             let pending_account_to_update: PendingAccount =
-                kernel_pending_accounts::dsl::kernel_pending_accounts
-                    .filter(kernel_pending_accounts::dsl::id.eq(msg.message.id))
+                pending_accounts::dsl::pending_accounts
+                    .filter(pending_accounts::dsl::id.eq(msg.message.id))
                     .for_update()
                     .first(&conn)?;
 
@@ -52,8 +52,8 @@ impl Handler<CompleteRegistration> for DbActor {
 
             let auth_key_hash = argon2id::hash_password(
                 msg.message.auth_key.as_bytes(),
-                myaccount::PASSWORD_ARGON2_OPSLIMIT,
-                myaccount::PASSWORD_ARGON2_MEMLIMIT,
+                accounts::PASSWORD_ARGON2_OPSLIMIT,
+                accounts::PASSWORD_ARGON2_MEMLIMIT,
             )?
             .to_string();
 
@@ -66,7 +66,7 @@ impl Handler<CompleteRegistration> for DbActor {
             };
             let (new_account, event) = eventsourcing::execute(&conn, Account::new(), &create_cmd)?;
 
-            diesel::insert_into(kernel_accounts::dsl::kernel_accounts)
+            diesel::insert_into(accounts::dsl::accounts)
                 .values(&new_account)
                 .execute(&conn)?;
 
@@ -80,7 +80,7 @@ impl Handler<CompleteRegistration> for DbActor {
             };
 
             let (new_session, event) = eventsourcing::execute(&conn, Session::new(), &start_cmd)?;
-            diesel::insert_into(kernel_sessions::dsl::kernel_sessions)
+            diesel::insert_into(sessions::dsl::sessions)
                 .values(&new_session)
                 .execute(&conn)?;
 

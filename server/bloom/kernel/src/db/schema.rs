@@ -17,6 +17,12 @@ table! {
 }
 
 table! {
+    deleted_usernames (username) {
+        username -> Text,
+    }
+}
+
+table! {
     pending_accounts (id) {
         id -> Uuid,
         created_at -> Timestamptz,
@@ -45,6 +51,7 @@ joinable!(sessions -> accounts (account_id));
 
 allow_tables_to_appear_in_same_query!(
     accounts,
+    deleted_usernames,
     pending_accounts,
     sessions,
 );

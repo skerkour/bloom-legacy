@@ -55,3 +55,11 @@ CREATE TABLE pending_accounts (
 
     PRIMARY KEY(id)
 );
+
+
+CREATE TABLE deleted_usernames (
+    username TEXT NOT NULL,
+
+    PRIMARY KEY(username)
+);
+CREATE INDEX idx_deleted_usernames_username ON deleted_usernames (username);
