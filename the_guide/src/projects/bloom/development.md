@@ -10,7 +10,7 @@ git clone git@gitlab.com:bloom42/server.git && cd server
 ```
 3. Launch a PostgreSQL instance
 ```sh
-$ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] -e POSTGRES_PASSWORD=[PASSWORD_TO_CHANGE] -p 5432:5432 postgres:12-alpine
+$ docker run -d -e POSTGRES_USER=[USER_TO_CHANGE] -e POSTGRES_DB=[DB_TO_CHANGE] -e POSTGRES_PASSWORD=[PASSWORD_TO_CHANGE] -p 5432:5432 postgres:12
 ```
 4. Copy `bloom.default.sane` to `bloom.sane`
 ```sh
