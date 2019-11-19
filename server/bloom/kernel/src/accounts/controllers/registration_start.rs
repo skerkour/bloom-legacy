@@ -1,6 +1,6 @@
 use crate::{
-    config::Config, db::DbActor, accounts::domain::pending_account,
-    accounts::notifications::emails::send_account_verification_code,
+    accounts::domain::pending_account,
+    accounts::notifications::emails::send_account_verification_code, config::Config, db::DbActor,
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;

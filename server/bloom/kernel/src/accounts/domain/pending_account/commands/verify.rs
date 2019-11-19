@@ -1,4 +1,4 @@
-use crate::myaccount::domain::pending_account;
+use crate::accounts::domain::pending_account;
 use bloom_error::BloomError;
 use chrono::Utc;
 use crypto42::kdf::argon2id;

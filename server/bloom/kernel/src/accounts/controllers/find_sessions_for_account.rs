@@ -1,4 +1,4 @@
-use crate::{db::DbActor, error::KernelError, myaccount::domain};
+use crate::{db::DbActor, error::KernelError, accounts::domain};
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 

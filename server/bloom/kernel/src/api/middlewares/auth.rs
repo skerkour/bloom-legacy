@@ -3,7 +3,7 @@
 //     middleware::{Middleware, Started},
 //     http::header,
 // };
-use crate::{api, db::DbActor, accounts::domain};
+use crate::{accounts::domain, api, db::DbActor};
 use actix::{Handler, Message};
 use actix_service::{Service as ActixService, Transform};
 use actix_web::{
@@ -287,7 +287,7 @@ impl Handler<CheckAuth> for DbActor {
     type Result = Result<Auth, BloomError>;
 
     fn handle(&mut self, msg: CheckAuth, _: &mut Self::Context) -> Self::Result {
-        use crate::db::schema::{kernel_accounts, kernel_sessions};
+        use crate::db::schema::{accounts, sessions};
         use diesel::prelude::*;
 
         let conn = self.pool.get()?;
@@ -296,9 +296,9 @@ impl Handler<CheckAuth> for DbActor {
             CheckAuth::Account(msg) => {
                 // find session + account
                 let (session, account): (domain::Session, domain::Account) =
-                    kernel_sessions::dsl::kernel_sessions
-                        .filter(kernel_sessions::dsl::id.eq(msg.session_id))
-                        .inner_join(kernel_accounts::table)
+                    sessions::dsl::sessions
+                        .filter(sessions::dsl::id.eq(msg.session_id))
+                        .inner_join(accounts::table)
                         .first(&conn)
                         .map_err(|_| BloomError::Forbidden("Session is not valid".to_string()))?;
 

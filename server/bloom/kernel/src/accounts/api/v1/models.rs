@@ -1,4 +1,4 @@
-use crate::myaccount::domain::{account, session};
+use crate::accounts::domain::{account, session};
 use serde::{Deserialize, Serialize};
 
 #[derive(Clone, Debug, Deserialize, Serialize)]

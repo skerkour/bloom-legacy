@@ -1,4 +1,4 @@
-use crate::{config::Config, error::KernelError, myaccount, myaccount::domain::account};
+use crate::{config::Config, error::KernelError, accounts, accounts::domain::account};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -56,8 +56,8 @@ impl eventsourcing::Command for UpdatePassword {
     ) -> Result<Self::Event, Self::Error> {
         let hashed_password = argon2id::hash_password(
             self.new_password.as_bytes(),
-            myaccount::PASSWORD_ARGON2_OPSLIMIT,
-            myaccount::PASSWORD_ARGON2_MEMLIMIT,
+            accounts::PASSWORD_ARGON2_OPSLIMIT,
+            accounts::PASSWORD_ARGON2_MEMLIMIT,
         )?.to_string();
 
         return Ok(PasswordUpdated {

@@ -1,4 +1,4 @@
-use crate::myaccount::domain::session;
+use crate::accounts::domain::session;
 use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},

@@ -1,7 +1,7 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    myaccount::domain::{account, pending_email, Account, PendingEmail},
+    accounts::domain::{account, pending_email, Account, PendingEmail},
 };
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};

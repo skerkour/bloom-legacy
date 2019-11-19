@@ -2,9 +2,9 @@ use crate::{
     api,
     api::middlewares::{GetRequestAuth, GetRequestId, GetRequestLogger},
     error::KernelError,
-    // myaccount::api::v1::models,
+    // accounts::api::v1::models,
     log::macros::*,
-    myaccount::controllers,
+    accounts::controllers,
 };
 use actix_web::{web, Error, HttpRequest, HttpResponse, ResponseError};
 use futures::{future::ok, future::Either, future::Future};

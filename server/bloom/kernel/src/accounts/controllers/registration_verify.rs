@@ -1,6 +1,6 @@
 use crate::{
-    db::DbActor,
     accounts::domain::{pending_account, PendingAccount},
+    db::DbActor,
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;
@@ -31,11 +31,10 @@ impl Handler<RegistrationVerify> for DbActor {
                 code: msg.message.code.clone(),
             };
 
-            let pending_account_to_verify: PendingAccount =
-                pending_accounts::dsl::pending_accounts
-                    .filter(pending_accounts::dsl::id.eq(msg.message.id))
-                    .for_update()
-                    .first(&conn)?;
+            let pending_account_to_verify: PendingAccount = pending_accounts::dsl::pending_accounts
+                .filter(pending_accounts::dsl::id.eq(msg.message.id))
+                .for_update()
+                .first(&conn)?;
 
             let (pending_account_to_verify, _) =
                 eventsourcing::execute(&conn, pending_account_to_verify, &verify_cmd)?;

@@ -16,7 +16,7 @@ pub fn send_password_reset(
     token: &str,
 ) -> Result<(), BloomError> {
     let password_reset_url = format!(
-        "{}/myaccount/recovery?id={}&token={}",
+        "{}/accounts/recovery?id={}&token={}",
         config.host, password_reset_id, token
     );
     let handlebars = Handlebars::new();

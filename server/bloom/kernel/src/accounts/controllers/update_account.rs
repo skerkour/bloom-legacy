@@ -1,5 +1,5 @@
 use crate::error::KernelError;
-use crate::{db::DbActor, myaccount::domain::account};
+use crate::{db::DbActor, accounts::domain::account};
 use actix::{Handler, Message};
 use serde::{Deserialize, Serialize};
 

@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::account};
+use crate::{error::KernelError, accounts, accounts::domain::account};
 use eventsourcing::{Event, EventTs};
 use image::{FilterType, ImageFormat};
 use rusoto_s3::{PutObjectRequest, S3};
@@ -22,7 +22,7 @@ impl eventsourcing::Command for UpdateAvatar {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        if self.avatar.len() > myaccount::AVATAR_MAX_SIZE {
+        if self.avatar.len() > accounts::AVATAR_MAX_SIZE {
             return Err(KernelError::Validation(
                 "Image size must be inferior or equal to 3MB.".to_string(),
             ));
@@ -46,8 +46,8 @@ impl eventsourcing::Command for UpdateAvatar {
         // resize image
         let img = image::load_from_memory(&self.avatar)?;
         let scaled = img.resize(
-            myaccount::AVATAR_RESIZE as u32,
-            myaccount::AVATAR_RESIZE as u32,
+            accounts::AVATAR_RESIZE as u32,
+            accounts::AVATAR_RESIZE as u32,
             FilterType::Lanczos3,
         );
         let mut result = Vec::new();

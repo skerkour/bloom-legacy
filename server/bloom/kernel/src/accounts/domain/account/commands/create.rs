@@ -56,11 +56,10 @@ impl eventsourcing::Command for Create {
         }
 
         // verify that username was not used by a deleted account
-        let existing_deleted_username: i64 =
-            deleted_usernames::dsl::deleted_usernames
-                .filter(deleted_usernames::dsl::username.eq(&self.username))
-                .count()
-                .get_result(ctx)?;
+        let existing_deleted_username: i64 = deleted_usernames::dsl::deleted_usernames
+            .filter(deleted_usernames::dsl::username.eq(&self.username))
+            .count()
+            .get_result(ctx)?;
         if existing_deleted_username != 0 {
             return Err(BloomError::Validation(format!(
                 "Username: {} is already in use.",

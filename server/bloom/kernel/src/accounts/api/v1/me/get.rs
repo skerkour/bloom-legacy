@@ -1,5 +1,5 @@
 use crate::{
-    api, api::middlewares::GetRequestAuth, error::KernelError, myaccount::api::v1::models,
+    api, api::middlewares::GetRequestAuth, error::KernelError, accounts::api::v1::models,
 };
 use actix_web::{error::ResponseError, HttpRequest, HttpResponse};
 

@@ -1,4 +1,4 @@
-use crate::db::schema::kernel_pending_accounts;
+use crate::db::schema::pending_accounts;
 use diesel::Queryable;
 use eventsourcing::Aggregate;
 use serde::{Deserialize, Serialize};
@@ -14,7 +14,7 @@ use serde::{Deserialize, Serialize};
     Queryable,
     Serialize,
 )]
-#[table_name = "kernel_pending_accounts"]
+#[table_name = "pending_accounts"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct PendingAccount {
     pub id: uuid::Uuid,

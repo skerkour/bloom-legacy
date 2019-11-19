@@ -3,8 +3,8 @@ use crate::{
     api::middlewares::{GetRequestAuth, GetRequestId, GetRequestLogger},
     error::KernelError,
     log::macros::*,
-    myaccount::api::v1::models,
-    myaccount::controllers,
+    accounts::api::v1::models,
+    accounts::controllers,
 };
 use actix_web::{web, Error, HttpRequest, HttpResponse, ResponseError};
 use futures::future::{ok, Either, Future, IntoFuture};

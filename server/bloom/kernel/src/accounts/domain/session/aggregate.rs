@@ -1,4 +1,4 @@
-use crate::db::schema::kernel_sessions;
+use crate::db::schema::sessions;
 use diesel::Queryable;
 // use diesel_as_jsonb::AsJsonb;
 use eventsourcing::Aggregate;
@@ -15,7 +15,7 @@ use serde::{Deserialize, Serialize};
     Queryable,
     Serialize,
 )]
-#[table_name = "kernel_sessions"]
+#[table_name = "sessions"]
 #[changeset_options(treat_none_as_null = "true")]
 pub struct Session {
     pub id: uuid::Uuid,

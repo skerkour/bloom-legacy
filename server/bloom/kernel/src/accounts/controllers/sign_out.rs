@@ -1,6 +1,6 @@
 use crate::{
-    db::DbActor,
     accounts::domain::{session, Account, Session},
+    db::DbActor,
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;

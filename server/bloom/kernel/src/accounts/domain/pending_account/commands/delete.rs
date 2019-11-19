@@ -1,4 +1,4 @@
-use crate::myaccount::domain::pending_account;
+use crate::accounts::domain::pending_account;
 use bloom_error::BloomError;
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},

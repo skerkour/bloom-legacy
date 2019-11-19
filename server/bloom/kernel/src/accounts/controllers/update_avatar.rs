@@ -1,7 +1,7 @@
 use crate::error::KernelError;
 use crate::{
     db::DbActor,
-    myaccount::domain::{account, Account},
+    accounts::domain::{account, Account},
 };
 use actix::{Handler, Message};
 

@@ -1,10 +1,10 @@
 use crate::{
+    accounts::domain::{account, pending_account, session, Account, PendingAccount, Session},
     config::Config,
     db::DbActor,
-    accounts::domain::{account, pending_account, session, Account, PendingAccount, Session},
 };
 use actix::{Handler, Message};
-use bloom_const::accounts;
+use bloom_const::accounts as accounts_const;
 use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use serde::{Deserialize, Serialize};
@@ -32,11 +32,10 @@ impl Handler<CompleteRegistration> for DbActor {
         let conn = self.pool.get()?;
 
         return Ok(conn.transaction::<_, BloomError, _>(|| {
-            let pending_account_to_update: PendingAccount =
-                pending_accounts::dsl::pending_accounts
-                    .filter(pending_accounts::dsl::id.eq(msg.message.id))
-                    .for_update()
-                    .first(&conn)?;
+            let pending_account_to_update: PendingAccount = pending_accounts::dsl::pending_accounts
+                .filter(pending_accounts::dsl::id.eq(msg.message.id))
+                .for_update()
+                .first(&conn)?;
 
             // complete registration
             let complete_registration_cmd = pending_account::Delete {};
@@ -52,8 +51,8 @@ impl Handler<CompleteRegistration> for DbActor {
 
             let auth_key_hash = argon2id::hash_password(
                 msg.message.auth_key.as_bytes(),
-                accounts::PASSWORD_ARGON2_OPSLIMIT,
-                accounts::PASSWORD_ARGON2_MEMLIMIT,
+                accounts_const::PASSWORD_ARGON2_OPSLIMIT,
+                accounts_const::PASSWORD_ARGON2_MEMLIMIT,
             )?
             .to_string();
 

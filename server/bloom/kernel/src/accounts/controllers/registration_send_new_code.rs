@@ -1,8 +1,8 @@
 use crate::{
-    config::Config,
-    db::DbActor,
     accounts::domain::{pending_account, PendingAccount},
     accounts::notifications::emails::send_account_verification_code,
+    config::Config,
+    db::DbActor,
 };
 use actix::{Handler, Message};
 use bloom_error::BloomError;
@@ -30,11 +30,10 @@ impl Handler<RegistrationSendNewCode> for DbActor {
         return Ok(conn.transaction::<_, BloomError, _>(|| {
             let resend_code_cmd = pending_account::SendNewCode {};
 
-            let pending_account: PendingAccount =
-                pending_accounts::dsl::pending_accounts
-                    .filter(pending_accounts::dsl::id.eq(msg.message.id))
-                    .for_update()
-                    .first(&conn)?;
+            let pending_account: PendingAccount = pending_accounts::dsl::pending_accounts
+                .filter(pending_accounts::dsl::id.eq(msg.message.id))
+                .for_update()
+                .first(&conn)?;
 
             let (pending_account, event) =
                 eventsourcing::execute(&conn, pending_account, &resend_code_cmd)?;

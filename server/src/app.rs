@@ -1,9 +1,9 @@
 use bloom_kernel::{
+    accounts::controllers,
+    // log::macros::slog_error,
     api,
     api::middlewares::{Auth, GetRequestAuth},
     config::Config,
-    myaccount::controllers,
-    // log::macros::slog_error,
 };
 
 use actix_web::{web, Error, HttpRequest, HttpResponse, Result as ActixResult};

@@ -1,5 +1,5 @@
-use crate::{myaccount::domain::pending_account, utils};
-use bloom_const::myaccount;
+use crate::{accounts::domain::pending_account, utils};
+use bloom_const::accounts;
 use bloom_error::BloomError;
 use chrono::Duration;
 use crypto42::kdf::argon2id;
@@ -41,8 +41,8 @@ impl eventsourcing::Command for SendNewCode {
         let code = utils::random_digit_string(8);
         let verification_code_hash = argon2id::hash_password(
             code.as_bytes(),
-            myaccount::PENDING_USER_CODE_ARGON2_OPSLIMIT,
-            myaccount::PENDING_USER_CODE_ARGON2_MEMLIMIT,
+            accounts::PENDING_USER_CODE_ARGON2_OPSLIMIT,
+            accounts::PENDING_USER_CODE_ARGON2_MEMLIMIT,
         )?
         .to_string();
 

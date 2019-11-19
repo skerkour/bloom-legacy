@@ -3,9 +3,9 @@ use crate::{
     api::middlewares::{GetRequestAuth, GetRequestId, GetRequestLogger},
     error::KernelError,
     log::macros::*,
-    myaccount,
-    myaccount::api::v1::models,
-    myaccount::controllers,
+    accounts,
+    accounts::api::v1::models,
+    accounts::controllers,
 };
 use actix_multipart::{Field, Multipart, MultipartError};
 use actix_web::{error, web, Error, HttpRequest, HttpResponse, ResponseError};
@@ -73,7 +73,7 @@ fn read_file(field: Field) -> Box<dyn Future<Item = Vec<u8>, Error = Error>> {
                 Vec::new(),
                 |mut acc, bytes| -> future::FutureResult<_, MultipartError> {
                     acc.extend_from_slice(&bytes);
-                    if acc.len() > myaccount::AVATAR_MAX_SIZE {
+                    if acc.len() > accounts::AVATAR_MAX_SIZE {
                         return future::err(MultipartError::Payload(error::PayloadError::Overflow));
                     }
                     future::ok(acc)

@@ -1,7 +1,7 @@
 use crate::{
-    config::Config, db::DbActor, error::KernelError, myaccount::domain,
-    myaccount::domain::pending_email,
-    myaccount::notifications::emails::send_email_verification_code,
+    config::Config, db::DbActor, error::KernelError, accounts::domain,
+    accounts::domain::pending_email,
+    accounts::notifications::emails::send_email_verification_code,
 };
 use actix::{Handler, Message};
 

@@ -1,5 +1,5 @@
-use crate::{config::Config, myaccount::domain::pending_account, utils};
-use bloom_const::myaccount;
+use crate::{accounts::domain::pending_account, config::Config, utils};
+use bloom_const::accounts;
 use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use diesel::{
@@ -27,17 +27,17 @@ impl eventsourcing::Command for Create {
         ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<(), Self::Error> {
-        use crate::db::schema::kernel_accounts::dsl::*;
+        use crate::db::schema::accounts::dsl::*;
         use diesel::prelude::*;
 
-        bloom_validators::myaccount::display_name(&self.display_name)?;
-        bloom_validators::myaccount::email(
+        bloom_validators::accounts::display_name(&self.display_name)?;
+        bloom_validators::accounts::email(
             self.config.disposable_email_domains.clone(),
             &self.email,
         )?;
 
         // verify that an email isn't already in use
-        let existing_email: i64 = kernel_accounts
+        let existing_email: i64 = accounts
             .filter(email.eq(&self.email))
             .count()
             .get_result(ctx)?;
@@ -60,14 +60,14 @@ impl eventsourcing::Command for Create {
         let verification_code = utils::random_digit_string(8);
         // let auth_key_hash = argon2id::hash_password(
         //     self.auth_key.as_bytes(),
-        //     myaccount::PASSWORD_ARGON2_OPSLIMIT,
-        //     myaccount::PASSWORD_ARGON2_MEMLIMIT,
+        //     accounts::PASSWORD_ARGON2_OPSLIMIT,
+        //     accounts::PASSWORD_ARGON2_MEMLIMIT,
         // )?
         // .to_string();
         let verification_code_hash = argon2id::hash_password(
             verification_code.as_bytes(),
-            myaccount::PENDING_USER_CODE_ARGON2_OPSLIMIT,
-            myaccount::PENDING_USER_CODE_ARGON2_MEMLIMIT,
+            accounts::PENDING_USER_CODE_ARGON2_OPSLIMIT,
+            accounts::PENDING_USER_CODE_ARGON2_MEMLIMIT,
         )?
         .to_string();
 

@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount, myaccount::domain::account, utils};
+use crate::{error::KernelError, accounts, accounts::domain::account, utils};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
@@ -29,11 +29,11 @@ impl eventsourcing::Command for RequestPasswordReset {
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
         let password_reset_id = uuid::Uuid::new_v4();
-        let token = utils::random_base64_string(myaccount::PASSWORD_RESET_TOKEN_BYTES as usize);
+        let token = utils::random_base64_string(accounts::PASSWORD_RESET_TOKEN_BYTES as usize);
         let hashed_token = argon2id::hash_password(
             token.as_bytes(),
-            myaccount::PASSWORD_RESET_TOKEN_ARGON2_OPSLIMIT,
-            myaccount::PASSWORD_RESET_TOKEN_ARGON2_MEMLIMIT,
+            accounts::PASSWORD_RESET_TOKEN_ARGON2_OPSLIMIT,
+            accounts::PASSWORD_RESET_TOKEN_ARGON2_MEMLIMIT,
         )?.to_string();
 
         return Ok(PasswordResetRequested {

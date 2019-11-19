@@ -1,5 +1,5 @@
-use crate::{myaccount::domain::session, utils};
-use bloom_const::myaccount;
+use crate::{accounts::domain::session, utils};
+use bloom_const::accounts;
 use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use diesel::{
@@ -35,11 +35,11 @@ impl eventsourcing::Command for Start {
         _ctx: &Self::Context,
         _aggregate: &Self::Aggregate,
     ) -> Result<Self::Event, Self::Error> {
-        let token = utils::random_base64_string(myaccount::SESSION_TOKEN_BYTES as usize);
+        let token = utils::random_base64_string(accounts::SESSION_TOKEN_BYTES as usize);
         let hashed_token = argon2id::hash_password(
             token.as_bytes(),
-            myaccount::SESSION_TOKEN_ARGON2_OPSLIMIT,
-            myaccount::SESSION_TOKEN_ARGON2_MEMLIMIT,
+            accounts::SESSION_TOKEN_ARGON2_OPSLIMIT,
+            accounts::SESSION_TOKEN_ARGON2_MEMLIMIT,
         )?
         .to_string();
 

@@ -1,8 +1,8 @@
 use crate::{
     config,
     error::KernelError,
-    myaccount,
-    myaccount::domain::{account, pending_email},
+    accounts,
+    accounts::domain::{account, pending_email},
     utils,
 };
 use diesel::{
@@ -59,8 +59,8 @@ impl eventsourcing::Command for Create {
 
         let token = argon2id::hash_password(
             code.as_bytes(),
-            myaccount::PENDING_EMAIL_CODE_ARGON2_OPSLIMIT,
-            myaccount::PENDING_EMAIL_CODE_ARGON2_MEMLIMIT,
+            accounts::PENDING_EMAIL_CODE_ARGON2_OPSLIMIT,
+            accounts::PENDING_EMAIL_CODE_ARGON2_MEMLIMIT,
         )?.to_string();
 
         return Ok(Created {

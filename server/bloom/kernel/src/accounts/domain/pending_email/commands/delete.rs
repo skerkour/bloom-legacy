@@ -1,4 +1,4 @@
-use crate::{error::KernelError, myaccount::domain::pending_email};
+use crate::{error::KernelError, accounts::domain::pending_email};
 use diesel::{
     r2d2::{ConnectionManager, PooledConnection},
     PgConnection,
