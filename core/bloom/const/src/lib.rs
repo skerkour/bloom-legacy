@@ -1,6 +1,6 @@
+pub mod accounts;
 pub mod auth;
 pub mod db;
-pub mod accounts;
 
 pub static ADDRESS_HELLO: &str = "hello@bloom.sh";
 pub static ADDRESS_WELCOME: &str = "welcome@bloom.sh";
