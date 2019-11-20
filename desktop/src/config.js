@@ -2,7 +2,7 @@ const path = require('path');
 
 const WEBSITE_DOMAIN = 'bloom.sh';
 
-module.exports = {
+export default {
   TRAY_ICON: path.join(__static, 'assets', 'icons', 'tray.png'),
   WINDOW_TITLE: 'Bloom',
   WINDOW_ICON: path.join(__static, 'bloom_1024.png'),
