@@ -6,7 +6,7 @@
 ```md
 <!--
 Please make sure you've read and understood our contributing guidelines:
-https://theguide.bloom.sh/organization/contributing.html
+https://bloom.sh/the-guide/organization/contributing.html
 
 If this is a bug fix, make sure your description includes "fix #xxxx", or
 "close #xxxx"

@@ -6,7 +6,7 @@ It contains details about the vision, the mission, documentation, architecture, 
 This is the ultimate answer to the question of Life, the Universe, and Everything
 
 
-Why? How? What? 👉 Read it online: https://theguide.bloom.sh
+Why? How? What? 👉 Read it online: https://bloom.sh/the-guide
 
 
 ## Install

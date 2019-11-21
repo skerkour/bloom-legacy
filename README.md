@@ -8,7 +8,7 @@
 
 --------
 
-Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
+Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
 
 1. [Download](#download)
 2. [Documentation](#documentation)
@@ -27,18 +27,18 @@ Why? How? What? 👉 Read The Guide: https://theguide.bloom.sh
 
 ## Documentation
 
-See [https://theguide.bloom.sh/projects/bloom](https://theguide.bloom.sh/projects/bloom).
+See [https://bloom.sh/the-guide/projects/bloom](https://bloom.sh/the-guide/projects/bloom).
 
 
 ## Development
 
-See [https://theguide.bloom.sh/projects/bloom/development.html](https://theguide.bloom.sh/projects/bloom/development.html).
+See [https://bloom.sh/the-guide/projects/bloom/development.html](https://bloom.sh/the-guide/projects/bloom/development.html).
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://theguide.bloom.sh/organization/contributing.html](https://theguide.bloom.sh/organization/contributing.html) for guidance.
+[https://bloom.sh/the-guide/organization/contributing.html](https://bloom.sh/the-guide/organization/contributing.html) for guidance.
 
 
 ## Licensing

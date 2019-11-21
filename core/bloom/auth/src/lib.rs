@@ -7,7 +7,7 @@ use bloom_messages::{auth, Message};
 use crypto42::kdf::{argon2id, blake2b};
 use std::cmp::Ordering;
 
-/// See https://theguide.bloom.sh/projects/bloom/security/authentication.html#registration for the spec
+/// See https://bloom.sh/the-guide/projects/bloom/security/authentication.html#registration for the spec
 pub fn registration_start(input: auth::RegistrationStart) -> Result<Message, BloomError> {
     let message: Message = input.into();
 
