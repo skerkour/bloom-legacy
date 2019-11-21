@@ -64,15 +64,23 @@
     <link rel="shortcut icon" type="image/png" href="/kernel/static/imgs/logos/bloom_128.png">
     <title>Bloom - Open technologies</title>
      <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet"> -->
-     <link rel='stylesheet' href='/css/bootstrap.min.css'>
+     <link rel='stylesheet' href='/css/bootstrap.min.css' integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T">
   </head>
   <body>
 
-    <div style="margin: auto; width: 50%; text-align: center; padding: 10px;">
-      <img alt="coming soon" src="/undraw_To_the_stars_qhyy.svg" style="max-width:100%; height:auto; "/>
-      <div style="height: 40px;"></div>
-      <h1>Imminent landing - <span id="countdown"></span></h1>
-      <!-- <h1 id="countdown"></h1> -->
+    <div class="container" style="text-align: center;">
+      <div class="row justify-content-center">
+        <div class="col-10 col-sm-8" style="margin-top: 40px;">
+          <img alt="coming soon" src="/undraw_To_the_stars_qhyy.svg" style="max-width:100%; height:auto; "/>
+          <h1 style="margin-top: 40px;">Imminent landing - <span id="countdown"></span></h1>
+        </div>
+
+        <div class="col-10 col-sm-8" style="margin-top: 40px;">
+          <div class="alert alert-warning" role="alert">
+            Looking for the web application? Head to <a href="https://legacy.bloom.sh">https://legacy.bloom.sh</a>
+          </div>
+        </div>
+      </div>
     </div>
     <script>
         // Set the date we're counting down to
@@ -106,4 +114,7 @@
         setInterval(countdown, 1000);
         </script>
   </body>
+  <script src="/js/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"></script>
+  <script src="/js/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1"></script>
+  <script src="/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM"></script>
 </html>
