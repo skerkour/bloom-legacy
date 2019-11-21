@@ -2,7 +2,7 @@
 
 
 [build]
-  publish = "public/"
+  publish = "dist/"
 
 
 # rewrite to for vuejs
@@ -11,12 +11,6 @@
   to = "/index.html"
   status = 200
 
-
-[[redirects]]
-  from = "https://peaceful-nightingale-b3e4cb.netlify.com/*"
-  to = "https://www.bloom.sh/:splat"
-  status = 301
-  force = true
 
 [[redirects]]
   from = "https://bloom.sh/*"

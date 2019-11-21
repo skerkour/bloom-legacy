@@ -282,6 +282,30 @@ pages: # release:website
     paths:
       - public/
 
+release:website:netlify:
+  image: node:$NODE_VERSION
+  stage: release
+  dependencies:
+    - build:website
+  tags:
+    - docker
+  script:
+    - npm install netlify-cli -g
+    - netlify --telemetry-disable
+    - cd website
+    - netlify deploy --site $NETLIFY_WEBSITE_ID --auth $NETLIFY_TOKEN --prod
+
+release:website_tmp:
+  image: node:$NODE_VERSION
+  stage: release
+  tags:
+    - docker
+  script:
+    - npm install netlify-cli -g
+    - netlify --telemetry-disable
+    - cd website_tmp
+    - netlify deploy --site $NETLIFY_WEBSITE_TMP_ID --auth $NETLIFY_TOKEN --prod
+
 release:status_page:
   image: docker:stable
   stage: release
@@ -335,18 +359,6 @@ release:server:stable:
     - make docker_build
     - make docker_login
     - make docker_release
-
-
-release:website_tmp:
-  image: node:$NODE_VERSION
-  stage: release
-  tags:
-    - docker
-  script:
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website_tmp
-    - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_TOKEN --prod
 
 # release the_guide
 # pages:
