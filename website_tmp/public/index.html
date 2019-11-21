@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta name="author" content="Sylvain Kerkour" />
+
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Organization",
+        "name": "Bloom",
+        "alternateName": "Bloom - Open technologies",
+        "url": "https://bloom.sh",
+        "logo": "https://bloom.sh/imgs/logos/bloom_256.png"
+      }
+    </script>
+    <script type="application/ld+json">
+      {
+        "@context": "http://schema.org",
+        "@type": "Website",
+        "name": "Bloom",
+        "alternateName": "Bloom - Open technologies",
+        "url": "https://bloom.sh",
+        "logo": "https://bloom.sh/imgs/logos/bloom_256.png"
+      }
+    </script>
+
+    <meta charset="utf-8">
+
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, height=device-height, initial-scale=1.0, maximum-scale=1.0" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+
+    <meta name="apple-mobile-web-app-status-bar-style" content="#5FCDFF" />
+    <meta name="theme-color" content="#5FCDFF" />
+    <meta name="msapplication-TileColor" content="#5FCDFF" />
+
+    <!-- <meta name="description" content="Open internet services. Build, collaborate, innovate and play with Bloom." /> -->
+    <meta name="title" content="Bloom - Open technologies">
+    <meta name="description" content="Bloom is on a mission to empower the world with open technologies." />
+    <meta name="keywords" content="awesome,cloud,internet,services,security,cybersecurity,infosec,platform,scale,bloom,phaser,open,opensource,open source" />
+
+    <meta name="og:title" property="og:title" content="Bloom - Open technologies" />
+    <!-- <meta name="og:site_name" property="og:site_name" content="Bloom" /> -->
+    <!-- <meta property="og:description" content="Open internet services. Build, collaborate, innovate and play with Bloom." /> -->
+    <meta name="og:description" property="og:description" content="Bloom is on a mission to empower the world with open technologies." />
+    <meta name="og:type" property="og:type" content="website" />
+    <meta name="og:url" property="og:url" content="https://bloom.sh" />
+    <meta name="og:image" property="og:image" content="https://bloom.sh/kernel/static/imgs/og_image.png">
+
+    <!-- <meta name="twitter:card" property="twitter:card" content="summary_large_image"> -->
+    <meta name="twitter:url" property="twitter:url" content="https://bloom.sh/">
+    <meta name="twitter:title" property="twitter:title" content="Bloom - Open technologies">
+    <meta name="twitter:description" property="twitter:description" content="Bloom is on a mission to empower the world with open technologies.">
+    <meta name="twitter:image" property="twitter:image" content="https://bloom.sh/kernel/static/imgs/og_image.png">
+
+    <link rel="apple-touch-icon" href="/kernel/static/imgs/logos/bloom_128.png" sizes="128x128" type="image/png"/>
+    <link rel="android-touch-icon" href="/kernel/static/imgs/logos/bloom_128.png" />
+    <link rel="shortcut icon" href="/kernel/static/imgs/logos/bloom_128.png" type="image/png"/>
+
+
+    <link rel="manifest" href="/manifest.json"/>
+
+    <link rel="shortcut icon" type="image/png" href="/kernel/static/imgs/logos/bloom_128.png">
+    <title>Bloom - Open technologies</title>
+     <!-- <link href='https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons' rel="stylesheet"> -->
+     <link rel='stylesheet' href='/css/bootstrap.min.css'>
+  </head>
+  <body>
+
+    <div style="margin: auto; width: 50%; text-align: center; padding: 10px;">
+      <img alt="coming soon" src="/undraw_To_the_stars_qhyy.svg" style="max-width:100%; height:auto; "/>
+      <div style="height: 40px;"></div>
+      <h1>Imminent landing - <span id="countdown"></span></h1>
+      <!-- <h1 id="countdown"></h1> -->
+    </div>
+    <script>
+        // Set the date we're counting down to
+        var pad = function(n, width, z) {
+          z = z || '0';
+          n = n + '';
+          return n.length >= width ? n : new Array(width - n.length + 1).join(z) + n;
+        }
+        var countDownDate = new Date("2020-01-01T14:00:00+01:00").getTime();
+
+        // Update the count down every 1 second
+        var countdown = function() {
+
+          // Get today's date and time
+          var now = new Date().getTime();
+
+          // Find the distance between now and the count down date
+          var distance = countDownDate - now;
+
+          // Time calculations for days, hours, minutes and seconds
+          var days = Math.floor(distance / (1000 * 60 * 60 * 24));
+          var hours = Math.floor( (distance/(1000*60*60)) % 24);
+          var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+          var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+          // Display the result in the element with id="demo"
+          document.getElementById("countdown").innerHTML = pad(days, 2)+"d " + pad(hours, 2) + ":"
+          + pad(minutes, 2) + ":" + pad(seconds, 2);
+        };
+        countdown();
+        setInterval(countdown, 1000);
+        </script>
+  </body>
+</html>

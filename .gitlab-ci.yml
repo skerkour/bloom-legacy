@@ -337,6 +337,17 @@ release:server:stable:
     - make docker_release
 
 
+release:website_tmp:
+  image: node:$NODE_VERSION
+  stage: release
+  tags:
+    - docker
+  script:
+    - npm install netlify-cli -g
+    - netlify --telemetry-disable
+    - cd website_tmp
+    - netlify deploy --site $NETLIFY_SITE_ID --auth $NETLIFY_TOKEN --prod
+
 # release the_guide
 # pages:
 #   stage: release
