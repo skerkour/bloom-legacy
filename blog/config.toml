@@ -1,6 +1,6 @@
 # The URL the site will be built for
 # base_url = "https://blog.bloom.sh"
-base_url = "https://bloom.sh/blog"
+base_url = "/blog"
 # Whether to automatically compile all Sass files in the sass directory
 compile_sass = true
 
@@ -20,5 +20,5 @@ description = "Empowering the world with open technologies"
 
 [extra]
 hyde_links = [
-    {url = "https://bloom.sh", name = "Back to website"},
+    {url = "/", name = "Back to website"},
 ]

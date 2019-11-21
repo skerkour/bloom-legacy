@@ -298,13 +298,13 @@ release:website:netlify:
 release:website_tmp:
   image: node:$NODE_VERSION
   stage: release
-  cache: {}
   tags:
     - docker
   script:
     - npm install netlify-cli -g
     - netlify --telemetry-disable
     - cd website_tmp
+    - cp -r ../website/dist/blog public && cp -r ../website/dist/the-guide public
     - netlify deploy --site $NETLIFY_WEBSITE_TMP_ID --auth $NETLIFY_TOKEN --prod
 
 release:status_page:
