@@ -40,4 +40,42 @@ $danger: #F56C6C;
   font-family: "rounded_elegance";
   src: url("/fonts/rounded_elegance.ttf") format("truetype");
 }
+
+.blm-rounded-elegance {
+  font-family: rounded_elegance;
+  font-size: unset;
+}
+
+
+// not sure why it does not work in block below
+.theme--dark.v-application {
+  background-color: #303030;
+}
+.theme--dark {
+  .v-toolbar, .v-table, .v-footer, .v-tabs__bar, .v-application {
+    background-color: #303030;
+  }
+
+  pre {
+    background-color: #212121;
+  }
+}
+
+// not sure why it does not work in block below
+.theme--light.v-application {
+  background-color: #fefefe;
+}
+.theme--light {
+  .v-toolbar, .v-table, .v-footer, .v-tabs__bar, .v-application {
+    background-color: #fefefe;
+  }
+
+  pre {
+    background-color: #f0f0f0;
+  }
+}
+
+.blm-pointer {
+  cursor: pointer;
+}
 </style>

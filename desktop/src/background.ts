@@ -14,7 +14,7 @@ const config = require('./config');
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null;
-let tray: Tray | null = null;
+// let tray: Tray | null = null;
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -38,20 +38,20 @@ function toggleWindow() {
 
 function createWindow() {
   // create tray icon
-  tray = new Tray(config.TRAY_ICON);
+  // tray = new Tray(config.TRAY_ICON);
   // tray.on('right-click', toggleWindow);
-  tray.on('right-click', (event, bounds) => {
-    const contextMenu = Menu.buildFromTemplate([
-      { label: 'Quit', click: () => { app.quit(); } },
-    ]);
-    tray!.popUpContextMenu(contextMenu);
-    // lastTrayIconBounds = bounds;
-  });
-  tray.setIgnoreDoubleClickEvents(true);
-  tray.on('click', (event) => {
-    toggleWindow();
-  });
-  tray.setToolTip('Bloom');
+  // tray.on('right-click', (event, bounds) => {
+  //   const contextMenu = Menu.buildFromTemplate([
+  //     { label: 'Quit', click: () => { app.quit(); } },
+  //   ]);
+  //   tray!.popUpContextMenu(contextMenu);
+  //   // lastTrayIconBounds = bounds;
+  // });
+  // tray.setIgnoreDoubleClickEvents(true);
+  // tray.on('click', (event) => {
+  //   toggleWindow();
+  // });
+  // tray.setToolTip('Bloom');
 
   // Create the browser window.
   mainWindow = new BrowserWindow({

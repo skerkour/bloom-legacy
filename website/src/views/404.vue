@@ -3,7 +3,7 @@
     <v-row row wrap justify-center>
 
       <v-col cols="12" class="text-center mb-5">
-        <v-img alt="404" src="/imgs/404.svg" id="img-404" contain />
+        <v-img alt="404" src="/imgs/404/404.svg" id="img-404" contain />
       </v-col>
 
       <v-col cols="12" class="text-center">

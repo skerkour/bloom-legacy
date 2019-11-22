@@ -52,13 +52,13 @@ variables:
   ZOLA_VERSION: "v0.9.0"
 
 
-cache:
-  paths:
-    - cargo_home/
-    - core/target/
-    - desktop/node_modules/
-    - website/node_modules/
-    - server/target/
+# cache:
+#   paths:
+#     - cargo_home/
+#     - core/target/
+#     - desktop/node_modules/
+#     - website/node_modules/
+#     - server/target/
 
 ####################################################################################################
 ## Test

@@ -1,7 +1,8 @@
 import Vue from 'vue';
-import App from '@/app.vue';
 import router from '@/views/routes';
 import vuetify from '@/plugins/vuetify';
+import App from '@/app.vue';
+
 
 const { log, Level } = require('@bloom42/astro');
 
