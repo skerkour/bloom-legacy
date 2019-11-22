@@ -140,6 +140,16 @@ test:server:
   services:
     - postgres:11
 
+test:website:
+  stage: test
+  image: node:lts
+  tags:
+    - docker
+  script:
+    - cd website/
+    - make install
+    - make lint
+
 ####################################################################################################
 ## Build
 ####################################################################################################
