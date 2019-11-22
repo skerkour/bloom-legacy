@@ -1,6 +1,6 @@
 # Intro
 
-![Banner](/assets/banner.jpg)
+![Banner](assets/banner.jpg)
 
 
 Whether you are an aspiring employee, a contributor, a journalist, a youtuber, an investor or even

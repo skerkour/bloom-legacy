@@ -62,7 +62,7 @@ Conversely, reducing the need for production = less work = even more unemploymen
 
 
 <div class="center">
-  <img src="/assets/organization/wealth_dsitribution.png" height="500"/>
+  <img src="/blog/bloom-a-free-and-open-source-google/wealth_dsitribution.png" height="500"/>
 
   Global wealth distribution. World economic forum.
 </div>
