@@ -10,7 +10,7 @@
         class="headline"
         to="/"
       >
-        <span>Bloom</span>
+        <span class="blm-toolbar-title-primary"><b>Bloom</b></span>
       </v-toolbar-title>
     </router-link>
 
@@ -48,5 +48,10 @@ export default class AppBar extends Vue {
 a {
   text-decoration: none;
   color: none;
+}
+
+.blm-toolbar-title-primary {
+  font-family: rounded_elegance;
+  font-size: unset;
 }
 </style>

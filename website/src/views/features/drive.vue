@@ -1,16 +1,12 @@
 <template>
-  <div>
-    <h1>Features</h1>
-
-    <router-link to="/features/notes">Notes</router-link>
-  </div>
+  <h1>Drive</h1>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Features extends Vue {
+export default class Drive extends Vue {
   // props
   // data
   // computed

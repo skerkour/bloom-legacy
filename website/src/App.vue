@@ -22,3 +22,22 @@ import Footer from '@/components/footer.vue';
 })
 export default class App extends Vue {}
 </script>
+
+
+<style lang="scss">
+// Global vars
+$grey: #2c3e50;
+$white: #fff;
+$red: #F44336;
+$blue: #2196F3;
+
+$success: #67C23A;
+$info: #409EFF;
+$warning: #E6A23C;
+$danger: #F56C6C;
+
+@font-face {
+  font-family: "rounded_elegance";
+  src: url("/fonts/rounded_elegance.ttf") format("truetype");
+}
+</style>

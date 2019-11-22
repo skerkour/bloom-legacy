@@ -1,7 +1,6 @@
 <template>
   <div>
     <blm-hello-world />
-    <blm-footer />
   </div>
 </template>
 
