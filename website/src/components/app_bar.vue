@@ -10,7 +10,7 @@
         class="headline"
         to="/"
       >
-        <span class="blm-toolbar-title-primary"><b>Bloom</b></span>
+        <span class="blm-toolbar-title-primary blm-rounded-elegance"><b>Bloom</b></span>
       </v-toolbar-title>
     </router-link>
 
@@ -51,7 +51,6 @@ a {
 }
 
 .blm-toolbar-title-primary {
-  font-family: rounded_elegance;
-  font-size: unset;
+  color: black;
 }
 </style>
