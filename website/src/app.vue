@@ -46,6 +46,10 @@ $danger: #F56C6C;
   font-size: unset;
 }
 
+.v-btn {
+  border-radius: 4px;
+  text-transform: none; /* overwrite default 'uppercase' */
+}
 
 // not sure why it does not work in block below
 .theme--dark.v-application {

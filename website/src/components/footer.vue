@@ -6,6 +6,7 @@
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3">Organization</h5>
           <ul>
+            <li><a class="nav-link" href="/the-guide">The Guide</a></li>
             <li><router-link class="nav-link" to="/about">About</router-link></li>
             <li><router-link class="nav-link" to="/contact">Contact</router-link></li>
             <li><router-link class="nav-link" to="/security">Security</router-link></li>
@@ -28,7 +29,6 @@
           <h5 class="title pb-3">Community</h5>
           <ul>
             <li><a class="nav-link" href="/blog">Blog</a></li>
-            <li><a class="nav-link" href="/the-guide">The Guide</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
@@ -89,7 +89,7 @@ ul {
   list-style-type: none;
 }
 
-ol, ul {
+ol, .v-application ul {
   padding-left: 0px;
 }
 </style>
