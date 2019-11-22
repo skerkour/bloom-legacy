@@ -1,5 +1,4 @@
 <template>
-  <div>
   <v-container class="mt-3 text-center">
     <v-row row wrap justify-center>
 
@@ -19,7 +18,6 @@
 
     </v-row>
   </v-container>
-</div>
 </template>
 
 

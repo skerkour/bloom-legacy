@@ -10,7 +10,7 @@ import Security from '@/views/security.vue';
 import Contact from '@/views/contact.vue';
 import P404 from '@/views/404.vue';
 
-import FeaturesRoutes from './features';
+import FeaturesRoutes from './features/routes';
 
 
 Vue.use(Router);
@@ -47,11 +47,12 @@ export default new Router({
       path: '/security',
       component: Security,
     },
+
+    ...FeaturesRoutes,
+
     {
       component: P404,
       path: '**',
     },
-
-    ...FeaturesRoutes,
   ],
 });
