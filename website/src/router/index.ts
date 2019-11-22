@@ -8,6 +8,7 @@ import Terms from '@/views/terms.vue';
 import Privacy from '@/views/privacy.vue';
 import Security from '@/views/security.vue';
 import Contact from '@/views/contact.vue';
+import P404 from '@/views/404.vue';
 
 import FeaturesRoutes from './features';
 
@@ -45,6 +46,10 @@ export default new Router({
     {
       path: '/security',
       component: Security,
+    },
+    {
+      component: P404,
+      path: '**',
     },
 
     ...FeaturesRoutes,
