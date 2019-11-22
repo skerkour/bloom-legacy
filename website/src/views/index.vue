@@ -19,7 +19,17 @@
         </v-col>
 
         <v-col cols="12" sm="6" class="text-center mb-5">
-          <v-img alt="hero" src="/imgs/landing/hero.png" contain />
+          <v-img alt="hero" src="/imgs/landing/hero.png" contain>
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-2" />
+              </v-row>
+            </template>
+          </v-img>
         </v-col>
 
       </v-row>
