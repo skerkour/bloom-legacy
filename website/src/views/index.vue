@@ -33,7 +33,7 @@
 
     </v-row>
 
-    <v-row class="mb-5 blm-features">
+    <v-row class="mb-5 blm-features align-center">
       <v-col cols="12" sm="6" order="last" order-sm="first" class="text-center mb-5 mt-5">
         <v-img alt="hero" src="/static/imgs/landing/secure.svg" contain height="200px">
             <template v-slot:placeholder>
@@ -62,7 +62,7 @@
     </v-row>
 
 
-    <v-row>
+    <v-row class="align-center">
       <v-col cols="12" sm="6">
         <h3 class="display-1 font-weight-regular">
           Bring your team together
