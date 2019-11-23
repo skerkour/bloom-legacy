@@ -3,18 +3,14 @@
     <v-row class="justify-center align-center">
 
       <v-col cols="12" sm="6" class="text-center">
-        <h1 class="display-3 mb-5">Our mission: Empowering people</h1>
+        <h1 class="display-3 mb-5">{{ $t('landing.mission') }}</h1>
 
-        <h4 class="headline mt-5 font-weight-light">Chat, Collaborate, Discover, Innovate.</h4>
-        <h4 class="headline mb-5 font-weight-light">Take back control with
-          <span class="blm-rounded-elegance"><b>Bloom</b></span>
-        </h4>
+        <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4>
+        <h4 class="headline mb-5 font-weight-light" v-html="$t('landing.subtitle2')"></h4>
 
         <blm-download-btn />
 
-        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
-          Other downloads
-        </router-link></p>
+        <blm-other-downloads-link />
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5">
@@ -94,7 +90,7 @@
     <v-row class="justify-center mt-5">
       <v-col cols="12" class="text-center mb-5 mt-5">
         <v-btn to="/features" outlined x-large color="primary">
-          Explore Features
+          {{ $t('landing.explore_features') }}
         </v-btn>
       </v-col>
     </v-row>
@@ -105,11 +101,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import DownloadBtn from '@/components/download_btn.vue';
+import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 
 @Component({
   components: {
     'blm-download-btn': DownloadBtn,
+    'blm-other-downloads-link': OtherDownloadsLink,
   },
 })
 export default class Index extends Vue {
