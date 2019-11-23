@@ -32,7 +32,7 @@ export default class AppBar extends Vue {
         this.icon = 'mdi-linux';
         break;
       case 'macos':
-        this.message = 'Download for MacOS';
+        this.message = 'Download for macOS';
         this.icon = 'mdi-apple';
         break;
       case 'windows':

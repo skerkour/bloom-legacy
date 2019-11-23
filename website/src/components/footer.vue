@@ -36,8 +36,8 @@
           </ul>
         </v-col>
 
-        <v-col cols="12">
-          <p class="text-center">
+        <v-col cols="12" class="blm-footer-year-col">
+          <p class="text-center blm-footer-year">
             <!-- <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span><br/><br/> -->
             <span>&copy; 2018 - {{ new Date().getFullYear() }} Bloom</span>
           </p>
@@ -91,5 +91,12 @@ ul {
 
 ol, .v-application ul {
   padding-left: 0px;
+}
+
+.blm-footer-year {
+  margin-bottom: 0px;
+}
+.blm-footer-year-col {
+  padding-bottom: 0px;
 }
 </style>

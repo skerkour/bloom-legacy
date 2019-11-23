@@ -38,7 +38,7 @@ $danger: #F56C6C;
 
 @font-face {
   font-family: "rounded_elegance";
-  src: url("/fonts/rounded_elegance.ttf") format("truetype");
+  src: url("/static/fonts/rounded_elegance.ttf") format("truetype");
 }
 
 a {

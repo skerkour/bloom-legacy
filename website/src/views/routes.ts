@@ -36,6 +36,10 @@ export default new Router({
       component: Download,
     },
     {
+      path: '/dl',
+      redirect: '/download',
+    },
+    {
       path: '/terms',
       component: Terms,
     },

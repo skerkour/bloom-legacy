@@ -67,7 +67,7 @@
         <v-hover>
           <a slot-scope="{ hover }" href="https://kerkour.fr" target="_blank" rel="noopener">
             <v-avatar size="100px" color="grey lighten-4">
-              <img src="/imgs/about/sylvain.jpg" alt="Sylvain Kerkour"
+              <img src="/static/imgs/about/sylvain.jpg" alt="Sylvain Kerkour"
               :class="`elevation-${hover ? hoverElevation : 0}`">
             </v-avatar>
             <h3 class="mt-3">
@@ -83,7 +83,7 @@
           <a slot-scope="{ hover }" href="https://www.linkedin.com/in/marina-da-silva-b289b4159"
           target="_blank" rel="noopener">
             <v-avatar size="100px" color="grey lighten-4">
-              <img src="/imgs/about/marina.jpg" alt="Marina Da Silva"
+              <img src="/static/imgs/about/marina.jpg" alt="Marina Da Silva"
               :class="`elevation-${hover ? hoverElevation : 0}`">
             </v-avatar>
             <h3 class="mt-3">

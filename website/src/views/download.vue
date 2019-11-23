@@ -1,11 +1,190 @@
 <template>
-  <h1>Download</h1>
+  <v-container class="mt-3 text-center">
+    <v-row class="justify-center">
+
+        <v-col cols="12" sm="10" md="8" class="text-center">
+          <h1 class="display-3 mb-5">
+            Take back control!
+          </h1>
+          <h1 class="headline mb-5 mt-5">
+            Start getting the respect you deserve with our privacy-first products.
+          </h1>
+          <div class="mt-5 mb-5"></div>
+          <blm-download-btn />
+        </v-col>
+    </v-row>
+
+    <v-row class="justify-center blm-all-downloads mb-5">
+      <v-col cols="12" sm="10" md="8" class="text-center">
+        <h2 class="display-1">All Downloads</h2>
+      </v-col>
+    </v-row>
+
+    <v-row class="justify-center mb-5">
+      <v-col cols="12" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5 elevation-0"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5 blm-inline-img"
+            height="50px"
+            src="/static/imgs/download/computer.svg"
+            contain
+          />
+          <v-img
+            class="white--text align-end mb-5 blm-inline-img"
+            height="50px"
+            src="/static/imgs/download/laptop.svg"
+            contain
+          />
+          <v-card-text class="text-center justify-center">
+            <h3 class="mb-3 title">Computers</h3>
+            <p class="body-1">Windows, macOS or Linux. Desktop or laptop.
+              Enjoy Bloom on any computer!</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5"
+            height="100px"
+            src="/static/imgs/download/apple.svg"
+            contain
+          />
+          <v-divider />
+          <v-card-actions class="text-center justify-center">
+            <v-btn text>Download for macOS</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5"
+            height="100px"
+            src="/static/imgs/download/windows.svg"
+            contain
+          />
+          <v-divider />
+          <v-card-actions class="text-center justify-center">
+            <v-btn text>Download for Windows</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5"
+            height="100px"
+            src="/static/imgs/download/linux.svg"
+            contain
+          />
+          <v-divider />
+          <v-card-actions class="text-center justify-center">
+            <v-btn text>Download for Linux</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+
+    </v-row>
+
+    <v-row class="justify-center mt-5 mb-5">
+      <v-divider />
+    </v-row>
+
+
+    <v-row class="justify-start mb-5 mt-5">
+      <v-col cols="12" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5 elevation-0"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5 blm-inline-img"
+            height="50px"
+            src="/static/imgs/download/tablet.svg"
+            contain
+          />
+          <v-img
+            class="white--text align-end mb-5 blm-inline-img"
+            height="50px"
+            src="/static/imgs/download/phone.svg"
+            contain
+          />
+          <v-card-text class="text-center justify-center">
+            <h3 class="mb-3 title">Mobile devices</h3>
+            <p class="body-1">On smartphones or tablets. Take Bloom everywhere with you.</p>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5"
+            height="100px"
+            src="/static/imgs/download/android.svg"
+            contain
+          />
+          <v-divider />
+          <v-card-actions class="text-center justify-center">
+            <v-btn text>Play Store</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" sm="6" md="3" class="text-center">
+        <v-card
+          class="mx-auto pt-5"
+          max-width="400"
+        >
+          <v-img
+            class="white--text align-end mb-5"
+            height="100px"
+            src="/static/imgs/download/apple.svg"
+            contain
+          />
+          <v-divider />
+          <v-card-actions class="text-center justify-center">
+            <v-btn text>App Store</v-btn>
+          </v-card-actions>
+        </v-card>
+      </v-col>
+
+    </v-row>
+
+
+  </v-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import DownloadBtn from '@/components/download_btn.vue';
 
-@Component
+
+@Component({
+  components: {
+    'blm-download-btn': DownloadBtn,
+  },
+})
 export default class Download extends Vue {
   // props
   // data
@@ -15,3 +194,17 @@ export default class Download extends Vue {
   // methods
 }
 </script>
+
+<style scoped land="scss">
+.blm-all-downloads {
+  margin-top: 100px;
+}
+
+.v-card {
+  border-radius: 10px;
+}
+
+.blm-inline-img {
+  display: inline-block;
+}
+</style>

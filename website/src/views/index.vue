@@ -1,7 +1,6 @@
 <template>
-  <div>
     <v-container class="mt-3 text-center">
-      <v-row row wrap justify-center>
+      <v-row class="justify-center">
 
         <v-col cols="12" sm="6" class="text-center">
           <h1 class="display-3 mb-5">Our mission: Empowering people</h1>
@@ -13,13 +12,13 @@
 
           <blm-download-btn />
 
-          <p class="subtitle-1 mt-5"><router-link to="/download" class="text--lighten grey--text">
+          <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
             Other downloads
           </router-link></p>
         </v-col>
 
         <v-col cols="12" sm="6" class="text-center mb-5">
-          <v-img alt="hero" src="/imgs/landing/hero.png" contain>
+          <v-img alt="hero" src="/static/imgs/landing/hero.png" contain>
             <template v-slot:placeholder>
               <v-row
                 class="fill-height ma-0"
@@ -43,18 +42,15 @@
         </v-col>
       </v-row>
     </v-container>
-  </div>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Footer from '@/components/footer.vue';
 import DownloadBtn from '@/components/download_btn.vue';
 
 
 @Component({
   components: {
-    'blm-footer': Footer,
     'blm-download-btn': DownloadBtn,
   },
 })
