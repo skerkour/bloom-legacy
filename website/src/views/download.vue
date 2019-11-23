@@ -1,7 +1,6 @@
 <template>
   <v-container class="mt-3 text-center">
     <v-row class="justify-center">
-
         <v-col cols="12" sm="10" md="8" class="text-center mt-5">
           <h1 class="display-3 mb-5">
             Take back control!

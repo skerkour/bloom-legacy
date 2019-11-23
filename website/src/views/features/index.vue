@@ -65,7 +65,9 @@ export default class Features extends Vue {
     {
       name: 'Chat',
       icon: '/static/imgs/icons/chat.svg',
-      description: 'TODO',
+      description: `Bloom messages and calls are always end-to-end encrypted and
+      engineered to keep your communication safe. We can't read your messages or see your calls,
+      and no one else can either.`,
       learnMore: 'chat',
     },
     {
@@ -84,7 +86,7 @@ export default class Features extends Vue {
     {
       name: 'Calendar',
       icon: '/static/imgs/icons/calendar.svg',
-      description: 'TODO',
+      description: 'Get organized on the go with the Bloom Calendar!',
       learnMore: 'calendar',
     },
     { name: 'dl_btn' },
@@ -111,7 +113,7 @@ export default class Features extends Vue {
     {
       name: 'Books',
       icon: '/static/imgs/icons/books.svg',
-      description: 'TODO',
+      description: 'Bloom Books is the single destination for all the books you love, and the ones you\'re about to. ',
       learnMore: 'books',
     },
     { name: 'dl_btn' },
@@ -127,7 +129,11 @@ export default class Features extends Vue {
       description: 'Keep your contacts organized and up to date.',
       learnMore: 'contacts',
     },
-
+    {
+      name: 'Scan QR Codes',
+      icon: '/static/imgs/features/qrcode.svg',
+      description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
+    },
   ];
 
   // computed
