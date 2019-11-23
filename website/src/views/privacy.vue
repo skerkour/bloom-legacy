@@ -8,9 +8,8 @@
           Privacy Policy
         </h1>
         <h4 class="text-center text--darken-1 mb-3">
-              Last updated: Jan 01, 2020
+         Last updated: Jan 01, 2020
         </h4>
-
       </v-col>
 
 
@@ -46,6 +45,7 @@
               Here's what we do to protect user privacy:
               <ul>
                 <li>Unless required by law, when you delete your account we will permanently delete all the associated data.</li>
+                <li>We do not use and will never use any kind of <i>analytics trackers</i>. We prefer to engage with our comunity to learn directly from them how they use our products.</li>
                 <li>Before or at the time of collecting personal information, we will identify the purposes for which information is being collected.</li>
                 <li>We will collect and use of personal information solely with the objective of fulfilling those purposes specified by us and for other compatible purposes, unless we obtain the consent of the individual concerned or as required by law.</li>
                 <li>We will only retain personal information as long as necessary for the fulfillment of those purposes.</li>
@@ -76,8 +76,6 @@
             Place of processing: United States – <a href="https://stripe.com/terms/US" target="_blank" rel="noopener">Privacy Policy</a>.
             Privacy Shield participant. <br/>
             </p>
-
-
 
 
             <p class="mt-5 mb-3"><i>
