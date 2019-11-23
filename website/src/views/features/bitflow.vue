@@ -2,6 +2,7 @@
   <blm-feature-page
     name="Bitflow"
     description="Download torrents to a secured cloud. Fast. Online."
+    hero="/static/imgs/features/bitflow_hero.svg"
     :features="features"
   />
 </template>

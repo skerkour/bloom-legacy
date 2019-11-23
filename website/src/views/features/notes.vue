@@ -2,6 +2,7 @@
   <blm-feature-page
     name="Notes"
     description="Quickly capture what’s on your mind."
+    hero="/static/imgs/features/notes_hero.svg"
     :features="features"
   />
 </template>

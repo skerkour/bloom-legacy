@@ -2,6 +2,7 @@
   <blm-feature-page
     name="Music"
     description="A world of emotion. <br/> Available wherever you are."
+    hero="/static/imgs/features/music_hero.svg"
     :features="features"
   />
 </template>

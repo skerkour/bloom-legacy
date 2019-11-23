@@ -2,6 +2,7 @@
   <blm-feature-page
     name="Drive"
     description="A safe place for all your files"
+    hero="/static/imgs/features/drive_hero.svg"
     :features="features"
   />
 </template>

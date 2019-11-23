@@ -1,7 +1,7 @@
 <template>
   <v-container class="mt-3 text-center">
-    <v-row class="justify-center">
-      <v-col cols="12" sm="10" md="8" class="text-center mt-5">
+    <v-row class="justify-center align-center">
+      <!-- <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">
           {{ name }}
         </h1>
@@ -13,6 +13,31 @@
         <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
           Other downloads
         </router-link></p>
+      </v-col> -->
+      <v-col cols="12" sm="6" class="text-center">
+        <h1 class="display-3 mb-5">{{ name }}</h1>
+
+        <p v-html="description"></p>
+
+        <blm-download-btn />
+
+        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
+          Other downloads
+        </router-link></p>
+      </v-col>
+
+      <v-col cols="12" sm="6" class="text-center mb-5">
+        <v-img alt="hero" :src="hero" contain height="300">
+          <template v-slot:placeholder>
+            <v-row
+              class="fill-height ma-0"
+              align="center"
+              justify="center"
+            >
+              <v-progress-circular indeterminate color="grey lighten-2" />
+            </v-row>
+          </template>
+        </v-img>
       </v-col>
     </v-row>
 
@@ -66,6 +91,8 @@ export default class FeaturePage extends Vue {
   @Prop({ type: String, required: true }) name!: string;
   @Prop({ type: String, required: true }) description!: string;
   @Prop({ type: Array, required: true }) features!: any[];
+  @Prop({ type: String, required: true }) hero!: any[];
+
 
   // data
   // computed

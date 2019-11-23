@@ -1,6 +1,6 @@
 <template>
   <v-container class="mt-3 text-center">
-    <v-row class="justify-center">
+    <v-row class="justify-center align-center">
 
       <v-col cols="12" sm="6" class="text-center">
         <h1 class="display-3 mb-5">Our mission: Empowering people</h1>
@@ -124,6 +124,6 @@ export default class Index extends Vue {
 
 <style scoped lang="scss">
 .blm-features {
-  margin-top: 80px;
+  margin-top: 42px;
 }
 </style>
