@@ -13,7 +13,7 @@ import { detectPlatform } from '@/utils/platform';
 export default class AppBar extends Vue {
   // props
   @Prop({ type: String }) platform?: string;
-  @Prop({ type: Boolean }) outlined?: boolean = false;
+  @Prop({ type: Boolean }) outlined?: boolean;
 
 
   // data

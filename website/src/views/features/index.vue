@@ -63,6 +63,12 @@ export default class Features extends Vue {
   // data
   features = [
     {
+      name: 'Chat',
+      icon: '/static/imgs/icons/chat.svg',
+      description: 'TODO',
+      learnMore: 'chat',
+    },
+    {
       name: 'Drive',
       icon: '/static/imgs/icons/drive.svg',
       description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
@@ -75,6 +81,13 @@ export default class Features extends Vue {
       description: 'Never stop enjoying your music! Directly from your drive.',
       learnMore: 'music',
     },
+    {
+      name: 'Calendar',
+      icon: '/static/imgs/icons/calendar.svg',
+      description: 'TODO',
+      learnMore: 'calendar',
+    },
+    { name: 'dl_btn' },
     {
       name: 'Bitflow',
       icon: '/static/imgs/icons/bitflow.svg',
@@ -89,18 +102,11 @@ export default class Features extends Vue {
         at the right place or time.`,
       learnMore: 'notes',
     },
-    { name: 'dl_btn' },
     {
-      name: 'Calendar',
-      icon: '/static/imgs/icons/calendar.svg',
-      description: 'TODO',
-      learnMore: 'calendar',
-    },
-    {
-      name: 'Chat',
-      icon: '/static/imgs/icons/chat.svg',
-      description: 'TODO',
-      learnMore: 'chat',
+      name: 'Arcade',
+      icon: '/static/imgs/icons/arcade.svg',
+      description: 'Never stop having fun!',
+      learnMore: 'arcade',
     },
     {
       name: 'Books',
@@ -108,25 +114,20 @@ export default class Features extends Vue {
       description: 'TODO',
       learnMore: 'books',
     },
+    { name: 'dl_btn' },
     {
       name: 'Gallery',
       icon: '/static/imgs/icons/gallery.svg',
       description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
       learnMore: 'gallery',
     },
-    { name: 'dl_btn' },
     {
       name: 'Contacts',
       icon: '/static/imgs/icons/contacts.svg',
       description: 'Keep your contacts organized and up to date.',
       learnMore: 'contacts',
     },
-    {
-      name: 'Arcade',
-      icon: '/static/imgs/icons/arcade.svg',
-      description: 'Never stop having fun!',
-      learnMore: 'arcade',
-    },
+
   ];
 
   // computed
