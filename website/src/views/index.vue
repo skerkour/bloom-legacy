@@ -53,9 +53,10 @@
           Fast, Simple, Secure
         </h3>
         <p class="mt-5">
-          Bloom is made for you. As an Open Source project anyone can inspect how it works.
-          There are no ads, no affiliate marketers, no creepy tracking.
-          Just open technology for a fast, simple, and secure experience. <br />
+          As an Open Source project anyone can inspect how Bloom works.
+          We use state of the art cryptography to keep your data secure.
+          There are no ads, no affiliate marketers, no creepy tracking,
+          just open technology. <br />
           The way it should be.
         </p>
       </v-col>
@@ -68,10 +69,10 @@
           Bring your team together
         </h3>
         <p class="mt-5">
-          Bloom is made for you. As an Open Source project anyone can inspect how it works.
-          There are no ads, no affiliate marketers, no creepy tracking.
-          Just open technology for a fast, simple, and secure experience. <br />
-          The way it should be.
+          Whether it's your friends or your colleagues, Bloom is made for collaboration.
+          Organize conversations, share files and ideas, organize your life.
+          Go from chatting to meeting up with Calendar, Notes, Drive and more.<br />
+          Never stop having fun.
         </p>
       </v-col>
 
