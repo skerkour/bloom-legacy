@@ -6,12 +6,12 @@
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3">Organization</h5>
           <ul>
-            <li><a class="nav-link" href="/the-guide">The Guide</a></li>
             <li><router-link class="nav-link" to="/about">About</router-link></li>
             <li><router-link class="nav-link" to="/contact">Contact</router-link></li>
             <li><router-link class="nav-link" to="/security">Security</router-link></li>
             <li><router-link class="nav-link" to="/terms">Terms</router-link></li>
             <li><router-link class="nav-link" to="/privacy">Privacy</router-link></li>
+            <li><a class="nav-link" href="/the-guide">The Guide</a></li>
           </ul>
         </v-col>
 

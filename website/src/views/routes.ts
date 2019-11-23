@@ -2,16 +2,16 @@ import Vue from 'vue';
 import Router from 'vue-router';
 
 import Index from '@/views/index.vue';
-import About from '@/views/about.vue';
 import Download from '@/views/download.vue';
-import Terms from '@/views/terms.vue';
-import Privacy from '@/views/privacy.vue';
-import Security from '@/views/security.vue';
 import Contact from '@/views/contact.vue';
 import P404 from '@/views/404.vue';
 
 import FeaturesRoutes from './features/routes';
 
+const Security = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/security.vue');
+const Privacy = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/privacy.vue');
+const Terms = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/terms.vue');
+const About = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/about.vue');
 
 Vue.use(Router);
 

@@ -1,4 +1,5 @@
-const Index = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/index.vue');
+import Index from './index.vue';
+
 const Notes = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/notes.vue');
 
 export default [

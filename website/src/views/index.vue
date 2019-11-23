@@ -33,6 +33,15 @@
         </v-col>
 
       </v-row>
+
+      <v-row class="justify-center">
+
+        <v-col cols="12" class="text-center mb-5 mt-5">
+          <v-btn to="/features" outlined x-large color="primary">
+            Explore Features
+          </v-btn>
+        </v-col>
+      </v-row>
     </v-container>
   </div>
 </template>
