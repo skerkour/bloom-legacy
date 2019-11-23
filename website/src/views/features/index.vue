@@ -27,7 +27,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
-        :order="index % 2 === 0 ? 'last' : 'first'" :order-sm="index % 2 === 0 ? 'first' : 'last'">
+        order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
         <v-avatar size="128px" v-if="feature.icon">
           <v-img :src="feature.icon" contain />
         </v-avatar>
