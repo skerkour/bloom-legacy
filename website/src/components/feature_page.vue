@@ -6,9 +6,7 @@
           {{ name }}
         </h1>
 
-        <p>
-          {{ description }}
-        </p>
+        <p v-html="description"></p>
 
         <blm-download-btn />
 
@@ -38,6 +36,15 @@
           {{ feature.name }}
         </h3>
         <p class="mt-5" v-html="feature.description"></p>
+      </v-col>
+    </v-row>
+
+    <v-row class="justify-center mb-5 mt-5 align-center blm-dl">
+      <v-col cols="12">
+        <blm-download-btn outlined />
+        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
+          Other downloads
+        </router-link></p>
       </v-col>
     </v-row>
 
@@ -75,5 +82,9 @@ export default class FeaturePage extends Vue {
 
 .blm-feature {
   margin-top: 42px;
+}
+
+.blm-dl {
+  height: 150px;
 }
 </style>
