@@ -16,6 +16,7 @@
       <v-btn
         text
         to="/features"
+        exact
       >Features</v-btn>
       <v-btn text>Help</v-btn>
     </v-toolbar-items>

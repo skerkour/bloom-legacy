@@ -55,9 +55,8 @@
         <p class="mt-5">
           As an Open Source project anyone can inspect how Bloom works.
           We use state of the art cryptography to keep your data secure.
-          There are no ads, no affiliate marketers, no creepy tracking,
-          just open technology. <br />
-          The way it should be.
+          There are no ads, no affiliate marketers, no creepy tracking. <br />
+          Just open technology for a fast, simple, and secure experience.
         </p>
       </v-col>
     </v-row>

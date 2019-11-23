@@ -25,7 +25,6 @@ export default class AppBar extends Vue {
     if (!this.platform) {
       platform = detectPlatform();
     }
-    console.log(platform);
     switch (platform) {
       case 'linux':
         this.message = 'Download for Linux';
