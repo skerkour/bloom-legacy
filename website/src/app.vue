@@ -41,8 +41,13 @@ $danger: #F56C6C;
   src: url("/fonts/rounded_elegance.ttf") format("truetype");
 }
 
+a {
+  text-decoration: none;
+  color: none;
+}
+
 .blm-rounded-elegance {
-  font-family: rounded_elegance;
+  font-family: rounded_elegance !important;
   font-size: unset;
 }
 

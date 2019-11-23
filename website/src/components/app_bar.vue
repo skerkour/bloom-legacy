@@ -1,16 +1,8 @@
 <template>
-  <v-app-bar
-    app
-    elevation="0"
-    color="transparent"
-    elevate-on-scroll
-  >
-    <router-link to="/">
-      <v-toolbar-title
-        class="headline"
-        to="/"
-      >
-        <span class="blm-toolbar-title-primary blm-rounded-elegance"><b>Bloom</b></span>
+  <v-app-bar app elevation="0">
+    <router-link to="/" class="blm-appbar-title">
+      <v-toolbar-title class="headline" to="/">
+        <span class="blm-rounded-elegance"><b>Bloom</b></span>
       </v-toolbar-title>
     </router-link>
 
@@ -44,13 +36,8 @@ export default class AppBar extends Vue {
 }
 </script>
 
-<style>
-a {
-  text-decoration: none;
-  color: none;
-}
-
-.blm-toolbar-title-primary {
-  color: black;
+<style lang="scss" scoped>
+.blm-appbar-title {
+  color: inherit;
 }
 </style>
