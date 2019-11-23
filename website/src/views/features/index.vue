@@ -4,7 +4,7 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">
-          <span class="blm-rounded-elegance">Bloom</span> is on a mission to empower the world
+          <span class="blm-rounded-elegance">Bloom</span> is on a mission to empower people
           with open technologies
         </h1>
 
@@ -19,16 +19,22 @@
     <v-row class="blm-features"></v-row>
 
     <v-row class="justify-center mb-5 mt-5 align-center blm-feature"
-      v-for="(feature, index) in features" :key="feature.name">
-      <v-col cols="12" sm="6" class="pt-2 pb-2" :order="index % 2 === 0 ? 'last' : 'first'"
-        :order-sm="index % 2 === 0 ? 'first' : 'last'">
+      v-for="(feature, index) in features" :key="index">
+      <v-col cols="12" v-if="feature.name === 'dl_btn'">
+        <div style="height: 100px;">
+          <blm-download-btn outlined />
+        </div>
+      </v-col>
+
+      <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
+        :order="index % 2 === 0 ? 'last' : 'first'" :order-sm="index % 2 === 0 ? 'first' : 'last'">
         <v-avatar size="128px" v-if="feature.icon">
           <v-img :src="feature.icon" contain />
         </v-avatar>
         <v-img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
       </v-col>
 
-      <v-col cols="12" sm="6">
+      <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
         <h3 class="display-1 font-weight-regular">
           {{ feature.name }}
         </h3>
@@ -83,6 +89,7 @@ export default class Features extends Vue {
         at the right place or time.`,
       learnMore: 'notes',
     },
+    { name: 'dl_btn' },
     {
       name: 'Calendar',
       icon: '/static/imgs/icons/calendar.svg',
@@ -90,10 +97,10 @@ export default class Features extends Vue {
       learnMore: 'calendar',
     },
     {
-      name: 'Arcade',
-      icon: '/static/imgs/icons/arcade.svg',
-      description: 'Never stop having fun!',
-      learnMore: 'arcade',
+      name: 'Chat',
+      icon: '/static/imgs/icons/chat.svg',
+      description: 'TODO',
+      learnMore: 'chat',
     },
     {
       name: 'Books',
@@ -102,10 +109,23 @@ export default class Features extends Vue {
       learnMore: 'books',
     },
     {
-      name: 'Chat',
-      icon: '/static/imgs/icons/chat.svg',
-      description: 'TODO',
-      learnMore: 'chat',
+      name: 'Gallery',
+      icon: '/static/imgs/icons/gallery.svg',
+      description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
+      learnMore: 'gallery',
+    },
+    { name: 'dl_btn' },
+    {
+      name: 'Contacts',
+      icon: '/static/imgs/icons/contacts.svg',
+      description: 'Keep your contacts organized and up to date.',
+      learnMore: 'contacts',
+    },
+    {
+      name: 'Arcade',
+      icon: '/static/imgs/icons/arcade.svg',
+      description: 'Never stop having fun!',
+      learnMore: 'arcade',
     },
   ];
 

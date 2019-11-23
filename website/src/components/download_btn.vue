@@ -1,5 +1,5 @@
 <template>
-  <v-btn x-large color="primary" class="mt-5">
+  <v-btn x-large color="primary" class="mt-5" :outlined="outlined">
     <v-icon left v-text="icon" v-if="icon !== ''"/>
     {{ message }}
   </v-btn>
@@ -13,6 +13,7 @@ import { detectPlatform } from '@/utils/platform';
 export default class AppBar extends Vue {
   // props
   @Prop({ type: String }) platform?: string;
+  @Prop({ type: Boolean }) outlined?: boolean = false;
 
 
   // data
