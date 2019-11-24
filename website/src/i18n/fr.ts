@@ -20,4 +20,6 @@ export default {
     },
   },
   other_downloads: 'Tous les Téléchargements',
+  download: 'Téléchargements',
+  features: 'Fonctionnalités',
 };

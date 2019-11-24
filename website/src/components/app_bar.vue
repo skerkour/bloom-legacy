@@ -12,12 +12,12 @@
       <v-btn
         text
         to="/download"
-      >Download</v-btn>
+      >{{ $t('download') }}</v-btn>
       <v-btn
         text
         to="/features"
         exact
-      >Features</v-btn>
+      >{{ $t('features') }}</v-btn>
       <!-- <v-btn text>Help</v-btn> -->
       <blm-locales-menu />
     </v-toolbar-items>

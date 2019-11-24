@@ -45,4 +45,6 @@ export default {
     },
   },
   other_downloads: 'Other downloads',
+  download: 'Download',
+  features: 'Features',
 };
