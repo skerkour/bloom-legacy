@@ -1,18 +1,24 @@
 <template>
   <v-container class="mt-4 text-center">
-    <v-row>
-       <v-col cols="12" class="text-center mb-2">
+    <v-row class="justify-center">
+       <v-col cols="12" class="mb-2">
         <h1 class="display-1 font-weight-medium">
-          Contact
+          {{ $t('contact.title') }}
         </h1>
       </v-col>
 
-       <v-col cols="12" sm10 md8 class="text-center mb-5">
+       <v-col cols="12" sm="10" md="8" class="mb-5">
         <p class="font-18 font-weight-regular text-left ">
-          You can contact the Bloom team using one of the following way:
+          {{ $t('contact.intro') }}
           <ul>
-            <li>Using email: <a href="mailto:hello@bloom.sh">hello@bloom.sh</a></li>
-            <li>Or by saying <i>Hi</i> on Twitter: <a href="https://twitter.com/42bloom" target="_blank" rel="noopener">@42bloom</a></li>
+            <li>
+              <span v-html="$t('contact.email')"></span>&nbsp;
+              <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+            </li>
+            <li>
+              <span v-html="$t('contact.twitter')"></span>&nbsp;
+              <a href="https://twitter.com/42bloom" target="_blank" rel="noopener">@42bloom</a>
+            </li>
           </ul>
         </p>
       </v-col>

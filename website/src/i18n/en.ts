@@ -76,4 +76,10 @@ export default {
       guide: 'Read <b>The Guide</b>',
     },
   },
+  contact: {
+    title: 'Contact',
+    intro: 'You can contact the Bloom team using one of the following way:',
+    email: 'Using email:',
+    twitter: 'Or by saying <i>Hi</i> on Twitter:',
+  },
 };

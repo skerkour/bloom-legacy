@@ -1,6 +1,12 @@
 import store from 'store';
 
-export function detectLocale(): string {
+
+export function saveLocale(locale: string) {
+  store.set('locale', locale);
+  document.querySelector('html')!.setAttribute('lang', locale);
+}
+
+export function getLocale(): string {
   let locale = store.get('locale');
   if (locale) {
     return locale;
@@ -9,10 +15,6 @@ export function detectLocale(): string {
   locale = navigator.language || (navigator as any).userLanguage;
 
   locale = (!locale || locale.length < 2) ? 'en' : locale.substring(0, 2);
-  store.set('locale', locale);
+  saveLocale(locale);
   return locale;
-}
-
-export function saveLocale(locale: string) {
-  store.set('locale', locale);
 }
