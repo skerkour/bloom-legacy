@@ -28,23 +28,23 @@ export default class AppBar extends Vue {
     }
     switch (platform) {
       case 'linux':
-        this.message = 'Download for Linux';
+        this.message = this.$t('download_btn.download_for', { platform: 'Linux' }).toString();
         this.icon = 'mdi-linux';
         break;
       case 'macos':
-        this.message = 'Download for macOS';
+        this.message = this.$t('download_btn.download_for', { platform: 'macOS' }).toString();
         this.icon = 'mdi-apple';
         break;
       case 'windows':
-        this.message = 'Download for Windows';
+        this.message = this.$t('download_btn.download_for', { platform: 'Windows' }).toString();
         this.icon = 'mdi-windows';
         break;
       case 'android':
-        this.message = 'Download for Android';
+        this.message = this.$t('download_btn.download_for', { platform: 'Android' }).toString();
         this.icon = 'mdi-android';
         break;
       case 'ios':
-        this.message = 'Download for iOS';
+        this.message = this.$t('download_btn.download_for', { platform: 'iOS' }).toString();
         this.icon = 'mdi-apple';
         break;
       default:

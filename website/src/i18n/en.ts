@@ -1,4 +1,7 @@
 export default {
+  other_downloads: 'Other downloads',
+  download: 'Download',
+  features: 'Features',
   landing: {
     mission: 'Our mission: Empowering people',
     subtitle1: 'Chat, Collaborate, Discover, Innovate.',
@@ -44,7 +47,7 @@ export default {
       sponsoring: 'Sponsoring',
     },
   },
-  other_downloads: 'Other downloads',
-  download: 'Download',
-  features: 'Features',
+  download_btn: {
+    download_for: 'Download for {platform}',
+  },
 };
