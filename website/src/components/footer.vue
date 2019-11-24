@@ -4,35 +4,35 @@
     <v-container>
       <v-row class="text-center text-sm-left">
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">Organization</h5>
+          <h5 class="title pb-3">{{ $t('footer.organization.title') }}</h5>
           <ul>
-            <li><router-link class="nav-link" to="/about">About</router-link></li>
-            <li><router-link class="nav-link" to="/contact">Contact</router-link></li>
-            <li><router-link class="nav-link" to="/security">Security</router-link></li>
-            <li><router-link class="nav-link" to="/terms">Terms</router-link></li>
-            <li><router-link class="nav-link" to="/privacy">Privacy</router-link></li>
+            <li><router-link class="nav-link" to="/about">{{ $t('footer.organization.about') }}</router-link></li>
+            <li><router-link class="nav-link" to="/contact">{{ $t('footer.organization.contact') }}</router-link></li>
+            <li><router-link class="nav-link" to="/security">{{ $t('footer.organization.security') }}</router-link></li>
+            <li><router-link class="nav-link" to="/terms">{{ $t('footer.organization.terms') }}</router-link></li>
+            <li><router-link class="nav-link" to="/privacy">{{ $t('footer.organization.privacy') }}</router-link></li>
             <li><a class="nav-link" href="/the-guide">The Guide</a></li>
           </ul>
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">Product</h5>
+          <h5 class="title pb-3">{{ $t('footer.product.title') }}</h5>
           <ul>
-            <li><router-link to="/help">Help & Support</router-link></li>
-            <li><router-link class="nav-link" to="/download">Download Apps</router-link></li>
-            <li><a class="nav-link" href="/the-guide/organization/contributing.html">Contribute</a></li>
-            <li><a class="nav-link" href="/the-guide/projects/bloom/index.html">Documentation</a></li>
+            <li><router-link to="/help">{{ $t('footer.product.help') }}</router-link></li>
+            <li><router-link class="nav-link" to="/download">{{ $t('footer.product.download') }}</router-link></li>
+            <li><a class="nav-link" href="/the-guide/organization/contributing.html">{{ $t('footer.product.contribute') }}</a></li>
+            <li><a class="nav-link" href="/the-guide/projects/bloom/index.html">{{ $t('footer.product.documentation') }}</a></li>
           </ul>
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">Community</h5>
+          <h5 class="title pb-3">{{ $t('footer.community.title') }}</h5>
           <ul>
             <li><a class="nav-link" href="/blog">Blog</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
-            <li><a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">Sponsoring</a></li>
+            <li><a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">{{ $t('footer.community.sponsoring') }}</a></li>
           </ul>
         </v-col>
 

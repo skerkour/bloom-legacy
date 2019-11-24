@@ -19,5 +19,30 @@ export default {
       Never stop having fun.`,
     },
   },
+  p404: {
+    not_found: 'Page not found',
+    back_home: 'Back to Home',
+  },
+  footer: {
+    organization: {
+      title: 'Organization',
+      about: 'About',
+      contact: 'Contact',
+      security: 'Security',
+      terms: 'Terms',
+      privacy: 'Privacy',
+    },
+    product: {
+      title: 'Product',
+      help: 'Help & Support',
+      download: 'Download Apps',
+      contribute: 'Contribute',
+      documentation: 'Documentation',
+    },
+    community: {
+      title: 'Community',
+      sponsoring: 'Sponsoring',
+    },
+  },
   other_downloads: 'Other downloads',
 };
