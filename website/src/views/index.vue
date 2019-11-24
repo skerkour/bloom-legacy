@@ -33,29 +33,13 @@
     <v-row class="mb-5 blm-features align-center">
       <v-col cols="12" sm="6" order="last" order-sm="first" class="text-center mb-5 mt-5">
         <img alt="secure" src="/static/imgs/landing/secure.svg" height="200" />
-        <!-- <v-img alt="hero" src="/static/imgs/landing/secure.svg" contain height="200px">
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular indeterminate color="grey lighten-2" />
-              </v-row>
-            </template>
-          </v-img> -->
       </v-col>
 
       <v-col cols="12" sm="6">
         <h3 class="display-1 font-weight-regular">
-          Fast, Simple, Secure
+          {{ $t('landing.feature1.title') }}
         </h3>
-        <p class="mt-5">
-          As an Open Source project anyone can inspect how Bloom works.
-          We use state of the art cryptography to keep your data secure.
-          There are no ads, no affiliate marketers, no creepy tracking. <br />
-          Just open technology for a fast, simple, and secure experience.
-        </p>
+        <p class="mt-5" v-html="$t('landing.feature1.description')"></p>
       </v-col>
     </v-row>
 
@@ -63,29 +47,13 @@
     <v-row class="align-center">
       <v-col cols="12" sm="6">
         <h3 class="display-1 font-weight-regular">
-          Bring your team together
+          {{ $t('landing.feature2.title') }}
         </h3>
-        <p class="mt-5">
-          Whether it's your friends or your colleagues, Bloom is made for collaboration.
-          Organize conversations, share files and ideas, organize your life.
-          Go from chatting to meeting up with Calendar, Notes, Drive and more.<br />
-          Never stop having fun.
-        </p>
+        <p class="mt-5" v-html="$t('landing.feature2.description')"></p>
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5 mt-5">
-        <!-- <v-img alt="hero" src="/static/imgs/landing/groups.svg" contain height="200px">
-            <template v-slot:placeholder>
-              <v-row
-                class="fill-height ma-0"
-                align="center"
-                justify="center"
-              >
-                <v-progress-circular indeterminate color="grey lighten-2" />
-              </v-row>
-            </template>
-          </v-img> -->
-          <img alt="groups" src="/static/imgs/landing/groups.svg" height="200" />
+        <img alt="groups" src="/static/imgs/landing/groups.svg" height="200" />
       </v-col>
     </v-row>
 
