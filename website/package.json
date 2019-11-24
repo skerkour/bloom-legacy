@@ -10,7 +10,9 @@
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "^4.5.95",
+    "@types/store": "^2.0.2",
     "core-js": "^3.4.1",
+    "store": "^2.0.12",
     "vue": "^2.6.10",
     "vue-class-component": "^7.0.2",
     "vue-i18n": "^8.15.0",

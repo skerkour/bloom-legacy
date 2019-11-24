@@ -10,9 +10,7 @@
 
         <blm-download-btn />
 
-        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
-          Other downloads
-        </router-link></p>
+        <blm-other-downloads-link />
       </v-col>
     </v-row>
 
@@ -29,9 +27,9 @@
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
         order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
         <v-avatar size="128px" v-if="feature.icon">
-          <v-img :src="feature.icon" contain />
+          <img :src="feature.icon" contain />
         </v-avatar>
-        <v-img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+        <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
       </v-col>
 
       <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
@@ -51,11 +49,13 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import DownloadBtn from '@/components/download_btn.vue';
+import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 
 @Component({
   components: {
     'blm-download-btn': DownloadBtn,
+    'blm-other-downloads-link': OtherDownloadsLink,
   },
 })
 export default class Features extends Vue {

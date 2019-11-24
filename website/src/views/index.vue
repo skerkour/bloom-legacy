@@ -14,6 +14,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5">
+        <!-- <img alt="hero" src="/static/imgs/landing/hero.png" height="480" /> -->
         <v-img alt="hero" src="/static/imgs/landing/hero.png" contain>
           <template v-slot:placeholder>
             <v-row
@@ -31,7 +32,8 @@
 
     <v-row class="mb-5 blm-features align-center">
       <v-col cols="12" sm="6" order="last" order-sm="first" class="text-center mb-5 mt-5">
-        <v-img alt="hero" src="/static/imgs/landing/secure.svg" contain height="200px">
+        <img alt="secure" src="/static/imgs/landing/secure.svg" height="200" />
+        <!-- <v-img alt="hero" src="/static/imgs/landing/secure.svg" contain height="200px">
             <template v-slot:placeholder>
               <v-row
                 class="fill-height ma-0"
@@ -41,7 +43,7 @@
                 <v-progress-circular indeterminate color="grey lighten-2" />
               </v-row>
             </template>
-          </v-img>
+          </v-img> -->
       </v-col>
 
       <v-col cols="12" sm="6">
@@ -72,7 +74,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5 mt-5">
-        <v-img alt="hero" src="/static/imgs/landing/groups.svg" contain height="200px">
+        <!-- <v-img alt="hero" src="/static/imgs/landing/groups.svg" contain height="200px">
             <template v-slot:placeholder>
               <v-row
                 class="fill-height ma-0"
@@ -82,7 +84,8 @@
                 <v-progress-circular indeterminate color="grey lighten-2" />
               </v-row>
             </template>
-          </v-img>
+          </v-img> -->
+          <img alt="groups" src="/static/imgs/landing/groups.svg" height="200" />
       </v-col>
     </v-row>
 

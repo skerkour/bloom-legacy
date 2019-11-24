@@ -1,19 +1,6 @@
 <template>
   <v-container class="mt-3 text-center">
     <v-row class="justify-center align-center">
-      <!-- <v-col cols="12" sm="10" md="8" class="text-center mt-5">
-        <h1 class="display-3 mb-5">
-          {{ name }}
-        </h1>
-
-        <p v-html="description"></p>
-
-        <blm-download-btn />
-
-        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
-          Other downloads
-        </router-link></p>
-      </v-col> -->
       <v-col cols="12" sm="6" class="text-center">
         <h1 class="display-3 mb-5">{{ name }}</h1>
 
@@ -21,9 +8,7 @@
 
         <blm-download-btn />
 
-        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
-          Other downloads
-        </router-link></p>
+        <blm-other-downloads-link />
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5">
@@ -53,7 +38,8 @@
 
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
         order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
-        <v-img :src="feature.img" contain height="200px"/>
+        <!-- <v-img :src="feature.img" contain height="200px"/> -->
+        <img :src="feature.img" height="200" />
       </v-col>
 
       <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
@@ -67,9 +53,7 @@
     <v-row class="justify-center mb-5 mt-5 align-center blm-dl">
       <v-col cols="12">
         <blm-download-btn outlined />
-        <p class="subtitle-1 mt-5"><router-link to="/download" class="text--darken-1 grey--text">
-          Other downloads
-        </router-link></p>
+        <blm-other-downloads-link />
       </v-col>
     </v-row>
 
@@ -79,11 +63,13 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import DownloadBtn from '@/components/download_btn.vue';
+import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 
 @Component({
   components: {
     'blm-download-btn': DownloadBtn,
+    'blm-other-downloads-link': OtherDownloadsLink,
   },
 })
 export default class FeaturePage extends Vue {

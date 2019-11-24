@@ -18,15 +18,21 @@
         to="/features"
         exact
       >Features</v-btn>
-      <v-btn text>Help</v-btn>
+      <!-- <v-btn text>Help</v-btn> -->
+      <blm-locales-menu />
     </v-toolbar-items>
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import LocalesMenu from '@/components/locales_menu.vue';
 
-@Component
+@Component({
+  components: {
+    'blm-locales-menu': LocalesMenu,
+  },
+})
 export default class AppBar extends Vue {
   // props
   // data
