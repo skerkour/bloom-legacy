@@ -58,7 +58,7 @@
         </v-hover>
       </v-col>
 
-      <v-col cols="12" sm="3" class="text-center mb-5">
+      <!-- <v-col cols="12" sm="3" class="text-center mb-5">
         <v-hover>
           <a slot-scope="{ hover }" href="https://www.linkedin.com/in/marina-da-silva-b289b4159"
           target="_blank" rel="noopener">
@@ -72,7 +72,7 @@
             <p>Head of operations, France 🇫🇷</p>
           </a>
         </v-hover>
-      </v-col>
+      </v-col> -->
 
 
       <v-col cols="12" class="text-center mb-5">

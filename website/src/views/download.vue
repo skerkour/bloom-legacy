@@ -25,13 +25,13 @@
           class="mx-auto pt-5 elevation-0"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5 blm-inline-img"
             height="50px"
             src="/static/imgs/download/computer.svg"
             contain
           />
-          <v-img
+          <img
             class="white--text align-end mb-5 blm-inline-img"
             height="50px"
             src="/static/imgs/download/laptop.svg"
@@ -50,7 +50,7 @@
           class="mx-auto pt-5"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5"
             height="100px"
             src="/static/imgs/download/apple.svg"
@@ -68,7 +68,7 @@
           class="mx-auto pt-5"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5"
             height="100px"
             src="/static/imgs/download/windows.svg"
@@ -86,7 +86,7 @@
           class="mx-auto pt-5"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5"
             height="100px"
             src="/static/imgs/download/linux.svg"
@@ -113,13 +113,13 @@
           class="mx-auto pt-5 elevation-0"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5 blm-inline-img"
             height="50px"
             src="/static/imgs/download/tablet.svg"
             contain
           />
-          <v-img
+          <img
             class="white--text align-end mb-5 blm-inline-img"
             height="50px"
             src="/static/imgs/download/phone.svg"
@@ -137,7 +137,7 @@
           class="mx-auto pt-5"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5"
             height="100px"
             src="/static/imgs/download/android.svg"
@@ -155,7 +155,7 @@
           class="mx-auto pt-5"
           max-width="400"
         >
-          <v-img
+          <img
             class="white--text align-end mb-5"
             height="100px"
             src="/static/imgs/download/apple.svg"
@@ -205,5 +205,6 @@ export default class Download extends Vue {
 
 .blm-inline-img {
   display: inline-block;
+  margin-right: 10px;
 }
 </style>
