@@ -30,7 +30,6 @@
         @click="setLocale(language)"
       >
         <v-list-item-avatar
-          tile
           size="24px"
         >
           <v-img

@@ -9,57 +9,37 @@
       </v-col>
 
       <v-col cols="12" sm="10" md="8" class="text-center mb-4">
-        <div class="elevation-0">
-          <v-card-text>
-            <p class="body-1 font-weight-regular">
-              We believe that sharing and collaboration is the only way to build a
-              sustainable future in a finite world.
-              We create the open infrastructure to change all
-              work from read-only to read-write. When everyone can contribute, users
-              become contributors and we greatly improve the quality of global human life.
-            </p>
-          </v-card-text>
-        </div>
+        <p class="body-1 font-weight-regular">
+          {{ $t('about.believe') }}
+        </p>
       </v-col>
 
 
       <v-col cols="12" class="text-center mb-3">
         <h1 class="display-1 font-weight-medium">
-          Mission
+          {{ $t('about.mission.title') }}
         </h1>
       </v-col>
 
       <v-flex xs12 sm10 md8 class="text-center mb-4">
-        <div class="elevation-0">
-          <v-card-text>
-            <p class="body-1 font-weight-regular">
-              Empowering the world with open technologies.
-            </p>
-          </v-card-text>
-        </div>
+        <p class="body-1 font-weight-regular">{{ $t('about.mission.description') }}</p>
       </v-flex>
 
 
       <v-col cols="12" class="text-center mb-3">
         <h1 class="display-1 font-weight-medium">
-          Values
+          {{ $t('about.values.title') }}
         </h1>
       </v-col>
 
       <v-col cols="12" sm="10" md="8" class="text-center mb-4">
-        <div class="elevation-0">
-          <v-card-text>
-            <p class="body-1 font-weight-regular">
-              Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).
-            </p>
-          </v-card-text>
-        </div>
+        <p class="body-1 font-weight-regular" v-html="$t('about.values.description')"></p>
       </v-col>
 
 
       <v-col cols="12" class="text-center mb-5">
         <h1 class="display-1 font-weight-medium">
-          Core team
+          {{ $t('about.team.title') }}
         </h1>
       </v-col>
 
@@ -96,41 +76,29 @@
 
 
       <v-col cols="12" class="text-center mb-5">
-        <h1 class="display-1 font-weight-medium" id="sponsors">
-          Sponsors
+        <h1 class="display-1 font-weight-medium mb-5" id="sponsors">
+          {{ $t('about.sponsors.title') }}
         </h1>
         <p class="body-1 font-weight-regular">
           <a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">
-            Want to sponsor Bloom?
+            {{ $t('about.sponsors.want') }}
           </a>
         </p>
       </v-col>
 
       <v-col cols="12" class="text-center mb-5">
-        <div class="elevation-0">
-          <v-card-text>
-            <p class="body-1 font-weight-regular">
-              -
-            </p>
-          </v-card-text>
-        </div>
+        <p class="body-1 font-weight-regular">-</p>
       </v-col>
 
 
-      <v-col cols="12" class="text-center mb-3">
+      <v-col cols="12" class="text-center">
         <h1 class="display-1 font-weight-medium">
-          Want to learn more?
+          {{ $t('about.learn_more.title') }}
         </h1>
       </v-col>
 
-      <v-col cols="12" sm="10" md="8" class="text-center mb-4">
-        <div class="elevation-0">
-          <v-card-text>
-            <a class="nav-link" href="/the-guide">
-              Read <b>The Guide</b>
-            </a>
-          </v-card-text>
-        </div>
+      <v-col cols="12" class="text-center mb-4">
+        <a class="nav-link" href="/the-guide" v-html="$t('about.learn_more.guide')"></a>
       </v-col>
 
     </v-row>

@@ -50,4 +50,30 @@ export default {
   download_btn: {
     download_for: 'Download for {platform}',
   },
+  about: {
+    believe: `We believe that sharing and collaboration is the only way to build a
+      sustainable future in a finite world.
+      We create the open infrastructure to change all
+      work from read-only to read-write. When everyone can contribute, users
+      become contributors and we greatly improve the quality of global human life.`,
+    mission: {
+      title: 'Mission',
+      description: 'Empowering the world with open technologies.',
+    },
+    values: {
+      title: 'Values',
+      description: 'Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).',
+    },
+    team: {
+      title: 'Core Team',
+    },
+    sponsors: {
+      title: 'Sponsors',
+      want: 'Want to sponsor Bloom?',
+    },
+    learn_more: {
+      title: 'Want to learn more?',
+      guide: 'Read <b>The Guide</b>',
+    },
+  },
 };
