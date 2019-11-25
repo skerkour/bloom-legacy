@@ -8,7 +8,7 @@
     "email": "hello@bloom.sh"
   },
   "scripts": {
-    "build": "vue-cli-service build --modern",
+    "build": "NODE_ENV=production vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
     "build:native": "electron-build-env neon build --release",
     "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
