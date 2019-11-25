@@ -37,15 +37,11 @@ release:
 
 docker_build:
 	docker build -t $(DOCKER_IMAGE):legacy-v$(VERSION) .
-	# docker tag $(DOCKER_IMAGE):legacy-v$(VERSION) $(DOCKER_IMAGE):$(VERSION)
+	docker tag $(DOCKER_IMAGE):legacy-v$(VERSION) $(DOCKER_IMAGE):legacy-latest
 
 docker_login:
 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 docker_release:
 	docker push $(DOCKER_IMAGE):legacy-v$(VERSION)
-	# docker push $(DOCKER_IMAGE):latest
-
-docker_release_nightly:
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
-	docker push $(DOCKER_IMAGE):nightly-$(DATE)
+	docker push $(DOCKER_IMAGE):legacy-latest
