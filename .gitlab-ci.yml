@@ -52,13 +52,13 @@ variables:
   ZOLA_VERSION: "v0.9.0"
 
 
-cache:
-  paths:
-    - cargo_home/
-    - core/target/
-    - desktop/node_modules/
-    - website/node_modules/
-    - server/target/
+# cache:
+#   paths:
+#     - cargo_home/
+#     - core/target/
+#     - desktop/node_modules/
+#     - website/node_modules/
+#     - server/target/
 
 ####################################################################################################
 ## Test
@@ -139,6 +139,16 @@ test:server:
     - make test
   services:
     - postgres:11
+
+test:website:
+  stage: test
+  image: node:lts
+  tags:
+    - docker
+  script:
+    - cd website/
+    - make install
+    - make lint
 
 ####################################################################################################
 ## Build

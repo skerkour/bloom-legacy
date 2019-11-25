@@ -1,16 +1,8 @@
 <template>
-  <v-app-bar
-    app
-    elevation="0"
-    color="transparent"
-    elevate-on-scroll
-  >
-    <router-link to="/">
-      <v-toolbar-title
-        class="headline"
-        to="/"
-      >
-        <span>Bloom</span>
+  <v-app-bar app elevation="0">
+    <router-link to="/" class="blm-appbar-title">
+      <v-toolbar-title class="headline" to="/">
+        <span class="blm-rounded-elegance"><b>Bloom</b></span>
       </v-toolbar-title>
     </router-link>
 
@@ -20,20 +12,27 @@
       <v-btn
         text
         to="/download"
-      >Download</v-btn>
+      >{{ $t('download') }}</v-btn>
       <v-btn
         text
         to="/features"
-      >Features</v-btn>
-      <v-btn text>Help</v-btn>
+        exact
+      >{{ $t('features') }}</v-btn>
+      <!-- <v-btn text>Help</v-btn> -->
+      <blm-locales-menu />
     </v-toolbar-items>
   </v-app-bar>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import LocalesMenu from '@/components/locales_menu.vue';
 
-@Component
+@Component({
+  components: {
+    'blm-locales-menu': LocalesMenu,
+  },
+})
 export default class AppBar extends Vue {
   // props
   // data
@@ -44,9 +43,8 @@ export default class AppBar extends Vue {
 }
 </script>
 
-<style>
-a {
-  text-decoration: none;
-  color: none;
+<style lang="scss" scoped>
+.blm-appbar-title {
+  color: inherit;
 }
 </style>

@@ -21,6 +21,9 @@
 
       {% block extra_head %}
       {% endblock extra_head %}
+
+      <link rel="shortcut icon" type="image/png" href="/favicon_128.png">
+      <title>Bloom blog - Open technologies</title>
     </head>
 
     <body class="{{ config.extra.hyde_theme }} {% if config.extra.hyde_reverse %}layout-reverse{% endif %}">
@@ -50,7 +53,7 @@
         <div class="content container">
             {% block content %}
                 <div class="posts">
-                    {% for page in section.pages | reverse %}
+                    {% for page in section.pages | sort(attribute="date") | reverse %}
                       <div class="post">
                         <h1 class="post-title">
                           <a href="{{ page.permalink }}">

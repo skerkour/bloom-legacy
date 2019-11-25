@@ -56,6 +56,11 @@ module.exports = {
   },
   pluginOptions: {
     electronBuilder: {
+      chainWebpackRendererProcess: (config) => {
+        if (process.env.NODE_ENV === 'development') {
+          config.plugins.delete('prefetch');
+        }
+      },
       builderOptions: {
         productName: 'Bloom',
         appId: 'com.bloom42.bloom',

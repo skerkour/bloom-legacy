@@ -27,12 +27,12 @@ Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
 
 ## Documentation
 
-See [https://bloom.sh/the-guide/projects/bloom](https://bloom.sh/the-guide/projects/bloom).
+See [https://bloom.sh/the-guide/projects/bloom](https://bloom.sh/the-guide/projects/bloom)
 
 
 ## Development
 
-See [https://bloom.sh/the-guide/projects/bloom/development.html](https://bloom.sh/the-guide/projects/bloom/development.html).
+See [https://bloom.sh/the-guide/projects/bloom/development.html](https://bloom.sh/the-guide/projects/bloom/development.html)
 
 
 ## Contributing
@@ -55,4 +55,4 @@ Bloom is a free and open source project. If you are interested in supporting thi
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://bloom.sh/security) instead. Thank you.
+[dedicated security page](https://bloom.sh/security) instead. Thank you!

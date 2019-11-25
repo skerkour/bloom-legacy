@@ -8,7 +8,7 @@
     "email": "hello@bloom.sh"
   },
   "scripts": {
-    "build": "vue-cli-service build --modern",
+    "build": "NODE_ENV=production vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
     "build:native": "electron-build-env neon build --release",
     "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
@@ -33,7 +33,7 @@
     "vue-property-decorator": "=8.3.0",
     "vue-router": "=3.1.3",
     "vue-the-mask": "^0.11.1",
-    "vuetify": "=2.1.10",
+    "vuetify": "=2.1.11",
     "vuex": "=3.1.2"
   },
   "devDependencies": {
