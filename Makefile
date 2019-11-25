@@ -30,21 +30,21 @@ clean:
 re: clean build
 
 release:
-	git tag v$(VERSION)
-	git push origin v$(VERSION)
+	git tag legacy-v$(VERSION)
+	git push origin legacy-v$(VERSION)
 
 
 
 docker_build:
-	docker build -t $(DOCKER_IMAGE):latest .
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
+	docker build -t $(DOCKER_IMAGE):legacy-v$(VERSION) .
+	# docker tag $(DOCKER_IMAGE):legacy-v$(VERSION) $(DOCKER_IMAGE):$(VERSION)
 
 docker_login:
 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 docker_release:
-	docker push $(DOCKER_IMAGE):$(VERSION)
-	docker push $(DOCKER_IMAGE):latest
+	docker push $(DOCKER_IMAGE):legacy-v$(VERSION)
+	# docker push $(DOCKER_IMAGE):latest
 
 docker_release_nightly:
 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
