@@ -26,7 +26,6 @@
           <h5 class="title pb-3">Community</h5>
           <ul>
             <li><a class="nav-link" href="https://blog.bloom.sh" target="_blank" rel="noopener">Blog</a></li>
-            <li><a class="nav-link" href="https://theguide.bloom.sh" target="_blank" rel="noopener">The Guide</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
