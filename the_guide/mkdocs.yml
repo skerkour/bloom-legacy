@@ -12,6 +12,7 @@ theme:
   logo: 'assets/icon.png'
   language: en
   feature:
+  favicon: '/static/imgs/icons/favicon.png'
   font:
     text: Roboto
     code: Roboto Mono
