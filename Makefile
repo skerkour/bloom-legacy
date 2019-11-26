@@ -4,7 +4,7 @@
 DIST_DIR = dist
 NAME := server
 VERSION := $(shell cat VERSION.txt | tr -d '\n')
-DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
+DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
