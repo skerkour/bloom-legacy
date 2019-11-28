@@ -18,6 +18,12 @@
   status = 301
   force = true
 
+[[redirects]]
+  from = "https://bloom42.com/*"
+  to = "https://www.bloom42.com/:splat"
+  status = 301
+  force = true
+
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
