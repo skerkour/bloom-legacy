@@ -9,6 +9,13 @@ lang = "en"
 +++
 
 
+It's been 6 months since <a href="https://reddit.com/r/onebag" target="_blank" rel="noopener">Bloom launched</a>.
+6 incredible months with a lot of sweat and some sleepless nights.
+
+But something even more incredible is coming during the next months: The launch of Bloom's native applications
+featuring among other things end to end encryption and offline support.
+
+
 ## The past few months
 
 Excuse du manque de news
