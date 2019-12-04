@@ -20,10 +20,21 @@
 
 [[redirects]]
   from = "https://bloom42.com/*"
-  to = "https://www.bloom42.com/:splat"
+  to = "https://www.bloom.sh/:splat"
   status = 301
   force = true
 
+[[redirects]]
+  from = "https://qi-lang.org/*"
+  to = "https://www.bloom.sh/:splat"
+  status = 301
+  force = true
+
+[[redirects]]
+  from = "https://www.qi-lang.org/*"
+  to = "https://www.bloom.sh/:splat"
+  status = 301
+  force = true
 
 [[headers]]
   # Define which paths this specific [[headers]] block will cover.
