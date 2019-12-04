@@ -282,10 +282,6 @@ pages: # release:website
     - docker
   dependencies:
     - build:website
-  # only:
-  #   - /^website-v.*$/ TODO
-  # except:
-  #   - branches
   script:
     - cp -rp website/dist public
   artifacts:
