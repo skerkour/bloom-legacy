@@ -31,7 +31,7 @@
             <li><a class="nav-link" href="/blog">Blog</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
-            <li><a class="nav-link" href="https://mastodon.social/web/accounts/947209" target="_blank" rel="noopener">Mastodon</a></li>
+            <li><a class="nav-link" href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">Mastodon</a></li>
             <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
             <li><a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">{{ $t('footer.community.sponsoring') }}</a></li>
           </ul>
