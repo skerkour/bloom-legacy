@@ -62,7 +62,8 @@ the data (*people*) create great power imbalances.
 
 This is why, as of today, cryptography is the only mean to equilibrate power between those 2 categories.
 
-With cryptography, **You** choose to whom you give access to **What**. **You** choose **Who** can read your messages.
+With cryptography, **You** choose to whom you give access to **What**. **You** choose **Who** can
+read your messages, not any random Facebook employee.
 
 <div class="center">
   <img src="cia_triad.jpg" height="500"/>
