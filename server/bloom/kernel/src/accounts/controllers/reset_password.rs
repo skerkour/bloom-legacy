@@ -62,7 +62,7 @@ impl Handler<ResetPassword> for DbActor {
             for session in sessions {
                 let (session, _) = eventsourcing::execute(&conn, session, &revoke_cmd)?;
                 // update session
-                diesel::update(&session).set(&session).execute(&conn)?;
+                diesel::delete(&session).execute(&conn)?;
             }
 
             // start new session
