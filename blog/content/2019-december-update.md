@@ -46,8 +46,9 @@ Cloud create a dependency which is the exact opposite of enmpowerement.
 ### Native applications
 
 
-The first step is to remove the cloud dependency. It means that Bloom should no longer be accessible through a web browser.
-It means that Bloom should be usable even if you go far from internet for 3 months.
+The first step is to remove the cloud dependency. It means that Bloom should no longer be accessible through a web browser but as an
+installed application that can work offline.
+It means that Bloom will be usable even if you go far away from internet for 3 months.
 
 
 It also means that **the web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) is deprecated and all data will be deleted on February 29, 2020**.
@@ -55,8 +56,8 @@ It also means that **the web application (<a href="https://legacy.bloom.sh" targ
 ### Cryptography
 
 For the better or the worse, computers made copying data virtually free. It's inevitable.
-Wheter it be an eBook, an image or a text file. Whether the data is public or private. In the long run,
-any piece of data will either become public or will be lost.
+Whether it be an eBook, an image or a text file. Whether the data is public or private. In the long run,
+any bit of data will either become public or will be lost.
 
 But the asymmetry between those who store and proceed the data (*cloud providers*), and those who produce
 the data (*people*) create great power imbalances.
@@ -77,14 +78,14 @@ Cryptography gives you confidentiality and integrity for your data, and paying f
 
 ### Collaboration
 
-Finally, humans operate in terms of networks (a.k.a communities, groups...) and this is why we have included
+Finally, humans operate in terms of networks (a.k.a communities, groups) and this is why we have included
 the *groups* feature, where you will be able to share a drive space with other peoples, notes, tasks and so on.
 
 
 ## Summary
 
 * **The web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) is deprecated and all data will be deleted on February 29, 2020**.
-* Native applications are coming, featuring end to end encryption and offline support among other improvements
+* Native applications are coming in January, featuring end to end encryption and offline support among other improvements
 * **You will need to create a new account on the native applications**
 * New Mastodon account: <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
 * Paying offers (more Drive space, more Phaser scans, more Bitflow downloads...) will be soon available
