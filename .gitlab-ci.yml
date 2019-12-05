@@ -278,10 +278,12 @@ package:server:
 pages: # release:website
   image: node:$NODE_VERSION
   stage: release
-  tags:
-    - docker
   dependencies:
     - build:website
+  only:
+    - master
+  tags:
+    - docker
   script:
     - cp -rp website/dist public
     # deploy on netlify
