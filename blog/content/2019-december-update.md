@@ -8,10 +8,10 @@ lang = "en"
 +++
 
 
-It's been 6 months since <a href="/blog/bloom-a-free-and-open-source-google" target="_blank" rel="noopener">Bloom launched</a>.
+It's been exactly 6 months since <a href="/blog/bloom-a-free-and-open-source-google" target="_blank" rel="noopener">Bloom launched</a>.
 6 incredible months with a lot of sweat and some sleepless nights.
 
-But something even more incredible is coming during the next months: The launch of Bloom's native applications
+But something even more incredible is coming during the next month: The launch of Bloom's native applications,
 featuring among other things end to end encryption and offline support.
 
 
@@ -24,11 +24,9 @@ finance, project management, marketing, software developement, cryptography and 
 
 Being the sole person working on Bloom full time (Marina no longer have neough free time, she is
 in an internship for her schooling) means that I need to aquire myself all this knowledge, and, more importantly,
-how to apply it to create an awesome product. It take a lot of time, efforts, and focus. Time I cannot spend on developing Bloom.
-Also I apologize for not merging all merge requests, but the project and requirements are moving really fast
-and requires a full time job to keep the pace.
+how to apply it to create an awesome product. It takes a lot of time, efforts and focus, time I cannot spend on developing Bloom.
 
-But the largest part is behind us and you can expect a lot more of development and openness the coming months.
+But the largest part is behind us and you can expect a lot more of development and openness in the coming months.
 
 ## From cloud to local first
 
@@ -43,20 +41,19 @@ If the enterprise's cloud get hacked? If an embargo is promulgated? If internet 
 
 Cloud create a dependency which is the exact opposite of enmpowerement.
 
+
 ### Native applications
 
-
 The first step is to remove the cloud dependency. It means that Bloom should no longer be accessible through a web browser but as an
-installed application that can work offline.
+installed application that can work without internet.
 It means that Bloom will be usable even if you go far away from internet for 3 months.
-
 
 It also means that **the web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) is deprecated and all data will be deleted on February 29, 2020**.
 
 ### Cryptography
 
 For the better or the worse, computers made copying data virtually free. It's inevitable.
-Whether it be an eBook, an image or a text file. Whether the data is public or private. In the long run,
+Whether it be an eBook, an image or a text file, whether the data is public or private. In the long run,
 any bit of data will either become public or will be lost.
 
 But the asymmetry between those who store and proceed the data (*cloud providers*), and those who produce
@@ -73,22 +70,24 @@ read your messages, not any random Facebook employee.
   The C.I.A triad
 </div>
 
-Cryptography gives you confidentiality and integrity for your data, and paying for Bloom Drive gives you availability.
+Cryptography gives you confidentiality and integrity for your data,
+and paying for Bloom Drive/Notes/Phaser... gives you availability:
+cross-devices synchronization, always online servers...
 
 
 ### Collaboration
 
 Finally, humans operate in terms of networks (a.k.a communities, groups) and this is why we have included
-the *groups* feature, where you will be able to share a drive space with other peoples, notes, tasks and so on.
+the *groups* feature, where you will be able to share a drive space, notes, tasks and so on with other peoples.
 
 
 ## Summary
 
 * **The web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) is deprecated and all data will be deleted on February 29, 2020**.
 * Native applications are coming in January, featuring end to end encryption and offline support among other improvements
-* **You will need to create a new account on the native applications**
+* **You will need to create a new account on the native application**
 * New Mastodon account: <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
-* Paying offers (more Drive space, more Phaser scans, more Bitflow downloads...) will be soon available
+* Paying offers (more Drive space, more Phaser scans, more Bitflow downloads...) will be available with the native applications
 * Next months will be dedicated to secure revenues and grow the core team
 
 <br />
