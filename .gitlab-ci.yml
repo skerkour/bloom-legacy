@@ -276,7 +276,7 @@ package:server:
 ####################################################################################################
 
 pages: # release:website
-  image: alpine:latest
+  image: node:$NODE_VERSION
   stage: release
   tags:
     - docker
@@ -284,22 +284,14 @@ pages: # release:website
     - build:website
   script:
     - cp -rp website/dist public
-  artifacts:
-    paths:
-      - public/
-
-release:website:netlify:
-  image: node:$NODE_VERSION
-  stage: release
-  dependencies:
-    - build:website
-  tags:
-    - docker
-  script:
+    # deploy on netlify
     - npm install netlify-cli -g
     - netlify --telemetry-disable
     - cd website
     - netlify deploy --site $NETLIFY_WEBSITE_ID --auth $NETLIFY_TOKEN --prod
+  artifacts:
+    paths:
+      - public/
 
 release:website_tmp:
   image: node:$NODE_VERSION

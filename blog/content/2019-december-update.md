@@ -54,3 +54,10 @@ CIA triad
 
 
 ### Collaboration
+
+
+## Summary
+
+* The web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) will be deprecated
+* You will need to create a new account on the native applications
+* Native applications are coming, featuring end to end encryption and offline support
