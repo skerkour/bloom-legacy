@@ -38,7 +38,7 @@ created recuring revenue streams for enterprises (and investors).
 
 What happen to users' data if the
 enterprise go bakrupt? If the enteprise decides to kill the product because it's not enough profitable?
-If the enterprise's cloud get hacked? If an embargo is set? If internet is cut for some days/weeks?
+If the enterprise's cloud get hacked? If an embargo is promulgated? If internet is cut for some days/weeks?
 
 
 ### Native applications
@@ -57,6 +57,7 @@ CIA triad
 
 ## Summary
 
-* The web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) will be deprecated
-* You will need to create a new account on the native applications
-* Native applications are coming, featuring end to end encryption and offline support
+* The web application (<a href="https://legacy.bloom.sh" target="_blank" rel="noopener">https://legacy.bloom.sh</a>) is deprecated and all data will be deleted on February 29, 2020 at .
+* Native applications are coming, featuring end to end encryption and offline support among other improvements
+* **You will need to create a new account on the native applications**
+* New Mastodon account: <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
