@@ -22,24 +22,24 @@ First of all I want to apologize for the lack of public communication the past f
 *Empowering people with open technologies* requires a lot of cross domain competencies, whether it be
 finance, project management, marketing, software developement, cryptography and so on...
 
-Being the sole person working on Bloom full time (Marina no longer have neough free time, she is
+Being the sole person working on Bloom full time (Marina no longer have enough free time, she is
 in an internship for her schooling) means that I need to aquire myself all this knowledge, and, more importantly,
-how to apply it to create an awesome product. It takes a lot of time, efforts and focus, time I cannot spend on developing Bloom.
+how to apply it to create an awesome product. It takes a lot of time, efforts and focus.
 
 But the largest part is behind us and you can expect a lot more of development and openness in the coming months.
 
 ## From cloud to local first
 
-*Cloud apps like Google Docs and Trello are popular because they enable real-time collaboration with colleagues, and they make it easy for us to access our work from all of our devices. However, by centralizing data storage on servers, cloud apps also take away ownership and agency from users. If a service shuts down, the software stops functioning, and data created with that software is lost.* from [InkAndSwitch](https://www.inkandswitch.com/local-first.html).
+*Cloud apps like Google Docs and Trello are popular because they enable real-time collaboration with colleagues, and they make it easy for us to access our work from all of our devices. However, by centralizing data storage on servers, cloud apps also take away ownership and agency from users. If a service shuts down, the software stops functioning, and data created with that software is lost.* from <a href="https://www.inkandswitch.com/local-first.html" target="_blank" rel="noopener">InkAndSwitch</a>.
 
 But first of all, cloud is a business model. Cloud's first objective is not to empower users or ease their lives, but to
-created recuring revenue streams for enterprises (and investors).
+create recuring revenue streams for enterprises (and investors).
 
 What would happen to users' data if the
 enterprise go bakrupt? If the enteprise decides to kill the product because it's not enough profitable?
 If the enterprise's cloud get hacked? If an embargo is promulgated? If internet is cut for some days/weeks?
 
-Cloud create a dependency which is the exact opposite of enmpowerement.
+Cloud induces dependency which is the exact opposite of enmpowerement.
 
 
 ### Native applications
@@ -57,9 +57,10 @@ Whether it be an eBook, an image or a text file, whether the data is public or p
 any bit of data will either become public or will be lost.
 
 But the asymmetry between those who store and proceed the data (*cloud providers*), and those who produce
-the data (*people*) create great power imbalances.
+the data (*people*) create great power imbalance.
 
-This is why, as of today, cryptography is the only mean to equilibrate power between those 2 parties.
+This is why, as of today, cryptography is <a href="https://en.wikipedia.org/wiki/Permanent_Record_(autobiography)" target="_blank" rel="noopener">the only mean to equilibrate power between those 2 parties</a>.
+
 
 With cryptography, **You** choose to whom you give access to **What**. **You** choose **Who** can
 read your messages, not any random Facebook employee.
@@ -67,18 +68,18 @@ read your messages, not any random Facebook employee.
 <div class="center">
   <img src="cia_triad.jpg" height="500"/>
 
-  The C.I.A triad
+  <a href="https://en.wikipedia.org/wiki/Information_security#Basic_principles" target="_blank" rel="noopener">The C.I.A triad</a>
 </div>
 
 Cryptography gives you confidentiality and integrity for your data,
-and paying for Bloom Drive/Notes/Phaser... gives you availability:
+and paying for Bloom gives you availability:
 cross-devices synchronization, always online servers...
 
 
 ### Collaboration
 
 Finally, humans operate in terms of networks (a.k.a communities, groups) and this is why we have included
-the *groups* feature, where you will be able to share a drive space, notes, tasks and so on with other peoples.
+the *groups* feature, where you will be able to share a drive space, notes, tasks and so on with your peers.
 
 
 ## Summary
