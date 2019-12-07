@@ -20,10 +20,10 @@ featuring among other things end to end encryption and offline support.
 First of all I want to apologize for the lack of public communication the past few months.
 
 *Empowering people with open technologies* requires a lot of cross domain competencies, whether it be
-finance, project management, marketing, software developement, cryptography and so on...
+finance, project management, marketing, software development, cryptography and so on...
 
 Being the sole person working on Bloom full time (Marina no longer have enough free time, she is
-in an internship for her schooling) means that I need to aquire myself all this knowledge, and, more importantly,
+in an internship for her schooling) means that I need to acquire myself all this knowledge, and, more importantly,
 how to apply it to create an awesome product. It takes a lot of time, efforts and focus.
 
 But the largest part is behind us and you can expect a lot more of development and openness in the coming months.
@@ -33,7 +33,7 @@ But the largest part is behind us and you can expect a lot more of development a
 *Cloud apps like Google Docs and Trello are popular because they enable real-time collaboration with colleagues, and they make it easy for us to access our work from all of our devices. However, by centralizing data storage on servers, cloud apps also take away ownership and agency from users. If a service shuts down, the software stops functioning, and data created with that software is lost.* from <a href="https://www.inkandswitch.com/local-first.html" target="_blank" rel="noopener">InkAndSwitch</a>.
 
 But first of all, cloud is a business model. Cloud's first objective is not to empower users or ease their lives, but to
-create recuring revenue streams for enterprises (and investors).
+create recurring revenue streams for enterprises (and investors).
 
 What would happen to users' data if the
 enterprise go bakrupt? If the enteprise decides to kill the product because it's not enough profitable?
