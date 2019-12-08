@@ -1,6 +1,6 @@
 import VueI18n from 'vue-i18n';
 import Vue from 'vue';
-import { getLocale } from '@/utils/locales';
+import { getLang } from '@/utils/lang';
 
 import en from './en';
 import fr from './fr';
@@ -18,7 +18,7 @@ const messages = {
 
 // Create VueI18n instance with options
 export const i18n = new VueI18n({
-  locale: getLocale(), // set locale
+  locale: getLang(), // set locale
   fallbackLocale: 'en',
   messages, // set locale messages
 });

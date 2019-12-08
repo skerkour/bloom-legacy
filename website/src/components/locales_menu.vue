@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { saveLocale } from '@/utils/locales';
+import { saveLang } from '@/utils/lang';
 
 interface Language {
   name: string,
@@ -96,9 +96,9 @@ export default class LocalesMenu extends Vue {
   // lifecycle
   // watch
   // methods
-  setLocale(locale: Language) {
-    this.$i18n.locale = locale.locale;
-    saveLocale(locale.locale);
+  setLocale(lang: Language) {
+    this.$i18n.locale = lang.locale;
+    saveLang(lang.locale);
   }
 }
 </script>

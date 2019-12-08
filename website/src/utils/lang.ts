@@ -1,13 +1,14 @@
 import store from 'store';
 
+const STORE_KEY = 'lang';
 
-export function saveLocale(locale: string) {
-  store.set('locale', locale);
+export function saveLang(locale: string) {
+  store.set(STORE_KEY, locale);
   document.querySelector('html')!.setAttribute('lang', locale);
 }
 
-export function getLocale(): string {
-  let locale = store.get('locale');
+export function getLang(): string {
+  let locale = store.get(STORE_KEY);
   if (locale) {
     return locale;
   }
@@ -15,6 +16,6 @@ export function getLocale(): string {
   locale = navigator.language || (navigator as any).userLanguage;
 
   locale = (!locale || locale.length < 2) ? 'en' : locale.substring(0, 2);
-  saveLocale(locale);
+  saveLang(locale);
   return locale;
 }
