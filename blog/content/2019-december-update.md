@@ -22,11 +22,10 @@ First of all I want to apologize for the lack of public communication the past f
 *Empowering people with open technologies* requires a lot of cross domain competencies, whether it be
 finance, project management, marketing, software development, cryptography and so on...
 
-Being the sole person working on Bloom full time (Marina no longer have enough free time, she is
-in an internship for her schooling) means that I need to acquire myself all this knowledge, and, more importantly,
-how to apply it to create an awesome product. It takes a lot of time, efforts and focus.
+Being the sole person working on Bloom full time (Marina no longers have enough free time) means that I need to acquire myself all this knowledge, and, more importantly,
+how to apply this knowledge to create an awesome product. It takes a lot of time, efforts and focus.
 
-But the largest part is behind us and you can expect a lot more of development and openness in the coming months.
+But the largest part is behind us and you can expect more openness in the coming months.
 
 ## From cloud to local first
 
@@ -39,7 +38,7 @@ What would happen to users' data if the
 enterprise go bakrupt? If the enteprise decides to kill the product because it's not enough profitable?
 If the enterprise's cloud get hacked? If an embargo is promulgated? If internet is cut for some days/weeks?
 
-Cloud induces dependency which is the exact opposite of enmpowerement.
+Cloud induces dependency which is the exact opposite of empowerement.
 
 
 ### Native applications
