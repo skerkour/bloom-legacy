@@ -443,10 +443,10 @@ export default class ContactDialog extends Vue {
   birthdayFormatted: string | null = null;
   birthdayMenu = false;
   notes: string = '';
-  organizations: Organization[] = [Object.assign({}, DEFAULT_ORGANIZATION)];
-  phones: Phone[] = [Object.assign({}, DEFAULT_PHONE)];
-  emails: Email[] = [Object.assign({}, DEFAULT_EMAIL)];
-  websites: Website[] = [Object.assign({}, DEFAULT_WEBSITE)];
+  organizations: Organization[] = [{ ...DEFAULT_ORGANIZATION }];
+  phones: Phone[] = [{ ...DEFAULT_PHONE }];
+  emails: Email[] = [{ ...DEFAULT_EMAIL }];
+  websites: Website[] = [{ ...DEFAULT_WEBSITE }];
   phoneLabels = [
     'Home',
     'Work',
@@ -475,7 +475,7 @@ export default class ContactDialog extends Vue {
   // lifecycle
   // watch
   @Watch('birthday')
-  onBirthdayUpdated(_val: any) {
+  onBirthdayUpdated() {
     this.birthdayFormatted = this.formatDate(this.birthday);
   }
 
@@ -499,16 +499,16 @@ export default class ContactDialog extends Vue {
       this.birthdayFormatted = this.formatDate(this.birthday);
       this.emails = contact.emails.length > 0
         ? contact.emails
-        : [Object.assign({}, DEFAULT_EMAIL)];
+        : [{ ...DEFAULT_EMAIL }];
       this.websites = contact.websites.length > 0
         ? contact.websites
-        : [Object.assign({}, DEFAULT_WEBSITE)];
+        : [{ ...DEFAULT_WEBSITE }];
       this.phones = contact.phones.length > 0
         ? contact.phones
-        : [Object.assign({}, DEFAULT_PHONE)];
+        : [{ ...DEFAULT_PHONE }];
       this.organizations = contact.organizations.length > 0
         ? contact.organizations
-        : [Object.assign({}, DEFAULT_ORGANIZATION)];
+        : [{ ...DEFAULT_ORGANIZATION }];
     } else {
       this.clearFields();
     }
@@ -602,7 +602,7 @@ export default class ContactDialog extends Vue {
       },
     };
     try {
-      const res = await Native.call(message);
+      await Native.call(message);
       this.$emit('deleted', this.contact);
     } catch (err) {
       this.error = err.message;
@@ -613,7 +613,7 @@ export default class ContactDialog extends Vue {
   }
 
   addPhone() {
-    this.phones.push(Object.assign({}, DEFAULT_PHONE));
+    this.phones.push({ ...DEFAULT_PHONE });
   }
 
   removePhone(index: number) {
@@ -624,7 +624,7 @@ export default class ContactDialog extends Vue {
   }
 
   addEmail() {
-    this.emails.push(Object.assign({}, DEFAULT_EMAIL));
+    this.emails.push({ ...DEFAULT_EMAIL });
   }
 
   removeEmail(index: number) {
@@ -635,7 +635,7 @@ export default class ContactDialog extends Vue {
   }
 
   addWebsite() {
-    this.websites.push(Object.assign({}, DEFAULT_WEBSITE));
+    this.websites.push({ ...DEFAULT_WEBSITE });
   }
   removeWebsite(index: number) {
     this.websites.splice(index, 1);
@@ -684,10 +684,10 @@ export default class ContactDialog extends Vue {
     this.lastName = '';
     this.notes = '';
     this.birthday = null;
-    this.emails = [Object.assign({}, DEFAULT_EMAIL)];
-    this.websites = [Object.assign({}, DEFAULT_WEBSITE)];
-    this.phones = [Object.assign({}, DEFAULT_PHONE)];
-    this.organizations = [Object.assign({}, DEFAULT_ORGANIZATION)];
+    this.emails = [{ ...DEFAULT_EMAIL }];
+    this.websites = [{ ...DEFAULT_WEBSITE }];
+    this.phones = [{ ...DEFAULT_PHONE }];
+    this.organizations = [{ ...DEFAULT_ORGANIZATION }];
     this.error = '';
   }
 

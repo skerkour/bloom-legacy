@@ -142,7 +142,7 @@ export default class AllAppsDialog extends Vue {
   // methods
   goto(path: string) {
     this.show = false;
-    this.$router.push({ path }).catch((_) => {});
+    this.$router.push({ path }).catch(() => {});
   }
 }
 </script>

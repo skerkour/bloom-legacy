@@ -2,8 +2,6 @@ import {
   app,
   protocol,
   BrowserWindow,
-  Tray,
-  Menu,
 } from 'electron';
 import { createProtocol } from './create_protocol';
 
@@ -22,19 +20,19 @@ protocol.registerSchemesAsPrivileged([
 ]);
 
 // show window
-function showWindow() {
-  // const position = getWindowPosition();
-  // mainWindow.setPosition(position.x, position.y, false);
-  mainWindow!.show();
-  mainWindow!.focus();
-}
+// function showWindow() {
+//   // const position = getWindowPosition();
+//   // mainWindow.setPosition(position.x, position.y, false);
+//   mainWindow!.show();
+//   mainWindow!.focus();
+// }
 
 // toggle window
-function toggleWindow() {
-  // if (!mainWindow.isVisible()) {
-  showWindow();
-  // }
-}
+// function toggleWindow() {
+//   // if (!mainWindow.isVisible()) {
+//   showWindow();
+//   // }
+// }
 
 function createWindow() {
   // create tray icon

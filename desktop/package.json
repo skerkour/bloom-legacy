@@ -23,8 +23,6 @@
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "^4.6.95",
-    "@typescript-eslint/eslint-plugin": "^2.10.0",
-    "@typescript-eslint/parser": "^2.10.0",
     "bloom_native": "file:native",
     "core-js": "^3.4.7",
     "moment": "^2.24.0",
@@ -41,6 +39,8 @@
   "devDependencies": {
     "@types/jest": "^24.0.23",
     "@types/vue-the-mask": "^0.11.0",
+    "@typescript-eslint/eslint-plugin": "^2.10.0",
+    "@typescript-eslint/parser": "^2.10.0",
     "@vue/cli-plugin-babel": "^4.1.1",
     "@vue/cli-plugin-eslint": "^4.1.1",
     "@vue/cli-plugin-typescript": "^4.1.1",

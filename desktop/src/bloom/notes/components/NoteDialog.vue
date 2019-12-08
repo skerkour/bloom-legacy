@@ -78,12 +78,9 @@ import {
   Component,
   Prop,
   Vue,
-  Watch,
 } from 'vue-property-decorator';
 import { Note, GuiNote } from '@/native/messages/notes';
 import { Native, Message } from '@/native';
-
-const { log } = require('@bloom42/astro');
 
 @Component
 export default class NoteDialog extends Vue {

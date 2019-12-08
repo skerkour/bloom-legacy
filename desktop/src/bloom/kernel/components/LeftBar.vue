@@ -117,7 +117,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import AllAppsDialog from './AllAppsDialog.vue';
 
 
@@ -198,7 +198,7 @@ export default class LeftBar extends Vue {
   }
 
   goto(path: string) {
-    this.$router.push({ path }).catch((_) => {});
+    this.$router.push({ path }).catch(() => {});
   }
 }
 </script>

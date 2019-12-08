@@ -129,7 +129,6 @@ import {
 } from 'vue-property-decorator';
 import { Event as EventModel, GuiEvent } from '@/native/messages/calendar';
 import { Native, Message } from '@/native';
-import { GuiExpression } from '../../../native/messages/calculator';
 
 @Component
 export default class EventDialog extends Vue {
@@ -273,7 +272,7 @@ export default class EventDialog extends Vue {
       },
     };
     try {
-      const res = await Native.call(message);
+      await Native.call(message);
       this.$emit('deleted', this.event);
       this.close(true);
     } catch (err) {

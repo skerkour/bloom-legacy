@@ -1,5 +1,3 @@
-const webpack = require('webpack');
-
 module.exports = {
   configureWebpack: {
     externals: {
@@ -71,7 +69,7 @@ module.exports = {
           icon: 'build/icons/mac/icon.icns',
         },
         linux: {
-          category: 'Utility,Office', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
+          category: 'Utility,Network', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
           icon: 'build/icons/png',
         },
         win: {

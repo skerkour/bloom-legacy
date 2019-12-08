@@ -32,4 +32,4 @@ class Event {
   }
 }
 
-export default Note;
+export default Event;

@@ -31,7 +31,7 @@ function createWindow() {
   // create tray icon
   tray = new Tray(config.TRAY_ICON);
   // tray.on('right-click', toggleWindow);
-  tray.on('right-click', (event, bounds) => {
+  tray.on('right-click', () => {
     const contextMenu = Menu.buildFromTemplate([
       { label: 'Quit', click: () => { app.quit(); } },
     ]);
@@ -39,7 +39,7 @@ function createWindow() {
     // lastTrayIconBounds = bounds;
   });
   tray.setIgnoreDoubleClickEvents(true);
-  tray.on('click', (event) => {
+  tray.on('click', () => {
     toggleWindow();
   });
   tray.setToolTip('Bloom');

@@ -100,7 +100,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import EventDialog from '../components/EventDialog.vue';
 import { Native, Message } from '@/native';
@@ -149,7 +149,7 @@ export default class Index extends Vue {
       // because vuetify does not support multi day events
       const diff = moment(e.end_at).diff(e.start_at, 'days');
       for (let i = 1; i <= diff; i += 1) {
-        const e2 = Object.assign({}, e);
+        const e2 = { ...e };
         e2.date = new Date(new Date(e2.start_at).setDate(new Date(e2.start_at).getDate() + i))
           .toISOString().substr(0, 10);
         (map[e2.date] = map[e2.date] || []).push(e);

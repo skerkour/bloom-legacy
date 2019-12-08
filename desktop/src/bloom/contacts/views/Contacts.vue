@@ -77,7 +77,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
 import { Contact, GuiContacts } from '@/native/messages/contacts';
 import ContactDialog from '../components/ContactDialog.vue';

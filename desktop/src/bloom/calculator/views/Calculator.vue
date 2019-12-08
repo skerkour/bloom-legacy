@@ -28,9 +28,8 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
-import { GuiExpression } from '@/native/messages/calculator';
 
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
 const OPERATORS = ['+', '-', '*', '/'];

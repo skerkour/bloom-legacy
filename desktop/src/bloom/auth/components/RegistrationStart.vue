@@ -47,7 +47,7 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import { Native, Message } from '@/native';
 import { RegistrationStarted } from '@/native/messages/auth';
 import { StorePendingAccount } from '../models';

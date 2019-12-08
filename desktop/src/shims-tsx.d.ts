@@ -1,4 +1,6 @@
-import Vue, { VNode } from 'vue';
+import Vue, { VNode } from 'vue'; // eslint-disable-line
+
+// we disable eslint, because otherwise Vue and VNode are marked as non used
 
 declare global {
   namespace JSX {

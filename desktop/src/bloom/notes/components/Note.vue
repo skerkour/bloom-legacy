@@ -247,7 +247,7 @@ export default class BlmNote extends Vue {
       },
     };
     try {
-      const res = await Native.call(message);
+      await Native.call(message);
       this.$emit('deleted', this.note);
     } catch (err) {
       this.error = err.message;
