@@ -4,7 +4,7 @@
 DIST_DIR = dist
 NAME := server
 VERSION := $(shell cat VERSION.txt | tr -d '\n')
-DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom
+DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom/legacy
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
@@ -36,12 +36,12 @@ release:
 
 
 docker_build:
-	docker build -t $(DOCKER_IMAGE):legacy-v$(VERSION) .
-	docker tag $(DOCKER_IMAGE):legacy-v$(VERSION) $(DOCKER_IMAGE):legacy-latest
+	docker build -t $(DOCKER_IMAGE):v$(VERSION) .
+	docker tag $(DOCKER_IMAGE):v$(VERSION) $(DOCKER_IMAGE):latest
 
 docker_login:
 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
 docker_release:
-	docker push $(DOCKER_IMAGE):legacy-v$(VERSION)
-	docker push $(DOCKER_IMAGE):legacy-latest
+	docker push $(DOCKER_IMAGE):v$(VERSION)
+	docker push $(DOCKER_IMAGE):latest
