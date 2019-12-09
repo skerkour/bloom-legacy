@@ -1,0 +1,9 @@
+rust_env = "production"
+aws_secret_access_key = "XXX"
+aws_access_key_id = "XXX"
+aws_region = "XXX"
+aws_s3_bucket = "XXX"
+sentry_url = "XXX"
+bloom_api_secret = "XXX"
+bloom_api_url = "https://bloom.sh/api"
+concurrency = 21

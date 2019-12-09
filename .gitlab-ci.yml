@@ -150,6 +150,20 @@ test:website:
     - make install
     - make lint
 
+test:bitflow:
+  stage: test
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - rustup component add rustfmt clippy
+    - cd bitflow
+    - make fmt_check
+    - make lint
+    - make test
+
 ####################################################################################################
 ## Build
 ####################################################################################################
@@ -254,6 +268,20 @@ build:website:
     - website/dist
 
 
+build:bitflow:
+  stage: build
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - cd bitflow
+    - make build
+  artifacts:
+    paths:
+    - bitflow/dist
+
 ####################################################################################################
 ## Package
 ####################################################################################################
@@ -270,6 +298,21 @@ package:server:
     - cd server
     - apk update && apk add make
     - make docker_build
+
+
+package:bitflow:
+  stage: package
+  dependencies:
+    - build:bitflow
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - cd bitflow
+    - make docker_build
+
 
 ####################################################################################################
 ## Release
@@ -361,7 +404,45 @@ release:server:stable:
     - make docker_login
     - make docker_release
 
-# release the_guide
+
+release:bitflow:stable:
+  only:
+    - /^server-v.*$/
+  except:
+    - branches
+  stage: release
+  dependencies:
+    - build:bitflow
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - cd bitflow
+    - make docker_build
+    - make docker_login
+    - make docker_release
+
+
+
+# release:bitflow:nightly:
+#   only:
+#     - schedules
+#   stage: release
+#   dependencies:
+#     - build
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release_nightly
+
+# # release the_guide
 # pages:
 #   stage: release
 #   only:

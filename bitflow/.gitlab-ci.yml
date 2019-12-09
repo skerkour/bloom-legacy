@@ -1,0 +1,93 @@
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - package
+  - release
+
+variables:
+  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+  RUST_VERSION: nightly-2019-10-13
+  RUST_BACKTRACE: 1
+  RUST_IMAGE: rust:latest
+
+cache:
+  paths:
+    - cargo_home/
+    - target/
+
+
+test:
+  stage: test
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - rustup component add rustfmt clippy
+    - make fmt_check
+    - make lint
+    - make test
+
+
+build:
+  stage: build
+  image: $RUST_IMAGE
+  tags:
+    - docker
+  script:
+    - apt update && apt install -y gcc make git
+    - rustup default $RUST_VERSION
+    - make build
+  artifacts:
+    paths:
+    - dist
+
+
+package:docker:
+  stage: package
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+
+
+release:docker:nightly:
+  only:
+    - schedules
+  stage: release
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release_nightly
+
+release:docker:stable:
+  only:
+    - tags
+  stage: release
+  dependencies:
+    - build
+  image: docker:stable
+  tags:
+    - docker
+  cache: {}
+  script:
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release
