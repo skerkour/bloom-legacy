@@ -34,7 +34,7 @@ services:
 
 
   bitflow:
-    image: registry.gitlab.com/bloom42/bitflow:${BITFLOW_VERSION}
+    image: registry.gitlab.com/bloom42/bloom/bitflow:${BITFLOW_VERSION}
     restart: unless-stopped
     env_file:
       - bitflow.env

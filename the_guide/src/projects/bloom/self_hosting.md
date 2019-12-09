@@ -48,4 +48,21 @@ See the [Phaser repository](https://gitlab.com/bloom42/phaser/tree/dev/docs).
 
 ## Run Bitflow worker
 
-See the [Bitflow repository](https://gitlab.com/bloom42/bitflow/tree/dev/docs).
+
+1. Pull latest Docker image
+```sh
+$ docker pull registry.gitlab.com/bloom42/bloom/bitflow:latest
+```
+
+2. Get the latest `bitflow.default.sane` file and move it to `bitflow.sane`
+```sh
+$ wget https://gitlab.com/bloom42/bloom/raw/master/bitflow/bitflow.default.sane?inline=false
+$ mv bitflow.default.sane bitflow.sane
+```
+
+3. Edit `bitflow.sane` with correct values
+
+4. Launch Docker container
+```sh
+$ docker run -d -v `pwd`/bitflow.sane:/bitflow/bitflow.sane:ro registry.gitlab.com/bloom42/bloom/bitflow:latest
+```

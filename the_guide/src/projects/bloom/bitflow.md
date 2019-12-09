@@ -201,18 +201,18 @@ $ make dev_docker_run
 
 1. Pull latest Docker image
 ```sh
-$ docker pull registry.gitlab.com/bloom42/bitflow:latest
+$ docker pull registry.gitlab.com/bloom42/bloom/bitflow:latest
 ```
 
-2. Get the latest `bitflow.template.sane` file and move it to `bitflow.sane`
+2. Get the latest `bitflow.default.sane` file and move it to `bitflow.sane`
 ```sh
-$ wget https://gitlab.com/bloom42/bitflow/raw/dev/bitflow.template.sane?inline=false
-$ mv bitflow.template.sane bitflow.sane
+$ wget https://gitlab.com/bloom42/bloom/raw/master/bitflow/bitflow.default.sane?inline=false
+$ mv bitflow.default.sane bitflow.sane
 ```
 
 3. Edit `bitflow.sane` with correct values
 
 4. Launch Docker container
 ```sh
-$ docker run -d -v `pwd`/bitflow.sane:/bitflow/bitflow.sane:ro registry.gitlab.com/bloom42/bitflow:latest
+$ docker run -d -v `pwd`/bitflow.sane:/bitflow/bitflow.sane:ro registry.gitlab.com/bloom42/bloom/bitflow:latest
 ```

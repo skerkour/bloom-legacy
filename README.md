@@ -6,6 +6,8 @@
 
 [Try it for free](https://bloom.sh/download)
 
+[![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
+
 --------
 
 Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
