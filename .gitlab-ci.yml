@@ -407,7 +407,7 @@ release:server:stable:
 
 release:bitflow:stable:
   only:
-    - /^server-v.*$/
+    - /^bitflow-v.*$/
   except:
     - branches
   stage: release
