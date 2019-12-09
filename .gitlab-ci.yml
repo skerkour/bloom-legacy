@@ -366,22 +366,6 @@ release:status_page:
     - make docker_login
     - make release
 
-release:server:nightly:
-  only:
-    - schedules
-  stage: release
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release_nightly
 
 release:server:stable:
   # only:
@@ -425,7 +409,23 @@ release:bitflow:stable:
     - make docker_release
 
 
-
+# release:server:nightly:
+#   only:
+#     - schedules
+#   stage: release
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release_nightly
+#
 # release:bitflow:nightly:
 #   only:
 #     - schedules
