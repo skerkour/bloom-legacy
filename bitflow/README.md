@@ -1,4 +1,6 @@
-<p align="center">
+See [https://www.bloom.sh/the-guide/projects/bloom/bitflow](https://www.bloom.sh/the-guide/projects/bloom/bitflow)
+
+<!-- <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bitflow_256.png" height="180" />
   <h3 align="center">Bitflow</h3>
   <p align="center">A simple piece of software that makes downloading ﬁles fast ⚡</p>
@@ -57,4 +59,4 @@ and the contributors please visit our
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://bloom.sh/security) instead. Thank you.
+[dedicated security page](https://bloom.sh/security) instead. Thank you. -->
