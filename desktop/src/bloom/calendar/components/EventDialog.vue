@@ -25,7 +25,6 @@
               <v-btn
                 slot="activator"
                 text
-                color="white"
                 icon
                 v-on="{ ...tooltip, ...menu }"
               >

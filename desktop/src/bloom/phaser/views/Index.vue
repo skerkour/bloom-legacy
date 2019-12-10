@@ -6,7 +6,7 @@
 
     <v-toolbar flat dense>
       <v-spacer />
-      <v-btn outlined color="primary" class="new-btn" @click="openNewScanDialog">
+      <v-btn color="primary" class="new-btn" @click="openNewScanDialog">
         <v-icon left>mdi-plus</v-icon>New scan
       </v-btn>
     </v-toolbar>
