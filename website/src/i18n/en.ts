@@ -58,7 +58,7 @@ export default {
       become contributors and we greatly improve the quality of global human life.`,
     mission: {
       title: 'Mission',
-      description: 'Empowering the world with open technologies.',
+      description: 'Empowering people with open technologies.',
     },
     values: {
       title: 'Values',

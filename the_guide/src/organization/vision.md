@@ -218,7 +218,7 @@ It is thus a virtuous circle that is formed, where cooperation breaks the fronti
 Where production no longer rhymes with auto-destruction.
 
 
-Our mission? **Empowering the world with open technologies**.
+Our mission? **Empowering people with open technologies**.
 
 Bloom offers today the following online services:
 
@@ -369,7 +369,7 @@ In summary the master plan is as follows:
 2. With this money reduce prices, free the data and the access to scientific knowledge
 3. With this money and this community create the open infrastructure to run these software and host this open data
 
-<b id="mission">Our mission?</b> Empowering the world with open technologies.
+<b id="mission">Our mission?</b> Empowering people with open technologies.
 
 **Our values​​?** Cooperation, Acuity, Transparency, Simplicity (CATS 🐱).
 
