@@ -10,6 +10,15 @@
       </v-list-item-content>
     </v-list-item>
 
+    <v-list-item exact to="/drive/trash">
+      <v-list-item-icon>
+        <v-icon>mdi-delete</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Trash</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
   </v-list>
 </template>
 
