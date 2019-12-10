@@ -91,11 +91,10 @@ export default class Features extends Vue {
     },
     { name: 'dl_btn' },
     {
-      name: 'Bitflow',
-      icon: '/static/imgs/icons/bitflow.svg',
-      description: `Your cloud-based download manager.
-      Download any file and torrent directly to your Drive.`,
-      learnMore: 'bitflow',
+      name: 'Phaser',
+      icon: '/static/imgs/icons/phaser.svg',
+      description: 'The cloud-native security scanner.',
+      learnMore: 'phaser',
     },
     {
       name: 'Notes',
@@ -103,6 +102,13 @@ export default class Features extends Vue {
       description: `Quickly capture what’s on your mind and get a reminder later
         at the right place or time.`,
       learnMore: 'notes',
+    },
+    {
+      name: 'Bitflow',
+      icon: '/static/imgs/icons/bitflow.svg',
+      description: `Your cloud-based download manager.
+      Download any file and torrent directly to your Drive.`,
+      learnMore: 'bitflow',
     },
     {
       name: 'Arcade',

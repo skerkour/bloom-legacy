@@ -10,6 +10,7 @@ const Drive = () => import(/* webpackChunkName: "chunk-features" */ '@/views/fea
 const Gallery = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/gallery.vue');
 const Music = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/music.vue');
 const Notes = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/notes.vue');
+const Phaser = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/phaser.vue');
 
 export default [
   {
@@ -55,5 +56,9 @@ export default [
   {
     component: Notes,
     path: '/features/notes',
+  },
+  {
+    component: Phaser,
+    path: '/features/phaser',
   },
 ];
