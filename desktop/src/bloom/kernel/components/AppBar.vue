@@ -29,7 +29,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import config from '@/config';
+
+const config = require('@/config');
 
 const { shell } = (window as any).require('electron');
 

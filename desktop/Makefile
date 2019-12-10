@@ -9,7 +9,7 @@ dev_electron:
 	npm urn dev:electron
 
 clean:
-	rm -rf dist node_modules/
+	rm -rf dist node_modules/ dist_electron
 
 install:
 	npm install
@@ -31,7 +31,8 @@ lint:
 	npm run lint
 
 build:
-	npm run build
+	npm run build:native
+	npm run build:electron
 
 assets:
 	rm -rf public/assets

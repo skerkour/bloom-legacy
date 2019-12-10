@@ -106,6 +106,7 @@ import EventDialog from '../components/EventDialog.vue';
 import { Native, Message } from '@/native';
 import { Event as EventModel, GuiEvents } from '@/native/messages/calendar';
 
+const { log } = require('@bloom42/astro');
 
 @Component({
   components: {
@@ -178,7 +179,7 @@ export default class Index extends Vue {
     try {
       const res = await Native.call(message);
       this.events = (res.data as GuiEvents).events;
-      console.log(this.events);
+      log.debug(this.events);
     } catch (err) {
       this.error = err.message;
     } finally {
