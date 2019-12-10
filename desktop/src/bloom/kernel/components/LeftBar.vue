@@ -43,13 +43,20 @@
               <v-list-item class="justify-center">
                 <v-btn
                   text
-                  color="primary"
+                  color="grey darken-4"
                   to="/preferences"
-                  id="menu-account"
-                  class="elevation-0"
                   @click="accountMenu = false"
                 >
-                  Preferences
+                  <v-icon left>mdi-settings</v-icon> Preferences
+                </v-btn>
+
+                <v-btn
+                  text
+                  color="grey darken-4"
+                  to="/my-account"
+                  @click="accountMenu = false"
+                >
+                  <v-icon left>mdi-account</v-icon> My Account
                 </v-btn>
               </v-list-item>
             </v-list>
