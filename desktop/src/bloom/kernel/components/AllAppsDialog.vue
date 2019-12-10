@@ -60,16 +60,16 @@ export default class AllAppsDialog extends Vue {
 
   // data
   apps1 = [
-    // {
-    //   name: 'Chat',
-    //   path: '/chat',
-    //   icon: '/assets/icons/chat_256.jpg',
-    // },
-    // {
-    //   name: 'Music',
-    //   path: '/music',
-    //   icon: '/assets/icons/music_256.jpg',
-    // },
+    {
+      name: 'Chat',
+      path: '/chat',
+      icon: '/assets/icons/chat_256.jpg',
+    },
+    {
+      name: 'Music',
+      path: '/music',
+      icon: '/assets/icons/music_256.jpg',
+    },
     {
       name: 'Notes',
       path: '/notes',

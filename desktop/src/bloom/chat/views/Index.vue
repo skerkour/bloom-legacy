@@ -1,9 +1,9 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="3">
+      <v-col cols="3" class="scrollable">
         <v-list two-line avatar>
-        <v-list-item-group v-model="conversation" color="primary">
+        <v-list-item-group v-model="selectedConversation" color="primary">
           <v-list-item
             v-for="(conversation, i) in conversations"
             :key="i"
@@ -38,7 +38,7 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class Index extends Vue {
   // props
   // data
-  selectedConversation = 1;
+  selectedConversation = 0;
   conversations = [
     {
       avatar: 'https://cdn.vuetifyjs.com/images/lists/1.jpg',
@@ -65,6 +65,57 @@ export default class Index extends Vue {
       title: 'Recipe to try',
       subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
     },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+    {
+      avatar: 'https://cdn.vuetifyjs.com/images/lists/5.jpg',
+      title: 'Recipe to try',
+      subtitle: "<span class='text--primary'>Britta Holt</span> &mdash; We should eat this: Grate, Squash, Corn, and tomatillo Tacos.",
+    },
+
   ];
 
   // computed
@@ -108,4 +159,8 @@ export default class Index extends Vue {
 
 
 <style lang="scss" scoped>
+.scrollable {
+  overflow-y: auto;
+  height: 88vh;
+}
 </style>

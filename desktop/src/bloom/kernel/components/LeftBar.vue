@@ -132,36 +132,41 @@ export default class LeftBar extends Vue {
   accountMenu = false;
   showAllAppsDialog = false;
   apps = [
-    // {
-    //   name: 'Chat',
-    //   path: '/chat',
-    //   icon: '/kernel/imgs/icons/chat_512.jpg',
-    // },
-    // {
-    //   name: 'Music',
-    //   path: '/music',
-    //   icon: '/kernel/imgs/icons/music_512.jpg',
-    // },
-    // {
-    //   name: 'Gallery',
-    //   path: '/gallery',
-    //   icon: '/kernel/imgs/icons/gallery_512.jpg',
-    // },
     {
-      name: 'Notes',
-      path: '/notes',
-      icon: '/assets/icons/notes_256.jpg',
+      name: 'Chat',
+      path: '/chat',
+      icon: '/kernel/imgs/icons/chat_512.jpg',
+    },
+    {
+      name: 'Drive',
+      path: '/drive',
+      icon: '/kernel/imgs/icons/drive_512.jpg',
+    },
+    {
+      name: 'Music',
+      path: '/music',
+      icon: '/kernel/imgs/icons/music_512.jpg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
       icon: '/assets/icons/calendar_256.jpg',
     },
-    // {
-    //   name: 'Bitflow',
-    //   path: '/bitflow',
-    //   icon: '/kernel/imgs/icons/bitflow_512.jpg',
-    // },
+    {
+      name: 'Notes',
+      path: '/notes',
+      icon: '/assets/icons/notes_256.jpg',
+    },
+    {
+      name: 'Bitflow',
+      path: '/bitflow',
+      icon: '/kernel/imgs/icons/bitflow_512.jpg',
+    },
+    {
+      name: 'Gallery',
+      path: '/gallery',
+      icon: '/kernel/imgs/icons/gallery_512.jpg',
+    },
     {
       name: 'Arcade',
       path: '/arcade',
@@ -172,11 +177,6 @@ export default class LeftBar extends Vue {
       path: '/contacts',
       icon: '/assets/icons/contacts_256.jpg',
     },
-    // {
-    //   name: 'Drive',
-    //   path: '/drive',
-    //   icon: '/kernel/imgs/icons/drive_512.jpg',
-    // },
     {
       name: 'Calculator',
       path: '/calculator',
@@ -207,5 +207,7 @@ export default class LeftBar extends Vue {
 <style lang="scss" scoped>
 .blm-left-bar {
   z-index: 100;
+  height: 100vh;
+  overflow-y: auto;
 }
 </style>
