@@ -161,6 +161,6 @@ export default class Index extends Vue {
 <style lang="scss" scoped>
 .scrollable {
   overflow-y: auto;
-  height: 88vh;
+  height: calc(100vh - 90px);
 }
 </style>

@@ -1,5 +1,15 @@
 <template>
   <v-list nav dense class="text-left">
+
+    <v-list-item exact link to="/phaser">
+      <v-list-item-icon>
+        <v-icon>mdi-format-list-bulleted</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Scans</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
   </v-list>
 </template>
 
