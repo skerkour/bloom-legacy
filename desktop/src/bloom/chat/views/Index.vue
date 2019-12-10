@@ -1,7 +1,7 @@
 <template>
   <v-container fluid>
     <v-row>
-      <v-col cols="3" class="scrollable">
+      <v-col cols="3" class="blm-scrollable">
         <v-list two-line avatar>
         <v-list-item-group v-model="selectedConversation" color="primary">
           <v-list-item
@@ -22,7 +22,7 @@
       </v-col>
 
 
-      <v-col cols="9">
+      <v-col cols="9" class="blm-chat-container">
         <h1>Chat</h1>
       </v-col>
     </v-row>
@@ -159,8 +159,13 @@ export default class Index extends Vue {
 
 
 <style lang="scss" scoped>
-.scrollable {
+.blm-scrollable {
   overflow-y: auto;
   height: calc(100vh - 90px);
+}
+
+.blm-chat-container{
+  // height: calc(100vh - 9.5rem);
+  overflow-y: auto;
 }
 </style>
