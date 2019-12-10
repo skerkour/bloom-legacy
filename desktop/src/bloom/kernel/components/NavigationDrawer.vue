@@ -30,7 +30,7 @@ import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
 import PhaserDrawer from '@/bloom/phaser/components/Drawer.vue';
 
-const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar', 'contacts'];
+const APPS_WITH_DRAWER = ['music', 'bitflow', 'notes', 'drive', 'phaser'];
 
 @Component({
   components: {
@@ -49,7 +49,7 @@ export default class NavigationDrawer extends Vue {
   // data
   // computed
   get showDrawer() {
-    return !APPS_WITHOUT_DRAWER.includes(this.app);
+    return APPS_WITH_DRAWER.includes(this.app);
   }
 
 
