@@ -14,6 +14,7 @@ import BitflowRouter from '@/bloom/bitflow/router';
 import ContactsRouter from '@/bloom/contacts/router';
 import GalleryRouter from '@/bloom/gallery/router';
 import CalculatorRouter from '@/bloom/calculator/router';
+import PhaserRouter from '@/bloom/phaser/router';
 
 
 import store from '@/store';
@@ -37,6 +38,7 @@ const router = new Router({
     ...ContactsRouter,
     ...GalleryRouter,
     ...CalculatorRouter,
+    ...PhaserRouter,
     {
       path: '**',
       redirect: '/chat',

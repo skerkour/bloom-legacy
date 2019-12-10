@@ -182,6 +182,11 @@ export default class LeftBar extends Vue {
       path: '/calculator',
       icon: '/assets/icons/calculator.svg',
     },
+    {
+      name: 'Phaser',
+      path: '/phaser',
+      icon: '/assets/icons/phaser.svg',
+    },
   ];
 
 

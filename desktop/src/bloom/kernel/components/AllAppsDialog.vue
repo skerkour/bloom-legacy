@@ -107,6 +107,11 @@ export default class AllAppsDialog extends Vue {
       path: '/calculator',
       icon: '/assets/icons/calculator.svg',
     },
+    {
+      name: 'Phaser',
+      path: '/phaser',
+      icon: '/assets/icons/phaser.svg',
+    },
   ];
 
   // computed
