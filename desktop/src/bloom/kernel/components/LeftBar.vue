@@ -135,52 +135,52 @@ export default class LeftBar extends Vue {
     {
       name: 'Chat',
       path: '/chat',
-      icon: '/kernel/imgs/icons/chat_512.jpg',
+      icon: '/assets/icons/chat.svg',
     },
     {
       name: 'Drive',
       path: '/drive',
-      icon: '/kernel/imgs/icons/drive_512.jpg',
+      icon: '/assets/icons/drive.svg',
     },
     {
       name: 'Music',
       path: '/music',
-      icon: '/kernel/imgs/icons/music_512.jpg',
+      icon: '/assets/icons/music.svg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
-      icon: '/assets/icons/calendar_256.jpg',
+      icon: '/assets/icons/calendar.svg',
     },
     {
       name: 'Notes',
       path: '/notes',
-      icon: '/assets/icons/notes_256.jpg',
+      icon: '/assets/icons/notes.svg',
     },
     {
       name: 'Bitflow',
       path: '/bitflow',
-      icon: '/kernel/imgs/icons/bitflow_512.jpg',
+      icon: '/assets/icons/bitflow.svg',
     },
     {
       name: 'Gallery',
       path: '/gallery',
-      icon: '/kernel/imgs/icons/gallery_512.jpg',
+      icon: '/assets/icons/gallery.svg',
     },
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/assets/icons/arcade_256.jpg',
+      icon: '/assets/icons/arcade.svg',
     },
     {
       name: 'Contacts',
       path: '/contacts',
-      icon: '/assets/icons/contacts_256.jpg',
+      icon: '/assets/icons/contacts.svg',
     },
     {
       name: 'Calculator',
       path: '/calculator',
-      icon: '/assets/icons/calculator_256.jpg',
+      icon: '/assets/icons/calculator.svg',
     },
   ];
 
@@ -207,7 +207,6 @@ export default class LeftBar extends Vue {
 <style lang="scss" scoped>
 .blm-left-bar {
   z-index: 100;
-  height: 100vh;
   overflow-y: auto;
 }
 </style>

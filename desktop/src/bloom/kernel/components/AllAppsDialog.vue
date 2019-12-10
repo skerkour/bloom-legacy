@@ -30,15 +30,6 @@
                 </v-col>
               </v-row>
 
-              <v-row justify="start">
-                <v-col cols="2" v-for="(app, index) in apps2" :key="index" class="blm-app-icon">
-                  <v-avatar class="blm-pointer" @click="goto(app.path)" size="52">
-                    <img :src="app.icon" :alt="app.name" />
-                  </v-avatar>
-                  <p class="subtitle-1 font-weight-medium blm-app-icon-name">{{ app.name }}</p>
-                </v-col>
-              </v-row>
-
             </v-container>
           </v-col>
         </v-row>
@@ -63,66 +54,59 @@ export default class AllAppsDialog extends Vue {
     {
       name: 'Chat',
       path: '/chat',
-      icon: '/assets/icons/chat_256.jpg',
+      icon: '/assets/icons/chat.svg',
     },
     {
       name: 'Music',
       path: '/music',
-      icon: '/assets/icons/music_256.jpg',
+      icon: '/assets/icons/music.svg',
     },
     {
       name: 'Notes',
       path: '/notes',
-      icon: '/assets/icons/notes_256.jpg',
+      icon: '/assets/icons/notes.svg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
-      icon: '/assets/icons/calendar_256.jpg',
-    },
-    {
-      name: 'Calculator',
-      path: '/calculator',
-      icon: '/assets/icons/calculator_256.jpg',
+      icon: '/assets/icons/calendar.svg',
     },
     {
       name: 'Contacts',
       path: '/contacts',
-      icon: '/assets/icons/contacts_256.jpg',
+      icon: '/assets/icons/contacts.svg',
     },
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/assets/icons/arcade_256.jpg',
+      icon: '/assets/icons/arcade.svg',
     },
-    // {
-    //   name: 'Bitflow',
-    //   path: '/bitflow',
-    //   icon: '/assets/icons/bitflow_256.jpg',
-    // },
-  ];
-  apps2 = [
-    // {
-    //   name: 'Drive',
-    //   path: '/drive',
-    //   icon: '/assets/icons/drive_256.jpg',
-    // },
-    // {
-    //   name: 'Arcade',
-    //   path: '/arcade',
-    //   icon: '/assets/icons/arcade_256.jpg',
-    // },
+    {
+      name: 'Bitflow',
+      path: '/bitflow',
+      icon: '/assets/icons/bitflow.svg',
+    },
+    {
+      name: 'Drive',
+      path: '/drive',
+      icon: '/assets/icons/drive.svg',
+    },
+    {
+      name: 'Arcade',
+      path: '/arcade',
+      icon: '/assets/icons/arcade.svg',
+    },
 
-    // {
-    //   name: 'Gallery',
-    //   path: '/gallery',
-    //   icon: '/assets/icons/gallery_256.jpg',
-    // },
-    // {
-    //   name: 'Calculator',
-    //   path: '/calculator',
-    //   icon: '/assets/icons/calculator_256.jpg',
-    // },
+    {
+      name: 'Gallery',
+      path: '/gallery',
+      icon: '/assets/icons/gallery.svg',
+    },
+    {
+      name: 'Calculator',
+      path: '/calculator',
+      icon: '/assets/icons/calculator.svg',
+    },
   ];
 
   // computed
