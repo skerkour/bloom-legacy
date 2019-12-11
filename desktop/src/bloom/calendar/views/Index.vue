@@ -10,8 +10,6 @@
 
         <!-- <v-row justify="center"> -->
         <v-btn
-          outlined
-          large
           color="primary"
           class="mb-4"
           @click="createEvent"
