@@ -39,6 +39,7 @@ assets:
 	mkdir -p public/assets public/assets/fonts public/assets/imgs
 	cp -r ../assets/icons public/assets/imgs/icons
 	cp ../assets/desktop/icons/* public/assets/imgs/icons/
+	cp ../assets/desktop/imgs/* public/assets/imgs/
 	cp ../assets/fonts/rounded_elegance.ttf public/assets/fonts/
 
 icons:

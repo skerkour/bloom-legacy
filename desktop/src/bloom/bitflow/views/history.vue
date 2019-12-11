@@ -10,7 +10,7 @@
       <v-tooltip bottom>
         <template v-slot:activator="{ on }">
           <v-btn icon @click="clearHistory" v-on="on">
-            <v-icon color="grey darken-1">mdi-delete</v-icon>
+            <v-icon>mdi-delete</v-icon>
           </v-btn>
         </template>
         <span>Clear history</span>

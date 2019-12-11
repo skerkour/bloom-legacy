@@ -1,5 +1,5 @@
 <template>
-  <v-app :dark="darkMode">
+  <v-app :dark="$store.state.dark_mode">
     <component :is="layout">
       <router-view/>
     </component>
@@ -28,10 +28,6 @@ export default class App extends Vue {
     return layout;
   }
 
-  get darkMode() {
-    return this.$store.state.dark_mode;
-  }
-
   // lifecycle
   // watch
   // methods
@@ -55,6 +51,10 @@ export default class App extends Vue {
 
 a {
   text-decoration: none;
+}
+
+.v-application a {
+  color: inherit !important;
 }
 
 .v-btn {

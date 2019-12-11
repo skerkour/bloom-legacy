@@ -5,12 +5,10 @@
     </v-alert>
 
     <v-toolbar flat dense id="blm-downloads-toolbar">
-
       <v-spacer />
       <v-btn color="primary" @click="addDownload">
         <v-icon left>mdi-plus</v-icon>New Download
       </v-btn>
-
     </v-toolbar>
 
 
