@@ -1,15 +1,20 @@
 .PHONY: dev install clean assets dev_vue dev_electron icons
 .PHONY: test lint build dev_native test_native lint_native
 
+build:
+	npm run build:native
+	npm run build:electron
+
+clean:
+	rm -rf dist dist_electron
+
+re: clean build
 
 dev_native:
 	npm run dev:native
 
 dev_electron:
 	npm urn dev:electron
-
-clean:
-	rm -rf dist node_modules/ dist_electron
 
 install:
 	npm install
@@ -29,10 +34,6 @@ fmt_native:
 
 lint:
 	npm run lint
-
-build:
-	npm run build:native
-	npm run build:electron
 
 assets:
 	rm -rf public/assets
