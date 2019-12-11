@@ -54,63 +54,63 @@ export default class AllAppsDialog extends Vue {
     {
       name: 'Chat',
       path: '/chat',
-      icon: '/assets/icons/chat.svg',
+      icon: '/assets/imgs/icons/chat.svg',
     },
     {
       name: 'Music',
       path: '/music',
-      icon: '/assets/icons/music.svg',
+      icon: '/assets/imgs/icons/music.svg',
     },
     {
       name: 'Notes',
       path: '/notes',
-      icon: '/assets/icons/notes.svg',
+      icon: '/assets/imgs/icons/notes.svg',
     },
     {
       name: 'Calendar',
       path: '/calendar',
-      icon: '/assets/icons/calendar.svg',
+      icon: '/assets/imgs/icons/calendar.svg',
     },
     {
       name: 'Contacts',
       path: '/contacts',
-      icon: '/assets/icons/contacts.svg',
+      icon: '/assets/imgs/icons/contacts.svg',
     },
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/assets/icons/arcade.svg',
+      icon: '/assets/imgs/icons/arcade.svg',
     },
     {
       name: 'Bitflow',
       path: '/bitflow',
-      icon: '/assets/icons/bitflow.svg',
+      icon: '/assets/imgs/icons/bitflow.svg',
     },
     {
       name: 'Drive',
       path: '/drive',
-      icon: '/assets/icons/drive.svg',
+      icon: '/assets/imgs/icons/drive.svg',
     },
     {
       name: 'Arcade',
       path: '/arcade',
-      icon: '/assets/icons/arcade.svg',
+      icon: '/assets/imgs/icons/arcade.svg',
     },
 
     {
       name: 'Gallery',
       path: '/gallery',
-      icon: '/assets/icons/gallery.svg',
+      icon: '/assets/imgs/icons/gallery.svg',
     },
     {
       name: 'Calculator',
       path: '/calculator',
-      icon: '/assets/icons/calculator.svg',
+      icon: '/assets/imgs/icons/calculator.svg',
     },
     {
       name: 'Phaser',
       path: '/phaser',
-      icon: '/assets/icons/phaser.svg',
+      icon: '/assets/imgs/icons/phaser.svg',
     },
   ];
 
