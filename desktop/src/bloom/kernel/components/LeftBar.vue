@@ -43,7 +43,6 @@
               <v-list-item class="justify-center">
                 <v-btn
                   text
-                  color="grey darken-4"
                   to="/preferences"
                   @click="accountMenu = false"
                 >
@@ -52,7 +51,6 @@
 
                 <v-btn
                   text
-                  color="grey darken-4"
                   to="/myaccount"
                   @click="accountMenu = false"
                 >

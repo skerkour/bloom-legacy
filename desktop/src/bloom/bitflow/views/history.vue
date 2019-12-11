@@ -35,7 +35,7 @@
         <td class="text-left">
           <span>{{ item.name | truncate }}</span>
         </td>
-        <td class="text-xs-left">
+        <td class="text-left">
           <span>{{ item.created_at | calendar }}</span>
         </td>
       </template>
