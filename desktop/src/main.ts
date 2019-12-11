@@ -3,6 +3,7 @@ import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
 import vuetify from '@/plugins/vuetify';
+import filters from '@/filters';
 
 const { log, Level } = require('@bloom42/astro');
 
@@ -15,6 +16,8 @@ if (process.env.NODE_ENV === 'development') {
     log.config({ level: Level.INFO });
   }
 }
+
+Vue.use(filters);
 
 new Vue({
   router,

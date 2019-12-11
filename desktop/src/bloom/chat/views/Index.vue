@@ -19,12 +19,9 @@
       </v-col>
 
       <v-col cols="9" class="blm-chat-container">
-        <v-app-bar flat id="blm-chat-toolbar">
-          <v-avatar>
-            <img
-              :src="conversations[selectedConversation].avatar"
-              alt="John"
-            >
+        <v-toolbar flat id="blm-chat-toolbar" dense>
+          <v-avatar size="42">
+            <v-img :src="conversations[selectedConversation].avatar" />
           </v-avatar>
           <v-toolbar-title id="blm-chat-toolbar-title">
             {{ conversations[selectedConversation].title }}
@@ -34,7 +31,7 @@
           <v-btn icon>
             <v-icon>mdi-dots-vertical</v-icon>
           </v-btn>
-        </v-app-bar>
+        </v-toolbar>
 
 
         <v-sheet
@@ -53,13 +50,14 @@
                 <v-list-item
                   v-else
                   :key="item.title"
+                  class="text-left"
                 >
                   <v-list-item-avatar>
                     <v-img :src="item.avatar"></v-img>
                   </v-list-item-avatar>
 
                   <v-list-item-content>
-                    <v-list-item-subtitle v-html="item.subtitle"></v-list-item-subtitle>
+                    <v-list-item-subtitle>{{ item.subtitle }}</v-list-item-subtitle>
                   </v-list-item-content>
                 </v-list-item>
               </template>

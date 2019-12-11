@@ -19,7 +19,7 @@
     hide-default-footer
     :loading="isLoading">
       <template slot="no-data">
-        <p class="text-xs-center">
+        <p class="text-center">
           No scan yet
         </p>
       </template>

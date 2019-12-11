@@ -30,10 +30,10 @@
       </v-flex>
 
       <v-flex xs12 text-xs-center v-if="error !== ''|| success !== ''">
-        <v-alert icon="mdi-alert-circle" type="error" v-if="error !== ''">
+        <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
           {{ error }}
         </v-alert>
-        <v-alert icon="mdi-check-circle" type="success" v-if="success !== ''">
+        <v-alert icon="mdi-check-circle" type="success" :value="success !== ''">
           {{ success }}
         </v-alert>
       </v-flex>
