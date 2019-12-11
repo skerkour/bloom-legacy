@@ -18,6 +18,7 @@
     <blm-drawer-drive v-else-if="app === 'drive'" />
     <blm-drawer-phaser v-else-if="app === 'phaser'" />
     <blm-drawer-gallery v-else-if="app === 'gallery'" />
+    <blm-drawer-admin v-else-if="app === 'admin'" />
 
   </v-navigation-drawer>
 </template>
@@ -31,8 +32,9 @@ import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
 import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
 import PhaserDrawer from '@/bloom/phaser/components/Drawer.vue';
 import GalleryDrawer from '@/bloom/gallery/components/drawer.vue';
+import AdminDrawer from '@/bloom/admin/components/drawer.vue';
 
-const APPS_WITH_DRAWER = ['music', 'bitflow', 'notes', 'drive', 'phaser', 'gallery'];
+const APPS_WITH_DRAWER = ['music', 'bitflow', 'notes', 'drive', 'phaser', 'gallery', 'admin'];
 
 @Component({
   components: {
@@ -42,6 +44,7 @@ const APPS_WITH_DRAWER = ['music', 'bitflow', 'notes', 'drive', 'phaser', 'galle
     'blm-drawer-drive': DriveDrawer,
     'blm-drawer-phaser': PhaserDrawer,
     'blm-drawer-gallery': GalleryDrawer,
+    'blm-drawer-admin': AdminDrawer,
   },
 })
 export default class NavigationDrawer extends Vue {
