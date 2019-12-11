@@ -53,7 +53,7 @@
                 <v-btn
                   text
                   color="grey darken-4"
-                  to="/my-account"
+                  to="/myaccount"
                   @click="accountMenu = false"
                 >
                   <v-icon left>mdi-account</v-icon> My Account

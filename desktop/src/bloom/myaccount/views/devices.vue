@@ -1,7 +1,7 @@
 <template>
-  <div>
-    <h1>Preferences</h1>
-  </div>
+  <v-container fluid>
+    <h1>Devices</h1>
+  </v-container>
 </template>
 
 
@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Index extends Vue {
+export default class Devices extends Vue {
   // props
   // data
   // computed
