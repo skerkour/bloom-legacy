@@ -9,7 +9,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Index extends Vue {
+export default class Songs extends Vue {
   // props
   // data
   // computed

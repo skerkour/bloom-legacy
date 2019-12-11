@@ -1,8 +1,13 @@
-const Index = () => import(/* webpackChunkName: "chunk-music" */ './views/Index.vue');
+const Songs = () => import(/* webpackChunkName: "chunk-music" */ './views/songs.vue');
+const Playlists = () => import(/* webpackChunkName: "chunk-music" */ './views/playlists.vue');
 
 export default [
   {
-    component: Index,
+    component: Songs,
     path: '/music',
+  },
+  {
+    component: Playlists,
+    path: '/music/playlists',
   },
 ];
