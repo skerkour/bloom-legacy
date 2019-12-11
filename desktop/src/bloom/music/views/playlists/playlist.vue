@@ -20,7 +20,7 @@
         <template v-slot:activator="{ on: menu }">
           <v-tooltip bottom>
             <template v-slot:activator="{ on: tooltip }">
-              <v-btn icon @click="clearHistory" v-on="{ ...tooltip, ...menu }">
+              <v-btn icon v-on="{ ...tooltip, ...menu }">
                 <v-icon>mdi-dots-vertical</v-icon>
               </v-btn>
             </template>
@@ -88,6 +88,7 @@ export default class Playlists extends Vue {
   // data
   error = '';
   songs = [];
+  isLoading = false;
   headers = [
     {
       align: 'left',
