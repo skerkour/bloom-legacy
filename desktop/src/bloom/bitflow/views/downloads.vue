@@ -69,14 +69,26 @@
       </template>
     </v-data-table>
 
+
+  <blm-bitflow-dialog-new-download
+    :visible="isNewDownloadDialogVisible"
+    @closed="closeNewDownloadDialog"
+  />
+
   </v-container>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import NewDownloadDialog from '../components/new_download_dialog.vue';
 
-@Component
+
+@Component({
+  components: {
+    'blm-bitflow-dialog-new-download': NewDownloadDialog,
+  },
+})
 export default class Downloads extends Vue {
   // props
   // data
@@ -99,15 +111,21 @@ export default class Downloads extends Vue {
     },
     { text: 'Actions', sortable: false },
   ];
+  isNewDownloadDialogVisible = false;
 
   // computed
   // lifecycle
   // watch
   // methods
   addDownload() {
+    this.isNewDownloadDialogVisible = true;
   }
 
   removeDownload() {
+  }
+
+  closeNewDownloadDialog() {
+    this.isNewDownloadDialogVisible = false;
   }
 }
 </script>
