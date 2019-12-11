@@ -1,8 +1,13 @@
-const Index = () => import(/* webpackChunkName: "chunk-gallery" */ './views/Index.vue');
+const Gallery = () => import(/* webpackChunkName: "chunk-gallery" */ './views/gallery.vue');
+const Albums = () => import(/* webpackChunkName: "chunk-gallery" */ './views/albums.vue');
 
 export default [
   {
-    component: Index,
+    component: Gallery,
     path: '/gallery',
+  },
+  {
+    component: Albums,
+    path: '/gallery/albums',
   },
 ];
