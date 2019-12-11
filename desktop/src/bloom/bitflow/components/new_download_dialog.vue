@@ -4,7 +4,7 @@
       <v-card-title class="headline">New Download</v-card-title>
 
       <v-card-actions>
-        <div class="flex-grow-1"></div>
+        <v-spacer />
 
         <v-btn text @click="show = false">
           Cancel
