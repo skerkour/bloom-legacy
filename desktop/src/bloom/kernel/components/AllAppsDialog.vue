@@ -22,7 +22,7 @@
             <v-container>
 
               <v-row justify="start">
-                <v-col cols="2" v-for="(app, index) in apps1" :key="index" class="blm-app-icon">
+                <v-col cols="2" v-for="(app, index) in apps" :key="index" class="blm-app-icon">
                   <v-avatar class="blm-pointer" @click="goto(app.path)" size="52">
                     <img :src="app.icon" :alt="app.name" />
                   </v-avatar>
@@ -42,6 +42,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import apps from '../apps';
 
 @Component
 export default class AllAppsDialog extends Vue {
@@ -50,69 +51,7 @@ export default class AllAppsDialog extends Vue {
 
 
   // data
-  apps1 = [
-    {
-      name: 'Chat',
-      path: '/chat',
-      icon: '/assets/imgs/icons/chat.svg',
-    },
-    {
-      name: 'Music',
-      path: '/music',
-      icon: '/assets/imgs/icons/music.svg',
-    },
-    {
-      name: 'Notes',
-      path: '/notes',
-      icon: '/assets/imgs/icons/notes.svg',
-    },
-    {
-      name: 'Calendar',
-      path: '/calendar',
-      icon: '/assets/imgs/icons/calendar.svg',
-    },
-    {
-      name: 'Contacts',
-      path: '/contacts',
-      icon: '/assets/imgs/icons/contacts.svg',
-    },
-    {
-      name: 'Arcade',
-      path: '/arcade',
-      icon: '/assets/imgs/icons/arcade.svg',
-    },
-    {
-      name: 'Bitflow',
-      path: '/bitflow',
-      icon: '/assets/imgs/icons/bitflow.svg',
-    },
-    {
-      name: 'Drive',
-      path: '/drive',
-      icon: '/assets/imgs/icons/drive.svg',
-    },
-    {
-      name: 'Arcade',
-      path: '/arcade',
-      icon: '/assets/imgs/icons/arcade.svg',
-    },
-
-    {
-      name: 'Gallery',
-      path: '/gallery',
-      icon: '/assets/imgs/icons/gallery.svg',
-    },
-    {
-      name: 'Calculator',
-      path: '/calculator',
-      icon: '/assets/imgs/icons/calculator.svg',
-    },
-    {
-      name: 'Phaser',
-      path: '/phaser',
-      icon: '/assets/imgs/icons/phaser.svg',
-    },
-  ];
+  apps = apps;
 
   // computed
   get show() {
