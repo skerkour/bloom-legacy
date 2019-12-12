@@ -30,7 +30,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class InvoicesTable extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Array, default: [] }) invoices!: any[];
+  @Prop({ type: Array }) invoices!: any[];
 
   // data
   headers = [

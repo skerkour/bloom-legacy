@@ -30,7 +30,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 export default class Security extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Array, default: [] }) methods!: any[];
+  @Prop({ type: Array }) methods!: any[];
 
   // data
   headers = [
