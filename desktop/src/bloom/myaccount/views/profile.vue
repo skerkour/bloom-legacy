@@ -32,7 +32,9 @@
           <v-col cols="12" sm="3">
             <v-subheader>Avatar</v-subheader>
           </v-col>
-
+          <v-col cols="12" sm="9">
+            <blm-myaccount-form-avatar :avatar="me.avatar" />
+          </v-col>
         </v-row>
 
 
@@ -40,7 +42,9 @@
           <v-col cols="12" sm="3">
             <v-subheader>Username</v-subheader>
           </v-col>
-
+          <v-col cols="12" sm="9">
+            <v-text-field :value="me.username" disabled label="Username" prefix="@" />
+          </v-col>
         </v-row>
 
 
@@ -99,6 +103,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import EmailForm from '../components/email_form.vue';
 import DisplayNameForm from '../components/display_name_form.vue';
 import BioForm from '../components/bio_form.vue';
+import AvatarForm from '../components/avatar_form.vue';
 
 
 @Component({
@@ -106,6 +111,7 @@ import BioForm from '../components/bio_form.vue';
     'blm-myaccount-form-email': EmailForm,
     'blm-myaccount-form-displayname': DisplayNameForm,
     'blm-myaccount-form-bio': BioForm,
+    'blm-myaccount-form-avatar': AvatarForm,
   },
 })
 export default class Profile extends Vue {
@@ -117,6 +123,8 @@ export default class Profile extends Vue {
     displayName: 'Sylvain Kerkour',
     email: 'dontexist@bloom.sh',
     bio: 'Hello World',
+    username: 'sylvain',
+    avatar: 'https://cdn.vuetifyjs.com/images/john.jpg',
   };
 
 

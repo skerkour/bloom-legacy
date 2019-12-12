@@ -57,10 +57,6 @@ export default class BioForm extends Vue {
   cancel() {
     this.newBio = this.bio;
   }
-
-  lowercaseBio() {
-    this.newBio = this.newBio.toLowerCase();
-  }
 }
 </script>
 
