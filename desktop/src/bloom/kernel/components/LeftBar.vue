@@ -21,7 +21,7 @@
               v-on="on"
               class="blm-pointer"
             >
-              <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+              <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" />
             </v-list-item-avatar>
 
             <!-- <v-list-item-title>John Leider</v-list-item-title> -->
