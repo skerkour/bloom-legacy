@@ -13,12 +13,12 @@
 
 
     <v-data-table
-    :headers="headers"
-    :items="scans"
-    item-key="id"
-    hide-default-footer
-    :loading="isLoading"
-    class="text-left">
+      :headers="headers"
+      :items="scans"
+      item-key="id"
+      hide-default-footer
+      :loading="isLoading"
+      class="text-left">
       <template slot="no-data">
         <p class="text-center">
           No scan yet
@@ -151,15 +151,14 @@ export default class Index extends Vue {
   ];
   headers = [
     {
-      align: 'left',
       sortable: true,
       text: 'Name',
       value: 'name',
     },
-    { text: 'Target', value: 'target', sortable: false },
+    { text: 'Target', value: 'target', sortable: true },
     { text: 'Profile', value: 'profile', sortable: true },
     { text: 'Last run', value: 'updated_at', sortable: true },
-    { text: 'Findings', value: 'findings', sortable: false },
+    { text: 'Findings', value: 'findings', sortable: true },
     { text: 'Actions', sortable: false },
   ];
 
