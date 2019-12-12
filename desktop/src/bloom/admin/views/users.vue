@@ -32,8 +32,8 @@
               <span>{{ item.username }}</span>
             </td>
             <td>
-              <v-chip color="red" outlined v-if="item.disabled_at">Disabled</v-chip>
-              <v-chip color="green" outlined v-else>Active</v-chip>
+              <v-chip color="error" outlined v-if="item.disabled_at">Disabled</v-chip>
+              <v-chip color="success" outlined v-else>Active</v-chip>
             </td>
             <td>
               <v-tooltip bottom>
