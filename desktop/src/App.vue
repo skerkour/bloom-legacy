@@ -53,10 +53,6 @@ a {
   text-decoration: none;
 }
 
-.v-application a {
-  color: inherit !important;
-}
-
 .v-btn {
   border-radius: 4px;
   text-transform: none !important; /* overwrite default 'uppercase' */

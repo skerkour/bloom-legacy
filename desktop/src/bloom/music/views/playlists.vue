@@ -15,7 +15,7 @@
       <v-row dense>
         <v-col cols="2" sm="4" lg="3" v-for="playlist in playlists" :key="playlist.id">
           <router-link :to="`/music/playlists/${playlist.id}`" slot="activator">
-            <v-img src="/assets/imgs/playlist.svg" height="150px" contain class="app-icon"/>
+            <v-img src="/assets/imgs/music_playlist.svg" height="150px" contain class="app-icon"/>
             <p class="headline text-center app-name mt-3">{{ playlist.name }}</p>
           </router-link>
         </v-col>
@@ -70,5 +70,9 @@ export default class Playlists extends Vue {
 <style lang="scss" scoped>
 .app-icon {
   border-radius: 28px;
+}
+
+.v-application a {
+  color: inherit !important;
 }
 </style>
