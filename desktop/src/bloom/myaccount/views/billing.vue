@@ -27,6 +27,25 @@
     <v-row>
       <v-col cols="12">
         <div class="headline">
+          Subscriptions
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <blm-myaccount-table-subscriptions :loading="isLoading" :subscriptions="subscriptions" />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col><v-divider/></v-col>
+    </v-row>
+
+
+    <v-row>
+      <v-col cols="12">
+        <div class="headline">
           Invoices
         </div>
       </v-col>
@@ -46,12 +65,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
-
+import SubscriptionsTable from '../components/subscriptions_table.vue';
 
 @Component({
   components: {
     'blm-myaccount-table-payment-methods': PaymentMethodsTable,
     'blm-myaccount-table-invoices': InvoicesTable,
+    'blm-myaccount-table-subscriptions': SubscriptionsTable,
   },
 })
 export default class Billing extends Vue {
@@ -61,6 +81,7 @@ export default class Billing extends Vue {
   isLoading = false;
   methods = [];
   invoices = [];
+  subscriptions = [];
 
   // computed
   // lifecycle
