@@ -27,7 +27,7 @@
           <v-row>
             <v-col cols="12" class="text-center">
                 <p class="title blue--text">{{ report.total_findings }}</p>
-                <p class="title">Findings</p>
+                <p class="headline">Findings</p>
             </v-col>
           </v-row>
           <v-row>
