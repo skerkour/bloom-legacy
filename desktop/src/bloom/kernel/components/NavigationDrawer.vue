@@ -31,7 +31,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import MusicDrawer from '@/bloom/music/components/drawer.vue';
 import BitflowDrawer from '@/bloom/bitflow/components/drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
-import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
+import DriveDrawer from '@/bloom/drive/components/drawer.vue';
 import PhaserDrawer from '@/bloom/phaser/components/Drawer.vue';
 import GalleryDrawer from '@/bloom/gallery/components/drawer.vue';
 import AdminDrawer from '@/bloom/admin/components/drawer.vue';
