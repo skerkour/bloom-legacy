@@ -17,21 +17,22 @@
     :items="scans"
     item-key="id"
     hide-default-footer
-    :loading="isLoading">
+    :loading="isLoading"
+    class="text-left">
       <template slot="no-data">
         <p class="text-center">
           No scan yet
         </p>
       </template>
-      <template slot="items" slot-scope="props">
-        <td>{{ props.item.name }}</td>
-        <td>{{ props.item.target }}</td>
-        <td>{{ props.item.profile }}</td>
+      <template v-slot:item="{ item }">
+        <td>{{ item.name }}</td>
+        <td>{{ item.target }}</td>
+        <td>{{ item.profile }}</td>
         <td>
-          <span v-if="props.item.state === State.Queued">
+          <span v-if="item.state === State.Queued">
             Queued
           </span>
-          <div v-else-if="props.item.state === State.Scanning">
+          <div v-else-if="item.state === State.Scanning">
             <v-progress-circular
               indeterminate
               :size="18"
@@ -39,49 +40,33 @@
               color="primary"
             /> Running
           </div>
-          <span v-else-if="props.item.last">
-            {{ props.item.last | calendar }}
+          <span v-else-if="item.last">
+            {{ item.last | calendar }}
           </span>
           <span v-else>
             never
           </span>
 
         </td>
-        <td>{{ props.item.findings }}</td>
+        <td>{{ item.findings }}</td>
         <td class="justify-left layout px-0">
 
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
               <v-btn
-                v-if="props.item.last"
+                v-if="item.last"
                 text
                 icon
                 small
-                color="grey darken-1"
                 v-on="on"
-                :to="`/platform/phaser/scans/${props.item.id}/reports`"
+                :to="`/phaser/scans/${item.id}/reports`"
+                :disabled="!item.last"
               >
                 <v-icon small>mdi-magnify</v-icon>
               </v-btn>
             </template>
-            <span>See reports</span>
-          </v-tooltip>
-
-           <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn
-                v-if="!props.item.last"
-                text
-                icon
-                small
-                color="grey darken-1"
-                v-on="on"
-                disabled
-              >
-                <v-icon small>mdi-magnify</v-icon>
-              </v-btn>
-            </template>
-            <span>No report yet</span>
+            <span v-if="item.last">See reports</span>
+            <span v-else>No report yet</span>
           </v-tooltip>
 
           <v-tooltip bottom>
@@ -90,10 +75,9 @@
                 text
                 icon
                 small
-                color="grey darken-1"
                 v-on="on"
-                @click="queue_scan(props.item)"
-                v-if="props.item.state === State.Waiting"
+                @click="queueScan(item)"
+                v-if="item.state === State.Waiting"
               >
                 <v-icon small>mdi-play</v-icon>
               </v-btn>
@@ -109,8 +93,8 @@
                 small
                 color="grey darken-1"
                 v-on="on"
-                @click="cancel_scan(props.item)"
-                v-if="props.item.state !== State.Waiting"
+                @click="cancelScan(item)"
+                v-if="item.state !== State.Waiting"
               >
                 <v-icon small>mdi-stop</v-icon>
               </v-btn>
@@ -126,7 +110,7 @@
               small
               color="grey darken-1"
               v-on="on"
-              @click="delete_scan(props.item)"
+              @click="deleteScan(item)"
             >
               <v-icon small>mdi-delete</v-icon>
             </v-btn>
@@ -144,6 +128,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { State } from '../models/scan';
 
 @Component
 export default class Index extends Vue {
@@ -151,8 +136,19 @@ export default class Index extends Vue {
   // data
   isLoading = false;
   error = '';
-  scans: any[] = [];
-  interval: any = null;
+  scans = [
+    {
+      id: '1',
+      last: {
+        id: '1',
+      },
+      state: State.Scanning,
+      name: 'kerkour.fr',
+      target: 'kerkour.fr',
+      profile: 'Application',
+      findings: 42,
+    },
+  ];
   headers = [
     {
       align: 'left',
@@ -166,11 +162,26 @@ export default class Index extends Vue {
     { text: 'Findings', value: 'findings', sortable: false },
     { text: 'Actions', sortable: false },
   ];
+
+
   // computed
+  get State(): typeof State {
+    return State;
+  }
+
   // lifecycle
   // watch
   // methods
   openNewScanDialog() {
+  }
+
+  queueScan() {
+  }
+
+  cancelScan() {
+  }
+
+  deleteScan() {
   }
 }
 </script>

@@ -7,14 +7,15 @@
       item-key="id"
       :loading="isLoading"
       loading-text="Loading... Please wait"
-      hide-default-footer>
+      hide-default-footer
+      class="text-left">
       <template v-slot:no-data>
         <p class="text-center">
           No song.
         </p>
       </template>
 
-      <template v-slot:item="{ item }" class="text-left">
+      <template v-slot:item="{ item }">
         <td>
           <span>{{ item.name | truncate }}</span>
         </td>
