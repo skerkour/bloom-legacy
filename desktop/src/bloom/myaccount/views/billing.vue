@@ -1,17 +1,67 @@
 <template>
-  <v-container fluid>
-    <h1>Billing</h1>
+  <v-container fluid class="text-left">
+
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+      {{ error }}
+    </v-alert>
+
+    <v-row>
+      <v-col cols="12">
+        <div class="headline">
+          Payment methods
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <blm-myaccount-table-payment-methods :loading="isLoading" :methods="methods" />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col><v-divider/></v-col>
+    </v-row>
+
+
+    <v-row>
+      <v-col cols="12">
+        <div class="headline">
+          Invoices
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <blm-myaccount-table-invoices :loading="isLoading" :invoices="invoices" />
+      </v-col>
+    </v-row>
+
   </v-container>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import PaymentMethodsTable from '../components/payment_methods_table.vue';
+import InvoicesTable from '../components/invoices_table.vue';
 
-@Component
+
+@Component({
+  components: {
+    'blm-myaccount-table-payment-methods': PaymentMethodsTable,
+    'blm-myaccount-table-invoices': InvoicesTable,
+  },
+})
 export default class Billing extends Vue {
   // props
   // data
+  error = '';
+  isLoading = false;
+  methods = [];
+  invoices = [];
+
   // computed
   // lifecycle
   // watch

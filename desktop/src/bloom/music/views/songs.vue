@@ -10,7 +10,7 @@
       hide-default-footer>
       <template v-slot:no-data>
         <p class="text-center">
-          No songs.
+          No song.
         </p>
       </template>
 
