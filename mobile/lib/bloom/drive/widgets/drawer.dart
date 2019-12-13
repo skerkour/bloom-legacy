@@ -18,7 +18,8 @@ class _DriveDrawerState extends State<DriveDrawer> {
             title: const Text('Back'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).popUntil((Route<dynamic> route) => route.settings.name == '/');
+              Navigator.of(context).popUntil(
+                  (Route<dynamic> route) => route.settings.name == '/');
             },
           ),
           const Divider(),

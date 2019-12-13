@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/const.dart';
 import 'package:flutter/material.dart';
 
 class PhaserDrawer extends StatefulWidget {
@@ -18,7 +19,8 @@ class _PhaserDrawerState extends State<PhaserDrawer> {
             title: const Text('Back'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).popUntil((Route<dynamic> route) => route.settings.name == '/');
+              Navigator.of(context).popUntil(
+                  (Route<dynamic> route) => route.settings.name == '/');
             },
           ),
           const Divider(),
@@ -29,7 +31,7 @@ class _PhaserDrawerState extends State<PhaserDrawer> {
               Navigator.pop(context);
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                '/phaser',
+                PATH_PHASER,
                 (Route<dynamic> route) => route.settings.name == '/',
               );
             },

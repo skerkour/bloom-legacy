@@ -87,6 +87,7 @@ class _TabMeViewState extends State<TabMeView> {
       ),
     );
   }
+
   GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
     return GridTile(
       child: GestureDetector(
@@ -123,24 +124,21 @@ class _BlmApp {
 
 List<_BlmApp> getApps() {
   return <_BlmApp>[
-    const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: '/notes'),
+    const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: PATH_NOTES),
     const _BlmApp(
-        icon: ICON_CALENDAR_256, name: 'Calendar', route: '/calendar'),
+        icon: ICON_CALENDAR_256, name: 'Calendar', route: PATH_CALENDAR),
     const _BlmApp(icon: ICON_DRIVE_256, name: 'Drive', route: PATH_DRIVE),
     const _BlmApp(
-        icon: ICON_CONTACTS_256, name: 'Contacts', route: '/contacts'),
-    const _BlmApp(icon: ICON_MUSIC_256, name: 'Music', route: '/music'),
+        icon: ICON_CONTACTS_256, name: 'Contacts', route: PATH_CONTACTS),
+    const _BlmApp(icon: ICON_MUSIC_256, name: 'Music', route: PATH_MUSIC),
     const _BlmApp(icon: ICON_GALLERY_256, name: 'Gallery', route: PATH_GALLERY),
-    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
+    const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: PATH_ARCADE),
     const _BlmApp(icon: ICON_BOOKS_256, name: 'Books', route: PATH_BOOKS),
     const _BlmApp(
-        icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
-    const _BlmApp(
-        icon: ICON_BITFLOW_256, name: 'Bitflow', route: PATH_BITFLOW),
-    const _BlmApp(
-        icon: ICON_PHASER_256, name: 'Phaser', route: PATH_PHASER),
-    const _BlmApp(
-        icon: ICON_ADMIN_256, name: 'Admin', route: PATH_ADMIN),
+        icon: ICON_CALCULATOR_256, name: 'Calculator', route: PATH_CALCULATOR),
+    const _BlmApp(icon: ICON_BITFLOW_256, name: 'Bitflow', route: PATH_BITFLOW),
+    const _BlmApp(icon: ICON_PHASER_256, name: 'Phaser', route: PATH_PHASER),
+    const _BlmApp(icon: ICON_ADMIN_256, name: 'Admin', route: PATH_ADMIN),
   ];
 }
 

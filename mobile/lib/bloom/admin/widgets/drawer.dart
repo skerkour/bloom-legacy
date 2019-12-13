@@ -1,4 +1,5 @@
 import 'package:bloom/bloom/admin/views/users.dart';
+import 'package:bloom/bloom/const.dart';
 import 'package:flutter/material.dart';
 
 class AdminDrawer extends StatefulWidget {
@@ -19,7 +20,8 @@ class _AdminDrawerState extends State<AdminDrawer> {
             title: const Text('Back'),
             onTap: () {
               Navigator.of(context).pop();
-              Navigator.of(context).popUntil((Route<dynamic> route) => route.settings.name == '/');
+              Navigator.of(context).popUntil(
+                  (Route<dynamic> route) => route.settings.name == '/');
             },
           ),
           const Divider(),
@@ -43,10 +45,9 @@ class _AdminDrawerState extends State<AdminDrawer> {
               Navigator.pushAndRemoveUntil<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) =>
-                      const AdminUsersView(),
+                  builder: (BuildContext context) => const AdminUsersView(),
                 ),
-                (Route<dynamic> route) => route.settings.name == '/admin',
+                (Route<dynamic> route) => route.settings.name == PATH_ADMIN,
               );
             },
           ),
