@@ -16,7 +16,25 @@ class _MyAccountProfileState extends State<MyAccountProfileView> {
       appBar: AppBar(
         title: const Text('MyAccount'),
       ),
-      body: const Center(child: Text('MyAccountProfile')),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: const <Widget>[
+          Text('Public Profile', style: TextStyle(fontSize: 32)),
+          Text('Avatar', style: TextStyle(fontSize: 21)),
+          Text('Username', style: TextStyle(fontSize: 21)),
+          Text('Display name', style: TextStyle(fontSize: 21)),
+          Text('Bio', style: TextStyle(fontSize: 21)),
+          Divider(),
+          Text('Personal Information', style: TextStyle(fontSize: 32)),
+        ],
+      ),
     );
   }
 }
