@@ -14,7 +14,7 @@ class _BitflowDownloadsState extends State<BitflowDownloadsView> {
     return Scaffold(
       drawer: const BitflowDrawer(),
       appBar: AppBar(
-        title: const Text('BitflowDownloads'),
+        title: const Text('Bitflow'),
       ),
       body: _buildBody(),
       floatingActionButton: _buildFloatingActionButton(),
