@@ -12,14 +12,13 @@ import 'package:bloom/bloom/gallery/views/gallery.dart';
 import 'package:bloom/bloom/home/views/home.dart';
 import 'package:bloom/bloom/music/views/music.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
-import 'package:bloom/bloom/phaser/views/phaser.dart';
-import 'package:bloom/bloom/platform/views/platform.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bloom/bloom/auth/views/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
 
 import 'bloom/const.dart';
+import 'bloom/phaser/views/scans.dart';
 
 void main() => runApp(MyApp());
 
@@ -51,8 +50,7 @@ class MyApp extends StatelessWidget {
         PATH_GALLERY: (BuildContext context) => const GalleryView(),
         PATH_MUSIC: (BuildContext context) => const MusicView(),
         '/notes': (BuildContext context) => const NotesView(),
-        '/phaser': (BuildContext context) => const PhaserView(),
-        '/platform': (BuildContext context) => const PlatformView(),
+        PATH_PHASER: (BuildContext context) => const PhaserScansView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

@@ -15,9 +15,9 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     final List<GridTile> apps =
         getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
-    final List<GridTile> mainApps = getMainApps()
-      .map((_BlmMainApp app) => _buildMainGridItem(context, app))
-      .toList();
+    // final List<GridTile> mainApps = getMainApps()
+    //   .map((_BlmMainApp app) => _buildMainGridItem(context, app))
+    //   .toList();
     return Column(
       children: <Widget>[
         const SizedBox(height: 10),
@@ -40,14 +40,14 @@ class _TabMeViewState extends State<TabMeView> {
           child: Text('@user:domain.com', style: TextStyle(fontSize: 18)),
         ),
         const SizedBox(height: 21),
-        GridView.count(
-          padding: const EdgeInsets.only(left: 12, right: 12),
-          mainAxisSpacing: 8,
-          crossAxisSpacing: 4,
-          shrinkWrap: true,
-          crossAxisCount: 3,
-          children: mainApps,
-        ),
+        // GridView.count(
+        //   padding: const EdgeInsets.only(left: 12, right: 12),
+        //   mainAxisSpacing: 8,
+        //   crossAxisSpacing: 4,
+        //   shrinkWrap: true,
+        //   crossAxisCount: 3,
+        //   children: mainApps,
+        // ),
         const SizedBox(height: 10),
         const Divider(),
         const SizedBox(height: 21),
@@ -135,6 +135,8 @@ List<_BlmApp> getApps() {
     const _BlmApp(icon: ICON_BOOKS_256, name: 'Books', route: PATH_BOOKS),
     const _BlmApp(
         icon: ICON_CALCULATOR_256, name: 'Calculator', route: '/calculator'),
+    const _BlmApp(
+        icon: ICON_PHASER_256, name: 'Phaser', route: PATH_PHASER),
   ];
 }
 

@@ -15,8 +15,8 @@ class _PhaserDrawerState extends State<PhaserDrawer> {
         children: <Widget>[
           ListTile(
             leading: const Icon(Icons.list),
-            title: const Text('Phaser'),
-            onTap: () => debugPrint('Phaser tapped'),
+            title: const Text('Scans'),
+            onTap: () => debugPrint('Scans tapped'),
           ),
         ],
       ),
