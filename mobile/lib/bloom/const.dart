@@ -23,3 +23,5 @@ const String PATH_ARCADE = '/arcade';
 const String PATH_NOTES = '/notes';
 const String PATH_CONTACTS = '/contacts';
 const String PATH_CALENDAR = '/calendar';
+const String PATH_MYACCOUNT = '/myaccount';
+const String PATH_PREFERENCES = '/preferences';

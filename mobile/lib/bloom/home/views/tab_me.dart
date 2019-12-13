@@ -15,22 +15,18 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     final List<GridTile> apps =
         getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
-    // final List<GridTile> mainApps = getMainApps()
-    //   .map((_BlmMainApp app) => _buildMainGridItem(context, app))
-    //   .toList();
+
     return Column(
       children: <Widget>[
-        const SizedBox(height: 10),
+        const SizedBox(height: 6),
         Center(
           child: GestureDetector(
             child: const CircleAvatar(
               backgroundColor: Colors.grey,
               backgroundImage: AssetImage(_avatar),
-              radius: 42,
+              radius: 40,
             ),
-            onTap: () {
-              Navigator.pushNamed(context, '/auth');
-            },
+            onTap: () => Navigator.pushNamed(context, '/auth'),
           ),
         ),
         const SizedBox(height: 21),
@@ -39,18 +35,23 @@ class _TabMeViewState extends State<TabMeView> {
         const Center(
           child: Text('@user:domain.com', style: TextStyle(fontSize: 18)),
         ),
-        const SizedBox(height: 21),
-        // GridView.count(
-        //   padding: const EdgeInsets.only(left: 12, right: 12),
-        //   mainAxisSpacing: 8,
-        //   crossAxisSpacing: 4,
-        //   shrinkWrap: true,
-        //   crossAxisCount: 3,
-        //   children: mainApps,
-        // ),
-        const SizedBox(height: 10),
+        ButtonBar(
+          alignment: MainAxisAlignment.center,
+          children: <Widget>[
+            FlatButton.icon(
+              onPressed: () => Navigator.pushNamed(context, PATH_PREFERENCES),
+              icon: const Icon(Icons.settings),
+              label: const Text('Preferences'),
+            ),
+            FlatButton.icon(
+              onPressed: () => Navigator.pushNamed(context, PATH_MYACCOUNT),
+              icon: const Icon(Icons.person),
+              label: const Text('My Account'),
+            ),
+          ],
+        ),
         const Divider(),
-        const SizedBox(height: 21),
+        const SizedBox(height: 10),
         Expanded(
           child: GridView.count(
             padding: const EdgeInsets.only(left: 12, right: 12),
@@ -87,31 +88,6 @@ class _TabMeViewState extends State<TabMeView> {
       ),
     );
   }
-
-  GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
-    return GridTile(
-      child: GestureDetector(
-        child: Column(
-          children: <Widget>[
-            CircleAvatar(
-              child: Icon(app.icon),
-              backgroundColor: app.backgroundColor,
-              foregroundColor: app.foregroundColor,
-              radius: 25,
-            ),
-            const SizedBox(height: 5),
-            Text(app.name, style: const TextStyle(fontSize: 16)),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
-        onTap: () => Navigator.pushNamed(
-          context,
-          app.route,
-          // (Route<dynamic> route) => false,
-        ),
-      ),
-    );
-  }
 }
 
 class _BlmApp {
@@ -139,40 +115,5 @@ List<_BlmApp> getApps() {
     const _BlmApp(icon: ICON_BITFLOW_256, name: 'Bitflow', route: PATH_BITFLOW),
     const _BlmApp(icon: ICON_PHASER_256, name: 'Phaser', route: PATH_PHASER),
     const _BlmApp(icon: ICON_ADMIN_256, name: 'Admin', route: PATH_ADMIN),
-  ];
-}
-
-class _BlmMainApp {
-  const _BlmMainApp(
-      {@required this.icon,
-      @required this.name,
-      @required this.route,
-      @required this.backgroundColor,
-      this.foregroundColor = Colors.white});
-  final IconData icon;
-  final String name;
-  final String route;
-  final Color backgroundColor;
-  final Color foregroundColor;
-}
-
-List<_BlmMainApp> getMainApps() {
-  return <_BlmMainApp>[
-    const _BlmMainApp(
-        icon: Icons.person,
-        name: 'My Account',
-        route: '/myaccount',
-        backgroundColor: Colors.blue),
-    const _BlmMainApp(
-        icon: Icons.settings,
-        name: 'Settings',
-        route: '/settings',
-        backgroundColor: Colors.white10,
-        foregroundColor: Colors.grey),
-    const _BlmMainApp(
-        icon: Icons.security,
-        name: 'Admin',
-        route: '/admin',
-        backgroundColor: Colors.blue),
   ];
 }

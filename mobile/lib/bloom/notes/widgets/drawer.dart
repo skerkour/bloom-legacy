@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/const.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class _NotesDrawerState extends State<NotesDrawer> {
               Navigator.pop(context);
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                '/notes',
+                PATH_NOTES,
                 (Route<dynamic> route) => route.settings.name == '/',
               );
             },
@@ -37,7 +38,7 @@ class _NotesDrawerState extends State<NotesDrawer> {
                   builder: (BuildContext context) =>
                       const NotesView(archive: true),
                 ),
-                (Route<dynamic> route) => route.settings.name == '/notes',
+                (Route<dynamic> route) => route.settings.name == PATH_NOTES,
               );
             },
           ),

@@ -11,7 +11,9 @@ import 'package:bloom/bloom/drive/views/drive.dart';
 import 'package:bloom/bloom/gallery/views/gallery.dart';
 import 'package:bloom/bloom/home/views/home.dart';
 import 'package:bloom/bloom/music/views/music.dart';
+import 'package:bloom/bloom/myaccount/views/profile.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
+import 'package:bloom/bloom/preferences/views/theme.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bloom/bloom/auth/views/auth.dart';
@@ -49,8 +51,11 @@ class MyApp extends StatelessWidget {
         PATH_DRIVE: (BuildContext context) => const DriveView(),
         PATH_GALLERY: (BuildContext context) => const GalleryView(),
         PATH_MUSIC: (BuildContext context) => const MusicView(),
+        PATH_MYACCOUNT: (BuildContext context) => const MyAccountProfileView(),
         PATH_NOTES: (BuildContext context) => const NotesView(),
         PATH_PHASER: (BuildContext context) => const PhaserScansView(),
+        PATH_PREFERENCES: (BuildContext context) =>
+            const PreferencesThemeView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );
