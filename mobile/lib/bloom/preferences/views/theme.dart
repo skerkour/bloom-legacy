@@ -9,6 +9,8 @@ class PreferencesThemeView extends StatefulWidget {
 }
 
 class _PreferencesThemeState extends State<PreferencesThemeView> {
+  bool _darkMode = false;
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -16,7 +18,22 @@ class _PreferencesThemeState extends State<PreferencesThemeView> {
       appBar: AppBar(
         title: const Text('Preferences'),
       ),
-      body: const Center(child: Text('PreferencesTheme')),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      child: SwitchListTile(
+        title: const Text('Light theme'),
+        value: _darkMode,
+        onChanged: (bool value) {
+          setState(() {
+            _darkMode = value;
+          });
+        },
+        secondary: const Icon(Icons.wb_sunny),
+      ),
     );
   }
 }

@@ -30,7 +30,8 @@ class _TabMeViewState extends State<TabMeView> {
           ),
         ),
         const SizedBox(height: 21),
-        const Center(child: Text('Sylvain Kerkour', style: TextStyle(fontSize: 21))),
+        const Center(
+            child: Text('Sylvain Kerkour', style: TextStyle(fontSize: 21))),
         const SizedBox(height: 5),
         const Center(
           child: Text('@sylvain', style: TextStyle(fontSize: 18)),
