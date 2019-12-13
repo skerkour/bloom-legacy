@@ -41,7 +41,7 @@ class MyApp extends StatelessWidget {
             const RegistrationVerifyView(),
         '/auth/registration/complete': (BuildContext context) =>
             const RegistrationCompleteView(),
-        '/bitflow': (BuildContext context) => const BitflowView(),
+        PATH_BITFLOW: (BuildContext context) => const BitflowView(),
         PATH_BOOKS: (BuildContext context) => const BooksView(),
         '/calculator': (BuildContext context) => const CalculatorView(),
         '/calendar': (BuildContext context) => const CalendarView(),

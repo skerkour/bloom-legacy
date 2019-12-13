@@ -8,9 +8,13 @@ const String ICON_MUSIC_256 = 'assets/icons/music_256.jpg';
 const String ICON_GALLERY_256 = 'assets/icons/gallery_256.jpg';
 const String ICON_BOOKS_256 = 'assets/icons/books_256.jpg';
 const String ICON_PHASER_256 = 'assets/icons/phaser_256.jpg';
+const String ICON_ADMIN_256 = 'assets/icons/admin_256.jpg';
+const String ICON_BITFLOW_256 = 'assets/icons/bitflow_256.jpg';
 
 const String PATH_BOOKS = '/books';
 const String PATH_DRIVE = '/drive';
 const String PATH_GALLERY = '/gallery';
 const String PATH_MUSIC = '/music';
 const String PATH_PHASER = '/phaser';
+const String PATH_ADMIN = '/admin';
+const String PATH_BITFLOW = '/bitflow';

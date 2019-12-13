@@ -14,9 +14,25 @@ class _PhaserDrawerState extends State<PhaserDrawer> {
       child: ListView(
         children: <Widget>[
           ListTile(
+            leading: const Icon(Icons.arrow_back),
+            title: const Text('Back'),
+            onTap: () {
+              Navigator.of(context).pop();
+              Navigator.of(context).popUntil((Route<dynamic> route) => route.settings.name == '/');
+            },
+          ),
+          const Divider(),
+          ListTile(
             leading: const Icon(Icons.list),
             title: const Text('Scans'),
-            onTap: () => debugPrint('Scans tapped'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                '/phaser',
+                (Route<dynamic> route) => route.settings.name == '/',
+              );
+            },
           ),
         ],
       ),

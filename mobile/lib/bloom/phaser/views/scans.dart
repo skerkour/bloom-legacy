@@ -12,7 +12,7 @@ class _PhaserScansState extends State<PhaserScansView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      endDrawer: const PhaserDrawer(),
+      drawer: const PhaserDrawer(),
       appBar: AppBar(
         title: const Text('Phaser'),
       ),
