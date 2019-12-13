@@ -30,10 +30,10 @@ class _TabMeViewState extends State<TabMeView> {
           ),
         ),
         const SizedBox(height: 21),
-        const Center(child: Text('My Name', style: TextStyle(fontSize: 21))),
+        const Center(child: Text('Sylvain Kerkour', style: TextStyle(fontSize: 21))),
         const SizedBox(height: 5),
         const Center(
-          child: Text('@user:domain.com', style: TextStyle(fontSize: 18)),
+          child: Text('@sylvain', style: TextStyle(fontSize: 18)),
         ),
         ButtonBar(
           alignment: MainAxisAlignment.center,
