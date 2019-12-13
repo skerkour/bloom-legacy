@@ -2,7 +2,7 @@ import 'package:bloom/bloom/admin/views/dashboard.dart';
 import 'package:bloom/bloom/arcade/views/arcade.dart';
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
-import 'package:bloom/bloom/bitflow/views/bitflow.dart';
+import 'package:bloom/bloom/bitflow/views/downloads.dart';
 import 'package:bloom/bloom/books/views/books.dart';
 import 'package:bloom/bloom/calculator/views/calculator.dart';
 import 'package:bloom/bloom/calendar/views/calendar.dart';
@@ -43,7 +43,7 @@ class MyApp extends StatelessWidget {
             const RegistrationVerifyView(),
         '/auth/registration/complete': (BuildContext context) =>
             const RegistrationCompleteView(),
-        PATH_BITFLOW: (BuildContext context) => const BitflowView(),
+        PATH_BITFLOW: (BuildContext context) => const BitflowDownloadsView(),
         PATH_BOOKS: (BuildContext context) => const BooksView(),
         PATH_CALCULATOR: (BuildContext context) => const CalculatorView(),
         PATH_CALENDAR: (BuildContext context) => const CalendarView(),
