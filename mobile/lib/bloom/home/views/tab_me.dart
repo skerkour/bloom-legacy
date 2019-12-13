@@ -15,9 +15,9 @@ class _TabMeViewState extends State<TabMeView> {
   Widget build(BuildContext context) {
     final List<GridTile> apps =
         getApps().map((_BlmApp app) => _buildGridItem(context, app)).toList();
-    // final List<GridTile> mainApps = getMainApps()
-    // .map((_BlmMainApp app) => _buildMainGridItem(context, app))
-    // .toList();
+    final List<GridTile> mainApps = getMainApps()
+      .map((_BlmMainApp app) => _buildMainGridItem(context, app))
+      .toList();
     return Column(
       children: <Widget>[
         const SizedBox(height: 10),
@@ -40,14 +40,14 @@ class _TabMeViewState extends State<TabMeView> {
           child: Text('@user:domain.com', style: TextStyle(fontSize: 18)),
         ),
         const SizedBox(height: 21),
-        // GridView.count(
-        //   padding: const EdgeInsets.only(left: 12, right: 12),
-        //   mainAxisSpacing: 8,
-        //   crossAxisSpacing: 4,
-        //   shrinkWrap: true,
-        //   crossAxisCount: 4,
-        //   children: mainApps,
-        // ),
+        GridView.count(
+          padding: const EdgeInsets.only(left: 12, right: 12),
+          mainAxisSpacing: 8,
+          crossAxisSpacing: 4,
+          shrinkWrap: true,
+          crossAxisCount: 3,
+          children: mainApps,
+        ),
         const SizedBox(height: 10),
         const Divider(),
         const SizedBox(height: 21),
@@ -87,29 +87,30 @@ class _TabMeViewState extends State<TabMeView> {
       ),
     );
   }
-  // GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
-  //   return GridTile(
-  //     child: GestureDetector(
-  //       child: Column(
-  //         children: <Widget>[
-  //           CircleAvatar(
-  //             child: Icon(app.icon),
-  //             backgroundColor: app.backgroundColor,
-  //             foregroundColor: app.foregroundColor,
-  //             radius: 25,
-  //           ),
-  //           const SizedBox(height: 5),
-  //           Text(app.name, style: const TextStyle(fontSize: 16)),
-  //         ],
-  //       ),
-  //       onTap: () => Navigator.pushNamed(
-  //         context,
-  //         app.route,
-  //         // (Route<dynamic> route) => false,
-  //       ),
-  //     ),
-  //   );
-  // }
+  GridTile _buildMainGridItem(BuildContext context, _BlmMainApp app) {
+    return GridTile(
+      child: GestureDetector(
+        child: Column(
+          children: <Widget>[
+            CircleAvatar(
+              child: Icon(app.icon),
+              backgroundColor: app.backgroundColor,
+              foregroundColor: app.foregroundColor,
+              radius: 25,
+            ),
+            const SizedBox(height: 5),
+            Text(app.name, style: const TextStyle(fontSize: 16)),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
+        ),
+        onTap: () => Navigator.pushNamed(
+          context,
+          app.route,
+          // (Route<dynamic> route) => false,
+        ),
+      ),
+    );
+  }
 }
 
 class _BlmApp {
@@ -155,24 +156,19 @@ List<_BlmMainApp> getMainApps() {
   return <_BlmMainApp>[
     const _BlmMainApp(
         icon: Icons.person,
-        name: 'Account',
-        route: '/account',
+        name: 'My Account',
+        route: '/myaccount',
         backgroundColor: Colors.blue),
-    const _BlmMainApp(
-        icon: Icons.calendar_today,
-        name: 'Calendar',
-        route: '/calendar',
-        backgroundColor: Colors.blue),
-    const _BlmMainApp(
-        icon: Icons.account_balance_wallet,
-        name: 'Wallet',
-        route: '/wallet',
-        backgroundColor: Colors.green),
     const _BlmMainApp(
         icon: Icons.settings,
         name: 'Settings',
         route: '/settings',
         backgroundColor: Colors.white10,
         foregroundColor: Colors.grey),
+    const _BlmMainApp(
+        icon: Icons.security,
+        name: 'Admin',
+        route: '/admin',
+        backgroundColor: Colors.blue),
   ];
 }

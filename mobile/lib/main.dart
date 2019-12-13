@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/admin/views/dashboard.dart';
 import 'package:bloom/bloom/arcade/views/arcade.dart';
 import 'package:bloom/bloom/auth/views/registration_complete.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
@@ -33,6 +34,7 @@ class MyApp extends StatelessWidget {
       ),
       initialRoute: '/',
       routes: <String, WidgetBuilder>{
+        '/admin': (BuildContext context) => const AdminDashboardView(),
         '/': (BuildContext context) => const HomeView(),
         '/arcade': (BuildContext context) => const ArcadeView(),
         '/auth': (BuildContext context) => const AuthView(),
