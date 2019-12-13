@@ -4,13 +4,13 @@
   <p align="center">Empowering people with open technologies 🌍 (Android, IOS, Linux, MacOS, Windows, Server, Website)</p>
 </p>
 
-[Try it for free](https://bloom.sh/download)
+[Try it for free](https://www.bloom.sh/download)
 
 [![pipeline status](https://gitlab.com/bloom42/bloom/badges/master/pipeline.svg)](https://gitlab.com/bloom42/bloom/commits/master)
 
 --------
 
-Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
+Why? How? What? 👉 Read The Guide: https://www.bloom.sh/the-guide
 
 1. [Download](#download)
 2. [Documentation](#documentation)
@@ -29,32 +29,32 @@ Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
 
 ## Documentation
 
-See [https://bloom.sh/the-guide/projects/bloom](https://bloom.sh/the-guide/projects/bloom)
+See [https://www.bloom.sh/the-guide/projects/bloom](https://www.bloom.sh/the-guide/projects/bloom)
 
 
 ## Development
 
-See [https://bloom.sh/the-guide/projects/bloom/development.html](https://bloom.sh/the-guide/projects/bloom/development.html)
+See [https://www.bloom.sh/the-guide/projects/bloom/development.html](https://www.bloom.sh/the-guide/projects/bloom/development.html)
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://bloom.sh/the-guide/organization/contributing.html](https://bloom.sh/the-guide/organization/contributing.html) for guidance.
+[https://www.bloom.sh/the-guide/organization/contributing.html](https://www.bloom.sh/the-guide/organization/contributing.html) for guidance.
 
 
 ## Licensing
 
-See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
+See `LICENSE.txt` and [https://www.bloom.sh/licensing](https://www.bloom.sh/licensing)
 
 
 ## Sponsoring
 
 Bloom is a free and open source project. If you are interested in supporting this project, please visit our
-[dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
+[dedicated 'Become a sponsor' page](https://www.bloom.sh/become-a-sponsor) ✌️
 
 
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://bloom.sh/security) instead. Thank you!
+[dedicated security page](https://www.bloom.sh/security) instead. Thank you!
