@@ -11,8 +11,8 @@ class AdminDashboardView extends StatefulWidget {
 }
 
 class _AdminDashboardState extends State<AdminDashboardView> {
-  String _version = '1.0.0';
-  int _users = 9000;
+  final String _version = '1.0.0';
+  final int _users = 9000;
 
   @override
   Widget build(BuildContext context) {
