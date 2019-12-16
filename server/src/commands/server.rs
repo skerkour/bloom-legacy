@@ -15,7 +15,7 @@ use rusoto_s3::S3Client;
 use std::error::Error;
 use std::str::FromStr;
 
-pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Error>> {
+async pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Error>> {
     let sys = System::new("bloom_server");
     let db_actor_addr = db::init(&cfg);
     let binding_addr = format!("0.0.0.0:{}", cfg.port);
@@ -29,6 +29,8 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
 
     // TODO: logger middleware
     // TODO: sentry middleware
+    slog_info!(logger, "starting server"; slog_o!("address" => binding_addr, "version" => crate::info::VERSION));
+
     HttpServer::new(move || {
         App::new()
         .data(api_state.clone())
@@ -59,10 +61,6 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
     .shutdown_timeout(2)
     .workers(num_cpus::get() * 2)
     .bind(&binding_addr)?
-    .start();
-
-    slog_info!(logger, "server started"; slog_o!("address" => binding_addr, "version" => crate::info::VERSION));
-    let _ = sys.run();
-
-    return Ok(());
+    .start()
+    .await
 }

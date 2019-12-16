@@ -22,7 +22,7 @@ try_future = { path = "../../../core/libs/rust-try-future" }
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 regex = "1"
 failure = "0.1.5"
-actix-web = "1.0.0"
+actix-web = "2.0.0-alpha.6"
 actix-multipart = "0.1.2"
 actix-service = "0.4.1"
 actix = "0.8"
@@ -31,7 +31,7 @@ serde = { version = "1.0", features = ["derive"] }
 serde_json = "1.0"
 uuid = { version = "0.7", features = ["serde", "v4"] }
 diesel = { version = "1.4", features = ["postgres", "chrono", "serde_json", "r2d2", "uuidv07"] }
-futures = "0.1"
+futures = "0.3.1"
 image = "0.21"
 chrono = { version = "0.4", features = ["serde"] }
 base64 = "0.10.1"

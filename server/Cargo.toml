@@ -30,9 +30,9 @@ bloom_error = { path = "../core/bloom/error", features = ["actix"] }
 
 crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
 futures = "0.1"
-futures_preview = { package ="futures-preview",  version = "0.3.0-alpha.16", features = ["compat"] }
-actix-web = "1.0.7"
-actix-cors = "0.1.0"
+actix-web = "2.0.0-alpha.6"
+actix-cors = "0.2.0-alpha.3"
+actix-rt = "1.0.0"
 actix = "0.8"
 rusoto_core = "0.39"
 rusoto_s3 = "0.39"

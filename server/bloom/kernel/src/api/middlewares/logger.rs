@@ -16,6 +16,8 @@ use actix_web::{
 // use chrono::{Utc, DateTime};
 use slog::slog_o; // slog_info, slog_warn, slog_error};
 use std::ops::Deref;
+use std::pin::Pin;
+use futures::future::Future;
 // use futures::{
 //     Poll,
 //     future::{ok, Either, FutureResult},
@@ -68,7 +70,7 @@ impl RequestLogger {
 impl FromRequest for RequestLogger {
     type Config = ();
     type Error = Error;
-    type Future = Result<RequestLogger, Error>;
+    type Future = Pin<Box<dyn Future<Output = Result<RequestLogger, Error>>>>;
 
     #[inline]
     fn from_request(req: &HttpRequest, _payload: &mut Payload) -> Self::Future {

@@ -27,7 +27,8 @@ fn register_reactors() {
     // ));
 }
 
-fn main() -> Result<(), Box<dyn Error>> {
+#[actix_rt::main]
+async fn main() -> Result<(), Box<dyn Error>> {
     // init config
     let cfg = config::init();
 
