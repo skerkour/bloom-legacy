@@ -4,8 +4,8 @@ export default {
   features: 'Features',
   landing: {
     mission: 'Our mission: Empowering people',
-    subtitle1: 'Chat, Collaborate, Enjoy, Innovate.',
-    subtitle2: 'Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span>',
+    subtitle1: 'Chat, Collaborate, Enjoy, Share',
+    subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
     feature1: {
       title: 'Fast, Simple, Secure',
