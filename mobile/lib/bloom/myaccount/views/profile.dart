@@ -33,6 +33,7 @@ class _MyAccountProfileState extends State<MyAccountProfileView> {
           Text('Bio', style: TextStyle(fontSize: 21)),
           Divider(),
           Text('Personal Information', style: TextStyle(fontSize: 32)),
+          Text('Email', style: TextStyle(fontSize: 21)),
         ],
       ),
     );

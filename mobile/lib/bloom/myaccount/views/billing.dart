@@ -35,7 +35,8 @@ class _MyAccountBillingState extends State<MyAccountBillingView> {
             const Text('Invoices', style: TextStyle(fontSize: 32)),
             _buildInvoicesTable(),
           ],
-        ));
+        ),
+    );
   }
 
   Widget _buildPaymentMethodsTable() {

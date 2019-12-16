@@ -37,8 +37,9 @@ export default {
     },
     product: {
       title: 'Product',
-      help: 'Help & Support',
+      faq: 'FAQ',
       download: 'Download Apps',
+      help: 'Help & Support',
       contribute: 'Contribute',
       documentation: 'Documentation',
     },

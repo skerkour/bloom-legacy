@@ -18,6 +18,7 @@
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3">{{ $t('footer.product.title') }}</h5>
           <ul>
+            <li><router-link to="/faq">{{ $t('footer.product.faq') }}</router-link></li>
             <li><router-link to="/help">{{ $t('footer.product.help') }}</router-link></li>
             <li><router-link class="nav-link" to="/download">{{ $t('footer.product.download') }}</router-link></li>
             <li><a class="nav-link" href="/the-guide/organization/contributing.html">{{ $t('footer.product.contribute') }}</a></li>
