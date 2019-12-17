@@ -47,7 +47,7 @@ class _DriveDrawerState extends State<DriveDrawer> {
                 MaterialPageRoute<dynamic>(
                   builder: (BuildContext context) => const DriveTrashView(),
                 ),
-                (Route<dynamic> route) => route.settings.name == PATH_BITFLOW,
+                (Route<dynamic> route) => route.settings.name == PATH_DRIVE,
               );
             },
           ),

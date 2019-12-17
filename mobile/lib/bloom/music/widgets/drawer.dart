@@ -1,3 +1,5 @@
+import 'package:bloom/bloom/const.dart';
+import 'package:bloom/bloom/music/views/playlists.dart';
 import 'package:flutter/material.dart';
 
 class MusicDrawer extends StatefulWidget {
@@ -24,8 +26,29 @@ class _MusicDrawerState extends State<MusicDrawer> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.music_note),
-            title: const Text('Music'),
-            onTap: () => debugPrint('Music tapped'),
+            title: const Text('Songs'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                PATH_MUSIC,
+                (Route<dynamic> route) => route.settings.name == '/',
+              );
+            },
+          ),
+          ListTile(
+            leading: const Icon(Icons.queue_music),
+            title: const Text('Playlists'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushAndRemoveUntil<dynamic>(
+                context,
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => const MusicPlaylistsView(),
+                ),
+                (Route<dynamic> route) => route.settings.name == PATH_MUSIC,
+              );
+            },
           ),
         ],
       ),
