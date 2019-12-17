@@ -50,7 +50,7 @@ class MyApp extends StatelessWidget {
         PATH_CONTACTS: (BuildContext context) => ContactsView(),
         PATH_DRIVE: (BuildContext context) => const DriveView(),
         PATH_GALLERY: (BuildContext context) => const GalleryView(),
-        PATH_MUSIC: (BuildContext context) => const MusicView(),
+        PATH_MUSIC: (BuildContext context) => const MusicSongsView(),
         PATH_MYACCOUNT: (BuildContext context) => const MyAccountProfileView(),
         PATH_NOTES: (BuildContext context) => const NotesView(),
         PATH_PHASER: (BuildContext context) => const PhaserScansView(),
