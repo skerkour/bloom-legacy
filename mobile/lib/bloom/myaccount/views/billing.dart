@@ -22,20 +22,20 @@ class _MyAccountBillingState extends State<MyAccountBillingView> {
 
   Widget _buildBody() {
     return Container(
-        padding: const EdgeInsets.all(16),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: <Widget>[
-            const Text('Payment methods', style: TextStyle(fontSize: 32)),
-            _buildPaymentMethodsTable(),
-            const Divider(),
-            const Text('Subscriptions', style: TextStyle(fontSize: 32)),
-            _buildSubscriptionsTable(),
-            const Divider(),
-            const Text('Invoices', style: TextStyle(fontSize: 32)),
-            _buildInvoicesTable(),
-          ],
-        ),
+      padding: const EdgeInsets.all(16),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text('Payment methods', style: TextStyle(fontSize: 32)),
+          _buildPaymentMethodsTable(),
+          const Divider(),
+          const Text('Subscriptions', style: TextStyle(fontSize: 32)),
+          _buildSubscriptionsTable(),
+          const Divider(),
+          const Text('Invoices', style: TextStyle(fontSize: 32)),
+          _buildInvoicesTable(),
+        ],
+      ),
     );
   }
 

@@ -25,7 +25,6 @@ class _GalleryState extends State<GalleryView> {
   }
 }
 
-
 class Photo {
   Photo({
     this.file,
@@ -41,5 +40,6 @@ class Photo {
   bool isFavorite;
   String get tag => file; // Assuming that all asset names are unique.
 
-  bool get isValid => file != null && title != null && caption != null && isFavorite != null;
+  bool get isValid =>
+      file != null && title != null && caption != null && isFavorite != null;
 }

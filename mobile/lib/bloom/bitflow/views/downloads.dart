@@ -25,18 +25,18 @@ class _BitflowDownloadsState extends State<BitflowDownloadsView> {
     final List<Download> downloads = Download.getDownloads();
 
     return Container(
-      child: ListView.builder(
+      child: ListView.separated(
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
           itemCount: downloads.length,
           itemBuilder: (BuildContext context, int index) {
             final Download download = downloads[index];
 
-            return Card(
-              child: ListTile(
-                leading: Icon(Icons.movie),
-                title: Text(download.name),
-                subtitle: Text('${download.progress}%'),
-                trailing: Icon(Icons.more_vert),
-              ),
+            return ListTile(
+              leading: Icon(Icons.movie),
+              title: Text(download.name),
+              subtitle: Text('${download.progress}%'),
+              trailing: Icon(Icons.more_vert),
             );
           }),
     );

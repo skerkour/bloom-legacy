@@ -25,17 +25,17 @@ class _BitflowHistoryState extends State<BitflowHistoryView> {
     final List<Download> downloads = Download.getDownloads();
 
     return Container(
-      child: ListView.builder(
+      child: ListView.separated(
+          separatorBuilder: (BuildContext context, int index) =>
+              const Divider(),
           itemCount: downloads.length,
           itemBuilder: (BuildContext context, int index) {
             final Download download = downloads[index];
 
-            return Card(
-              child: ListTile(
-                leading: Icon(Icons.movie),
-                title: Text(download.name),
-                subtitle: Text('${download.state}'),
-              ),
+            return ListTile(
+              leading: Icon(Icons.movie),
+              title: Text(download.name),
+              subtitle: Text('${download.state}'),
             );
           }),
     );

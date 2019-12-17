@@ -2,14 +2,14 @@ import 'package:bloom/bloom/drive/widgets/drawer.dart';
 import 'package:bloom/libs/filesize.dart';
 import 'package:flutter/material.dart';
 
-class DriveView extends StatefulWidget {
-  const DriveView();
+class DriveTrashView extends StatefulWidget {
+  const DriveTrashView();
 
   @override
-  _DriveState createState() => _DriveState();
+  _DriveTrashState createState() => _DriveTrashState();
 }
 
-class _DriveState extends State<DriveView> {
+class _DriveTrashState extends State<DriveTrashView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,9 +26,7 @@ class _DriveState extends State<DriveView> {
     final List<File> files = File.getFiles();
 
     return Container(
-      child: ListView.separated(
-          separatorBuilder: (BuildContext context, int index) =>
-              const Divider(),
+      child: ListView.builder(
           itemCount: files.length,
           itemBuilder: (BuildContext context, int index) {
             final File file = files[index];
@@ -64,7 +62,6 @@ class File {
   static List<File> getFiles() {
     return <File>[
       File(name: 'My super clip', size: 42000000),
-      File(name: 'My super clip 2', size: 42000000),
     ];
   }
 }
