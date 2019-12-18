@@ -17,6 +17,14 @@
           and we will get back to you faster than the light.
         </p>
 
+        <h2 class="mt-5 mb-3 display-1 font-weight-medium">Hall of Fame</h2>
+
+        <p class="body-1 font-weight-regular">
+          <ul>
+            <lil><a href="https://www.facebook.com/profile.php?id=100004793059302" rel="noopener noreferrer">Hassan Ahmed Hacker (Xen Lee)</a></lil>
+          </ul>
+        </p>
+
       </v-col>
     </v-row>
   </v-container>
