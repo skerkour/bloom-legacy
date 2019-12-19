@@ -30,10 +30,10 @@
           <h5 class="title pb-3">{{ $t('footer.community.title') }}</h5>
           <ul>
             <li><a class="nav-link" href="/blog">Blog</a></li>
-            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42/forum" target="_blank" rel="noopener">Forum</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">Mastodon</a></li>
-            <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
             <li><a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">{{ $t('footer.community.sponsoring') }}</a></li>
           </ul>
         </v-col>
