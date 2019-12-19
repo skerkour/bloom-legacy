@@ -157,7 +157,9 @@ class _GridPhotoViewerState extends State<GridPhotoViewer>
 
   void _handleOnScaleEnd(ScaleEndDetails details) {
     final double magnitude = details.velocity.pixelsPerSecond.distance;
-    if (magnitude < _kMinFlingVelocity) return;
+    if (magnitude < _kMinFlingVelocity) {
+      return;
+    }
     final Offset direction = details.velocity.pixelsPerSecond / magnitude;
     final double distance = (Offset.zero & context.size).shortestSide;
     _flingAnimation = _controller.drive(Tween<Offset>(

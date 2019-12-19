@@ -16,7 +16,56 @@ class _MyAccountSecurityState extends State<MyAccountSecurityView> {
       appBar: AppBar(
         title: const Text('MyAccount'),
       ),
-      body: const Center(child: Text('MyAccountSecurity')),
+      body: _buildBody(),
+    );
+  }
+
+  Widget _buildBody() {
+    return Container(
+      padding: const EdgeInsets.all(21),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: <Widget>[
+          const Text('Change password', style: TextStyle(fontSize: 21)),
+          const SizedBox(height: 22),
+          const TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'Current password',
+            ),
+          ),
+          const SizedBox(height: 11),
+          const TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'New password',
+            ),
+          ),
+          const SizedBox(height: 11),
+          const TextField(
+            obscureText: true,
+            decoration: InputDecoration(
+              border: OutlineInputBorder(),
+              labelText: 'New password verification',
+            ),
+          ),
+          const SizedBox(height: 11),
+          ButtonBar(
+            alignment: MainAxisAlignment.end,
+            children: <Widget>[
+              RaisedButton(
+                child: const Text('Update password'),
+                padding: const EdgeInsets.all(8.0),
+                textColor: Colors.white,
+                color: Colors.blue,
+                onPressed: () {},
+              )
+            ],
+          ),
+        ],
+      ),
     );
   }
 }
