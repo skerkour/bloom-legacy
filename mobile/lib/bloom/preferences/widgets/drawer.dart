@@ -18,7 +18,6 @@ class _PreferencesDrawerState extends State<PreferencesDrawer> {
             leading: const Icon(Icons.arrow_back),
             title: const Text('Back'),
             onTap: () {
-              Navigator.of(context).pop();
               Navigator.of(context).popUntil(
                   (Route<dynamic> route) => route.settings.name == '/');
             },
