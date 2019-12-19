@@ -40,6 +40,11 @@ export default [
     icon: '/assets/imgs/icons/arcade.svg',
   },
   {
+    name: 'Books',
+    path: '/books',
+    icon: '/assets/imgs/icons/books.svg',
+  },
+  {
     name: 'Contacts',
     path: '/contacts',
     icon: '/assets/imgs/icons/contacts.svg',

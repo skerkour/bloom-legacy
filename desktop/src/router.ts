@@ -17,6 +17,7 @@ import CalculatorRouter from '@/bloom/calculator/router';
 import PhaserRouter from '@/bloom/phaser/router';
 import AdminRouter from '@/bloom/admin/router';
 import MyAccountRouter from '@/bloom/myaccount/router';
+import BooksRouter from '@/bloom/books/router';
 
 import store from '@/store';
 
@@ -42,6 +43,7 @@ const router = new Router({
     ...PhaserRouter,
     ...AdminRouter,
     ...MyAccountRouter,
+    ...BooksRouter,
     {
       path: '**',
       redirect: '/chat',
