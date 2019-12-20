@@ -6,7 +6,7 @@
             Take back control!
           </h1>
           <h1 class="headline mb-5 mt-5">
-            Start getting the respect you deserve with our privacy-first products.
+            Start getting the respect you deserve with our privacy-first apps.
           </h1>
           <div class="mt-5 mb-5"></div>
           <blm-download-btn />
