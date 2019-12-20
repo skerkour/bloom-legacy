@@ -9,7 +9,7 @@
   },
   "dependencies": {
     "@mdi/font": "^4.7.95",
-    "core-js": "^3.5.0",
+    "core-js": "^3.6.0",
     "store": "^2.0.12",
     "vue": "^2.6.11",
     "vue-class-component": "^7.0.2",
