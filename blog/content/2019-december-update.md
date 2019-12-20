@@ -87,7 +87,7 @@ the *groups* feature, where you will be able to share a drive space, notes, task
 * Native applications are coming in January, featuring end to end encryption and offline support among other improvements
 * **You will need to create a new account on the native application**
 * New Mastodon account: <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
-* Paying offers (more Drive space, more Phaser scans, more Bitflow downloads...) will be available with the native applications
+* Paying offers (more Drive space, more Bitflow downloads...) will be available with the native applications
 * Next months will be dedicated to secure revenues and grow the core team
 
 <br />
