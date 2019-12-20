@@ -62,14 +62,14 @@ export default class Features extends Vue {
   // props
   // data
   features = [
-    {
-      name: 'Chat',
-      icon: '/static/imgs/icons/chat.svg',
-      description: `Bloom messages and calls are always end-to-end encrypted and
-      engineered to keep your communication safe. We can't read your messages or see your calls,
-      and no one else can either.`,
-      learnMore: 'chat',
-    },
+    // {
+    //   name: 'Chat',
+    //   icon: '/static/imgs/icons/chat.svg',
+    //   description: `Bloom messages and calls are always end-to-end encrypted and
+    //   engineered to keep your communication safe. We can't read your messages or see your calls,
+    //   and no one else can either.`,
+    //   learnMore: 'chat',
+    // },
     {
       name: 'Drive',
       icon: '/static/imgs/icons/drive.svg',

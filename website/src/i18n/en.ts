@@ -4,14 +4,14 @@ export default {
   features: 'Features',
   landing: {
     mission: 'Our mission: Empowering people',
-    subtitle1: 'Chat, Collaborate, Enjoy, Share',
+    subtitle1: 'Collaborate, Enjoy, Share, Innovate',
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
     feature1: {
       title: 'Fast, Simple, Secure',
       description: `As an Open Source project anyone can inspect how Bloom works.
       We use state of the art cryptography to keep your data secure.
-      There are no ads, no affiliate marketers, no creepy tracking. <br />
+      There are no ads, no affiliate marketing, no creepy tracking. <br />
       Just open technology for a fast, simple, and secure experience.`,
     },
     feature2: {

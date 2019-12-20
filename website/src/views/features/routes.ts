@@ -4,7 +4,7 @@ const Arcade = () => import(/* webpackChunkName: "chunk-features" */ '@/views/fe
 const Bitflow = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/bitflow.vue');
 const Books = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/books.vue');
 const Calendar = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/calendar.vue');
-const Chat = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/chat.vue');
+// const Chat = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/chat.vue');
 const Contacts = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/contacts.vue');
 const Drive = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/drive.vue');
 const Gallery = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/gallery.vue');
@@ -32,10 +32,10 @@ export default [
     component: Calendar,
     path: '/features/calendar',
   },
-  {
-    component: Chat,
-    path: '/features/chat',
-  },
+  // {
+  //   component: Chat,
+  //   path: '/features/chat',
+  // },
   {
     component: Contacts,
     path: '/features/contacts',
