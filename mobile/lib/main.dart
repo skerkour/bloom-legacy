@@ -20,7 +20,6 @@ import 'package:bloom/bloom/auth/views/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
 
 import 'bloom/const.dart';
-import 'bloom/phaser/views/scans.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,7 +52,6 @@ class MyApp extends StatelessWidget {
         PATH_MUSIC: (BuildContext context) => const MusicSongsView(),
         PATH_MYACCOUNT: (BuildContext context) => const MyAccountProfileView(),
         PATH_NOTES: (BuildContext context) => const NotesView(),
-        PATH_PHASER: (BuildContext context) => const PhaserScansView(),
         PATH_PREFERENCES: (BuildContext context) =>
             const PreferencesThemeView(),
       },
