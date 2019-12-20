@@ -91,12 +91,6 @@ export default class Features extends Vue {
     },
     { name: 'dl_btn' },
     {
-      name: 'Phaser',
-      icon: '/static/imgs/icons/phaser.svg',
-      description: 'The cloud-native security scanner.',
-      learnMore: 'phaser',
-    },
-    {
       name: 'Notes',
       icon: '/static/imgs/icons/notes.svg',
       description: `Quickly capture what’s on your mind and get a reminder later
