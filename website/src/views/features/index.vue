@@ -89,7 +89,6 @@ export default class Features extends Vue {
       description: 'Get organized on the go with the Bloom Calendar!',
       learnMore: 'calendar',
     },
-    { name: 'dl_btn' },
     {
       name: 'Notes',
       icon: '/static/imgs/icons/notes.svg',
@@ -97,6 +96,7 @@ export default class Features extends Vue {
         at the right place or time.`,
       learnMore: 'notes',
     },
+    { name: 'dl_btn' },
     {
       name: 'Bitflow',
       icon: '/static/imgs/icons/bitflow.svg',
@@ -116,18 +116,18 @@ export default class Features extends Vue {
       description: 'Bloom Books is the single destination for all the books you love, and the ones you\'re about to. ',
       learnMore: 'books',
     },
+    {
+      name: 'Contacts',
+      icon: '/static/imgs/icons/contacts.svg',
+      description: 'Keep your contacts organized and up to date.',
+      learnMore: 'contacts',
+    },
     { name: 'dl_btn' },
     {
       name: 'Gallery',
       icon: '/static/imgs/icons/gallery.svg',
       description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
       learnMore: 'gallery',
-    },
-    {
-      name: 'Contacts',
-      icon: '/static/imgs/icons/contacts.svg',
-      description: 'Keep your contacts organized and up to date.',
-      learnMore: 'contacts',
     },
     {
       name: 'Scan QR Codes',

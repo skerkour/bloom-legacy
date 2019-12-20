@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import AuthRouter from '@/bloom/auth/router';
 import KernelRouter from '@/bloom/kernel/router';
-import ChatRouter from '@/bloom/chat/router';
+// import ChatRouter from '@/bloom/chat/router';
 import PreferencesRouter from '@/bloom/preferences/router';
 import MusicRouter from '@/bloom/music/router';
 import NotesRouter from '@/bloom/notes/router';
@@ -27,7 +27,7 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     ...AuthRouter,
-    ...ChatRouter,
+    // ...ChatRouter,
     ...KernelRouter,
     ...PreferencesRouter,
     ...MusicRouter,

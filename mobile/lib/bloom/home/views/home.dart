@@ -31,16 +31,16 @@ class _HomeViewState extends State<HomeView> {
     final List<IconButton> actions = <IconButton>[];
 
     switch (_selectedIndex) {
-      case 0:
-        actions.add(IconButton(
-            icon: Icon(Icons.search),
-            onPressed: () {
-              showSearch<String>(
-                context: context,
-                delegate: ChatsSearchDelegate(),
-              );
-            }));
-        break;
+      // case 0:
+      //   actions.add(IconButton(
+      //       icon: Icon(Icons.search),
+      //       onPressed: () {
+      //         showSearch<String>(
+      //           context: context,
+      //           delegate: ChatsSearchDelegate(),
+      //         );
+      //       }));
+      //   break;
       case 1:
         actions.add(IconButton(
             icon: Icon(Icons.search),
@@ -64,12 +64,12 @@ class _HomeViewState extends State<HomeView> {
 
   FloatingActionButton _buildFloatingActionButton(BuildContext context) {
     switch (_selectedIndex) {
-      case 0:
-        return FloatingActionButton(
-          onPressed: () => _fabChatsPressed(),
-          child: Icon(Icons.add),
-          backgroundColor: Colors.red,
-        );
+      // case 0:
+      //   return FloatingActionButton(
+      //     onPressed: () => _fabChatsPressed(),
+      //     child: Icon(Icons.add),
+      //     backgroundColor: Colors.red,
+      //   );
       case 1:
         return FloatingActionButton(
           onPressed: () => _fabGroupsPressed(),
@@ -102,17 +102,17 @@ class _HomeViewState extends State<HomeView> {
   BottomNavigationBar _buildBottomNavigationBar() {
     return BottomNavigationBar(
       items: const <BottomNavigationBarItem>[
+        // BottomNavigationBarItem(
+        //   icon: Icon(Icons.chat),
+        //   title: Text('Chat'),
+        // ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.chat),
-          title: Text('Chat'),
+          icon: Icon(Icons.person),
+          title: Text('Me'),
         ),
         BottomNavigationBarItem(
           icon: Icon(Icons.people),
           title: Text('Groups'),
-        ),
-        BottomNavigationBarItem(
-          icon: Icon(Icons.person),
-          title: Text('Me'),
         ),
       ],
       currentIndex: _selectedIndex,
@@ -124,8 +124,8 @@ class _HomeViewState extends State<HomeView> {
 
   Widget _buildBody(BuildContext context) {
     switch (_selectedIndex) {
-      case 0:
-        return const ConversationListView();
+      // case 0:
+      //   return const ConversationListView();
       case 1:
         return const TabGroupsView();
       default:

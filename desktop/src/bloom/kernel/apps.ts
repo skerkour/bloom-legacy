@@ -1,9 +1,9 @@
 export default [
-  {
-    name: 'Chat',
-    path: '/chat',
-    icon: '/assets/imgs/icons/chat.svg',
-  },
+  // {
+  //   name: 'Chat',
+  //   path: '/chat',
+  //   icon: '/assets/imgs/icons/chat.svg',
+  // },
   {
     name: 'Drive',
     path: '/drive',
