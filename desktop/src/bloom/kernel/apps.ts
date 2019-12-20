@@ -55,11 +55,6 @@ export default [
     icon: '/assets/imgs/icons/calculator.svg',
   },
   {
-    name: 'Phaser',
-    path: '/phaser',
-    icon: '/assets/imgs/icons/phaser.svg',
-  },
-  {
     name: 'Admin',
     path: '/admin',
     icon: '/assets/imgs/icons/admin.svg',
