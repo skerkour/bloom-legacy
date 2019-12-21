@@ -15,9 +15,9 @@ use bloom_error::BloomError;
 use crypto42::kdf::argon2id;
 use futures::Future;
 use futures::{
-    future::{ok, Either, Ready},
+    future::{ok, Either, FutureResult},
+    Poll,
 };
-use std::task::{Poll};
 use std::cell::RefCell;
 use std::env;
 use std::rc::Rc;
@@ -42,7 +42,7 @@ pub struct AuthMiddleware;
 impl<S, B> Transform<S> for AuthMiddleware
 where
     S: ActixService<Request = ServiceRequest, Response = ServiceResponse<B>, Error = Error>,
-    S::Future: 'static,
+    S: 'static,
     B: 'static,
 {
     type Request = ServiceRequest;
@@ -50,7 +50,7 @@ where
     type Error = Error;
     type InitError = ();
     type Transform = AuthMiddleware2<S>;
-    type Future = Ready<Result<Self::Transform, Self::InitError>>;
+    type Future = FutureResult<Self::Transform, Self::InitError>;
 
     fn new_transform(&self, service: S) -> Self::Future {
         ok(AuthMiddleware2 {
@@ -73,9 +73,9 @@ where
     type Request = ServiceRequest;
     type Response = ServiceResponse<B>;
     type Error = S::Error;
-    type Future = Box<dyn Future<Output = Result<Self::Response, Self::Error>>>;
+    type Future = Box<dyn Future<Item = Self::Response, Error = Self::Error>>;
 
-    fn poll_ready(&mut self) -> Poll<Result<(), Self::Error>> {
+    fn poll_ready(&mut self) -> Poll<(), Self::Error> {
         self.service.poll_ready()
     }
 

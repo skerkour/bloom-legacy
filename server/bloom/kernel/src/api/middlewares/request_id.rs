@@ -6,9 +6,9 @@ use actix_web::{
     Error, FromRequest, HttpMessage, HttpRequest,
 };
 use futures::{
-    future::{ok, Future},
+    future::{ok, Future, FutureResult},
+    Poll,
 };
-use std::task::{Poll};
 use std::ops::Deref;
 
 /// The header set by the middleware
@@ -85,7 +85,7 @@ where
     type Error = Error;
     type InitError = ();
     type Transform = RequestIdMiddleware2<S>;
-    type Future = Future<Output = Result<Self::Transform, Self::InitError>>;
+    type Future = FutureResult<Self::Transform, Self::InitError>;
 
     fn new_transform(&self, service: S) -> Self::Future {
         ok(RequestIdMiddleware2 { service })
@@ -105,9 +105,9 @@ where
     type Request = ServiceRequest;
     type Response = ServiceResponse<B>;
     type Error = Error;
-    type Future = Box<dyn Future<Output = Result<Self::Response, Self::Error>>>;
+    type Future = Box<dyn Future<Item = Self::Response, Error = Self::Error>>;
 
-    fn poll_ready(&mut self) -> Poll<Result<(), Self::Error>> {
+    fn poll_ready(&mut self) -> Poll<(), Self::Error> {
         self.service.poll_ready()
     }
 
