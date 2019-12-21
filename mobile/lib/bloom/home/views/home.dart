@@ -1,9 +1,7 @@
-import 'package:bloom/bloom/chat/views/conversation_list.dart';
 import 'package:bloom/bloom/groups/views/create.dart';
 import 'package:bloom/bloom/home/views/chats_search.dart';
 import 'package:bloom/bloom/home/views/tab_groups.dart';
 import 'package:bloom/bloom/home/views/tab_me.dart';
-import 'package:bloom/bloom/home/widgets/bottom_sheet_chats.dart';
 import 'package:flutter/material.dart';
 
 class HomeView extends StatefulWidget {
@@ -79,15 +77,6 @@ class _HomeViewState extends State<HomeView> {
       default:
         return null;
     }
-  }
-
-  void _fabChatsPressed() {
-    showModalBottomSheet<ChatsBottomSheet>(
-      context: context,
-      builder: (BuildContext ctx) {
-        return ChatsBottomSheet();
-      },
-    );
   }
 
   void _fabGroupsPressed() {
