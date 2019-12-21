@@ -3,10 +3,10 @@
     <v-row class="justify-center">
         <v-col cols="12" sm="10" md="8" class="text-center mt-5">
           <h1 class="display-3 mb-5">
-            Take back control!
+            {{ $t('download.title') }}
           </h1>
           <h1 class="headline mb-5 mt-5">
-            Start getting the respect you deserve with our privacy-first apps.
+            {{ $t('download.subtitle') }}
           </h1>
           <div class="mt-5 mb-5"></div>
           <blm-download-btn />
@@ -15,7 +15,7 @@
 
     <v-row class="justify-center blm-all-downloads mb-5">
       <v-col cols="12" sm="10" md="8" class="text-center">
-        <h2 class="display-1">All Downloads</h2>
+        <h2 class="display-1">{{ $t('download.all') }}</h2>
       </v-col>
     </v-row>
 
@@ -38,9 +38,8 @@
             contain
           />
           <v-card-text class="text-center justify-center">
-            <h3 class="mb-3 title">Computers</h3>
-            <p class="body-1">Windows, macOS or Linux. Desktop or laptop.
-              Enjoy Bloom on any computer!</p>
+            <h3 class="mb-3 title">{{ $t('download.computers_title') }}</h3>
+            <p class="body-1">{{ $t('download.computers_description') }}</p>
           </v-card-text>
         </v-card>
       </v-col>
@@ -58,7 +57,7 @@
           />
           <v-divider />
           <v-card-actions class="text-center justify-center">
-            <v-btn text>Download for macOS</v-btn>
+            <v-btn text>macOS</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -76,7 +75,7 @@
           />
           <v-divider />
           <v-card-actions class="text-center justify-center">
-            <v-btn text>Download for Windows</v-btn>
+            <v-btn text>Windows</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -94,7 +93,7 @@
           />
           <v-divider />
           <v-card-actions class="text-center justify-center">
-            <v-btn text>Download for Linux</v-btn>
+            <v-btn text>Linux</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -126,8 +125,8 @@
             contain
           />
           <v-card-text class="text-center justify-center">
-            <h3 class="mb-3 title">Mobile devices</h3>
-            <p class="body-1">On smartphones or tablets. Take Bloom everywhere with you.</p>
+            <h3 class="mb-3 title">{{ $t('download.mobile_title') }}</h3>
+            <p class="body-1">{{ $t('download.mobile_description') }}</p>
           </v-card-text>
         </v-card>
       </v-col>

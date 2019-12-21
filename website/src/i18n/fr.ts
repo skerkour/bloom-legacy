@@ -1,4 +1,8 @@
 export default {
+  appbar: {
+    download: 'Télécharger',
+    features: 'Fonctionnalités',
+  },
   landing: {
     mission: 'Notre mission: Empowering people',
     subtitle1: 'Conversez, Collaborez, Découvrez, Innovez.',
@@ -20,6 +24,4 @@ export default {
     },
   },
   other_downloads: 'Tous les Téléchargements',
-  download: 'Télécharger',
-  features: 'Fonctionnalités',
 };

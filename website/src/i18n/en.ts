@@ -1,7 +1,9 @@
 export default {
   other_downloads: 'Other downloads',
-  download: 'Download',
-  features: 'Features',
+  appbar: {
+    download: 'Download',
+    features: 'Features',
+  },
   landing: {
     mission: 'Our mission: Empowering people',
     subtitle1: 'Collaborate, Enjoy, Share, Innovate',
@@ -82,5 +84,15 @@ export default {
     intro: 'You can contact the Bloom team using one of the following way:',
     email: 'Using email:',
     twitter: 'Or by saying <i>Hi</i> on Twitter:',
+  },
+  download: {
+    title: 'Take back control!',
+    subtitle: 'Start getting the respect you deserve with our privacy-first apps.',
+    all: 'All Downloads',
+    computers_title: 'Computers',
+    computers_description: `Windows, macOS or Linux. Desktop or laptop.
+      Enjoy Bloom on any computer!`,
+    mobile_title: 'Mobile devices',
+    mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
   },
 };
