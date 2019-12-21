@@ -1,0 +1,140 @@
+<template>
+  <v-container fluid class="text-left">
+
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+      {{ error }}
+    </v-alert>
+
+    <v-row v-if="initialLoading">
+      <v-col cols="12">
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          size="50"
+        />
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col xs="12" sm="10" md="8" xl="7">
+
+
+        <v-row>
+          <v-col cols="12">
+            <div class="headline">
+              Public Profile
+            </div>
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12" sm="3">
+            <v-subheader>Avatar</v-subheader>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <blm-myaccount-form-avatar :avatar="me.avatar" />
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12" sm="3">
+            <v-subheader>Username</v-subheader>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <v-text-field :value="me.username" disabled label="Username" prefix="@" />
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12" sm="3">
+            <v-subheader>Display name</v-subheader>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <blm-myaccount-form-displayname :display-name="me.displayName" />
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12" sm="3">
+            <v-subheader>Bio</v-subheader>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <blm-myaccount-form-bio :bio="me.bio" />
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col><v-divider/></v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12">
+            <div class="headline">
+              Personal Information
+            </div>
+          </v-col>
+        </v-row>
+
+
+        <v-row>
+          <v-col cols="12" sm="3">
+            <v-subheader>Email</v-subheader>
+          </v-col>
+          <v-col cols="12" sm="9">
+            <blm-myaccount-form-email :email="me.email" />
+          </v-col>
+        </v-row>
+
+
+      </v-col>
+    </v-row>
+  </v-container>
+</template>
+
+
+<script lang="ts">
+import { Component, Vue } from 'vue-property-decorator';
+import EmailForm from '../components/email_form.vue';
+import DisplayNameForm from '../components/display_name_form.vue';
+import BioForm from '../components/bio_form.vue';
+import AvatarForm from '../components/avatar_form.vue';
+
+
+@Component({
+  components: {
+    'blm-myaccount-form-email': EmailForm,
+    'blm-myaccount-form-displayname': DisplayNameForm,
+    'blm-myaccount-form-bio': BioForm,
+    'blm-myaccount-form-avatar': AvatarForm,
+  },
+})
+export default class Profile extends Vue {
+  // props
+  // data
+  initialLoading = false;
+  error = '';
+  me = {
+    displayName: 'Sylvain Kerkour',
+    email: 'dontexist@bloom.sh',
+    bio: 'Hello World',
+    username: 'sylvain',
+    avatar: 'https://cdn.vuetifyjs.com/images/john.jpg',
+  };
+
+
+  // computed
+  // lifecycle
+  // watch
+  // methods
+}
+</script>
+
+
+<style lang="scss" scoped>
+</style>

@@ -22,7 +22,7 @@ variables:
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
-  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.10.14-dev.tar.xz"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.2-dev.tar.xz"
 
   # desktop
   NODE_ENV: test
@@ -243,7 +243,7 @@ build:website:
   tags:
     - docker
   script:
-    - apt update && apt install curl make python3 python3-pip -y
+    - apt update && apt install curl make python3 python3-pip gzip -y
     - pip3 install mkdocs pymdown-extensions # for the-guide
     - cd website/
     - make install
@@ -263,6 +263,10 @@ build:website:
     - make assets
     - make build
     - mv dist ../website/dist/the-guide
+    - cd .. # go back to 'root' folder
+    # comrepss files ahead of time
+    - cd website
+    - gzip -k -9 -r -f dist
   artifacts:
     paths:
     - website/dist
@@ -319,21 +323,16 @@ package:bitflow:
 ####################################################################################################
 
 pages: # release:website
-  image: node:$NODE_VERSION
+  image: alpine:latest
   stage: release
   dependencies:
     - build:website
-  only:
-    - release-website
+  # only:
+  #   - release-website
   tags:
     - docker
   script:
     - cp -rp website/dist public
-    # deploy on netlify
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website
-    - netlify deploy --site $NETLIFY_WEBSITE_ID --auth $NETLIFY_TOKEN --prod
   artifacts:
     paths:
       - public/

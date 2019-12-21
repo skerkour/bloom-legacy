@@ -52,7 +52,8 @@ class _ConversationListViewState extends State<ConversationListView> {
             Navigator.push<dynamic>(
               context,
               MaterialPageRoute<dynamic>(
-                builder: (BuildContext context) => ConversationView(chatEntity: entity),
+                builder: (BuildContext context) =>
+                    ConversationView(chatEntity: entity),
               ),
             );
           },

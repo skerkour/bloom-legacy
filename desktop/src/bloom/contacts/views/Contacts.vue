@@ -1,20 +1,11 @@
 <template>
   <div>
     <v-container fluid>
-      <v-toolbar
-        flat
-        dense
-      >
+      <v-toolbar flat dense>
         <v-spacer />
-        <v-btn
-          outlined
-          color="primary"
-          class="add-btn"
-          @click="currentContact = null; openContactDialog()"
-        >
+        <v-btn color="primary" @click="currentContact = null; openContactDialog()">
           <v-icon left>mdi-plus</v-icon>Create Contact
         </v-btn>
-
       </v-toolbar>
 
       <v-data-table

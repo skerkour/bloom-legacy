@@ -21,7 +21,7 @@
               v-on="on"
               class="blm-pointer"
             >
-              <v-img src="https://randomuser.me/api/portraits/men/85.jpg"></v-img>
+              <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" />
             </v-list-item-avatar>
 
             <!-- <v-list-item-title>John Leider</v-list-item-title> -->
@@ -43,13 +43,18 @@
               <v-list-item class="justify-center">
                 <v-btn
                   text
-                  color="primary"
                   to="/preferences"
-                  id="menu-account"
-                  class="elevation-0"
                   @click="accountMenu = false"
                 >
-                  Preferences
+                  <v-icon left>mdi-settings</v-icon> Preferences
+                </v-btn>
+
+                <v-btn
+                  text
+                  to="/myaccount"
+                  @click="accountMenu = false"
+                >
+                  <v-icon left>mdi-account</v-icon> My Account
                 </v-btn>
               </v-list-item>
             </v-list>
@@ -119,7 +124,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AllAppsDialog from './AllAppsDialog.vue';
-
+import apps from '../apps';
 
 @Component({
   components: {
@@ -131,58 +136,7 @@ export default class LeftBar extends Vue {
   // data
   accountMenu = false;
   showAllAppsDialog = false;
-  apps = [
-    // {
-    //   name: 'Chat',
-    //   path: '/chat',
-    //   icon: '/kernel/imgs/icons/chat_512.jpg',
-    // },
-    // {
-    //   name: 'Music',
-    //   path: '/music',
-    //   icon: '/kernel/imgs/icons/music_512.jpg',
-    // },
-    // {
-    //   name: 'Gallery',
-    //   path: '/gallery',
-    //   icon: '/kernel/imgs/icons/gallery_512.jpg',
-    // },
-    {
-      name: 'Notes',
-      path: '/notes',
-      icon: '/assets/icons/notes_256.jpg',
-    },
-    {
-      name: 'Calendar',
-      path: '/calendar',
-      icon: '/assets/icons/calendar_256.jpg',
-    },
-    // {
-    //   name: 'Bitflow',
-    //   path: '/bitflow',
-    //   icon: '/kernel/imgs/icons/bitflow_512.jpg',
-    // },
-    {
-      name: 'Arcade',
-      path: '/arcade',
-      icon: '/assets/icons/arcade_256.jpg',
-    },
-    {
-      name: 'Contacts',
-      path: '/contacts',
-      icon: '/assets/icons/contacts_256.jpg',
-    },
-    // {
-    //   name: 'Drive',
-    //   path: '/drive',
-    //   icon: '/kernel/imgs/icons/drive_512.jpg',
-    // },
-    {
-      name: 'Calculator',
-      path: '/calculator',
-      icon: '/assets/icons/calculator_256.jpg',
-    },
-  ];
+  apps = apps;
 
 
   // computed
@@ -207,5 +161,6 @@ export default class LeftBar extends Vue {
 <style lang="scss" scoped>
 .blm-left-bar {
   z-index: 100;
+  overflow-y: auto;
 }
 </style>

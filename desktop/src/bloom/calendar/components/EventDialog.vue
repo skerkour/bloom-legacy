@@ -25,7 +25,6 @@
               <v-btn
                 slot="activator"
                 text
-                color="white"
                 icon
                 v-on="{ ...tooltip, ...menu }"
               >
@@ -130,6 +129,8 @@ import {
 import { Event as EventModel, GuiEvent } from '@/native/messages/calendar';
 import { Native, Message } from '@/native';
 
+const { log } = require('@bloom42/astro');
+
 @Component
 export default class EventDialog extends Vue {
   // props
@@ -187,7 +188,7 @@ export default class EventDialog extends Vue {
       await this.save();
     }
     if (this.error !== '') {
-      console.log('error not empty');
+      log.debug('error not empty');
       return;
     }
     this.show = false;

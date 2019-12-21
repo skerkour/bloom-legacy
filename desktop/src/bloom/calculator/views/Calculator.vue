@@ -60,6 +60,7 @@ export default class Calculator extends Vue {
   }
 
   async evaluate() {
+    this.error = '';
     const message: Message = {
       type: 'calculator.gui.expression',
       data: {

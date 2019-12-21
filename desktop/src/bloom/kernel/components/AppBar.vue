@@ -30,8 +30,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-const { shell } = (window as any).require('electron');
 const config = require('@/config');
+
+const { shell } = (window as any).require('electron');
 
 
 @Component

@@ -20,11 +20,6 @@ sentry = {
     server_url = "${SENTRY_SERVER_URL}", # optional
 }
 
-phaser = {
-    # cryptographically secure random string of at least 65 characters
-    secret =  "${PHASER_SECRET}",
-}
-
 bitflow = {
     # cryptographically secure random string of at least 65 characters
     secret = "${BITFLOW_SECRET}",

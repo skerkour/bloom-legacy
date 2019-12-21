@@ -16,6 +16,12 @@
     <blm-drawer-bitflow v-else-if="app === 'bitflow'" />
     <blm-drawer-notes v-else-if="app === 'notes'" />
     <blm-drawer-drive v-else-if="app === 'drive'" />
+    <blm-drawer-phaser v-else-if="app === 'phaser'" />
+    <blm-drawer-gallery v-else-if="app === 'gallery'" />
+    <blm-drawer-admin v-else-if="app === 'admin'" />
+    <blm-drawer-preferences v-else-if="app === 'preferences'" />
+    <blm-drawer-myaccount v-else-if="app === 'myaccount'" />
+    <blm-drawer-books v-else-if="app === 'books'" />
 
   </v-navigation-drawer>
 </template>
@@ -23,12 +29,27 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import MusicDrawer from '@/bloom/music/components/Drawer.vue';
-import BitflowDrawer from '@/bloom/bitflow/components/Drawer.vue';
+import MusicDrawer from '@/bloom/music/components/drawer.vue';
+import BitflowDrawer from '@/bloom/bitflow/components/drawer.vue';
 import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
-import DriveDrawer from '@/bloom/drive/components/Drawer.vue';
+import DriveDrawer from '@/bloom/drive/components/drawer.vue';
+import GalleryDrawer from '@/bloom/gallery/components/drawer.vue';
+import AdminDrawer from '@/bloom/admin/components/drawer.vue';
+import PreferencesDrawer from '@/bloom/preferences/components/drawer.vue';
+import MyAccountDrawer from '@/bloom/myaccount/components/drawer.vue';
+import BooksDrawer from '@/bloom/books/components/drawer.vue';
 
-const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar', 'contacts'];
+const APPS_WITH_DRAWER = [
+  'music',
+  'bitflow',
+  'notes',
+  'drive',
+  'gallery',
+  'admin',
+  'preferences',
+  'myaccount',
+  'books',
+];
 
 @Component({
   components: {
@@ -36,6 +57,11 @@ const APPS_WITHOUT_DRAWER = ['chat', 'arcade', 'calculator', 'calendar', 'contac
     'blm-drawer-bitflow': BitflowDrawer,
     'blm-drawer-notes': NotesDrawer,
     'blm-drawer-drive': DriveDrawer,
+    'blm-drawer-gallery': GalleryDrawer,
+    'blm-drawer-admin': AdminDrawer,
+    'blm-drawer-preferences': PreferencesDrawer,
+    'blm-drawer-myaccount': MyAccountDrawer,
+    'blm-drawer-books': BooksDrawer,
   },
 })
 export default class NavigationDrawer extends Vue {
@@ -46,7 +72,7 @@ export default class NavigationDrawer extends Vue {
   // data
   // computed
   get showDrawer() {
-    return !APPS_WITHOUT_DRAWER.includes(this.app);
+    return APPS_WITH_DRAWER.includes(this.app);
   }
 
 

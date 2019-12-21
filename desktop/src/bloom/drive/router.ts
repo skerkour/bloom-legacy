@@ -1,8 +1,13 @@
-const Index = () => import(/* webpackChunkName: "chunk-drive" */ './views/Index.vue');
+const Drive = () => import(/* webpackChunkName: "chunk-drive" */ './views/drive.vue');
+const Trash = () => import(/* webpackChunkName: "chunk-drive" */ './views/trash.vue');
 
 export default [
   {
-    component: Index,
+    component: Drive,
     path: '/drive',
+  },
+  {
+    component: Trash,
+    path: '/drive/trash',
   },
 ];

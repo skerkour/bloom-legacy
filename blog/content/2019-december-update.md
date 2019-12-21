@@ -55,7 +55,7 @@ For the better or the worse, computers made copying data virtually free. It's in
 Whether it be an eBook, an image or a text file, whether the data is public or private. In the long run,
 any bit of data will either become public or will be lost.
 
-But the asymmetry between those who store and proceed the data (*cloud providers*), and those who produce
+But the asymmetry between those who store and proceed the data (*cloud providers*), and those who produce and use
 the data (*people*) create great power imbalance.
 
 This is why, as of today, cryptography is <a href="https://en.wikipedia.org/wiki/Permanent_Record_(autobiography)" target="_blank" rel="noopener">the only mean to equilibrate power between those 2 parties</a>.
@@ -87,7 +87,7 @@ the *groups* feature, where you will be able to share a drive space, notes, task
 * Native applications are coming in January, featuring end to end encryption and offline support among other improvements
 * **You will need to create a new account on the native application**
 * New Mastodon account: <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
-* Paying offers (more Drive space, more Phaser scans, more Bitflow downloads...) will be available with the native applications
+* Paying offers (more Drive space, more Bitflow downloads...) will be available with the native applications
 * Next months will be dedicated to secure revenues and grow the core team
 
 <br />

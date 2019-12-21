@@ -3,7 +3,7 @@ import Router from 'vue-router';
 
 import AuthRouter from '@/bloom/auth/router';
 import KernelRouter from '@/bloom/kernel/router';
-import ChatRouter from '@/bloom/chat/router';
+// import ChatRouter from '@/bloom/chat/router';
 import PreferencesRouter from '@/bloom/preferences/router';
 import MusicRouter from '@/bloom/music/router';
 import NotesRouter from '@/bloom/notes/router';
@@ -14,7 +14,9 @@ import BitflowRouter from '@/bloom/bitflow/router';
 import ContactsRouter from '@/bloom/contacts/router';
 import GalleryRouter from '@/bloom/gallery/router';
 import CalculatorRouter from '@/bloom/calculator/router';
-
+import AdminRouter from '@/bloom/admin/router';
+import MyAccountRouter from '@/bloom/myaccount/router';
+import BooksRouter from '@/bloom/books/router';
 
 import store from '@/store';
 
@@ -25,7 +27,7 @@ const router = new Router({
   base: process.env.BASE_URL,
   routes: [
     ...AuthRouter,
-    ...ChatRouter,
+    // ...ChatRouter,
     ...KernelRouter,
     ...PreferencesRouter,
     ...MusicRouter,
@@ -37,6 +39,9 @@ const router = new Router({
     ...ContactsRouter,
     ...GalleryRouter,
     ...CalculatorRouter,
+    ...AdminRouter,
+    ...MyAccountRouter,
+    ...BooksRouter,
     {
       path: '**',
       redirect: '/chat',

@@ -1,8 +1,8 @@
-const Index = () => import(/* webpackChunkName: "chunk-preferences" */ './views/Index.vue');
+const Theme = () => import(/* webpackChunkName: "chunk-preferences" */ './views/theme.vue');
 
 export default [
   {
-    component: Index,
+    component: Theme,
     path: '/preferences',
   },
 ];

@@ -1,15 +1,20 @@
 .PHONY: dev install clean assets dev_vue dev_electron icons
 .PHONY: test lint build dev_native test_native lint_native
 
+build:
+	npm run build:native
+	npm run build:electron
+
+clean:
+	rm -rf dist dist_electron
+
+re: clean build
 
 dev_native:
 	npm run dev:native
 
 dev_electron:
 	npm urn dev:electron
-
-clean:
-	rm -rf dist node_modules/
 
 install:
 	npm install
@@ -30,14 +35,12 @@ fmt_native:
 lint:
 	npm run lint
 
-build:
-	npm run build
-
 assets:
 	rm -rf public/assets
-	mkdir -p public/assets public/assets/fonts
-	cp -r ../assets/icons public/assets/icons
-	cp ../assets/desktop/icons/* public/assets/icons/
+	mkdir -p public/assets public/assets/fonts public/assets/imgs
+	cp -r ../assets/icons public/assets/imgs/icons
+	cp ../assets/desktop/icons/* public/assets/imgs/icons/
+	cp ../assets/desktop/imgs/* public/assets/imgs/
 	cp ../assets/fonts/rounded_elegance.ttf public/assets/fonts/
 
 icons:

@@ -41,9 +41,9 @@ $danger: #F56C6C;
   src: url("/static/fonts/rounded_elegance.ttf") format("truetype");
 }
 
-a {
-  text-decoration: none;
-  color: none;
+a, a * {
+  text-decoration: none !important;
+  color: inherit !important;
 }
 
 .blm-rounded-elegance {

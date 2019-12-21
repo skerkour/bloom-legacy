@@ -63,7 +63,9 @@ class BlocProvider<T extends BlocBase> extends StatefulWidget {
 
   static T of<T extends BlocBase>(BuildContext context) {
     final Type type = _typeOf<_BlocProviderInherited<T>>();
+
     final _BlocProviderInherited<T> provider =
+        // ignore: deprecated_member_use
         context.ancestorInheritedElementForWidgetOfExactType(type)?.widget;
     return provider?.bloc;
   }

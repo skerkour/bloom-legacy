@@ -43,7 +43,8 @@ class ChatMessage {
 }
 
 class ConversationView extends StatefulWidget {
-  const ConversationView({Key key, @required this.chatEntity}) : super(key: key);
+  const ConversationView({Key key, @required this.chatEntity})
+      : super(key: key);
 
   final ChatEntity chatEntity;
 
@@ -86,7 +87,7 @@ class _ConversationViewState extends State<ConversationView> {
       crossAxisAlignment: CrossAxisAlignment.center,
       children: <Widget>[
         IconButton(
-          icon: Icon(Icons.arrow_back),
+          icon: const Icon(Icons.arrow_back),
           onPressed: () {
             Navigator.pop(context);
           },

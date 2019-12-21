@@ -1,16 +1,6 @@
 use bloom_error::BloomError;
 use url::Url;
 
-pub fn phaser_secret(secret: &str) -> Result<(), BloomError> {
-    if secret.len() < 64 {
-        return Err(BloomError::Validation(
-            "Phaser secret length must be at least 64.".to_string(),
-        ));
-    }
-
-    return Ok(());
-}
-
 pub fn bitflow_secret(secret: &str) -> Result<(), BloomError> {
     if secret.len() < 64 {
         return Err(BloomError::Validation(
