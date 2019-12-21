@@ -17,7 +17,6 @@ struct ConfigFile {
     aws: AwsConfig,
     s3: S3Config,
     sentry: SentryConfig,
-    phaser: PhaserConfig,
     bitflow: BitflowConfig,
     blacklists: BlacklistsConfig,
     stripe: StripeConfig,
@@ -34,7 +33,6 @@ pub struct Config {
     pub aws: AwsConfig,
     pub s3: S3Config,
     pub sentry: SentryConfig,
-    pub phaser: PhaserConfig,
     pub bitflow: BitflowConfig,
     pub stripe: StripeConfig,
     pub disposable_email_domains: HashSet<String>,
@@ -91,7 +89,6 @@ impl From<ConfigFile> for Config {
                     DisabledService::Gallery => disabled.gallery = true,
                     DisabledService::Music => disabled.music = true,
                     DisabledService::Notes => disabled.notes = true,
-                    DisabledService::Phaser => disabled.phaser = true,
                 }
             }
         }
@@ -105,7 +102,6 @@ impl From<ConfigFile> for Config {
             aws: config.aws,
             s3: config.s3,
             sentry: config.sentry,
-            phaser: config.phaser,
             bitflow: config.bitflow,
             stripe: config.stripe,
             disposable_email_domains: blacklisted_email_domains,
@@ -118,7 +114,6 @@ impl From<ConfigFile> for Config {
 
 impl Config {
     pub fn validate(&self) -> Result<(), BloomError> {
-        bloom_validators::config::phaser_secret(&self.phaser.secret)?;
         bloom_validators::config::bitflow_secret(&self.bitflow.secret)?;
 
         bloom_validators::config::host(&self.host)?;
@@ -162,11 +157,6 @@ pub struct AwsConfig {
 pub struct S3Config {
     pub bucket: String,
     pub base_url: String,
-}
-
-#[derive(Clone, Debug, Deserialize, Serialize)]
-pub struct PhaserConfig {
-    pub secret: String,
 }
 
 #[derive(Clone, Debug, Deserialize, Serialize)]
@@ -222,8 +212,6 @@ pub enum DisabledService {
     Music,
     #[serde(rename = "notes")]
     Notes,
-    #[serde(rename = "phaser")]
-    Phaser,
 }
 
 #[derive(Clone, Debug, Default, Deserialize, Serialize)]
@@ -236,7 +224,6 @@ pub struct DisabledConfig {
     pub gallery: bool,
     pub music: bool,
     pub notes: bool,
-    pub phaser: bool,
 }
 
 pub fn init() -> Config {
@@ -256,7 +243,6 @@ pub fn init() -> Config {
         config.aws.secret_access_key.clone(),
     );
     env::set_var("AWS_REGION", config.aws.region.clone());
-    env::set_var("PHASER_SECRET", config.phaser.secret.clone());
     env::set_var("BITFLOW_SECRET", config.bitflow.secret.clone());
 
     return config;
@@ -353,15 +339,6 @@ fn replace_env(mut config: ConfigFile) -> ConfigFile {
             config.sentry.server_url =
                 Some(url.replace(match_str, &get_env(match_str.trim_matches(patterns))));
         }
-    }
-
-    // phaser
-    for match_ in re.find_iter(&config.phaser.secret.clone()) {
-        let match_str = match_.as_str();
-        config.phaser.secret = config
-            .phaser
-            .secret
-            .replace(match_str, &get_env(match_str.trim_matches(patterns)));
     }
 
     // bitflow
