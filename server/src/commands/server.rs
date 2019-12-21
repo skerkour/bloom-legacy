@@ -29,8 +29,6 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
 
     // TODO: logger middleware
     // TODO: sentry middleware
-    slog_info!(logger, "starting server"; slog_o!("address" => binding_addr, "version" => crate::info::VERSION));
-
     HttpServer::new(move || {
         App::new()
         .data(api_state.clone())
@@ -65,4 +63,6 @@ pub fn run(cfg: config::Config, logger: slog::Logger) -> Result<(), Box<dyn Erro
 
     slog_info!(logger, "server started"; slog_o!("address" => binding_addr, "version" => crate::info::VERSION));
     let _ = sys.run();
+
+    return Ok(());
 }
