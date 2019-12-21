@@ -26,13 +26,16 @@
 
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
         order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
-        <v-avatar size="128px" v-if="feature.icon">
-          <img :src="feature.icon" contain />
-        </v-avatar>
-        <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+        <router-link :to="`/features/${feature.learnMore}`">
+          <v-avatar size="128px" v-if="feature.icon">
+            <img :src="feature.icon" contain />
+          </v-avatar>
+          <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+        </router-link>
       </v-col>
 
       <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
+        <router-link :to="`/features/${feature.learnMore}`">
         <h3 class="display-1 font-weight-regular">
           {{ feature.name }}
         </h3>
@@ -40,6 +43,7 @@
         <v-btn v-if="feature.learnMore" :to="`/features/${feature.learnMore}`" text color="primary">
           Learn more
         </v-btn>
+        </router-link>
       </v-col>
     </v-row>
 
