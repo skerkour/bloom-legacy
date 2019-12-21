@@ -263,6 +263,10 @@ build:website:
     - make assets
     - make build
     - mv dist ../website/dist/the-guide
+    - cd .. # go back to 'root' folder
+    # comrepss files ahead of time
+    - cd website
+    - gzip -k -9 -r dist
   artifacts:
     paths:
     - website/dist
@@ -323,8 +327,8 @@ pages: # release:website
   stage: release
   dependencies:
     - build:website
-  only:
-    - release-website
+  # only:
+  #   - release-website
   tags:
     - docker
   script:
