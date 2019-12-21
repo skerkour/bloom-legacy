@@ -79,6 +79,15 @@ class _HomeViewState extends State<HomeView> {
     }
   }
 
+  // void _fabChatsPressed() {
+  //   showModalBottomSheet<ChatsBottomSheet>(
+  //     context: context,
+  //     builder: (BuildContext ctx) {
+  //       return ChatsBottomSheet();
+  //     },
+  //   );
+  // }
+
   void _fabGroupsPressed() {
     Navigator.push<dynamic>(
       context,
