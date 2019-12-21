@@ -323,7 +323,7 @@ package:bitflow:
 ####################################################################################################
 
 pages: # release:website
-  image: node:$NODE_VERSION
+  image: alpine:latest
   stage: release
   dependencies:
     - build:website
@@ -333,11 +333,6 @@ pages: # release:website
     - docker
   script:
     - cp -rp website/dist public
-    # deploy on netlify
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website
-    - netlify deploy --site $NETLIFY_WEBSITE_ID --auth $NETLIFY_TOKEN --prod
   artifacts:
     paths:
       - public/
