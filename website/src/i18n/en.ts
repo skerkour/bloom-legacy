@@ -5,7 +5,7 @@ export default {
     features: 'Features',
   },
   landing: {
-    mission: 'Our mission: Empowering people',
+    mission: 'We believe that everyone deserves respect and privacy',
     subtitle1: 'Collaborate, Enjoy, Share, Innovate',
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
@@ -96,6 +96,6 @@ export default {
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
   },
   features: {
-    title: 'We believe that Everyone deserve privacy and security',
+    title: 'Our mission: Empowering people',
   },
 };
