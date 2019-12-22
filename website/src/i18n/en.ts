@@ -98,4 +98,14 @@ export default {
   features: {
     title: 'Our mission: Empowering people',
   },
+  security: {
+    title: 'Security',
+    description: `Keeping our customer data safe and secure is our top priority. We take threats very
+    seriously and work hard to protect our customers and their data. Your input and feedback
+      on our security is greatly appreciated.`,
+    issues_title: 'Reporting Issues',
+    issues_description: `Send reports directly to <a href="mailto:security@bloom.sh">security@bloom.sh</a>
+      and we will get back to you faster than the light.`,
+    hall_title: 'Hall of fame',
+  },
 };
