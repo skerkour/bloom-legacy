@@ -4,8 +4,7 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">
-          <span class="blm-rounded-elegance">Bloom</span> is on a mission to empower people
-          with open technologies
+          {{ $t('features.title') }}
         </h1>
 
         <blm-download-btn />
@@ -114,12 +113,13 @@ export default class Features extends Vue {
       description: 'Never stop having fun!',
       learnMore: 'arcade',
     },
-    {
-      name: 'Books',
-      icon: '/static/imgs/icons/books.svg',
-      description: 'Bloom Books is the single destination for all the books you love, and the ones you\'re about to. ',
-      learnMore: 'books',
-    },
+    // {
+    //   name: 'Books',
+    //   icon: '/static/imgs/icons/books.svg',
+    //   description: 'Bloom Books is
+    // the single destination for all the books you love, and the ones you\'re about to. ',
+    //   learnMore: 'books',
+    // },
     {
       name: 'Contacts',
       icon: '/static/imgs/icons/contacts.svg',
@@ -135,7 +135,7 @@ export default class Features extends Vue {
     },
     {
       name: 'Scan QR Codes',
-      icon: '/static/imgs/features/qrcode.svg',
+      icon: '/static/imgs/icons/qrcode.svg',
       description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
     },
   ];

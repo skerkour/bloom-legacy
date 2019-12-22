@@ -95,4 +95,7 @@ export default {
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
   },
+  features: {
+    title: 'We believe that Everyone deserve privacy and security',
+  },
 };
