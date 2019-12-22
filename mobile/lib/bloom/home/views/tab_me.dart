@@ -110,7 +110,6 @@ List<_BlmApp> getApps() {
     const _BlmApp(icon: ICON_MUSIC_256, name: 'Music', route: PATH_MUSIC),
     const _BlmApp(icon: ICON_GALLERY_256, name: 'Gallery', route: PATH_GALLERY),
     const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: PATH_ARCADE),
-    const _BlmApp(icon: ICON_BOOKS_256, name: 'Books', route: PATH_BOOKS),
     const _BlmApp(
         icon: ICON_CALCULATOR_256, name: 'Calculator', route: PATH_CALCULATOR),
     const _BlmApp(icon: ICON_BITFLOW_256, name: 'Bitflow', route: PATH_BITFLOW),
