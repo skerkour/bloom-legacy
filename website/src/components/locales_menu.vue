@@ -68,11 +68,11 @@ export default class LocalesMenu extends Vue {
       locale: 'fr',
       flag: '/static/imgs/flags/france.png',
     },
-    {
-      name: 'Español',
-      locale: 'es',
-      flag: '/static/imgs/flags/spain.png',
-    },
+    // {
+    //   name: 'Español',
+    //   locale: 'es',
+    //   flag: '/static/imgs/flags/spain.png',
+    // },
     {
       name: 'Português',
       locale: 'pt',
@@ -85,10 +85,10 @@ export default class LocalesMenu extends Vue {
     switch (this.$i18n.locale) {
       case 'fr':
         return this.languages[1];
-      case 'es':
-        return this.languages[2];
+      // case 'es':
+      //   return this.languages[2];
       case 'pt':
-        return this.languages[3];
+        return this.languages[2];
       default:
         return this.languages[0];
     }
