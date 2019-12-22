@@ -32,11 +32,11 @@ export default class Drive extends Vue {
       img: '/static/imgs/features/arcade_privacy.svg',
       name: 'Committed to your privacy',
     },
-    {
-      description: 'We are committed to provide the best multiplayer experience.',
-      img: '/static/imgs/features/arcade_friends.svg',
-      name: 'Never stop the fun with friends',
-    },
+    // {
+    //   description: 'We are committed to provide the best multiplayer experience.',
+    //   img: '/static/imgs/features/arcade_friends.svg',
+    //   name: 'Never stop the fun with friends',
+    // },
   ];
   // computed
   // lifecycle
