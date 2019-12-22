@@ -1,7 +1,7 @@
 <template>
   <p class="subtitle-1 mt-5">
     <router-link to="/download" class="text--darken-1 grey--text">
-      {{ $t('other_downloads') }}
+      {{ $t('labels.other_downloads') }}
     </router-link>
   </p>
 </template>

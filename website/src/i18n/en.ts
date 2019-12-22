@@ -1,5 +1,8 @@
 export default {
-  other_downloads: 'Other downloads',
+  labels: {
+    other_downloads: 'Other downloads',
+    learn_more: 'Learn more',
+  },
   appbar: {
     download: 'Download',
     features: 'Features',
