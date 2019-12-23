@@ -50,7 +50,6 @@ export default {
     },
     community: {
       title: 'Community',
-      sponsoring: 'Sponsoring',
     },
   },
   download_btn: {
