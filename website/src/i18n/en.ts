@@ -78,7 +78,7 @@ export default {
     },
     learn_more: {
       title: 'Want to learn more?',
-      guide: 'Read <b>The Guide</b>',
+      wiki: 'Read <b>The Wiki</b>',
     },
   },
   contact: {
