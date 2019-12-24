@@ -1,4 +1,4 @@
-See [https://www.bloom.sh/the-guide/projects/bloom/bitflow](https://www.bloom.sh/the-guide/projects/bloom/bitflow)
+See https://gitlab.com/bloom42/bloom/-/wikis/bitflow
 
 <!-- <p align="center">
   <img alt="bloom logo" src="https://bloom.sh/kernel/static/imgs/logos/bitflow_256.png" height="180" />
