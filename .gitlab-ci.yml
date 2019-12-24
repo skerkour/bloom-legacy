@@ -447,7 +447,6 @@ release:bitflow:stable:
 #   paths:
 #     - $CARGO_HOME/bin
 
-
 # test:android:
 #   stage: test
 #   script:
