@@ -46,12 +46,6 @@ https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 See `LICENSE.txt` and [https://www.bloom.sh/licensing](https://www.bloom.sh/licensing)
 
 
-## Sponsoring
-
-Bloom is a free and open source project. If you are interested in supporting this project, please visit our
-[dedicated 'Become a sponsor' page](https://www.bloom.sh/become-a-sponsor) ✌️
-
-
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
