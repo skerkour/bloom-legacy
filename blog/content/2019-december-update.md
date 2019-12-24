@@ -71,7 +71,7 @@ read your messages, not any random Facebook employee.
 </div>
 
 Cryptography gives you confidentiality and integrity for your data,
-and paying for Bloom gives you availability:
+and paying for Bloom gives you availability: high reliability backup,
 cross-devices synchronization, always online servers...
 
 
