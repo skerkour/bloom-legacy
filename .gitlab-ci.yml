@@ -8,9 +8,9 @@ stages:
   - release
 
 include:
-  template: Dependency-Scanning.gitlab-ci.yml
-  template: SAST.gitlab-ci.yml
-  template: Container-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
 
 variables:
   # Rust (core)
