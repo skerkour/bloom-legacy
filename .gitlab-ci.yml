@@ -436,9 +436,6 @@ release:bitflow:stable:
 #     - make docker_login
 #     - make docker_release_nightly
 
-# variables:
-#   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
-
 # default:
 #   image: rust:latest
 #   before_script:
