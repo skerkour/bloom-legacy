@@ -35,6 +35,7 @@ variables:
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
+  POSTGRES_VERSION: 12
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
@@ -140,7 +141,7 @@ test:server:
     - make lint
     - make test
   services:
-    - postgres:11
+    - postgres:$POSTGRES_VERSION
 
 test:website:
   stage: test

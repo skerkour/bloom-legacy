@@ -155,4 +155,9 @@ export default class Features extends Vue {
 .blm-feature {
   margin-top: 42px;
 }
+
+a, a * {
+  text-decoration: none !important;
+  color: inherit !important;
+}
 </style>
