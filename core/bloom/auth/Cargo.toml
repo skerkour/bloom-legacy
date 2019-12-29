@@ -11,7 +11,7 @@ bloom_messages = { path = "../messages" }
 bloom_error = { path = "../error", features = ["reqwest", "crypto42"] }
 bloom_const = { path = "../const" }
 
-crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
+crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42-rs" }
 uuid = { version = "0.7", features = ["serde", "v4"] }
 # reqwest = { version = "0.9", features = ["default-tls-vendored"] }
 reqwest = { version = "0.9", default-features = false, features = ["rustls-tls"] }

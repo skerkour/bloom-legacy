@@ -28,7 +28,7 @@ bloom_error = { path = "../core/bloom/error", features = ["actix"] }
 # admin = { path = "bloom/admin" }
 # calendar = { path = "bloom/calendar" }
 
-crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42" }
+crypto42 = { version = "0.5", git = "https://gitlab.com/bloom42/libs/crypto42-rs" }
 futures = "0.1"
 futures_preview = { package ="futures-preview",  version = "0.3.0-alpha.16", features = ["compat"] }
 actix-web = "1.0.7"
