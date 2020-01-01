@@ -1,11 +1,14 @@
 export default {
-  other_downloads: 'Other downloads',
+  labels: {
+    other_downloads: 'Other downloads',
+    learn_more: 'Learn more',
+  },
   appbar: {
     download: 'Download',
     features: 'Features',
   },
   landing: {
-    mission: 'Our mission: Empowering people',
+    mission: 'We believe that everyone deserves respect and privacy',
     subtitle1: 'Collaborate, Enjoy, Share, Innovate',
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
@@ -47,7 +50,6 @@ export default {
     },
     community: {
       title: 'Community',
-      sponsoring: 'Sponsoring',
     },
   },
   download_btn: {
@@ -76,7 +78,7 @@ export default {
     },
     learn_more: {
       title: 'Want to learn more?',
-      guide: 'Read <b>The Guide</b>',
+      wiki: 'Read <b>The Wiki</b>',
     },
   },
   contact: {
@@ -96,6 +98,16 @@ export default {
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
   },
   features: {
-    title: 'We believe that Everyone deserve privacy and security',
+    title: 'Our mission: Empowering people',
+  },
+  security: {
+    title: 'Security',
+    description: `Keeping our customer data safe and secure is our top priority. We take threats very
+    seriously and work hard to protect our customers and their data. Your input and feedback
+      on our security is greatly appreciated.`,
+    issues_title: 'Reporting Issues',
+    issues_description: `Send reports directly to <a href="mailto:security@bloom.sh">security@bloom.sh</a>
+      and we will get back to you faster than the light.`,
+    hall_title: 'Hall of fame',
   },
 };

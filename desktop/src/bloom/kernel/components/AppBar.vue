@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevation="0" fixed>
+  <v-app-bar elevation="0" fixed app>
 
     <div class="blm-app-bar-left-spacer" />
 

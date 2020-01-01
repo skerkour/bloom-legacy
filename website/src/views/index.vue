@@ -5,7 +5,7 @@
       <v-col cols="12" sm="6" class="text-center">
         <h1 class="display-3 mb-5">{{ $t('landing.mission') }}</h1>
 
-        <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4>
+        <!-- <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4> -->
         <h4 class="headline mb-5 font-weight-light" v-html="$t('landing.subtitle2')"></h4>
 
         <blm-download-btn />

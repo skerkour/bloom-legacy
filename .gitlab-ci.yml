@@ -8,7 +8,9 @@ stages:
   - release
 
 include:
-  template: Dependency-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
 
 variables:
   # Rust (core)
@@ -22,7 +24,7 @@ variables:
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
-  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.2-dev.tar.xz"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.5-dev.tar.xz"
 
   # desktop
   NODE_ENV: test
@@ -33,6 +35,7 @@ variables:
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
+  POSTGRES_VERSION: 12
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
@@ -138,7 +141,7 @@ test:server:
     - make lint
     - make test
   services:
-    - postgres:11
+    - postgres:$POSTGRES_VERSION
 
 test:website:
   stage: test
@@ -243,8 +246,7 @@ build:website:
   tags:
     - docker
   script:
-    - apt update && apt install curl make python3 python3-pip gzip -y
-    - pip3 install mkdocs pymdown-extensions # for the-guide
+    - apt update && apt install curl make gzip -y
     - cd website/
     - make install
     - make build
@@ -257,12 +259,6 @@ build:website:
     - tar -xzf zola.tar.gz
     - ./zola build
     - mv public ../website/dist/blog
-    - cd .. # go back to 'root' folder
-    # build the-guide
-    - cd the_guide
-    - make assets
-    - make build
-    - mv dist ../website/dist/the-guide
     - cd .. # go back to 'root' folder
     # comrepss files ahead of time
     - cd website
@@ -346,7 +342,7 @@ release:website_tmp:
     - npm install netlify-cli -g
     - netlify --telemetry-disable
     - cd website_tmp
-    - cp -r ../website/dist/blog public && cp -r ../website/dist/the-guide public
+    - cp -r ../website/dist/blog public
     - netlify deploy --site $NETLIFY_WEBSITE_TMP_ID --auth $NETLIFY_TOKEN --prod
 
 release:status_page:
@@ -441,21 +437,6 @@ release:bitflow:stable:
 #     - make docker_login
 #     - make docker_release_nightly
 
-# # release the_guide
-# pages:
-#   stage: release
-#   only:
-#     - master
-#   script:
-#     - make build
-#     - mv dist public
-#   artifacts:
-#     paths:
-#       - public
-
-# variables:
-#   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
-
 # default:
 #   image: rust:latest
 #   before_script:
@@ -465,7 +446,6 @@ release:bitflow:stable:
 # cache:
 #   paths:
 #     - $CARGO_HOME/bin
-
 
 # test:android:
 #   stage: test

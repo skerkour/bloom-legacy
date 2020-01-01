@@ -40,7 +40,7 @@
         </h3>
         <p class="mt-5" v-html="feature.description"></p>
         <v-btn v-if="feature.learnMore" :to="`/features/${feature.learnMore}`" text color="primary">
-          Learn more
+          {{ $t('labels.learn_more') }}
         </v-btn>
         </router-link>
       </v-col>
@@ -77,7 +77,7 @@ export default class Features extends Vue {
       name: 'Drive',
       icon: '/static/imgs/icons/drive.svg',
       description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
-        <b>30GB free.</b>`,
+        <b>5GB free.</b>`,
       learnMore: 'drive',
     },
     {
@@ -154,5 +154,10 @@ export default class Features extends Vue {
 
 .blm-feature {
   margin-top: 42px;
+}
+
+a, a * {
+  text-decoration: none !important;
+  color: inherit !important;
 }
 </style>

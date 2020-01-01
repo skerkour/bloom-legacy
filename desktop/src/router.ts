@@ -44,7 +44,7 @@ const router = new Router({
     ...BooksRouter,
     {
       path: '**',
-      redirect: '/chat',
+      redirect: '/notes',
     },
   ],
 });

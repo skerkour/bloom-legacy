@@ -44,7 +44,7 @@ class _BitflowHistoryState extends State<BitflowHistoryView> {
   FloatingActionButton _buildFloatingActionButton() {
     return FloatingActionButton(
       onPressed: () => debugPrint('Delete history pressed'),
-      child: Icon(Icons.delete),
+      child: const Icon(Icons.delete),
       backgroundColor: Colors.red,
     );
   }

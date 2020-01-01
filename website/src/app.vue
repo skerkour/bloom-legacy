@@ -43,7 +43,7 @@ $danger: #F56C6C;
 
 a, a * {
   text-decoration: none !important;
-  color: inherit !important;
+  // color: inherit !important;
 }
 
 .blm-rounded-elegance {
