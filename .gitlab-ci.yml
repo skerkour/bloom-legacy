@@ -67,19 +67,19 @@ variables:
 ## Test
 ####################################################################################################
 
-test:core:
-  stage: test
-  image: 'rust:stretch'
-  tags:
-    - docker
-  script:
-    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-    - rustup default $RUST_VERSION
-    - rustup component add rustfmt clippy
-    - cd core
-    - make fmt_check
-    - make lint
-    - make test
+# test:core:
+#   stage: test
+#   image: 'rust:stretch'
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git libsodium-dev libc6-dev
+#     - rustup default $RUST_VERSION
+#     - rustup component add rustfmt clippy
+#     - cd core
+#     - make fmt_check
+#     - make lint
+#     - make test
 
 
 test:mobile:
@@ -173,16 +173,16 @@ test:bitflow:
 
 # TODO
 
-build:core:
-  stage: build
-  image: 'rust:stretch'
-  tags:
-    - docker
-  script:
-    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-    - rustup default $RUST_VERSION
-    - cd core
-    - make build
+# build:core:
+#   stage: build
+#   image: 'rust:stretch'
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git libsodium-dev libc6-dev
+#     - rustup default $RUST_VERSION
+#     - cd core
+#     - make build
 
 
 # build:desktop: Commented because we need to implement the native addon build
