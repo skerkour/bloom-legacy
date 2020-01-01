@@ -24,7 +24,7 @@ variables:
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
-  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.2-dev.tar.xz"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.5-dev.tar.xz"
 
   # desktop
   NODE_ENV: test
