@@ -9,7 +9,7 @@ const String ICON_GALLERY_256 = 'assets/icons/gallery_256.jpg';
 const String ICON_BOOKS_256 = 'assets/icons/books_256.jpg';
 const String ICON_ADMIN_256 = 'assets/icons/admin_256.jpg';
 const String ICON_BITFLOW_256 = 'assets/icons/bitflow_256.jpg';
-const String ICON_QRCODE_256 = 'assets/icons/qrcode_256.jpg';
+const String ICON_QRCODES_256 = 'assets/icons/qrcode_256.jpg';
 
 const String PATH_BOOKS = '/books';
 const String PATH_DRIVE = '/drive';
@@ -24,4 +24,4 @@ const String PATH_CONTACTS = '/contacts';
 const String PATH_CALENDAR = '/calendar';
 const String PATH_MYACCOUNT = '/myaccount';
 const String PATH_PREFERENCES = '/preferences';
-const String PATH_QRCODE = '/qrcode';
+const String PATH_QRCODES = '/qrcode';

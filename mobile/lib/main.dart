@@ -20,6 +20,7 @@ import 'package:bloom/bloom/auth/views/auth.dart';
 import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
 
 import 'bloom/const.dart';
+import 'bloom/qrcodes/views/qrcodes.dart';
 
 void main() => runApp(MyApp());
 
@@ -54,6 +55,7 @@ class MyApp extends StatelessWidget {
         PATH_NOTES: (BuildContext context) => const NotesView(),
         PATH_PREFERENCES: (BuildContext context) =>
             const PreferencesThemeView(),
+        PATH_QRCODES: (BuildContext context) => const QrCodesView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );

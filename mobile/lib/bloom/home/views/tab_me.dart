@@ -113,7 +113,8 @@ List<_BlmApp> getApps() {
     const _BlmApp(
         icon: ICON_CALCULATOR_256, name: 'Calculator', route: PATH_CALCULATOR),
     const _BlmApp(icon: ICON_BITFLOW_256, name: 'Bitflow', route: PATH_BITFLOW),
-    const _BlmApp(icon: ICON_QRCODE_256, name: 'QR Code', route: PATH_QRCODE),
+    const _BlmApp(
+        icon: ICON_QRCODES_256, name: 'QR Codes', route: PATH_QRCODES),
     const _BlmApp(icon: ICON_ADMIN_256, name: 'Admin', route: PATH_ADMIN),
   ];
 }
