@@ -34,7 +34,7 @@ class _QrCodesState extends State<QrCodesView> {
 
             return ListTile(
               leading: CircleAvatar(
-                backgroundImage: AssetImage(ICON_QRCODES_256),
+                backgroundImage: const AssetImage(ICON_QRCODES_256),
                 backgroundColor: Colors.transparent,
                 radius: 28,
               ),
