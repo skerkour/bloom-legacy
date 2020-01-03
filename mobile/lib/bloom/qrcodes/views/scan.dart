@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 
-class BarcodeView extends StatefulWidget {
-  const BarcodeView({@required this.barcode});
+class QrCodeScanView extends StatefulWidget {
+  const QrCodeScanView({@required this.barcode});
 
   final String barcode;
 
   @override
-  _BarcodeState createState() => _BarcodeState();
+  _QrCodeScanState createState() => _QrCodeScanState();
 }
 
-class _BarcodeState extends State<BarcodeView> {
+class _QrCodeScanState extends State<QrCodeScanView> {
   String _barcode;
   Color _textColor = Colors.black;
 
@@ -39,7 +39,7 @@ class _BarcodeState extends State<BarcodeView> {
                   _barcode,
                   style: TextStyle(color: _textColor, fontSize: 21),
                 ),
-                onTap: _launchBarcode,
+                onTap: _launchQrCodeScan,
               ),
             ),
           ],
@@ -48,7 +48,7 @@ class _BarcodeState extends State<BarcodeView> {
     );
   }
 
-  Future<void> _launchBarcode() async {
+  Future<void> _launchQrCodeScan() async {
     if (await canLaunch(_barcode)) {
       await launch(_barcode);
     }

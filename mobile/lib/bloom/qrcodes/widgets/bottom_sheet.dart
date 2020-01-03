@@ -1,5 +1,5 @@
 import 'package:bloom/bloom/home/blocs/chat_tab.dart';
-import 'package:bloom/bloom/home/views/barcode.dart';
+import 'package:bloom/bloom/qrcodes/views/scan.dart';
 import 'package:flutter/material.dart';
 
 class QrCodesBottomSheet extends StatelessWidget {
@@ -30,7 +30,7 @@ class QrCodesBottomSheet extends StatelessWidget {
     await Navigator.push<dynamic>(
       context,
       MaterialPageRoute<dynamic>(
-        builder: (BuildContext context) => BarcodeView(barcode: barcode),
+        builder: (BuildContext context) => QrCodeScanView(barcode: barcode),
       ),
     );
     Navigator.of(context).pop();
