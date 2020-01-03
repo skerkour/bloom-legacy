@@ -23,6 +23,15 @@ class _QrCodesState extends State<QrCodesView> {
 
   Widget _buildBody() {
     final List<Code> codes = Code.getCodes();
+    codes.sort((Code a, Code b) {
+      if (a.starred) {
+        return -1;
+      }
+      if (b.starred) {
+        return 1;
+      }
+      return 0;
+    });
 
     return Container(
       child: ListView.separated(
