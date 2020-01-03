@@ -22,7 +22,7 @@ class _QrCodesState extends State<QrCodesView> {
   }
 
   Widget _buildBody() {
-    final List<Code> codes = Code.getSongs();
+    final List<Code> codes = Code.getCodes();
 
     return Container(
       child: ListView.separated(
@@ -40,6 +40,7 @@ class _QrCodesState extends State<QrCodesView> {
               ),
               title: Text(code.name),
               subtitle: Text(code.data),
+              trailing: code.starred ? Icon(Icons.star) : null,
             );
           }),
     );
@@ -60,12 +61,13 @@ class _QrCodesState extends State<QrCodesView> {
 }
 
 class Code {
-  Code({this.name, this.data});
+  Code({this.name, this.data, this.starred = false});
 
   String name;
   String data;
+  bool starred;
 
-  static List<Code> getSongs() {
+  static List<Code> getCodes() {
     return <Code>[
       Code(
         name: 'My super qrcode',
@@ -74,6 +76,7 @@ class Code {
       Code(
         name: 'My Wifi password',
         data: 'my super password',
+        starred: true,
       ),
     ];
   }

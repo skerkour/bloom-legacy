@@ -9,13 +9,13 @@ class QrCodesBottomSheet extends StatelessWidget {
       child: Wrap(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.camera_alt),
-            title: const Text('Scan QR code'),
+            leading: Icon(Icons.add_to_photos),
+            title: const Text('Create QR code'),
             onTap: () => _onScanQRCodeTapped(context),
           ),
           ListTile(
             leading: Icon(Icons.camera_alt),
-            title: const Text('Create QR code'),
+            title: const Text('Scan QR code'),
             onTap: () => _onScanQRCodeTapped(context),
           ),
         ],
