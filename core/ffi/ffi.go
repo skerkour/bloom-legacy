@@ -11,7 +11,7 @@ type Paylaod struct {
 }
 
 //export call
-func call(payload *C.char) *C.char {
+func Call(payload *C.char) *C.char {
   return nil
 }
 
