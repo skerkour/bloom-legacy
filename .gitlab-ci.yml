@@ -125,23 +125,23 @@ test:desktop:
     #- make test
     - make lint
 
-test:server:
-  stage: test
-  image: $RUST_IMAGE
-  tags:
-    - docker
-  script:
-    - cd server
-    - apt update && apt install -y gcc make git
-    - rustup default $RUST_VERSION
-    - rustup component add rustfmt clippy
-    - cp bloom.default.sane bloom.sane
-    - make assets
-    - make fmt_check
-    - make lint
-    - make test
-  services:
-    - postgres:$POSTGRES_VERSION
+# test:server:
+#   stage: test
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd server
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - rustup component add rustfmt clippy
+#     - cp bloom.default.sane bloom.sane
+#     - make assets
+#     - make fmt_check
+#     - make lint
+#     - make test
+#   services:
+#     - postgres:$POSTGRES_VERSION
 
 test:website:
   stage: test
@@ -225,20 +225,20 @@ build:mobile:
     - make assets
     - make build
 
-build:server:
-  stage: build
-  image: $RUST_IMAGE
-  tags:
-    - docker
-  script:
-    - cd server
-    - apt update && apt install -y gcc make git
-    - rustup default $RUST_VERSION
-    - make assets
-    - make build
-  artifacts:
-    paths:
-    - server/dist
+# build:server:
+#   stage: build
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd server
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - make assets
+#     - make build
+#   artifacts:
+#     paths:
+#     - server/dist
 
 build:website:
   stage: build
@@ -286,18 +286,18 @@ build:website:
 ## Package
 ####################################################################################################
 
-package:server:
-  stage: package
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
+# package:server:
+#   stage: package
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
 
 
 # package:bitflow:
@@ -362,26 +362,26 @@ release:status_page:
     - make release
 
 
-release:server:stable:
-  # only:
-  #   - tags
-  only:
-    - /^server-v.*$/
-  except:
-    - branches
-  stage: release
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release
+# release:server:stable:
+#   # only:
+#   #   - tags
+#   only:
+#     - /^server-v.*$/
+#   except:
+#     - branches
+#   stage: release
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release
 
 
 # release:bitflow:stable:
