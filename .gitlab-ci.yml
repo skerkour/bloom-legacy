@@ -113,17 +113,17 @@ test:mobile:
     - make lint
     - make test
 
-test:desktop:
-  stage: test
-  image: node:$NODE_VERSION
-  tags:
-    - docker
-  script:
-    - cd desktop
-    - make assets
-    - make install
-    #- make test
-    - make lint
+# test:desktop:
+#   stage: test
+#   image: node:$NODE_VERSION
+#   tags:
+#     - docker
+#   script:
+#     - cd desktop
+#     - make assets
+#     - make install
+#     #- make test
+#     - make lint
 
 # test:server:
 #   stage: test
