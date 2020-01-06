@@ -71,7 +71,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DownloadBtn from '@/components/download_btn.vue';
+import DownloadBtn from '@/components/coming_soon_btn.vue';
 import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 
