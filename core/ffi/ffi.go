@@ -17,7 +17,7 @@ type Error struct {
 }
 
 //export call
-func Call(message *C.char) *C.char {
+func call(message *C.char) *C.char {
 	return nil
 }
 
