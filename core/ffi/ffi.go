@@ -5,13 +5,13 @@ import (
   "encoding/json"
 )
 
-type Paylaod struct {
+type Payload struct {
   Method string `json:"method"`
   Params json.RawMessage `json:"params"`
 }
 
 //export call
-func Call(payload *C.char) *C.char {
+func Call(message *C.char) *C.char {
   return nil
 }
 
