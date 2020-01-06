@@ -18,7 +18,22 @@ type Error struct {
 
 //export call
 func call(message *C.char) *C.char {
-	return nil
+	var payload Payload
+
+	bytesMsg := C.GoString(message)
+	// if bytesMsg == nil {
+	// 	return nil // TODO(z0mbie42): return error
+	// }
+
+	err := json.Unmarshal([]byte(bytesMsg), &payload)
+	if err != nil {
+		return nil // TODO(z0mbie42): return error
+	}
+
+	switch payload.Method {
+	default:
+		return nil // TODO: return not found error
+	}
 }
 
 func main() {}
