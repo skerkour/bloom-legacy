@@ -63,6 +63,16 @@
     <link rel="shortcut icon" type="image/png" href="/static/imgs/icons/favicon.png">
     <title>Bloom - Open technologies</title>
   </head>
+  <script>
+    // because GitLab pages does not support server side redirects
+    function _redirect(domain){
+      var hostname = location.hostname;
+      if (hostname != domain && hostname != 'localhost' && hostname != '127.0.0.1') {
+        location.href = 'https://' + domain;
+      }
+    }
+    _redirect('bloom.sh');
+  </script>
   <style>
     html, body {
       height: 100%;
