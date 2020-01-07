@@ -14,25 +14,25 @@
 
 [[redirects]]
   from = "https://bloom.sh/*"
-  to = "https://www.bloom.sh/:splat"
+  to = "https://bloom.sh/:splat"
   status = 301
   force = true
 
 [[redirects]]
   from = "https://bloom42.com/*"
-  to = "https://www.bloom.sh/:splat"
+  to = "https://bloom.sh/:splat"
   status = 301
   force = true
 
 [[redirects]]
   from = "https://qi-lang.org/*"
-  to = "https://www.bloom.sh/:splat"
+  to = "https://bloom.sh/:splat"
   status = 301
   force = true
 
 [[redirects]]
   from = "https://www.qi-lang.org/*"
-  to = "https://www.bloom.sh/:splat"
+  to = "https://bloom.sh/:splat"
   status = 301
   force = true
 

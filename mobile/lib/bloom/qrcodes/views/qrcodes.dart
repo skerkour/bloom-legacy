@@ -80,7 +80,7 @@ class Code {
     return <Code>[
       Code(
         name: 'My super qrcode',
-        data: 'https://www.bloom.sh',
+        data: 'https://bloom.sh',
       ),
       Code(
         name: 'My Wifi password',

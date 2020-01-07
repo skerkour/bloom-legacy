@@ -4,11 +4,11 @@
   <p align="center">Empowering people with open technologies 🌍 (Android, IOS, Linux, MacOS, Windows, Server, Website)</p>
 </p>
 
-[Try it for free](https://www.bloom.sh/download)
+[Try it for free](https://bloom.sh/download)
 
 --------
 
-Why? How? What? 👉 Read the launch post: https://www.bloom.sh/blog/bloom-a-free-and-open-source-google
+Why? How? What? 👉 Read the launch post: https://bloom.gitlab.io/blog/bloom-a-free-and-open-source-google
 
 1. [Download](#download)
 2. [Documentation](#documentation)
@@ -43,10 +43,10 @@ https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
 ## Licensing
 
-See `LICENSE.txt` and [https://www.bloom.sh/licensing](https://www.bloom.sh/licensing)
+See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
 
 
 ## Security
 
 If you found a security issue affecting this project, please do not open a public issue and refer to our
-[dedicated security page](https://www.bloom.sh/security) instead. Thank you!
+[dedicated security page](https://bloom.sh/security) instead. Thank you!
