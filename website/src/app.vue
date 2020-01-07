@@ -2,6 +2,11 @@
   <v-app>
     <blm-app-bar />
     <v-content>
+      <v-alert type="info" tile v-model="alert" dismissible prominent>
+        <v-row align="center">
+          <v-col class="grow" v-html="alertHtml"></v-col>
+        </v-row>
+      </v-alert>
       <router-view/>
     </v-content>
     <blm-footer />
@@ -20,11 +25,21 @@ import Footer from '@/components/footer.vue';
     'blm-footer': Footer,
   },
 })
-export default class App extends Vue {}
+export default class App extends Vue {
+  alert = true;
+  alertHtml = `
+  Looking for the web application? Head to <a href="https://legacy.bloom.sh">https://legacy.bloom.sh</a><br/>
+    What's happening? <a href="https://bloom42.gitlab.io/blog/2019-december-update">Read the announcement &#9432;</a>
+  `;
+}
 </script>
 
 
 <style lang="scss">
+.v-alert a {
+  color: #FAA200 !important;
+}
+
 // Global vars
 $grey: #2c3e50;
 $white: #fff;
