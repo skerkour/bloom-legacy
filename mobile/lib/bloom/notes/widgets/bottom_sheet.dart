@@ -45,7 +45,7 @@ class _MoreOptionsSheetState extends State<MoreOptionsSheet> {
       child: Wrap(
         children: <Widget>[
           ListTile(
-            leading: Icon(Icons.delete),
+            leading: const Icon(Icons.delete),
             title: const Text('Delete permanently'),
             onTap: () => _onDeleted(context),
           ),
