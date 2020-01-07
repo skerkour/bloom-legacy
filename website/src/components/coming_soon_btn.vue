@@ -1,6 +1,5 @@
 <template>
-  <v-btn x-large color="primary" class="mt-5" :outlined="outlined" to="/download">
-    <v-icon left v-text="icon" v-if="icon !== ''"/>
+  <v-btn x-large color="primary" class="mt-5 text-left" :outlined="outlined" to="/download">
     Coming January 2020
   </v-btn>
 </template>
