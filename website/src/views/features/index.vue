@@ -160,4 +160,8 @@ a, a * {
   text-decoration: none !important;
   color: inherit !important;
 }
+
+.v-btn--router {
+  color: white !important;
+}
 </style>

@@ -41,6 +41,13 @@ $danger: #F56C6C;
   src: url("/static/fonts/rounded_elegance.ttf") format("truetype");
 }
 
+body {
+  font-size: 19px;
+  @media (max-width: 768px) {
+    font-size: 17px;
+  }
+}
+
 a, a * {
   text-decoration: none !important;
   // color: inherit !important;
