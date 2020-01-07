@@ -333,17 +333,6 @@ pages: # release:website
     paths:
       - public/
 
-release:website_tmp:
-  image: node:$NODE_VERSION
-  stage: release
-  tags:
-    - docker
-  script:
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website_tmp
-    - cp -r ../website/dist/blog public
-    - netlify deploy --site $NETLIFY_WEBSITE_TMP_ID --auth $NETLIFY_TOKEN --prod
 
 release:status_page:
   image: docker:stable
