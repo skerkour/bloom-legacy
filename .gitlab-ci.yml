@@ -248,7 +248,6 @@ build:website:
     - make install
     - make build
     # comrepss files ahead of time
-    - cd website
     - gzip -k -9 -r -f dist
   artifacts:
     paths:
