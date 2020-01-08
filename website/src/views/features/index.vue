@@ -77,7 +77,7 @@ export default class Features extends Vue {
       name: 'Drive',
       icon: '/static/imgs/icons/drive.svg',
       description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
-        <b>5GB free.</b>`,
+        <b>3GB free.</b>`,
       learnMore: 'drive',
     },
     {

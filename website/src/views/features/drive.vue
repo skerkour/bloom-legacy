@@ -23,7 +23,7 @@ export default class Drive extends Vue {
   features = [
     {
       description: `Keep photos, stories, designs, drawings, recordings, videos, and more.
-        Your first <b>30 GB</b> of storage are free.`,
+        Your first <b>3 GB</b> of storage are free.`,
       img: '/static/imgs/features/drive_files.svg',
       name: 'Store any file',
     },
