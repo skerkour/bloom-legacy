@@ -13,7 +13,8 @@ export default {
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
     feature1: {
-      title: 'Fast, Simple, Secure',
+      // title: 'Fast, Simple, Secure',
+      title: 'A safe place for all your data',
       description: `As an Open Source project anyone can inspect how Bloom works.
       We use state of the art cryptography to keep your data secure.
       There are no ads, no affiliate marketing, no creepy tracking. <br />
