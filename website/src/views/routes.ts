@@ -5,6 +5,7 @@ import Index from '@/views/index.vue';
 import Download from '@/views/download.vue';
 import Contact from '@/views/contact.vue';
 import P404 from '@/views/404.vue';
+import Blog from '@/views/blog.vue';
 
 import FeaturesRoutes from './features/routes';
 
@@ -53,6 +54,11 @@ export default new Router({
     {
       path: '/security',
       component: Security,
+    },
+
+    {
+      path: '/blog**',
+      component: Blog,
     },
 
     ...FeaturesRoutes,
