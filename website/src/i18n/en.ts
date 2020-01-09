@@ -99,7 +99,8 @@ export default {
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
   },
   features: {
-    title: 'Our mission: Empowering people',
+    // title: 'Our mission: Empowering people',
+    title: 'Bloom: A safe place for all your data',
   },
   security: {
     title: 'Security',
