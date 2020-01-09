@@ -100,7 +100,7 @@ export default {
   },
   features: {
     // title: 'Our mission: Empowering people',
-    title: 'Bloom: A safe place for all your data',
+    title: 'A safe place for all your data',
   },
   security: {
     title: 'Security',
