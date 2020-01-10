@@ -43,7 +43,7 @@ https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
 ## Licensing
 
-See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
+See `LICENSE.txt` and https://gitlab.com/bloom42/wiki/-/wikis/organization/licensing
 
 
 ## Security
