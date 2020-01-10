@@ -218,6 +218,24 @@ export default {
       },
     },
     gallery_description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
+    gallery: {
+      description: 'All your media organized and easy to find',
+      feature1: {
+        name: 'Access from any device',
+        description: `You can access your galleries on your computer,
+        smartphone, or other supported devices.`,
+      },
+      feature2: {
+        name: 'Access your personal gallery wherever you are',
+        description: 'Your photos will be safe, secure, and always with you.',
+      },
+      feature3: {
+        name: 'Directly from your drive',
+        description: `Thanks to the unified data model of Bloom, all your photos and videos files
+        in your Bloom Drive are directly available in Bloom Gallery. No need to reorganize
+        everything everytime.`,
+      },
+    },
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
   security: {
