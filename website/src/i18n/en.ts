@@ -103,6 +103,24 @@ export default {
     title: 'A safe place for all your data',
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>3GB free.</b>`,
+    drive: {
+      description: 'A safe place for all your files',
+      feature1: {
+        name: 'Store any file',
+        description: `Keep photos, stories, designs, drawings, recordings, videos, and more.
+        Your first <b>3 GB</b> of storage are free.`,
+      },
+      feature2: {
+        name: 'See your stuff anywhere',
+        description: `Your files in Drive can be reached from any smartphone, tablet, or computer.
+        So wherever you go, your files follow.`,
+      },
+      feature3: {
+        name: 'Keep your files safe',
+        description: `If something happens to your device, you don't have to worry about losing
+          your files or photos – they're in your Bloom Drive.`,
+      },
+    },
     music_description: 'Never stop enjoying your music! Directly from your drive.',
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
     notes_description: `Quickly capture what’s on your mind and get a reminder later
