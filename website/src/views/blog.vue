@@ -15,7 +15,7 @@ export default class Index extends Vue {
   // lifecycle
   created() {
     const route = this.$route.path.replace('/blog', '');
-    window.location.href = `https://bloom42.gitlab.io/blog${route}`;
+    window.location.href = `https://fatalentropy.com${route}`;
   }
   // watch
   // methods
