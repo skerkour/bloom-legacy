@@ -204,6 +204,19 @@ export default {
       },
     },
     contacts_description: 'Keep your contacts organized and up to date.',
+    contacts: {
+      description: 'Keep your contacts organized and up to date',
+      feature1: {
+        name: 'Back up your contacts and sync them across all your devices',
+        description: `Safely back up your contacts to the cloud
+        to access from any device.`,
+      },
+      feature2: {
+        name: 'Keep your contacts organized and up to date',
+        description: `Easily add contacts and edit information like phone numbers, emails,
+        and profiles.`,
+      },
+    },
     gallery_description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
