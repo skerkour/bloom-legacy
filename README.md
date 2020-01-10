@@ -8,7 +8,7 @@
 
 --------
 
-Why? How? What? 👉 Read the launch post: https://bloom.gitlab.io/blog/bloom-a-free-and-open-source-google
+Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free-and-open-source-google
 
 1. [Download](#download)
 2. [Documentation](#documentation)
