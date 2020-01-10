@@ -64,83 +64,81 @@ import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 export default class Features extends Vue {
   // props
   // data
-  features = [
-    // {
-    //   name: 'Chat',
-    //   icon: '/static/imgs/icons/chat.svg',
-    //   description: `Bloom messages and calls are always end-to-end encrypted and
-    //   engineered to keep your communication safe. We can't read your messages or see your calls,
-    //   and no one else can either.`,
-    //   learnMore: 'chat',
-    // },
-    {
-      name: 'Drive',
-      icon: '/static/imgs/icons/drive.svg',
-      description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
-        <b>3GB free.</b>`,
-      learnMore: 'drive',
-    },
-    {
-      name: 'Music',
-      icon: '/static/imgs/icons/music.svg',
-      description: 'Never stop enjoying your music! Directly from your drive.',
-      learnMore: 'music',
-    },
-    {
-      name: 'Calendar',
-      icon: '/static/imgs/icons/calendar.svg',
-      description: 'Get organized on the go with the Bloom Calendar!',
-      learnMore: 'calendar',
-    },
-    {
-      name: 'Notes',
-      icon: '/static/imgs/icons/notes.svg',
-      description: `Quickly capture what’s on your mind and get a reminder later
-        at the right place or time.`,
-      learnMore: 'notes',
-    },
-    { name: 'dl_btn' },
-    {
-      name: 'Bitflow',
-      icon: '/static/imgs/icons/bitflow.svg',
-      description: `Your cloud-based download manager.
-      Download any file and torrent directly to your Drive.`,
-      learnMore: 'bitflow',
-    },
-    {
-      name: 'Arcade',
-      icon: '/static/imgs/icons/arcade.svg',
-      description: 'Never stop having fun!',
-      learnMore: 'arcade',
-    },
-    // {
-    //   name: 'Books',
-    //   icon: '/static/imgs/icons/books.svg',
-    //   description: 'Bloom Books is
-    // the single destination for all the books you love, and the ones you\'re about to. ',
-    //   learnMore: 'books',
-    // },
-    {
-      name: 'Contacts',
-      icon: '/static/imgs/icons/contacts.svg',
-      description: 'Keep your contacts organized and up to date.',
-      learnMore: 'contacts',
-    },
-    { name: 'dl_btn' },
-    {
-      name: 'Gallery',
-      icon: '/static/imgs/icons/gallery.svg',
-      description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
-      learnMore: 'gallery',
-    },
-    {
-      name: 'Scan QR Codes',
-      icon: '/static/imgs/icons/qrcode.svg',
-      description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
-    },
-  ];
-
   // computed
+  get features(): any[] {
+    return [
+      // {
+      //   name: 'Chat',
+      //   icon: '/static/imgs/icons/chat.svg',
+      //   description: `Bloom messages and calls are always end-to-end encrypted and
+      //   engineered to keep your communication safe. We can't read your messages or see your calls
+      //   and no one else can either.`,
+      //   learnMore: 'chat',
+      // },
+      {
+        name: 'Drive',
+        icon: '/static/imgs/icons/drive.svg',
+        description: this.$i18n.t('features.drive_description'),
+        learnMore: 'drive',
+      },
+      {
+        name: 'Music',
+        icon: '/static/imgs/icons/music.svg',
+        description: this.$i18n.t('features.music_description'),
+        learnMore: 'music',
+      },
+      {
+        name: 'Calendar',
+        icon: '/static/imgs/icons/calendar.svg',
+        description: this.$i18n.t('features.calendar_description'),
+        learnMore: 'calendar',
+      },
+      {
+        name: 'Notes',
+        icon: '/static/imgs/icons/notes.svg',
+        description: this.$i18n.t('features.notes_description'),
+        learnMore: 'notes',
+      },
+      { name: 'dl_btn' },
+      {
+        name: 'Bitflow',
+        icon: '/static/imgs/icons/bitflow.svg',
+        description: this.$i18n.t('features.bitflow_description'),
+        learnMore: 'bitflow',
+      },
+      {
+        name: 'Arcade',
+        icon: '/static/imgs/icons/arcade.svg',
+        description: this.$i18n.t('features.arcade_description'),
+        learnMore: 'arcade',
+      },
+      // {
+      //   name: 'Books',
+      //   icon: '/static/imgs/icons/books.svg',
+      //   description: 'Bloom Books is
+      // the single destination for all the books you love, and the ones you\'re about to. ',
+      //   learnMore: 'books',
+      // },
+      {
+        name: 'Contacts',
+        icon: '/static/imgs/icons/contacts.svg',
+        description: this.$i18n.t('features.contacts_description'),
+        learnMore: 'contacts',
+      },
+      { name: 'dl_btn' },
+      {
+        name: 'Gallery',
+        icon: '/static/imgs/icons/gallery.svg',
+        description: this.$i18n.t('features.gallery_description'),
+        learnMore: 'gallery',
+      },
+      {
+        name: 'QR Codes',
+        icon: '/static/imgs/icons/qrcode.svg',
+        description: this.$i18n.t('features.qrcodes_description'),
+      },
+    ];
+  }
   // lifecycle
   // watch
   // methods

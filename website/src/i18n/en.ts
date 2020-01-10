@@ -101,6 +101,18 @@ export default {
   features: {
     // title: 'Our mission: Empowering people',
     title: 'A safe place for all your data',
+    drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
+    <b>3GB free.</b>`,
+    music_description: 'Never stop enjoying your music! Directly from your drive.',
+    calendar_description: 'Get organized on the go with the Bloom Calendar!',
+    notes_description: `Quickly capture what’s on your mind and get a reminder later
+    at the right place or time.`,
+    bitflow_description: `Your cloud-based download manager.
+    Download any file and torrent directly to your Drive.`,
+    arcade_description: 'Never stop having fun!',
+    contacts_description: 'Keep your contacts organized and up to date.',
+    gallery_description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
+    qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
   security: {
     title: 'Security',
