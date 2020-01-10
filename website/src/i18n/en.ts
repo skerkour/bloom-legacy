@@ -191,6 +191,18 @@ export default {
       },
     },
     arcade_description: 'Never stop having fun!',
+    arcade: {
+      description: 'The best place to play',
+      feature1: {
+        name: 'Play from any device',
+        description: `Gaming should not be frustrating because the lack of a specific device. Bloom
+        Arcade's games can run on any platform with a web browser`,
+      },
+      feature2: {
+        name: 'Committed to your privacy',
+        description: 'None of our games contains ad.',
+      },
+    },
     contacts_description: 'Keep your contacts organized and up to date.',
     gallery_description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
