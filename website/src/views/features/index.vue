@@ -78,38 +78,38 @@ export default class Features extends Vue {
       {
         name: 'Drive',
         icon: '/static/imgs/icons/drive.svg',
-        description: this.$i18n.t('features.drive_description'),
+        description: this.$t('features.drive_description'),
         learnMore: 'drive',
       },
       {
         name: 'Music',
         icon: '/static/imgs/icons/music.svg',
-        description: this.$i18n.t('features.music_description'),
+        description: this.$t('features.music_description'),
         learnMore: 'music',
       },
       {
         name: 'Calendar',
         icon: '/static/imgs/icons/calendar.svg',
-        description: this.$i18n.t('features.calendar_description'),
+        description: this.$t('features.calendar_description'),
         learnMore: 'calendar',
       },
       {
         name: 'Notes',
         icon: '/static/imgs/icons/notes.svg',
-        description: this.$i18n.t('features.notes_description'),
+        description: this.$t('features.notes_description'),
         learnMore: 'notes',
       },
       { name: 'dl_btn' },
       {
         name: 'Bitflow',
         icon: '/static/imgs/icons/bitflow.svg',
-        description: this.$i18n.t('features.bitflow_description'),
+        description: this.$t('features.bitflow_description'),
         learnMore: 'bitflow',
       },
       {
         name: 'Arcade',
         icon: '/static/imgs/icons/arcade.svg',
-        description: this.$i18n.t('features.arcade_description'),
+        description: this.$t('features.arcade_description'),
         learnMore: 'arcade',
       },
       // {
@@ -122,20 +122,20 @@ export default class Features extends Vue {
       {
         name: 'Contacts',
         icon: '/static/imgs/icons/contacts.svg',
-        description: this.$i18n.t('features.contacts_description'),
+        description: this.$t('features.contacts_description'),
         learnMore: 'contacts',
       },
       { name: 'dl_btn' },
       {
         name: 'Gallery',
         icon: '/static/imgs/icons/gallery.svg',
-        description: this.$i18n.t('features.gallery_description'),
+        description: this.$t('features.gallery_description'),
         learnMore: 'gallery',
       },
       {
         name: 'QR Codes',
         icon: '/static/imgs/icons/qrcode.svg',
-        description: this.$i18n.t('features.qrcodes_description'),
+        description: this.$t('features.qrcodes_description'),
       },
     ];
   }

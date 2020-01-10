@@ -1,7 +1,7 @@
 <template>
   <blm-feature-page
     name="Calendar"
-    description="Make the most of every day"
+    :description="$t('features.calendar.description')"
     hero="/static/imgs/features/calendar_hero.svg"
     :features="features"
   />
@@ -20,21 +20,21 @@ import FeaturePage from '@/components/feature_page.vue';
 export default class Drive extends Vue {
   // props
   // data
-  features = [
-    {
-      description: `Make the most of every day with a simple to use interface, designed to adapt to
-      everyone's needs.`,
-      img: '/static/imgs/features/calendar_easy.svg',
-      name: 'Easy to use',
-    },
-    {
-      description: `Share calendars with friends and coworkers and access them all from the same
-      unified interface`,
-      img: '/static/imgs/features/calendar_group.svg',
-      name: 'All your calendars in one place',
-    },
-  ];
   // computed
+  get features(): any[] {
+    return [
+      {
+        description: this.$t('features.calendar.feature1.description'),
+        img: '/static/imgs/features/calendar_easy.svg',
+        name: this.$t('features.calendar.feature1.name'),
+      },
+      {
+        description: this.$t('features.calendar.feature2.description'),
+        img: '/static/imgs/features/calendar_group.svg',
+        name: this.$t('features.calendar.feature2.name'),
+      },
+    ];
+  }
   // lifecycle
   // watch
   // methods

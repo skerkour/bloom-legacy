@@ -19,6 +19,10 @@
               <span v-html="$t('contact.twitter')"></span>&nbsp;
               <a href="https://twitter.com/42bloom" target="_blank" rel="noopener">@42bloom</a>
             </li>
+            <li>
+              <span v-html="$t('contact.mastodon')"></span>&nbsp;
+              <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
+            </li>
           </ul>
         </p>
       </v-col>
