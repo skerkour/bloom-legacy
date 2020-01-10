@@ -53,7 +53,7 @@
             <h3 class="mt-3">
               Sylvain Kerkour
             </h3>
-            <p>Product design, France 🇫🇷</p>
+            <p>{{ $t('about.sylvain_title') }}, France 🇫🇷</p>
           </a>
         </v-hover>
       </v-col>

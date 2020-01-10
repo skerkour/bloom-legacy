@@ -1,6 +1,6 @@
 <template>
   <v-btn x-large color="primary" class="mt-5 text-left" :outlined="outlined" to="/download">
-    Coming January 2020
+    {{ $t('labels.coming_soon_btn') }}
   </v-btn>
 </template>
 

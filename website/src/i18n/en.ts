@@ -2,6 +2,7 @@ export default {
   labels: {
     other_downloads: 'Other downloads',
     learn_more: 'Learn more',
+    coming_soon_btn: 'Coming January 2020',
   },
   appbar: {
     download: 'Download',
@@ -81,12 +82,14 @@ export default {
       title: 'Want to learn more?',
       wiki: 'Read <b>The Wiki</b>',
     },
+    sylvain_title: 'Product design',
   },
   contact: {
     title: 'Contact',
     intro: 'You can contact the Bloom team using one of the following way:',
     email: 'Using email:',
-    twitter: 'Or by saying <i>Hi</i> on Twitter:',
+    twitter: 'By saying <i>Hi</i> on Twitter:',
+    mastodon: 'On the fediverse:',
   },
   download: {
     title: 'Take back control!',
@@ -97,6 +100,7 @@ export default {
       Enjoy Bloom on any computer!`,
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
+    coming_soon: 'Coming soon',
   },
   features: {
     // title: 'Our mission: Empowering people',

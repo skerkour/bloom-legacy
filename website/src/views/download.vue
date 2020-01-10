@@ -58,7 +58,7 @@
           <v-divider />
           <v-card-actions class="text-center justify-center">
             <!-- <v-btn text>macOS</v-btn> -->
-            <v-btn text disabled>Coming soon</v-btn>
+            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -77,7 +77,7 @@
           <v-divider />
           <v-card-actions class="text-center justify-center">
             <!-- <v-btn text>Windows</v-btn> -->
-            <v-btn text disabled>Coming soon</v-btn>
+            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -96,7 +96,7 @@
           <v-divider />
           <v-card-actions class="text-center justify-center">
             <!-- <v-btn text>Linux</v-btn> -->
-            <v-btn text disabled>Coming soon</v-btn>
+            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -148,7 +148,7 @@
           <v-divider />
           <v-card-actions class="text-center justify-center">
             <!-- <v-btn text>Play Store</v-btn> -->
-            <v-btn text disabled>Coming soon</v-btn>
+            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -167,7 +167,7 @@
           <v-divider />
           <v-card-actions class="text-center justify-center">
             <!-- <v-btn text>App Store</v-btn> -->
-            <v-btn text disabled>Coming soon</v-btn>
+            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
