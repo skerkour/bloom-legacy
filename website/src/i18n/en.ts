@@ -142,6 +142,19 @@ export default {
       },
     },
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
+    calendar: {
+      description: 'Make the most of every day',
+      feature1: {
+        name: 'Easy to use',
+        description: `Make the most of every day with a simple to use interface, designed to adapt to
+        everyone's needs.`,
+      },
+      feature2: {
+        name: 'All your calendars in one place',
+        description: `Share calendars with friends and coworkers and access them all from the same
+        unified interface`,
+      },
+    },
     notes_description: `Quickly capture what’s on your mind and get a reminder later
     at the right place or time.`,
     bitflow_description: `Your cloud-based download manager.
