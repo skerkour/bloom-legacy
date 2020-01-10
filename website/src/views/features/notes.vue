@@ -1,7 +1,7 @@
 <template>
   <blm-feature-page
     name="Notes"
-    description="Quickly capture what’s on your mind."
+    :description="this.$t('features.notes.description')"
     hero="/static/imgs/features/notes_hero.svg"
     :features="features"
   />
@@ -20,28 +20,27 @@ import FeaturePage from '@/components/feature_page.vue';
 export default class Drive extends Vue {
   // props
   // data
-  features = [
-    {
-      description: `Bloom Notes helps you capture and prioritize ideas, projects,
-            so nothing falls through the cracks.`,
-      img: '/static/imgs/features/notes_organized.svg',
-      name: 'Feel organized without the effort',
-    },
-    {
-      description: `Take note. It's easy to pull up your content from anywhere. Start on your
-        laptop then update notes on your phone. Bloom Notes works on any device or platform.`,
-      img: '/static/imgs/features/notes_devices.svg',
-      name: 'Access from anywhere',
-    },
-    // {
-    //   description: 'Quickly filter and search for notes. Find what you\'re looking \
-    //     for even faster, and let Bloom notes do the remembering for you.',
-    //   logo: '/static/imgs/features/notes_search.svg',
-    //   name: 'Find what you need, fast ',
-    // },
-  ];
-
   // computed
+  get features(): any[] {
+    return [
+      {
+        description: this.$t('features.notes.feature1.description'),
+        img: '/static/imgs/features/notes_organized.svg',
+        name: this.$t('features.notes.feature1.name'),
+      },
+      {
+        description: this.$t('features.notes.feature2.description'),
+        img: '/static/imgs/features/notes_devices.svg',
+        name: this.$t('features.notes.feature2.name'),
+      },
+      // {
+      //   description: 'Quickly filter and search for notes. Find what you\'re looking \
+      //     for even faster, and let Bloom notes do the remembering for you.',
+      //   logo: '/static/imgs/features/notes_search.svg',
+      //   name: 'Find what you need, fast ',
+      // },
+    ];
+  }
   // lifecycle
   // watch
   // methods

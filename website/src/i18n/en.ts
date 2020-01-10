@@ -157,6 +157,19 @@ export default {
     },
     notes_description: `Quickly capture what’s on your mind and get a reminder later
     at the right place or time.`,
+    notes: {
+      description: 'Quickly capture what’s on your mind.',
+      feature1: {
+        name: 'Feel organized without the effort',
+        description: `Bloom Notes helps you capture and prioritize ideas, projects,
+        so nothing falls through the cracks.`,
+      },
+      feature2: {
+        name: 'Access from anywhere',
+        description: `Take notes. It's easy to pull up your content from anywhere. Start on your
+        laptop then update notes on your phone. Bloom Notes works on any device or platform.`,
+      },
+    },
     bitflow_description: `Your cloud-based download manager.
     Download any file and torrent directly to your Drive.`,
     arcade_description: 'Never stop having fun!',
