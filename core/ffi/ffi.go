@@ -12,12 +12,12 @@ type Payload struct {
 
 type Error struct {
 	Code string      `json:"code"`
-	Msg  string      `json:"msg"`
+	Message  string  `json:"message"`
 	Meta interface{} `json:"meta"`
 }
 
-//export call
-func call(message *C.char) *C.char {
+//export blmcore_call
+func blmcore_call(message *C.char) *C.char {
 	var payload Payload
 
 	bytesMsg := C.GoString(message)
