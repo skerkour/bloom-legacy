@@ -32,36 +32,31 @@ typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
 // RustFree _coreFree;
 BlmCoreCall _call;
 
-class BlmCore {
-  BlmCore() {
+Payload<P> toPayload<P>(String method, P params) {
+  return Payload<P>(method, params);
+}
+
+Map<String, dynamic> coreCall<P>(Payload<P> payload) {
+  final String jsonPayload = jsonEncode(payload.toJson());
+  debugPrint('jsonPayload: $jsonPayload');
+  final ffi.Pointer<Utf8> cPayload = Utf8.toUtf8(jsonPayload);
+
+  if (_call == null) {
     final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libblmcore.so');
     _call = dylib.lookupFunction<BlmCoreCall, BlmCoreCall>('blmcore_call');
   }
 
-  Payload<P> toPayload<P>(String method, P params) {
-    return Payload<P>(method, params);
+  final ffi.Pointer<Utf8> res = _call(cPayload);
+  free(cPayload);
+
+  final String retPayload = Utf8.fromUtf8(res);
+  free(res);
+  debugPrint('retPayload: $retPayload');
+
+  final Map<String, dynamic> ret = jsonDecode(retPayload);
+  if (ret['type'] == 'error') {
+    final String errorMessage = ret['data']['message'];
+    throw errorMessage;
   }
-
-  Map<String, dynamic> call<P>(Payload<P> payload) {
-    debugPrint('blmcore.call($payload)');
-
-    final ffi.Pointer<Utf8> cPayload =
-        Utf8.toUtf8(jsonEncode(payload.toJson()));
-    debugPrint('cPayload: $cPayload');
-
-    final ffi.Pointer<Utf8> res = _call(cPayload);
-    free(cPayload);
-
-    final String retStr = Utf8.fromUtf8(res);
-    free(res);
-
-    final Map<String, dynamic> ret = jsonDecode(retStr);
-    if (ret['type'] == 'error') {
-      final String errorMessage = ret['data']['message'];
-      throw errorMessage;
-    }
-    return ret;
-  }
+  return ret;
 }
-
-BlmCore core = BlmCore();

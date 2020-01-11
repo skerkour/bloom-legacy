@@ -221,8 +221,8 @@ class _CalculatorState extends State<CalculatorView> {
     } else if (key == '=') {
       try {
         final Map<String, dynamic> res = await compute(
-          _CalculatorState._coreCall,
-          core.toPayload(
+          coreCall,
+          toPayload(
               CalculatorMethod.calc, CalculatorExpression(expression: expr)),
         );
         final CalculatorResult ret = CalculatorResult.fromJson(res);
@@ -235,12 +235,6 @@ class _CalculatorState extends State<CalculatorView> {
       _expression = expr;
       _result = result;
     });
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }
 

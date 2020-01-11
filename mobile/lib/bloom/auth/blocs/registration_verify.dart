@@ -37,8 +37,8 @@ class RegistrationVerifyBloc extends BlocBase {
 
     try {
       json = await compute(
-        RegistrationVerifyBloc._coreCall,
-        core.toPayload(AuthMethod.verify_registration, message),
+        coreCall,
+        toPayload(AuthMethod.verify_registration, message),
       );
     } catch (err) {
       rethrow;
@@ -51,11 +51,5 @@ class RegistrationVerifyBloc extends BlocBase {
 
   String _cleanCode(String code) {
     return code.substring(0, 4) + code.substring(5);
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }

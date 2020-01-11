@@ -111,8 +111,8 @@ class Contact {
     );
 
     final Map<String, dynamic> res = await compute(
-      Contact._coreCall,
-      core.toPayload(ContactsMethod.create_contact, params),
+      coreCall,
+      toPayload(ContactsMethod.create_contact, params),
     );
 
     return Contact.fromJson(res);
@@ -122,8 +122,8 @@ class Contact {
     debugPrint('Contact.update called (id: $id)');
 
     final Map<String, dynamic> res = await compute(
-      Contact._coreCall,
-      core.toPayload(ContactsMethod.update_contact, this),
+      coreCall,
+      toPayload(ContactsMethod.update_contact, this),
     );
 
     return Contact.fromJson(res);
@@ -132,8 +132,8 @@ class Contact {
   Future<Contact> delete() async {
     debugPrint('Contact.delete called (id: $id)');
     await compute(
-      Contact._coreCall,
-      core.toPayload(ContactsMethod.delete_contact, ContactsDeleteContact(id)),
+      coreCall,
+      toPayload(ContactsMethod.delete_contact, ContactsDeleteContact(id)),
     );
     return this;
   }
@@ -142,8 +142,8 @@ class Contact {
     debugPrint('Contact.find called');
 
     final Map<String, dynamic> res = await compute(
-      Contact._coreCall,
-      core.toPayload(ContactsMethod.list_contacts, Empty()),
+      coreCall,
+      toPayload(ContactsMethod.list_contacts, Empty()),
     );
     final ContactsContacts resMsg = ContactsContacts.fromJson(res);
 
@@ -162,12 +162,6 @@ class Contact {
     }
 
     return existingsContactsDeviceIds;
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }
 

@@ -29,16 +29,6 @@ class NotesCreateNote {
   }
 }
 
-class NotesUpdateNote {
-  NotesUpdateNote(this.note);
-
-  final Note note;
-
-  Map<String, dynamic> toJson() {
-    return note.toJson();
-  }
-}
-
 class NotesDeleteNote {
   NotesDeleteNote(this.id);
 

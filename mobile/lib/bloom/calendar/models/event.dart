@@ -57,8 +57,8 @@ class Event {
     debugPrint('Event.create called');
 
     final Map<String, dynamic> res = await compute(
-      Event._coreCall,
-      core.toPayload(CalendarMethod.update_event,
+      coreCall,
+      toPayload(CalendarMethod.update_event,
           CalendarCreateEvent(title, description, startAt, endAt)),
     );
 
@@ -69,8 +69,8 @@ class Event {
     debugPrint('Event.update called (id: $id)');
 
     final Map<String, dynamic> res = await compute(
-      Event._coreCall,
-      core.toPayload(CalendarMethod.update_event, this),
+      coreCall,
+      toPayload(CalendarMethod.update_event, this),
     );
 
     return Event.fromJson(res);
@@ -80,8 +80,8 @@ class Event {
     debugPrint('Event.delete called (id: $id)');
 
     await compute(
-      Event._coreCall,
-      core.toPayload(CalendarMethod.delete_event, CalendarDeleteEvent(id)),
+      coreCall,
+      toPayload(CalendarMethod.delete_event, CalendarDeleteEvent(id)),
     );
   }
 
@@ -89,19 +89,12 @@ class Event {
     debugPrint('Event.find called');
 
     final Map<String, dynamic> res = await compute(
-      Event._coreCall,
-      core.toPayload(
-          CalendarMethod.list_events, CalendarListEvents(startAt, endAt)),
+      coreCall,
+      toPayload(CalendarMethod.list_events, CalendarListEvents(startAt, endAt)),
     );
     final CalendarEvents resMsg = CalendarEvents.fromJson(res);
 
     return resMsg.events;
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 
   DateTime _zeroizeDay(DateTime day) {

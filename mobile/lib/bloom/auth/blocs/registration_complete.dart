@@ -37,8 +37,8 @@ class RegistrationCompleteBloc extends BlocBase {
 
     try {
       json = await compute(
-        RegistrationCompleteBloc._coreCall,
-        core.toPayload(AuthMethod.complete_registration, message),
+        coreCall,
+        toPayload(AuthMethod.complete_registration, message),
       );
     } catch (err) {
       rethrow;
@@ -47,11 +47,5 @@ class RegistrationCompleteBloc extends BlocBase {
     }
 
     return json;
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }

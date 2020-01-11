@@ -32,8 +32,8 @@ class SignInBloc extends BlocBase {
 
     try {
       json = await compute(
-        SignInBloc._coreCall,
-        core.toPayload(AuthMethod.sign_in, message),
+        coreCall,
+        toPayload(AuthMethod.sign_in, message),
       );
     } catch (err) {
       rethrow;
@@ -42,11 +42,5 @@ class SignInBloc extends BlocBase {
     }
 
     return json;
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }

@@ -60,8 +60,8 @@ class Note {
     debugPrint('Note.create called');
 
     final Map<String, dynamic> res = await compute(
-      Note._coreCall,
-      core.toPayload(
+      coreCall,
+      toPayload(
           NotesMethod.create_note, NotesCreateNote(title, body, color.value)),
     );
 
@@ -72,8 +72,8 @@ class Note {
     debugPrint('Note.update called (id: $id)');
 
     final Map<String, dynamic> res = await compute(
-      Note._coreCall,
-      core.toPayload(NotesMethod.update_note, this),
+      coreCall,
+      toPayload(NotesMethod.update_note, this),
     );
 
     return Note.fromJson(res);
@@ -83,8 +83,8 @@ class Note {
     debugPrint('Note.delete called (id: $id)');
 
     await compute(
-      Note._coreCall,
-      core.toPayload(NotesMethod.delete_note, NotesDeleteNote(id)),
+      coreCall,
+      toPayload(NotesMethod.delete_note, NotesDeleteNote(id)),
     );
   }
 
@@ -92,26 +92,20 @@ class Note {
     debugPrint('Note.find called');
 
     final Map<String, dynamic> res = await compute(
-      Note._coreCall,
-      core.toPayload(NotesMethod.list_notes, Empty()),
+      coreCall,
+      toPayload(NotesMethod.list_notes, Empty()),
     );
     final NotesNotes resMsg = NotesNotes.fromJson(res);
 
     return resMsg.notes;
   }
 
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
-  }
-
   static Future<List<Note>> findArchived() async {
     debugPrint('Note.findArchived called');
 
     final Map<String, dynamic> res = await compute(
-      Note._coreCall,
-      core.toPayload(NotesMethod.list_archived, Empty()),
+      coreCall,
+      toPayload(NotesMethod.list_archived, Empty()),
     );
     final NotesNotes resMsg = NotesNotes.fromJson(res);
     final List<Note> results = resMsg.notes;

@@ -36,8 +36,8 @@ class RegistrationStartBloc extends BlocBase {
 
     try {
       json = await compute(
-        RegistrationStartBloc._coreCall,
-        core.toPayload(AuthMethod.start_registration, message),
+        coreCall,
+        toPayload(AuthMethod.start_registration, message),
       );
       ret = AuthRegistrationStarted.fromJson(json);
     } catch (err) {
@@ -47,11 +47,5 @@ class RegistrationStartBloc extends BlocBase {
     }
 
     return ret;
-  }
-
-  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
-    final Map<String, dynamic> res = core.call(payload);
-    debugPrint('output: $res');
-    return res;
   }
 }
