@@ -223,9 +223,9 @@ class _CalculatorState extends State<CalculatorView> {
         final Map<String, dynamic> res = await compute(
           coreCall,
           toPayload(
-              CalculatorMethod.calc, CalculatorExpression(expression: expr)),
+              CalculatorMethod.calc, CalculatorCalcParams(expression: expr)),
         );
-        final CalculatorResult ret = CalculatorResult.fromJson(res);
+        final CalculatorCalcResult ret = CalculatorCalcResult.fromJson(res);
         result = ret.result;
       } catch (err) {
         result = 'Error';

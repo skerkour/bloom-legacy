@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class CalculatorExpression {
-  CalculatorExpression({@required this.expression});
+class CalculatorCalcParams {
+  CalculatorCalcParams({@required this.expression});
 
   final String expression;
 
@@ -13,13 +13,13 @@ class CalculatorExpression {
   }
 }
 
-class CalculatorResult {
-  CalculatorResult({@required this.result});
+class CalculatorCalcResult {
+  CalculatorCalcResult({@required this.result});
 
   final String result;
 
-  static CalculatorResult fromJson(Map<String, dynamic> json) {
+  static CalculatorCalcResult fromJson(Map<String, dynamic> json) {
     final String result = json['data']['result'];
-    return CalculatorResult(result: result);
+    return CalculatorCalcResult(result: result);
   }
 }
