@@ -62,7 +62,7 @@ class Note {
     final Map<String, dynamic> res = await compute(
       Note._coreCall,
       core.toPayload(
-          Notes.create_note, NotesCreateNote(title, body, color.value)),
+          NotesMethod.create_note, NotesCreateNote(title, body, color.value)),
     );
 
     return Note.fromJson(res);
@@ -73,8 +73,9 @@ class Note {
 
     final Map<String, dynamic> res = await compute(
       Note._coreCall,
-      core.toPayload(Notes.update_note, NotesUpdateNote(this)),
+      core.toPayload(NotesMethod.update_note, this),
     );
+
     return Note.fromJson(res);
   }
 
@@ -83,7 +84,7 @@ class Note {
 
     await compute(
       Note._coreCall,
-      core.toPayload(Notes.delete_note, NotesDeleteNote(id)),
+      core.toPayload(NotesMethod.delete_note, NotesDeleteNote(id)),
     );
   }
 
@@ -92,7 +93,7 @@ class Note {
 
     final Map<String, dynamic> res = await compute(
       Note._coreCall,
-      core.toPayload(Notes.list_notes, Empty()),
+      core.toPayload(NotesMethod.list_notes, Empty()),
     );
     final NotesNotes resMsg = NotesNotes.fromJson(res);
 
@@ -110,7 +111,7 @@ class Note {
 
     final Map<String, dynamic> res = await compute(
       Note._coreCall,
-      core.toPayload(Notes.list_archived, Empty()),
+      core.toPayload(NotesMethod.list_archived, Empty()),
     );
     final NotesNotes resMsg = NotesNotes.fromJson(res);
     final List<Note> results = resMsg.notes;

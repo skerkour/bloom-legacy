@@ -38,8 +38,8 @@ class BlmCore {
     _call = dylib.lookupFunction<BlmCoreCall, BlmCoreCall>('blmcore_call');
   }
 
-  Payload<P> toPayload<M, P>(M method, P params) {
-    return Payload<P>(method.toString().toLowerCase(), params);
+  Payload<P> toPayload<P>(String method, P params) {
+    return Payload<P>(method, params);
   }
 
   Map<String, dynamic> call<P>(Payload<P> payload) {
