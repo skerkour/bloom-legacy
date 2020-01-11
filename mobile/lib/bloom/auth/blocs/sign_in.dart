@@ -1,13 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
 import 'package:bloom/bloom/auth/core/messages.dart';
 import 'package:bloom/bloom/auth/core/methods.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
 import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../messages.dart';
 
 class SignInBloc extends BlocBase {
   SignInBloc();

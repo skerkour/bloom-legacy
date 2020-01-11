@@ -14,22 +14,21 @@ class CalendarListEvents {
   }
 }
 
-class CalendarGuiEvents {
-  CalendarGuiEvents({this.events});
+class CalendarEvents {
+  CalendarEvents({this.events});
 
   final List<Event> events;
 
-  static CalendarGuiEvents fromJson(Map<String, dynamic> json) {
+  static CalendarEvents fromJson(Map<String, dynamic> json) {
     final List<dynamic> list = json['data']['events'];
     final List<Event> events =
         list.map((dynamic i) => Event.fromJson(i)).toList();
-    return CalendarGuiEvents(events: events);
+    return CalendarEvents(events: events);
   }
 }
 
-class CalendarGuiCreateEvent {
-  CalendarGuiCreateEvent(
-      this.title, this.description, this.startAt, this.endAt);
+class CalendarCreateEvent {
+  CalendarCreateEvent(this.title, this.description, this.startAt, this.endAt);
 
   final String title;
   final String description;
@@ -47,8 +46,8 @@ class CalendarGuiCreateEvent {
   }
 }
 
-class CalendarGuiDeleteEvent {
-  CalendarGuiDeleteEvent(this.id);
+class CalendarDeleteEvent {
+  CalendarDeleteEvent(this.id);
 
   final String id;
 
