@@ -120,7 +120,7 @@ packages:
       name: intl
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "0.16.0"
+    version: "0.16.1"
   matcher:
     dependency: transitive
     description:
@@ -258,7 +258,7 @@ packages:
       name: table_calendar
       url: "https://pub.dartlang.org"
     source: hosted
-    version: "2.2.1"
+    version: "2.2.2"
   term_glyph:
     dependency: transitive
     description:
