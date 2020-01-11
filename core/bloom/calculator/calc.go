@@ -5,7 +5,6 @@ import (
 	"go/parser"
 	"go/token"
 	"strconv"
-	"fmt"
 )
 
 func evalExpr(exp ast.Expr) float64 {
@@ -57,5 +56,5 @@ func Calc(params CalcParams) (CalcResult, error) {
 	if err != nil {
 		return CalcResult{}, err
 	}
-	return CalcResult{Result: fmt.Sprintf("%f", res)}, nil
+	return CalcResult{Result: strconv.FormatFloat(res, 'f', -1, 64)}, nil
 }
