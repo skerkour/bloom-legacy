@@ -33,3 +33,7 @@ build_android_x86:
 # PHONY: build_android_amd64
 # build_android_amd64:
 # 	GOOS=android GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-linux-android-clang go build --tags "android" -o dist/amd64/lib$(NAME).so -buildmode=c-shared ffi/ffi.go
+
+.PHONY: clean
+clean:
+	rm -rf dist
