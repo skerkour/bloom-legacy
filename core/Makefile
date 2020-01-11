@@ -11,6 +11,9 @@ all: build
 build:
 	go build -o dist/lib$(NAME).so -buildmode=c-shared ffi/ffi.go
 
+.PHONY: build
+test:
+	go test ./...
 
 PHONY: build_android
 build_android: build_android_armv8 build_android_armv7 build_android_x86 # build_android_amd64
