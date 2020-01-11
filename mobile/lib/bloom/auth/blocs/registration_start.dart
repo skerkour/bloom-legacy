@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:bloom/bloom/auth/core/messages.dart';
+import 'package:bloom/bloom/auth/core/methods.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../messages.dart';
 
 class RegistrationStartBloc extends BlocBase {
   RegistrationStartBloc();
@@ -20,24 +19,27 @@ class RegistrationStartBloc extends BlocBase {
     _isLoadingController.close();
   }
 
-  Future<AuthGuiRegistrationStarted> start(
+  Future<AuthRegistrationStarted> start(
     String displayName,
     String email,
   ) async {
     debugPrint('RegistrationStartBloc.start called');
     _isLoadingController.add(true);
 
-    final String message = jsonEncode(AuthRegistrationStart(
+    final AuthStartRegistration message = AuthStartRegistration(
       displayName: displayName,
       email: email,
-    ));
+    );
 
     Map<String, dynamic> json;
-    AuthGuiRegistrationStarted ret;
+    AuthRegistrationStarted ret;
 
     try {
-      json = await compute(RegistrationStartBloc._nativeCall, message);
-      ret = AuthGuiRegistrationStarted.fromJson(json);
+      json = await compute(
+        RegistrationStartBloc._coreCall,
+        core.toPayload(AuthMethod.start_registration, message),
+      );
+      ret = AuthRegistrationStarted.fromJson(json);
     } catch (err) {
       rethrow;
     } finally {
@@ -47,10 +49,8 @@ class RegistrationStartBloc extends BlocBase {
     return ret;
   }
 
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
+  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
+    final Map<String, dynamic> res = core.call(payload);
     debugPrint('output: $res');
     return res;
   }

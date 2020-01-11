@@ -1,7 +1,9 @@
 import 'dart:async';
 import 'dart:convert';
+import 'package:bloom/bloom/auth/core/messages.dart';
+import 'package:bloom/bloom/auth/core/methods.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -24,15 +26,18 @@ class SignInBloc extends BlocBase {
     debugPrint('SignInBloc.signIn called');
     _isLoadingController.add(true);
 
-    final String message = jsonEncode(AuthGuiSignIn(
+    final AuthSignIn message = AuthSignIn(
       username: username,
       password: password,
-    ));
+    );
 
     Map<String, dynamic> json;
 
     try {
-      json = await compute(SignInBloc._nativeCall, message);
+      json = await compute(
+        SignInBloc._coreCall,
+        core.toPayload(AuthMethod.sign_in, message),
+      );
     } catch (err) {
       rethrow;
     } finally {
@@ -42,10 +47,8 @@ class SignInBloc extends BlocBase {
     return json;
   }
 
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
+  static Map<String, dynamic> _coreCall(Payload<dynamic> payload) {
+    final Map<String, dynamic> res = core.call(payload);
     debugPrint('output: $res');
     return res;
   }
