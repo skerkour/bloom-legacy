@@ -13,10 +13,7 @@ func evalExpr(exp ast.Expr) float64 {
 		return evalBinaryExpr(exp)
 	case *ast.BasicLit:
 		switch exp.Kind {
-		case token.INT:
-			i, _ := strconv.ParseFloat(exp.Value, 64)
-			return i
-		case token.FLOAT:
+		case token.INT, token.FLOAT:
 			i, _ := strconv.ParseFloat(exp.Value, 64)
 			return i
 		}
