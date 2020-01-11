@@ -1,8 +1,6 @@
-// import 'package:bloom/bloom/calculator/widgets/drawer.dart';
-import 'dart:convert';
-
-import 'package:bloom/bloom/calculator/native/messages.dart';
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/bloom/calculator/core/messages.dart';
+import 'package:bloom/bloom/calculator/core/methods.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -223,10 +221,11 @@ class _CalculatorState extends State<CalculatorView> {
     } else if (key == '=') {
       try {
         final Map<String, dynamic> res = await compute(
-          _CalculatorState._nativeCall,
-          CalculatorGuiExpression(expression: expr),
+          coreCall,
+          toPayload(
+              CalculatorMethod.calc, CalculatorExpression(expression: expr)),
         );
-        final CalculatorGuiResult ret = CalculatorGuiResult.fromJson(res);
+        final CalculatorResult ret = CalculatorResult.fromJson(res);
         result = ret.result;
       } catch (err) {
         result = 'Error';
@@ -236,14 +235,6 @@ class _CalculatorState extends State<CalculatorView> {
       _expression = expr;
       _result = result;
     });
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 }
 

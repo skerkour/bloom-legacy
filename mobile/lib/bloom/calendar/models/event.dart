@@ -1,10 +1,8 @@
-import 'dart:convert';
-
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/bloom/calendar/core/messages.dart';
+import 'package:bloom/bloom/calendar/core/methods.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../messages.dart';
 
 class Event {
   Event({
@@ -58,45 +56,45 @@ class Event {
       DateTime startAt, DateTime endAt) async {
     debugPrint('Event.create called');
 
-    final Map<String, dynamic> res = await compute(Event._nativeCall,
-        CalendarGuiCreateEvent(title, description, startAt, endAt));
-    final CalendarGuiEvent ret = CalendarGuiEvent.fromJson(res);
+    final Map<String, dynamic> res = await compute(
+      coreCall,
+      toPayload(CalendarMethod.update_event,
+          CalendarCreateEvent(title, description, startAt, endAt)),
+    );
 
-    return ret.event;
+    return Event.fromJson(res);
   }
 
   Future<Event> update() async {
     debugPrint('Event.update called (id: $id)');
 
-    final Map<String, dynamic> res =
-        await compute(Event._nativeCall, CalendarGuiUpdateEvent(this));
-    final CalendarGuiEvent ret = CalendarGuiEvent.fromJson(res);
+    final Map<String, dynamic> res = await compute(
+      coreCall,
+      toPayload(CalendarMethod.update_event, this),
+    );
 
-    return ret.event;
+    return Event.fromJson(res);
   }
 
   Future<void> delete() async {
     debugPrint('Event.delete called (id: $id)');
 
-    await compute(Event._nativeCall, CalendarGuiDeleteEvent(id));
+    await compute(
+      coreCall,
+      toPayload(CalendarMethod.delete_event, CalendarDeleteEvent(id)),
+    );
   }
 
   static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
     debugPrint('Event.find called');
 
-    final Map<String, dynamic> res =
-        await compute(Event._nativeCall, CalendarListEvents(startAt, endAt));
-    final CalendarGuiEvents resMsg = CalendarGuiEvents.fromJson(res);
+    final Map<String, dynamic> res = await compute(
+      coreCall,
+      toPayload(CalendarMethod.list_events, CalendarListEvents(startAt, endAt)),
+    );
+    final CalendarEvents resMsg = CalendarEvents.fromJson(res);
 
     return resMsg.events;
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 
   DateTime _zeroizeDay(DateTime day) {

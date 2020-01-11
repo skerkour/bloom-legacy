@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 
-class AuthRegistrationStart {
-  AuthRegistrationStart({
+class AuthStartRegistration {
+  AuthStartRegistration({
     @required this.displayName,
     @required this.email,
   });
@@ -11,30 +11,27 @@ class AuthRegistrationStart {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'type': 'auth.registration_start',
-      'data': <String, dynamic>{
-        'display_name': displayName,
-        'email': email,
-      },
+      'display_name': displayName,
+      'email': email,
     };
     return data;
   }
 }
 
-class AuthGuiRegistrationStarted {
-  AuthGuiRegistrationStarted({
+class AuthRegistrationStarted {
+  AuthRegistrationStarted({
     @required this.id,
   });
 
   final String id;
 
-  static AuthGuiRegistrationStarted fromJson(Map<String, dynamic> json) {
-    return AuthGuiRegistrationStarted(id: json['data']['id']);
+  static AuthRegistrationStarted fromJson(Map<String, dynamic> json) {
+    return AuthRegistrationStarted(id: json['data']['id']);
   }
 }
 
-class AuthGuiRegistrationVerify {
-  AuthGuiRegistrationVerify({
+class AuthGuiVerifyRegistration {
+  AuthGuiVerifyRegistration({
     @required this.id,
     @required this.code,
   });
@@ -44,18 +41,15 @@ class AuthGuiRegistrationVerify {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'type': 'auth.registration_verify',
-      'data': <String, dynamic>{
-        'id': id,
-        'code': code,
-      },
+      'id': id,
+      'code': code,
     };
     return data;
   }
 }
 
-class AuthGuiRegistrationComplete {
-  AuthGuiRegistrationComplete({
+class AuthGuiCompleteRegistration {
+  AuthGuiCompleteRegistration({
     @required this.id,
     @required this.username,
     @required this.password,
@@ -67,19 +61,16 @@ class AuthGuiRegistrationComplete {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'type': 'auth.gui.registration_complete',
-      'data': <String, dynamic>{
-        'id': id,
-        'username': username,
-        'password': password,
-      },
+      'id': id,
+      'username': username,
+      'password': password,
     };
     return data;
   }
 }
 
-class AuthGuiSignIn {
-  AuthGuiSignIn({
+class AuthSignIn {
+  AuthSignIn({
     @required this.username,
     @required this.password,
   });
@@ -89,11 +80,8 @@ class AuthGuiSignIn {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'type': 'auth.gui.sign_in',
-      'data': <String, dynamic>{
-        'username': username,
-        'password': password,
-      },
+      'username': username,
+      'password': password,
     };
     return data;
   }
