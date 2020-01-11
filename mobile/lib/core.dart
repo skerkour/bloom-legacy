@@ -12,7 +12,7 @@ class Payload<P> {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'method': method,
-      'params': jsonEncode(params),
+      'params': params,
     };
     return data;
   }
@@ -48,6 +48,7 @@ Map<String, dynamic> coreCall<P>(Payload<P> payload) {
 
   final ffi.Pointer<Utf8> res = _call(cPayload);
   free(cPayload);
+  debugPrint('res: $res');
 
   final String retPayload = Utf8.fromUtf8(res);
   free(res);
