@@ -3,9 +3,9 @@ package calculator
 import "testing"
 
 func TestEval(t *testing.T) {
-	var expected int
+	var expected float64
 	var exp string
-	var res int
+	var res float64
 	var err error
 
 	exp = "1+1"
@@ -15,7 +15,7 @@ func TestEval(t *testing.T) {
 		t.Errorf("err is not null: %v", err)
 	}
 	if expected != res {
-		t.Errorf("%s = %d; want %d", exp, res, expected)
+		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
 
 	exp = "1 + 1"
@@ -25,7 +25,7 @@ func TestEval(t *testing.T) {
 		t.Errorf("err is not null: %v", err)
 	}
 	if expected != res {
-		t.Errorf("%s = %d; want %d", exp, res, expected)
+		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
 
 	exp = "42"
@@ -35,7 +35,7 @@ func TestEval(t *testing.T) {
 		t.Errorf("err is not null: %v", err)
 	}
 	if expected != res {
-		t.Errorf("%s = %d; want %d", exp, res, expected)
+		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
 
 	exp = "42 - 1"
@@ -45,7 +45,7 @@ func TestEval(t *testing.T) {
 		t.Errorf("err is not null: %v", err)
 	}
 	if expected != res {
-		t.Errorf("%s = %d; want %d", exp, res, expected)
+		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
 
 	exp = "2 * 4"
@@ -55,6 +55,6 @@ func TestEval(t *testing.T) {
 		t.Errorf("err is not null: %v", err)
 	}
 	if expected != res {
-		t.Errorf("%s = %d; want %d", exp, res, expected)
+		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
 }

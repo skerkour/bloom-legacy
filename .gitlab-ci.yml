@@ -73,7 +73,6 @@ test:core:
   tags:
     - docker
   script:
-    - apt update && apt install -y gcc make git
     - cd core
     - make test
 

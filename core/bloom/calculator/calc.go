@@ -5,16 +5,20 @@ import (
 	"go/parser"
 	"go/token"
 	"strconv"
+	"fmt"
 )
 
-func evalExpr(exp ast.Expr) int {
+func evalExpr(exp ast.Expr) float64 {
 	switch exp := exp.(type) {
 	case *ast.BinaryExpr:
 		return evalBinaryExpr(exp)
 	case *ast.BasicLit:
 		switch exp.Kind {
 		case token.INT:
-			i, _ := strconv.Atoi(exp.Value)
+			i, _ := strconv.ParseFloat(exp.Value, 64)
+			return i
+		case token.FLOAT:
+			i, _ := strconv.ParseFloat(exp.Value, 64)
 			return i
 		}
 	}
@@ -22,7 +26,7 @@ func evalExpr(exp ast.Expr) int {
 	return 0
 }
 
-func evalBinaryExpr(exp *ast.BinaryExpr) int {
+func evalBinaryExpr(exp *ast.BinaryExpr) float64 {
 	left := evalExpr(exp.X)
 	right := evalExpr(exp.Y)
 
@@ -40,7 +44,7 @@ func evalBinaryExpr(exp *ast.BinaryExpr) int {
 	return 0
 }
 
-func Eval(expression string) (int, error) {
+func Eval(expression string) (float64, error) {
 	exp, err := parser.ParseExpr(expression)
 	if err != nil {
 		return 0, err
@@ -53,5 +57,5 @@ func Calc(params CalcParams) (CalcResult, error) {
 	if err != nil {
 		return CalcResult{}, err
 	}
-	return CalcResult{Result: strconv.Itoa(res)}, nil
+	return CalcResult{Result: fmt.Sprintf("%f", res)}, nil
 }
