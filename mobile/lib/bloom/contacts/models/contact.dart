@@ -110,43 +110,27 @@ class Contact {
       birthday: birthday,
     );
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(ContactsMethod.create_contact, params),
-    );
-
-    return Contact.fromJson(res);
+    return Contact.fromJson(
+        await coreCall(ContactsMethod.create_contact, params));
   }
 
   Future<Contact> update() async {
     debugPrint('Contact.update called (id: $id)');
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(ContactsMethod.update_contact, this),
-    );
-
-    return Contact.fromJson(res);
+    return Contact.fromJson(
+        await coreCall(ContactsMethod.update_contact, this));
   }
 
   Future<Contact> delete() async {
     debugPrint('Contact.delete called (id: $id)');
-    await compute(
-      coreCall,
-      toPayload(ContactsMethod.delete_contact, ContactsDeleteContact(id)),
-    );
+    await coreCall(ContactsMethod.delete_contact, ContactsDeleteContact(id));
     return this;
   }
 
   static Future<List<Contact>> list() async {
     debugPrint('Contact.find called');
-
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(ContactsMethod.list_contacts, Empty()),
-    );
-    final ContactsContacts resMsg = ContactsContacts.fromJson(res);
-
+    final ContactsContacts resMsg = ContactsContacts.fromJson(
+        await coreCall(ContactsMethod.list_contacts, Empty()));
     return resMsg.contacts;
   }
 

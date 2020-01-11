@@ -36,10 +36,7 @@ class RegistrationCompleteBloc extends BlocBase {
     Map<String, dynamic> json;
 
     try {
-      json = await compute(
-        coreCall,
-        toPayload(AuthMethod.complete_registration, message),
-      );
+      json = await coreCall(AuthMethod.complete_registration, message);
     } catch (err) {
       rethrow;
     } finally {

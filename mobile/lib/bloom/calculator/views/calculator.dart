@@ -1,7 +1,6 @@
 import 'package:bloom/bloom/calculator/core/messages.dart';
 import 'package:bloom/bloom/calculator/core/methods.dart';
 import 'package:bloom/core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorView extends StatefulWidget {
@@ -220,12 +219,9 @@ class _CalculatorState extends State<CalculatorView> {
       result = '';
     } else if (key == '=') {
       try {
-        final Map<String, dynamic> res = await compute(
-          coreCall,
-          toPayload(
-              CalculatorMethod.calc, CalculatorCalcParams(expression: expr)),
-        );
-        final CalculatorCalcResult ret = CalculatorCalcResult.fromJson(res);
+        final CalculatorCalcResult ret = CalculatorCalcResult.fromJson(
+            await coreCall(
+                CalculatorMethod.calc, CalculatorCalcParams(expression: expr)));
         result = ret.result;
       } catch (err) {
         result = 'Error';

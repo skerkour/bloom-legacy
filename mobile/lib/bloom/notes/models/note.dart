@@ -59,57 +59,35 @@ class Note {
   static Future<Note> create(String title, String body, Color color) async {
     debugPrint('Note.create called');
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(
-          NotesMethod.create_note, NotesCreateNote(title, body, color.value)),
-    );
-
-    return Note.fromJson(res);
+    return Note.fromJson(await coreCall(
+        NotesMethod.create_note, NotesCreateNote(title, body, color.value)));
   }
 
   Future<Note> update() async {
     debugPrint('Note.update called (id: $id)');
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(NotesMethod.update_note, this),
-    );
-
-    return Note.fromJson(res);
+    return Note.fromJson(await coreCall(NotesMethod.update_note, this));
   }
 
   Future<void> delete() async {
     debugPrint('Note.delete called (id: $id)');
 
-    await compute(
-      coreCall,
-      toPayload(NotesMethod.delete_note, NotesDeleteNote(id)),
-    );
+    await coreCall(NotesMethod.delete_note, NotesDeleteNote(id));
   }
 
   static Future<List<Note>> find() async {
     debugPrint('Note.find called');
-
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(NotesMethod.list_notes, Empty()),
-    );
-    final NotesNotes resMsg = NotesNotes.fromJson(res);
-
+    final NotesNotes resMsg =
+        NotesNotes.fromJson(await coreCall(NotesMethod.list_notes, Empty()));
     return resMsg.notes;
   }
 
   static Future<List<Note>> findArchived() async {
     debugPrint('Note.findArchived called');
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(NotesMethod.list_archived, Empty()),
-    );
-    final NotesNotes resMsg = NotesNotes.fromJson(res);
+    final NotesNotes resMsg =
+        NotesNotes.fromJson(await coreCall(NotesMethod.list_archived, Empty()));
     final List<Note> results = resMsg.notes;
-
     debugPrint('fetched: ${results.length} notes');
 
     return results;

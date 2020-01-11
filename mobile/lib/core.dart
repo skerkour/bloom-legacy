@@ -1,8 +1,7 @@
 import 'dart:convert';
 import 'dart:ffi' as ffi;
-
-import 'package:ffi/ffi.dart';
 import 'package:flutter/foundation.dart';
+import 'package:ffi/ffi.dart';
 
 class Payload<P> {
   Payload(this.method, this.params);
@@ -32,11 +31,16 @@ typedef RustFreeFunction = ffi.Void Function(ffi.Pointer<Utf8>);
 // RustFree _coreFree;
 BlmCoreCall _call;
 
-Payload<P> toPayload<P>(String method, P params) {
+Payload<P> _toPayload<P>(String method, P params) {
   return Payload<P>(method, params);
 }
 
-Map<String, dynamic> coreCall<P>(Payload<P> payload) {
+Future<Map<String, dynamic>> coreCall<P>(String method, P params) async {
+  final Payload<P> payload = _toPayload(method, params);
+  return await compute(_coreCall, payload);
+}
+
+Map<String, dynamic> _coreCall<P>(Payload<P> payload) {
   final String jsonPayload = jsonEncode(payload.toJson());
   debugPrint('jsonPayload: $jsonPayload');
   final ffi.Pointer<Utf8> cPayload = Utf8.toUtf8(jsonPayload);

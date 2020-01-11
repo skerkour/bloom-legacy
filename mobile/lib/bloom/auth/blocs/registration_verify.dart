@@ -36,10 +36,7 @@ class RegistrationVerifyBloc extends BlocBase {
     Map<String, dynamic> json;
 
     try {
-      json = await compute(
-        coreCall,
-        toPayload(AuthMethod.verify_registration, message),
-      );
+      json = await coreCall(AuthMethod.verify_registration, message);
     } catch (err) {
       rethrow;
     } finally {
