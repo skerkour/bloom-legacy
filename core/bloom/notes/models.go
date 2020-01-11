@@ -1,4 +1,4 @@
-package models
+package notes
 
 type Note struct {
 }
