@@ -10,7 +10,6 @@ export default {
   },
   landing: {
     mission: 'We believe that everyone deserves respect and privacy',
-    subtitle1: 'Collaborate, Enjoy, Share, Innovate',
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
     feature1: {
@@ -24,8 +23,8 @@ export default {
     feature2: {
       title: 'Bring your team together',
       description: `Whether it's your friends or your colleagues, Bloom is made for collaboration.
-      Organize conversations, share files and ideas, organize your life.
-      Go from chatting to meeting up with Calendar, Notes, Drive and more.<br />
+      Organize your files and ideas, organize your life.
+      Go meeting up with Calendar, Notes, Drive and more.<br />
       Never stop having fun.`,
     },
   },
