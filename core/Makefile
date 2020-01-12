@@ -7,6 +7,11 @@ DATE := $(shell date +"%Y-%m-%d")
 .PHONY: all
 all: build_desktop build_android
 
+.PHONY: fmt
+fmt:
+	go fmt ./...
+
+
 .PHONY: build_desktop
 build_desktop:
 	go build -o dist/$(NAME)server server/*.go

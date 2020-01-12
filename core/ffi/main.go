@@ -3,53 +3,46 @@ package main
 import (
 	"C"
 	"encoding/json"
+	"gitlab.com/bloom42/bloom/core"
 	"strings"
 )
 
-type PayloadIn struct {
-	Method string          `json:"method"`
-	Params json.RawMessage `json:"params"`
-}
-
-type PayloadOut struct {
-	Data  interface{} `json:"data"`
-	Error *CoreError  `json:"error"`
-}
-
-type CoreError struct {
-	Code    string      `json:"code"`
-	Message string      `json:"message"`
-	Meta    interface{} `json:"meta"`
-}
-
 //export blmcore_call
 func blmcore_call(message *C.char) *C.char {
-	var payload PayloadIn
+	var messageIn core.MessageIn
 
 	bytesMsg := C.GoString(message)
 	// if bytesMsg == nil {
 	// 	return nil // TODO(z0mbie42): return error
 	// }
 
-	err := json.Unmarshal([]byte(bytesMsg), &payload)
+	err := json.Unmarshal([]byte(bytesMsg), &messageIn)
 	if err != nil {
 		return nil // TODO(z0mbie42): return error
 	}
 
-	parts := strings.Split(payload.Method, ".")
+	parts := strings.Split(messageIn.Method, ".")
 	if len(parts) != 2 {
 		return nil // TODO(z0mbie42): return error
 	}
 
 	// TODO(z0mbie42): handle methods returns go error, and convert to c error here
+	var messageOut core.MessageOut
+
 	switch parts[0] {
 	case "notes":
-		return handleNotesMethod(parts[1], payload.Params)
+		messageOut = core.HandleNotesMethod(parts[1], messageIn.Params)
 	case "calculator":
-		return handleCalculatorMehtod(parts[1], payload.Params)
+		messageOut = core.HandleCalculatorMehtod(parts[1], messageIn.Params)
 	default:
-		return nil // TODO: return not found error
+		messageOut = core.MethodNotFoundError(parts[0], "service") // TODO: return not found error
 	}
+
+	data, err := json.Marshal(messageOut)
+	if err != nil {
+		return nil
+	}
+	return C.CString(string(data))
 }
 
 //export blmcore_init
