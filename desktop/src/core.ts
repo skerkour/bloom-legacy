@@ -12,4 +12,11 @@ async function call(method: string, params: any): Promise<any> {
   return res.data;
 }
 
-export default { call };
+function toIsoDate(date: string | null): Date | null {
+  if (date === null) {
+    return null;
+  }
+  return new Date(date).toISOString() as unknown as Date;
+}
+
+export default { call, toIsoDate };

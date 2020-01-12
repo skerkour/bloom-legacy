@@ -127,7 +127,10 @@ import {
   Watch,
 } from 'vue-property-decorator';
 import { Event as EventModel, GuiEvent } from '@/native/messages/calendar';
-import { Native, Message } from '@/native';
+import core from '@/core';
+import { DeleteEvent, CreateEvent } from '../core/messages';
+import CalendarMethod from '../core/methods';
+
 
 const { log } = require('@bloom42/astro');
 
@@ -220,17 +223,14 @@ export default class EventDialog extends Vue {
     }
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'calendar.gui.create_event',
-      data: {
-        title: this.title,
-        description: this.description,
-        start_at: Native.toRustDate(this.startAt)!,
-        end_at: Native.toRustDate(this.endAt)!,
-      },
+    const params: CreateEvent = {
+      title: this.title,
+      description: this.description,
+      start_at: core.toIsoDate(this.startAt)!,
+      end_at: core.toIsoDate(this.endAt)!,
     };
     try {
-      const res = await Native.call(message);
+      const res = await core.call(CalendarMethod.CreateEvent, params);
       this.$emit('created', (res.data as GuiEvent).event);
     } catch (err) {
       this.error = err.message;
@@ -245,16 +245,10 @@ export default class EventDialog extends Vue {
     const event = { ...this.event } as EventModel;
     event.title = this.title;
     event.description = this.description;
-    event.start_at = Native.toRustDate(this.startAt)!;
-    event.end_at = Native.toRustDate(this.endAt)!;
-    const message: Message = {
-      type: 'calendar.gui.update_event',
-      data: {
-        event,
-      },
-    };
+    event.start_at = core.toIsoDate(this.startAt)!;
+    event.end_at = core.toIsoDate(this.endAt)!;
     try {
-      const res = await Native.call(message);
+      const res = await core.call(CalendarMethod.UpdateEvent, event);
       this.$emit('updated', (res.data as GuiEvent).event);
     } catch (err) {
       this.error = err.message;
@@ -266,14 +260,11 @@ export default class EventDialog extends Vue {
   async deleteEvent() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'calendar.gui.delete_event',
-      data: {
-        id: this.event!.id,
-      },
+    const params: DeleteEvent = {
+      id: this.event!.id,
     };
     try {
-      await Native.call(message);
+      await core.call(CalendarMethod.DeleteEvent, params);
       this.$emit('deleted', this.event);
       this.close(true);
     } catch (err) {
