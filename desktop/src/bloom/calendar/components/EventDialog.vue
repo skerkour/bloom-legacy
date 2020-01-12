@@ -126,9 +126,8 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { Event as EventModel, Event } from '@/native/messages/calendar';
 import core from '@/core';
-import { DeleteEvent, CreateEvent } from '../core/messages';
+import { DeleteEvent, CreateEvent, Event as EventModel } from '../core/messages';
 import CalendarMethod from '../core/methods';
 
 

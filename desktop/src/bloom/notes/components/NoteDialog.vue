@@ -79,8 +79,9 @@ import {
   Prop,
   Vue,
 } from 'vue-property-decorator';
-import { Note, GuiNote } from '@/native/messages/notes';
-import { Native, Message } from '@/native';
+import core from '@/core';
+import { Note, CreateNote } from '../core/messages';
+import NotesMethod from '../core/methods';
 
 @Component
 export default class NoteDialog extends Vue {
@@ -136,17 +137,14 @@ export default class NoteDialog extends Vue {
     if (this.body.length === 0 || this.title.length === 0) {
       return;
     }
-    const message: Message = {
-      type: 'notes.gui.create_note',
-      data: {
-        title: this.title,
-        body: this.body,
-        color: 4294967295,
-      },
+    const params: CreateNote = {
+      title: this.title,
+      body: this.body,
+      color: 4294967295,
     };
     try {
-      const res = await Native.call(message);
-      this.$emit('created', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.CreateNote, params);
+      this.$emit('created', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -160,15 +158,9 @@ export default class NoteDialog extends Vue {
     const note = { ...this.note } as Note;
     note.title = this.title;
     note.body = this.body;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('updated', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -190,15 +182,9 @@ export default class NoteDialog extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.is_pinned = true;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('updated', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -211,15 +197,9 @@ export default class NoteDialog extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.is_pinned = false;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('updated', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {

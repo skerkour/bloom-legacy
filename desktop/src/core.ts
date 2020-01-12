@@ -19,4 +19,4 @@ function toIsoDate(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-export default { call, toIsoDate };
+export default { call, toIsoDate, empty: {} };

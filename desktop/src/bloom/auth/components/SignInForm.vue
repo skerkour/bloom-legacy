@@ -44,7 +44,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Mutations } from '@/store';
-import { Native, Message } from '@/native';
+import core from '@/core';
+import { SignIn } from '../core/messages';
+import AuthMethod from '../core/methods';
 
 const { log } = require('@bloom42/astro');
 
@@ -66,16 +68,13 @@ export default class SignInForm extends Vue {
   async signIn() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'auth.gui.sign_in',
-      data: {
-        username: this.username,
-        password: this.password,
-      },
+    const params: SignIn = {
+      username: this.username,
+      password: this.password,
     };
 
     try {
-      const res = await Native.call(message);
+      const res = await core.call(AuthMethod.SignIn, params);
       log.debug('success');
       log.debug(res);
       this.$store.commit(Mutations.SIGN_IN.toString());
