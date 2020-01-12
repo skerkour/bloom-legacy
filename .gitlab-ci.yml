@@ -166,19 +166,14 @@ test:website:
 ## Build
 ####################################################################################################
 
-# TODO
-
-# build:core:
-#   stage: build
-#   image: 'rust:stretch'
-#   tags:
-#     - docker
-#   script:
-#     - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-#     - rustup default $RUST_VERSION
-#     - cd core
-#     - make build
-
+build:core:
+  stage: build
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - cd core
+    - make build_desktop
 
 # build:desktop: Commented because we need to implement the native addon build
 #   stage: build
