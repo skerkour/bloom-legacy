@@ -39,6 +39,14 @@ protocol.registerSchemesAsPrivileged([
 //   // }
 // }
 
+function killChild(): boolean {
+  if (child !== null) {
+    child.kill();
+  }
+  console.log('mainProcess: server stopped');
+  return true;
+}
+
 function createWindow() {
   // create tray icon
   // tray = new Tray(config.TRAY_ICON);
@@ -93,6 +101,7 @@ app.on('window-all-closed', () => {
   // if (process.platform !== 'darwin') {
   //   app.quit();
   // }
+  killChild();
   app.quit();
 });
 
@@ -137,10 +146,4 @@ ipcMain.on('server:start', () => {
   return true;
 });
 
-ipcMain.on('server:stop', () => {
-  if (child !== null) {
-    child.kill();
-  }
-  console.log('mainProcess: server stopped');
-  return true;
-});
+ipcMain.on('server:stop', killChild);
