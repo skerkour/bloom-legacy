@@ -23,6 +23,7 @@
   "dependencies": {
     "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "^4.7.95",
+    "axios": "^0.19.1",
     "bloom_native": "file:native",
     "core-js": "^3.6.1",
     "moment": "^2.24.0",

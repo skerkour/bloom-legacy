@@ -1,4 +1,5 @@
 import Vue from 'vue';
+import { ipcRenderer } from 'electron';
 import App from '@/App.vue';
 import router from '@/router';
 import store from '@/store';
@@ -16,6 +17,16 @@ if (process.env.NODE_ENV === 'development') {
     log.config({ level: Level.INFO });
   }
 }
+
+async function func() {
+  await ipcRenderer.send('server:start');
+}
+func();
+
+window.onunload = async () => {
+  await ipcRenderer.send('server:stop');
+  window.location.reload();
+};
 
 Vue.use(filters);
 

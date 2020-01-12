@@ -2,7 +2,9 @@ import {
   app,
   protocol,
   BrowserWindow,
+  ipcMain,
 } from 'electron';
+import { execFile, ChildProcess } from 'child_process';
 import { createProtocol } from './create_protocol';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
@@ -13,6 +15,9 @@ const config = require('./config');
 // be closed automatically when the JavaScript object is garbage collected.
 let mainWindow: BrowserWindow | null = null;
 // let tray: Tray | null = null;
+// child is used to control the server
+let child: ChildProcess | null = null;
+
 
 // Scheme must be registered before the app is ready
 protocol.registerSchemesAsPrivileged([
@@ -118,3 +123,24 @@ if (isDevelopment) {
     });
   }
 }
+
+
+ipcMain.on('server:start', () => {
+  console.log('mainProcess: starting server');
+  child = execFile('./blmcoreserver', (err, data) => {
+    if (err) {
+      console.error(err);
+      return;
+    }
+    console.log(data.toString());
+  });
+  return true;
+});
+
+ipcMain.on('server:stop', () => {
+  if (child !== null) {
+    child.kill();
+  }
+  console.log('mainProcess: server stopped');
+  return true;
+});
