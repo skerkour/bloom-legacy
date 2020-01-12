@@ -1,6 +1,5 @@
 .PHONY: build
 build:
-	npm run build:native
 	npm run build:electron
 
 .PHONY: clean

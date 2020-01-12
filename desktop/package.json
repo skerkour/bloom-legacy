@@ -10,8 +10,6 @@
   "scripts": {
     "build": "NODE_ENV=production vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
-    "build:native": "electron-build-env neon build --release",
-    "dev:native": "cd native && electron-build-env cargo watch -s \\\"neon build -p ..\\\"",
     "build:electron": "vue-cli-service electron:build",
     "dev:electron": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",

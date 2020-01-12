@@ -53,7 +53,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Native, Message } from '@/native';
+import core from '@/core';
+import { CompleteRegistration } from '../core/messages';
+import AuthMethod from '../core/methods';
 import { Mutations } from '@/store';
 
 const { log } = require('@bloom42/astro');
@@ -94,16 +96,13 @@ export default class RegistrationComplete extends Vue {
   async completeRegistration() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'auth.gui.registration_complete',
-      data: {
-        id: this.pendingAccountId,
-        username: this.username,
-        password: this.password,
-      },
+    const params: CompleteRegistration = {
+      id: this.pendingAccountId,
+      username: this.username,
+      password: this.password,
     };
     try {
-      const res = await Native.call(message);
+      const res = await core.call(AuthMethod.CompleteRegistration, params);
       log.debug(res);
       this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
       this.$store.commit(Mutations.SIGN_IN.toString());
