@@ -413,15 +413,18 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
+import core from '@/core';
 import {
   Contact,
   Organization,
   Website,
   Email,
   Phone,
-  GuiContact,
-} from '@/native/messages/contacts';
-import { Native, Message } from '@/native';
+  CreateContact,
+  DeleteContact,
+} from '../core/messages';
+import ContactsMethod from '../core/methods';
+
 
 const DEFAULT_EMAIL = { email: '', label: 'Other' };
 const DEFAULT_WEBSITE = { website: '', label: 'Other' };
@@ -538,24 +541,21 @@ export default class ContactDialog extends Vue {
     if (this.isEmpty()) {
       return;
     }
-    const message: Message = {
-      type: 'contacts.gui.create_contact',
-      data: {
-        birthday: Native.toRustDate(this.birthday),
-        first_name: this.firstName,
-        last_name: this.lastName,
-        notes: this.notes,
-        emails: this.emails,
-        phones: this.phones,
-        websites: this.websites,
-        organizations: this.organizations,
-        addresses: [],
-        device_id: '',
-      },
+    const params: CreateContact = {
+      birthday: core.toIsoDate(this.birthday),
+      first_name: this.firstName,
+      last_name: this.lastName,
+      notes: this.notes,
+      emails: this.emails,
+      phones: this.phones,
+      websites: this.websites,
+      organizations: this.organizations,
+      addresses: [],
+      device_id: '',
     };
     try {
-      const res = await Native.call(message);
-      this.$emit('created', (res.data as GuiContact).contact);
+      const res = await core.call(ContactsMethod.CreateContact, params);
+      this.$emit('created', (res.data as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -567,7 +567,7 @@ export default class ContactDialog extends Vue {
     this.error = '';
     this.isLoading = true;
     const contact = { ...this.contact } as Contact;
-    contact.birthday = Native.toRustDate(this.birthday);
+    contact.birthday = core.toIsoDate(this.birthday);
     contact.first_name = this.firstName;
     contact.last_name = this.lastName;
     contact.notes = this.notes;
@@ -576,15 +576,9 @@ export default class ContactDialog extends Vue {
     contact.websites = this.websites;
     contact.organizations = this.organizations;
     contact.addresses = [];
-    const message: Message = {
-      type: 'contacts.gui.update_contact',
-      data: {
-        contact,
-      },
-    };
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiContact).contact);
+      const res = await core.call(ContactsMethod.UpdateContact, contact);
+      this.$emit('updated', (res.data as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -595,14 +589,11 @@ export default class ContactDialog extends Vue {
   async deleteContact() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'contacts.gui.delete_contact',
-      data: {
-        id: this.contact!.id,
-      },
+    const params: DeleteContact = {
+      id: this.contact!.id,
     };
     try {
-      await Native.call(message);
+      await core.call(ContactsMethod.DeleteContact, params);
       this.$emit('deleted', this.contact);
     } catch (err) {
       this.error = err.message;

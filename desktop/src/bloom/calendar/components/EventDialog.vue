@@ -126,7 +126,7 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
-import { Event as EventModel, GuiEvent } from '@/native/messages/calendar';
+import { Event as EventModel, Event } from '@/native/messages/calendar';
 import core from '@/core';
 import { DeleteEvent, CreateEvent } from '../core/messages';
 import CalendarMethod from '../core/methods';
@@ -231,7 +231,7 @@ export default class EventDialog extends Vue {
     };
     try {
       const res = await core.call(CalendarMethod.CreateEvent, params);
-      this.$emit('created', (res.data as GuiEvent).event);
+      this.$emit('created', (res.data as Event));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -249,7 +249,7 @@ export default class EventDialog extends Vue {
     event.end_at = core.toIsoDate(this.endAt)!;
     try {
       const res = await core.call(CalendarMethod.UpdateEvent, event);
-      this.$emit('updated', (res.data as GuiEvent).event);
+      this.$emit('updated', (res.data as Event));
     } catch (err) {
       this.error = err.message;
     } finally {

@@ -101,8 +101,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import EventDialog from '../components/EventDialog.vue';
-import { Native, Message } from '@/native';
-import { Event as EventModel, GuiEvents } from '@/native/messages/calendar';
+import core from '@/core';
+import { ListEvents, Event as EventModel, Events } from '../core/messages';
+import CalendarMethod from '../core/methods';
 
 const { log } = require('@bloom42/astro');
 
@@ -167,16 +168,13 @@ export default class Index extends Vue {
   async fetchData(startAt?: Date, endAt?: Date) {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'calendar.gui.list_events',
-      data: {
-        start_at: startAt,
-        end_at: endAt,
-      },
+    const params: ListEvents = {
+      start_at: startAt,
+      end_at: endAt,
     };
     try {
-      const res = await Native.call(message);
-      this.events = (res.data as GuiEvents).events;
+      const res = await core.call(CalendarMethod.ListEvents, params);
+      this.events = (res.data as Events).events;
       log.debug(this.events);
     } catch (err) {
       this.error = err.message;

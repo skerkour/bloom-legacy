@@ -15,8 +15,8 @@ export type Events = {
 }
 
 export type ListEvents = {
-  start_at: Date | null,
-  end_at: Date | null,
+  start_at: Date | undefined,
+  end_at: Date | undefined,
 }
 
 export type CreateEvent = {
