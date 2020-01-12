@@ -5,13 +5,14 @@ DATE := $(shell date +"%Y-%m-%d")
 
 
 .PHONY: all
-all: build
+all: build_desktop build_android
 
-.PHONY: build
-build:
-	go build -o dist/lib$(NAME).so -buildmode=c-shared ffi/*.go
+.PHONY: build_desktop
+build_desktop:
+	go build -o dist/$(NAME)server server/*.go
+	cp dist/$(NAME)server ../desktop/$(NAME)server
 
-.PHONY: build
+.PHONY: test
 test:
 	go test ./...
 
