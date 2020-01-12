@@ -30,6 +30,42 @@
 
     </v-row>
 
+    <v-row class="text-center" align="center" justify="center" >
+      <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
+        <h5 class="title mb-2">Featured on</h5>
+        <a href="https://news.ycombinator.com/item?id=20105567" target="_blank" rel="noopener noreferer" class="blm-pointer">
+          <v-img alt="Hacker news" src="/static/imgs/landing/hn.svg" width="200px" >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-2" />
+              </v-row>
+            </template>
+          </v-img>
+        </a>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
+        <h5 class="title mb-2">#1 Product of the Day</h5>
+        <a href="https://www.producthunt.com/posts/bloom-05383d81-983e-4d4d-b22f-78dd91066cda" target="_blank" rel="noopener noreferer" class="blm-pointer">
+          <v-img alt="Product Hunt" src="/static/imgs/landing/ph.svg" width="200px" contain>
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-2" />
+              </v-row>
+            </template>
+          </v-img>
+        </a>
+      </v-col>
+
+    </v-row>
+
     <v-row class="mb-5 blm-features align-center">
       <v-col cols="12" sm="6" order="last" order-sm="first" class="text-center mb-5 mt-5">
         <img alt="secure" src="/static/imgs/landing/secure.svg" height="200" />
