@@ -3,10 +3,7 @@ package main
 import (
 	"C"
 	"encoding/json"
-	"gitlab.com/bloom42/bloom/core/bloom/calculator"
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
 	"strings"
-	"fmt"
 )
 
 type PayloadIn struct {
@@ -55,61 +52,9 @@ func blmcore_call(message *C.char) *C.char {
 	}
 }
 
-func handleNotesMethod(method string, jsonParams json.RawMessage) *C.char {
-	switch method {
-	case "list_notes":
-		var params notes.ListNotesParams
-		err := json.Unmarshal(jsonParams, &params)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		res, err := notes.ListNotes(params)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		payloadOut := PayloadOut{Data: res}
-		data, err := json.Marshal(payloadOut)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		return C.CString(string(data))
-	default:
-		return methodNotFoundError(method, "notes")
-	}
-}
-
-func handleCalculatorMehtod(method string, jsonParams json.RawMessage) *C.char {
-	switch method {
-	case "calc":
-		var params calculator.CalcParams
-		err := json.Unmarshal(jsonParams, &params)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		res, err := calculator.Calc(params)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		payloadOut := PayloadOut{Data: res}
-		data, err := json.Marshal(payloadOut)
-		if err != nil {
-			return nil // TODO(z0mbie42): return error
-		}
-		return C.CString(string(data))
-	default:
-		return methodNotFoundError(method, "calculator")
-	}
-}
-
-func methodNotFoundError(method, service string) *C.char {
-	err := &CoreError{
-		Code:    "METHOD_NOT_FOUND",
-		Message: fmt.Sprintf("method '%s' not found in service: '%s'", method, service),
-		Meta:    nil,
-	}
-	payloadOut := PayloadOut{Error: err}
-	data, _ := json.Marshal(payloadOut)
-	return C.CString(string(data))
+//export blmcore_init
+func blmcore_init() C.int {
+	return C.int(0)
 }
 
 func main() {}
