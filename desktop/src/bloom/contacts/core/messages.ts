@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-export interface Contact {
+export type Contact = {
   id: string,
   created_at: Date,
   updated_at: Date,
@@ -16,27 +16,27 @@ export interface Contact {
   device_id: string,
 }
 
-export interface Email {
+export type Email = {
   email: string,
   label: string,
 }
 
-export interface Phone {
+export type Phone = {
   phone: string,
   label: string,
 }
 
-export interface Website {
+export type Website = {
   website: string,
   label: string,
 }
 
-export interface Organization {
+export type Organization = {
   name: string,
   title: string,
 }
 
-export interface Address {
+export type Address = {
   city: string,
   country: string,
   label: string,
@@ -45,15 +45,11 @@ export interface Address {
   street_address2: string,
 }
 
-export interface GuiContact {
-  contact: Contact,
-}
-
-export interface GuiContacts {
+export type Contacts = {
   contacts: Contact[],
 }
 
-export interface GuiCreateContact {
+export type CreateContact = {
   birthday: Date | null,
   first_name: string,
   last_name: string,
@@ -66,6 +62,6 @@ export interface GuiCreateContact {
   device_id: string,
 }
 
-export interface GuiDeleteContact {
+export type DeleteContact = {
   id: string,
 }

@@ -1,9 +1,9 @@
 /* eslint-disable camelcase */
 
-export interface GuiExpression {
+export type Expression = {
   expression: string,
 }
 
-export interface GuiResult {
+export type Result = {
   result: string,
 }

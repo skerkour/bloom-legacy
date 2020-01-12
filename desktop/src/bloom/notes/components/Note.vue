@@ -132,8 +132,9 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import NoteDialog from './NoteDialog.vue';
-import { Note, GuiNote } from '@/native/messages/notes';
-import { Native, Message } from '@/native';
+import { Note, DeleteNote } from '../core/messages';
+import NotesMethod from '../core/methods';
+import core from '@/core';
 
 @Component({
   components: {
@@ -158,15 +159,10 @@ export default class BlmNote extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.archived_at = new Date().toISOString() as unknown as Date;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
+
     try {
-      const res = await Native.call(message);
-      this.$emit('archived', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('archived', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -179,15 +175,10 @@ export default class BlmNote extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.archived_at = null;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
+
     try {
-      const res = await Native.call(message);
-      this.$emit('unarchived', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('unarchived', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -200,15 +191,10 @@ export default class BlmNote extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.is_pinned = true;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
+
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('updated', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -221,15 +207,10 @@ export default class BlmNote extends Vue {
     this.isLoading = true;
     const note = { ...this.note } as Note;
     note.is_pinned = false;
-    const message: Message = {
-      type: 'notes.gui.update_note',
-      data: {
-        note,
-      },
-    };
+
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiNote).note);
+      const res = await core.call(NotesMethod.UpdateNote, note);
+      this.$emit('updated', (res.data as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -240,14 +221,12 @@ export default class BlmNote extends Vue {
   async deleteNote() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'notes.gui.delete_note',
-      data: {
-        id: this.note.id,
-      },
+    const params: DeleteNote = {
+      id: this.note.id,
     };
+
     try {
-      await Native.call(message);
+      await core.call(NotesMethod.DeleteNote, params);
       this.$emit('deleted', this.note);
     } catch (err) {
       this.error = err.message;

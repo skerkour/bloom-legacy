@@ -1,6 +1,6 @@
 /* eslint-disable camelcase */
 
-export interface Event {
+export type Event = {
   id: string,
   title: string,
   description: string,
@@ -10,26 +10,22 @@ export interface Event {
   end_at: Date,
 }
 
-export interface GuiEvents {
+export type Events = {
   events: Event[],
 }
 
-export interface ListEvents {
+export type ListEvents = {
   start_at: Date | undefined,
   end_at: Date | undefined,
 }
 
-export interface GuiEvent {
-  event: Event,
-}
-
-export interface GuiCreateEvent {
+export type CreateEvent = {
   title: string,
   description: string,
   start_at: Date,
   end_at: Date,
 }
 
-export interface GuiDeleteEvent {
+export type DeleteEvent = {
   id: string,
 }
