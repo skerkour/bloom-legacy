@@ -175,16 +175,16 @@ build:core:
     - cd core
     - make build_desktop
 
-# build:desktop: Commented because we need to implement the native addon build
-#   stage: build
-#   image: node:$NODE_VERSION
-#   tags:
-#     - docker
-#   script:
-#     - cd desktop
-#     - make assets
-#     - make install
-#     - make build
+build:desktop: Commented because we need to implement the native addon build
+  stage: build
+  image: node:$NODE_VERSION
+  tags:
+    - docker
+  script:
+    - cd desktop
+    - make assets
+    - make install
+    - make build
 
 build:mobile:
   stage: build
