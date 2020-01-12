@@ -35,10 +35,7 @@ class RegistrationStartBloc extends BlocBase {
     AuthRegistrationStarted ret;
 
     try {
-      json = await compute(
-        coreCall,
-        toPayload(AuthMethod.start_registration, message),
-      );
+      json = await coreCall(AuthMethod.start_registration, message);
       ret = AuthRegistrationStarted.fromJson(json);
     } catch (err) {
       rethrow;

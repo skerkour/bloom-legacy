@@ -51,6 +51,9 @@ variables:
   STRIPE_PUBLIC_KEY: test
   STRIPE_SECRET_KEY: test
 
+  # Go
+  GO_IMAGE: golang:latest
+
 
 # cache:
 #   paths:
@@ -64,19 +67,14 @@ variables:
 ## Test
 ####################################################################################################
 
-# test:core:
-#   stage: test
-#   image: 'rust:stretch'
-#   tags:
-#     - docker
-#   script:
-#     - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-#     - rustup default $RUST_VERSION
-#     - rustup component add rustfmt clippy
-#     - cd core
-#     - make fmt_check
-#     - make lint
-#     - make test
+test:core:
+  stage: test
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - cd core
+    - make test
 
 
 test:mobile:

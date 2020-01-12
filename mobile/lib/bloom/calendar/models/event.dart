@@ -56,43 +56,25 @@ class Event {
       DateTime startAt, DateTime endAt) async {
     debugPrint('Event.create called');
 
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(CalendarMethod.update_event,
-          CalendarCreateEvent(title, description, startAt, endAt)),
-    );
-
-    return Event.fromJson(res);
+    return Event.fromJson(await coreCall(CalendarMethod.update_event,
+        CalendarCreateEvent(title, description, startAt, endAt)));
   }
 
   Future<Event> update() async {
     debugPrint('Event.update called (id: $id)');
-
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(CalendarMethod.update_event, this),
-    );
-
-    return Event.fromJson(res);
+    return Event.fromJson(await coreCall(CalendarMethod.update_event, this));
   }
 
   Future<void> delete() async {
     debugPrint('Event.delete called (id: $id)');
 
-    await compute(
-      coreCall,
-      toPayload(CalendarMethod.delete_event, CalendarDeleteEvent(id)),
-    );
+    await coreCall(CalendarMethod.delete_event, CalendarDeleteEvent(id));
   }
 
   static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
     debugPrint('Event.find called');
-
-    final Map<String, dynamic> res = await compute(
-      coreCall,
-      toPayload(CalendarMethod.list_events, CalendarListEvents(startAt, endAt)),
-    );
-    final CalendarEvents resMsg = CalendarEvents.fromJson(res);
+    final CalendarEvents resMsg = CalendarEvents.fromJson(await coreCall(
+        CalendarMethod.list_events, CalendarListEvents(startAt, endAt)));
 
     return resMsg.events;
   }
