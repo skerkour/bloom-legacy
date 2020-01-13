@@ -20,7 +20,6 @@ if (process.env.NODE_ENV === 'development') {
 }
 
 
-
 window.onunload = async () => {
   await ipcRenderer.send('server:stop');
   window.location.reload();

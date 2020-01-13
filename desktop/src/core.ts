@@ -22,13 +22,7 @@ function toIsoDate(date: string | null): Date | null {
 }
 
 async function init(): Promise<void> {
-  const payload = JSON.stringify({
-    method: 'init',
-    params: empty,
-  });
-
-  const res = await axios.post(CALL_URL, payload);
-  return res.data;
+  return call('core.init', empty);
 }
 
 export default {
