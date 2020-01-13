@@ -5,12 +5,12 @@ const CALL_URL = 'http://localhost:8042/electronCall';
 const empty = {};
 
 async function call(method: string, params: any): Promise<any> {
-  const payload = JSON.stringify({
+  const message = JSON.stringify({
     method,
     params,
   });
 
-  const res = await axios.post(CALL_URL, payload);
+  const res = await axios.post(CALL_URL, message);
   return res.data;
 }
 
