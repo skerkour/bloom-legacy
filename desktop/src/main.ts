@@ -25,8 +25,13 @@ window.onunload = async () => {
   window.location.reload();
 };
 
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
+
 async function main() {
   await ipcRenderer.send('server:start');
+  await sleep(1000);
   await core.init();
 
   Vue.use(filters);
