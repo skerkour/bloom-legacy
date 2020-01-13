@@ -30,6 +30,8 @@ func blmcore_call(message *C.char) *C.char {
 	var messageOut core.MessageOut
 
 	switch parts[0] {
+	case "core":
+		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
 		messageOut = core.HandleNotesMethod(parts[1], messageIn.Params)
 	case "calculator":

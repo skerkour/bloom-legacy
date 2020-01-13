@@ -30,6 +30,8 @@ func handleElectronPost(w http.ResponseWriter, r *http.Request) {
 	var messageOut core.MessageOut
 
 	switch parts[0] {
+	case "core":
+		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
 		messageOut = core.HandleNotesMethod(parts[1], messageIn.Params)
 	case "calculator":
@@ -50,7 +52,7 @@ func handleElectronPost(w http.ResponseWriter, r *http.Request) {
 }
 
 func main() {
-	http.HandleFunc("/electronPost", handleElectronPost)
+	http.HandleFunc("/electronCall", handleElectronPost)
 
 	log.Fatal(http.ListenAndServe("127.0.0.1:8042", nil))
 }

@@ -17,3 +17,5 @@ type ErrorData struct {
 	Message string      `json:"message"`
 	Meta    interface{} `json:"meta"`
 }
+
+type Empty struct{}
