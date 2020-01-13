@@ -48,7 +48,7 @@
         </a>
       </v-col>
       <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
-        <h5 class="title mb-2">Featured on</h5>
+        <h5 class="title mb-2">#1 Post on</h5>
         <a href="https://news.ycombinator.com/item?id=20105567" target="_blank" rel="noopener noreferer" class="blm-pointer">
           <v-img alt="Hacker news" src="/static/imgs/landing/hn.svg" width="200px" >
             <template v-slot:placeholder>
