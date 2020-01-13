@@ -35,6 +35,10 @@ Payload<P> _toPayload<P>(String method, P params) {
   return Payload<P>(method, params);
 }
 
+Future<void> coreInit() async {
+  return await coreCall('core.init', Empty());
+}
+
 Future<Map<String, dynamic>> coreCall<P>(String method, P params) async {
   final Payload<P> payload = _toPayload(method, params);
   return await compute(_coreCall, payload);
