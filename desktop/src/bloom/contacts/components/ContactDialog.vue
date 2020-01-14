@@ -413,15 +413,18 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
+import core from '@/core';
 import {
   Contact,
   Organization,
   Website,
   Email,
   Phone,
-  GuiContact,
-} from '@/native/messages/contacts';
-import { Native, Message } from '@/native';
+  CreateContact,
+  DeleteContact,
+} from '../core/messages';
+import ContactsMethod from '../core/methods';
+
 
 const DEFAULT_EMAIL = { email: '', label: 'Other' };
 const DEFAULT_WEBSITE = { website: '', label: 'Other' };
@@ -443,10 +446,10 @@ export default class ContactDialog extends Vue {
   birthdayFormatted: string | null = null;
   birthdayMenu = false;
   notes: string = '';
-  organizations: Organization[] = [Object.assign({}, DEFAULT_ORGANIZATION)];
-  phones: Phone[] = [Object.assign({}, DEFAULT_PHONE)];
-  emails: Email[] = [Object.assign({}, DEFAULT_EMAIL)];
-  websites: Website[] = [Object.assign({}, DEFAULT_WEBSITE)];
+  organizations: Organization[] = [{ ...DEFAULT_ORGANIZATION }];
+  phones: Phone[] = [{ ...DEFAULT_PHONE }];
+  emails: Email[] = [{ ...DEFAULT_EMAIL }];
+  websites: Website[] = [{ ...DEFAULT_WEBSITE }];
   phoneLabels = [
     'Home',
     'Work',
@@ -475,7 +478,7 @@ export default class ContactDialog extends Vue {
   // lifecycle
   // watch
   @Watch('birthday')
-  onBirthdayUpdated(_val: any) {
+  onBirthdayUpdated() {
     this.birthdayFormatted = this.formatDate(this.birthday);
   }
 
@@ -499,16 +502,16 @@ export default class ContactDialog extends Vue {
       this.birthdayFormatted = this.formatDate(this.birthday);
       this.emails = contact.emails.length > 0
         ? contact.emails
-        : [Object.assign({}, DEFAULT_EMAIL)];
+        : [{ ...DEFAULT_EMAIL }];
       this.websites = contact.websites.length > 0
         ? contact.websites
-        : [Object.assign({}, DEFAULT_WEBSITE)];
+        : [{ ...DEFAULT_WEBSITE }];
       this.phones = contact.phones.length > 0
         ? contact.phones
-        : [Object.assign({}, DEFAULT_PHONE)];
+        : [{ ...DEFAULT_PHONE }];
       this.organizations = contact.organizations.length > 0
         ? contact.organizations
-        : [Object.assign({}, DEFAULT_ORGANIZATION)];
+        : [{ ...DEFAULT_ORGANIZATION }];
     } else {
       this.clearFields();
     }
@@ -538,24 +541,21 @@ export default class ContactDialog extends Vue {
     if (this.isEmpty()) {
       return;
     }
-    const message: Message = {
-      type: 'contacts.gui.create_contact',
-      data: {
-        birthday: Native.toRustDate(this.birthday),
-        first_name: this.firstName,
-        last_name: this.lastName,
-        notes: this.notes,
-        emails: this.emails,
-        phones: this.phones,
-        websites: this.websites,
-        organizations: this.organizations,
-        addresses: [],
-        device_id: '',
-      },
+    const params: CreateContact = {
+      birthday: core.toIsoDate(this.birthday),
+      first_name: this.firstName,
+      last_name: this.lastName,
+      notes: this.notes,
+      emails: this.emails,
+      phones: this.phones,
+      websites: this.websites,
+      organizations: this.organizations,
+      addresses: [],
+      device_id: '',
     };
     try {
-      const res = await Native.call(message);
-      this.$emit('created', (res.data as GuiContact).contact);
+      const res = await core.call(ContactsMethod.CreateContact, params);
+      this.$emit('created', (res.data as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -567,7 +567,7 @@ export default class ContactDialog extends Vue {
     this.error = '';
     this.isLoading = true;
     const contact = { ...this.contact } as Contact;
-    contact.birthday = Native.toRustDate(this.birthday);
+    contact.birthday = core.toIsoDate(this.birthday);
     contact.first_name = this.firstName;
     contact.last_name = this.lastName;
     contact.notes = this.notes;
@@ -576,15 +576,9 @@ export default class ContactDialog extends Vue {
     contact.websites = this.websites;
     contact.organizations = this.organizations;
     contact.addresses = [];
-    const message: Message = {
-      type: 'contacts.gui.update_contact',
-      data: {
-        contact,
-      },
-    };
     try {
-      const res = await Native.call(message);
-      this.$emit('updated', (res.data as GuiContact).contact);
+      const res = await core.call(ContactsMethod.UpdateContact, contact);
+      this.$emit('updated', (res.data as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -595,14 +589,11 @@ export default class ContactDialog extends Vue {
   async deleteContact() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'contacts.gui.delete_contact',
-      data: {
-        id: this.contact!.id,
-      },
+    const params: DeleteContact = {
+      id: this.contact!.id,
     };
     try {
-      const res = await Native.call(message);
+      await core.call(ContactsMethod.DeleteContact, params);
       this.$emit('deleted', this.contact);
     } catch (err) {
       this.error = err.message;
@@ -613,7 +604,7 @@ export default class ContactDialog extends Vue {
   }
 
   addPhone() {
-    this.phones.push(Object.assign({}, DEFAULT_PHONE));
+    this.phones.push({ ...DEFAULT_PHONE });
   }
 
   removePhone(index: number) {
@@ -624,7 +615,7 @@ export default class ContactDialog extends Vue {
   }
 
   addEmail() {
-    this.emails.push(Object.assign({}, DEFAULT_EMAIL));
+    this.emails.push({ ...DEFAULT_EMAIL });
   }
 
   removeEmail(index: number) {
@@ -635,7 +626,7 @@ export default class ContactDialog extends Vue {
   }
 
   addWebsite() {
-    this.websites.push(Object.assign({}, DEFAULT_WEBSITE));
+    this.websites.push({ ...DEFAULT_WEBSITE });
   }
   removeWebsite(index: number) {
     this.websites.splice(index, 1);
@@ -684,10 +675,10 @@ export default class ContactDialog extends Vue {
     this.lastName = '';
     this.notes = '';
     this.birthday = null;
-    this.emails = [Object.assign({}, DEFAULT_EMAIL)];
-    this.websites = [Object.assign({}, DEFAULT_WEBSITE)];
-    this.phones = [Object.assign({}, DEFAULT_PHONE)];
-    this.organizations = [Object.assign({}, DEFAULT_ORGANIZATION)];
+    this.emails = [{ ...DEFAULT_EMAIL }];
+    this.websites = [{ ...DEFAULT_WEBSITE }];
+    this.phones = [{ ...DEFAULT_PHONE }];
+    this.organizations = [{ ...DEFAULT_ORGANIZATION }];
     this.error = '';
   }
 

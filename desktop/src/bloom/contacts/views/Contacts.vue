@@ -1,20 +1,11 @@
 <template>
   <div>
     <v-container fluid>
-      <v-toolbar
-        flat
-        dense
-      >
+      <v-toolbar flat dense>
         <v-spacer />
-        <v-btn
-          outlined
-          color="primary"
-          class="add-btn"
-          @click="currentContact = null; openContactDialog()"
-        >
+        <v-btn color="primary" @click="currentContact = null; openContactDialog()">
           <v-icon left>mdi-plus</v-icon>Create Contact
         </v-btn>
-
       </v-toolbar>
 
       <v-data-table
@@ -77,9 +68,10 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Native, Message } from '@/native';
-import { Contact, GuiContacts } from '@/native/messages/contacts';
+import { Component, Vue } from 'vue-property-decorator';
+import core from '@/core';
+import { Contact, Contacts } from '../core/messages';
+import ContactsMethod from '../core/methods';
 import ContactDialog from '../components/ContactDialog.vue';
 
 
@@ -132,13 +124,9 @@ export default class Index extends Vue {
   async findContacts() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'contacts.gui.list_contacts',
-      data: {},
-    };
     try {
-      const res = await Native.call(message);
-      this.contacts = (res.data as GuiContacts).contacts;
+      const res = await core.call(ContactsMethod.ListContacts, core.empty);
+      this.contacts = (res.data as Contacts).contacts;
     } catch (err) {
       log.error(err);
     } finally {

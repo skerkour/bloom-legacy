@@ -18,7 +18,6 @@
 <script lang="ts">
 import {
   Component,
-  Prop,
   Vue,
   Watch,
 } from 'vue-property-decorator';
@@ -70,11 +69,5 @@ export default class Auth extends Vue {
 
 .v-content {
   margin-left: 80px;
-
-  padding-top: 64px !important;
-
-  @media screen and (max-width: 960px) {
-    padding-top: 56px !important;
-  }
 }
 </style>

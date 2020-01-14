@@ -14,10 +14,13 @@ module.exports = {
     'lines-between-class-members': 'off',
     'class-methods-use-this': 'off',
     'import/no-unresolved': [2, { ignore: ['bloom_native'] }],
+    'no-unused-vars': 'off',
+    '@typescript-eslint/no-unused-vars': 'error',
   },
   parserOptions: {
     parser: '@typescript-eslint/parser',
   },
+  plugins: ['@typescript-eslint'],
   overrides: [
     {
       files: [

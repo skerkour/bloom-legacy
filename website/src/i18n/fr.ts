@@ -1,25 +1,35 @@
 export default {
+  labels: {
+    other_downloads: 'Tous les Téléchargements',
+    learn_more: 'Plus d\'info',
+    coming_soon_btn: 'Sortie en Janvier 2020',
+  },
+  appbar: {
+    download: 'Télécharger',
+    features: 'Fonctionnalités',
+  },
   landing: {
-    mission: 'Notre mission: Empowering people',
-    subtitle1: 'Conversez, Collaborez, Découvrez, Innovez.',
-    subtitle2: 'Reprenez le contrôle avec <span class="blm-rounded-elegance"><b>Bloom</b></span>',
-    explore_features: 'Découvrez toutes les fonctionnalités',
+    mission: 'Nous pensons que chacun a droit au respect et à la vie privée',
+    subtitle2: '<b>Reprenez le contrôle avec <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
+    explore_features: 'Découvrez les fonctionnalités',
     feature1: {
-      title: 'Rapide, Simple, Sécurisé',
-      description: `As an Open Source project anyone can inspect how Bloom works.
-      We use state of the art cryptography to keep your data secure.
-      There are no ads, no affiliate marketers, no creepy tracking. <br />
-      Just open technology for a fast, simple, and secure experience.`,
+      // title: 'Fast, Simple, Secure',
+      title: 'Un lieu sûr pour toutes vos données',
+      description: `En tant que projet Open Source, n'importe qui peut regarder comment fonctionne
+      Bloom. Nous utilisons l'état de l'art en cryptographie pour garder vos données en sécurité.
+      Il n'y a pas de publicité, pas de marketing d'affiliation, pas de trackers envahissants. <br />
+      Seulement de la technologie ouverte pour une expérience rapide, simple et sécure.`,
     },
     feature2: {
-      title: 'Bring your team together',
-      description: `Whether it's your friends or your colleagues, Bloom is made for collaboration.
-      Organize conversations, share files and ideas, organize your life.
-      Go from chatting to meeting up with Calendar, Notes, Drive and more.<br />
-      Never stop having fun.`,
+      title: 'Un outil collaboratif',
+      description: `Que ce soit avec vos amis ou vos collègues, Bloom a été pensé pour la coopération.
+      Organisez vos fichiers, partagez vos idées et organisez votre vie.
+      Enfin des outils pensés pour passer moins de temps devant un écran, et plus dans la vraie vie.<br />
+      N'arrêtez jamais le fun.`,
     },
   },
-  other_downloads: 'Tous les Téléchargements',
-  download: 'Télécharger',
-  features: 'Fonctionnalités',
+  p404: {
+    not_found: 'Page non trouvée',
+    back_home: 'Retour à l\'accueil',
+  },
 };

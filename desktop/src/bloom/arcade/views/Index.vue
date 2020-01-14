@@ -8,7 +8,7 @@
     >
 
     <v-img
-      src="/assets/icons/2048.png"
+      src="/assets/imgs/icons/2048.png"
       height="200px"
       width="200px"
     ></v-img>
@@ -21,7 +21,7 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 
 // const { BrowserWindow } = require('electron').remote;
 

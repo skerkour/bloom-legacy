@@ -1,3 +1,2 @@
-# rust
-/target
-Cargo.lock
+libcore.so
+/dist

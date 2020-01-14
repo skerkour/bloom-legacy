@@ -30,10 +30,10 @@
       </v-flex>
 
       <v-flex xs12 text-xs-center v-if="error !== ''|| success !== ''">
-        <v-alert icon="mdi-alert-circle" type="error" v-if="error !== ''">
+        <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
           {{ error }}
         </v-alert>
-        <v-alert icon="mdi-check-circle" type="success" v-if="success !== ''">
+        <v-alert icon="mdi-check-circle" type="success" :value="success !== ''">
           {{ success }}
         </v-alert>
       </v-flex>
@@ -62,7 +62,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { mask } from 'vue-the-mask';
-import { Native, Message } from '@/native';
+import core from '@/core';
+import { VerifyRegistration } from '../core/messages';
+import AuthMethod from '../core/methods';
 
 
 const RESEND_TIMEOUT = 42_000;
@@ -126,15 +128,12 @@ export default class RegistrationVerify extends Vue {
     this.showSendNewCode = false;
     this.isLoading = true;
     const code = this.cleanCode();
-    const message: Message = {
-      type: 'auth.registration_verify',
-      data: {
-        id: this.pendingAccountId,
-        code,
-      },
+    const params: VerifyRegistration = {
+      id: this.pendingAccountId,
+      code,
     };
     try {
-      const res = await Native.call(message);
+      await core.call(AuthMethod.VerifyRegistration, params);
       this.$router.push({ path: '/auth/registration/complete', params: { pendingAccountId: this.pendingAccountId } });
     } catch (err) {
       this.error = err.message;

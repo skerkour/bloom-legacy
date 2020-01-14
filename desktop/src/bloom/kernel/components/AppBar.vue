@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar elevation="0" fixed>
+  <v-app-bar elevation="0" fixed app>
 
     <div class="blm-app-bar-left-spacer" />
 
@@ -28,10 +28,11 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
+
+const config = require('@/config');
 
 const { shell } = (window as any).require('electron');
-const config = require('@/config');
 
 
 @Component

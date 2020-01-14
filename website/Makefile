@@ -9,9 +9,7 @@ DATE = $(shell date +"%Y-%m-%d")
 
 build:
 	npm run build
-
-build_staging:
-	NODE_ENV=satging npm run build:staging
+	cp dist/index.html dist/404.html
 
 install:
 	npm install

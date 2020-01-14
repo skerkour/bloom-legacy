@@ -1,11 +1,10 @@
 import 'dart:async';
-import 'dart:convert';
+import 'package:bloom/bloom/auth/core/messages.dart';
+import 'package:bloom/bloom/auth/core/methods.dart';
 import 'package:bloom/bloom/kernel/blocs/bloc_provider.dart';
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../messages.dart';
 
 class RegistrationCompleteBloc extends BlocBase {
   RegistrationCompleteBloc();
@@ -28,16 +27,16 @@ class RegistrationCompleteBloc extends BlocBase {
     debugPrint('RegistrationCompleteBloc.complete called');
     _isLoadingController.add(true);
 
-    final String message = jsonEncode(AuthGuiRegistrationComplete(
+    final AuthGuiCompleteRegistration message = AuthGuiCompleteRegistration(
       id: pendingAccountId,
       username: username,
       password: password,
-    ));
+    );
 
     Map<String, dynamic> json;
 
     try {
-      json = await compute(RegistrationCompleteBloc._nativeCall, message);
+      json = await coreCall(AuthMethod.complete_registration, message);
     } catch (err) {
       rethrow;
     } finally {
@@ -45,13 +44,5 @@ class RegistrationCompleteBloc extends BlocBase {
     }
 
     return json;
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 }

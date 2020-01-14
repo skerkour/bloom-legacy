@@ -30,10 +30,12 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Native, Message } from '@/native';
 import BlmNote from './Note.vue';
 import NoteDialog from './NoteDialog.vue';
-import { Note, GuiNotes } from '@/native/messages/notes';
+import core from '@/core';
+import { Note, Notes } from '../core/messages';
+import NotesMethod from '../core/methods';
+
 
 const { log } = require('@bloom42/astro');
 
@@ -66,13 +68,10 @@ export default class Index extends Vue {
   async fetchNotes() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'notes.gui.list_notes',
-      data: {},
-    };
+
     try {
-      const res = await Native.call(message);
-      this.notes = (res.data as GuiNotes).notes;
+      const res = await core.call(NotesMethod.ListNotes, core.empty);
+      this.notes = (res.data as Notes).notes;
     } catch (err) {
       log.error(err);
     } finally {
@@ -83,13 +82,10 @@ export default class Index extends Vue {
   async fetchArchive() {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'notes.gui.get_archive',
-      data: {},
-    };
+
     try {
-      const res = await Native.call(message);
-      this.notes = (res.data as GuiNotes).notes;
+      const res = await core.call(NotesMethod.ListArchived, core.empty);
+      this.notes = (res.data as Notes).notes;
     } catch (err) {
       this.error = err.message;
     } finally {

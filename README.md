@@ -8,7 +8,7 @@
 
 --------
 
-Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
+Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free-and-open-source-google
 
 1. [Download](#download)
 2. [Documentation](#documentation)
@@ -27,29 +27,23 @@ Why? How? What? 👉 Read The Guide: https://bloom.sh/the-guide
 
 ## Documentation
 
-See [https://bloom.sh/the-guide/projects/bloom](https://bloom.sh/the-guide/projects/bloom)
+See [the wiki](https://gitlab.com/bloom42/bloom/-/wikis)
 
 
 ## Development
 
-See [https://bloom.sh/the-guide/projects/bloom/development.html](https://bloom.sh/the-guide/projects/bloom/development.html)
+See https://gitlab.com/bloom42/bloom/-/wikis/development
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
-[https://bloom.sh/the-guide/organization/contributing.html](https://bloom.sh/the-guide/organization/contributing.html) for guidance.
+https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
 
 ## Licensing
 
-See `LICENSE.txt` and [https://bloom.sh/licensing](https://bloom.sh/licensing)
-
-
-## Sponsoring
-
-Bloom is a free and open source project. If you are interested in supporting this project, please visit our
-[dedicated 'Become a sponsor' page](https://bloom.sh/become-a-sponsor) ✌️
+See `LICENSE.txt` and https://gitlab.com/bloom42/wiki/-/wikis/organization/licensing
 
 
 ## Security

@@ -16,6 +16,7 @@ export enum Mutations {
   SIGN_OUT,
   SET_PENDING_ACCOUNT,
   CLEAR_PENDING_ACCOUNT,
+  SWITCH_DARK_MODE,
 }
 
 export default new Vuex.Store<AppState>({
@@ -35,6 +36,9 @@ export default new Vuex.Store<AppState>({
     },
     [Mutations.CLEAR_PENDING_ACCOUNT](state: AppState) {
       state.pending_account = undefined;
+    },
+    [Mutations.SWITCH_DARK_MODE](state: AppState) {
+      state.dark_mode = !state.dark_mode;
     },
   },
   actions: {

@@ -1,44 +1,39 @@
-.PHONY: dev install clean assets dev_vue dev_electron icons
-.PHONY: test lint build dev_native test_native lint_native
+.PHONY: build
+build:
+	npm run build:electron
 
+.PHONY: clean
+clean:
+	rm -rf dist dist_electron
 
-dev_native:
-	npm run dev:native
+.PHONY: re
+re: clean build
 
-dev_electron:
+.PHONY: dev
+dev:
 	npm urn dev:electron
 
-clean:
-	rm -rf dist node_modules/
-
+.PHONY: install
 install:
 	npm install
 
+.PHONY: test
 test:
 	npm run test:unit
 
-test_native:
-	cd native && cargo test
-
-lint_native:
-	cd native && cargo fmt --all -- --check
-	cd native && cargo clippy -- -D warnings -A clippy::needless_return
-
-fmt_native:
-	cd native && cargo fmt
-
+.PHONY: lint
 lint:
 	npm run lint
 
-build:
-	npm run build
-
+.PHONY: assets
 assets:
 	rm -rf public/assets
-	mkdir -p public/assets public/assets/fonts
-	cp -r ../assets/icons public/assets/icons
-	cp ../assets/desktop/icons/* public/assets/icons/
+	mkdir -p public/assets public/assets/fonts public/assets/imgs
+	cp -r ../assets/icons public/assets/imgs/icons
+	cp ../assets/desktop/icons/* public/assets/imgs/icons/
+	cp ../assets/desktop/imgs/* public/assets/imgs/
 	cp ../assets/fonts/rounded_elegance.ttf public/assets/fonts/
 
+.PHONY: icons
 icons:
 	npm run icons

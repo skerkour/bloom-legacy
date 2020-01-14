@@ -11,28 +11,29 @@
             <li><router-link class="nav-link" to="/security">{{ $t('footer.organization.security') }}</router-link></li>
             <li><router-link class="nav-link" to="/terms">{{ $t('footer.organization.terms') }}</router-link></li>
             <li><router-link class="nav-link" to="/privacy">{{ $t('footer.organization.privacy') }}</router-link></li>
-            <li><a class="nav-link" href="/the-guide">The Guide</a></li>
+            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis">Wiki</a></li>
           </ul>
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3">{{ $t('footer.product.title') }}</h5>
           <ul>
+            <li><router-link to="/faq">{{ $t('footer.product.faq') }}</router-link></li>
             <li><router-link to="/help">{{ $t('footer.product.help') }}</router-link></li>
             <li><router-link class="nav-link" to="/download">{{ $t('footer.product.download') }}</router-link></li>
-            <li><a class="nav-link" href="/the-guide/organization/contributing.html">{{ $t('footer.product.contribute') }}</a></li>
-            <li><a class="nav-link" href="/the-guide/projects/bloom/index.html">{{ $t('footer.product.documentation') }}</a></li>
+            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing">{{ $t('footer.product.contribute') }}</a></li>
+            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/bloom/-/wikis">{{ $t('footer.product.documentation') }}</a></li>
           </ul>
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3">{{ $t('footer.community.title') }}</h5>
           <ul>
-            <li><a class="nav-link" href="/blog">Blog</a></li>
-            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">Open Source</a></li>
+            <li><a class="nav-link" href="https://fatalentropy.com" target="_blank" rel="noopener">Blog</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42/forum" target="_blank" rel="noopener">Forum</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
-            <li><a class="nav-link" href="https://discord.gg/HmDQDGv" target="_blank" rel="noopener">Discord Chat</a></li>
-            <li><a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">{{ $t('footer.community.sponsoring') }}</a></li>
+            <li><a class="nav-link" href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">Mastodon</a></li>
           </ul>
         </v-col>
 

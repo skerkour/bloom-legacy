@@ -1,10 +1,8 @@
-import 'dart:convert';
-
-import 'package:bloom/native/core_ffi.dart';
+import 'package:bloom/bloom/calendar/core/messages.dart';
+import 'package:bloom/bloom/calendar/core/methods.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-
-import '../messages.dart';
 
 class Event {
   Event({
@@ -58,45 +56,27 @@ class Event {
       DateTime startAt, DateTime endAt) async {
     debugPrint('Event.create called');
 
-    final Map<String, dynamic> res = await compute(Event._nativeCall,
-        CalendarGuiCreateEvent(title, description, startAt, endAt));
-    final CalendarGuiEvent ret = CalendarGuiEvent.fromJson(res);
-
-    return ret.event;
+    return Event.fromJson(await coreCall(CalendarMethod.update_event,
+        CalendarCreateEvent(title, description, startAt, endAt)));
   }
 
   Future<Event> update() async {
     debugPrint('Event.update called (id: $id)');
-
-    final Map<String, dynamic> res =
-        await compute(Event._nativeCall, CalendarGuiUpdateEvent(this));
-    final CalendarGuiEvent ret = CalendarGuiEvent.fromJson(res);
-
-    return ret.event;
+    return Event.fromJson(await coreCall(CalendarMethod.update_event, this));
   }
 
   Future<void> delete() async {
     debugPrint('Event.delete called (id: $id)');
 
-    await compute(Event._nativeCall, CalendarGuiDeleteEvent(id));
+    await coreCall(CalendarMethod.delete_event, CalendarDeleteEvent(id));
   }
 
   static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
     debugPrint('Event.find called');
-
-    final Map<String, dynamic> res =
-        await compute(Event._nativeCall, CalendarListEvents(startAt, endAt));
-    final CalendarGuiEvents resMsg = CalendarGuiEvents.fromJson(res);
+    final CalendarEvents resMsg = CalendarEvents.fromJson(await coreCall(
+        CalendarMethod.list_events, CalendarListEvents(startAt, endAt)));
 
     return resMsg.events;
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 
   DateTime _zeroizeDay(DateTime day) {

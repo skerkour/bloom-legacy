@@ -4,8 +4,7 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">
-          <span class="blm-rounded-elegance">Bloom</span> is on a mission to empower people
-          with open technologies
+          {{ $t('features.title') }}
         </h1>
 
         <blm-download-btn />
@@ -26,20 +25,24 @@
 
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
         order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
-        <v-avatar size="128px" v-if="feature.icon">
-          <img :src="feature.icon" contain />
-        </v-avatar>
-        <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+        <router-link :to="`/features/${feature.learnMore}`">
+          <v-avatar size="128px" v-if="feature.icon">
+            <img :src="feature.icon" contain />
+          </v-avatar>
+          <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+        </router-link>
       </v-col>
 
       <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
+        <router-link :to="`/features/${feature.learnMore}`">
         <h3 class="display-1 font-weight-regular">
           {{ feature.name }}
         </h3>
         <p class="mt-5" v-html="feature.description"></p>
         <v-btn v-if="feature.learnMore" :to="`/features/${feature.learnMore}`" text color="primary">
-          Learn more
+          {{ $t('labels.learn_more') }}
         </v-btn>
+        </router-link>
       </v-col>
     </v-row>
 
@@ -48,7 +51,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DownloadBtn from '@/components/download_btn.vue';
+import DownloadBtn from '@/components/coming_soon_btn.vue';
 import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 
@@ -61,82 +64,81 @@ import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 export default class Features extends Vue {
   // props
   // data
-  features = [
-    {
-      name: 'Chat',
-      icon: '/static/imgs/icons/chat.svg',
-      description: `Bloom messages and calls are always end-to-end encrypted and
-      engineered to keep your communication safe. We can't read your messages or see your calls,
-      and no one else can either.`,
-      learnMore: 'chat',
-    },
-    {
-      name: 'Drive',
-      icon: '/static/imgs/icons/drive.svg',
-      description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
-        <b>30GB free.</b>`,
-      learnMore: 'drive',
-    },
-    {
-      name: 'Music',
-      icon: '/static/imgs/icons/music.svg',
-      description: 'Never stop enjoying your music! Directly from your drive.',
-      learnMore: 'music',
-    },
-    {
-      name: 'Calendar',
-      icon: '/static/imgs/icons/calendar.svg',
-      description: 'Get organized on the go with the Bloom Calendar!',
-      learnMore: 'calendar',
-    },
-    { name: 'dl_btn' },
-    {
-      name: 'Bitflow',
-      icon: '/static/imgs/icons/bitflow.svg',
-      description: `Your cloud-based download manager.
-      Download any file and torrent directly to your Drive.`,
-      learnMore: 'bitflow',
-    },
-    {
-      name: 'Notes',
-      icon: '/static/imgs/icons/notes.svg',
-      description: `Quickly capture what’s on your mind and get a reminder later
-        at the right place or time.`,
-      learnMore: 'notes',
-    },
-    {
-      name: 'Arcade',
-      icon: '/static/imgs/icons/arcade.svg',
-      description: 'Never stop having fun!',
-      learnMore: 'arcade',
-    },
-    {
-      name: 'Books',
-      icon: '/static/imgs/icons/books.svg',
-      description: 'Bloom Books is the single destination for all the books you love, and the ones you\'re about to. ',
-      learnMore: 'books',
-    },
-    { name: 'dl_btn' },
-    {
-      name: 'Gallery',
-      icon: '/static/imgs/icons/gallery.svg',
-      description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
-      learnMore: 'gallery',
-    },
-    {
-      name: 'Contacts',
-      icon: '/static/imgs/icons/contacts.svg',
-      description: 'Keep your contacts organized and up to date.',
-      learnMore: 'contacts',
-    },
-    {
-      name: 'Scan QR Codes',
-      icon: '/static/imgs/features/qrcode.svg',
-      description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
-    },
-  ];
-
   // computed
+  get features(): any[] {
+    return [
+      // {
+      //   name: 'Chat',
+      //   icon: '/static/imgs/icons/chat.svg',
+      //   description: `Bloom messages and calls are always end-to-end encrypted and
+      //   engineered to keep your communication safe. We can't read your messages or see your calls
+      //   and no one else can either.`,
+      //   learnMore: 'chat',
+      // },
+      {
+        name: 'Drive',
+        icon: '/static/imgs/icons/drive.svg',
+        description: this.$t('features.drive_description'),
+        learnMore: 'drive',
+      },
+      {
+        name: 'Music',
+        icon: '/static/imgs/icons/music.svg',
+        description: this.$t('features.music_description'),
+        learnMore: 'music',
+      },
+      {
+        name: 'Calendar',
+        icon: '/static/imgs/icons/calendar.svg',
+        description: this.$t('features.calendar_description'),
+        learnMore: 'calendar',
+      },
+      {
+        name: 'Notes',
+        icon: '/static/imgs/icons/notes.svg',
+        description: this.$t('features.notes_description'),
+        learnMore: 'notes',
+      },
+      { name: 'dl_btn' },
+      {
+        name: 'Bitflow',
+        icon: '/static/imgs/icons/bitflow.svg',
+        description: this.$t('features.bitflow_description'),
+        learnMore: 'bitflow',
+      },
+      {
+        name: 'Arcade',
+        icon: '/static/imgs/icons/arcade.svg',
+        description: this.$t('features.arcade_description'),
+        learnMore: 'arcade',
+      },
+      // {
+      //   name: 'Books',
+      //   icon: '/static/imgs/icons/books.svg',
+      //   description: 'Bloom Books is
+      // the single destination for all the books you love, and the ones you\'re about to. ',
+      //   learnMore: 'books',
+      // },
+      {
+        name: 'Contacts',
+        icon: '/static/imgs/icons/contacts.svg',
+        description: this.$t('features.contacts_description'),
+        learnMore: 'contacts',
+      },
+      { name: 'dl_btn' },
+      {
+        name: 'Gallery',
+        icon: '/static/imgs/icons/gallery.svg',
+        description: this.$t('features.gallery_description'),
+        learnMore: 'gallery',
+      },
+      {
+        name: 'QR Codes',
+        icon: '/static/imgs/icons/qrcode.svg',
+        description: this.$t('features.qrcodes_description'),
+      },
+    ];
+  }
   // lifecycle
   // watch
   // methods
@@ -150,5 +152,14 @@ export default class Features extends Vue {
 
 .blm-feature {
   margin-top: 42px;
+}
+
+a, a * {
+  text-decoration: none !important;
+  color: inherit !important;
+}
+
+.v-btn--router {
+  color: white !important;
 }
 </style>

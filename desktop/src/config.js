@@ -2,10 +2,12 @@ const path = require('path');
 
 const WEBSITE_DOMAIN = 'bloom.sh';
 
+
+// eslint disables are due to __static being marked as not declared
 export default {
-  TRAY_ICON: path.join(__static, 'assets', 'icons', 'tray.png'),
+  TRAY_ICON: path.join(__static, 'assets', 'icons', 'tray.png'), // eslint-disable-line
   WINDOW_TITLE: 'Bloom',
-  WINDOW_ICON: path.join(__static, 'bloom_1024.png'),
+  WINDOW_ICON: path.join(__static, 'bloom_1024.png'), // eslint-disable-line
   WINDOW_URL: 'http://localhost:8080',
   WINDOW_DEFAULT_WIDTH: 900,
   WINDOW_DEFAULT_HEIGHT: 700,

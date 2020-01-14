@@ -10,8 +10,6 @@
 
         <!-- <v-row justify="center"> -->
         <v-btn
-          outlined
-          large
           color="primary"
           class="mb-4"
           @click="createEvent"
@@ -100,12 +98,14 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import EventDialog from '../components/EventDialog.vue';
-import { Native, Message } from '@/native';
-import { Event as EventModel, GuiEvents } from '@/native/messages/calendar';
+import core from '@/core';
+import { ListEvents, Event as EventModel, Events } from '../core/messages';
+import CalendarMethod from '../core/methods';
 
+const { log } = require('@bloom42/astro');
 
 @Component({
   components: {
@@ -149,7 +149,7 @@ export default class Index extends Vue {
       // because vuetify does not support multi day events
       const diff = moment(e.end_at).diff(e.start_at, 'days');
       for (let i = 1; i <= diff; i += 1) {
-        const e2 = Object.assign({}, e);
+        const e2 = { ...e };
         e2.date = new Date(new Date(e2.start_at).setDate(new Date(e2.start_at).getDate() + i))
           .toISOString().substr(0, 10);
         (map[e2.date] = map[e2.date] || []).push(e);
@@ -168,17 +168,14 @@ export default class Index extends Vue {
   async fetchData(startAt?: Date, endAt?: Date) {
     this.error = '';
     this.isLoading = true;
-    const message: Message = {
-      type: 'calendar.gui.list_events',
-      data: {
-        start_at: startAt,
-        end_at: endAt,
-      },
+    const params: ListEvents = {
+      start_at: startAt,
+      end_at: endAt,
     };
     try {
-      const res = await Native.call(message);
-      this.events = (res.data as GuiEvents).events;
-      console.log(this.events);
+      const res = await core.call(CalendarMethod.ListEvents, params);
+      this.events = (res.data as Events).events;
+      log.debug(this.events);
     } catch (err) {
       this.error = err.message;
     } finally {

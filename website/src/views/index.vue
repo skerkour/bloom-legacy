@@ -5,7 +5,7 @@
       <v-col cols="12" sm="6" class="text-center">
         <h1 class="display-3 mb-5">{{ $t('landing.mission') }}</h1>
 
-        <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4>
+        <!-- <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4> -->
         <h4 class="headline mb-5 font-weight-light" v-html="$t('landing.subtitle2')"></h4>
 
         <blm-download-btn />
@@ -28,6 +28,41 @@
         </v-img>
       </v-col>
 
+    </v-row>
+
+    <v-row class="text-center text--darken-1 grey--text" align="center" justify="center" >
+      <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
+        <h5 class="title mb-2">#1 Product of the Day</h5>
+        <a href="https://www.producthunt.com/posts/bloom-05383d81-983e-4d4d-b22f-78dd91066cda" target="_blank" rel="noopener noreferer" class="blm-pointer">
+          <v-img alt="Product Hunt" src="/static/imgs/landing/ph.svg" width="200px" contain>
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-2" />
+              </v-row>
+            </template>
+          </v-img>
+        </a>
+      </v-col>
+      <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
+        <h5 class="title mb-2">#1 Post on</h5>
+        <a href="https://news.ycombinator.com/item?id=20105567" target="_blank" rel="noopener noreferer" class="blm-pointer">
+          <v-img alt="Hacker news" src="/static/imgs/landing/hn.svg" width="200px" >
+            <template v-slot:placeholder>
+              <v-row
+                class="fill-height ma-0"
+                align="center"
+                justify="center"
+              >
+                <v-progress-circular indeterminate color="grey lighten-2" />
+              </v-row>
+            </template>
+          </v-img>
+        </a>
+      </v-col>
     </v-row>
 
     <v-row class="mb-5 blm-features align-center">
@@ -71,7 +106,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DownloadBtn from '@/components/download_btn.vue';
+import DownloadBtn from '@/components/coming_soon_btn.vue';
 import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
 

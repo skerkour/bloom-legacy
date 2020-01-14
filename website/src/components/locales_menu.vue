@@ -45,7 +45,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { saveLocale } from '@/utils/locales';
+import { saveLang } from '@/utils/lang';
 
 interface Language {
   name: string,
@@ -68,16 +68,16 @@ export default class LocalesMenu extends Vue {
       locale: 'fr',
       flag: '/static/imgs/flags/france.png',
     },
-    {
-      name: 'Español',
-      locale: 'es',
-      flag: '/static/imgs/flags/spain.png',
-    },
-    {
-      name: 'Português',
-      locale: 'pt',
-      flag: '/static/imgs/flags/portugal.png',
-    },
+    // {
+    //   name: 'Español',
+    //   locale: 'es',
+    //   flag: '/static/imgs/flags/spain.png',
+    // },
+    // {
+    //   name: 'Português',
+    //   locale: 'pt',
+    //   flag: '/static/imgs/flags/portugal.png',
+    // },
   ];
 
   // computed
@@ -85,10 +85,10 @@ export default class LocalesMenu extends Vue {
     switch (this.$i18n.locale) {
       case 'fr':
         return this.languages[1];
-      case 'es':
-        return this.languages[2];
-      case 'pt':
-        return this.languages[3];
+      // case 'es':
+      //   return this.languages[2];
+      // case 'pt':
+      //   return this.languages[2];
       default:
         return this.languages[0];
     }
@@ -96,9 +96,9 @@ export default class LocalesMenu extends Vue {
   // lifecycle
   // watch
   // methods
-  setLocale(locale: Language) {
-    this.$i18n.locale = locale.locale;
-    saveLocale(locale.locale);
+  setLocale(lang: Language) {
+    this.$i18n.locale = lang.locale;
+    saveLang(lang.locale);
   }
 }
 </script>

@@ -3,18 +3,21 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center">
 
-        <h1 class="mt-5 mb-3 display-1 font-weight-medium">Security</h1>
-        <p class="body-1 font-weight-regular mb-5">
-          Keeping our customer data safe and secure is our top priority. We take threats very
-        seriously and work hard to protect our customers and their data. Your input and feedback
-          on our security is greatly appreciated.
+        <h1 class="mt-5 mb-3 display-1 font-weight-medium">{{ $t('security.title') }}</h1>
+        <p class="body-1 mb-5 font-weight-regular mb-5">
+          {{ $t('security.description') }}
         </p>
 
-        <h2 class="mt-5 mb-3 display-1 font-weight-medium">Reporting Issues</h2>
+        <h2 class="mt-5 mb-3 display-1 font-weight-medium">{{ $t('security.issues_title') }}</h2>
+
+        <p class="body-1 mb-5 font-weight-regular" v-html="$t('security.issues_description')"></p>
+
+        <h2 class="mt-5 mb-3 display-1 font-weight-medium">{{ $t('security.hall_title') }}</h2>
 
         <p class="body-1 font-weight-regular">
-          Send reports directly to <a href="mailto:security@bloom.sh">security@bloom.sh</a>
-          and we will get back to you faster than the light.
+          <ul>
+            <lil><a href="https://www.facebook.com/profile.php?id=100004793059302" rel="noopener noreferrer">Hassan Ahmed Hacker (Xen Lee)</a></lil>
+          </ul>
         </p>
 
       </v-col>

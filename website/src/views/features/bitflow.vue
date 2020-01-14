@@ -1,7 +1,7 @@
 <template>
   <blm-feature-page
     name="Bitflow"
-    description="Download torrents to a secured cloud. Fast. Online."
+    :description="$t('features.bitflow.description')"
     hero="/static/imgs/features/bitflow_hero.svg"
     :features="features"
   />
@@ -20,27 +20,26 @@ import FeaturePage from '@/components/feature_page.vue';
 export default class Drive extends Vue {
   // props
   // data
-  features = [
-    {
-      description: `Your files are downloaded directly to your Drive and can can be accessed from
-        any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
-      img: '/static/imgs/features/bitflow_devices.svg',
-      name: 'Download anywhere, anytime',
-    },
-    {
-      description: `With Bitflow you don’t need to download any program, all you need is a
-      browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
-      img: '/static/imgs/features/bitflow_protocols.svg',
-      name: 'No need to install a torrent client',
-    },
-    {
-      description: `It takes a long time to download large files with a residential bandwidth.
-        Not with Bitflow! We'll download your files in the blink of an eye!`,
-      img: '/static/imgs/features/bitflow_speed.svg',
-      name: 'Download big files faster',
-    },
-  ];
   // computed
+  get features(): any[] {
+    return [
+      {
+        description: this.$t('features.bitflow.feature1.description'),
+        img: '/static/imgs/features/bitflow_devices.svg',
+        name: this.$t('features.bitflow.feature1.name'),
+      },
+      {
+        description: this.$t('features.bitflow.feature2.description'),
+        img: '/static/imgs/features/bitflow_protocols.svg',
+        name: this.$t('features.bitflow.feature2.name'),
+      },
+      {
+        description: this.$t('features.bitflow.feature3.description'),
+        img: '/static/imgs/features/bitflow_speed.svg',
+        name: this.$t('features.bitflow.feature3.name'),
+      },
+    ];
+  }
   // lifecycle
   // watch
   // methods

@@ -1,5 +1,5 @@
 <template>
-  <v-app :dark="darkMode">
+  <v-app :dark="$store.state.dark_mode">
     <component :is="layout">
       <router-view/>
     </component>
@@ -26,10 +26,6 @@ export default class App extends Vue {
     const layout = this.$route.meta.layout
       ? `blm-layout-${this.$route.meta.layout}` : 'blm-layout-default';
     return layout;
-  }
-
-  get darkMode() {
-    return this.$store.state.dark_mode;
   }
 
   // lifecycle

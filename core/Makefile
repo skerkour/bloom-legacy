@@ -1,39 +1,48 @@
-.PHONY: build clean re test build_debug
-.PHONY: lint fmt fmt_check audit
-
-NAME := bloom_core
-VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
+NAME := blmcore
+# VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 
-all: build
 
-dev:
-	cargo watch -x 'check'
+.PHONY: all
+all: build_desktop build_android
 
-build:
-	cargo build --release
-
-build_debug:
-	cargo build
-
-clean:
-	rm -rf target/
-
-re: clean build
-
-test:
-	cargo test
-	cd bloom/auth && cargo test
-
+.PHONY: fmt
 fmt:
-	cargo fmt
+	go fmt ./...
 
-fmt_check:
-	cargo fmt --all -- --check
 
-lint:
-	cargo clippy -- -D warnings -A clippy::needless_return
+.PHONY: build_desktop
+build_desktop:
+	go build -o dist/$(NAME)server server/*.go
+	cp dist/$(NAME)server ../desktop/$(NAME)server
 
-audit:
-	cargo audit
+.PHONY: test
+test:
+	go test ./...
+
+PHONY: build_android
+build_android: build_android_armv8 build_android_armv7 build_android_x86 # build_android_amd64
+
+PHONY: build_android_armv8
+build_android_armv8:
+	GOOS=android GOARCH=arm64 CGO_ENABLED=1 CC=aarch64-linux-android28-clang go build --tags "android" -o dist/android/armv8/lib$(NAME).so -buildmode=c-shared ffi/*.go
+	cp dist/android/armv8/lib$(NAME).so ../mobile/android/app/src/main/jniLibs/arm64-v8a/lib$(NAME).so
+
+PHONY: build_android_armv7
+build_android_armv7:
+	GOOS=android GOARM=7 GOARCH=arm CGO_ENABLED=1 CC=arm-linux-androideabi-clang go build --tags "android" -o dist/android/armv7/lib$(NAME).so -buildmode=c-shared ffi/*.go
+	cp dist/android/armv7/lib$(NAME).so ../mobile/android/app/src/main/jniLibs/armeabi-v7a/lib$(NAME).so
+
+PHONY: build_android_x86
+build_android_x86:
+	GOOS=android GOARCH=386 CGO_ENABLED=1 CC=i686-linux-android18-clang go build --tags "android" -o dist/android/x86/lib$(NAME).so -buildmode=c-shared ffi/*.go
+	cp dist/android/x86/lib$(NAME).so ../mobile/android/app/src/main/jniLibs/x86/lib$(NAME).so
+
+# PHONY: build_android_amd64
+# build_android_amd64:
+# 	GOOS=android GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-linux-android-clang go build --tags "android" -o dist/amd64/lib$(NAME).so -buildmode=c-shared ffi/*.go
+
+.PHONY: clean
+clean:
+	rm -rf dist

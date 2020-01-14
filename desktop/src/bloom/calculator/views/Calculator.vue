@@ -28,9 +28,10 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Native, Message } from '@/native';
-import { GuiExpression } from '@/native/messages/calculator';
+import { Component, Vue } from 'vue-property-decorator';
+import core from '@/core';
+import { Expression } from '../core/messages';
+import CalculatorMethod from '../core/methods';
 
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
 const OPERATORS = ['+', '-', '*', '/'];
@@ -61,14 +62,12 @@ export default class Calculator extends Vue {
   }
 
   async evaluate() {
-    const message: Message = {
-      type: 'calculator.gui.expression',
-      data: {
-        expression: this.formula,
-      },
+    this.error = '';
+    const params: Expression = {
+      expression: this.formula,
     };
     try {
-      const res = await Native.call(message);
+      const res = await core.call(CalculatorMethod.Calc, params);
       this.result = (res.data as any).result;
     } catch (err) {
       this.error = err.message;

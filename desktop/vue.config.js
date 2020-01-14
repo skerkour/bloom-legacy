@@ -1,5 +1,3 @@
-const webpack = require('webpack');
-
 module.exports = {
   configureWebpack: {
     externals: {
@@ -7,8 +5,8 @@ module.exports = {
       // JavaScript to implement a stub module.  We can't use `node-loader` for
       // this because it bakes in hard-coded paths and breaks the ability to
       // move compiled Electron apps between systems.
-      bloom_native: process.env.NODE_ENV === 'development'
-        ? "require('./native')" : undefined,
+      // bloom_native: process.env.NODE_ENV === 'development'
+      // ? "require('./native')" : undefined,
     },
     module: {
       rules: [
@@ -71,7 +69,7 @@ module.exports = {
           icon: 'build/icons/mac/icon.icns',
         },
         linux: {
-          category: 'Utility,Office', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
+          category: 'Utility,Network', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
           icon: 'build/icons/png',
         },
         win: {

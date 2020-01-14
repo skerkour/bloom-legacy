@@ -1,6 +1,6 @@
-import 'dart:convert';
-import 'package:bloom/native/core_ffi.dart';
-import 'package:bloom/bloom/notes/messages.dart';
+import 'package:bloom/bloom/notes/core/messages.dart';
+import 'package:bloom/bloom/notes/core/methods.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -59,54 +59,35 @@ class Note {
   static Future<Note> create(String title, String body, Color color) async {
     debugPrint('Note.create called');
 
-    final Map<String, dynamic> res = await compute(
-        Note._nativeCall, NotesGuiCreateNote(title, body, color.value));
-    final NotesGuiNote ret = NotesGuiNote.fromJson(res);
-
-    return ret.note;
+    return Note.fromJson(await coreCall(
+        NotesMethod.create_note, NotesCreateNote(title, body, color.value)));
   }
 
   Future<Note> update() async {
     debugPrint('Note.update called (id: $id)');
 
-    final Map<String, dynamic> res =
-        await compute(Note._nativeCall, NotesGuiUpdateNote(this));
-    final NotesGuiNote ret = NotesGuiNote.fromJson(res);
-
-    return ret.note;
+    return Note.fromJson(await coreCall(NotesMethod.update_note, this));
   }
 
   Future<void> delete() async {
     debugPrint('Note.delete called (id: $id)');
-    await compute(Note._nativeCall, NotesGuiDeleteNote(id));
+
+    await coreCall(NotesMethod.delete_note, NotesDeleteNote(id));
   }
 
   static Future<List<Note>> find() async {
     debugPrint('Note.find called');
-
-    final Map<String, dynamic> res =
-        await compute(Note._nativeCall, NotesGuiListNotes());
-    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(res);
-
+    final NotesNotes resMsg =
+        NotesNotes.fromJson(await coreCall(NotesMethod.list_notes, Empty()));
     return resMsg.notes;
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 
   static Future<List<Note>> findArchived() async {
     debugPrint('Note.findArchived called');
 
-    final Map<String, dynamic> res =
-        await compute(Note._nativeCall, NotesGetArchive());
-    final NotesGuiNotes resMsg = NotesGuiNotes.fromJson(res);
+    final NotesNotes resMsg =
+        NotesNotes.fromJson(await coreCall(NotesMethod.list_archived, Empty()));
     final List<Note> results = resMsg.notes;
-
     debugPrint('fetched: ${results.length} notes');
 
     return results;

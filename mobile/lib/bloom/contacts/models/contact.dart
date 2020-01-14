@@ -1,7 +1,7 @@
-import 'dart:convert';
+import 'package:bloom/bloom/contacts/core/messages.dart';
+import 'package:bloom/bloom/contacts/core/methods.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/material.dart';
-import 'package:bloom/native/core_ffi.dart';
-import 'package:bloom/bloom/contacts/messages.dart';
 import 'package:flutter/foundation.dart';
 import 'package:contacts_service/contacts_service.dart' as contacts_service;
 
@@ -102,44 +102,35 @@ class Contact {
   Future<Contact> create() async {
     debugPrint('Contact.create called');
 
-    final Map<String, dynamic> res = await compute(
-      Contact._nativeCall,
-      ContactsGuiCreateContact(
-        firstName: firstName,
-        lastName: lastName,
-        notes: notes,
-        deviceId: deviceId,
-        birthday: birthday,
-      ),
+    final ContactsCreateContact params = ContactsCreateContact(
+      firstName: firstName,
+      lastName: lastName,
+      notes: notes,
+      deviceId: deviceId,
+      birthday: birthday,
     );
-    final ContactsGuiContact ret = ContactsGuiContact.fromJson(res);
 
-    return ret.contact;
+    return Contact.fromJson(
+        await coreCall(ContactsMethod.create_contact, params));
   }
 
   Future<Contact> update() async {
     debugPrint('Contact.update called (id: $id)');
 
-    final Map<String, dynamic> res =
-        await compute(Contact._nativeCall, ContactsGuiUpdateContact(this));
-    final ContactsGuiContact ret = ContactsGuiContact.fromJson(res);
-
-    return ret.contact;
+    return Contact.fromJson(
+        await coreCall(ContactsMethod.update_contact, this));
   }
 
   Future<Contact> delete() async {
     debugPrint('Contact.delete called (id: $id)');
-    await compute(Contact._nativeCall, ContactsGuiDeleteContact(id));
+    await coreCall(ContactsMethod.delete_contact, ContactsDeleteContact(id));
     return this;
   }
 
   static Future<List<Contact>> list() async {
     debugPrint('Contact.find called');
-
-    final Map<String, dynamic> res =
-        await compute(Contact._nativeCall, ContactsGuiListContacts());
-    final ContactsGuiContacts resMsg = ContactsGuiContacts.fromJson(res);
-
+    final ContactsContacts resMsg = ContactsContacts.fromJson(
+        await coreCall(ContactsMethod.list_contacts, Empty()));
     return resMsg.contacts;
   }
 
@@ -155,14 +146,6 @@ class Contact {
     }
 
     return existingsContactsDeviceIds;
-  }
-
-  static Map<String, dynamic> _nativeCall<T>(T message) {
-    final String jsonPayload = jsonEncode(message);
-    debugPrint('input: $jsonPayload');
-    final Map<String, dynamic> res = coreFfi.call(jsonPayload);
-    debugPrint('output: $res');
-    return res;
   }
 }
 

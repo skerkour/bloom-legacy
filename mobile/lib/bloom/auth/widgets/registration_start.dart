@@ -1,8 +1,8 @@
 import 'package:bloom/bloom/auth/blocs/registration_start.dart';
+import 'package:bloom/bloom/auth/core/messages.dart';
 import 'package:bloom/bloom/auth/views/registration_verify.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import '../messages.dart';
 
 class RegistrationStart extends StatefulWidget {
   const RegistrationStart({Key key}) : super(key: key);
@@ -106,7 +106,7 @@ class _RegistrationStartState extends State<RegistrationStart> {
 
   Future<void> _onRegisterButtonPressed() async {
     final String email = emailController.text;
-    final AuthGuiRegistrationStarted messageRes =
+    final AuthRegistrationStarted messageRes =
         await _bloc.start(displayNameController.text, email);
     final RegistrationVerifyArguments args =
         RegistrationVerifyArguments(messageRes.id, email);

@@ -47,9 +47,10 @@
 </template>
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
-import { Native, Message } from '@/native';
-import { RegistrationStarted } from '@/native/messages/auth';
+import { Component, Vue } from 'vue-property-decorator';
+import core from '@/core';
+import { StartRegistration, RegistrationStarted } from '../core/messages';
+import AuthMethod from '../core/methods';
 import { StorePendingAccount } from '../models';
 import { Mutations } from '@/store';
 
@@ -76,15 +77,12 @@ export default class RegistrationStart extends Vue {
   async register() {
     this.isLoading = true;
     this.error = '';
-    const message: Message = {
-      type: 'auth.registration_start',
-      data: {
-        display_name: this.displayName,
-        email: this.email,
-      },
+    const params: StartRegistration = {
+      display_name: this.displayName,
+      email: this.email,
     };
     try {
-      const res = await Native.call(message);
+      const res = await core.call(AuthMethod.StartRegistration, params);
 
       const pendingAccount: StorePendingAccount = {
         email: this.email,

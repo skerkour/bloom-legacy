@@ -8,21 +8,19 @@ stages:
   - release
 
 include:
-  template: Dependency-Scanning.gitlab-ci.yml
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
 
 variables:
-  # Rust (core)
-  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
-  RUST_ENV: test
-  RUST_VERSION: nightly-2019-10-13
-  RUST_BACKTRACE: 1
-  RUST_IMAGE: rust:latest
+  # Go
+  GO_IMAGE: golang:latest
 
   # mobile
   ANDROID_COMPILE_SDK: "28"
   ANDROID_BUILD_TOOLS: "28.0.2"
   ANDROID_SDK_TOOLS:   "4333796"
-  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.10.14-dev.tar.xz"
+  FLUTTER_VERSION: "https://storage.googleapis.com/flutter_infra/releases/dev/linux/flutter_linux_v1.13.5-dev.tar.xz"
 
   # desktop
   NODE_ENV: test
@@ -33,6 +31,7 @@ variables:
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
+  POSTGRES_VERSION: 12
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
@@ -48,10 +47,6 @@ variables:
   STRIPE_PUBLIC_KEY: test
   STRIPE_SECRET_KEY: test
 
-  # blog
-  ZOLA_VERSION: "v0.9.0"
-
-
 # cache:
 #   paths:
 #     - cargo_home/
@@ -66,16 +61,11 @@ variables:
 
 test:core:
   stage: test
-  image: 'rust:stretch'
+  image: $GO_IMAGE
   tags:
     - docker
   script:
-    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-    - rustup default $RUST_VERSION
-    - rustup component add rustfmt clippy
     - cd core
-    - make fmt_check
-    - make lint
     - make test
 
 
@@ -110,35 +100,36 @@ test:mobile:
     - make lint
     - make test
 
-test:desktop:
-  stage: test
-  image: node:$NODE_VERSION
-  tags:
-    - docker
-  script:
-    - cd desktop
-    - make assets
-    - make install
-    #- make test
-    - make lint
 
-test:server:
-  stage: test
-  image: $RUST_IMAGE
-  tags:
-    - docker
-  script:
-    - cd server
-    - apt update && apt install -y gcc make git
-    - rustup default $RUST_VERSION
-    - rustup component add rustfmt clippy
-    - cp bloom.default.sane bloom.sane
-    - make assets
-    - make fmt_check
-    - make lint
-    - make test
-  services:
-    - postgres:11
+# test:desktop:
+#   stage: test
+#   image: node:$NODE_VERSION
+#   tags:
+#     - docker
+#   script:
+#     - cd desktop
+#     - make assets
+#     - make install
+#     #- make test
+#     - make lint
+
+# test:server:
+#   stage: test
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd server
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - rustup component add rustfmt clippy
+#     - cp bloom.default.sane bloom.sane
+#     - make assets
+#     - make fmt_check
+#     - make lint
+#     - make test
+#   services:
+#     - postgres:$POSTGRES_VERSION
 
 test:website:
   stage: test
@@ -150,34 +141,45 @@ test:website:
     - make install
     - make lint
 
+# test:bitflow:
+#   stage: test
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - rustup component add rustfmt clippy
+#     - cd bitflow
+#     - make fmt_check
+#     - make lint
+#     - make test
+
 ####################################################################################################
 ## Build
 ####################################################################################################
 
-# TODO
-
 build:core:
   stage: build
-  image: 'rust:stretch'
+  image: $GO_IMAGE
   tags:
     - docker
   script:
-    - apt update && apt install -y gcc make git libsodium-dev libc6-dev
-    - rustup default $RUST_VERSION
     - cd core
+    - make build_desktop
+
+
+build:desktop:
+  stage: build
+  image: node:$NODE_VERSION
+  tags:
+    - docker
+  script:
+    - cd desktop
+    - make assets
+    - make install
     - make build
 
-
-# build:desktop: Commented because we need to implement the native addon build
-#   stage: build
-#   image: node:$NODE_VERSION
-#   tags:
-#     - docker
-#   script:
-#     - cd desktop
-#     - make assets
-#     - make install
-#     - make build
 
 build:mobile:
   stage: build
@@ -208,20 +210,20 @@ build:mobile:
     - make assets
     - make build
 
-build:server:
-  stage: build
-  image: $RUST_IMAGE
-  tags:
-    - docker
-  script:
-    - cd server
-    - apt update && apt install -y gcc make git
-    - rustup default $RUST_VERSION
-    - make assets
-    - make build
-  artifacts:
-    paths:
-    - server/dist
+# build:server:
+#   stage: build
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd server
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - make assets
+#     - make build
+#   artifacts:
+#     paths:
+#     - server/dist
 
 build:website:
   stage: build
@@ -229,47 +231,47 @@ build:website:
   tags:
     - docker
   script:
-    - apt update && apt install curl make python3 python3-pip -y
-    - pip3 install mkdocs pymdown-extensions # for the-guide
+    - apt update && apt install curl make gzip -y
     - cd website/
     - make install
     - make build
-    - cd .. # go back to 'root' folder
-    # build blog
-    - "export LC_ALL=C.UTF-8"
-    - "export LANG=C.UTF-8"
-    - cd blog
-    - curl -L https://github.com/getzola/zola/releases/download/$ZOLA_VERSION/zola-$ZOLA_VERSION-x86_64-unknown-linux-gnu.tar.gz > zola.tar.gz
-    - tar -xzf zola.tar.gz
-    - ./zola build
-    - mv public ../website/dist/blog
-    - cd .. # go back to 'root' folder
-    # build the-guide
-    - cd the_guide
-    - make assets
-    - make build
-    - mv dist ../website/dist/the-guide
+    # comrepss files ahead of time
+    - gzip -k -9 -r -f dist
   artifacts:
     paths:
     - website/dist
 
 
+# build:bitflow:
+#   stage: build
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - cd bitflow
+#     - make build
+#   artifacts:
+#     paths:
+#     - bitflow/dist
+
 ####################################################################################################
 ## Package
 ####################################################################################################
 
-package:server:
-  stage: package
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
+# package:server:
+#   stage: package
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
 
 ####################################################################################################
 ## Release
@@ -278,44 +280,18 @@ package:server:
 pages: # release:website
   image: alpine:latest
   stage: release
-  tags:
-    - docker
   dependencies:
     - build:website
   # only:
-  #   - /^website-v.*$/
-  # except:
-  #   - branches
+  #   - release-website
+  tags:
+    - docker
   script:
     - cp -rp website/dist public
   artifacts:
     paths:
       - public/
 
-release:website:netlify:
-  image: node:$NODE_VERSION
-  stage: release
-  dependencies:
-    - build:website
-  tags:
-    - docker
-  script:
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website
-    - netlify deploy --site $NETLIFY_WEBSITE_ID --auth $NETLIFY_TOKEN --prod
-
-release:website_tmp:
-  image: node:$NODE_VERSION
-  stage: release
-  tags:
-    - docker
-  script:
-    - npm install netlify-cli -g
-    - netlify --telemetry-disable
-    - cd website_tmp
-    - cp -r ../website/dist/blog public && cp -r ../website/dist/the-guide public
-    - netlify deploy --site $NETLIFY_WEBSITE_TMP_ID --auth $NETLIFY_TOKEN --prod
 
 release:status_page:
   image: docker:stable
@@ -333,58 +309,81 @@ release:status_page:
     - make docker_login
     - make release
 
-release:server:nightly:
-  only:
-    - schedules
-  stage: release
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release_nightly
 
-release:server:stable:
-  # only:
-  #   - tags
-  only:
-    - /^server-v.*$/
-  except:
-    - branches
-  stage: release
-  dependencies:
-    - build:server
-  image: docker:stable
-  tags:
-    - docker
-  cache: {}
-  script:
-    - cd server
-    - apk update && apk add make
-    - make docker_build
-    - make docker_login
-    - make docker_release
-
-# release the_guide
-# pages:
-#   stage: release
+# release:server:stable:
+#   # only:
+#   #   - tags
 #   only:
-#     - master
+#     - /^server-v.*$/
+#   except:
+#     - branches
+#   stage: release
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
 #   script:
-#     - make build
-#     - mv dist public
-#   artifacts:
-#     paths:
-#       - public
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release
 
-# variables:
-#   CARGO_HOME: $CI_PROJECT_DIR/cargo_home
+
+# release:bitflow:stable:
+#   only:
+#     - /^bitflow-v.*$/
+#   except:
+#     - branches
+#   stage: release
+#   dependencies:
+#     - build:bitflow
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - apk update && apk add make
+#     - cd bitflow
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release
+
+
+# release:server:nightly:
+#   only:
+#     - schedules
+#   stage: release
+#   dependencies:
+#     - build:server
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - cd server
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release_nightly
+#
+# release:bitflow:nightly:
+#   only:
+#     - schedules
+#   stage: release
+#   dependencies:
+#     - build
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release_nightly
 
 # default:
 #   image: rust:latest
@@ -395,7 +394,6 @@ release:server:stable:
 # cache:
 #   paths:
 #     - $CARGO_HOME/bin
-
 
 # test:android:
 #   stage: test
