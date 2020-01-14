@@ -13,12 +13,8 @@ include:
   - template: Container-Scanning.gitlab-ci.yml
 
 variables:
-  # Rust (core)
-  CARGO_HOME: $CI_PROJECT_DIR/cargo_home
-  RUST_ENV: test
-  RUST_VERSION: nightly-2019-10-13
-  RUST_BACKTRACE: 1
-  RUST_IMAGE: rust:latest
+  # Go
+  GO_IMAGE: golang:latest
 
   # mobile
   ANDROID_COMPILE_SDK: "28"
@@ -50,10 +46,6 @@ variables:
   SMTP_PASSWORD: test
   STRIPE_PUBLIC_KEY: test
   STRIPE_SECRET_KEY: test
-
-  # Go
-  GO_IMAGE: golang:latest
-
 
 # cache:
 #   paths:
@@ -107,6 +99,7 @@ test:mobile:
     - make fmt_check
     - make lint
     - make test
+
 
 # test:desktop:
 #   stage: test
@@ -175,6 +168,7 @@ build:core:
     - cd core
     - make build_desktop
 
+
 build:desktop:
   stage: build
   image: node:$NODE_VERSION
@@ -185,6 +179,7 @@ build:desktop:
     - make assets
     - make install
     - make build
+
 
 build:mobile:
   stage: build
@@ -277,21 +272,6 @@ build:website:
 #     - cd server
 #     - apk update && apk add make
 #     - make docker_build
-
-
-# package:bitflow:
-#   stage: package
-#   dependencies:
-#     - build:bitflow
-#   image: docker:stable
-#   tags:
-#     - docker
-#   cache: {}
-#   script:
-#     - apk update && apk add make
-#     - cd bitflow
-#     - make docker_build
-
 
 ####################################################################################################
 ## Release

@@ -14,6 +14,7 @@ import 'package:bloom/bloom/music/views/music.dart';
 import 'package:bloom/bloom/myaccount/views/profile.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
 import 'package:bloom/bloom/preferences/views/theme.dart';
+import 'package:bloom/core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bloom/bloom/auth/views/auth.dart';
@@ -22,7 +23,10 @@ import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
 import 'bloom/const.dart';
 import 'bloom/qrcodes/views/qrcodes.dart';
 
-void main() => runApp(MyApp());
+Future<void> main() async {
+  await coreInit();
+  runApp(MyApp());
+}
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.

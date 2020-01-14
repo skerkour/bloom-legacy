@@ -1,14 +1,16 @@
 import axios from 'axios';
 
-const URL = 'http://localhost:8042/electronPost';
+const CALL_URL = 'http://localhost:8042/electronCall';
+
+const empty = {};
 
 async function call(method: string, params: any): Promise<any> {
-  const payload = JSON.stringify({
+  const message = JSON.stringify({
     method,
     params,
   });
 
-  const res = await axios.post(URL, payload);
+  const res = await axios.post(CALL_URL, message);
   return res.data;
 }
 
@@ -19,4 +21,13 @@ function toIsoDate(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-export default { call, toIsoDate, empty: {} };
+async function init(): Promise<void> {
+  return call('core.init', empty);
+}
+
+export default {
+  call,
+  toIsoDate,
+  empty,
+  init,
+};

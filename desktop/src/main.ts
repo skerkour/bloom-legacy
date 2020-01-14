@@ -5,6 +5,7 @@ import router from '@/router';
 import store from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
+import core from './core';
 
 const { log, Level } = require('@bloom42/astro');
 
@@ -18,21 +19,29 @@ if (process.env.NODE_ENV === 'development') {
   }
 }
 
-async function func() {
-  await ipcRenderer.send('server:start');
-}
-func();
 
 window.onunload = async () => {
   await ipcRenderer.send('server:stop');
   window.location.reload();
 };
 
-Vue.use(filters);
+function sleep(ms: number) {
+  return new Promise((resolve) => setTimeout(resolve, ms));
+}
 
-new Vue({
-  router,
-  store,
-  vuetify,
-  render: (h) => h(App),
-}).$mount('#app');
+async function main() {
+  await ipcRenderer.send('server:start');
+  await sleep(1000);
+  await core.init();
+
+  Vue.use(filters);
+
+  new Vue({
+    router,
+    store,
+    vuetify,
+    render: (h) => h(App),
+  }).$mount('#app');
+}
+
+main();
