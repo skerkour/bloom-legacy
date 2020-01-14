@@ -1,12 +1,12 @@
 package db
 
 import (
+	"bytes"
 	"database/sql"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
 
 	_ "github.com/mattn/go-sqlite3"
 	"gitlab.com/bloom42/bloom/core/bloom/kernel"
@@ -20,7 +20,7 @@ func homeDir() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return strings.TrimSuffix(string(data), "\x00"), nil
+		return filepath.Join("data", "data", string(bytes.Trim(data, "\x00"))), nil
 	} else {
 		home, err := kernel.GetHome()
 		if err != nil {

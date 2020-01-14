@@ -1,24 +1,21 @@
 import 'dart:ui';
 
-class HexColor extends Color {
-  HexColor(final String hexColor) : super(_getColorFromHex(hexColor));
+class HexColor {
+  HexColor();
 
-  static int _getColorFromHex(String hexString) {
+  static Color fromHex(String hexString) {
     final StringBuffer buffer = StringBuffer();
     if (hexString.length == 6 || hexString.length == 7) {
       buffer.write('ff');
     }
     buffer.write(hexString.replaceFirst('#', ''));
-    return int.parse(buffer.toString(), radix: 16);
+    return Color(int.parse(buffer.toString(), radix: 16));
   }
 
-  static HexColor fromColor(Color color) {
-    return color;
-  }
-
-  String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
-      '${alpha.toRadixString(16).padLeft(2, '0')}'
-      '${red.toRadixString(16).padLeft(2, '0')}'
-      '${green.toRadixString(16).padLeft(2, '0')}'
-      '${blue.toRadixString(16).padLeft(2, '0')}';
+  static String toHex(Color color, {bool leadingHashSign = true}) =>
+      '${leadingHashSign ? '#' : ''}'
+      '${color.alpha.toRadixString(16).padLeft(2, '0')}'
+      '${color.red.toRadixString(16).padLeft(2, '0')}'
+      '${color.green.toRadixString(16).padLeft(2, '0')}'
+      '${color.blue.toRadixString(16).padLeft(2, '0')}';
 }

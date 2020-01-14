@@ -1,4 +1,7 @@
+import 'dart:ui';
+
 import 'package:bloom/bloom/notes/models/note.dart';
+import 'package:bloom/libs/hex_color.dart';
 
 class NotesNotes {
   NotesNotes({this.notes});
@@ -6,24 +9,24 @@ class NotesNotes {
   final List<Note> notes;
 
   static NotesNotes fromJson(Map<String, dynamic> json) {
-    final List<dynamic> list = json['data']['notes'];
+    final List<dynamic> list = json['notes'];
     final List<Note> notes = list.map((dynamic i) => Note.fromJson(i)).toList();
     return NotesNotes(notes: notes);
   }
 }
 
-class NotesCreateNote {
-  NotesCreateNote(this.title, this.body, this.color);
+class NotesCreateNoteParams {
+  NotesCreateNoteParams(this.title, this.body, this.color);
 
   final String title;
   final String body;
-  final int color;
+  final Color color;
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'title': title,
       'body': body,
-      'color': color,
+      'color': HexColor.toHex(color),
     };
     return data;
   }

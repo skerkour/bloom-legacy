@@ -1,3 +1,4 @@
+import 'package:bloom/bloom/kernel/services/utils.dart';
 import 'package:bloom/bloom/notes/core/messages.dart';
 import 'package:bloom/bloom/notes/core/methods.dart';
 import 'package:bloom/core.dart';
@@ -10,21 +11,19 @@ class Note {
     this.id,
     this.title = '',
     this.body = '',
-    this.color,
+    this.color = Colors.white,
     this.createdAt,
     this.updatedAt,
     this.archivedAt,
     this.isPinned = false,
-  }) {
-    color ??= HexColor.fromColor(Colors.white);
-  }
+  });
 
   String id;
   String title;
   String body;
   DateTime createdAt;
   DateTime updatedAt;
-  HexColor color;
+  Color color;
   DateTime archivedAt;
   bool isPinned;
 
@@ -35,11 +34,11 @@ class Note {
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: DateTime.parse(json['created_at']).toUtc(),
-      updatedAt: DateTime.parse(json['updated_at']).toUtc(),
-      color: HexColor(json['color']),
+      createdAt: Utils.fromGoTime(json['created_at']).toUtc(),
+      updatedAt: Utils.fromGoTime(json['updated_at']).toUtc(),
+      color: HexColor.fromHex(json['color']),
       archivedAt:
-          archivedAt == null ? null : DateTime.parse(archivedAt).toUtc(),
+          archivedAt == null ? null : Utils.fromGoTime(archivedAt).toUtc(),
       isPinned: json['is_pinned'],
     );
   }
@@ -51,7 +50,7 @@ class Note {
       'body': body,
       'created_at': createdAt.toUtc().toIso8601String(),
       'updated_at': updatedAt.toUtc().toIso8601String(),
-      'color': color.toHex(),
+      'color': HexColor.toHex(color),
       'archived_at':
           archivedAt == null ? null : archivedAt.toUtc().toIso8601String(),
       'is_pinned': isPinned,
@@ -63,7 +62,7 @@ class Note {
     debugPrint('Note.create called');
 
     return Note.fromJson(await coreCall(
-        NotesMethod.create_note, NotesCreateNote(title, body, color.value)));
+        NotesMethod.create_note, NotesCreateNoteParams(title, body, color)));
   }
 
   Future<Note> update() async {
