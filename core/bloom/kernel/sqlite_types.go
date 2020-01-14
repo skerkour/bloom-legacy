@@ -42,7 +42,7 @@ func (t *SQLiteTime) Scan(src interface{}) error {
 
 func (t *SQLiteTime) MarshalJSON() ([]byte, error) {
 	tim := time.Time(*t)
-	valueStr := tim.Format(time.RFC3339Nano)
+	valueStr := tim.Format(time.RFC3339)
 	return []byte(valueStr), nil
 }
 
