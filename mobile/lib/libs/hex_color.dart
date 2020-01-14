@@ -12,6 +12,10 @@ class HexColor extends Color {
     return int.parse(buffer.toString(), radix: 16);
   }
 
+  static HexColor fromColor(Color color) {
+    return color;
+  }
+
   String toHex({bool leadingHashSign = true}) => '${leadingHashSign ? '#' : ''}'
       '${alpha.toRadixString(16).padLeft(2, '0')}'
       '${red.toRadixString(16).padLeft(2, '0')}'

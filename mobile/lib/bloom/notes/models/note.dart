@@ -10,12 +10,14 @@ class Note {
     this.id,
     this.title = '',
     this.body = '',
-    this.color = Colors.white,
+    this.color,
     this.createdAt,
     this.updatedAt,
     this.archivedAt,
     this.isPinned = false,
-  });
+  }) {
+    color ??= HexColor.fromColor(Colors.white);
+  }
 
   String id;
   String title;
