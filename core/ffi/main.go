@@ -30,6 +30,8 @@ func blmcore_call(message *C.char) *C.char {
 	var messageOut core.MessageOut
 
 	switch parts[0] {
+	case "Auth":
+		messageOut = core.HandleAuthMethod(parts[1], messageIn.Params)
 	case "core":
 		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
@@ -37,7 +39,7 @@ func blmcore_call(message *C.char) *C.char {
 	case "calculator":
 		messageOut = core.HandleCalculatorMehtod(parts[1], messageIn.Params)
 	default:
-		messageOut = core.MethodNotFoundError(parts[0], "service") // TODO: return not found error
+		messageOut = core.ServiceNotFoundError(parts[0])
 	}
 
 	data, err := json.Marshal(messageOut)

@@ -5,9 +5,9 @@ export default [
   //   icon: '/assets/imgs/icons/chat.svg',
   // },
   {
-    name: 'Drive',
-    path: '/drive',
-    icon: '/assets/imgs/icons/drive.svg',
+    name: 'Notes',
+    path: '/notes',
+    icon: '/assets/imgs/icons/notes.svg',
   },
   {
     name: 'Music',
@@ -20,9 +20,9 @@ export default [
     icon: '/assets/imgs/icons/calendar.svg',
   },
   {
-    name: 'Notes',
-    path: '/notes',
-    icon: '/assets/imgs/icons/notes.svg',
+    name: 'Drive',
+    path: '/drive',
+    icon: '/assets/imgs/icons/drive.svg',
   },
   {
     name: 'Bitflow',

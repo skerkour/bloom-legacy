@@ -1,6 +1,8 @@
+import 'package:bloom/bloom/kernel/services/utils.dart';
 import 'package:bloom/bloom/notes/core/messages.dart';
 import 'package:bloom/bloom/notes/core/methods.dart';
 import 'package:bloom/core.dart';
+import 'package:bloom/libs/hex_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -32,11 +34,11 @@ class Note {
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: DateTime.parse(json['created_at']).toUtc(),
-      updatedAt: DateTime.parse(json['updated_at']).toUtc(),
-      color: Color(json['color']),
+      createdAt: Utils.fromGoTime(json['created_at']).toUtc(),
+      updatedAt: Utils.fromGoTime(json['updated_at']).toUtc(),
+      color: HexColor.fromHex(json['color']),
       archivedAt:
-          archivedAt == null ? null : DateTime.parse(archivedAt).toUtc(),
+          archivedAt == null ? null : Utils.fromGoTime(archivedAt).toUtc(),
       isPinned: json['is_pinned'],
     );
   }
@@ -48,7 +50,7 @@ class Note {
       'body': body,
       'created_at': createdAt.toUtc().toIso8601String(),
       'updated_at': updatedAt.toUtc().toIso8601String(),
-      'color': color.value,
+      'color': HexColor.toHex(color),
       'archived_at':
           archivedAt == null ? null : archivedAt.toUtc().toIso8601String(),
       'is_pinned': isPinned,
@@ -60,7 +62,7 @@ class Note {
     debugPrint('Note.create called');
 
     return Note.fromJson(await coreCall(
-        NotesMethod.create_note, NotesCreateNote(title, body, color.value)));
+        NotesMethod.create_note, NotesCreateNoteParams(title, body, color)));
   }
 
   Future<Note> update() async {

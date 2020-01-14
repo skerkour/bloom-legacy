@@ -48,8 +48,6 @@ import core from '@/core';
 import { SignIn } from '../core/messages';
 import AuthMethod from '../core/methods';
 
-const { log } = require('@bloom42/astro');
-
 @Component
 export default class SignInForm extends Vue {
   // props
@@ -74,9 +72,7 @@ export default class SignInForm extends Vue {
     };
 
     try {
-      const res = await core.call(AuthMethod.SignIn, params);
-      log.debug('success');
-      log.debug(res);
+      await core.call(AuthMethod.SignIn, params);
       this.$store.commit(Mutations.SIGN_IN.toString());
       this.$router.push({ path: '/' });
     } catch (err) {

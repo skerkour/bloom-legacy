@@ -27,4 +27,13 @@ class Utils {
 
     return dateString;
   }
+
+  static DateTime fromGoTime(String time) {
+    if (time == null) {
+      return null;
+    }
+    time = time.substring(0, 25).replaceAll('Z', '') + 'Z';
+
+    return DateTime.parse(time);
+  }
 }

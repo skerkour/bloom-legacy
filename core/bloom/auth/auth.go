@@ -12,14 +12,10 @@ func CompleteRegistration(params CompleteRegistrationParams) ([]byte, error) {
 	return nil, nil
 }
 
-func SignIn(params SignInParams) ([]byte, error) {
-	return nil, nil
-}
-
 func SignOut() error {
 	return nil
 }
 
-func DeriveAuthKey(username, password []byte) ([]byte, error) {
+func deriveAuthKey(username, password []byte) ([]byte, error) {
 	return []byte{}, nil
 }

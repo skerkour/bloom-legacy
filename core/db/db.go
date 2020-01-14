@@ -1,16 +1,69 @@
 package db
 
 import (
+	"bytes"
 	"database/sql"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"runtime"
+
 	_ "github.com/mattn/go-sqlite3"
+	"gitlab.com/bloom42/bloom/core/bloom/kernel"
 )
 
 var DB *sql.DB
 
-func Init() error {
-	var err error
+func homeDir() (string, error) {
+	if runtime.GOOS == "android" {
+		data, err := ioutil.ReadFile("/proc/self/cmdline")
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join("data", "data", string(bytes.Trim(data, "\x00"))), nil
+	} else {
+		home, err := kernel.GetHome()
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join(home, ".bloom"), nil
+	}
+}
 
-	DB, err = sql.Open("sqlite3", "/Users/user/.bloom/db/bloom.db")
+func dbDir() (string, error) {
+	home, err := homeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, "db"), nil
+}
+
+func dbPath() (string, error) {
+	dbDir, err := dbDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(dbDir, "bloom.db"), nil
+
+}
+
+func Init() error {
+	dbDir, err := dbDir()
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(dbDir, 0740)
+	if err != nil {
+		return err
+	}
+
+	dbPath, err := dbPath()
+	if err != nil {
+		return err
+	}
+
+	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
@@ -18,12 +71,12 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS notes (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
-		archived_at TEXT,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
+		archived_at DATETIME,
 		title TEXT NOT NULL,
 		body TEXT NOT NULL,
-		color INTEGER NOT NULL,
+		color TEXT NOT NULL,
 		is_pinned INTEGER
 	)
 	`)

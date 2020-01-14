@@ -1,5 +1,7 @@
 import axios from 'axios';
 
+const { log } = require('@bloom42/astro');
+
 const CALL_URL = 'http://localhost:8042/electronCall';
 
 const empty = {};
@@ -9,8 +11,11 @@ async function call(method: string, params: any): Promise<any> {
     method,
     params,
   });
+  log.with({ msg: message }).debug('jsonMessage');
 
   const res = await axios.post(CALL_URL, message);
+  log.with({ res: res.data }).debug('resMessage');
+
   return res.data;
 }
 

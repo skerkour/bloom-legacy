@@ -63,9 +63,9 @@ Map<String, dynamic> _coreCall<P>(Message<P> message) {
   debugPrint('retMessage: $retMessage');
 
   final Map<String, dynamic> ret = jsonDecode(retMessage);
-  if (ret['type'] == 'error') {
-    final String errorMessage = ret['data']['message'];
+  if (ret['error'] != null) {
+    final String errorMessage = ret['error']['message'];
     throw errorMessage;
   }
-  return ret;
+  return ret['data'];
 }
