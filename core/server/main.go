@@ -35,6 +35,8 @@ func handleElectronPost(w http.ResponseWriter, r *http.Request) {
 	var messageOut core.MessageOut
 
 	switch parts[0] {
+	case "auth":
+		messageOut = core.HandleAuthMethod(parts[1], messageIn.Params)
 	case "core":
 		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
@@ -42,7 +44,7 @@ func handleElectronPost(w http.ResponseWriter, r *http.Request) {
 	case "calculator":
 		messageOut = core.HandleCalculatorMehtod(parts[1], messageIn.Params)
 	default:
-		messageOut = core.MethodNotFoundError(parts[0], "service") // TODO: return not found error
+		messageOut = core.ServiceNotFoundError(parts[0]) // TODO: return not found error
 	}
 
 	data, err := json.Marshal(messageOut)

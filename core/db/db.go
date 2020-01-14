@@ -23,7 +23,7 @@ func Init() error {
 		archived_at TEXT,
 		title TEXT NOT NULL,
 		body TEXT NOT NULL,
-		color INTEGER NOT NULL,
+		color TEXT NOT NULL,
 		is_pinned INTEGER
 	)
 	`)

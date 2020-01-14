@@ -18,4 +18,6 @@ type ErrorData struct {
 	Meta    interface{} `json:"meta"`
 }
 
-type Empty struct{}
+type InitRes struct {
+	Success bool `json:"success"`
+}

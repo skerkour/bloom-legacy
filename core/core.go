@@ -13,7 +13,7 @@ func HandleCoreMethod(method string, _ json.RawMessage) MessageOut {
 		if err != nil {
 			return MethodNotFoundError(method, "core") // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: Empty{}}
+		return MessageOut{Data: InitRes{Success: true}}
 	default:
 		return MethodNotFoundError(method, "core")
 	}
