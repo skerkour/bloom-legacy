@@ -282,8 +282,8 @@ pages: # release:website
   stage: release
   dependencies:
     - build:website
-  # only:
-  #   - release-website
+  only:
+    - release-website
   tags:
     - docker
   script:
