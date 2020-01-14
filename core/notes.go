@@ -4,8 +4,8 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
 	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+	"gitlab.com/bloom42/bloom/core/bloom/notes"
 )
 
 func HandleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
@@ -28,6 +28,17 @@ func HandleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		res, err := notes.ListArchived(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "create_note":
+		var params notes.CreateNoteParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := notes.CreateNote(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

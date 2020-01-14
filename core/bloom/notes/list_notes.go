@@ -5,8 +5,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/db"
 )
 
-func ListNotes(_ kernel.Empty) ([]Note, error) {
-	ret := []Note{}
+func ListNotes(_ kernel.Empty) (Notes, error) {
+	ret := Notes{Notes: []Note{}}
 
 	rows, err := db.DB.Query(`SELECT id, created_at, updated_at, archived_at, title, body, color, is_pinned
 	FROM notes WHERE archived_at IS NULL ORDER BY is_pinned DESC, created_at ASC`)
@@ -21,7 +21,7 @@ func ListNotes(_ kernel.Empty) ([]Note, error) {
 		if err != nil {
 			return ret, err
 		}
-		ret = append(ret, note)
+		ret.Notes = append(ret.Notes, note)
 	}
 
 	return ret, nil

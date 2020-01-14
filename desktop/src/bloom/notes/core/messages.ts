@@ -6,7 +6,7 @@ export type Note = {
   body: string,
   created_at: Date,
   updated_at: Date,
-  color: number,
+  color: string,
   archived_at: Date | null,
   is_pinned: boolean,
 }
@@ -18,7 +18,7 @@ export type Notes = {
 export type CreateNote = {
   title: string,
   body: string,
-  color: number,
+  color: string,
 }
 
 export type DeleteNote = {

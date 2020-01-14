@@ -140,7 +140,7 @@ export default class NoteDialog extends Vue {
     const params: CreateNote = {
       title: this.title,
       body: this.body,
-      color: 4294967295,
+      color: '#ffffff',
     };
     try {
       const res = await core.call(NotesMethod.CreateNote, params);

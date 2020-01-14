@@ -18,9 +18,9 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS notes (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
-		archived_at TEXT,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
+		archived_at DATETIME,
 		title TEXT NOT NULL,
 		body TEXT NOT NULL,
 		color TEXT NOT NULL,
