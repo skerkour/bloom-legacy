@@ -1,6 +1,7 @@
 import 'package:bloom/bloom/notes/core/messages.dart';
 import 'package:bloom/bloom/notes/core/methods.dart';
 import 'package:bloom/core.dart';
+import 'package:bloom/libs/hex_color.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 
@@ -21,7 +22,7 @@ class Note {
   String body;
   DateTime createdAt;
   DateTime updatedAt;
-  Color color;
+  HexColor color;
   DateTime archivedAt;
   bool isPinned;
 
@@ -34,7 +35,7 @@ class Note {
       body: json['body'],
       createdAt: DateTime.parse(json['created_at']).toUtc(),
       updatedAt: DateTime.parse(json['updated_at']).toUtc(),
-      color: Color(json['color']),
+      color: HexColor(json['color']),
       archivedAt:
           archivedAt == null ? null : DateTime.parse(archivedAt).toUtc(),
       isPinned: json['is_pinned'],
@@ -48,7 +49,7 @@ class Note {
       'body': body,
       'created_at': createdAt.toUtc().toIso8601String(),
       'updated_at': updatedAt.toUtc().toIso8601String(),
-      'color': color.value,
+      'color': color.toHex(),
       'archived_at':
           archivedAt == null ? null : archivedAt.toUtc().toIso8601String(),
       'is_pinned': isPinned,
