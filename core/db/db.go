@@ -2,15 +2,68 @@ package db
 
 import (
 	"database/sql"
+	"io/ioutil"
+	"os"
+	"path/filepath"
+	"runtime"
+	"strings"
+
 	_ "github.com/mattn/go-sqlite3"
+	"gitlab.com/bloom42/bloom/core/bloom/kernel"
 )
 
 var DB *sql.DB
 
-func Init() error {
-	var err error
+func homeDir() (string, error) {
+	if runtime.GOOS == "android" {
+		data, err := ioutil.ReadFile("/proc/self/cmdline")
+		if err != nil {
+			return "", err
+		}
+		return strings.TrimSuffix(string(data), "\x00"), nil
+	} else {
+		home, err := kernel.GetHome()
+		if err != nil {
+			return "", err
+		}
+		return filepath.Join(home, ".bloom"), nil
+	}
+}
 
-	DB, err = sql.Open("sqlite3", "/Users/user/.bloom/db/bloom.db")
+func dbDir() (string, error) {
+	home, err := homeDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(home, "db"), nil
+}
+
+func dbPath() (string, error) {
+	dbDir, err := dbDir()
+	if err != nil {
+		return "", err
+	}
+	return filepath.Join(dbDir, "bloom.db"), nil
+
+}
+
+func Init() error {
+	dbDir, err := dbDir()
+	if err != nil {
+		return err
+	}
+
+	err = os.MkdirAll(dbDir, 0740)
+	if err != nil {
+		return err
+	}
+
+	dbPath, err := dbPath()
+	if err != nil {
+		return err
+	}
+
+	DB, err = sql.Open("sqlite3", dbPath)
 	if err != nil {
 		return err
 	}
