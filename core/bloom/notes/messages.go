@@ -9,3 +9,7 @@ type CreateNoteParams struct {
 type Notes struct {
 	Notes []Note `json:"notes"`
 }
+
+type DeleteNoteParams struct {
+	ID string `json:"id"`
+}
