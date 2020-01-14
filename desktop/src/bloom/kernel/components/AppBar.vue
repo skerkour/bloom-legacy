@@ -54,6 +54,7 @@ export default class BlmAppBar extends Vue {
 <style lang="scss" scoped>
 .v-app-bar {
   border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1) !important;
+  left: 0px !important;
 }
 
 .blm-appbar-title-primary {
