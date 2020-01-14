@@ -4,7 +4,6 @@ import (
 	"C"
 	"encoding/json"
 	"gitlab.com/bloom42/bloom/core"
-	"strings"
 )
 
 //export blmcore_call
@@ -21,31 +20,7 @@ func blmcore_call(message *C.char) *C.char {
 		return nil // TODO(z0mbie42): return error
 	}
 
-	parts := strings.Split(messageIn.Method, ".")
-	if len(parts) != 2 {
-		return nil // TODO(z0mbie42): return error
-	}
-
-	// TODO(z0mbie42): handle methods returns go error, and convert to c error here
-	var messageOut core.MessageOut
-
-	switch parts[0] {
-	case "Auth":
-		messageOut = core.HandleAuthMethod(parts[1], messageIn.Params)
-	case "core":
-		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
-	case "notes":
-		messageOut = core.HandleNotesMethod(parts[1], messageIn.Params)
-	case "calculator":
-		messageOut = core.HandleCalculatorMehtod(parts[1], messageIn.Params)
-	default:
-		messageOut = core.ServiceNotFoundError(parts[0])
-	}
-
-	data, err := json.Marshal(messageOut)
-	if err != nil {
-		return nil
-	}
+	data, err := core.HandleMessage(messageIn)
 	return C.CString(string(data))
 }
 

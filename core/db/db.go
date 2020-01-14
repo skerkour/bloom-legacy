@@ -87,12 +87,12 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS calendar_events (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
 		title TEXT NOT NULL,
 		description TEXT NOT NULL,
-		start_at TEXT NOT NULL,
-		end_at TEXT NOT NULL
+		start_at DATETIME NOT NULL,
+		end_at DATETIME NOT NULL
 	)
 	`)
 	if err != nil {

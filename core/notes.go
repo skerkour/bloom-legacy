@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/bloom/notes"
 )
 
-func HandleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
+func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "list_notes":
 		var params kernel.Empty
@@ -66,6 +66,6 @@ func HandleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	default:
-		return MethodNotFoundError(method, "notes")
+		return methodNotFoundError(method, "notes")
 	}
 }

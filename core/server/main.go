@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"log"
 	"net/http"
-	"strings"
 
 	"gitlab.com/bloom42/bloom/core"
 )
@@ -25,29 +24,7 @@ func handleElectronPost(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
-	parts := strings.Split(messageIn.Method, ".")
-	if len(parts) != 2 {
-		http.Error(w, err.Error(), http.StatusBadRequest) // TODO(z0mbie42): return error
-		return
-	}
-
-	// TODO(z0mbie42): handle methods returns go error, and convert to c error here
-	var messageOut core.MessageOut
-
-	switch parts[0] {
-	case "auth":
-		messageOut = core.HandleAuthMethod(parts[1], messageIn.Params)
-	case "core":
-		messageOut = core.HandleCoreMethod(parts[1], messageIn.Params)
-	case "notes":
-		messageOut = core.HandleNotesMethod(parts[1], messageIn.Params)
-	case "calculator":
-		messageOut = core.HandleCalculatorMehtod(parts[1], messageIn.Params)
-	default:
-		messageOut = core.ServiceNotFoundError(parts[0]) // TODO: return not found error
-	}
-
-	data, err := json.Marshal(messageOut)
+	data, err := core.HandleMessage(messageIn)
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
 		return

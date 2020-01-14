@@ -5,7 +5,7 @@ import (
 	"fmt"
 )
 
-func MethodNotFoundError(method, service string) MessageOut {
+func methodNotFoundError(method, service string) MessageOut {
 	err := &ErrorData{
 		Code:    "METHOD_NOT_FOUND",
 		Message: fmt.Sprintf("method '%s' not found in service: '%s'", method, service),
@@ -16,7 +16,7 @@ func MethodNotFoundError(method, service string) MessageOut {
 	// return C.CString(string(data))
 }
 
-func ServiceNotFoundError(service string) MessageOut {
+func serviceNotFoundError(service string) MessageOut {
 	err := &ErrorData{
 		Code:    "Service_NOT_FOUND",
 		Message: fmt.Sprintf("method '%s' not found", service),
