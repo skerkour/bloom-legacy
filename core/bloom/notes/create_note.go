@@ -6,33 +6,6 @@ import (
 	"time"
 )
 
-// let now = chrono::Utc::now();
-// let note = db::Note {
-// 	id: uuid::Uuid::new_v4().to_hyphenated().to_string(),
-// 	created_at: now,
-// 	updated_at: now,
-// 	archived_at: None,
-// 	title: input.title,
-// 	body: input.body,
-// 	color: input.color,
-// 	is_pinned: false,
-// };
-
-// conn.execute(
-// 	"INSERT INTO notes (id, created_at, updated_at, archived_at, title, body, color, is_pinned)
-// 		VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-// 	params![
-// 		&note.id,
-// 		&note.created_at,
-// 		&note.updated_at,
-// 		&note.archived_at,
-// 		&note.title,
-// 		&note.body,
-// 		&note.color,
-// 		&note.is_pinned,
-// 	],
-// )?;
-
 func CreateNote(params CreateNoteParams) (Note, error) {
 	now := time.Now().UTC()
 	uuid := uuid.New()
@@ -50,7 +23,7 @@ func CreateNote(params CreateNoteParams) (Note, error) {
 	stmt, err := db.DB.Prepare(`INSERT INTO notes (id, created_at, updated_at, archived_at, title, body, color, is_pinned)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
-		return note, nil
+		return note, err
 	}
 	defer stmt.Close()
 

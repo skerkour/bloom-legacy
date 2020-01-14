@@ -12,13 +12,6 @@ func CompleteRegistration(params CompleteRegistrationParams) ([]byte, error) {
 	return nil, nil
 }
 
-func SignIn(params SignInParams) (Session, error) {
-	return Session{
-		ID:    "myRandomID",
-		Token: "myRandomTOken",
-	}, nil
-}
-
 func SignOut() error {
 	return nil
 }
