@@ -105,8 +105,6 @@ import core from '@/core';
 import { ListEvents, Event as EventModel, Events } from '../core/messages';
 import CalendarMethod from '../core/methods';
 
-const { log } = require('@bloom42/astro');
-
 @Component({
   components: {
     'blm-calendar-dialog-event': EventDialog,
@@ -175,7 +173,6 @@ export default class Index extends Vue {
     try {
       const res = await core.call(CalendarMethod.ListEvents, params);
       this.events = (res.data as Events).events;
-      log.debug(this.events);
     } catch (err) {
       this.error = err.message;
     } finally {
