@@ -172,7 +172,7 @@ export default class Index extends Vue {
     };
     try {
       const res = await core.call(CalendarMethod.ListEvents, params);
-      this.events = (res.data as Events).events;
+      this.events = (res as Events).events;
     } catch (err) {
       this.error = err.message;
     } finally {

@@ -144,7 +144,7 @@ export default class NoteDialog extends Vue {
     };
     try {
       const res = await core.call(NotesMethod.CreateNote, params);
-      this.$emit('created', (res.data as Note));
+      this.$emit('created', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -160,7 +160,7 @@ export default class NoteDialog extends Vue {
     note.body = this.body;
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('updated', (res.data as Note));
+      this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -184,7 +184,7 @@ export default class NoteDialog extends Vue {
     note.is_pinned = true;
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('updated', (res.data as Note));
+      this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -199,7 +199,7 @@ export default class NoteDialog extends Vue {
     note.is_pinned = false;
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('updated', (res.data as Note));
+      this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {

@@ -39,11 +39,11 @@ export default [
     path: '/arcade',
     icon: '/assets/imgs/icons/arcade.svg',
   },
-  {
-    name: 'Books',
-    path: '/books',
-    icon: '/assets/imgs/icons/books.svg',
-  },
+  // {
+  //   name: 'Books',
+  //   path: '/books',
+  //   icon: '/assets/imgs/icons/books.svg',
+  // },
   {
     name: 'Contacts',
     path: '/contacts',

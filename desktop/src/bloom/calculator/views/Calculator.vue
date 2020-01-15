@@ -30,7 +30,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import core from '@/core';
-import { Expression } from '../core/messages';
+import { Expression, Result } from '../core/messages';
 import CalculatorMethod from '../core/methods';
 
 const DIGITS = ['0', '1', '2', '3', '4', '5', '6', '7', '8', '9', '.'];
@@ -68,7 +68,7 @@ export default class Calculator extends Vue {
     };
     try {
       const res = await core.call(CalculatorMethod.Calc, params);
-      this.result = (res.data as any).result;
+      this.result = (res as Result).result;
     } catch (err) {
       this.error = err.message;
     }

@@ -126,7 +126,7 @@ export default class Index extends Vue {
     this.isLoading = true;
     try {
       const res = await core.call(ContactsMethod.ListContacts, core.empty);
-      this.contacts = (res.data as Contacts).contacts;
+      this.contacts = (res as Contacts).contacts;
     } catch (err) {
       log.error(err);
     } finally {

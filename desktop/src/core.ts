@@ -16,7 +16,12 @@ async function call(method: string, params: any): Promise<any> {
   const res = await axios.post(CALL_URL, message);
   log.with({ res: res.data }).debug('resMessage');
 
-  return res.data;
+  const { data } = res;
+  if (data.error !== null) {
+    throw data.error;
+  }
+
+  return data.data;
 }
 
 function toIsoDate(date: string | null): Date | null {
