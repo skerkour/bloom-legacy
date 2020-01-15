@@ -7,28 +7,13 @@ import (
 	"os"
 
 	"github.com/go-chi/chi"
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
 	"github.com/google/uuid"
-	"github.com/twitchtv/twirp"
 	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"gitlab.com/bloom42/bloom/server/bloom/accounts"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
 )
-
-// AccountsServer implements the Haberdasher service
-type AccountsServer struct{}
-
-func (s AccountsServer) SignIn(ctx context.Context, params *rpcaccounts.SignInParams) (*rpcaccounts.Session, error) {
-	return &rpcaccounts.Session{
-		Id:    "MyRandomId",
-		Token: "MyRandomToken",
-	}, nil
-}
-
-func (s AccountsServer) SignOut(ctx context.Context, _ *google_protobuf.Empty) (*google_protobuf.Empty, error) {
-	return nil, twirp.NotFoundError("lol not found")
-}
 
 func main() {
 	env := os.Getenv("GO_ENV")
@@ -48,7 +33,7 @@ func main() {
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"), rzhttp.UserAgent(""))
 
-	accountsHandler := rpcaccounts.NewAccountsServer(AccountsServer{}, nil)
+	accountsHandler := rpcaccounts.NewAccountsServer(accounts.Handler{}, nil)
 
 	// here the order matters, otherwise loggingMiddleware won't see the request ID
 	router.Use(requestIDMiddleware)
