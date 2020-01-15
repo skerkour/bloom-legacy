@@ -5,8 +5,8 @@ option go_package = "accounts";
 
 import "google/protobuf/empty.proto";
 
-// accounts
-service accounts {
+// Accounts
+service Accounts {
   rpc SignIn(SignInParams) returns (Session);
   rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
 }

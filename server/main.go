@@ -20,7 +20,10 @@ import (
 type AccountsServer struct{}
 
 func (s AccountsServer) SignIn(ctx context.Context, params *rpcaccounts.SignInParams) (*rpcaccounts.Session, error) {
-	return nil, twirp.NotFoundError("lol not found")
+	return &rpcaccounts.Session{
+		Id:    "MyRandomId",
+		Token: "MyRandomToken",
+	}, nil
 }
 
 func (s AccountsServer) SignOut(ctx context.Context, _ *google_protobuf.Empty) (*google_protobuf.Empty, error) {
@@ -33,7 +36,6 @@ func main() {
 	if port == "" {
 		port = "8000"
 	}
-	accountsHandler := rpcaccounts.NewAccountsServer(AccountsServer{}, nil)
 
 	log.SetLogger(log.With(
 		rz.Fields(
@@ -45,6 +47,8 @@ func main() {
 
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"), rzhttp.UserAgent(""))
+
+	accountsHandler := rpcaccounts.NewAccountsServer(AccountsServer{}, nil)
 
 	// here the order matters, otherwise loggingMiddleware won't see the request ID
 	router.Use(requestIDMiddleware)
