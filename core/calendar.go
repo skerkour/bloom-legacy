@@ -4,57 +4,56 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
+	"gitlab.com/bloom42/bloom/core/bloom/calendar"
 )
 
-func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
+func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "list_notes":
-		res, err := notes.ListNotes()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "list_archived":
-		res, err := notes.ListArchived()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "create_note":
-		var params notes.CreateNoteParams
+	case "list_events":
+		var params calendar.ListEventsParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.CreateNote(params)
+		res, err := calendar.ListEvents(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_note":
-		var params notes.Note
+	case "create_event":
+		var params calendar.CreateEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.UpdateNote(params)
+		res, err := calendar.CreateEvent(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_note":
-		var params notes.DeleteNoteParams
+	case "delete_event":
+		var params calendar.DeleteEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.DeleteNote(params)
+		res, err := calendar.DeleteEvent(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "update_event":
+		var params calendar.Event
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := calendar.UpdateEvent(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	default:
-		return methodNotFoundError(method, "notes")
+		return methodNotFoundError(method, "calendar")
 	}
 }

@@ -4,57 +4,63 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
+	"gitlab.com/bloom42/bloom/core/bloom/accounts"
+	"gitlab.com/bloom42/bloom/core/bloom/kernel"
 )
 
-func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
+func handleAccountsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "list_notes":
-		res, err := notes.ListNotes()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "list_archived":
-		res, err := notes.ListArchived()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "create_note":
-		var params notes.CreateNoteParams
+	case "start_registration":
+		var params accounts.StartRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.CreateNote(params)
+		res, err := accounts.StartRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_note":
-		var params notes.Note
+	case "verify_registration":
+		var params accounts.VerifyRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.UpdateNote(params)
+		res, err := accounts.VerifyRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_note":
-		var params notes.DeleteNoteParams
+	case "complete_registration":
+		var params accounts.CompleteRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.DeleteNote(params)
+		res, err := accounts.CompleteRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "sign_in":
+		var params accounts.SignInParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := accounts.SignIn(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "sign_out":
+		err := accounts.SignOut()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: kernel.Empty{}}
 	default:
-		return methodNotFoundError(method, "notes")
+		return methodNotFoundError(method, "accounts")
 	}
 }

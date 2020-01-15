@@ -3,58 +3,51 @@ package core
 import (
 	"C"
 	"encoding/json"
-
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
+	"gitlab.com/bloom42/bloom/core/bloom/contacts"
 )
 
-func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
+func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "list_notes":
-		res, err := notes.ListNotes()
+	case "list_contacts":
+		res, err := contacts.ListContacts()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "list_archived":
-		res, err := notes.ListArchived()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "create_note":
-		var params notes.CreateNoteParams
+	case "create_contact":
+		var params contacts.CreateContactParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.CreateNote(params)
+		res, err := contacts.CreateContact(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_note":
-		var params notes.Note
+	case "delete_contact":
+		var params contacts.DeleteContactParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.UpdateNote(params)
+		res, err := contacts.DeleteContact(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_note":
-		var params notes.DeleteNoteParams
+	case "update_contact":
+		var params contacts.Contact
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.DeleteNote(params)
+		res, err := contacts.UpdateContact(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	default:
-		return methodNotFoundError(method, "notes")
+		return methodNotFoundError(method, "contacts")
 	}
 }

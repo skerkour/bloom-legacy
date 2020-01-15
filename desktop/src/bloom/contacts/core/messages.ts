@@ -49,7 +49,7 @@ export type Contacts = {
   contacts: Contact[],
 }
 
-export type CreateContact = {
+export type CreateContactParams = {
   birthday: Date | null,
   first_name: string,
   last_name: string,

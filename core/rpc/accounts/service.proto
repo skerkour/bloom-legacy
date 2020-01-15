@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.bloom42;
+option go_package = "accounts";
+
+import "google/protobuf/empty.proto";
+
+// accounts
+service accounts {
+  rpc SignIn(SignInParams) returns (Session);
+  rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
+}
+
+
+message SignInParams {
+  string username = 1;
+  bytes auth_key = 2;
+}
+
+message Session {
+  string id = 1;
+  string token = 2;
+}

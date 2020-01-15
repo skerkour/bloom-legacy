@@ -87,12 +87,12 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS calendar_events (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
 		title TEXT NOT NULL,
 		description TEXT NOT NULL,
-		start_at TEXT NOT NULL,
-		end_at TEXT NOT NULL
+		start_at DATETIME NOT NULL,
+		end_at DATETIME NOT NULL
 	)
 	`)
 	if err != nil {
@@ -102,29 +102,8 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS contacts (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
-		first_name TEXT NOT NULL,
-		last_name TEXT NOT NULL,
-		notes TEXT NOT NULL,
-		addresses TEXT NOT NULL,
-		birthday TEXT,
-		organizations TEXT NOT NULL,
-		emails TEXT NOT NULL,
-		phones TEXT NOT NULL,
-		websites TEXT NOT NULL,
-		device_id TEXT NOT NULL
-	)
-	`)
-	if err != nil {
-		return err
-	}
-
-	_, err = DB.Exec(`
-	CREATE TABLE IF NOT EXISTS contacts (
-		id TEXT PRIMARY KEY NOT NULL,
-		created_at TEXT NOT NULL,
-		updated_at TEXT NOT NULL,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
 		first_name TEXT NOT NULL,
 		last_name TEXT NOT NULL,
 		notes TEXT NOT NULL,

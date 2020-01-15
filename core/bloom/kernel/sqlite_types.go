@@ -19,14 +19,8 @@ func (t SQLiteTime) Value() (driver.Value, error) {
 }
 
 func (t *SQLiteTime) Scan(src interface{}) error {
-	var sourceStr string
-
-	switch src.(type) {
-	case string:
-		sourceStr = src.(string)
-	case []byte:
-		sourceStr = string(src.([]byte))
-	default:
+	sourceStr, ok := src.(string)
+	if !ok {
 		return errors.New("Incompatible type for SQliteTime")
 	}
 

@@ -20,7 +20,7 @@ class CalendarEvents {
   final List<Event> events;
 
   static CalendarEvents fromJson(Map<String, dynamic> json) {
-    final List<dynamic> list = json['data']['events'];
+    final List<dynamic> list = json['events'];
     final List<Event> events =
         list.map((dynamic i) => Event.fromJson(i)).toList();
     return CalendarEvents(events: events);
@@ -46,8 +46,8 @@ class CalendarCreateEvent {
   }
 }
 
-class CalendarDeleteEvent {
-  CalendarDeleteEvent(this.id);
+class CalendarDeleteEventParams {
+  CalendarDeleteEventParams(this.id);
 
   final String id;
 
