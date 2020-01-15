@@ -30,8 +30,8 @@ clean:
 re: clean build
 
 release:
-	git tag legacy-v$(VERSION)
-	git push origin legacy-v$(VERSION)
+	git tag legacy/v$(VERSION)
+	git push origin legacy/v$(VERSION)
 
 
 
