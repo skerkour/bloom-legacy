@@ -36,11 +36,19 @@ import url "net/url"
 
 // Accounts
 type Accounts interface {
+	StartRegistration(context.Context, *StartRegistrationParams) (*RegistrationStarted, error)
+
+	VerifyRegistration(context.Context, *VerifyRegistrationParams) (*google_protobuf.Empty, error)
+
+	CompleteRegistration(context.Context, *CompleteRegistrationParams) (*Session, error)
+
+	RequestNewRegistrationCode(context.Context, *RequestNewRegistrationCodeParams) (*google_protobuf.Empty, error)
+
 	SignIn(context.Context, *SignInParams) (*Session, error)
 
 	SignOut(context.Context, *google_protobuf.Empty) (*google_protobuf.Empty, error)
 
-	RevokeSession(context.Context, *google_protobuf.Empty) (*google_protobuf.Empty, error)
+	RevokeSession(context.Context, *RevokeSessionParams) (*google_protobuf.Empty, error)
 }
 
 // ========================
@@ -49,7 +57,7 @@ type Accounts interface {
 
 type accountsProtobufClient struct {
 	client HTTPClient
-	urls   [3]string
+	urls   [7]string
 	opts   twirp.ClientOptions
 }
 
@@ -66,7 +74,11 @@ func NewAccountsProtobufClient(addr string, client HTTPClient, opts ...twirp.Cli
 	}
 
 	prefix := urlBase(addr) + AccountsPathPrefix
-	urls := [3]string{
+	urls := [7]string{
+		prefix + "StartRegistration",
+		prefix + "VerifyRegistration",
+		prefix + "CompleteRegistration",
+		prefix + "RequestNewRegistrationCode",
 		prefix + "SignIn",
 		prefix + "SignOut",
 		prefix + "RevokeSession",
@@ -79,12 +91,92 @@ func NewAccountsProtobufClient(addr string, client HTTPClient, opts ...twirp.Cli
 	}
 }
 
+func (c *accountsProtobufClient) StartRegistration(ctx context.Context, in *StartRegistrationParams) (*RegistrationStarted, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
+	out := new(RegistrationStarted)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsProtobufClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
+	out := new(google_protobuf.Empty)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsProtobufClient) CompleteRegistration(ctx context.Context, in *CompleteRegistrationParams) (*Session, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
+	out := new(Session)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsProtobufClient) RequestNewRegistrationCode(ctx context.Context, in *RequestNewRegistrationCodeParams) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "RequestNewRegistrationCode")
+	out := new(google_protobuf.Empty)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
 func (c *accountsProtobufClient) SignIn(ctx context.Context, in *SignInParams) (*Session, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(Session)
-	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -104,7 +196,7 @@ func (c *accountsProtobufClient) SignOut(ctx context.Context, in *google_protobu
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
 	out := new(google_protobuf.Empty)
-	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -119,12 +211,12 @@ func (c *accountsProtobufClient) SignOut(ctx context.Context, in *google_protobu
 	return out, nil
 }
 
-func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *google_protobuf.Empty) (*google_protobuf.Empty, error) {
+func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*google_protobuf.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "RevokeSession")
 	out := new(google_protobuf.Empty)
-	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -145,7 +237,7 @@ func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *google_p
 
 type accountsJSONClient struct {
 	client HTTPClient
-	urls   [3]string
+	urls   [7]string
 	opts   twirp.ClientOptions
 }
 
@@ -162,7 +254,11 @@ func NewAccountsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientO
 	}
 
 	prefix := urlBase(addr) + AccountsPathPrefix
-	urls := [3]string{
+	urls := [7]string{
+		prefix + "StartRegistration",
+		prefix + "VerifyRegistration",
+		prefix + "CompleteRegistration",
+		prefix + "RequestNewRegistrationCode",
 		prefix + "SignIn",
 		prefix + "SignOut",
 		prefix + "RevokeSession",
@@ -175,12 +271,92 @@ func NewAccountsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientO
 	}
 }
 
+func (c *accountsJSONClient) StartRegistration(ctx context.Context, in *StartRegistrationParams) (*RegistrationStarted, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
+	out := new(RegistrationStarted)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsJSONClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
+	out := new(google_protobuf.Empty)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsJSONClient) CompleteRegistration(ctx context.Context, in *CompleteRegistrationParams) (*Session, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
+	out := new(Session)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsJSONClient) RequestNewRegistrationCode(ctx context.Context, in *RequestNewRegistrationCodeParams) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "RequestNewRegistrationCode")
+	out := new(google_protobuf.Empty)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
 func (c *accountsJSONClient) SignIn(ctx context.Context, in *SignInParams) (*Session, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(Session)
-	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[4], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -200,7 +376,7 @@ func (c *accountsJSONClient) SignOut(ctx context.Context, in *google_protobuf.Em
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
 	out := new(google_protobuf.Empty)
-	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -215,12 +391,12 @@ func (c *accountsJSONClient) SignOut(ctx context.Context, in *google_protobuf.Em
 	return out, nil
 }
 
-func (c *accountsJSONClient) RevokeSession(ctx context.Context, in *google_protobuf.Empty) (*google_protobuf.Empty, error) {
+func (c *accountsJSONClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*google_protobuf.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "RevokeSession")
 	out := new(google_protobuf.Empty)
-	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[2], in, out)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -283,6 +459,18 @@ func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) 
 	}
 
 	switch req.URL.Path {
+	case "/twirp/com.bloom42.Accounts/StartRegistration":
+		s.serveStartRegistration(ctx, resp, req)
+		return
+	case "/twirp/com.bloom42.Accounts/VerifyRegistration":
+		s.serveVerifyRegistration(ctx, resp, req)
+		return
+	case "/twirp/com.bloom42.Accounts/CompleteRegistration":
+		s.serveCompleteRegistration(ctx, resp, req)
+		return
+	case "/twirp/com.bloom42.Accounts/RequestNewRegistrationCode":
+		s.serveRequestNewRegistrationCode(ctx, resp, req)
+		return
 	case "/twirp/com.bloom42.Accounts/SignIn":
 		s.serveSignIn(ctx, resp, req)
 		return
@@ -298,6 +486,522 @@ func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) 
 		s.writeError(ctx, resp, err)
 		return
 	}
+}
+
+func (s *accountsServer) serveStartRegistration(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveStartRegistrationJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveStartRegistrationProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *accountsServer) serveStartRegistrationJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(StartRegistrationParams)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *RegistrationStarted
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.StartRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RegistrationStarted and nil error while calling StartRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	respBytes := buf.Bytes()
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveStartRegistrationProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
+		return
+	}
+	reqContent := new(StartRegistrationParams)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *RegistrationStarted
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.StartRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *RegistrationStarted and nil error while calling StartRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveVerifyRegistration(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveVerifyRegistrationJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveVerifyRegistrationProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *accountsServer) serveVerifyRegistrationJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(VerifyRegistrationParams)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.VerifyRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	respBytes := buf.Bytes()
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveVerifyRegistrationProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
+		return
+	}
+	reqContent := new(VerifyRegistrationParams)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.VerifyRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveCompleteRegistration(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveCompleteRegistrationJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveCompleteRegistrationProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *accountsServer) serveCompleteRegistrationJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(CompleteRegistrationParams)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *Session
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.CompleteRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Session and nil error while calling CompleteRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	respBytes := buf.Bytes()
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveCompleteRegistrationProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
+		return
+	}
+	reqContent := new(CompleteRegistrationParams)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *Session
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.CompleteRegistration(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Session and nil error while calling CompleteRegistration. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveRequestNewRegistrationCode(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveRequestNewRegistrationCodeJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveRequestNewRegistrationCodeProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *accountsServer) serveRequestNewRegistrationCodeJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RequestNewRegistrationCode")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(RequestNewRegistrationCodeParams)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.RequestNewRegistrationCode(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling RequestNewRegistrationCode. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	respBytes := buf.Bytes()
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveRequestNewRegistrationCodeProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "RequestNewRegistrationCode")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
+		return
+	}
+	reqContent := new(RequestNewRegistrationCodeParams)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.RequestNewRegistrationCode(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling RequestNewRegistrationCode. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
 }
 
 func (s *accountsServer) serveSignIn(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
@@ -585,7 +1289,7 @@ func (s *accountsServer) serveRevokeSessionJSON(ctx context.Context, resp http.R
 		return
 	}
 
-	reqContent := new(google_protobuf.Empty)
+	reqContent := new(RevokeSessionParams)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -645,7 +1349,7 @@ func (s *accountsServer) serveRevokeSessionProtobuf(ctx context.Context, resp ht
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(google_protobuf.Empty)
+	reqContent := new(RevokeSessionParams)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
@@ -1212,22 +1916,34 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 261 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x94, 0x90, 0xbd, 0x4e, 0xc3, 0x40,
-	0x10, 0x84, 0x65, 0x4b, 0xc4, 0xce, 0x12, 0x28, 0x4e, 0x11, 0x4a, 0x4c, 0x13, 0xa5, 0x4a, 0x75,
-	0x96, 0x02, 0x4d, 0x2a, 0x04, 0x52, 0x0a, 0x44, 0x01, 0x72, 0x3a, 0x1a, 0x64, 0x3b, 0x8b, 0x39,
-	0x39, 0x77, 0x6b, 0xdd, 0x4f, 0x24, 0x3f, 0x1e, 0x6f, 0x86, 0xfc, 0x87, 0x42, 0x41, 0x91, 0x72,
-	0x6e, 0x76, 0xe7, 0xbe, 0x59, 0x88, 0x74, 0x95, 0xc7, 0x69, 0x9e, 0x93, 0x53, 0xd6, 0xc4, 0x06,
-	0xf5, 0x51, 0xe4, 0xc8, 0x2b, 0x4d, 0x96, 0xd8, 0x65, 0x4e, 0x92, 0x67, 0x07, 0x22, 0x79, 0xbf,
-	0x8e, 0x6e, 0x0b, 0xa2, 0xe2, 0x80, 0x71, 0x6b, 0x65, 0xee, 0x33, 0x46, 0x59, 0xd9, 0xba, 0x9b,
-	0x5c, 0x6e, 0x61, 0xb2, 0x13, 0x85, 0x7a, 0x56, 0x6f, 0xa9, 0x4e, 0xa5, 0x61, 0x11, 0x84, 0xce,
-	0xa0, 0x56, 0xa9, 0xc4, 0x99, 0xb7, 0xf0, 0x56, 0xe3, 0xe4, 0x57, 0xb3, 0x39, 0x84, 0xa9, 0xb3,
-	0x5f, 0x1f, 0x25, 0xd6, 0x33, 0x7f, 0xe1, 0xad, 0x26, 0x49, 0xd0, 0xe8, 0x17, 0xac, 0x97, 0x31,
-	0x04, 0x3b, 0x34, 0x46, 0x90, 0x62, 0xd7, 0xe0, 0x8b, 0x7d, 0xbf, 0xeb, 0x8b, 0x3d, 0x9b, 0xc2,
-	0x85, 0xa5, 0x12, 0x55, 0xbb, 0x32, 0x4e, 0x3a, 0xb1, 0xfe, 0xf6, 0x20, 0x7c, 0xec, 0xe1, 0xd9,
-	0x06, 0x46, 0x1d, 0x04, 0x9b, 0xf3, 0x13, 0x72, 0x7e, 0x4a, 0x16, 0x4d, 0xff, 0x5a, 0xfd, 0x6f,
-	0x1b, 0x08, 0x9a, 0xa9, 0x57, 0x67, 0xd9, 0x0d, 0xef, 0x8a, 0xf2, 0xa1, 0x28, 0xdf, 0x36, 0x45,
-	0xa3, 0x7f, 0xde, 0xd9, 0x03, 0x5c, 0x25, 0x78, 0xa4, 0x12, 0x87, 0xac, 0x33, 0x03, 0x9e, 0xe0,
-	0x3d, 0x1c, 0xee, 0x9f, 0x8d, 0x5a, 0xef, 0xee, 0x27, 0x00, 0x00, 0xff, 0xff, 0x3e, 0x88, 0x90,
-	0x84, 0x96, 0x01, 0x00, 0x00,
+	// 451 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0x51, 0x6f, 0xd3, 0x30,
+	0x10, 0x80, 0xd5, 0xb2, 0xad, 0xe5, 0x56, 0x90, 0x38, 0x2a, 0xe8, 0xc2, 0x4b, 0x89, 0x98, 0xd8,
+	0x0b, 0x89, 0x54, 0x78, 0xd9, 0x0b, 0x12, 0x4c, 0x7b, 0x98, 0x90, 0x06, 0x4a, 0x05, 0x0f, 0xf0,
+	0x30, 0xb9, 0xce, 0xad, 0x58, 0x8d, 0xe3, 0x60, 0x3b, 0x43, 0xf9, 0x69, 0xfc, 0x3b, 0xd4, 0x24,
+	0x45, 0x49, 0x13, 0x4f, 0xbc, 0xf5, 0xea, 0xf3, 0x77, 0x77, 0xbe, 0x4f, 0x01, 0x4f, 0x67, 0x3c,
+	0x64, 0x9c, 0xab, 0x3c, 0xb5, 0x26, 0x34, 0xa4, 0xef, 0x04, 0xa7, 0x20, 0xd3, 0xca, 0x2a, 0x3c,
+	0xe6, 0x4a, 0x06, 0xab, 0x44, 0x29, 0xf9, 0x6e, 0xe1, 0xbd, 0x58, 0x2b, 0xb5, 0x4e, 0x28, 0x2c,
+	0x8f, 0x56, 0xf9, 0x6d, 0x48, 0x32, 0xb3, 0x45, 0x95, 0xe9, 0x47, 0xf0, 0x7c, 0x69, 0x99, 0xb6,
+	0x11, 0xad, 0x85, 0xb1, 0x9a, 0x59, 0xa1, 0xd2, 0x2f, 0x4c, 0x33, 0x69, 0xf0, 0x25, 0x4c, 0x62,
+	0x61, 0xb2, 0x84, 0x15, 0x37, 0x29, 0x93, 0x34, 0x1b, 0xcc, 0x07, 0x67, 0x0f, 0xa3, 0xe3, 0xfa,
+	0xbf, 0x6b, 0x26, 0x09, 0xa7, 0x70, 0x48, 0x92, 0x89, 0x64, 0x36, 0x2c, 0xcf, 0xaa, 0xc0, 0x3f,
+	0x85, 0xa7, 0x4d, 0x5c, 0xc9, 0xa7, 0x18, 0x1f, 0xc3, 0x50, 0xc4, 0x35, 0x65, 0x28, 0x62, 0xff,
+	0x3d, 0xcc, 0xbe, 0x91, 0x16, 0xb7, 0x45, 0x4f, 0xed, 0xbd, 0x5c, 0x44, 0x38, 0xe0, 0x2a, 0xa6,
+	0xba, 0x4e, 0xf9, 0xdb, 0x5f, 0xc0, 0x3c, 0xa2, 0x5f, 0x39, 0x19, 0x7b, 0x4d, 0xbf, 0x9b, 0x8c,
+	0x0b, 0x15, 0x53, 0x3f, 0xc7, 0xe7, 0xe0, 0x5d, 0x28, 0x99, 0x25, 0x64, 0xe9, 0x3f, 0xaa, 0x7a,
+	0x30, 0xce, 0x0d, 0xe9, 0x72, 0xfa, 0xaa, 0xf2, 0xbf, 0x18, 0x4f, 0x60, 0xcc, 0x72, 0xfb, 0xf3,
+	0x66, 0x43, 0xc5, 0xec, 0xc1, 0x7c, 0x70, 0x36, 0x89, 0x46, 0xdb, 0xf8, 0x13, 0x15, 0xfe, 0x25,
+	0x4c, 0x96, 0x62, 0x9d, 0x5e, 0xed, 0xb0, 0x4d, 0xcc, 0xe0, 0x1e, 0xcc, 0xb0, 0x8d, 0x09, 0x61,
+	0xb4, 0x24, 0x63, 0x84, 0x4a, 0x3b, 0x8d, 0x4d, 0xe1, 0xd0, 0xaa, 0x0d, 0xa5, 0xbb, 0x77, 0x2f,
+	0x83, 0xea, 0xdd, 0xef, 0xd4, 0x86, 0xea, 0x6b, 0xfd, 0x53, 0x2d, 0xfe, 0x1c, 0xc0, 0xf8, 0x43,
+	0xed, 0x0d, 0xfe, 0x80, 0x27, 0x9d, 0xfd, 0xe3, 0xab, 0xa0, 0xe1, 0x4f, 0xe0, 0xf0, 0xc3, 0x9b,
+	0xb7, 0xb2, 0xfa, 0x36, 0xbe, 0x04, 0xec, 0x6e, 0x18, 0x4f, 0x5b, 0xf7, 0x5c, 0x0a, 0x78, 0xcf,
+	0x82, 0xca, 0xdb, 0x60, 0xe7, 0x6d, 0x70, 0xb9, 0xf5, 0x16, 0xbf, 0xc2, 0xb4, 0x6f, 0x85, 0xf8,
+	0xba, 0x85, 0x75, 0x6f, 0xd9, 0x9b, 0xb6, 0xa7, 0xab, 0x9f, 0x98, 0x83, 0xe7, 0xb6, 0x09, 0xdf,
+	0xec, 0xcd, 0x7a, 0xbf, 0x76, 0xce, 0xde, 0xcf, 0xe1, 0xa8, 0x32, 0x03, 0x4f, 0xda, 0x4d, 0x34,
+	0x74, 0x71, 0xf4, 0x77, 0x0e, 0xa3, 0x6d, 0xd6, 0xe7, 0xdc, 0xa2, 0x83, 0xee, 0xac, 0x7a, 0x05,
+	0x8f, 0x5a, 0x5e, 0xe0, 0xfe, 0xe6, 0x3a, 0xce, 0xb8, 0x50, 0x1f, 0xe1, 0xfb, 0x78, 0xf7, 0xc9,
+	0x59, 0x1d, 0x95, 0x67, 0x6f, 0xff, 0x06, 0x00, 0x00, 0xff, 0xff, 0xf2, 0xe1, 0x7a, 0xbe, 0x89,
+	0x04, 0x00, 0x00,
 }
