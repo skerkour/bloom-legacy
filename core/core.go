@@ -37,6 +37,8 @@ func HandleMessage(messageIn MessageIn) ([]byte, error) {
 		messageOut = handleCalculatorMehtod(parts[1], messageIn.Params)
 	case "calendar":
 		messageOut = handleCalendarMehtod(parts[1], messageIn.Params)
+	case "contacts":
+		messageOut = handleContactsMehtod(parts[1], messageIn.Params)
 	case "core":
 		messageOut = handleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
