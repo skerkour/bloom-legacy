@@ -22,6 +22,6 @@ pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
 func SignIn(params SignInParams) (Session, error) {
 	return Session{
 		ID:    "myRandomID",
-		Token: "myRandomTOken",
+		Token: "myRandomToken",
 	}, nil
 }

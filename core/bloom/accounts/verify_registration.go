@@ -1,5 +1,9 @@
 package accounts
 
+import (
+	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+)
+
 /*
 pub fn registration_verify(message: auth::RegistrationVerify) -> Result<Message, BloomError> {
     let message: Message = message.into();
@@ -13,6 +17,6 @@ pub fn registration_verify(message: auth::RegistrationVerify) -> Result<Message,
 }
 */
 
-func VerifyRegistration(params VerifyRegistrationParams) ([]byte, error) {
-	return nil, nil
+func VerifyRegistration(params VerifyRegistrationParams) (kernel.Empty, error) {
+	return kernel.Empty{}, nil
 }

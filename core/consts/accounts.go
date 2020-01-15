@@ -26,5 +26,8 @@ const AVATAR_BYTES_MAX int = 3000000
 const AVATAR_RESIZE int = 256
 const PASSWORD_RESET_TOKEN_BYTES int = 256
 const AVATAR_DEFAULT_PATH = "/imgs/myaccount/profile.jpg"
+
 const BIO_MAX_LENGTH int = 200
 const DISPLAY_NAME_MAX_LENGTH int = 42
+const FIRST_NAME_MAX_LENGTH int = 30
+const LAST_NAME_MAX_LENGTH int = 42

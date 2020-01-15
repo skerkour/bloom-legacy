@@ -20,6 +20,9 @@ pub fn registration_complete(input: auth::GuiRegistrationComplete) -> Result<Mes
 }
 */
 
-func CompleteRegistration(params CompleteRegistrationParams) ([]byte, error) {
-	return nil, nil
+func CompleteRegistration(params CompleteRegistrationParams) (Session, error) {
+	return Session{
+		ID:    "myRandomID",
+		Token: "myRandomToken",
+	}, nil
 }

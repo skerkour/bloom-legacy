@@ -14,6 +14,6 @@ pub fn registration_start(input: auth::RegistrationStart) -> Result<Message, Blo
 }
 */
 
-func StartRegistration(params StartRegistrationParams) ([]byte, error) {
-	return nil, nil
+func StartRegistration(params StartRegistrationParams) (RegistrationStarted, error) {
+	return RegistrationStarted{ID: "myRandomID"}, nil
 }

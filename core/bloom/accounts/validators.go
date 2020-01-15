@@ -1,33 +1,62 @@
 package accounts
 
+import (
+	"errors"
+	"gitlab.com/bloom42/bloom/core/consts"
+)
+
+func validateFirstName(firstName string) error {
+	firstNameLen := len(firstName)
+
+	if firstNameLen == 0 {
+		return errors.New("first_name cannot be empty")
+	}
+
+	if firstNameLen > consts.FIRST_NAME_MAX_LENGTH {
+		return errors.New("first_name is too long")
+	}
+
+	return nil
+}
+
+func validateLastName(lastName string) error {
+	lastNameLen := len(lastName)
+
+	if lastNameLen == 0 {
+		return errors.New("last_name cannot be empty")
+	}
+
+	if lastNameLen > consts.LAST_NAME_MAX_LENGTH {
+		return errors.New("last_name is too long")
+	}
+
+	return nil
+}
+
+func validateBio(bio string) error {
+	if len(bio) > consts.BIO_MAX_LENGTH {
+		return errors.New("bio is too long")
+	}
+
+	return nil
+}
+
+func validateDisplayName(displayName string) error {
+	displayNameLen := len(displayName)
+
+	if displayNameLen == 0 {
+		return errors.New("display_name cannot be empty")
+	}
+
+	if displayNameLen > consts.DISPLAY_NAME_MAX_LENGTH {
+		return errors.New("display_name is too long")
+	}
+
+	return nil
+}
+
 /*
-pub fn first_name(first_name: &str) -> Result<(), BloomError> {
-    if first_name.is_empty() {
-        return Err(BloomError::Validation(
-            "first_name cannot be empty".to_string(),
-        ));
-    }
 
-    if first_name.len() > 64 {
-        return Err(BloomError::Validation("first_name is too long".to_string()));
-    }
-
-    return Ok(());
-}
-
-pub fn last_name(last_name: &str) -> Result<(), BloomError> {
-    if last_name.is_empty() {
-        return Err(BloomError::Validation(
-            "last_name cannot be empty".to_string(),
-        ));
-    }
-
-    if last_name.len() > 64 {
-        return Err(BloomError::Validation("last_name is too long".to_string()));
-    }
-
-    return Ok(());
-}
 
 pub fn password<S: std::hash::BuildHasher>(
     basic_passwords: HashSet<String, S>,
@@ -164,28 +193,5 @@ pub fn username(username: &str) -> Result<(), BloomError> {
     return Ok(());
 }
 
-pub fn bio(bio: &str) -> Result<(), BloomError> {
-    if bio.len() > accounts::BIO_MAX_LENGTH {
-        return Err(BloomError::Validation("bio is too long".to_string()));
-    }
 
-    return Ok(());
-}
-
-pub fn display_name(display_name: &str) -> Result<(), BloomError> {
-    if display_name.is_empty() {
-        return Err(BloomError::Validation(
-            "display_name cannot be empty".to_string(),
-        ));
-    }
-
-    if display_name.len() > accounts::DISPLAY_NAME_MAX_LENGTH {
-        return Err(BloomError::Validation(format!(
-            "display_name is too long ({} characters max)",
-            accounts::DISPLAY_NAME_MAX_LENGTH
-        )));
-    }
-
-    return Ok(());
-}
 */
