@@ -9,6 +9,7 @@ import "google/protobuf/empty.proto";
 service Accounts {
   rpc SignIn(SignInParams) returns (Session);
   rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
+  rpc RevokeSession(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 
