@@ -420,7 +420,7 @@ import {
   Website,
   Email,
   Phone,
-  CreateContact,
+  CreateContactParams,
   DeleteContact,
 } from '../core/messages';
 import ContactsMethod from '../core/methods';
@@ -541,7 +541,7 @@ export default class ContactDialog extends Vue {
     if (this.isEmpty()) {
       return;
     }
-    const params: CreateContact = {
+    const params: CreateContactParams = {
       birthday: core.toIsoDate(this.birthday),
       first_name: this.firstName,
       last_name: this.lastName,
