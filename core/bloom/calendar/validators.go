@@ -1,16 +1,13 @@
 package calendar
 
-/*
-pub fn event_dates(
-    start_at: chrono::DateTime<chrono::Utc>,
-    end_at: chrono::DateTime<chrono::Utc>,
-) -> Result<(), BloomError> {
-    if end_at < start_at {
-        return Err(BloomError::Validation(
-            "end_at must be after start_at".to_string(),
-        ));
-    }
+import (
+	"errors"
+	"time"
+)
 
-    Ok(())
+func valdiateEventDates(startAt, endAt time.Time) error {
+	if endAt.Before(startAt) {
+		return errors.New("end_at can't be before start_at")
+	}
+	return nil
 }
-*/

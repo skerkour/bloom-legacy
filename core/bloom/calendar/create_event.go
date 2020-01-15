@@ -8,7 +8,10 @@ import (
 )
 
 func CreateEvent(params CreateEventParams) (Event, error) {
-	// bloom_validators::calendar::event_dates(input.start_at, input.end_at)?;
+	if err := validateCreateEvent(params); err != nil {
+		return Event{}, err
+	}
+
 	now := time.Now().UTC()
 	uuid := uuid.New()
 	event := Event{
@@ -31,4 +34,11 @@ func CreateEvent(params CreateEventParams) (Event, error) {
 	_, err = stmt.Exec(&event.ID, &event.CreatedAt, &event.UpdatedAt, &event.Title, &event.Description, &event.StartAt, &event.EndAt)
 
 	return event, err
+}
+
+func validateCreateEvent(params CreateEventParams) error {
+	if err := valdiateEventDates(params.StartAt, params.EndAt); err != nil {
+		return err
+	}
+	return nil
 }

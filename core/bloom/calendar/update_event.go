@@ -7,10 +7,11 @@ import (
 )
 
 func UpdateEvent(event Event) (Event, error) {
-	// validators
-	now := time.Now().UTC()
+	if err := validateUpdateEvent(event); err != nil {
+		return event, err
+	}
 
-	event.UpdatedAt = now
+	event.UpdatedAt = time.Now().UTC()
 
 	stmt, err := db.DB.Prepare(`
 		UPDATE calendar_events SET
@@ -29,4 +30,11 @@ func UpdateEvent(event Event) (Event, error) {
 	_, err = stmt.Exec(&event.UpdatedAt, &event.Title, &event.Description, &event.StartAt, &event.EndAt, &event.ID)
 
 	return event, err
+}
+
+func validateUpdateEvent(params Event) error {
+	if err := valdiateEventDates(params.StartAt, params.EndAt); err != nil {
+		return err
+	}
+	return nil
 }
