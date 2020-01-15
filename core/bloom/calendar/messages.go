@@ -19,3 +19,7 @@ type CreateEventParams struct {
 	StartAt     time.Time `json:"start_at"`
 	EndAt       time.Time `json:"end_at"`
 }
+
+type DeleteEventParams struct {
+	ID string `json:"id"`
+}
