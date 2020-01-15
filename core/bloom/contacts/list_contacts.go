@@ -1,11 +1,10 @@
 package contacts
 
 import (
-	"gitlab.com/bloom42/bloom/core/bloom/kernel"
 	"gitlab.com/bloom42/bloom/core/db"
 )
 
-func ListContacts(_ kernel.Empty) (Contacts, error) {
+func ListContacts() (Contacts, error) {
 	ret := Contacts{Contacts: []Contact{}}
 
 	rows, err := db.DB.Query(`SELECT id, created_at, updated_at, first_name, last_name, notes, addresses,

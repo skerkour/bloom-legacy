@@ -23,6 +23,8 @@ import proto "github.com/golang/protobuf/proto"
 import twirp "github.com/twitchtv/twirp"
 import ctxsetters "github.com/twitchtv/twirp/ctxsetters"
 
+import google_protobuf "github.com/golang/protobuf/ptypes/empty"
+
 // Imports only used by utility functions:
 import io "io"
 import json "encoding/json"
@@ -32,9 +34,11 @@ import url "net/url"
 // Accounts Interface
 // ==================
 
-// Accounts
+// accounts
 type Accounts interface {
 	SignIn(context.Context, *SignInParams) (*Session, error)
+
+	SignOut(context.Context, *google_protobuf.Empty) (*google_protobuf.Empty, error)
 }
 
 // ========================
@@ -43,7 +47,7 @@ type Accounts interface {
 
 type accountsProtobufClient struct {
 	client HTTPClient
-	urls   [1]string
+	urls   [2]string
 	opts   twirp.ClientOptions
 }
 
@@ -60,8 +64,9 @@ func NewAccountsProtobufClient(addr string, client HTTPClient, opts ...twirp.Cli
 	}
 
 	prefix := urlBase(addr) + AccountsPathPrefix
-	urls := [1]string{
+	urls := [2]string{
 		prefix + "SignIn",
+		prefix + "SignOut",
 	}
 
 	return &accountsProtobufClient{
@@ -72,11 +77,31 @@ func NewAccountsProtobufClient(addr string, client HTTPClient, opts ...twirp.Cli
 }
 
 func (c *accountsProtobufClient) SignIn(ctx context.Context, in *SignInParams) (*Session, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(Session)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsProtobufClient) SignOut(ctx context.Context, in *google_protobuf.Empty) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
+	out := new(google_protobuf.Empty)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -97,7 +122,7 @@ func (c *accountsProtobufClient) SignIn(ctx context.Context, in *SignInParams) (
 
 type accountsJSONClient struct {
 	client HTTPClient
-	urls   [1]string
+	urls   [2]string
 	opts   twirp.ClientOptions
 }
 
@@ -114,8 +139,9 @@ func NewAccountsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientO
 	}
 
 	prefix := urlBase(addr) + AccountsPathPrefix
-	urls := [1]string{
+	urls := [2]string{
 		prefix + "SignIn",
+		prefix + "SignOut",
 	}
 
 	return &accountsJSONClient{
@@ -126,11 +152,31 @@ func NewAccountsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientO
 }
 
 func (c *accountsJSONClient) SignIn(ctx context.Context, in *SignInParams) (*Session, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(Session)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[0], in, out)
+	if err != nil {
+		twerr, ok := err.(twirp.Error)
+		if !ok {
+			twerr = twirp.InternalErrorWith(err)
+		}
+		callClientError(ctx, c.opts.Hooks, twerr)
+		return nil, err
+	}
+
+	callClientResponseReceived(ctx, c.opts.Hooks)
+
+	return out, nil
+}
+
+func (c *accountsJSONClient) SignOut(ctx context.Context, in *google_protobuf.Empty) (*google_protobuf.Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
+	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
+	out := new(google_protobuf.Empty)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -170,11 +216,11 @@ func (s *accountsServer) writeError(ctx context.Context, resp http.ResponseWrite
 // AccountsPathPrefix is used for all URL paths on a twirp Accounts server.
 // Requests are always: POST AccountsPathPrefix/method
 // It can be used in an HTTP mux to route twirp requests along with non-twirp requests on other routes.
-const AccountsPathPrefix = "/twirp/com.bloom42.accounts.Accounts/"
+const AccountsPathPrefix = "/twirp/com.bloom42.Accounts/"
 
 func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithResponseWriter(ctx, resp)
 
@@ -193,8 +239,11 @@ func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) 
 	}
 
 	switch req.URL.Path {
-	case "/twirp/com.bloom42.accounts.Accounts/SignIn":
+	case "/twirp/com.bloom42.Accounts/SignIn":
 		s.serveSignIn(ctx, resp, req)
+		return
+	case "/twirp/com.bloom42.Accounts/SignOut":
+		s.serveSignOut(ctx, resp, req)
 		return
 	default:
 		msg := fmt.Sprintf("no handler for path %q", req.URL.Path)
@@ -310,6 +359,135 @@ func (s *accountsServer) serveSignInProtobuf(ctx context.Context, resp http.Resp
 	}
 	if respContent == nil {
 		s.writeError(ctx, resp, twirp.InternalError("received a nil *Session and nil error while calling SignIn. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	respBytes, err := proto.Marshal(respContent)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	resp.Header().Set("Content-Type", "application/protobuf")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveSignOut(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	header := req.Header.Get("Content-Type")
+	i := strings.Index(header, ";")
+	if i == -1 {
+		i = len(header)
+	}
+	switch strings.TrimSpace(strings.ToLower(header[:i])) {
+	case "application/json":
+		s.serveSignOutJSON(ctx, resp, req)
+	case "application/protobuf":
+		s.serveSignOutProtobuf(ctx, resp, req)
+	default:
+		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
+		twerr := badRouteError(msg, req.Method, req.URL.Path)
+		s.writeError(ctx, resp, twerr)
+	}
+}
+
+func (s *accountsServer) serveSignOutJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	reqContent := new(google_protobuf.Empty)
+	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
+	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.SignOut(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling SignOut. nil responses are not supported"))
+		return
+	}
+
+	ctx = callResponsePrepared(ctx, s.hooks)
+
+	var buf bytes.Buffer
+	marshaler := &jsonpb.Marshaler{OrigName: true}
+	if err = marshaler.Marshal(&buf, respContent); err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
+		return
+	}
+
+	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
+	respBytes := buf.Bytes()
+	resp.Header().Set("Content-Type", "application/json")
+	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
+	resp.WriteHeader(http.StatusOK)
+
+	if n, err := resp.Write(respBytes); err != nil {
+		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
+		twerr := twirp.NewError(twirp.Unknown, msg)
+		callError(ctx, s.hooks, twerr)
+	}
+	callResponseSent(ctx, s.hooks)
+}
+
+func (s *accountsServer) serveSignOutProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
+	var err error
+	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
+	ctx, err = callRequestRouted(ctx, s.hooks)
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+
+	buf, err := ioutil.ReadAll(req.Body)
+	if err != nil {
+		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
+		return
+	}
+	reqContent := new(google_protobuf.Empty)
+	if err = proto.Unmarshal(buf, reqContent); err != nil {
+		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
+		return
+	}
+
+	// Call service method
+	var respContent *google_protobuf.Empty
+	func() {
+		defer ensurePanicResponses(ctx, resp, s.hooks)
+		respContent, err = s.Accounts.SignOut(ctx, reqContent)
+	}()
+
+	if err != nil {
+		s.writeError(ctx, resp, err)
+		return
+	}
+	if respContent == nil {
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *google_protobuf.Empty and nil error while calling SignOut. nil responses are not supported"))
 		return
 	}
 
@@ -858,18 +1036,21 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 201 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x2a, 0x2a, 0x48, 0xd6,
-	0x4f, 0x4c, 0x4e, 0xce, 0x2f, 0xcd, 0x2b, 0x29, 0xd6, 0x2f, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e,
-	0xd5, 0x2b, 0x28, 0xca, 0x2f, 0xc9, 0x17, 0x12, 0x49, 0xce, 0xcf, 0xd5, 0x4b, 0xca, 0xc9, 0xcf,
-	0xcf, 0x35, 0x31, 0xd2, 0x83, 0xa9, 0x51, 0x72, 0xe5, 0xe2, 0x09, 0xce, 0x4c, 0xcf, 0xf3, 0xcc,
-	0x0b, 0x48, 0x2c, 0x4a, 0xcc, 0x2d, 0x16, 0x92, 0xe2, 0xe2, 0x28, 0x2d, 0x4e, 0x2d, 0xca, 0x4b,
-	0xcc, 0x4d, 0x95, 0x60, 0x54, 0x60, 0xd4, 0xe0, 0x0c, 0x82, 0xf3, 0x85, 0x24, 0xb9, 0x38, 0x12,
-	0x4b, 0x4b, 0x32, 0xe2, 0xb3, 0x53, 0x2b, 0x25, 0x98, 0xc0, 0x72, 0xec, 0x20, 0xbe, 0x77, 0x6a,
-	0xa5, 0x92, 0x3e, 0x17, 0x7b, 0x70, 0x6a, 0x71, 0x71, 0x66, 0x7e, 0x9e, 0x10, 0x1f, 0x17, 0x53,
-	0x66, 0x0a, 0x54, 0x2f, 0x53, 0x66, 0x8a, 0x90, 0x08, 0x17, 0x6b, 0x49, 0x7e, 0x76, 0x6a, 0x1e,
-	0x54, 0x0b, 0x84, 0x63, 0x14, 0xce, 0xc5, 0xe1, 0x08, 0x75, 0x83, 0x90, 0x37, 0x17, 0x1b, 0xc4,
-	0x0d, 0x42, 0x4a, 0x7a, 0xd8, 0x1c, 0xa9, 0x87, 0xec, 0x42, 0x29, 0x59, 0x1c, 0x6a, 0x20, 0xd6,
-	0x3b, 0x71, 0x45, 0x71, 0xc0, 0xc4, 0x92, 0xd8, 0xc0, 0x3e, 0x37, 0x06, 0x04, 0x00, 0x00, 0xff,
-	0xff, 0xdb, 0x55, 0xb2, 0xf0, 0x17, 0x01, 0x00, 0x00,
+	// 245 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x74, 0x8f, 0x3f, 0x6b, 0xeb, 0x40,
+	0x10, 0xc4, 0x91, 0xe0, 0x59, 0xf2, 0x3e, 0x93, 0xe2, 0x30, 0xc1, 0x56, 0x1a, 0xe3, 0xca, 0xd5,
+	0x1d, 0x38, 0x69, 0xdc, 0x06, 0x5c, 0x84, 0x14, 0x09, 0x72, 0x97, 0x26, 0x9c, 0xce, 0x1b, 0xe5,
+	0xb0, 0xef, 0x56, 0xdc, 0x9f, 0x80, 0xba, 0x7c, 0xf4, 0x20, 0xc9, 0x36, 0x4e, 0x91, 0x72, 0x76,
+	0x66, 0xd8, 0xdf, 0x40, 0xe1, 0x1a, 0x25, 0xa4, 0x52, 0x14, 0x6d, 0xf0, 0xc2, 0xa3, 0xfb, 0xd2,
+	0x0a, 0x79, 0xe3, 0x28, 0x10, 0xfb, 0xaf, 0xc8, 0xf0, 0xea, 0x48, 0x64, 0x1e, 0xd6, 0xc5, 0x5d,
+	0x4d, 0x54, 0x1f, 0x51, 0xf4, 0x56, 0x15, 0x3f, 0x04, 0x9a, 0x26, 0xb4, 0x43, 0x72, 0xb9, 0x85,
+	0xc9, 0x4e, 0xd7, 0xf6, 0xc9, 0xbe, 0x4a, 0x27, 0x8d, 0x67, 0x05, 0xe4, 0xd1, 0xa3, 0xb3, 0xd2,
+	0xe0, 0x2c, 0x59, 0x24, 0xab, 0x71, 0x79, 0xd1, 0x6c, 0x0e, 0xb9, 0x8c, 0xe1, 0xf3, 0xfd, 0x80,
+	0xed, 0x2c, 0x5d, 0x24, 0xab, 0x49, 0x99, 0x75, 0xfa, 0x19, 0xdb, 0xa5, 0x80, 0x6c, 0x87, 0xde,
+	0x6b, 0xb2, 0xec, 0x06, 0x52, 0xbd, 0x3f, 0x75, 0x53, 0xbd, 0x67, 0x53, 0xf8, 0x17, 0xe8, 0x80,
+	0xb6, 0xaf, 0x8c, 0xcb, 0x41, 0xac, 0xbf, 0x13, 0xc8, 0xcf, 0xf0, 0x6c, 0x03, 0xa3, 0x01, 0x82,
+	0xcd, 0xf9, 0x15, 0x39, 0xbf, 0x26, 0x2b, 0xa6, 0xbf, 0xad, 0xd3, 0xb7, 0x0d, 0x64, 0x5d, 0xea,
+	0x25, 0x06, 0x76, 0xcb, 0x87, 0xa1, 0xfc, 0x3c, 0x94, 0x6f, 0xbb, 0xa1, 0xc5, 0x1f, 0xf7, 0x47,
+	0x78, 0xbb, 0x10, 0x54, 0xa3, 0xde, 0xbb, 0xff, 0x09, 0x00, 0x00, 0xff, 0xff, 0xf4, 0xcc, 0xae,
+	0xf8, 0x55, 0x01, 0x00, 0x00,
 }

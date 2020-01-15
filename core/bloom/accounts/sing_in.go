@@ -1,5 +1,11 @@
 package accounts
 
+import (
+	"context"
+	"gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"net/http"
+)
+
 /*
 
 pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
@@ -20,8 +26,20 @@ pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
 }
 */
 func SignIn(params SignInParams) (Session, error) {
+	client := accounts.NewAccountsProtobufClient("http://localhost:8080", &http.Client{})
+
+	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
+	rpcParams := accounts.SignInParams{
+		Username: params.Username,
+		AuthKey:  authKey,
+	}
+
+	session, err := client.SignIn(context.Background(), &rpcParams)
+	if err != nil {
+		return Session{}, err
+	}
 	return Session{
-		ID:    "myRandomID",
-		Token: "myRandomToken",
+		ID:    session.Id,
+		Token: session.Token,
 	}, nil
 }

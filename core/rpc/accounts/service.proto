@@ -1,17 +1,20 @@
 syntax = "proto3";
 
-package com.bloom42.accounts;
+package com.bloom42;
 option go_package = "accounts";
 
-// Accounts
-service Accounts {
+import "google/protobuf/empty.proto";
+
+// accounts
+service accounts {
   rpc SignIn(SignInParams) returns (Session);
+  rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
 }
 
 
 message SignInParams {
   string username = 1;
-  string auth_key = 2;
+  bytes auth_key = 2;
 }
 
 message Session {
