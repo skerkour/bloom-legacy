@@ -2,7 +2,7 @@ package main
 
 import (
 	"context"
-	"fmt"
+	"encoding/json"
 	"net/http"
 	"os"
 
@@ -33,7 +33,7 @@ func main() {
 	if port == "" {
 		port = "8000"
 	}
-	twirpHandler := rpcaccounts.NewAccountsServer(AccountsServer{}, nil)
+	accountsHandler := rpcaccounts.NewAccountsServer(AccountsServer{}, nil)
 
 	log.SetLogger(log.With(
 		rz.Fields(
@@ -52,7 +52,8 @@ func main() {
 	router.Use(injectLoggerMiddleware(log.Logger()))
 
 	router.Get("/", helloWorld)
-	router.Mount(twirpHandler.PathPrefix(), twirpHandler)
+	router.Mount(accountsHandler.PathPrefix(), accountsHandler)
+	router.NotFound(http.HandlerFunc(notFoundHandler))
 
 	err := http.ListenAndServe(":"+port, router)
 	if err != nil {
@@ -85,8 +86,38 @@ func injectLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handl
 	}
 }
 
+type HelloWorld struct {
+	Hello string `json:"hello"`
+}
+
 func helloWorld(w http.ResponseWriter, r *http.Request) {
-	// logger := rz.FromCtx(r.Context())
-	// logger.Info("hello from GET /")
-	fmt.Fprintf(w, "Hello, you've requested: %s\n", r.URL.Path)
+	data, err := json.Marshal(HelloWorld{Hello: "world"})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+
+	w.Header().Set("content-type", "application/json")
+	w.Write(data)
+}
+
+type APIError struct {
+	Code    string            `json:"code"`
+	Message string            `json:"msg"`
+	Meta    map[string]string `json:"meta"`
+}
+
+func notFoundHandler(w http.ResponseWriter, r *http.Request) {
+	data, err := json.Marshal(APIError{
+		Code:    "not_found",
+		Message: "route not found",
+		Meta:    nil,
+	})
+	if err != nil {
+		http.Error(w, err.Error(), http.StatusInternalServerError)
+		return
+	}
+	w.Header().Set("content-type", "application/json")
+	w.WriteHeader(http.StatusNotFound)
+	w.Write(data)
 }
