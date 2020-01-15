@@ -31,6 +31,28 @@ func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut 
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "delete_contact":
+		var params contacts.DeleteContactParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := contacts.DeleteContact(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "update_contact":
+		var params contacts.Contact
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := contacts.UpdateContact(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	default:
 		return methodNotFoundError(method, "contacts")
 	}

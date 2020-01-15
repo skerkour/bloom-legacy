@@ -20,3 +20,7 @@ type CreateContactParams struct {
 	Phones        Phones        `json:"phones"`
 	Websites      Websites      `json:"websites"`
 }
+
+type DeleteContactParams struct {
+	ID string `json:"id"`
+}
