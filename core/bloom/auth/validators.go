@@ -1,8 +1,6 @@
-use bloom_const::accounts;
-use bloom_error::BloomError;
-use regex::Regex;
-use std::collections::HashSet;
+package auth
 
+/*
 pub fn first_name(first_name: &str) -> Result<(), BloomError> {
     if first_name.is_empty() {
         return Err(BloomError::Validation(
@@ -190,3 +188,4 @@ pub fn display_name(display_name: &str) -> Result<(), BloomError> {
 
     return Ok(());
 }
+*/

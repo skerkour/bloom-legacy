@@ -1,5 +1,3 @@
-#[allow(non_camel_case_types)]
-#[derive(Debug)]
 pub enum ErrorCode {
     INTERNAL,
     UKNOWN_MESSAGE_TYPE,

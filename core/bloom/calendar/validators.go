@@ -1,5 +1,6 @@
-use bloom_error::BloomError;
+package calendar
 
+/*
 pub fn event_dates(
     start_at: chrono::DateTime<chrono::Utc>,
     end_at: chrono::DateTime<chrono::Utc>,
@@ -12,3 +13,4 @@ pub fn event_dates(
 
     Ok(())
 }
+*/
