@@ -71,7 +71,7 @@ export default class Index extends Vue {
 
     try {
       const res = await core.call(NotesMethod.ListNotes, core.empty);
-      this.notes = (res.data as Notes).notes;
+      this.notes = (res as Notes).notes;
     } catch (err) {
       log.error(err);
     } finally {
@@ -85,7 +85,7 @@ export default class Index extends Vue {
 
     try {
       const res = await core.call(NotesMethod.ListArchived, core.empty);
-      this.notes = (res.data as Notes).notes;
+      this.notes = (res as Notes).notes;
     } catch (err) {
       this.error = err.message;
     } finally {

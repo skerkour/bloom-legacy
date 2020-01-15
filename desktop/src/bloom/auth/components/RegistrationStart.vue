@@ -86,7 +86,7 @@ export default class RegistrationStart extends Vue {
 
       const pendingAccount: StorePendingAccount = {
         email: this.email,
-        id: (res.data as RegistrationStarted).id,
+        id: (res as RegistrationStarted).id,
       };
       this.$store.commit(Mutations.SET_PENDING_ACCOUNT.toString(), pendingAccount);
 

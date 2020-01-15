@@ -162,7 +162,7 @@ export default class BlmNote extends Vue {
 
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('archived', (res.data as Note));
+      this.$emit('archived', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -178,7 +178,7 @@ export default class BlmNote extends Vue {
 
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('unarchived', (res.data as Note));
+      this.$emit('unarchived', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -194,7 +194,7 @@ export default class BlmNote extends Vue {
 
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('updated', (res.data as Note));
+      this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -210,7 +210,7 @@ export default class BlmNote extends Vue {
 
     try {
       const res = await core.call(NotesMethod.UpdateNote, note);
-      this.$emit('updated', (res.data as Note));
+      this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {

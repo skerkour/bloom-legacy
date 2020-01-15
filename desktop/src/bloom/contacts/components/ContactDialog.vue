@@ -555,7 +555,7 @@ export default class ContactDialog extends Vue {
     };
     try {
       const res = await core.call(ContactsMethod.CreateContact, params);
-      this.$emit('created', (res.data as Contact));
+      this.$emit('created', (res as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -578,7 +578,7 @@ export default class ContactDialog extends Vue {
     contact.addresses = [];
     try {
       const res = await core.call(ContactsMethod.UpdateContact, contact);
-      this.$emit('updated', (res.data as Contact));
+      this.$emit('updated', (res as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {

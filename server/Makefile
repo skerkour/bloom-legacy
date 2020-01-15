@@ -15,6 +15,10 @@ fmt:
 test:
 	go test ./...
 
+.PHONY: dev
+dev:
+	go run .
+
 .PHONY: build
 build:
 	go build -o dist/$(NAME)

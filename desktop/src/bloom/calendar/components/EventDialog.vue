@@ -230,7 +230,7 @@ export default class EventDialog extends Vue {
     };
     try {
       const res = await core.call(CalendarMethod.CreateEvent, params);
-      this.$emit('created', (res.data as Event));
+      this.$emit('created', (res as Event));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -248,7 +248,7 @@ export default class EventDialog extends Vue {
     event.end_at = core.toIsoDate(this.endAt)!;
     try {
       const res = await core.call(CalendarMethod.UpdateEvent, event);
-      this.$emit('updated', (res.data as Event));
+      this.$emit('updated', (res as Event));
     } catch (err) {
       this.error = err.message;
     } finally {
