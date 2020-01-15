@@ -1,6 +1,5 @@
 package core
 
-
 import (
 	"C"
 	"encoding/json"
