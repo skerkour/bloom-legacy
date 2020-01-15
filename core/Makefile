@@ -11,15 +11,18 @@ all: desktop android
 fmt:
 	go fmt ./...
 
+.PHONY: test
+test:
+	go test ./...
+
+.PHONY: rpc
+rpc:
+	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/accounts/service.proto
 
 .PHONY: desktop
 desktop:
 	go build -o dist/$(NAME)server server/*.go
 	cp dist/$(NAME)server ../desktop/$(NAME)server
-
-.PHONY: test
-test:
-	go test ./...
 
 PHONY: android
 android: android_armv8 android_armv7 android_x86 # android_amd64

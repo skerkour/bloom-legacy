@@ -1,0 +1,20 @@
+syntax = "proto3";
+
+package com.bloom42.accounts;
+option go_package = "accounts";
+
+// Accounts
+service Accounts {
+  rpc SignIn(SignInParams) returns (Session);
+}
+
+
+message SignInParams {
+  string username = 1;
+  string auth_key = 2;
+}
+
+message Session {
+  string id = 1;
+  string token = 2;
+}
