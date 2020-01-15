@@ -12,3 +12,10 @@ type ListEventsParams struct {
 type Events struct {
 	Events []Event `json:"events"`
 }
+
+type CreateEventParams struct {
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	StartAt     time.Time `json:"start_at"`
+	EndAt       time.Time `json:"end_at"`
+}
