@@ -55,9 +55,8 @@ func validateDisplayName(displayName string) error {
 	return nil
 }
 
+// TODO
 /*
-
-
 pub fn password<S: std::hash::BuildHasher>(
     basic_passwords: HashSet<String, S>,
     password: &str,
@@ -81,7 +80,13 @@ pub fn password<S: std::hash::BuildHasher>(
 
     return Ok(());
 }
+*/
+func validatePassword(password string, basicPassword map[string]bool) error {
+	return nil
+}
 
+// TODO
+/*
 pub fn email<S: std::hash::BuildHasher>(
     disposable_emails: HashSet<String, S>,
     email: &str,
@@ -135,7 +140,13 @@ pub fn email<S: std::hash::BuildHasher>(
 
     return Ok(());
 }
+*/
+func validateEmail(email string, disposableEmailDomains map[string]bool) error {
+	return nil
+}
 
+// TODO
+/*
 pub fn username(username: &str) -> Result<(), BloomError> {
     if username.is_empty() {
         return Err(BloomError::Validation(
@@ -192,6 +203,7 @@ pub fn username(username: &str) -> Result<(), BloomError> {
 
     return Ok(());
 }
-
-
 */
+func validateUsername(username string) error {
+	return nil
+}
