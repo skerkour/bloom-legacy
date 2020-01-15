@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 pub fn first_name(first_name: &str) -> Result<(), BloomError> {

@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 pub fn registration_complete(input: auth::GuiRegistrationComplete) -> Result<Message, BloomError> {

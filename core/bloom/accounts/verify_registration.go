@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 pub fn registration_verify(message: auth::RegistrationVerify) -> Result<Message, BloomError> {

@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 pub fn sign_out(_: auth::SignOut) -> Result<Message, BloomError> {

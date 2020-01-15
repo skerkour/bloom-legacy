@@ -166,7 +166,7 @@ build:core:
     - docker
   script:
     - cd core
-    - make build_desktop
+    - make desktop
 
 
 build:desktop:

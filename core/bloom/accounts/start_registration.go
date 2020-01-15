@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 /// See https://bloom.sh/the-guide/projects/bloom/security/authentication.html#registration for the spec

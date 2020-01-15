@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 /*
 fn username_to_salt(username: &str) -> argon2id::Salt {

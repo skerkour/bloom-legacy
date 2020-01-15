@@ -1,4 +1,4 @@
-package auth
+package accounts
 
 type SignInParams struct {
 	Username string `json:"username"`
