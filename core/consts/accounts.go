@@ -53,3 +53,6 @@ var INVALID_USERNAMES = []string{
 	"kerkour.sylvain",
 	"kerkoursylvain",
 }
+
+const PASSWORD_MIN_LENGTH int = 8
+const PASSWORD_MAX_LENGTH int = 256

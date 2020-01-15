@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"errors"
+	"fmt"
 	"gitlab.com/bloom42/bloom/core/consts"
 	"regexp"
 	"strings"
@@ -57,33 +58,21 @@ func validateDisplayName(displayName string) error {
 	return nil
 }
 
-// TODO
-/*
-pub fn password<S: std::hash::BuildHasher>(
-    basic_passwords: HashSet<String, S>,
-    password: &str,
-) -> Result<(), BloomError> {
-    let length = password.len();
-
-    if length < 8 {
-        return Err(BloomError::Validation(
-            "Password must be longer than 7 characters".to_string(),
-        ));
-    } else if length > 128 {
-        return Err(BloomError::Validation(
-            "Password must be shorter than 128 characters".to_string(),
-        ));
-    } else if basic_passwords
-        .iter()
-        .any(|basic_password| basic_password == password)
-    {
-        return Err(BloomError::Validation("Password is too weak".to_string()));
-    }
-
-    return Ok(());
-}
-*/
 func validatePassword(password string, basicPassword map[string]bool) error {
+	passwordLength := len(password)
+
+	if passwordLength < consts.PASSWORD_MAX_LENGTH {
+		return fmt.Errorf("Password must be longer than %d characters", consts.PASSWORD_MAX_LENGTH-1)
+	}
+
+	if passwordLength > consts.PASSWORD_MAX_LENGTH {
+		return fmt.Errorf("Password must be shorter than %d characters", consts.PASSWORD_MAX_LENGTH)
+	}
+
+	if _, ok := basicPassword[password]; ok {
+		return errors.New("Password is too weak")
+	}
+
 	return nil
 }
 
@@ -147,42 +136,6 @@ func validateEmail(email string, disposableEmailDomains map[string]bool) error {
 	return nil
 }
 
-// TODO
-/*
-pub fn username(username: &str) -> Result<(), BloomError> {
-
-    let invalid_usernames = vec![
-        "admin",
-        "sysy",
-        "asministrator",
-        "bloom",
-        "bloom42",
-        "support",
-        "help",
-        "settings",
-        "admin1",
-        "security",
-        "profile",
-        "42bloom",
-        "sylvain.kerkour",
-        "sylvainkerkour",
-        "kerkour.sylvain",
-        "kerkoursylvain",
-    ];
-
-    if invalid_usernames.contains(&username) {
-        return Err(BloomError::Validation("username is not valid".to_string()));
-    }
-
-    if username.contains("administrator") {
-        return Err(BloomError::Validation("username is not valid".to_string()));
-    }
-
-
-    return Ok(());
-}
-*/
-
 var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 
 func validateUsername(username string) error {
@@ -193,11 +146,11 @@ func validateUsername(username string) error {
 	}
 
 	if usernameLength < consts.USERNAME_MIN_LENGTH {
-		return errors.New("username is too short")
+		return fmt.Errorf("username must be longer than %d characters", consts.USERNAME_MIN_LENGTH-1)
 	}
 
 	if usernameLength > consts.USERNAME_MAX_LENGTH {
-		return errors.New("username is too long")
+		return fmt.Errorf("username must be longer than %d characters", consts.USERNAME_MAX_LENGTH)
 	}
 
 	if username != strings.ToLower(username) {
