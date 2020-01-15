@@ -131,6 +131,18 @@ test:mobile:
 #   services:
 #     - postgres:$POSTGRES_VERSION
 
+test:server:
+  stage: test
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - cd server
+    - cp bloom.default.sane bloom.sane
+    - make test
+  services:
+    - postgres:$POSTGRES_VERSION
+
 test:website:
   stage: test
   image: node:lts
@@ -224,6 +236,15 @@ build:mobile:
 #   artifacts:
 #     paths:
 #     - server/dist
+
+build:server:
+  stage: build
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - cd server
+    - make build
 
 build:website:
   stage: build
