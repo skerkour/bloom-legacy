@@ -1,11 +1,11 @@
 package auth
 
 /*
-
-pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
+pub fn registration_complete(input: auth::GuiRegistrationComplete) -> Result<Message, BloomError> {
     let auth_key = derive_auth_key(&input.username, &input.password)?;
 
-    let message: Message = auth::SignIn {
+    let message: Message = auth::RegistrationComplete {
+        id: input.id,
         username: input.username,
         auth_key: base64::encode(&auth_key),
     }
@@ -19,9 +19,7 @@ pub fn sign_in(input: auth::GuiSignIn) -> Result<Message, BloomError> {
     return Ok(ret);
 }
 */
-func SignIn(params SignInParams) (Session, error) {
-	return Session{
-		ID:    "myRandomID",
-		Token: "myRandomTOken",
-	}, nil
+
+func CompleteRegistration(params CompleteRegistrationParams) ([]byte, error) {
+	return nil, nil
 }
