@@ -1,8 +1,10 @@
 import 'package:bloom/bloom/calendar/core/messages.dart';
 import 'package:bloom/bloom/calendar/core/methods.dart';
+import 'package:bloom/bloom/kernel/services/utils.dart';
 import 'package:bloom/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 class Event {
   Event({
@@ -32,10 +34,10 @@ class Event {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      createdAt: DateTime.parse(json['created_at']).toUtc(),
-      updatedAt: DateTime.parse(json['updated_at']).toUtc(),
-      startAt: DateTime.parse(json['start_at']).toUtc(),
-      endAt: DateTime.parse(json['end_at']).toUtc(),
+      createdAt: Utils.fromGoTime(json['created_at']).toUtc(),
+      updatedAt: Utils.fromGoTime(json['updated_at']).toUtc(),
+      startAt: Utils.fromGoTime(json['start_at']).toUtc(),
+      endAt: Utils.fromGoTime(json['end_at']).toUtc(),
     );
   }
 
@@ -68,7 +70,7 @@ class Event {
   Future<void> delete() async {
     debugPrint('Event.delete called (id: $id)');
 
-    await coreCall(CalendarMethod.delete_event, CalendarDeleteEvent(id));
+    await coreCall(CalendarMethod.delete_event, CalendarDeleteEventParams(id));
   }
 
   static Future<List<Event>> find(DateTime startAt, DateTime endAt) async {
@@ -80,6 +82,7 @@ class Event {
   }
 
   DateTime _zeroizeDay(DateTime day) {
-    return DateTime.parse('${day.year}-${day.month}-${day.day}T00:00:00.00Z');
+    final DateFormat formatter = DateFormat('yyyy-MM-dd');
+    return DateTime.parse('${formatter.format(day)}T00:00:00.00Z');
   }
 }

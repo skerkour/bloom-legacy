@@ -32,7 +32,12 @@ class Utils {
     if (time == null) {
       return null;
     }
-    time = time.substring(0, 25).replaceAll('Z', '') + 'Z';
+
+    if (time.length > 25) {
+      time = time.substring(0, 25);
+    }
+
+    time = time.replaceAll('Z', '') + 'Z';
 
     return DateTime.parse(time);
   }
