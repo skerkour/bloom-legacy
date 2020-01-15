@@ -3,6 +3,8 @@ package accounts
 import (
 	"errors"
 	"gitlab.com/bloom42/bloom/core/consts"
+	"regexp"
+	"strings"
 )
 
 func validateFirstName(firstName string) error {
@@ -148,25 +150,6 @@ func validateEmail(email string, disposableEmailDomains map[string]bool) error {
 // TODO
 /*
 pub fn username(username: &str) -> Result<(), BloomError> {
-    if username.is_empty() {
-        return Err(BloomError::Validation(
-            "username cannot be empty".to_string(),
-        ));
-    }
-
-    if username.len() < 4 {
-        return Err(BloomError::Validation("username is too short".to_string()));
-    }
-
-    if username.len() > 16 {
-        return Err(BloomError::Validation("username is too long".to_string()));
-    }
-
-    if username.to_lowercase() != username {
-        return Err(BloomError::Validation(
-            "username must be lowercase".to_string(),
-        ));
-    }
 
     let invalid_usernames = vec![
         "admin",
@@ -195,15 +178,48 @@ pub fn username(username: &str) -> Result<(), BloomError> {
         return Err(BloomError::Validation("username is not valid".to_string()));
     }
 
-    if !username.chars().all(char::is_alphanumeric) || !username.is_ascii() {
-        return Err(BloomError::Validation(
-            "username must contains only alphanumeric characters".to_string(),
-        ));
-    }
 
     return Ok(());
 }
 */
+
+var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
+
 func validateUsername(username string) error {
+	usernameLength := len(username)
+
+	if usernameLength == 0 {
+		return errors.New("username cannot be empty")
+	}
+
+	if usernameLength < consts.USERNAME_MIN_LENGTH {
+		return errors.New("username is too short")
+	}
+
+	if usernameLength > consts.USERNAME_MAX_LENGTH {
+		return errors.New("username is too long")
+	}
+
+	if username != strings.ToLower(username) {
+		return errors.New("username must be lowercase")
+	}
+
+	if !isAlphaNumeric(username) {
+		return errors.New("username must contains only alphanumeric characters")
+	}
+
+	if strings.Contains(username, "admin") || stringSliceContains(consts.INVALID_USERNAMES, username) {
+		return errors.New("username is not valid")
+	}
+
 	return nil
+}
+
+func stringSliceContains(s []string, e string) bool {
+	for _, a := range s {
+		if a == e {
+			return true
+		}
+	}
+	return false
 }
