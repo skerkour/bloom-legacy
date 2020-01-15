@@ -10,7 +10,7 @@ service Accounts {
   rpc StartRegistration(StartRegistrationParams) returns (RegistrationStarted);
   rpc VerifyRegistration(VerifyRegistrationParams) returns (google.protobuf.Empty);
   rpc CompleteRegistration(CompleteRegistrationParams) returns (Session);
-  rpc RequestNewRegistrationCode(RequestNewRegistrationCodeParams) returns (google.protobuf.Empty);
+  rpc SendNewRegistrationCode(SendNewRegistrationCodeParams) returns (google.protobuf.Empty);
   rpc SignIn(SignInParams) returns (Session);
   rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc RevokeSession(RevokeSessionParams) returns (google.protobuf.Empty);
@@ -30,7 +30,7 @@ message VerifyRegistrationParams {
   string code = 2;
 }
 
-message RequestNewRegistrationCodeParams {
+message SendNewRegistrationCodeParams {
   string id = 1;
 }
 

@@ -100,7 +100,9 @@ func notFoundHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(APIError{
 		Code:    "not_found",
 		Message: "route not found",
-		Meta:    nil,
+		Meta: map[string]string{
+			"path": r.URL.Path,
+		},
 	})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
