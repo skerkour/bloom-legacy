@@ -1,8 +1,8 @@
-NAME := bloomserver
-# VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
+NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
+VERSION := $(shell cat version/version.go| grep "\sVersion\s=" | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
-
+GO_PKG = gitlab.com/bloom42/bloom/server
 
 .PHONY: all
 all: build
@@ -22,7 +22,11 @@ dev:
 
 .PHONY: build
 build:
-	go build -o dist/$(NAME)
+	go build -o dist/$(NAME) -ldflags "-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
+		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
+		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
+	cp -r migrations dist/
+	cp bloom.default.sane dist/bloom.sane
 
 .PHONY: clean
 clean:

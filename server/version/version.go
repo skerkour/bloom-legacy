@@ -5,16 +5,14 @@ import (
 )
 
 // const set at build time
-const (
-	UTCBuildTime = "undefined"
-	GitCommit    = "undefined"
-	OS           = runtime.GOOS
-	Arch         = runtime.GOARCH
-	GoVersion    = "undefined"
-	Name         = "bloomserver"
-)
 
-// Version is the bitflow's version
+var GitCommit string
+var UTCBuildTime string
+var GoVersion string
+
 const (
+	OS      = runtime.GOOS
+	Arch    = runtime.GOARCH
+	Name    = "bloomserver"
 	Version = "0.1.0"
 )
