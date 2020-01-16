@@ -1,15 +1,13 @@
 package cmd
 
 import (
-	"context"
-	"encoding/json"
 	"fmt"
 	"net/http"
 
 	"github.com/go-chi/chi"
-	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
@@ -46,13 +44,14 @@ var serverCmd = &cobra.Command{
 		accountsHandler := rpcaccounts.NewAccountsServer(accounts.Handler{}, nil)
 
 		// here the order matters, otherwise loggingMiddleware won't see the request ID
-		router.Use(requestIDMiddleware)
+		router.Use(api.SecurityHeadersMiddleware)
+		router.Use(api.SetRequestIDMiddleware)
 		router.Use(loggingMiddleware)
-		router.Use(injectLoggerMiddleware(log.Logger()))
+		router.Use(api.SetLoggerMiddleware(log.Logger()))
 
-		router.Get("/", helloWorld)
+		router.Get("/", api.HelloWorldRoute)
 		router.Mount(accountsHandler.PathPrefix(), accountsHandler)
-		router.NotFound(http.HandlerFunc(notFoundHandler))
+		router.NotFound(http.HandlerFunc(api.NotFoundHandler))
 
 		log.Info("satarting server", rz.Uint16("port", config.Config.Port))
 		err = http.ListenAndServe(fmt.Sprintf(":%d", config.Config.Port), router)
@@ -60,67 +59,4 @@ var serverCmd = &cobra.Command{
 			log.Fatal("listening", rz.Err(err))
 		}
 	},
-}
-
-func requestIDMiddleware(next http.Handler) http.Handler {
-	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		uuidv4, _ := uuid.NewRandom()
-		requestID := uuidv4.String()
-		w.Header().Set("X-Bloom-Request-ID", requestID)
-
-		ctx := context.WithValue(r.Context(), rzhttp.RequestIDCtxKey, requestID)
-		next.ServeHTTP(w, r.WithContext(ctx))
-	})
-}
-
-func injectLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(string); ok {
-				logger = logger.With(rz.Fields(rz.String("request_id", rid)))
-				ctx := logger.ToCtx(r.Context())
-				r = r.WithContext(ctx)
-			}
-
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-type HelloWorld struct {
-	Hello string `json:"hello"`
-}
-
-func helloWorld(w http.ResponseWriter, r *http.Request) {
-	data, err := json.Marshal(HelloWorld{Hello: "world"})
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-
-	w.Header().Set("content-type", "application/json")
-	w.Write(data)
-}
-
-type APIError struct {
-	Code    string            `json:"code"`
-	Message string            `json:"msg"`
-	Meta    map[string]string `json:"meta"`
-}
-
-func notFoundHandler(w http.ResponseWriter, r *http.Request) {
-	data, err := json.Marshal(APIError{
-		Code:    "not_found",
-		Message: "route not found",
-		Meta: map[string]string{
-			"path": r.URL.Path,
-		},
-	})
-	if err != nil {
-		http.Error(w, err.Error(), http.StatusInternalServerError)
-		return
-	}
-	w.Header().Set("content-type", "application/json")
-	w.WriteHeader(http.StatusNotFound)
-	w.Write(data)
 }
