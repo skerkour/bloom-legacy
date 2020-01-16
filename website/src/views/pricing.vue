@@ -51,9 +51,35 @@
       </v-col>
     </v-row>
 
-    <v-row class="justify-center">
+    <v-row class="justify-center align-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">Save big with Bloom</h1>
+      </v-col>
+
+      <v-col cols="12" md="5" class="text-center mt-5">
+        <v-card class="mx-auto" outlined>
+          <v-card-title class="text-center justify-center">Bloom</v-card-title>
+          <v-card-text class="text-left">
+            <ul>
+              <li><v-icon color="success">mdi-check</v-icon> Notes</li>
+              <li><v-icon color="success">mdi-check</v-icon> Drive</li>
+              <li>And much more <a href="https://gitlab.com/bloom42/wiki/-/wikis/organization/roadmap" target="_blank" rel="noopener noreferer">coming soon</a></li>
+            </ul>
+          </v-card-text>
+        </v-card>
+      </v-col>
+
+      <v-col cols="12" md="1" class="text-center mt-5">
+        <h3 class="display-1">VS</h3>
+      </v-col>
+
+      <v-col cols="12" md="5" class="text-center mt-5">
+        <v-card class="mx-auto" outlined>
+          <v-card-title class="text-center justify-center">Others</v-card-title>
+          <v-card-text>
+            blah blah blah
+          </v-card-text>
+        </v-card>
       </v-col>
     </v-row>
 
@@ -100,4 +126,7 @@ export default class Pricing extends Vue {
 </script>
 
 <style scoped lang="scss">
+ul {
+  list-style-type: none;
+}
 </style>
