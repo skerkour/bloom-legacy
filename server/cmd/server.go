@@ -3,14 +3,15 @@ package cmd
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
-	"os"
 
 	"github.com/go-chi/chi"
 	"github.com/google/uuid"
 	"github.com/spf13/cobra"
 	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
+	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
@@ -26,15 +27,14 @@ var serverCmd = &cobra.Command{
 	Short:   "Run the server",
 	Long:    "Run the server",
 	Run: func(cmd *cobra.Command, args []string) {
-		env := os.Getenv("GO_ENV")
-		port := os.Getenv("PORT")
-		if port == "" {
-			port = "8000"
+		err := config.Init("bloom.sane")
+		if err != nil {
+			log.Fatal("Initializing config", rz.Err(err))
 		}
 
 		log.SetLogger(log.With(
 			rz.Fields(
-				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", env),
+				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Config.Env),
 			),
 		))
 
@@ -54,7 +54,8 @@ var serverCmd = &cobra.Command{
 		router.Mount(accountsHandler.PathPrefix(), accountsHandler)
 		router.NotFound(http.HandlerFunc(notFoundHandler))
 
-		err := http.ListenAndServe(":"+port, router)
+		log.Info("satarting server", rz.Uint16("port", config.Config.Port))
+		err = http.ListenAndServe(fmt.Sprintf(":%d", config.Config.Port), router)
 		if err != nil {
 			log.Fatal("listening", rz.Err(err))
 		}

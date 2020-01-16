@@ -32,13 +32,13 @@ var migrationsRunCmd = &cobra.Command{
 	Run: func(cmd *cobra.Command, args []string) {
 		err := config.Init("bloom.sane")
 		if err != nil {
-			log.Fatal("Initiating config", rz.Err(err))
+			log.Fatal("Initializing config", rz.Err(err))
 		}
 
 		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
 
 		if err != nil {
-			log.Fatal("Initiating DB connection", rz.Err(err))
+			log.Fatal("Initializing DB connection", rz.Err(err))
 		}
 
 		err = migrate.Up()
@@ -61,7 +61,7 @@ var migrationsRevertCmd = &cobra.Command{
 		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
 
 		if err != nil {
-			log.Fatal("Initiating DB connection", rz.Err(err))
+			log.Fatal("Initializing DB connection", rz.Err(err))
 		}
 
 		err = migrate.Steps(-1)
