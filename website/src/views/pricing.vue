@@ -7,7 +7,7 @@
         <v-row class="justify-center">
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
-              <v-card-title class="text-center justify-center">Free</v-card-title>
+              <v-card-title class="display-1 justify-center">Free</v-card-title>
               <v-card-text>
                 blah blah blah
               </v-card-text>
@@ -16,7 +16,7 @@
 
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
-              <v-card-title class="text-center justify-center">Basic</v-card-title>
+              <v-card-title class="display-1 justify-center">Basic</v-card-title>
               <v-card-text>
                 blah blah blah
               </v-card-text>
@@ -25,7 +25,7 @@
 
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
-              <v-card-title class="text-center justify-center">Pro</v-card-title>
+              <v-card-title class="display-1 justify-center">Pro</v-card-title>
               <v-card-text>
                 blah blah blah
               </v-card-text>
@@ -34,7 +34,7 @@
 
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
-              <v-card-title class="text-center justify-center">Ultra</v-card-title>
+              <v-card-title class="display-1 justify-center">Ultra</v-card-title>
               <v-card-text>
                 blah blah blah
               </v-card-text>
@@ -45,7 +45,7 @@
     </v-row>
 
     <v-row class="justify-center">
-      <v-col cols="12" sm="10" md="8" class="text-center mt-5">
+      <v-col cols="12" sm="10" md="8" class="text-center">
         <blm-download-btn />
         <blm-other-downloads-link />
       </v-col>
@@ -58,13 +58,15 @@
 
       <v-col cols="10" sm="8" md="5" class="text-center mt-5">
         <v-card class="mx-auto" outlined>
-          <v-card-title class="display-2 justify-center">Bloom</v-card-title>
-          <v-card-text class="text-left justify-center">
+          <v-card-title class="display-1 justify-center">Bloom</v-card-title>
+          <v-card-text class="text-left">
             <v-row class="justify-center">
               <v-col cols="12" sm="10" md="8">
                 <ul>
                   <li><v-icon color="success">mdi-check</v-icon> Notes</li>
                   <li><v-icon color="success">mdi-check</v-icon> Drive</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Calendar</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Torrents</li>
                   <li>...And much <a href="https://gitlab.com/bloom42/wiki/-/wikis/organization/roadmap" target="_blank" rel="noopener noreferer">more coming</a></li>
                 </ul>
               </v-col>
@@ -79,9 +81,19 @@
 
       <v-col cols="10" sm="8" md="5" class="text-center mt-5">
         <v-card class="mx-auto" outlined>
-          <v-card-title  class="display-2 justify-center">Others</v-card-title>
-          <v-card-text>
-            blah blah blah
+          <v-card-title  class="display-1 justify-center">Others</v-card-title>
+          <v-card-text class="text-left">
+            <v-row class="justify-center">
+              <v-col cols="12" sm="10" md="8">
+                <ul>
+                  <li><v-icon color="primary">mdi-dropbox</v-icon> Dropbox 9.99€</li>
+                  <li><v-icon color="green">mdi-evernote</v-icon> Evernote 6.99€</li>
+                  <li><v-icon color="success">mdi-anchor</v-icon> Bitport 8€</li>
+                  <v-divider class="mt-3 mb-3" />
+                  <li><b>24.98€ / m</b></li>
+                </ul>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -132,6 +144,9 @@ export default class Pricing extends Vue {
 <style scoped lang="scss">
 ul {
   list-style-type: none;
+}
+li {
+  margin-top: 5px;
 }
 
 .v-card__text {
