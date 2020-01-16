@@ -14,7 +14,7 @@ type Context struct {
 }
 
 // Key to use when setting the Context
-type apiCtxKey int
+type ctxKeytx struct{}
 
-// ApiCtxKey is the key that holds the unique Context in a request context.
-const CtxKey apiCtxKey = 0
+// ctxKeytx is the key that holds the unique Context in a request context.
+var CtxKey ctxKeytx = ctxKeytx{}

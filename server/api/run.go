@@ -6,6 +6,7 @@ import (
 
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
+	"github.com/go-chi/cors"
 	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
 	"gitlab.com/bloom42/bloom/server/config"
@@ -15,6 +16,7 @@ import (
 )
 
 func Run() error {
+	var allowedOrigins []string
 	router := chi.NewRouter()
 
 	// replace size field name by latency and disable userAgent logging
@@ -23,7 +25,6 @@ func Run() error {
 	accountsHandler := rpcaccounts.NewAccountsServer(accounts.Handler{}, nil)
 
 	/*
-
 		router.Use(SetRequestID)
 		router.Use(rzhttp.Handler(log.Logger()))
 		router.Use(injectLoggerMiddleware(log.Logger()))
@@ -38,8 +39,26 @@ func Run() error {
 	router.Use(SetLoggerMiddleware(log.Logger()))
 	router.Use(middleware.Recoverer)
 	// router.Use(middleware.Timeout(60 * time.Second))
-
-	router.Use(SecurityHeadersMiddleware)
+	if config.Config.Env == config.EnvProduction {
+		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh"}
+	} else if config.Config.Env == config.EnvStaging {
+		allowedOrigins = []string{"https://*.streamx.xyz", "https://streamx.xyz"}
+	} else {
+		allowedOrigins = []string{"*"}
+	}
+	cors := cors.New(cors.Options{
+		AllowedOrigins:   allowedOrigins,
+		AllowedMethods:   []string{"GET", "POST", "PUT", "DELETE", "OPTIONS"},
+		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "Origin"},
+		ExposedHeaders:   []string{},
+		AllowCredentials: false,
+		MaxAge:           3600,
+	})
+	router.Use(cors.Handler)
+	if config.Config.Env != config.EnvDevelopment {
+		router.Use(SetSecurityHeadersMiddleware)
+	}
+	router.Use(SetContextMiddleware)
 
 	router.Get("/", HelloWorlHandler)
 	router.Mount(accountsHandler.PathPrefix(), accountsHandler)
