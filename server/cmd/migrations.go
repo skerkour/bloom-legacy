@@ -8,12 +8,25 @@ import (
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
 
+func init() {
+	migrationsCmd.AddCommand(migrationsRunCmd)
+	rootCmd.AddCommand(migrationsCmd)
+}
+
 // migrationsCmd is the bloomserver's `version` command. It display various information about the current phaser executable
 var migrationsCmd = &cobra.Command{
 	Use:     "migrations",
 	Aliases: []string{"m"},
 	Short:   "Manage database migrations",
-	Long:    "Manage database migrations",
+	Run: func(cmd *cobra.Command, args []string) {
+		cmd.Help()
+	},
+}
+
+var migrationsRunCmd = &cobra.Command{
+	Use:     "run",
+	Aliases: []string{"r"},
+	Short:   "Run all pending migration",
 	Run: func(cmd *cobra.Command, args []string) {
 		migrate, err := migrate.New(
 			"file:///migrations",
