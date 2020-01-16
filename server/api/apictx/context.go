@@ -1,7 +1,7 @@
-package api
+package apictx
 
 import (
-	"gitlab.com/bloom42/bloom/server/bloom/accounts"
+	accounts "gitlab.com/bloom42/bloom/server/bloom/accounts/models"
 )
 
 type Context struct {
@@ -13,8 +13,8 @@ type Context struct {
 	UserAgent            string            `json:"user_agent"`
 }
 
-// Key to use when setting the Context
-type ctxKeytx struct{}
+// key to use when setting the Context
+type key struct{}
 
-// ctxKeytx is the key that holds the unique Context in a request context.
-var CtxKey ctxKeytx = ctxKeytx{}
+// Key is the key that holds the unique Context in a request context.
+var Key key = key{}
