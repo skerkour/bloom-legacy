@@ -10,6 +10,8 @@
               <v-card-title class="display-1 justify-center">Free</v-card-title>
               <v-card-text>
                 blah blah blah
+                <v-divider class="mt-3 mb-3" />
+                <p class="title">0€ / m</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -19,6 +21,8 @@
               <v-card-title class="display-1 justify-center">Basic</v-card-title>
               <v-card-text>
                 blah blah blah
+                <v-divider class="mt-3 mb-3" />
+                <p class="title">4.99€ / m</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -28,6 +32,8 @@
               <v-card-title class="display-1 justify-center">Pro</v-card-title>
               <v-card-text>
                 blah blah blah
+                <v-divider class="mt-3 mb-3" />
+                <p class="title">9.99€ / m</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -37,6 +43,8 @@
               <v-card-title class="display-1 justify-center">Ultra</v-card-title>
               <v-card-text>
                 blah blah blah
+                <v-divider class="mt-3 mb-3" />
+                <p class="title">19.99€ / m</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -151,5 +159,9 @@ li {
 
 .v-card__text {
   font-size: 20px !important;
+}
+
+.v-application p {
+  margin-bottom: 0px;
 }
 </style>
