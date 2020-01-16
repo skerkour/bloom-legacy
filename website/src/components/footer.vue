@@ -32,8 +32,8 @@
           <ul>
             <li><a class="nav-link" href="https://fatalentropy.com" target="_blank" rel="noopener">Blog</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42/forum" target="_blank" rel="noopener">Forum</a></li>
-            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
+            <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
             <li><a class="nav-link" href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">Mastodon</a></li>
           </ul>
         </v-col>
