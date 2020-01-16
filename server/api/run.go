@@ -41,8 +41,6 @@ func Run() error {
 	// router.Use(middleware.Timeout(60 * time.Second))
 	if config.Config.Env == config.EnvProduction {
 		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh"}
-	} else if config.Config.Env == config.EnvStaging {
-		allowedOrigins = []string{"https://*.streamx.xyz", "https://streamx.xyz"}
 	} else {
 		allowedOrigins = []string{"*"}
 	}
