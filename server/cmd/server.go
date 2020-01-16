@@ -41,7 +41,7 @@ var serverCmd = &cobra.Command{
 		router := chi.NewRouter()
 
 		// replace size field name by latency and disable userAgent logging
-		loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"), rzhttp.UserAgent(""))
+		loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
 
 		accountsHandler := rpcaccounts.NewAccountsServer(accounts.Handler{}, nil)
 

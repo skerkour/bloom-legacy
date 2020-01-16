@@ -17,7 +17,8 @@ test:
 
 .PHONY: dev
 dev:
-	go run .
+	# go run main.go server
+	gowatch -build="make build" -command="dist/bloomserver server"
 
 .PHONY: build
 build:
