@@ -8,7 +8,7 @@ import (
 	"strings"
 )
 
-func validateFirstName(firstName string) error {
+func ValidateFirstName(firstName string) error {
 	firstNameLen := len(firstName)
 
 	if firstNameLen == 0 {
@@ -22,7 +22,7 @@ func validateFirstName(firstName string) error {
 	return nil
 }
 
-func validateLastName(lastName string) error {
+func ValidateLastName(lastName string) error {
 	lastNameLen := len(lastName)
 
 	if lastNameLen == 0 {
@@ -36,7 +36,7 @@ func validateLastName(lastName string) error {
 	return nil
 }
 
-func validateBio(bio string) error {
+func ValidateBio(bio string) error {
 	if len(bio) > consts.BIO_MAX_LENGTH {
 		return errors.New("bio is too long")
 	}
@@ -44,7 +44,7 @@ func validateBio(bio string) error {
 	return nil
 }
 
-func validateDisplayName(displayName string) error {
+func ValidateDisplayName(displayName string) error {
 	displayNameLen := len(displayName)
 
 	if displayNameLen == 0 {
@@ -132,13 +132,13 @@ pub fn email<S: std::hash::BuildHasher>(
     return Ok(());
 }
 */
-func validateEmail(email string, disposableEmailDomains map[string]bool) error {
+func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
 	return nil
 }
 
 var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 
-func validateUsername(username string) error {
+func ValidateUsername(username string) error {
 	usernameLength := len(username)
 
 	if usernameLength == 0 {
