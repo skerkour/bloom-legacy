@@ -3,3 +3,4 @@
 DROP TABLE sessions;
 DROP TABLE accounts;
 DROP TABLE pending_accounts;
+DROP TABLE deleted_usernames;

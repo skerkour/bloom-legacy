@@ -3,13 +3,16 @@ package cmd
 import (
 	"github.com/golang-migrate/migrate/v4"
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
+	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/spf13/cobra"
+	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
 
 func init() {
 	migrationsCmd.AddCommand(migrationsRunCmd)
+	migrationsCmd.AddCommand(migrationsRevertCmd)
 	rootCmd.AddCommand(migrationsCmd)
 }
 
@@ -24,19 +27,44 @@ var migrationsCmd = &cobra.Command{
 }
 
 var migrationsRunCmd = &cobra.Command{
-	Use:     "run",
-	Aliases: []string{"r"},
-	Short:   "Run all pending migration",
+	Use:   "run",
+	Short: "Run all pending migration",
 	Run: func(cmd *cobra.Command, args []string) {
-		migrate, err := migrate.New(
-			"file:///migrations",
-			"postgres://localhost:5432/database?sslmode=enable")
+		err := config.Init("bloom.sane")
+		if err != nil {
+			log.Fatal("Initiating config", rz.Err(err))
+		}
+
+		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
 
 		if err != nil {
 			log.Fatal("Initiating DB connection", rz.Err(err))
 		}
 
 		err = migrate.Up()
+		if err != nil {
+			log.Fatal("Running migrations", rz.Err(err))
+		}
+	},
+}
+
+var migrationsRevertCmd = &cobra.Command{
+	Use:     "revert",
+	Aliases: []string{"rev"},
+	Short:   "Revert the last migration",
+	Run: func(cmd *cobra.Command, args []string) {
+		err := config.Init("bloom.sane")
+		if err != nil {
+			log.Fatal("Initiating config", rz.Err(err))
+		}
+
+		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
+
+		if err != nil {
+			log.Fatal("Initiating DB connection", rz.Err(err))
+		}
+
+		err = migrate.Steps(-1)
 		if err != nil {
 			log.Fatal("Running migrations", rz.Err(err))
 		}

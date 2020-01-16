@@ -12,4 +12,5 @@ require (
 	github.com/twitchtv/twirp v5.10.0+incompatible
 	gitlab.com/bloom42/bloom/core v0.0.0-20200115203412-6cc983f92ff9
 	gitlab.com/bloom42/libs/rz-go v1.3.0
+	gitlab.com/bloom42/libs/sane-go v0.10.0
 )
