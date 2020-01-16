@@ -97,7 +97,7 @@
                   <li><v-icon color="primary">mdi-dropbox</v-icon> Dropbox 9.99€</li>
                   <li><v-icon color="green">mdi-evernote</v-icon> Evernote 6.99€</li>
                   <li><v-icon color="success">mdi-anchor</v-icon> Bitport 8€</li>
-                  <v-divider class="mt-3 mb-3" />
+                  <v-divider class="mt-5 mb-5" />
                   <li><b>24.98€ / m</b></li>
                 </ul>
               </v-col>
@@ -153,8 +153,9 @@ export default class Pricing extends Vue {
 ul {
   list-style-type: none;
 }
+
 li {
-  margin-top: 5px;
+  margin-top: 9px;
 }
 
 .v-card__text {
