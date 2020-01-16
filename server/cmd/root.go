@@ -4,6 +4,12 @@ import (
 	"github.com/spf13/cobra"
 )
 
+var configFileFlag string
+
+func init() {
+	rootCmd.PersistentFlags().StringVarP(&configFileFlag, "cofnig", "c", "bloom.sane", "Configuration file")
+}
+
 var rootCmd = &cobra.Command{
 	Use:   "bloomserver",
 	Short: "Bloom server",

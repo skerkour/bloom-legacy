@@ -30,7 +30,7 @@ var migrationsRunCmd = &cobra.Command{
 	Use:   "run",
 	Short: "Run all pending migration",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := config.Init("bloom.sane")
+		err := config.Init(configFileFlag)
 		if err != nil {
 			log.Fatal("Initializing config", rz.Err(err))
 		}
@@ -53,7 +53,7 @@ var migrationsRevertCmd = &cobra.Command{
 	Aliases: []string{"rev"},
 	Short:   "Revert the last migration",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := config.Init("bloom.sane")
+		err := config.Init(configFileFlag)
 		if err != nil {
 			log.Fatal("Initiating config", rz.Err(err))
 		}

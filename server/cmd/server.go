@@ -27,7 +27,7 @@ var serverCmd = &cobra.Command{
 	Short:   "Run the server",
 	Long:    "Run the server",
 	Run: func(cmd *cobra.Command, args []string) {
-		err := config.Init("bloom.sane")
+		err := config.Init(configFileFlag)
 		if err != nil {
 			log.Fatal("Initializing config", rz.Err(err))
 		}
