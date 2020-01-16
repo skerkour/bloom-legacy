@@ -1,10 +1,11 @@
-rust_env = "test"
-host = "${HOST}"
+env = "test"
+# host = "localhost"
 port = 8000
 
 database = {
     url = "${DATABASE_URL}"
 }
+
 aws = {
     secret_access_key = "${AWS_SECRET_ACCESS_KEY}",
     access_key_id = "${AWS_ACCESS_KEY_ID}",
