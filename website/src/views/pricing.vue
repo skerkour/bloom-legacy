@@ -3,7 +3,7 @@
 
     <v-row class="justify-center">
       <v-col cols="10" sm="8" md="10" class="text-center mt-5">
-        <h1 class="display-3 mb-5">Pricing</h1>
+        <h1 class="display-3 mb-5">{{ $t('pricing.title') }}</h1>
         <v-row class="justify-center">
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
@@ -11,7 +11,7 @@
               <v-card-text>
                 blah blah blah
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">0€ / m</p>
+                <p class="title">0€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -22,7 +22,7 @@
               <v-card-text>
                 blah blah blah
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">4.99€ / m</p>
+                <p class="title">4.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -33,7 +33,7 @@
               <v-card-text>
                 blah blah blah
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">9.99€ / m</p>
+                <p class="title">9.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -44,7 +44,7 @@
               <v-card-text>
                 blah blah blah
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">19.99€ / m</p>
+                <p class="title">19.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -61,7 +61,7 @@
 
     <v-row class="justify-center align-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
-        <h1 class="display-3 mb-5">Save big with Bloom</h1>
+        <h1 class="display-3 mb-5">{{ $t('pricing.title2') }}</h1>
       </v-col>
 
       <v-col cols="10" sm="8" md="5" class="text-center mt-5">
@@ -89,7 +89,7 @@
 
       <v-col cols="10" sm="8" md="5" class="text-center mt-5">
         <v-card class="mx-auto" outlined>
-          <v-card-title  class="display-1 justify-center">Others</v-card-title>
+          <v-card-title  class="display-1 justify-center">{{ $t('pricing.others') }}</v-card-title>
           <v-card-text class="text-left">
             <v-row class="justify-center">
               <v-col cols="12" sm="10" md="8">
@@ -98,7 +98,7 @@
                   <li><v-icon color="green">mdi-evernote</v-icon> Evernote 6.99€</li>
                   <li><v-icon color="success">mdi-anchor</v-icon> Bitport 8€</li>
                   <v-divider class="mt-5 mb-5" />
-                  <li><b>24.98€ / m</b></li>
+                  <li><b>24.98€ / {{ $t('pricing.month') }}</b></li>
                 </ul>
               </v-col>
             </v-row>
@@ -109,9 +109,9 @@
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
-        <h1 class="display-3 mb-5">Having questions?</h1>
+        <h1 class="display-3 mb-5">{{ $t('pricing.title3') }}</h1>
         <div class="mt-5 pt-5">
-          <router-link outlined to="/faq" >Explore the FAQ</router-link>
+          <router-link outlined to="/faq">{{ $t('pricing.explore_faq') }}</router-link>
         </div>
       </v-col>
     </v-row>

@@ -102,6 +102,14 @@ export default {
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
     coming_soon: 'Coming soon',
   },
+  pricing: {
+    title: 'Pricing',
+    title2: 'Save big with Bloom',
+    title3: 'Having questions?',
+    explore_faq: 'Explore the FAQ',
+    month: 'month',
+    others: 'Others',
+  },
   features: {
     // title: 'Our mission: Empowering people',
     title: 'A safe place for all your data',
