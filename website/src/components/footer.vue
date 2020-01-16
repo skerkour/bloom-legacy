@@ -19,6 +19,7 @@
           <h5 class="title pb-3">{{ $t('footer.product.title') }}</h5>
           <ul>
             <li><router-link to="/faq">{{ $t('footer.product.faq') }}</router-link></li>
+            <li><router-link to="/pricing">{{ $t('footer.product.pricing') }}</router-link></li>
             <li><router-link to="/help">{{ $t('footer.product.help') }}</router-link></li>
             <li><router-link class="nav-link" to="/download">{{ $t('footer.product.download') }}</router-link></li>
             <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing">{{ $t('footer.product.contribute') }}</a></li>

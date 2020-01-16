@@ -44,6 +44,7 @@ export default {
     product: {
       title: 'Product',
       faq: 'FAQ',
+      pricing: 'Pricing',
       download: 'Download Apps',
       help: 'Help & Support',
       contribute: 'Contribute',
