@@ -49,11 +49,11 @@ var serverCmd = &cobra.Command{
 		router.Use(loggingMiddleware)
 		router.Use(api.SetLoggerMiddleware(log.Logger()))
 
-		router.Get("/", api.HelloWorldRoute)
+		router.Get("/", api.HelloWorlHandler)
 		router.Mount(accountsHandler.PathPrefix(), accountsHandler)
 		router.NotFound(http.HandlerFunc(api.NotFoundHandler))
 
-		log.Info("satarting server", rz.Uint16("port", config.Config.Port))
+		log.Info("starting server", rz.Uint16("port", config.Config.Port))
 		err = http.ListenAndServe(fmt.Sprintf(":%d", config.Config.Port), router)
 		if err != nil {
 			log.Fatal("listening", rz.Err(err))

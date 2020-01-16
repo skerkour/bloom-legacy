@@ -9,7 +9,7 @@ type helloWorld struct {
 	Hello string `json:"hello"`
 }
 
-func HelloWorldRoute(w http.ResponseWriter, r *http.Request) {
+func HelloWorlHandler(w http.ResponseWriter, r *http.Request) {
 	data, err := json.Marshal(helloWorld{Hello: "world"})
 	if err != nil {
 		http.Error(w, err.Error(), http.StatusInternalServerError)
