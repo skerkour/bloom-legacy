@@ -5,6 +5,12 @@ import (
 	"io/ioutil"
 )
 
+const (
+	EnvProduction  = "production"
+	EnvStaging     = "staging"
+	EnvDevelopment = "development"
+)
+
 var Config Configuration
 
 type Configuration struct {

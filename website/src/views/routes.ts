@@ -6,6 +6,7 @@ import Download from '@/views/download.vue';
 import Contact from '@/views/contact.vue';
 import P404 from '@/views/404.vue';
 import Blog from '@/views/blog.vue';
+import Pricing from '@/views/pricing.vue';
 
 import FeaturesRoutes from './features/routes';
 
@@ -13,6 +14,7 @@ const Security = () => import(/* webpackChunkName: "chunk-organization" */ '@/vi
 const Privacy = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/privacy.vue');
 const Terms = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/terms.vue');
 const About = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/about.vue');
+const FAQ = () => import(/* webpackChunkName: "chunk-faq" */ '@/views/faq.vue');
 
 Vue.use(Router);
 
@@ -54,6 +56,14 @@ export default new Router({
     {
       path: '/security',
       component: Security,
+    },
+    {
+      path: '/pricing',
+      component: Pricing,
+    },
+    {
+      path: '/faq',
+      component: FAQ,
     },
 
     {

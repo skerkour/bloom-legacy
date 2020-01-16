@@ -20,6 +20,11 @@
       >{{ $t('footer.product.faq') }}</v-btn>
       <v-btn
         text
+        to="/pricing"
+        class="d-none d-sm-flex"
+      >{{ $t('footer.product.pricing') }}</v-btn>
+      <v-btn
+        text
         to="/features"
         exact
       >{{ $t('appbar.features') }}</v-btn>
