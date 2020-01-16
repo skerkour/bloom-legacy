@@ -26,7 +26,7 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 }
 
-// Version is the phaser's `version` command. It display various information about the current phaser executable
+// versionCmd is the bloomserver's `version` command. It display various information about the current phaser executable
 var versionCmd = &cobra.Command{
 	Use:     "version",
 	Aliases: []string{"v"},
