@@ -56,15 +56,19 @@
         <h1 class="display-3 mb-5">Save big with Bloom</h1>
       </v-col>
 
-      <v-col cols="12" md="5" class="text-center mt-5">
+      <v-col cols="10" sm="8" md="5" class="text-center mt-5">
         <v-card class="mx-auto" outlined>
-          <v-card-title class="text-center justify-center">Bloom</v-card-title>
-          <v-card-text class="text-left">
-            <ul>
-              <li><v-icon color="success">mdi-check</v-icon> Notes</li>
-              <li><v-icon color="success">mdi-check</v-icon> Drive</li>
-              <li>And much more <a href="https://gitlab.com/bloom42/wiki/-/wikis/organization/roadmap" target="_blank" rel="noopener noreferer">coming soon</a></li>
-            </ul>
+          <v-card-title class="display-2 justify-center">Bloom</v-card-title>
+          <v-card-text class="text-left justify-center">
+            <v-row class="justify-center">
+              <v-col cols="12" sm="10" md="8">
+                <ul>
+                  <li><v-icon color="success">mdi-check</v-icon> Notes</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Drive</li>
+                  <li>...And much <a href="https://gitlab.com/bloom42/wiki/-/wikis/organization/roadmap" target="_blank" rel="noopener noreferer">more coming</a></li>
+                </ul>
+              </v-col>
+            </v-row>
           </v-card-text>
         </v-card>
       </v-col>
@@ -73,9 +77,9 @@
         <h3 class="display-1">VS</h3>
       </v-col>
 
-      <v-col cols="12" md="5" class="text-center mt-5">
+      <v-col cols="10" sm="8" md="5" class="text-center mt-5">
         <v-card class="mx-auto" outlined>
-          <v-card-title class="text-center justify-center">Others</v-card-title>
+          <v-card-title  class="display-2 justify-center">Others</v-card-title>
           <v-card-text>
             blah blah blah
           </v-card-text>
@@ -128,5 +132,9 @@ export default class Pricing extends Vue {
 <style scoped lang="scss">
 ul {
   list-style-type: none;
+}
+
+.v-card__text {
+  font-size: 20px !important;
 }
 </style>
