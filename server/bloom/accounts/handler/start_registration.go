@@ -32,7 +32,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("accounts.StartRegistration: Starting transaction", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError("error creating account")
+		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
 	}
 
 	newPendingAccount, verificationCode, twerr := accounts.CreatePendingAccount(ctx, tx, params.DisplayName, params.Email)
@@ -40,14 +40,20 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 		tx.Rollback()
 		return &rpc.RegistrationStarted{}, twerr
 	}
-	err = tx.Commit()
+
+	err = accounts.SendAccountVerificationCode(params.Email, params.DisplayName, verificationCode)
 	if err != nil {
-		logger.Error("accounts.StartRegistration: Committing transaction", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError(err.Error())
+		tx.Rollback()
+		logger.Error("accounts.StartRegistration: Sending confirmation email", rz.Err(err))
+		return &rpc.RegistrationStarted{}, twirp.InternalError("Error sending confirmation email. Please try again.")
 	}
 
-	// TODO: send email
-	_ = verificationCode
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("accounts.StartRegistration: Committing transaction", rz.Err(err))
+		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
+	}
 
 	ret := rpc.RegistrationStarted{
 		Id: newPendingAccount.ID,

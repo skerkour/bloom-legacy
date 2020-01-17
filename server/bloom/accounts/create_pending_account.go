@@ -55,7 +55,7 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 				.to_string();
 	*/
 	now := time.Now().UTC()
-	verificationCode := "000000"
+	verificationCode := "00000000"
 	newUuid := uuid.New()
 	ret := PendingAccount{
 		ID:                   newUuid.String(),
