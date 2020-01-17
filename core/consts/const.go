@@ -7,7 +7,7 @@ const ADDRESS_SECURITY = "security@bloom.sh"
 const API_BASE_URL = "http://192.168.1.53:8000"
 
 const (
-	EN_PRODUCTION   = "production"
+	ENV_PRODUCTION  = "production"
 	ENV_STAGING     = "staging"
 	ENV_DEVELOPMENT = "development"
 )
