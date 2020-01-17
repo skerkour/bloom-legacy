@@ -19,6 +19,23 @@ func Init() error {
 	return nil
 }
 
-func InsecureRandomInt(min, max int) int {
-	return mathrand.Intn(max-min) + min
+func RandomInt64(min, max int64) (int64, error) {
+	n, err := rand.Int(rand.Reader, big.NewInt(max-min))
+	if err != nil {
+		return max, err
+	}
+	return n.Int64(), nil
+}
+
+func RandomDigitStr(n uint) (string, error) {
+	b := make([]byte, n)
+
+	for i := range b {
+		n, err := rand.Int(rand.Reader, big.NewInt(int64(len(DigitAlphabet))))
+		if err != nil {
+			return "", err
+		}
+		b[i] = DigitAlphabet[n.Int64()]
+	}
+	return string(b), nil
 }

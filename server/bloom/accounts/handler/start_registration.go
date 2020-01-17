@@ -26,7 +26,12 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	}
 
 	// sleep to prevent spam and bruteforce
-	time.Sleep(time.Duration(util.InsecureRandomInt(500, 800)) * time.Millisecond)
+	sleep, err := util.RandomInt64(500, 800)
+	if err != nil {
+		logger.Error("accounts.StartRegistration: generating random int", rz.Err(err))
+		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
+	}
+	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	// created pending account
 	tx, err := db.DB.Beginx()

@@ -8,9 +8,9 @@ import (
 	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator/accounts"
 	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/services/util"
 	"gitlab.com/bloom42/libs/crypto42-go/kdf/argon2id"
 	"gitlab.com/bloom42/libs/rz-go"
-
 	"time"
 )
 
@@ -33,35 +33,23 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	err = tx.Get(&existingAccount, queryCountExistingEmails, email)
 	if err != nil {
 		logger.Error("accounts.CreatePendingAccount: error fetching existing emails counts", rz.Err(err))
-		return PendingAccount{}, "", twirp.InternalError("error creating new account")
+		return PendingAccount{}, "", twirp.InternalError("Error creating new account. Please try again")
 	}
 
 	if existingAccount != 0 {
 		return PendingAccount{}, "", twirp.InvalidArgumentError("email", fmt.Sprintf("account with email: '%s' already exists", email))
 	}
 
-	// TODO: generate verification code, hash verification code
-	/*
-			let verification_code = utils::random_digit_string(8);
-		        // let auth_key_hash = argon2id::hash_password(
-		        //     self.auth_key.as_bytes(),
-		        //     accounts::PASSWORD_ARGON2_OPSLIMIT,
-		        //     accounts::PASSWORD_ARGON2_MEMLIMIT,
-		        // )?
-		        // .to_string();
-		        let verification_code_hash = argon2id::hash_password(
-		            verification_code.as_bytes(),
-		            accounts::PENDING_USER_CODE_ARGON2_OPSLIMIT,
-		            accounts::PENDING_USER_CODE_ARGON2_MEMLIMIT,
-		        )?
-				.to_string();
-	*/
 	now := time.Now().UTC()
-	verificationCode := "00000000"
 	newUuid := uuid.New()
+	verificationCode, err := util.RandomDigitStr(8)
+	if err != nil {
+		logger.Error("accounts.CreatePendingAccount: error generating verification code", rz.Err(err))
+		return PendingAccount{}, "", twirp.InternalError("Error creating new account. Please try again")
+	}
+
 	// TODO: update params
 	codeHash, err := argon2id.HashPassword(verificationCode, argon2id.DefaultHashPasswordParams)
-
 	ret := PendingAccount{
 		ID:                   newUuid.String(),
 		CreatedAt:            now,
