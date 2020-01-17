@@ -48,10 +48,14 @@ func SetContextMiddleware(next http.Handler) http.Handler {
 			remote = host
 		}
 		// check that remote address is valid
-		// if err = validator.IP(remote); err != nil {
-		// 	InternalError(w, r)
-		// 	return
-		// }
+		if err = ValidateIP(remote); err != nil {
+			erro := Error{
+				Code:    "invalid_argument",
+				Message: "remote IP address is not valid",
+			}
+			ResError(w, r, http.StatusInternalServerError, erro)
+			return
+		}
 		apiCtx.IP = remote
 		apiCtx.UserAgent = r.UserAgent()
 
