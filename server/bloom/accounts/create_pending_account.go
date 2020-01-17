@@ -2,6 +2,7 @@ package accounts
 
 import (
 	"context"
+	"fmt"
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/twitchtv/twirp"
@@ -13,24 +14,28 @@ import (
 
 func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingAccount, string, twirp.Error) {
 	logger := rz.FromCtx(ctx)
-	var existingAccounts int
+	var existingAccount int
 	var err error
 
+	// validate params
 	if err = accounts.ValidateDisplayName(displayName); err != nil {
 		return PendingAccount{}, "", twirp.InvalidArgumentError("display_name", err.Error())
 	}
 
-	// TODO: pass good data
 	if err = accounts.ValidateEmail(email, config.DisposableEmailDomains); err != nil {
 		return PendingAccount{}, "", twirp.InvalidArgumentError("email", err.Error())
 	}
 
-	// check if emails does not already exists
+	// check if email does not already exist
 	queryCountExistingEmails := "SELECT COUNT(*) FROM accounts WHERE email = $1"
-	err = tx.Get(&existingAccounts, queryCountExistingEmails, email)
+	err = tx.Get(&existingAccount, queryCountExistingEmails, email)
 	if err != nil {
 		logger.Error("accounts.CreatePendingAccount: error fetching existing emails counts", rz.Err(err))
 		return PendingAccount{}, "", twirp.InternalError("error creating new account")
+	}
+
+	if existingAccount != 0 {
+		return PendingAccount{}, "", twirp.InvalidArgumentError("email", fmt.Sprintf("account with email: '%s' already exists", email))
 	}
 
 	// TODO: generate verification code, hash verification code
