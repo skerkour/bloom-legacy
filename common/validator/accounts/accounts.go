@@ -4,6 +4,7 @@ import (
 	"errors"
 	"fmt"
 	"gitlab.com/bloom42/bloom/common/consts"
+	"github.com/asaskevich/govalidator"
 	"regexp"
 	"strings"
 )
@@ -133,6 +134,9 @@ pub fn email<S: std::hash::BuildHasher>(
 }
 */
 func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
+	if !govalidator.IsEmail(email) {
+		return errors.New("email is not valid")
+	}
 	return nil
 }
 
