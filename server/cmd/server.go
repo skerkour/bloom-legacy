@@ -27,7 +27,7 @@ var serverCmd = &cobra.Command{
 
 		log.SetLogger(log.With(
 			rz.Fields(
-				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Config.Env),
+				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
 			),
 		))
 
@@ -36,7 +36,7 @@ var serverCmd = &cobra.Command{
 			log.Fatal("Initializing util", rz.Err(err))
 		}
 
-		err = db.Init(config.Config)
+		err = db.Init()
 		if err != nil {
 			log.Fatal("Connecting to database", rz.Err(err))
 		}

@@ -35,7 +35,7 @@ var migrationsRunCmd = &cobra.Command{
 			log.Fatal("Initializing config", rz.Err(err))
 		}
 
-		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
+		migrate, err := migrate.New("file://migrations", config.Database.URL)
 
 		if err != nil {
 			log.Fatal("Initializing DB connection", rz.Err(err))
@@ -58,7 +58,7 @@ var migrationsRevertCmd = &cobra.Command{
 			log.Fatal("Initiating config", rz.Err(err))
 		}
 
-		migrate, err := migrate.New("file://migrations", config.Config.Database.URL)
+		migrate, err := migrate.New("file://migrations", config.Database.URL)
 
 		if err != nil {
 			log.Fatal("Initializing DB connection", rz.Err(err))
