@@ -16,7 +16,7 @@ CREATE TABLE accounts (
 
     is_admin BOOLEAN NOT NULL,
     disabled_at TIMESTAMP WITH TIME ZONE,
-    auth_key_hash TEXT NOT NULL,
+    auth_key_hash BYTEA NOT NULL,
     -- password_reset_id TEXT,
     -- password_reset_token_hash TEXT,
 
@@ -32,7 +32,7 @@ CREATE TABLE sessions (
 
     account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
 
-    token_hash TEXT NOT NULL,
+    token_hash BYTEA NOT NULL,
     ip TEXT NOT NULL,
     user_agent TEXT NOT NULL,
 
@@ -49,7 +49,7 @@ CREATE TABLE pending_accounts (
     email TEXT NOT NULL,
     display_name TEXT NOT NULL,
 
-    verification_code_hash TEXT NOT NULL,
+    verification_code_hash BYTEA NOT NULL,
     trials BIGINT NOT NULL,
     verified BOOLEAN NOT NULL,
 

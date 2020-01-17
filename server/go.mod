@@ -8,6 +8,8 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.8.0
 	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v1.1.1
+	github.com/jmoiron/sqlx v1.2.1-0.20191203222853-2ba0fc60eb4a
+	github.com/lib/pq v1.0.0
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/twitchtv/twirp v5.10.0+incompatible
