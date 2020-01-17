@@ -8,15 +8,15 @@ import (
 
 var DB *sqlx.DB
 
-func Init(conf config.Configuration) error {
+func Init() error {
 	var err error
 
-	DB, err = sqlx.Connect("postgres", conf.Database.URL)
+	DB, err = sqlx.Connect("postgres", config.Database.URL)
 	if err != nil {
 		return err
 	}
 
-	DB.SetMaxOpenConns(20)
+	DB.SetMaxOpenConns(config.Database.PoolSize)
 
 	err = DB.Ping()
 	if err != nil {

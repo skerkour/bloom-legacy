@@ -40,7 +40,7 @@ func Run() error {
 	router.Use(SetLoggerMiddleware(log.Logger()))
 	router.Use(middleware.Recoverer)
 	// router.Use(middleware.Timeout(60 * time.Second))
-	if config.Config.Env == consts.ENV_PRODUCTION {
+	if config.Env == consts.ENV_PRODUCTION {
 		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh"}
 	} else {
 		allowedOrigins = []string{"*"}
@@ -54,7 +54,7 @@ func Run() error {
 		MaxAge:           3600,
 	})
 	router.Use(cors.Handler)
-	if config.Config.Env != consts.ENV_DEVELOPMENT {
+	if config.Env != consts.ENV_DEVELOPMENT {
 		router.Use(SetSecurityHeadersMiddleware)
 	}
 	router.Use(SetContextMiddleware)
@@ -63,6 +63,6 @@ func Run() error {
 	router.Mount(accountsHandler.PathPrefix(), accountsHandler)
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	log.Info("starting server", rz.Uint16("port", config.Config.Port))
-	return http.ListenAndServe(fmt.Sprintf(":%d", config.Config.Port), router)
+	log.Info("starting server", rz.Uint16("port", config.Port))
+	return http.ListenAndServe(fmt.Sprintf(":%d", config.Port), router)
 }

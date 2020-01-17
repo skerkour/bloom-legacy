@@ -3,7 +3,8 @@ env = "test"
 port = 8000
 
 database = {
-    url = "${DATABASE_URL}"
+    url = "${DATABASE_URL}",
+    pool_size = 20
 }
 
 aws = {
