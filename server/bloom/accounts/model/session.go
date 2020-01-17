@@ -1,4 +1,4 @@
-package accounts
+package model
 
 type Session struct {
 }

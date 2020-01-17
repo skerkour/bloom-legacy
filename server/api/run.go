@@ -8,7 +8,7 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
-	"gitlab.com/bloom42/bloom/server/bloom/accounts"
+	accountshandler "gitlab.com/bloom42/bloom/server/bloom/accounts/handler"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
@@ -22,7 +22,7 @@ func Run() error {
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
 
-	accountsHandler := rpcaccounts.NewAccountsServer(accounts.Handler{}, nil)
+	accountsHandler := rpcaccounts.NewAccountsServer(accountshandler.Handler{}, nil)
 
 	/*
 		router.Use(SetRequestID)
