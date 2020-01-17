@@ -18,7 +18,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
 		logger.Error("accounts.StartRegistration: error getting apiCtx from context")
-		return &rpc.RegistrationStarted{}, twirp.InternalError("error creating account")
+		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)
 	}
 	if apiCtx.AuthenticatedAccount != nil {
 		twerr := twirp.NewError(twirp.PermissionDenied, "Must not be authenticated")
@@ -29,7 +29,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	sleep, err := util.RandomInt64(500, 800)
 	if err != nil {
 		logger.Error("accounts.StartRegistration: generating random int", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
+		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
@@ -37,7 +37,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("accounts.StartRegistration: Starting transaction", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
+		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)
 	}
 
 	newPendingAccount, verificationCode, twerr := accounts.CreatePendingAccount(ctx, tx, params.DisplayName, params.Email)
@@ -50,14 +50,14 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	if err != nil {
 		tx.Rollback()
 		logger.Error("accounts.StartRegistration: Sending confirmation email", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError("Error sending confirmation email. Please try again.")
+		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("accounts.StartRegistration: Committing transaction", rz.Err(err))
-		return &rpc.RegistrationStarted{}, twirp.InternalError("Error creating account. Please try again.")
+		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)
 	}
 
 	ret := rpc.RegistrationStarted{

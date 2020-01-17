@@ -14,6 +14,8 @@ import (
 	"time"
 )
 
+const ErrorCreatePendingAccountMsg = "Error creating new account. Please try again."
+
 func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingAccount, string, twirp.Error) {
 	logger := rz.FromCtx(ctx)
 	var existingAccount int
@@ -33,7 +35,7 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	err = tx.Get(&existingAccount, queryCountExistingEmails, email)
 	if err != nil {
 		logger.Error("accounts.CreatePendingAccount: error fetching existing emails counts", rz.Err(err))
-		return PendingAccount{}, "", twirp.InternalError("Error creating new account. Please try again")
+		return PendingAccount{}, "", twirp.InternalError(ErrorCreatePendingAccountMsg)
 	}
 
 	if existingAccount != 0 {
@@ -45,7 +47,7 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	verificationCode, err := util.RandomDigitStr(8)
 	if err != nil {
 		logger.Error("accounts.CreatePendingAccount: error generating verification code", rz.Err(err))
-		return PendingAccount{}, "", twirp.InternalError("Error creating new account. Please try again")
+		return PendingAccount{}, "", twirp.InternalError(ErrorCreatePendingAccountMsg)
 	}
 
 	// TODO: update params
@@ -67,7 +69,7 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	_, err = tx.Exec(queryCreatePendingAccount, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Email, ret.DisplayName, ret.VerificationCodeHash, ret.Trials, ret.Verified)
 	if err != nil {
 		logger.Error("error creating new account", rz.Err(err))
-		return ret, "", twirp.InternalError("error creating new account")
+		return ret, "", twirp.InternalError(ErrorCreatePendingAccountMsg)
 	}
 	return ret, verificationCode, nil
 }
