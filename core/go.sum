@@ -1,3 +1,4 @@
+github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496/go.mod h1:oGkLhpf+kjZl6xBf758TQhh5XrAeiJv/7FRz/2spLIg=
 github.com/golang/protobuf v1.3.2 h1:6nsPYzhq5kReh6QImI3k5qWzO4PEbvbIW2cwSfR/6xs=
 github.com/golang/protobuf v1.3.2/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
@@ -10,6 +11,8 @@ github.com/twitchtv/twirp v5.10.0+incompatible h1:JSPKlRSaaKLbZ0EGgWUEnkwtEJLmrn
 github.com/twitchtv/twirp v5.10.0+incompatible/go.mod h1:RRJoFSAmTEh2weEqWtpPE3vFK5YBhA6bqp2l1kfCC5A=
 gitlab.com/bloom42/bloom/common v0.0.0-20200117205020-7c6124069df9 h1:uW5gc2nrErlmDFHIf/aIND34fOajfyAis8qVcknKClw=
 gitlab.com/bloom42/bloom/common v0.0.0-20200117205020-7c6124069df9/go.mod h1:ylvsrBi5KzPAnVI6Jm9ToiKAVukL5DFetC1C2F1+mRM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200117210143-9349fac0d82b h1:K6vhe+nSNKz4cSmMwVuoU5iS7QmQpe9G332VTT1G4Ic=
+gitlab.com/bloom42/bloom/common v0.0.0-20200117210143-9349fac0d82b/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d h1:2+ZP7EfsZV7Vvmx3TIqSlSzATMkTAKqM14YGFPoSKjI=
 golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
