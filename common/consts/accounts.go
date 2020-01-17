@@ -15,6 +15,10 @@ package consts
 // pub const PASSWORD_RESET_TOKEN_ARGON2_OPSLIMIT: argon2id::OpsLimit = argon2id::OPSLIMIT_INTERACTIVE; // TODO: change bcrypt(5)
 // pub const PASSWORD_RESET_TOKEN_ARGON2_MEMLIMIT: argon2id::MemLimit = argon2id::MEMLIMIT_INTERACTIVE; // TODO: change bcrypt(5)
 
+const (
+	PENDING_ACCOUNT_CODE_SALT_LENGTH = 32
+)
+
 const PASSWORD_BCRYPT_COST int = 13
 const PENDING_USER_TOKEN_BCRYPT_COST int = 11
 const PENDING_EMAIL_TOKEN_BCRYPT_COST int = 11
