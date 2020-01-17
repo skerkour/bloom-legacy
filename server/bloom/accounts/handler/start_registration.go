@@ -35,7 +35,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 		return &rpc.RegistrationStarted{}, twirp.InternalError("error creating account")
 	}
 
-	newPendingAccount, twerr := accounts.CreatePendingAccount(ctx, tx, params.DisplayName, params.Email)
+	newPendingAccount, verificationCode, twerr := accounts.CreatePendingAccount(ctx, tx, params.DisplayName, params.Email)
 	if twerr != nil {
 		tx.Rollback()
 		return &rpc.RegistrationStarted{}, twerr
@@ -47,6 +47,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	}
 
 	// TODO: send email
+	_ = verificationCode
 
 	ret := rpc.RegistrationStarted{
 		Id: newPendingAccount.ID,

@@ -5,11 +5,7 @@ import (
 	"io/ioutil"
 )
 
-const (
-	EnvProduction  = "production"
-	EnvStaging     = "staging"
-	EnvDevelopment = "development"
-)
+var DisposableEmailDomains map[string]bool
 
 var Config Configuration
 
@@ -30,5 +26,12 @@ func Init(configFile string) error {
 	}
 
 	err = sane.Unmarshal(data, &Config)
+	if err != nil {
+		return err
+	}
+
+	// TODO
+	DisposableEmailDomains = map[string]bool{}
+
 	return err
 }

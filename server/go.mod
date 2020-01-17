@@ -13,8 +13,9 @@ require (
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/twitchtv/twirp v5.10.0+incompatible
-	gitlab.com/bloom42/bloom/core v0.0.0-20200116165319-7f18372c9e04
+	gitlab.com/bloom42/bloom/core v0.0.0-20200117164140-e26263aa99ce
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
-	golang.org/x/sys v0.0.0-20200116001909-b77594299b42 // indirect
+	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad // indirect
+	golang.org/x/sys v0.0.0-20200117145432-59e60aa80a0c // indirect
 )
