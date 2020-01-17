@@ -39,6 +39,21 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	}
 
 	// TODO: generate verification code, hash verification code
+	/*
+			let verification_code = utils::random_digit_string(8);
+		        // let auth_key_hash = argon2id::hash_password(
+		        //     self.auth_key.as_bytes(),
+		        //     accounts::PASSWORD_ARGON2_OPSLIMIT,
+		        //     accounts::PASSWORD_ARGON2_MEMLIMIT,
+		        // )?
+		        // .to_string();
+		        let verification_code_hash = argon2id::hash_password(
+		            verification_code.as_bytes(),
+		            accounts::PENDING_USER_CODE_ARGON2_OPSLIMIT,
+		            accounts::PENDING_USER_CODE_ARGON2_MEMLIMIT,
+		        )?
+				.to_string();
+	*/
 	now := time.Now().UTC()
 	verificationCode := "000000"
 	newUuid := uuid.New()
