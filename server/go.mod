@@ -8,14 +8,11 @@ require (
 	github.com/golang-migrate/migrate/v4 v4.8.0
 	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v1.1.1
-	github.com/jmoiron/sqlx v1.2.1-0.20191203222853-2ba0fc60eb4a
-	github.com/lib/pq v1.0.0
-	github.com/pkg/errors v0.9.1 // indirect
+	github.com/jmoiron/sqlx v1.2.0
+	github.com/lib/pq v1.3.0
 	github.com/spf13/cobra v0.0.5
 	github.com/twitchtv/twirp v5.10.0+incompatible
-	gitlab.com/bloom42/bloom/core v0.0.0-20200117164140-e26263aa99ce
+	gitlab.com/bloom42/bloom/common v0.0.0-20200117205020-7c6124069df9
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
-	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad // indirect
-	golang.org/x/sys v0.0.0-20200117145432-59e60aa80a0c // indirect
 )

@@ -3,7 +3,7 @@ package handler
 import (
 	"context"
 
-	rpcaccounts "gitlab.com/bloom42/bloom/core/rpc/accounts"
+	rpcaccounts "gitlab.com/bloom42/bloom/common/rpc/accounts"
 )
 
 func (s Handler) SignIn(ctx context.Context, params *rpcaccounts.SignInParams) (*rpcaccounts.Session, error) {

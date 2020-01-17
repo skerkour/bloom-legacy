@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/twitchtv/twirp"
-	rpc "gitlab.com/bloom42/bloom/core/rpc/accounts"
+	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
 	"gitlab.com/bloom42/bloom/server/db"

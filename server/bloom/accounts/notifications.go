@@ -35,6 +35,6 @@ func SendAccountVerificationCode(toAddr, displayName, code string) error {
 		return err
 	}
 
-	err = notification.SendEmailHTML("hello@bloom.sh", "Bloom", toAddr, displayName, subject, content.String())
+	err = notification.SendHTMLEmail("hello@bloom.sh", "Bloom", toAddr, displayName, subject, content.String())
 	return err
 }

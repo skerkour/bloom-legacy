@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/twitchtv/twirp"
-	"gitlab.com/bloom42/bloom/core/bloom/accounts"
+	"gitlab.com/bloom42/bloom/common/validator/accounts"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"time"
