@@ -5,7 +5,7 @@ import (
 	"errors"
 	"net/http"
 
-	"gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"gitlab.com/bloom42/bloom/common/rpc/accounts"
 )
 
 func CompleteRegistration(params CompleteRegistrationParams) (Session, error) {

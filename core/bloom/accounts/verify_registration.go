@@ -5,7 +5,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/bloom/kernel"
 	"net/http"
 
-	"gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"gitlab.com/bloom42/bloom/common/rpc/accounts"
 )
 
 func VerifyRegistration(params VerifyRegistrationParams) (kernel.Empty, error) {

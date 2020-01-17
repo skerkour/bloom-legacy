@@ -3,7 +3,7 @@ package accounts
 import (
 	"context"
 	google_protobuf "github.com/golang/protobuf/ptypes/empty"
-	"gitlab.com/bloom42/bloom/core/rpc/accounts"
+	"gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"net/http"
 )
 

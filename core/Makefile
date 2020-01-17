@@ -15,10 +15,6 @@ fmt:
 test:
 	go test ./...
 
-.PHONY: rpc
-rpc:
-	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/accounts/service.proto
-
 .PHONY: desktop
 desktop:
 	go build -o dist/$(NAME)server server/*.go
