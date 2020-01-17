@@ -2,9 +2,10 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/services/util"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
@@ -30,7 +31,12 @@ var serverCmd = &cobra.Command{
 			),
 		))
 
-		err = db.Init()
+		err = util.Init()
+		if err != nil {
+			log.Fatal("Initializing util", rz.Err(err))
+		}
+
+		err = db.Init(config.Config)
 		if err != nil {
 			log.Fatal("Connecting to database", rz.Err(err))
 		}
