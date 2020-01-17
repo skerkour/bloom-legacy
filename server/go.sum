@@ -188,10 +188,10 @@ github.com/xanzy/go-gitlab v0.15.0/go.mod h1:8zdQa/ri1dfn8eS3Ir1SyfvOKlw7WBJ8DVT
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
 github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0HrGL1Y=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
-gitlab.com/bloom42/bloom/common v0.0.0-20200117205020-7c6124069df9 h1:uW5gc2nrErlmDFHIf/aIND34fOajfyAis8qVcknKClw=
-gitlab.com/bloom42/bloom/common v0.0.0-20200117205020-7c6124069df9/go.mod h1:ylvsrBi5KzPAnVI6Jm9ToiKAVukL5DFetC1C2F1+mRM=
-gitlab.com/bloom42/bloom/common v0.0.0-20200117210143-9349fac0d82b h1:K6vhe+nSNKz4cSmMwVuoU5iS7QmQpe9G332VTT1G4Ic=
-gitlab.com/bloom42/bloom/common v0.0.0-20200117210143-9349fac0d82b/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200117212037-9f1f40a65a68 h1:dtm6PkwzYj55F7U0uljacqtgBYvykijcTK/wWkrdsPg=
+gitlab.com/bloom42/bloom/common v0.0.0-20200117212037-9f1f40a65a68/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200117214453-b4679d993f68 h1:TwTOxVtIjGpDNP8hYQNeCdoIDkyA08CXT1u3oBQGm0o=
+gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200117214453-b4679d993f68/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
 gitlab.com/bloom42/libs/rz-go v1.3.0/go.mod h1:/G8JCs/z9FPn+XYJT9e52gj76clf4dk8tf2jbq1HCpQ=
 gitlab.com/bloom42/libs/sane-go v0.10.0 h1:ddubZDaZSXxA9JP7FEAojOV7pkG3sEvd8bMeX9juLTU=
@@ -204,7 +204,10 @@ golang.org/x/crypto v0.0.0-20180904163835-0709b304e793/go.mod h1:6SG95UA2DQfeDnf
 golang.org/x/crypto v0.0.0-20181203042331-505ab145d0a9/go.mod h1:6SG95UA2DQfeDnfUPMdvaQW0Q7yPrPDi9nlGo2tz2b4=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20190325154230-a5d413f7728c/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
+golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734 h1:p/H982KKEjUnLJkM3tt/LemDnOc1GiZL5FCVlORJ5zo=
 golang.org/x/crypto v0.0.0-20190426145343-a29dc8fdc734/go.mod h1:yigFU9vqHzYiE8UmvKecakEJjdnWj3jj499lnFckfCI=
+golang.org/x/crypto v0.0.0-20200117160349-530e935923ad h1:Jh8cai0fqIK+f6nG0UgPW5wFk8wmiMhM3AyciDBdtQg=
+golang.org/x/crypto v0.0.0-20200117160349-530e935923ad/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
 golang.org/x/exp v0.0.0-20190121172915-509febef88a4/go.mod h1:CJ0aWSM057203Lf6IL+f9T1iT9GByDxfZKAQTCR3kQA=
 golang.org/x/lint v0.0.0-20181026193005-c67002cb31c3/go.mod h1:UVdnD1Gm6xHRNCYTkRU2/jEulfH38KcIWyp/GAMgvoE=
 golang.org/x/lint v0.0.0-20190227174305-5b3e6a55c961/go.mod h1:wehouNa3lNwaWXcvxsM5YxQ5yQlVC4a0KAMCusXpPoU=

@@ -8,7 +8,9 @@ import (
 	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator/accounts"
 	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/libs/crypto42-go/kdf/argon2id"
 	"gitlab.com/bloom42/libs/rz-go"
+
 	"time"
 )
 
@@ -57,13 +59,16 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	now := time.Now().UTC()
 	verificationCode := "00000000"
 	newUuid := uuid.New()
+	// TODO: update params
+	codeHash, err := argon2id.HashPassword(verificationCode, argon2id.DefaultHashPasswordParams)
+
 	ret := PendingAccount{
 		ID:                   newUuid.String(),
 		CreatedAt:            now,
 		UpdatedAt:            now,
 		Email:                email,
 		DisplayName:          displayName,
-		VerificationCodeHash: []byte(verificationCode),
+		VerificationCodeHash: codeHash,
 		Trials:               0,
 		Verified:             false,
 	}
