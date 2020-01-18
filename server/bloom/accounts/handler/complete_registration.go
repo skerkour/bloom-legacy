@@ -8,6 +8,7 @@ import (
 	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
 )
@@ -33,10 +34,37 @@ func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteR
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	// find pedning account
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("accounts.CompleteRegistration: Starting transaction", rz.Err(err))
+		return &ret, twirp.InternalError(accounts.ErrorCompletingRegistrationMsg)
+	}
+
+	// find pending account
+	var pendingAccount accounts.PendingAccount
+	err = tx.Get(&pendingAccount, "SELECT * FROM pending_accounts WHERE id = $1 FOR UPDATE", params.Id)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("accounts.CompleteRegistration: getting pending account", rz.Err(err))
+		return &ret, twirp.InternalError(accounts.ErrorCompletingRegistrationMsg)
+	}
+
 	// delete pending account
+	twerr := accounts.DeletePendingAccount(ctx, tx, pendingAccount.ID)
+	if twerr != nil {
+		tx.Rollback()
+		return &ret, twerr
+	}
+
 	// create account
 	// start session
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("accounts.VerifyRegistration: Committing transaction", rz.Err(err))
+		return &ret, twirp.InternalError(accounts.ErrorCompletingRegistrationMsg)
+	}
 
 	ret = rpc.Session{
 		Id:    "MyRandomID",
