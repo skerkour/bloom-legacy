@@ -5,14 +5,14 @@ import (
 	"net/http"
 
 	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
-	"gitlab.com/bloom42/bloom/common/validator/accounts"
+	"gitlab.com/bloom42/bloom/common/validator"
 )
 
 // See https://bloom.sh/the-guide/projects/bloom/security/authentication.html#registration for the spec
 func StartRegistration(params StartRegistrationParams) (RegistrationStarted, error) {
 	client := rpc.NewAccountsProtobufClient("http://localhost:8000", &http.Client{})
 
-	if err := accounts.ValidateDisplayName(params.DisplayName); err != nil {
+	if err := validator.AccountDisplayName(params.DisplayName); err != nil {
 		return RegistrationStarted{}, err
 	}
 
