@@ -2,14 +2,18 @@
   <v-container class="mt-3 text-center">
 
     <v-row class="justify-center">
-      <v-col cols="10" sm="8" md="10" class="text-center mt-5">
+      <v-col cols="10" sm="8" md="12" class="text-center mt-5">
         <h1 class="display-3 mb-5">{{ $t('pricing.title') }}</h1>
         <v-row class="justify-center">
           <v-col cols="12" md="3" class="text-center mt-5">
             <v-card class="mx-auto" outlined>
               <v-card-title class="display-1 justify-center">Free</v-card-title>
-              <v-card-text>
-                blah blah blah
+              <v-card-text >
+                <ul class="text-left">
+                  <li>2GB storage</li>
+                  <li>1 Bitflow download every hour</li>
+                  <li>Non priority support</li>
+                </ul>
                 <v-divider class="mt-3 mb-3" />
                 <p class="title">0€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
@@ -20,9 +24,16 @@
             <v-card class="mx-auto" outlined>
               <v-card-title class="display-1 justify-center">Basic</v-card-title>
               <v-card-text>
-                blah blah blah
+                <ul class="text-left">
+                  <li>All Free features</li>
+                  <li class="text-center">+</li>
+
+                  <li>100GB storage</li>
+                  <li>1 parallel Bitflow download</li>
+                  <li>Priority support</li>
+                </ul>
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">4.99€ / {{ $t('pricing.month') }}</p>
+                <p class="title">5.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -31,9 +42,15 @@
             <v-card class="mx-auto" outlined>
               <v-card-title class="display-1 justify-center">Pro</v-card-title>
               <v-card-text>
-                blah blah blah
+                <ul class="text-left">
+                  <li>All Basic features</li>
+                  <li class="text-center">+</li>
+
+                  <li>400GB storage</li>
+                  <li>3 parallel Bitflow downloads</li>
+                </ul>
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">9.99€ / {{ $t('pricing.month') }}</p>
+                <p class="title">10.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
@@ -42,9 +59,15 @@
             <v-card class="mx-auto" outlined>
               <v-card-title class="display-1 justify-center">Ultra</v-card-title>
               <v-card-text>
-                blah blah blah
+                <ul class="text-left">
+                  <li>All Pro features</li>
+                  <li class="text-center">+</li>
+
+                  <li>1TB storage</li>
+                  <li>5 parallel Bitflow downloads</li>
+                </ul>
                 <v-divider class="mt-3 mb-3" />
-                <p class="title">19.99€ / {{ $t('pricing.month') }}</p>
+                <p class="title">20.99€ / {{ $t('pricing.month') }}</p>
               </v-card-text>
             </v-card>
           </v-col>
