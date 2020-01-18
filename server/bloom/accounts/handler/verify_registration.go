@@ -53,8 +53,16 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 	twerr := accounts.VerifyPendingAccount(ctx, tx, pendingAccount, params.Code)
 	if twerr != nil {
 		tx.Rollback()
-		now := time.Now().UTC()
-		db.DB.Exec("UPDATE pending_accounts SET trials = $1, updated_at = $2 WHERE id = $3", pendingAccount.Trials+1, now, pendingAccount.ID)
+		tx, _ := db.DB.Beginx()
+		if tx != nil {
+			twerr2 := accounts.FailVerification(ctx, tx, pendingAccount)
+			if twerr2 != nil {
+				tx.Rollback()
+				logger.Error("accounts.VerifyRegistration: failing verification", rz.Err(twerr2))
+				return ret, twirp.InternalError(accounts.ErrorVerifyPendingAccountMsg)
+			}
+			tx.Commit()
+		}
 		return ret, twerr
 	}
 
