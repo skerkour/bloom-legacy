@@ -14,6 +14,7 @@ service Accounts {
   rpc SignIn(SignInParams) returns (NewSession);
   rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc RevokeSession(RevokeSessionParams) returns (google.protobuf.Empty);
+  rpc ListSessions(google.protobuf.Empty) returns (Sessions);
 }
 
 message StartRegistrationParams {
@@ -56,6 +57,10 @@ message Session {
   string ip = 3;
   string device = 4; // empty, reserved
   string location = 5; // empty, reserved
+}
+
+message Sessions {
+  repeated Session sessions = 1;
 }
 
 message RevokeSessionParams {
