@@ -49,6 +49,12 @@ func (s Handler) SendNewRegistrationCode(ctx context.Context, params *rpc.SendNe
 		return ret, twirp.InternalError(accounts.ErrorSendingNewRegistrationCode)
 	}
 
+	now := time.Now().UTC()
+	since := now.Sub(pendingAccount.UpdatedAt)
+	if since <= 30*time.Second {
+		return ret, twirp.NewError(twirp.PermissionDenied, "Please wait at least 30 seconds before requesting a new code.")
+	}
+
 	// generate new code and update pending account
 	verificationCode, twerr := accounts.GenerateNewRegistrationCode(ctx, tx, &pendingAccount)
 	if twerr != nil {
