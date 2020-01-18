@@ -1,5 +1,5 @@
 <template>
-  <v-app-bar app elevation="0">
+  <v-app-bar app elevate-on-scroll>
     <router-link to="/" class="blm-appbar-title">
       <v-toolbar-title class="headline" to="/">
         <span class="blm-rounded-elegance"><b>Bloom</b></span>

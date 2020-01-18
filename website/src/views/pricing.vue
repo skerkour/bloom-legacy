@@ -4,73 +4,28 @@
     <v-row class="justify-center">
       <v-col cols="10" sm="8" md="12" class="text-center mt-5">
         <h1 class="display-3 mb-5">{{ $t('pricing.title') }}</h1>
-        <v-row class="justify-center">
-          <v-col cols="12" md="3" class="text-center mt-5">
-            <v-card class="mx-auto" outlined>
-              <v-card-title class="display-1 justify-center">Free</v-card-title>
-              <v-card-text >
-                <ul class="text-left">
-                  <li>2GB storage</li>
-                  <li>1 Bitflow download every hour</li>
-                  <li>Non priority support</li>
-                </ul>
-                <v-divider class="mt-3 mb-3" />
-                <p class="title">0€ / {{ $t('pricing.month') }}</p>
+        <v-row justify="space-around" align="stretch">
+
+          <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
+            v-for="plan in plans" :key="plan.name">
+            <v-card class="mx-auto blm-pricing-card" outlined>
+              <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
+              <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
+                <div class="d-inline-block">
+                  <span class="display-3 font-weight-bold">Free</span>
+                </div>
+              </div>
+              <div class="v-card--plan__price pa-5 col col-12" v-else>
+                <div class="d-inline-block">
+                  <span class="display-3 font-weight-bold">{{ plan.price }}€</span>
+                </div>
+                <span class="caption"> /mo </span>
+              </div>
+              <v-card-text class="blm-pricing-card-text" v-html="plan.description">
               </v-card-text>
             </v-card>
           </v-col>
 
-          <v-col cols="12" md="3" class="text-center mt-5">
-            <v-card class="mx-auto" outlined>
-              <v-card-title class="display-1 justify-center">Basic</v-card-title>
-              <v-card-text>
-                <ul class="text-left">
-                  <li>All Free features</li>
-                  <li class="text-center">+</li>
-
-                  <li>100GB storage</li>
-                  <li>1 parallel Bitflow download</li>
-                  <li>Priority support</li>
-                </ul>
-                <v-divider class="mt-3 mb-3" />
-                <p class="title">5.99€ / {{ $t('pricing.month') }}</p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="3" class="text-center mt-5">
-            <v-card class="mx-auto" outlined>
-              <v-card-title class="display-1 justify-center">Pro</v-card-title>
-              <v-card-text>
-                <ul class="text-left">
-                  <li>All Basic features</li>
-                  <li class="text-center">+</li>
-
-                  <li>400GB storage</li>
-                  <li>3 parallel Bitflow downloads</li>
-                </ul>
-                <v-divider class="mt-3 mb-3" />
-                <p class="title">10.99€ / {{ $t('pricing.month') }}</p>
-              </v-card-text>
-            </v-card>
-          </v-col>
-
-          <v-col cols="12" md="3" class="text-center mt-5">
-            <v-card class="mx-auto" outlined>
-              <v-card-title class="display-1 justify-center">Ultra</v-card-title>
-              <v-card-text>
-                <ul class="text-left">
-                  <li>All Pro features</li>
-                  <li class="text-center">+</li>
-
-                  <li>1TB storage</li>
-                  <li>5 parallel Bitflow downloads</li>
-                </ul>
-                <v-divider class="mt-3 mb-3" />
-                <p class="title">20.99€ / {{ $t('pricing.month') }}</p>
-              </v-card-text>
-            </v-card>
-          </v-col>
         </v-row>
       </v-col>
     </v-row>
@@ -82,13 +37,13 @@
       </v-col>
     </v-row>
 
-    <v-row class="justify-center align-center">
+    <v-row class="justify-center" align="stretch">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
         <h1 class="display-3 mb-5">{{ $t('pricing.title2') }}</h1>
       </v-col>
 
-      <v-col cols="10" sm="8" md="5" class="text-center mt-5">
-        <v-card class="mx-auto" outlined>
+      <v-col cols="10" sm="8" md="5" class="text-center mt-5" align-self="stretch">
+        <v-card class="mx-auto blm-pricing-card" outlined>
           <v-card-title class="display-1 justify-center">Bloom</v-card-title>
           <v-card-text class="text-left">
             <v-row class="justify-center">
@@ -110,8 +65,8 @@
         <h3 class="display-1">VS</h3>
       </v-col>
 
-      <v-col cols="10" sm="8" md="5" class="text-center mt-5">
-        <v-card class="mx-auto" outlined>
+      <v-col cols="10" sm="8" md="5" class="text-center mt-5" align-self="stretch">
+        <v-card class="mx-auto blm-pricing-card" outlined>
           <v-card-title  class="display-1 justify-center">{{ $t('pricing.others') }}</v-card-title>
           <v-card-text class="text-left">
             <v-row class="justify-center">
@@ -165,6 +120,59 @@ import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 export default class Pricing extends Vue {
   // props
   // data
+  plans = [
+    {
+      name: 'Free',
+      price: 0,
+      description: `
+      <ul>
+        <li>2GB storage</li>
+        <li>1 Bitflow download every hour</li>
+        <li>Non priority support</li>
+      </ul>
+      `,
+    },
+    {
+      name: 'Basic',
+      price: 5.99,
+      description: `
+      <ul>
+        <li><b>All Free features</b></li>
+        <li class="text-center bold"><b>+</b></li>
+
+        <li>100GB storage</li>
+        <li>1 parallel Bitflow download</li>
+        <li>Priority support</li>
+      </ul>
+      `,
+    },
+    {
+      name: 'Pro',
+      price: 10.99,
+      description: `
+      <ul>
+        <li><b>All Basic features</b></li>
+        <li class="text-center bold"><b>+</b></li>
+
+        <li>400GB storage</li>
+        <li>3 parallel Bitflow downloads</li>
+      </ul>
+      `,
+    },
+    {
+      name: 'Ultra',
+      price: 20.99,
+      description: `
+        <ul>
+          <li><b>All Pro features</b></li>
+          <li class="text-center bold"><b>+</b></li>
+
+          <li>1TB storage</li>
+          <li>5 parallel Bitflow downloads</li>
+        </ul>
+      `,
+    },
+  ]
   // computed
   // lifecycle
   // watch
@@ -172,20 +180,27 @@ export default class Pricing extends Vue {
 }
 </script>
 
-<style scoped lang="scss">
-ul {
+
+<style lang="scss">
+.blm-pricing-card-text ul {
   list-style-type: none;
 }
 
-li {
+.blm-pricing-card-text ul li {
   margin-top: 9px;
 }
+</style>
 
+<style scoped lang="scss">
 .v-card__text {
   font-size: 20px !important;
 }
 
 .v-application p {
   margin-bottom: 0px;
+}
+
+.blm-pricing-card {
+  height: 100%;
 }
 </style>
