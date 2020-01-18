@@ -98,7 +98,7 @@
                   <li><v-icon color="success">mdi-check</v-icon> Drive</li>
                   <li><v-icon color="success">mdi-check</v-icon> Calendar</li>
                   <li><v-icon color="success">mdi-check</v-icon> Torrents</li>
-                  <li>...And much <a href="https://gitlab.com/bloom42/wiki/-/wikis/organization/roadmap" target="_blank" rel="noopener noreferer">more coming</a></li>
+                  <li>... <router-link to="/features">And much more coming</router-link></li>
                 </ul>
               </v-col>
             </v-row>
