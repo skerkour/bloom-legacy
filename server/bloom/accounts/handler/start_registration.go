@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/bloom/accounts"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/services/util"
+	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -26,7 +26,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := util.RandomInt64(500, 800)
+	sleep, err := rand.Int64(500, 800)
 	if err != nil {
 		logger.Error("accounts.StartRegistration: generating random int", rz.Err(err))
 		return &rpc.RegistrationStarted{}, twirp.InternalError(accounts.ErrorCreatePendingAccountMsg)

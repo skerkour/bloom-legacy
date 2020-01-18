@@ -8,8 +8,8 @@ import (
 	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/server/config"
-	"gitlab.com/bloom42/bloom/server/services/util"
 	"gitlab.com/bloom42/libs/crypto42-go/kdf/argon2id"
+	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
 	"time"
 )
@@ -44,7 +44,7 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 
 	now := time.Now().UTC()
 	newUuid := uuid.New()
-	verificationCode, err := util.RandomDigitStr(8)
+	verificationCode, err := rand.StringAlph(alphabetDigits, 8)
 	if err != nil {
 		logger.Error("accounts.CreatePendingAccount: error generating verification code", rz.Err(err))
 		return PendingAccount{}, "", twirp.InternalError(ErrorCreatePendingAccountMsg)

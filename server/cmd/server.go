@@ -6,7 +6,6 @@ import (
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/services/notification"
-	"gitlab.com/bloom42/bloom/server/services/util"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
@@ -31,11 +30,6 @@ var serverCmd = &cobra.Command{
 				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
 			),
 		))
-
-		err = util.Init()
-		if err != nil {
-			log.Fatal("Initializing util", rz.Err(err))
-		}
 
 		err = notification.Init()
 		if err != nil {
