@@ -57,13 +57,18 @@ func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteR
 	}
 
 	// create account
-	_, twerr = accounts.CreateAccount(ctx, tx, pendingAccount, params.Username, params.AuthKey)
+	newAccount, twerr := accounts.CreateAccount(ctx, tx, pendingAccount, params.Username, params.AuthKey)
 	if twerr != nil {
 		tx.Rollback()
 		return &ret, twerr
 	}
 
 	// start session
+	newSessiont, token, twerr := accounts.StartSession(ctx, tx, newAccount.ID, apiCtx.IP, apiCtx.UserAgent)
+	if twerr != nil {
+		tx.Rollback()
+		return &ret, twerr
+	}
 
 	err = tx.Commit()
 	if err != nil {
@@ -73,8 +78,8 @@ func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteR
 	}
 
 	ret = rpc.Session{
-		Id:    "MyRandomID",
-		Token: "MyRandomToken",
+		Id:    newSessiont.ID,
+		Token: token,
 	}
 	return &ret, nil
 }
