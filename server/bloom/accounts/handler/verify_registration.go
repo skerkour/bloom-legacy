@@ -43,8 +43,9 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 	}
 
 	var pendingAccount accounts.PendingAccount
-	err = tx.Get(&pendingAccount, "SELECT * FROM pending_accounts WHERE id = $1", params.Id)
+	err = tx.Get(&pendingAccount, "SELECT * FROM pending_accounts WHERE id = $1 FOR UPDATE", params.Id)
 	if err != nil {
+		tx.Rollback()
 		logger.Error("accounts.VerifyRegistration: getting pending account", rz.Err(err))
 		return ret, twirp.InternalError(accounts.ErrorVerifyPendingAccountMsg)
 	}
@@ -52,6 +53,7 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 	twerr := accounts.VerifyPendingAccount(ctx, tx, pendingAccount, params.Code)
 	if twerr != nil {
 		tx.Rollback()
+		db.DB.Exec("UPDATE pending_accounts SET trials = $1 WHERE id = $2", pendingAccount.Trials+1, pendingAccount.ID)
 		return ret, twerr
 	}
 
