@@ -16,8 +16,8 @@ func VerifyPendingAccount(ctx context.Context, tx *sqlx.Tx, pendingAccount Pendi
 		return twirp.NewError(twirp.PermissionDenied, "Maximum trials reached. Please create a new account.")
 	}
 
-	if !argon2id.VerifyPassword(code, pendingAccount.VerificationCodeHash) {
-		return twirp.InvalidArgumentError("code", "Verification code is not valid.")
+	if !argon2id.VerifyPassword([]byte(code), pendingAccount.VerificationCodeHash) {
+		return twirp.NewError(twirp.PermissionDenied, "Verification code is not valid.")
 	}
 
 	now := time.Now().UTC()

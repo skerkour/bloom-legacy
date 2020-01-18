@@ -19,14 +19,14 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, accountID, ipAddr, userAgent
 	token, err := rand.TokenBase64(uint64(consts.SESSION_TOKEN_BYTES))
 	if err != nil {
 		logger.Error("accounts.StartSession: generating sessions token", rz.Err(err))
-		return ret, token, twirp.NewError(twirp.Internal, ErrorStartSessionMsg)
+		return ret, token, twirp.NewError(twirp.Internal, ErrorSingingInMsg)
 	}
 
 	// TODO: update params
 	tokenHash, err := argon2id.HashPassword([]byte(token), argon2id.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("accounts.StartSession: hashing auth key", rz.Err(err))
-		return ret, token, twirp.InternalError(ErrorStartSessionMsg)
+		return ret, token, twirp.InternalError(ErrorSingingInMsg)
 	}
 
 	now := time.Now().UTC()
@@ -48,7 +48,7 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, accountID, ipAddr, userAgent
 	_, err = tx.Exec(queryCreateSession, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.AccountID, ret.TokenHash, ret.IPAddr, ret.UserAgent)
 	if err != nil {
 		logger.Error("accounts.StartSession: inserting new session", rz.Err(err))
-		return ret, token, twirp.InternalError(ErrorStartSessionMsg)
+		return ret, token, twirp.InternalError(ErrorSingingInMsg)
 	}
 
 	return ret, token, nil

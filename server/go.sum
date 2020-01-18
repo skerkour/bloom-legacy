@@ -190,8 +190,8 @@ github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118092552-367b22b97c30 h1:r/NS5ulTAc90MWpTWQLnb1m0Cj0ckV4qcCyHG7neG4w=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118092552-367b22b97c30/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
-gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118171355-825990c3fc03 h1:E5tBHSkJmkOLp5C0n4uBp1mORr5o3z/tChWcz2nxxOc=
-gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118171355-825990c3fc03/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
+gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899 h1:uZwZ8PQR7d7r4BJJDzSI+UKiF9JwlEXjkJF/uVXcJuo=
+gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
 gitlab.com/bloom42/libs/rz-go v1.3.0/go.mod h1:/G8JCs/z9FPn+XYJT9e52gj76clf4dk8tf2jbq1HCpQ=
 gitlab.com/bloom42/libs/sane-go v0.10.0 h1:ddubZDaZSXxA9JP7FEAojOV7pkG3sEvd8bMeX9juLTU=
