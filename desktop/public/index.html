@@ -23,17 +23,21 @@
       background-color: #fff;
     }
 
-    .spinner {
+    .blm-loader {
+      text-align: center;
+    }
+
+    .blm-loader-spinner {
       width: 50px;
       height: 50px;
-      position: absolute;
+      position: absolute !important;
       margin-top: 21px;
-      margin-left: calc(50vw - 25px);
+      margin-left: calc(50vw - 25px) !important;
     }
 
     .blm-loader-icon {
-      margin-top: calc(50vh - 128px);
-      margin-left: calc(50vw - 64px);
+      margin-top: calc(50vh - 128px) !important;
+      /* margin-left: calc(50vw - 64px) !important; */
     }
 
     .lds-ring {
@@ -78,10 +82,13 @@
         it to continue.</strong>
     </noscript>
     <div id="app">
-      <img class="blm-loader-icon" src="/assets/imgs/icons/bloom_256.png" style="height: 128px; width: 128px;"/>
-      <div class="spinner">
-        <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+      <div class="blm-loader">
+        <img class="blm-loader-icon" src="/assets/imgs/icons/bloom_256.png" style="height: 128px; width: 128px;"/>
+        <div class="blm-loader-spinner">
+          <div class="lds-ring"><div></div><div></div><div></div><div></div></div>
+        </div>
       </div>
+
     </div>
     <!-- built files will be auto injected -->
   </body>
