@@ -13,8 +13,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteRegistrationParams) (*rpc.Session, error) {
-	var ret rpc.Session
+func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteRegistrationParams) (*rpc.NewSession, error) {
+	var ret rpc.NewSession
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
@@ -77,7 +77,7 @@ func (s Handler) CompleteRegistration(ctx context.Context, params *rpc.CompleteR
 		return &ret, twirp.InternalError(accounts.ErrorCompletingRegistrationMsg)
 	}
 
-	ret = rpc.Session{
+	ret = rpc.NewSession{
 		Id:    newSessiont.ID,
 		Token: token,
 	}

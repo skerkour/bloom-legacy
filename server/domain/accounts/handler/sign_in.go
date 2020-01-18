@@ -14,8 +14,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) SignIn(ctx context.Context, params *rpc.SignInParams) (*rpc.Session, error) {
-	var ret rpc.Session
+func (s Handler) SignIn(ctx context.Context, params *rpc.SignInParams) (*rpc.NewSession, error) {
+	var ret rpc.NewSession
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
@@ -71,7 +71,7 @@ func (s Handler) SignIn(ctx context.Context, params *rpc.SignInParams) (*rpc.Ses
 		return &ret, twirp.InternalError(accounts.ErrorSingingInMsg)
 	}
 
-	ret = rpc.Session{
+	ret = rpc.NewSession{
 		Id:    newSession.ID,
 		Token: token,
 	}
