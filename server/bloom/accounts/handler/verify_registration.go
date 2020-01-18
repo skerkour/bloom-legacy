@@ -53,7 +53,8 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 	twerr := accounts.VerifyPendingAccount(ctx, tx, pendingAccount, params.Code)
 	if twerr != nil {
 		tx.Rollback()
-		db.DB.Exec("UPDATE pending_accounts SET trials = $1 WHERE id = $2", pendingAccount.Trials+1, pendingAccount.ID)
+		now := time.Now().UTC()
+		db.DB.Exec("UPDATE pending_accounts SET trials = $1, updated_at = $2 WHERE id = $3", pendingAccount.Trials+1, now, pendingAccount.ID)
 		return ret, twerr
 	}
 

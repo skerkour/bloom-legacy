@@ -23,7 +23,7 @@ func VerifyPendingAccount(ctx context.Context, tx *sqlx.Tx, pendingAccount Pendi
 		return twirp.InvalidArgumentError("code", "Verification code expired. Please create a new account.")
 	}
 
-	_, err := tx.Exec("UPDATE pending_accounts SET verified = TRUE WHERE id = $1", pendingAccount.ID)
+	_, err := tx.Exec("UPDATE pending_accounts SET verified = TRUE, updated_at = $1 WHERE id = $2", now, pendingAccount.ID)
 	if err != nil {
 		return twirp.NewError(twirp.PermissionDenied, ErrorVerifyPendingAccountMsg)
 	}
