@@ -8,13 +8,11 @@ import (
 	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/server/config"
-	"gitlab.com/bloom42/libs/crypto42-go/kdf/argon2id"
+	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
 	"time"
 )
-
-const ErrorCreatePendingAccountMsg = "Error creating new account. Please try again."
 
 func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingAccount, string, twirp.Error) {
 	logger := rz.FromCtx(ctx)
