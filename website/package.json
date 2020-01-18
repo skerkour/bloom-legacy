@@ -8,7 +8,7 @@
     "lint": "vue-cli-service lint"
   },
   "dependencies": {
-    "@mdi/font": "^4.7.95",
+    "@mdi/font": "^4.8.95",
     "core-js": "^3.6.4",
     "store": "^2.0.12",
     "vue": "^2.6.11",
@@ -31,9 +31,9 @@
     "babel-eslint": "^10.0.3",
     "eslint": "^6.8.0",
     "eslint-plugin-vue": "^6.1.2",
-    "sass": "^1.24.4",
+    "sass": "^1.25.0",
     "sass-loader": "^8.0.2",
-    "typescript": "^3.7.4",
+    "typescript": "^3.7.5",
     "vue-template-compiler": "^2.6.11",
     "vuetify-loader": "^1.4.3"
   }
