@@ -9,7 +9,7 @@ import (
 	"github.com/go-chi/cors"
 	"gitlab.com/bloom42/bloom/common/consts"
 	rpcaccounts "gitlab.com/bloom42/bloom/common/rpc/accounts"
-	accountshandler "gitlab.com/bloom42/bloom/server/bloom/accounts/handler"
+	accountshandler "gitlab.com/bloom42/bloom/server/domain/accounts/handler"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
