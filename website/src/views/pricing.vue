@@ -142,7 +142,7 @@ export default class Pricing extends Vue {
 
         <li>100GB storage</li>
         <li>1 parallel Bitflow download</li>
-        <li>Priority support</li>
+        <li>Lovely support</li>
       </ul>
       `,
     },
