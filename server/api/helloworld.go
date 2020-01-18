@@ -5,6 +5,6 @@ import (
 )
 
 func HelloWorlHandler(w http.ResponseWriter, r *http.Request) {
-	res := map[string]string{"hello": "world"}
-	ResJSON(w, r, 200, res)
+	data := map[string]string{"hello": "world"}
+	ResJSON(w, r, http.StatusOK, data)
 }
