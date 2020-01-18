@@ -6,7 +6,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/twitchtv/twirp"
-	"gitlab.com/bloom42/bloom/common/validator/accounts"
+	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/services/util"
 	"gitlab.com/bloom42/libs/crypto42-go/kdf/argon2id"
@@ -22,11 +22,11 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	var err error
 
 	// validate params
-	if err = accounts.ValidateDisplayName(displayName); err != nil {
+	if err = validator.AccountDisplayName(displayName); err != nil {
 		return PendingAccount{}, "", twirp.InvalidArgumentError("display_name", err.Error())
 	}
 
-	if err = accounts.ValidateEmail(email, config.DisposableEmailDomains); err != nil {
+	if err = validator.AccountEmail(email, config.DisposableEmailDomains); err != nil {
 		return PendingAccount{}, "", twirp.InvalidArgumentError("email", err.Error())
 	}
 
