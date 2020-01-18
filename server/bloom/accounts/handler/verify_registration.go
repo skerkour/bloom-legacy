@@ -55,7 +55,7 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 		tx.Rollback()
 		tx, _ := db.DB.Beginx()
 		if tx != nil {
-			twerr2 := accounts.FailVerification(ctx, tx, pendingAccount)
+			twerr2 := accounts.FailPendingAccountVerification(ctx, tx, pendingAccount)
 			if twerr2 != nil {
 				tx.Rollback()
 				logger.Error("accounts.VerifyRegistration: failing verification", rz.Err(twerr2))

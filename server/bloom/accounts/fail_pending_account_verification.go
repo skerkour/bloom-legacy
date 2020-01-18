@@ -8,7 +8,7 @@ import (
 	"time"
 )
 
-func FailVerification(ctx context.Context, tx *sqlx.Tx, pendingAccount PendingAccount) twirp.Error {
+func FailPendingAccountVerification(ctx context.Context, tx *sqlx.Tx, pendingAccount PendingAccount) twirp.Error {
 	logger := rz.FromCtx(ctx)
 
 	now := time.Now().UTC()
