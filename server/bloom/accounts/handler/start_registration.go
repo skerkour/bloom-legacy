@@ -33,7 +33,7 @@ func (s Handler) StartRegistration(ctx context.Context, params *rpc.StartRegistr
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	// created pending account
+	// create pending account
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("accounts.StartRegistration: Starting transaction", rz.Err(err))
