@@ -13,7 +13,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/twitchtv/twirp v5.10.0+incompatible
 	gitlab.com/bloom42/bloom/common v0.0.0-20200118092552-367b22b97c30
-	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118121418-8ea5fb31fa99
+	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118164834-dcd6cad27506
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
 )

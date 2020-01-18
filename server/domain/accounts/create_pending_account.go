@@ -49,7 +49,11 @@ func CreatePendingAccount(ctx context.Context, tx *sqlx.Tx, displayName, email s
 	}
 
 	// TODO: update params
-	codeHash, err := argon2id.HashPassword(verificationCode, argon2id.DefaultHashPasswordParams)
+	codeHash, err := argon2id.HashPassword([]byte(verificationCode), argon2id.DefaultHashPasswordParams)
+	if err != nil {
+		logger.Error("accounts.CreatePendingAccount: hashing verification code", rz.Err(err))
+		return PendingAccount{}, "", twirp.InternalError(ErrorCreatePendingAccountMsg)
+	}
 	ret := PendingAccount{
 		ID:                   newUuid.String(),
 		CreatedAt:            now,

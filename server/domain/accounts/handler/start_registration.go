@@ -7,8 +7,8 @@ import (
 	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
-	"gitlab.com/bloom42/bloom/server/domain/accounts"
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/accounts"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
 )

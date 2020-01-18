@@ -3,8 +3,19 @@ package accounts
 import "time"
 
 type Account struct {
-	ID       string `json:"id" db:"id"`
-	Username string `json:"username" db:"username"`
+	ID          string     `json:"id" db:"id"`
+	CreatedAt   time.Time  `json:"created_at" db:"created_at"`
+	UpdatedAt   time.Time  `json:"updated_at" db:"updated_at"`
+	AvatardID   *string    `json:"avatar_id" db:"avatar_id"`
+	Email       string     `json:"email" db:"email"`
+	DisplayName string     `json:"display_name" db:"display_name"`
+	Username    string     `json:"username" db:"username"`
+	AuthKeyHash string     `json:"-" db:"auth_key_hash"`
+	Bio         string     `json:"bio" db:"bio"`
+	FirstName   string     `json:"first_name" db:"first_name"`
+	LastName    string     `json:"last_name" db:"last_name"`
+	IsAdmin     bool       `json:"is_admin" db:"is_admin"`
+	DisabledAt  *time.Time `json:"disabled_at" db:"disabled_at"`
 }
 
 type PendingAccount struct {
