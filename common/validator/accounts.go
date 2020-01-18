@@ -1,15 +1,15 @@
-package accounts
+package valdiator
 
 import (
 	"errors"
 	"fmt"
-	"gitlab.com/bloom42/bloom/common/consts"
 	"github.com/asaskevich/govalidator"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"regexp"
 	"strings"
 )
 
-func ValidateFirstName(firstName string) error {
+func AccountFirstName(firstName string) error {
 	firstNameLen := len(firstName)
 
 	if firstNameLen == 0 {
@@ -23,7 +23,7 @@ func ValidateFirstName(firstName string) error {
 	return nil
 }
 
-func ValidateLastName(lastName string) error {
+func AccountLastName(lastName string) error {
 	lastNameLen := len(lastName)
 
 	if lastNameLen == 0 {
@@ -37,7 +37,7 @@ func ValidateLastName(lastName string) error {
 	return nil
 }
 
-func ValidateBio(bio string) error {
+func AccountBio(bio string) error {
 	if len(bio) > consts.BIO_MAX_LENGTH {
 		return errors.New("bio is too long")
 	}
@@ -45,7 +45,7 @@ func ValidateBio(bio string) error {
 	return nil
 }
 
-func ValidateDisplayName(displayName string) error {
+func AccountDisplayName(displayName string) error {
 	displayNameLen := len(displayName)
 
 	if displayNameLen == 0 {
@@ -59,7 +59,7 @@ func ValidateDisplayName(displayName string) error {
 	return nil
 }
 
-func validatePassword(password string, basicPassword map[string]bool) error {
+func AccountPassword(password string, basicPassword map[string]bool) error {
 	passwordLength := len(password)
 
 	if passwordLength < consts.PASSWORD_MAX_LENGTH {
@@ -133,7 +133,7 @@ pub fn email<S: std::hash::BuildHasher>(
     return Ok(());
 }
 */
-func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
+func AccountEmail(email string, disposableEmailDomains map[string]bool) error {
 	if !govalidator.IsEmail(email) {
 		return errors.New("email is not valid")
 	}
@@ -142,7 +142,7 @@ func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
 
 var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 
-func ValidateUsername(username string) error {
+func AccountUsername(username string) error {
 	usernameLength := len(username)
 
 	if usernameLength == 0 {
