@@ -42,7 +42,14 @@ func (s Handler) VerifyRegistration(ctx context.Context, params *rpc.VerifyRegis
 		return ret, twirp.InternalError(accounts.ErrorVerifyPendingAccountMsg)
 	}
 
-	twerr := accounts.VerifyPendingAccount(ctx, tx, params.Id, params.Code)
+	var pendingAccount accounts.PendingAccount
+	err = tx.Get(&pendingAccount, "SELECT * FROM pending_accounts WHERE id = $1", params.Id)
+	if err != nil {
+		logger.Error("accounts.VerifyRegistration: getting pending account", rz.Err(err))
+		return ret, twirp.InternalError(accounts.ErrorVerifyPendingAccountMsg)
+	}
+
+	twerr := accounts.VerifyPendingAccount(ctx, tx, pendingAccount, params.Code)
 	if twerr != nil {
 		tx.Rollback()
 		return ret, twerr
