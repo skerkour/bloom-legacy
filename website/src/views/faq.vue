@@ -2,6 +2,10 @@
   <v-container class="mt-3 text-center">
     <h1>FAQ</h1>
 
+    <!-- How are my data secured?
+    Parler de crpytographie, xchacha, argon2, blake2b
+    -->
+
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
