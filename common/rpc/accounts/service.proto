@@ -9,9 +9,9 @@ import "google/protobuf/empty.proto";
 service Accounts {
   rpc StartRegistration(StartRegistrationParams) returns (RegistrationStarted);
   rpc VerifyRegistration(VerifyRegistrationParams) returns (google.protobuf.Empty);
-  rpc CompleteRegistration(CompleteRegistrationParams) returns (Session);
+  rpc CompleteRegistration(CompleteRegistrationParams) returns (NewSession);
   rpc SendNewRegistrationCode(SendNewRegistrationCodeParams) returns (google.protobuf.Empty);
-  rpc SignIn(SignInParams) returns (Session);
+  rpc SignIn(SignInParams) returns (NewSession);
   rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
   rpc RevokeSession(RevokeSessionParams) returns (google.protobuf.Empty);
 }
@@ -45,9 +45,17 @@ message SignInParams {
   bytes auth_key = 2;
 }
 
-message Session {
+message NewSession {
   string id = 1;
   string token = 2;
+}
+
+message Session {
+  string id = 1;
+  string created_at = 2;
+  string ip = 3;
+  string device = 4; // empty, reserved
+  string location = 5; // empty, reserved
 }
 
 message RevokeSessionParams {
