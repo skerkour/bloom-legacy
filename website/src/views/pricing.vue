@@ -140,7 +140,7 @@ export default class Pricing extends Vue {
       price: 5.99,
       description: `
       <ul>
-        <li><b>All Free features</b></li>
+        <li><b>All features from Free</b></li>
         <li class="text-center bold"><b>+</b></li>
 
         <li>100GB storage</li>
@@ -154,7 +154,7 @@ export default class Pricing extends Vue {
       price: 10.99,
       description: `
       <ul>
-        <li><b>All Basic features</b></li>
+        <li><b>All features from Basic</b></li>
         <li class="text-center bold"><b>+</b></li>
 
         <li>400GB storage</li>
@@ -167,7 +167,7 @@ export default class Pricing extends Vue {
       price: 20.99,
       description: `
         <ul>
-          <li><b>All Pro features</b></li>
+          <li><b>All features from Pro</b></li>
           <li class="text-center bold"><b>+</b></li>
 
           <li>1TB storage</li>
