@@ -15,6 +15,11 @@
       >{{ $t('appbar.download') }}</v-btn>
       <v-btn
         text
+        to="/features"
+        exact
+      >{{ $t('appbar.features') }}</v-btn>
+      <v-btn
+        text
         to="/faq"
         class="d-none d-sm-flex"
       >{{ $t('footer.product.faq') }}</v-btn>
@@ -23,11 +28,6 @@
         to="/pricing"
         class="d-none d-sm-flex"
       >{{ $t('footer.product.pricing') }}</v-btn>
-      <v-btn
-        text
-        to="/features"
-        exact
-      >{{ $t('appbar.features') }}</v-btn>
       <!-- <v-btn text>Help</v-btn> -->
       <blm-locales-menu />
     </v-toolbar-items>
