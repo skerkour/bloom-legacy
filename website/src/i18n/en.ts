@@ -72,7 +72,7 @@ export default {
       description: 'Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).',
     },
     team: {
-      title: 'Core Team',
+      title: 'The Crew',
     },
     sponsors: {
       title: 'Sponsors',
