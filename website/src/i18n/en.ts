@@ -105,10 +105,13 @@ export default {
   pricing: {
     title: 'Pricing',
     title2: 'Save big with Bloom',
-    title3: 'Having questions?',
+    title3: 'Questions?',
     explore_faq: 'Explore the FAQ',
     month: 'month',
     others: 'Others',
+  },
+  faq: {
+    title: 'Frequently Asked Questions',
   },
   features: {
     // title: 'Our mission: Empowering people',

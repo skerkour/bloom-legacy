@@ -2,34 +2,33 @@
   <v-container class="mt-3 text-center">
 
     <v-row class="justify-center">
-      <v-col cols="10" sm="8" md="12" class="text-center mt-5">
+      <v-col cols="10" sm="8" md="12" class="text-center">
         <h1 class="display-3 mb-5">{{ $t('pricing.title') }}</h1>
-        <v-row justify="space-around" align="stretch">
+      </v-col>
+    </v-row>
 
-          <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
-            v-for="plan in plans" :key="plan.name">
-            <v-hover v-slot:default="{ hover }">
-              <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
-                :class="{ 'on-hover': hover }">
-                <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
-                <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
-                  <div class="d-inline-block">
-                    <span class="display-3 font-weight-bold">Free</span>
-                  </div>
-                </div>
-                <div class="v-card--plan__price pa-5 col col-12" v-else>
-                  <div class="d-inline-block">
-                    <span class="display-3 font-weight-bold">{{ plan.price }}€</span>
-                  </div>
-                  <span class="caption"> /mo </span>
-                </div>
-                <v-card-text class="blm-pricing-card-text" v-html="plan.description">
-                </v-card-text>
-              </v-card>
-            </v-hover>
-          </v-col>
-
-        </v-row>
+    <v-row justify="space-around" align="stretch">
+      <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
+        v-for="plan in plans" :key="plan.name">
+        <v-hover v-slot:default="{ hover }">
+          <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
+            :class="{ 'on-hover': hover }">
+            <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
+            <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
+              <div class="d-inline-block">
+                <span class="display-3 font-weight-bold">Free</span>
+              </div>
+            </div>
+            <div class="v-card--plan__price pa-5 col col-12" v-else>
+              <div class="d-inline-block">
+                <span class="display-3 font-weight-bold">{{ plan.price }}€</span>
+              </div>
+              <span class="caption"> /mo </span>
+            </div>
+            <v-card-text class="blm-pricing-card-text" v-html="plan.description">
+            </v-card-text>
+          </v-card>
+        </v-hover>
       </v-col>
     </v-row>
 

@@ -1,11 +1,21 @@
 <template>
   <v-container class="mt-3 text-center">
-    <h1>FAQ</h1>
 
-    <!-- How are my data secured?
-    Parler de crpytographie, xchacha, argon2, blake2b
-    -->
+    <v-row class="justify-center">
+      <v-col cols="10" sm="8" md="12" class="text-center">
+        <h1 class="display-3 mb-5">{{ $t('faq.title') }}</h1>
+      </v-col>
+    </v-row>
 
+    <v-row class="justify-center">
+      <v-col cols="12" sm="10" md="8" class="text-left mt-3">
+        <div class="mb-5" v-for="question in questions" :key="question.question">
+          <h2 class="display-1 mb-2">{{ question.question }}</h2>
+          <p v-html="question.answer"></p>
+        </div>
+      </v-col>
+
+    </v-row>
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center mt-5">
@@ -33,6 +43,20 @@ import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 export default class Pricing extends Vue {
   // props
   // data
+  questions = [
+    {
+      question: 'Are my data secure?',
+      answer: 'Oui lol',
+    },
+    {
+      question: 'Are my data secure?2',
+      answer: 'Oui lol',
+    },
+    {
+      question: 'Are my data secure?3',
+      answer: 'Oui lol',
+    },
+  ];
   // computed
   // lifecycle
   // watch
