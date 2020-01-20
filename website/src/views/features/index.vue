@@ -2,7 +2,7 @@
   <v-container class="mt-3 text-center">
 
     <v-row class="justify-center">
-      <v-col cols="12" sm="10" md="8" class="text-center mt-5">
+      <v-col cols="12" sm="10" md="8" class="text-center">
         <h1 class="display-3 mb-5">
           {{ $t('features.title') }}
         </h1>
