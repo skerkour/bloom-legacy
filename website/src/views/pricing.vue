@@ -56,6 +56,10 @@
                   <li><v-icon color="success">mdi-check</v-icon> Notes</li>
                   <li><v-icon color="success">mdi-check</v-icon> Torrents</li>
                   <li><v-icon color="success">mdi-check</v-icon> Calendar</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Contacts</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Gallery</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Music</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Privacy by design</li>
                   <li>... <router-link to="/features">And much more</router-link></li>
                 </ul>
               </v-col>
@@ -72,14 +76,17 @@
         <v-card class="mx-auto blm-pricing-card" outlined>
           <v-card-title  class="display-1 justify-center">{{ $t('pricing.others') }}</v-card-title>
           <v-card-text class="text-left blm-pricing-card-text">
-            <v-row class="justify-center">
-              <v-col cols="12" sm="10" md="8">
+            <v-row justify="center" align="center">
+              <v-col cols="12" sm="10" md="8" align-self="center">
                 <ul>
                   <li><v-icon color="primary">mdi-dropbox</v-icon> Dropbox <b>9.99€</b></li>
                   <li><v-icon color="green">mdi-evernote</v-icon> Evernote <b>6.99€</b></li>
                   <li><v-icon color="success">mdi-anchor</v-icon> Bitport <b>8€</b></li>
+                  <li><v-icon color="red">mdi-google</v-icon> Google Suite <b>5.20€</b></li>
                   <v-divider class="mt-5 mb-5" />
-                  <li><b>24.98€ / {{ $t('pricing.month') }}</b></li>
+                  <li><b>29.18€ / mo</b></li>
+                  <li><v-icon color="error">mdi-close</v-icon> Privacy</li>
+                  <li><v-icon color="error">mdi-close</v-icon> Ethical technology</li>
                 </ul>
               </v-col>
             </v-row>
@@ -129,7 +136,7 @@ export default class Pricing extends Vue {
       price: 0,
       description: `
       <ul>
-        <li>2GB storage</li>
+        <li>1GB storage</li>
         <li>1 Bitflow download every hour</li>
         <li>Non priority support</li>
       </ul>
@@ -137,7 +144,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Basic',
-      price: 5.99,
+      price: 6.99,
       description: `
       <ul>
         <li><b>All features from Free</b></li>
@@ -151,27 +158,27 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Pro',
-      price: 10.99,
+      price: 12.99,
       description: `
       <ul>
         <li><b>All features from Basic</b></li>
         <li class="text-center bold"><b>+</b></li>
 
         <li>400GB storage</li>
-        <li>3 parallel Bitflow downloads</li>
+        <li>2 parallel Bitflow downloads</li>
       </ul>
       `,
     },
     {
       name: 'Ultra',
-      price: 20.99,
+      price: 25.99,
       description: `
         <ul>
           <li><b>All features from Pro</b></li>
           <li class="text-center bold"><b>+</b></li>
 
           <li>1TB storage</li>
-          <li>5 parallel Bitflow downloads</li>
+          <li>3 parallel Bitflow downloads</li>
         </ul>
       `,
     },
