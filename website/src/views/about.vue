@@ -9,7 +9,7 @@
       </v-col>
 
       <v-col cols="12" sm="10" md="8" class="text-center mb-4">
-        <p class="body-1 font-weight-regular">
+        <p class="font-weight-regular">
           {{ $t('about.believe') }}
         </p>
       </v-col>
@@ -22,7 +22,7 @@
       </v-col>
 
       <v-flex xs12 sm10 md8 class="text-center mb-4">
-        <p class="body-1 font-weight-regular">{{ $t('about.mission.description') }}</p>
+        <p class="font-weight-regular">{{ $t('about.mission.description') }}</p>
       </v-flex>
 
 
@@ -33,7 +33,7 @@
       </v-col>
 
       <v-col cols="12" sm="10" md="8" class="text-center mb-4">
-        <p class="body-1 font-weight-regular" v-html="$t('about.values.description')"></p>
+        <p class="font-weight-regular" v-html="$t('about.values.description')"></p>
       </v-col>
 
 
@@ -53,7 +53,7 @@
             <h3 class="mt-3">
               Sylvain Kerkour
             </h3>
-            <p>{{ $t('about.sylvain_title') }}, France 🇫🇷</p>
+            <p><!-- {{ $t('about.sylvain_title') }}, -->France 🇫🇷</p>
           </a>
         </v-hover>
       </v-col>
@@ -79,7 +79,7 @@
         <h1 class="display-1 font-weight-medium mb-5" id="sponsors">
           {{ $t('about.sponsors.title') }}
         </h1>
-        <p class="body-1 font-weight-regular">
+        <p class="font-weight-regular">
           <a class="nav-link" href="/the-guide/organization/contributing.html#sponsoring">
             {{ $t('about.sponsors.want') }}
           </a>
@@ -87,7 +87,7 @@
       </v-col> -->
 
       <v-col cols="12" class="text-center mb-5">
-        <p class="body-1 font-weight-regular">-</p>
+        <p class="font-weight-regular">-</p>
       </v-col>
 
 
