@@ -67,6 +67,10 @@ export default class FAQ extends Vue {
         answer: this.$t('faq.a5'),
       },
       {
+        question: this.$t('faq.q7'),
+        answer: this.$t('faq.a7'),
+      },
+      {
         question: this.$t('faq.q6'),
         answer: this.$t('faq.a6'),
       },
