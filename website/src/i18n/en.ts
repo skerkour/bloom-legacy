@@ -80,7 +80,8 @@ export default {
     },
     learn_more: {
       title: 'Want to learn more?',
-      wiki: 'Read <b>The Wiki</b>',
+      blog: `We share our strong opinions and crazy ideas about Tech, Design and Humanity on the blog
+      <a href="https://fatalentropy.com" target="_blank" rel="noopener noreferer">Fatal Entropy</a>.`,
     },
     sylvain_title: 'Product design',
   },

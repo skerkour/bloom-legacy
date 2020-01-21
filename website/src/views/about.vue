@@ -86,9 +86,9 @@
         </p>
       </v-col> -->
 
-      <v-col cols="12" class="text-center mb-5">
+      <!-- <v-col cols="12" class="text-center mb-5">
         <p class="font-weight-regular">-</p>
-      </v-col>
+      </v-col> -->
 
 
       <v-col cols="12" class="text-center">
@@ -98,7 +98,7 @@
       </v-col>
 
       <v-col cols="12" class="text-center mb-4">
-        <a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis/" v-html="$t('about.learn_more.wiki')"></a>
+        <p v-html="$t('about.learn_more.blog')" />
       </v-col>
 
     </v-row>
