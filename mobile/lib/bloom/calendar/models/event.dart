@@ -58,7 +58,7 @@ class Event {
       DateTime startAt, DateTime endAt) async {
     debugPrint('Event.create called');
 
-    return Event.fromJson(await coreCall(CalendarMethod.update_event,
+    return Event.fromJson(await coreCall(CalendarMethod.create_event,
         CalendarCreateEvent(title, description, startAt, endAt)));
   }
 

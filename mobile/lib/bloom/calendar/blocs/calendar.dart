@@ -93,5 +93,3 @@ class CalendarBloc extends BlocBase {
         '${day.year}-${day.month.toString().padLeft(2, '0')}-${day.day.toString().padLeft(2, '0')}T00:00:00.00Z');
   }
 }
-
-final CalendarBloc notesBloc = CalendarBloc();
