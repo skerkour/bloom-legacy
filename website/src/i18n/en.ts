@@ -117,6 +117,10 @@ export default {
   features: {
     // title: 'Our mission: Empowering people',
     title: 'A safe place for all your data',
+    subtitle: `Tired of being abused by Big Companies? <br />
+     You are done with your private information shared to advertisers? <br />
+     You no longer trust monopolies? <br/>
+     We neither, and that's why we built Bloom.`,
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
