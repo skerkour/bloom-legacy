@@ -58,7 +58,7 @@
                   <li><v-icon color="success">mdi-check</v-icon> Contacts</li>
                   <li><v-icon color="success">mdi-check</v-icon> Gallery</li>
                   <li><v-icon color="success">mdi-check</v-icon> Music</li>
-                  <li><v-icon color="success">mdi-check</v-icon> <b>Privacy by design</b></li>
+                  <li><v-icon color="success">mdi-check</v-icon> <b>Private by design</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Ethical by design</b></li>
                   <li>... <router-link to="/features">And much more</router-link></li>
                 </ul>
