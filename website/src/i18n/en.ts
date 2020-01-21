@@ -153,7 +153,7 @@ export default {
     subtitle: `Tired of being abused by Big Companies? <br />
      You are done with your private information shared to advertisers? <br />
      You no longer trust monopolies? <br/>
-     <b>We neither, and that's why we built <span class="blm-rounded-elegance">Bloom</span></b>.`,
+     <b>We too, and that's why we built <span class="blm-rounded-elegance">Bloom</span></b>.`,
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
