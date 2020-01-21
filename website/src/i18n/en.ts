@@ -148,7 +148,8 @@ export default {
         to allow you to test our applications before subscribing.`,
     q7: 'What happens if I forgot my password and all my devices are signed out?',
     a7: `Because of encryption, unfortunately, if you lose your password and all your devices are logged out, you lose all your data.
-    If you forget your password but at least one of your devices is signed in, you have the ability to change your password, without losing nothing.`,
+    If you forget your password but at least one of your devices is signed in, you have the ability to change your password, without losing nothing. <br />
+    We recommend you to note your account's password on a sheet of paper and to hide it somewhere.`,
   },
   features: {
     // title: 'Our mission: Empowering people',
