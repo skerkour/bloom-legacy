@@ -32,7 +32,7 @@
 
     <v-row class="text-center text--darken-1 grey--text" align="center" justify="center" >
       <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
-        <h5 class="title mb-2">#1 Product of the Day</h5>
+        <h5 class="title mb-2">{{ $t('landing.product_hunt') }}</h5>
         <a href="https://www.producthunt.com/posts/bloom-05383d81-983e-4d4d-b22f-78dd91066cda" target="_blank" rel="noopener noreferer" class="blm-pointer">
           <v-img alt="Product Hunt" src="/static/imgs/landing/ph.svg" width="200px" contain>
             <template v-slot:placeholder>
@@ -48,7 +48,7 @@
         </a>
       </v-col>
       <v-col cols="12" sm="6" md="4" align="center" justify="center" class="pb-3">
-        <h5 class="title mb-2">#1 on</h5>
+        <h5 class="title mb-2">{{ $t('landing.hacker_news') }}</h5>
         <a href="https://news.ycombinator.com/item?id=20105567" target="_blank" rel="noopener noreferer" class="blm-pointer">
           <v-img alt="Hacker news" src="/static/imgs/landing/hn.svg" width="200px" >
             <template v-slot:placeholder>
