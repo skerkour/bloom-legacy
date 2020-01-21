@@ -59,6 +59,7 @@
                   <li><v-icon color="success">mdi-check</v-icon> Gallery</li>
                   <li><v-icon color="success">mdi-check</v-icon> Music</li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Privacy by design</b></li>
+                  <li><v-icon color="success">mdi-check</v-icon> <b>Ethical by design</b></li>
                   <li>... <router-link to="/features">And much more</router-link></li>
                 </ul>
               </v-col>
@@ -84,8 +85,8 @@
                   <li><v-icon color="red">mdi-google</v-icon> Google Suite <b>5.20€</b></li>
                   <v-divider class="mt-5 mb-5" />
                   <li><b>29.18€ / mo</b></li>
-                  <li><v-icon color="error">mdi-close</v-icon> <b>Privacy</b></li>
-                  <li><v-icon color="error">mdi-close</v-icon> <b>Ethical technology</b></li>
+                  <li><v-icon color="error">mdi-close</v-icon> Privacy</li>
+                  <li><v-icon color="error">mdi-close</v-icon> Ethical technology</li>
                 </ul>
               </v-col>
             </v-row>
