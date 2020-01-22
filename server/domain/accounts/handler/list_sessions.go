@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
 	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
@@ -13,7 +12,7 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) ListSessions(ctx context.Context, _ *google_protobuf.Empty) (*rpc.Sessions, error) {
+func (s Handler) ListSessions(ctx context.Context, _ *rpc.Empty) (*rpc.Sessions, error) {
 	ret := &rpc.Sessions{Sessions: []*rpc.Session{}}
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)

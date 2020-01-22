@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
 	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
@@ -12,8 +11,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) RevokeSession(ctx context.Context, params *rpc.RevokeSessionParams) (*google_protobuf.Empty, error) {
-	ret := &google_protobuf.Empty{}
+func (s Handler) RevokeSession(ctx context.Context, params *rpc.RevokeSessionParams) (*rpc.Empty, error) {
+	ret := &rpc.Empty{}
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {

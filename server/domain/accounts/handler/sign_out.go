@@ -3,16 +3,16 @@ package handler
 import (
 	"context"
 
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
 	"github.com/twitchtv/twirp"
+	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/accounts"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) SignOut(ctx context.Context, _ *google_protobuf.Empty) (*google_protobuf.Empty, error) {
-	ret := &google_protobuf.Empty{}
+func (s Handler) SignOut(ctx context.Context, _ *rpc.Empty) (*rpc.Empty, error) {
+	ret := &rpc.Empty{}
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
