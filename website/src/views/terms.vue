@@ -135,7 +135,7 @@
               If fees are not paid in the following 14 days, Supplier has the right to permanently
               delete the Workspace, including all Client Data therein.<br /><br />
 
-              Payments are proceded at the start of the billing period.<br /><br />
+              Payments are proceeded at the start of the billing period.<br /><br />
             </p>
 
             <h4 class="text-left text--darken-1 mt-3 mb-3">

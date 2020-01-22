@@ -138,7 +138,7 @@ export default {
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',
     a4: `When you don't pay for a service, YOU are the product. <br />
       Your personal data are either shared
-      with third party advertisers, or algortihms are applied to your data to sell you more and more products
+      with third party advertisers, or algorithms are applied to your data to sell you more and more products
       you don't need, or even influence elections. <br />
       On the other side, with Bloom, your data are encrypted and are not at the mercy of a tyranic government,
       a rogue employee, or an over jealous conjoint.`,
@@ -149,8 +149,8 @@ export default {
     a6: `We do not issue refunds, but we offer a free tier
         to allow you to test our applications before subscribing.`,
     q7: 'What happens if I forgot my password and all my devices are signed out?',
-    a7: `Because of encryption, unfortunately, if you lose your password and all your devices are logged out, you lose all your data.
-    If you forget your password but at least one of your devices is signed in, you have the ability to change your password, without losing nothing. <br />
+    a7: `Due to how encryption works, unfortunately, if you lose your password and all your devices are logged out, you lose all your data. <br />
+    If you forget your password but at least one of your devices is signed in, you can normally change your password, without losing nothing. <br />
     We recommend you to note your account's password on a sheet of paper and to hide it somewhere.`,
   },
   features: {
