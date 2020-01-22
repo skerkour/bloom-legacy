@@ -9,7 +9,8 @@
         <p>
           {{ $t('labels.pain2') }} <br />
           {{ $t('labels.pain1') }} <br />
-          {{ $t('labels.pain3') }}
+          {{ $t('labels.pain3') }} <br />
+          <b>{{ $t('features.solution') }}</b>
         </p>
 
         <blm-download-btn />

@@ -154,8 +154,8 @@ export default {
     We recommend you to note your account's password on a sheet of paper and to hide it somewhere.`,
   },
   features: {
-    // title: 'Our mission: Empowering people',
     title: 'A safe place for all your data',
+    solution: 'We too, and that\'s why we build Bloom',
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
