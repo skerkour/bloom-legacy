@@ -6,7 +6,11 @@
         <h1 class="display-3 mb-5">
           {{ $t('features.title') }}
         </h1>
-        <p v-html="$t('features.subtitle')" />
+        <p>
+          {{ $t('labels.pain2') }} <br />
+          {{ $t('labels.pain1') }} <br />
+          {{ $t('labels.pain3') }}
+        </p>
 
         <blm-download-btn />
 

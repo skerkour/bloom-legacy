@@ -3,7 +3,7 @@
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" xl="8" class="text-center">
-        <h2 class="display-3 mb-5">{{ $t('download.title') }}</h2>
+        <h2 class="display-3 mb-5">{{ $t('labels.pain1') }}</h2>
         <h1 class="display-2 mb-5">
           {{ $t('download.subtitle') }}
         </h1>

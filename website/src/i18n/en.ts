@@ -3,6 +3,9 @@ export default {
     other_downloads: 'Other downloads',
     learn_more: 'Learn more',
     coming_soon_btn: 'Coming Early 2020',
+    pain1: 'You are done with your privacy invaded by advertisers?',
+    pain2: 'Tired of being abused by Big Companies?',
+    pain3: 'You no longer trust tech monopolies?',
   },
   appbar: {
     download: 'Download',
@@ -95,7 +98,6 @@ export default {
     mastodon: 'On the fediverse:',
   },
   download: {
-    title: 'You are done with your privacy invaded by advertisers?',
     subtitle: 'Take back control!',
     subtitle2: 'Start getting the respect you deserve with our privacy-first apps.',
     all: 'All Downloads',
@@ -154,10 +156,6 @@ export default {
   features: {
     // title: 'Our mission: Empowering people',
     title: 'A safe place for all your data',
-    subtitle: `Tired of being abused by Big Companies? <br />
-     You are done with your privacy invaded by advertisers? <br />
-     You no longer trust tech monopolies? <br/>
-     <b>We too, and that's why we built <span class="blm-rounded-elegance">Bloom</span></b>.`,
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
