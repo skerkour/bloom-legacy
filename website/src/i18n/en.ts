@@ -95,8 +95,9 @@ export default {
     mastodon: 'On the fediverse:',
   },
   download: {
-    title: 'Take back control!',
-    subtitle: 'Start getting the respect you deserve with our privacy-first apps.',
+    title: 'You are done with your privacy invaded by advertisers?',
+    subtitle: 'Take back control!',
+    subtitle2: 'Start getting the respect you deserve with our privacy-first apps.',
     all: 'All Downloads',
     computers_title: 'Computers',
     computers_description: `Windows, macOS or Linux. Desktop or laptop.

@@ -2,13 +2,14 @@
   <v-container class="mt-3 text-center">
 
     <v-row class="justify-center">
-      <v-col cols="12" sm="10" md="8" class="text-center">
-        <h1 class="display-3 mb-5">
-          {{ $t('download.title') }}
-        </h1>
-        <h1 class="headline mb-5 mt-5">
+      <v-col cols="12" sm="10" xl="8" class="text-center">
+        <h2 class="display-3 mb-5">{{ $t('download.title') }}</h2>
+        <h1 class="display-2 mb-5">
           {{ $t('download.subtitle') }}
         </h1>
+        <h3 class="headline mb-5 mt-5">
+          {{ $t('download.subtitle2') }}
+        </h3>
         <div class="mt-5 mb-5"></div>
         <blm-download-btn />
       </v-col>
