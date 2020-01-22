@@ -3,10 +3,26 @@
     <v-row class="justify-center align-center">
 
       <v-col cols="12" sm="6" class="text-center">
-        <h1 class="display-3 mb-5">{{ $t('landing.mission') }}</h1>
+        <h1 class="display-3 mb-5">
+          <vue-typer
+            :text='pains'
+            :repeat='Infinity'
+            :shuffle='false'
+            initial-action='typing'
+            :pre-type-delay='60'
+            :type-delay='60'
+            :pre-erase-delay='7000'
+            :erase-delay='250'
+            erase-style='clear'
+            :erase-on-complete='false'
+            caret-animation='blink'
+            id="typewriter"
+            @typed-char="onTypedChar"
+          ></vue-typer>
+        </h1>
 
-        <!-- <h4 class="headline mt-5 font-weight-light">{{ $t('landing.subtitle1') }}</h4> -->
-        <h4 class="headline mb-5 font-weight-light" v-html="$t('landing.subtitle2')"></h4>
+        <h4 class="display-1 mb-5" v-html="$t('landing.subtitle2')"></h4>
+        <h4 class="headline mb-4">{{ $t('landing.mission') }}</h4>
 
         <blm-download-btn />
 
@@ -106,25 +122,66 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { VueTyper } from 'vue-typer';
 import DownloadBtn from '@/components/coming_soon_btn.vue';
 import OtherDownloadsLink from '@/components/other_downloads_link.vue';
-
 
 @Component({
   components: {
     'blm-download-btn': DownloadBtn,
     'blm-other-downloads-link': OtherDownloadsLink,
+    VueTyper,
   },
 })
 export default class Index extends Vue {
   // props
   // data
+  countWord = 0;
+
   // computed
+  get pains(): any[] {
+    return [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3')];
+  }
   // lifecycle
   // watch
   // methods
+  onTypedChar(typedChar: string, typedCharIndex: number) {
+    if (typedCharIndex === 0) {
+      this.countWord = 0;
+      (document!.getElementById('typewriter')!.firstChild! as any).innerHTML = '';
+    }
+    const lessNodes = document.getElementById('typewriter')!.lastChild!.childNodes;
+    if (typedChar === ' ' || lessNodes.length === 1) {
+      const finalNodes = document.getElementById('typewriter')!.firstChild;
+      const listNodes = finalNodes!.childNodes;
+
+      const newNode = document.createElement('span');
+
+      let x = this.countWord;
+      const countNodes = listNodes.length;
+      while (x < countNodes) {
+        if ((listNodes[this.countWord] as any).innerHTML !== ' ') {
+          newNode.insertAdjacentElement('beforeend', listNodes[this.countWord] as any);
+        } else {
+          this.countWord += 1;
+        }
+        // TODO: ADD LAST CHAR
+        x += 1;
+      }
+      newNode.className = 'nowrap';
+      (finalNodes as any).insertAdjacentElement('beforeend', newNode);
+
+      this.countWord += 1;
+    }
+  }
 }
 </script>
+
+<style  lang="scss">
+span.nowrap{
+  white-space: nowrap;
+}
+</style>
 
 <style scoped lang="scss">
 .blm-features {
