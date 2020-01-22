@@ -11,9 +11,11 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.3.0
 	github.com/spf13/cobra v0.0.5
-	github.com/twitchtv/twirp v5.10.0+incompatible
-	gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736
+	github.com/spf13/pflag v1.0.5 // indirect
+	github.com/twitchtv/twirp v5.10.1+incompatible
+	gitlab.com/bloom42/bloom/common v0.0.0-20200122204511-695fd2de8e2d
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
+	golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 // indirect
 )

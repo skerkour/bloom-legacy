@@ -174,6 +174,8 @@ github.com/spf13/cobra v0.0.5/go.mod h1:3K3wKZymM7VvHMDS9+Akkh4K60UwM26emMESw8tL
 github.com/spf13/jwalterweatherman v1.0.0/go.mod h1:cQK4TGJAtQXfYWX+Ddv3mKDzgVb68N+wFjFa4jdeBTo=
 github.com/spf13/pflag v1.0.3 h1:zPAT6CGy6wXeQ7NtTnaTerfKOsV6V6F8agHXFiazDkg=
 github.com/spf13/pflag v1.0.3/go.mod h1:DYY7MBk1bdzusC3SYhjObp+wFpr4gzcvqqNjLnInEg4=
+github.com/spf13/pflag v1.0.5 h1:iy+VFUOCP1a+8yFto/drg2CJ5u0yRoB7fZw3DKv/JXA=
+github.com/spf13/pflag v1.0.5/go.mod h1:McXfInJRrz4CZXVZOBLb0bTZqETkiAhM9Iw0y3An2Bg=
 github.com/spf13/viper v1.3.2/go.mod h1:ZiWeW+zYFKm7srdB9IoDzzZXaJaI5eL9QjNiN/DMA2s=
 github.com/stretchr/objx v0.1.0/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
 github.com/stretchr/objx v0.1.1/go.mod h1:HFkY916IF+rwdDfMAkV7OtwuqBVzrE8GR6GFx+wExME=
@@ -183,6 +185,8 @@ github.com/stretchr/testify v1.3.0/go.mod h1:M5WIy9Dh21IEIfnGCwXGc5bZfKNJtfHm1UV
 github.com/tidwall/pretty v0.0.0-20180105212114-65a9db5fad51/go.mod h1:XNkn88O1ChpSDQmQeStsy+sBenx6DDtFZJxhVysOjyk=
 github.com/twitchtv/twirp v5.10.0+incompatible h1:JSPKlRSaaKLbZ0EGgWUEnkwtEJLmrn5nid3/zKCmv4c=
 github.com/twitchtv/twirp v5.10.0+incompatible/go.mod h1:RRJoFSAmTEh2weEqWtpPE3vFK5YBhA6bqp2l1kfCC5A=
+github.com/twitchtv/twirp v5.10.1+incompatible h1:35js8ID9rYPKkZ0qWnuZw+q+OuCWM1GIibu1F1YImjA=
+github.com/twitchtv/twirp v5.10.1+incompatible/go.mod h1:RRJoFSAmTEh2weEqWtpPE3vFK5YBhA6bqp2l1kfCC5A=
 github.com/ugorji/go/codec v0.0.0-20181204163529-d75b2dcb6bc8/go.mod h1:VFNgLljTbGfSG7qAOspJ7OScBnGdDN/yBr0sguwnwf0=
 github.com/xanzy/go-gitlab v0.15.0/go.mod h1:8zdQa/ri1dfn8eS3Ir1SyfvOKlw7WBJ8DVThkpGiXrs=
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
@@ -192,6 +196,8 @@ gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f h1:LzfQlG769M
 gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736 h1:+Chpqaz7WXtoavJ70hKBrLfug0+Bp8RT0GVanVuHAFE=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200122204511-695fd2de8e2d h1:98Wb+Rx6jaHpK+XpgsVYYHyLB/3juJHrw4OaLC6NVPU=
+gitlab.com/bloom42/bloom/common v0.0.0-20200122204511-695fd2de8e2d/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899 h1:uZwZ8PQR7d7r4BJJDzSI+UKiF9JwlEXjkJF/uVXcJuo=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
@@ -248,6 +254,8 @@ golang.org/x/sys v0.0.0-20190215142949-d0b11bdaac8a/go.mod h1:STP8DvDyc/dI5b8T5h
 golang.org/x/sys v0.0.0-20190412213103-97732733099d/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/sys v0.0.0-20190426135247-a129542de9ae h1:mQLHiymj/JXKnnjc62tb7nD5pZLs940/sXJu+Xp3DBA=
 golang.org/x/sys v0.0.0-20190426135247-a129542de9ae/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
+golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 h1:ywK/j/KkyTHcdyYSZNXGjMwgmDSfjglYZ3vStQ/gSCU=
+golang.org/x/sys v0.0.0-20200122134326-e047566fdf82/go.mod h1:h1NjWce9XRLGQEsW7wpKNCjG9DtNlClVuFLEZdDNbEs=
 golang.org/x/text v0.3.0/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.1-0.20180807135948-17ff2d5776d2/go.mod h1:NqM8EUOU14njkJ3fqMW+pc6Ldnwhi/IjpwHt7yyuwOQ=
 golang.org/x/text v0.3.2 h1:tW2bmiBqwgJj/UpqtC8EpXEZVYOwU0yG4iWbprSVAcs=
