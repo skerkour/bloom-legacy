@@ -3,19 +3,19 @@ syntax = "proto3";
 package com.bloom42;
 option go_package = "accounts";
 
-import "google/protobuf/empty.proto";
-
 // Accounts
 service Accounts {
   rpc StartRegistration(StartRegistrationParams) returns (RegistrationStarted);
-  rpc VerifyRegistration(VerifyRegistrationParams) returns (google.protobuf.Empty);
+  rpc VerifyRegistration(VerifyRegistrationParams) returns (Empty);
   rpc CompleteRegistration(CompleteRegistrationParams) returns (NewSession);
-  rpc SendNewRegistrationCode(SendNewRegistrationCodeParams) returns (google.protobuf.Empty);
+  rpc SendNewRegistrationCode(SendNewRegistrationCodeParams) returns (Empty);
   rpc SignIn(SignInParams) returns (NewSession);
-  rpc SignOut(google.protobuf.Empty) returns (google.protobuf.Empty);
-  rpc RevokeSession(RevokeSessionParams) returns (google.protobuf.Empty);
-  rpc ListSessions(google.protobuf.Empty) returns (Sessions);
+  rpc SignOut(Empty) returns (Empty);
+  rpc RevokeSession(RevokeSessionParams) returns (Empty);
+  rpc ListSessions(Empty) returns (Sessions);
 }
+
+message Empty {}
 
 message StartRegistrationParams {
   string display_name = 1;

@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.bloom42;
+option go_package = "billing";
+
+// Billing
+service Billing {
+}
+
+message Empty {}
