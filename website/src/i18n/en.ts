@@ -140,9 +140,8 @@ export default {
       On the other side, with Bloom, your data are encrypted and are not at the mercy of a tyranic government,
       a rogue employee, or an over jealous conjoint.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
-    a5: `By being a human scale company, we do our best to provide the best and more ethical service as possible. Our clients
-      are the people paying us, not advertisers. <br />
-      Thus we do our best to respond to any customer request as soon and with the more love as we can.`,
+    a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
+      Our clients are the people paying us, not the advertisers.`,
     q6: 'Do you issue refunds?',
     a6: `We do not issue refunds, but we offer a free tier
         to allow you to test our applications before subscribing.`,
