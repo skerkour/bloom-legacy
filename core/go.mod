@@ -6,6 +6,8 @@ require (
 	github.com/golang/protobuf v1.3.2
 	github.com/google/uuid v1.1.1
 	github.com/mattn/go-sqlite3 v2.0.2+incompatible
-	gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f
-	golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d
+	github.com/twitchtv/twirp v5.10.1+incompatible // indirect
+	gitlab.com/bloom42/bloom/common v0.0.0-20200122212055-f52779bf7f0f
+	golang.org/x/crypto v0.0.0-20200117160349-530e935923ad
+	golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 // indirect
 )

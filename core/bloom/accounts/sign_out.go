@@ -2,14 +2,15 @@ package accounts
 
 import (
 	"context"
-	google_protobuf "github.com/golang/protobuf/ptypes/empty"
-	"gitlab.com/bloom42/bloom/common/rpc/accounts"
 	"net/http"
+
+	"gitlab.com/bloom42/bloom/common/rpc/accounts"
+	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 )
 
 func SignOut() error {
 	client := accounts.NewAccountsProtobufClient("http://localhost:8080", &http.Client{})
 
-	_, err := client.SignOut(context.Background(), &google_protobuf.Empty{})
+	_, err := client.SignOut(context.Background(), &rpc.Empty{})
 	return err
 }
