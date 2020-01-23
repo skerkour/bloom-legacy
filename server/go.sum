@@ -198,6 +198,12 @@ gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736 h1:+Chpqaz7WX
 gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122204511-695fd2de8e2d h1:98Wb+Rx6jaHpK+XpgsVYYHyLB/3juJHrw4OaLC6NVPU=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122204511-695fd2de8e2d/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123192952-cf1567793fa3 h1:Robf66Gc/jhMlBemIeOglQvThWNsrcetn8ccFCUGPH8=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123192952-cf1567793fa3/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123193823-1b3ecb359600 h1:UenXsOWTqe6imy5InZrVRqjsP0T396D9nUQRgKnF36M=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123193823-1b3ecb359600/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123194006-a4fe75dd0a7a h1:nbrcyg724bobCRt7zNf+WrzeFzYoUrSf8f+EgOilY3I=
+gitlab.com/bloom42/bloom/common v0.0.0-20200123194006-a4fe75dd0a7a/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899 h1:uZwZ8PQR7d7r4BJJDzSI+UKiF9JwlEXjkJF/uVXcJuo=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
