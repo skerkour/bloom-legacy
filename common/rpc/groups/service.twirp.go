@@ -54,8 +54,6 @@ type Groups interface {
 
 	DeclineInvitation(context.Context, *Empty) (*Empty, error)
 
-	ResendInvitation(context.Context, *Empty) (*Empty, error)
-
 	CancelInvitation(context.Context, *Empty) (*Empty, error)
 }
 
@@ -65,7 +63,7 @@ type Groups interface {
 
 type groupsProtobufClient struct {
 	client HTTPClient
-	urls   [11]string
+	urls   [10]string
 	opts   twirp.ClientOptions
 }
 
@@ -82,7 +80,7 @@ func NewGroupsProtobufClient(addr string, client HTTPClient, opts ...twirp.Clien
 	}
 
 	prefix := urlBase(addr) + GroupsPathPrefix
-	urls := [11]string{
+	urls := [10]string{
 		prefix + "CreateGroup",
 		prefix + "DeleteGroup",
 		prefix + "UpdateGroup",
@@ -92,7 +90,6 @@ func NewGroupsProtobufClient(addr string, client HTTPClient, opts ...twirp.Clien
 		prefix + "InviteMembers",
 		prefix + "AcceptInvitation",
 		prefix + "DeclineInvitation",
-		prefix + "ResendInvitation",
 		prefix + "CancelInvitation",
 	}
 
@@ -283,32 +280,12 @@ func (c *groupsProtobufClient) DeclineInvitation(ctx context.Context, in *Empty)
 	return out, nil
 }
 
-func (c *groupsProtobufClient) ResendInvitation(ctx context.Context, in *Empty) (*Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
-	ctx = ctxsetters.WithServiceName(ctx, "Groups")
-	ctx = ctxsetters.WithMethodName(ctx, "ResendInvitation")
-	out := new(Empty)
-	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
-	if err != nil {
-		twerr, ok := err.(twirp.Error)
-		if !ok {
-			twerr = twirp.InternalErrorWith(err)
-		}
-		callClientError(ctx, c.opts.Hooks, twerr)
-		return nil, err
-	}
-
-	callClientResponseReceived(ctx, c.opts.Hooks)
-
-	return out, nil
-}
-
 func (c *groupsProtobufClient) CancelInvitation(ctx context.Context, in *Empty) (*Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "CancelInvitation")
 	out := new(Empty)
-	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[10], in, out)
+	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -329,7 +306,7 @@ func (c *groupsProtobufClient) CancelInvitation(ctx context.Context, in *Empty) 
 
 type groupsJSONClient struct {
 	client HTTPClient
-	urls   [11]string
+	urls   [10]string
 	opts   twirp.ClientOptions
 }
 
@@ -346,7 +323,7 @@ func NewGroupsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientOpt
 	}
 
 	prefix := urlBase(addr) + GroupsPathPrefix
-	urls := [11]string{
+	urls := [10]string{
 		prefix + "CreateGroup",
 		prefix + "DeleteGroup",
 		prefix + "UpdateGroup",
@@ -356,7 +333,6 @@ func NewGroupsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientOpt
 		prefix + "InviteMembers",
 		prefix + "AcceptInvitation",
 		prefix + "DeclineInvitation",
-		prefix + "ResendInvitation",
 		prefix + "CancelInvitation",
 	}
 
@@ -547,32 +523,12 @@ func (c *groupsJSONClient) DeclineInvitation(ctx context.Context, in *Empty) (*E
 	return out, nil
 }
 
-func (c *groupsJSONClient) ResendInvitation(ctx context.Context, in *Empty) (*Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
-	ctx = ctxsetters.WithServiceName(ctx, "Groups")
-	ctx = ctxsetters.WithMethodName(ctx, "ResendInvitation")
-	out := new(Empty)
-	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
-	if err != nil {
-		twerr, ok := err.(twirp.Error)
-		if !ok {
-			twerr = twirp.InternalErrorWith(err)
-		}
-		callClientError(ctx, c.opts.Hooks, twerr)
-		return nil, err
-	}
-
-	callClientResponseReceived(ctx, c.opts.Hooks)
-
-	return out, nil
-}
-
 func (c *groupsJSONClient) CancelInvitation(ctx context.Context, in *Empty) (*Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "CancelInvitation")
 	out := new(Empty)
-	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[10], in, out)
+	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
 		if !ok {
@@ -661,9 +617,6 @@ func (s *groupsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 		return
 	case "/twirp/com.bloom42.Groups/DeclineInvitation":
 		s.serveDeclineInvitation(ctx, resp, req)
-		return
-	case "/twirp/com.bloom42.Groups/ResendInvitation":
-		s.serveResendInvitation(ctx, resp, req)
 		return
 	case "/twirp/com.bloom42.Groups/CancelInvitation":
 		s.serveCancelInvitation(ctx, resp, req)
@@ -1837,135 +1790,6 @@ func (s *groupsServer) serveDeclineInvitationProtobuf(ctx context.Context, resp 
 	callResponseSent(ctx, s.hooks)
 }
 
-func (s *groupsServer) serveResendInvitation(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	header := req.Header.Get("Content-Type")
-	i := strings.Index(header, ";")
-	if i == -1 {
-		i = len(header)
-	}
-	switch strings.TrimSpace(strings.ToLower(header[:i])) {
-	case "application/json":
-		s.serveResendInvitationJSON(ctx, resp, req)
-	case "application/protobuf":
-		s.serveResendInvitationProtobuf(ctx, resp, req)
-	default:
-		msg := fmt.Sprintf("unexpected Content-Type: %q", req.Header.Get("Content-Type"))
-		twerr := badRouteError(msg, req.Method, req.URL.Path)
-		s.writeError(ctx, resp, twerr)
-	}
-}
-
-func (s *groupsServer) serveResendInvitationJSON(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "ResendInvitation")
-	ctx, err = callRequestRouted(ctx, s.hooks)
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-
-	reqContent := new(Empty)
-	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
-	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
-		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
-		return
-	}
-
-	// Call service method
-	var respContent *Empty
-	func() {
-		defer ensurePanicResponses(ctx, resp, s.hooks)
-		respContent, err = s.Groups.ResendInvitation(ctx, reqContent)
-	}()
-
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling ResendInvitation. nil responses are not supported"))
-		return
-	}
-
-	ctx = callResponsePrepared(ctx, s.hooks)
-
-	var buf bytes.Buffer
-	marshaler := &jsonpb.Marshaler{OrigName: true}
-	if err = marshaler.Marshal(&buf, respContent); err != nil {
-		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal json response"))
-		return
-	}
-
-	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
-	respBytes := buf.Bytes()
-	resp.Header().Set("Content-Type", "application/json")
-	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
-	resp.WriteHeader(http.StatusOK)
-
-	if n, err := resp.Write(respBytes); err != nil {
-		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
-		twerr := twirp.NewError(twirp.Unknown, msg)
-		callError(ctx, s.hooks, twerr)
-	}
-	callResponseSent(ctx, s.hooks)
-}
-
-func (s *groupsServer) serveResendInvitationProtobuf(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
-	var err error
-	ctx = ctxsetters.WithMethodName(ctx, "ResendInvitation")
-	ctx, err = callRequestRouted(ctx, s.hooks)
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-
-	buf, err := ioutil.ReadAll(req.Body)
-	if err != nil {
-		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
-		return
-	}
-	reqContent := new(Empty)
-	if err = proto.Unmarshal(buf, reqContent); err != nil {
-		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
-		return
-	}
-
-	// Call service method
-	var respContent *Empty
-	func() {
-		defer ensurePanicResponses(ctx, resp, s.hooks)
-		respContent, err = s.Groups.ResendInvitation(ctx, reqContent)
-	}()
-
-	if err != nil {
-		s.writeError(ctx, resp, err)
-		return
-	}
-	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling ResendInvitation. nil responses are not supported"))
-		return
-	}
-
-	ctx = callResponsePrepared(ctx, s.hooks)
-
-	respBytes, err := proto.Marshal(respContent)
-	if err != nil {
-		s.writeError(ctx, resp, wrapInternal(err, "failed to marshal proto response"))
-		return
-	}
-
-	ctx = ctxsetters.WithStatusCode(ctx, http.StatusOK)
-	resp.Header().Set("Content-Type", "application/protobuf")
-	resp.Header().Set("Content-Length", strconv.Itoa(len(respBytes)))
-	resp.WriteHeader(http.StatusOK)
-	if n, err := resp.Write(respBytes); err != nil {
-		msg := fmt.Sprintf("failed to write response, %d of %d bytes written: %s", n, len(respBytes), err.Error())
-		twerr := twirp.NewError(twirp.Unknown, msg)
-		callError(ctx, s.hooks, twerr)
-	}
-	callResponseSent(ctx, s.hooks)
-}
-
 func (s *groupsServer) serveCancelInvitation(ctx context.Context, resp http.ResponseWriter, req *http.Request) {
 	header := req.Header.Get("Content-Type")
 	i := strings.Index(header, ";")
@@ -2620,19 +2444,19 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 219 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x9c, 0xd2, 0x31, 0x4b, 0x04, 0x31,
-	0x10, 0x05, 0xe0, 0x46, 0x57, 0x99, 0x43, 0x38, 0x53, 0x89, 0xa5, 0x3f, 0x20, 0x07, 0xe7, 0x89,
-	0x70, 0x56, 0xe7, 0xae, 0x88, 0xa0, 0xcd, 0x82, 0x8d, 0xdd, 0x6e, 0xf6, 0x21, 0x81, 0x24, 0x13,
-	0x92, 0xb8, 0xe0, 0xaf, 0x57, 0x36, 0x5a, 0x58, 0x58, 0x6c, 0xb6, 0x9c, 0xe1, 0x7d, 0xcc, 0x14,
-	0x8f, 0x2e, 0x82, 0x57, 0x9b, 0xf7, 0xc0, 0x1f, 0x3e, 0x6e, 0x22, 0xc2, 0xa8, 0x15, 0xa4, 0x0f,
-	0x9c, 0x58, 0xac, 0x14, 0x5b, 0xd9, 0x1b, 0x66, 0xbb, 0xdb, 0x5e, 0x9d, 0xd0, 0xf1, 0x83, 0xf5,
-	0xe9, 0x73, 0xfb, 0x75, 0x44, 0xd5, 0x63, 0x8e, 0x8b, 0x1b, 0x5a, 0xd5, 0x01, 0x5d, 0x42, 0x9e,
-	0x85, 0x90, 0x7f, 0x80, 0xcc, 0xe9, 0xcb, 0x7f, 0x76, 0x13, 0x6b, 0x60, 0xb0, 0x80, 0xbd, 0xfa,
-	0xa1, 0xf8, 0xda, 0x8e, 0xe8, 0x59, 0xc7, 0xf4, 0xfb, 0xf2, 0x5c, 0x75, 0x4b, 0x67, 0x93, 0x3a,
-	0x18, 0x53, 0x0e, 0x5b, 0x58, 0x1e, 0xf1, 0x02, 0xdb, 0x23, 0x14, 0xc1, 0x27, 0x37, 0xea, 0x54,
-	0x0c, 0xf7, 0xb4, 0x3e, 0x28, 0x05, 0x9f, 0x32, 0xef, 0x92, 0x66, 0x37, 0xdb, 0xde, 0xd1, 0x79,
-	0x03, 0x65, 0xb4, 0xc3, 0x02, 0xbc, 0xa7, 0x75, 0x8b, 0x08, 0x37, 0x2c, 0xb3, 0x75, 0xe7, 0x14,
-	0x4c, 0xb9, 0xbd, 0x3f, 0x7d, 0xab, 0x7e, 0xfa, 0xda, 0x57, 0xb9, 0xa8, 0xd7, 0xdf, 0x01, 0x00,
-	0x00, 0xff, 0xff, 0x23, 0x8d, 0x2c, 0x1c, 0xc4, 0x02, 0x00, 0x00,
+	// 215 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x28, 0x2a, 0x48, 0xd6,
+	0x4f, 0x2f, 0xca, 0x2f, 0x2d, 0x28, 0xd6, 0x2f, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0xd5, 0x2b,
+	0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4e, 0xce, 0xcf, 0xd5, 0x4b, 0xca, 0xc9, 0xcf, 0xcf, 0x35,
+	0x31, 0x52, 0x62, 0xe7, 0x62, 0x75, 0xcd, 0x2d, 0x28, 0xa9, 0x34, 0x3a, 0xcc, 0xc2, 0xc5, 0xe6,
+	0x0e, 0x56, 0x2e, 0x64, 0xca, 0xc5, 0xed, 0x5c, 0x94, 0x9a, 0x58, 0x92, 0x0a, 0xe6, 0x0b, 0x09,
+	0xe9, 0x21, 0x69, 0xd0, 0x03, 0xab, 0x96, 0xc2, 0x22, 0x06, 0xd2, 0xe6, 0x92, 0x9a, 0x93, 0x4a,
+	0x86, 0xb6, 0xd0, 0x82, 0x14, 0x92, 0x6d, 0x33, 0xe1, 0xe2, 0xf2, 0xc9, 0x2c, 0x2e, 0x81, 0x3a,
+	0x99, 0x58, 0x5d, 0xe6, 0x5c, 0xbc, 0x20, 0x5d, 0x8e, 0x39, 0x39, 0xa4, 0x6b, 0x0c, 0x4a, 0xcd,
+	0xcd, 0x2f, 0x4b, 0xf5, 0x4d, 0xcd, 0x4d, 0x4a, 0x2d, 0x22, 0x49, 0xa3, 0x67, 0x5e, 0x59, 0x66,
+	0x09, 0xc9, 0x1a, 0xad, 0xb8, 0x04, 0x1c, 0x93, 0x93, 0x53, 0x0b, 0x4a, 0xc0, 0xda, 0x13, 0x4b,
+	0x32, 0xf3, 0xf3, 0x88, 0xd6, 0x6b, 0xcd, 0x25, 0xe8, 0x92, 0x9a, 0x9c, 0x93, 0x99, 0x97, 0x4a,
+	0x86, 0x66, 0x2b, 0x2e, 0x01, 0xe7, 0xc4, 0xbc, 0xe4, 0xd4, 0x1c, 0xd2, 0xf5, 0x3a, 0x71, 0x44,
+	0xb1, 0x41, 0xd2, 0x5c, 0x12, 0x1b, 0x38, 0xb1, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x3d,
+	0x4f, 0xd0, 0xce, 0x88, 0x02, 0x00, 0x00,
 }
