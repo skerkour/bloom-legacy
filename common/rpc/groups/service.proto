@@ -12,8 +12,8 @@ service Groups {
   rpc ListGroups(Empty) returns (Empty);
   rpc ListAllGroups(Empty) returns (Empty);
   // members related
-  rpc RemoveMember(Empty) returns (Empty);
-  rpc InviteMember(Empty) returns (Empty);
+  rpc RemoveMembers(Empty) returns (Empty);
+  rpc InviteMembers(Empty) returns (Empty);
   rpc AcceptInvitation(Empty) returns (Empty);
   rpc DeclineInvitation(Empty) returns (Empty);
   rpc ResendInvitation(Empty) returns (Empty);
