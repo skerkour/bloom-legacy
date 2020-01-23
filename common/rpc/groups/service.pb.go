@@ -51,26 +51,572 @@ func (m *Empty) XXX_DiscardUnknown() {
 
 var xxx_messageInfo_Empty proto.InternalMessageInfo
 
+type CreateGroupParams struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description          string   `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	PeopleToInvite       []string `protobuf:"bytes,3,rep,name=people_to_invite,json=peopleToInvite,proto3" json:"people_to_invite,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CreateGroupParams) Reset()         { *m = CreateGroupParams{} }
+func (m *CreateGroupParams) String() string { return proto.CompactTextString(m) }
+func (*CreateGroupParams) ProtoMessage()    {}
+func (*CreateGroupParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{1}
+}
+
+func (m *CreateGroupParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CreateGroupParams.Unmarshal(m, b)
+}
+func (m *CreateGroupParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CreateGroupParams.Marshal(b, m, deterministic)
+}
+func (m *CreateGroupParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CreateGroupParams.Merge(m, src)
+}
+func (m *CreateGroupParams) XXX_Size() int {
+	return xxx_messageInfo_CreateGroupParams.Size(m)
+}
+func (m *CreateGroupParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_CreateGroupParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CreateGroupParams proto.InternalMessageInfo
+
+func (m *CreateGroupParams) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *CreateGroupParams) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+func (m *CreateGroupParams) GetPeopleToInvite() []string {
+	if m != nil {
+		return m.PeopleToInvite
+	}
+	return nil
+}
+
+type DeleteGroupParams struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeleteGroupParams) Reset()         { *m = DeleteGroupParams{} }
+func (m *DeleteGroupParams) String() string { return proto.CompactTextString(m) }
+func (*DeleteGroupParams) ProtoMessage()    {}
+func (*DeleteGroupParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{2}
+}
+
+func (m *DeleteGroupParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeleteGroupParams.Unmarshal(m, b)
+}
+func (m *DeleteGroupParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeleteGroupParams.Marshal(b, m, deterministic)
+}
+func (m *DeleteGroupParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeleteGroupParams.Merge(m, src)
+}
+func (m *DeleteGroupParams) XXX_Size() int {
+	return xxx_messageInfo_DeleteGroupParams.Size(m)
+}
+func (m *DeleteGroupParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeleteGroupParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeleteGroupParams proto.InternalMessageInfo
+
+func (m *DeleteGroupParams) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type UpdateGroupParams struct {
+	Name                 string   `protobuf:"bytes,1,opt,name=name,proto3" json:"name,omitempty"`
+	Description          string   `protobuf:"bytes,2,opt,name=description,proto3" json:"description,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *UpdateGroupParams) Reset()         { *m = UpdateGroupParams{} }
+func (m *UpdateGroupParams) String() string { return proto.CompactTextString(m) }
+func (*UpdateGroupParams) ProtoMessage()    {}
+func (*UpdateGroupParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{3}
+}
+
+func (m *UpdateGroupParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_UpdateGroupParams.Unmarshal(m, b)
+}
+func (m *UpdateGroupParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_UpdateGroupParams.Marshal(b, m, deterministic)
+}
+func (m *UpdateGroupParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_UpdateGroupParams.Merge(m, src)
+}
+func (m *UpdateGroupParams) XXX_Size() int {
+	return xxx_messageInfo_UpdateGroupParams.Size(m)
+}
+func (m *UpdateGroupParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_UpdateGroupParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_UpdateGroupParams proto.InternalMessageInfo
+
+func (m *UpdateGroupParams) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *UpdateGroupParams) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+type Group struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Name                 string   `protobuf:"bytes,2,opt,name=name,proto3" json:"name,omitempty"`
+	Description          string   `protobuf:"bytes,3,opt,name=description,proto3" json:"description,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Group) Reset()         { *m = Group{} }
+func (m *Group) String() string { return proto.CompactTextString(m) }
+func (*Group) ProtoMessage()    {}
+func (*Group) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{4}
+}
+
+func (m *Group) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Group.Unmarshal(m, b)
+}
+func (m *Group) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Group.Marshal(b, m, deterministic)
+}
+func (m *Group) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Group.Merge(m, src)
+}
+func (m *Group) XXX_Size() int {
+	return xxx_messageInfo_Group.Size(m)
+}
+func (m *Group) XXX_DiscardUnknown() {
+	xxx_messageInfo_Group.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Group proto.InternalMessageInfo
+
+func (m *Group) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *Group) GetName() string {
+	if m != nil {
+		return m.Name
+	}
+	return ""
+}
+
+func (m *Group) GetDescription() string {
+	if m != nil {
+		return m.Description
+	}
+	return ""
+}
+
+type GroupList struct {
+	Groups               []*Group `protobuf:"bytes,1,rep,name=groups,proto3" json:"groups,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *GroupList) Reset()         { *m = GroupList{} }
+func (m *GroupList) String() string { return proto.CompactTextString(m) }
+func (*GroupList) ProtoMessage()    {}
+func (*GroupList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{5}
+}
+
+func (m *GroupList) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_GroupList.Unmarshal(m, b)
+}
+func (m *GroupList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_GroupList.Marshal(b, m, deterministic)
+}
+func (m *GroupList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_GroupList.Merge(m, src)
+}
+func (m *GroupList) XXX_Size() int {
+	return xxx_messageInfo_GroupList.Size(m)
+}
+func (m *GroupList) XXX_DiscardUnknown() {
+	xxx_messageInfo_GroupList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_GroupList proto.InternalMessageInfo
+
+func (m *GroupList) GetGroups() []*Group {
+	if m != nil {
+		return m.Groups
+	}
+	return nil
+}
+
+type RemoveMembersParams struct {
+	Usernames            []string `protobuf:"bytes,1,rep,name=usernames,proto3" json:"usernames,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *RemoveMembersParams) Reset()         { *m = RemoveMembersParams{} }
+func (m *RemoveMembersParams) String() string { return proto.CompactTextString(m) }
+func (*RemoveMembersParams) ProtoMessage()    {}
+func (*RemoveMembersParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{6}
+}
+
+func (m *RemoveMembersParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_RemoveMembersParams.Unmarshal(m, b)
+}
+func (m *RemoveMembersParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_RemoveMembersParams.Marshal(b, m, deterministic)
+}
+func (m *RemoveMembersParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_RemoveMembersParams.Merge(m, src)
+}
+func (m *RemoveMembersParams) XXX_Size() int {
+	return xxx_messageInfo_RemoveMembersParams.Size(m)
+}
+func (m *RemoveMembersParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_RemoveMembersParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_RemoveMembersParams proto.InternalMessageInfo
+
+func (m *RemoveMembersParams) GetUsernames() []string {
+	if m != nil {
+		return m.Usernames
+	}
+	return nil
+}
+
+type InviteMembersParams struct {
+	Usernames            []string `protobuf:"bytes,1,rep,name=usernames,proto3" json:"usernames,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *InviteMembersParams) Reset()         { *m = InviteMembersParams{} }
+func (m *InviteMembersParams) String() string { return proto.CompactTextString(m) }
+func (*InviteMembersParams) ProtoMessage()    {}
+func (*InviteMembersParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{7}
+}
+
+func (m *InviteMembersParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InviteMembersParams.Unmarshal(m, b)
+}
+func (m *InviteMembersParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InviteMembersParams.Marshal(b, m, deterministic)
+}
+func (m *InviteMembersParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InviteMembersParams.Merge(m, src)
+}
+func (m *InviteMembersParams) XXX_Size() int {
+	return xxx_messageInfo_InviteMembersParams.Size(m)
+}
+func (m *InviteMembersParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_InviteMembersParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InviteMembersParams proto.InternalMessageInfo
+
+func (m *InviteMembersParams) GetUsernames() []string {
+	if m != nil {
+		return m.Usernames
+	}
+	return nil
+}
+
+type Invitation struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Group                *Group   `protobuf:"bytes,2,opt,name=group,proto3" json:"group,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *Invitation) Reset()         { *m = Invitation{} }
+func (m *Invitation) String() string { return proto.CompactTextString(m) }
+func (*Invitation) ProtoMessage()    {}
+func (*Invitation) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{8}
+}
+
+func (m *Invitation) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_Invitation.Unmarshal(m, b)
+}
+func (m *Invitation) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_Invitation.Marshal(b, m, deterministic)
+}
+func (m *Invitation) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_Invitation.Merge(m, src)
+}
+func (m *Invitation) XXX_Size() int {
+	return xxx_messageInfo_Invitation.Size(m)
+}
+func (m *Invitation) XXX_DiscardUnknown() {
+	xxx_messageInfo_Invitation.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_Invitation proto.InternalMessageInfo
+
+func (m *Invitation) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+func (m *Invitation) GetGroup() *Group {
+	if m != nil {
+		return m.Group
+	}
+	return nil
+}
+
+type InvitationList struct {
+	Invitations          []*Invitation `protobuf:"bytes,1,rep,name=invitations,proto3" json:"invitations,omitempty"`
+	XXX_NoUnkeyedLiteral struct{}      `json:"-"`
+	XXX_unrecognized     []byte        `json:"-"`
+	XXX_sizecache        int32         `json:"-"`
+}
+
+func (m *InvitationList) Reset()         { *m = InvitationList{} }
+func (m *InvitationList) String() string { return proto.CompactTextString(m) }
+func (*InvitationList) ProtoMessage()    {}
+func (*InvitationList) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{9}
+}
+
+func (m *InvitationList) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_InvitationList.Unmarshal(m, b)
+}
+func (m *InvitationList) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_InvitationList.Marshal(b, m, deterministic)
+}
+func (m *InvitationList) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_InvitationList.Merge(m, src)
+}
+func (m *InvitationList) XXX_Size() int {
+	return xxx_messageInfo_InvitationList.Size(m)
+}
+func (m *InvitationList) XXX_DiscardUnknown() {
+	xxx_messageInfo_InvitationList.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_InvitationList proto.InternalMessageInfo
+
+func (m *InvitationList) GetInvitations() []*Invitation {
+	if m != nil {
+		return m.Invitations
+	}
+	return nil
+}
+
+type AcceptInvitationParams struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *AcceptInvitationParams) Reset()         { *m = AcceptInvitationParams{} }
+func (m *AcceptInvitationParams) String() string { return proto.CompactTextString(m) }
+func (*AcceptInvitationParams) ProtoMessage()    {}
+func (*AcceptInvitationParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{10}
+}
+
+func (m *AcceptInvitationParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_AcceptInvitationParams.Unmarshal(m, b)
+}
+func (m *AcceptInvitationParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_AcceptInvitationParams.Marshal(b, m, deterministic)
+}
+func (m *AcceptInvitationParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_AcceptInvitationParams.Merge(m, src)
+}
+func (m *AcceptInvitationParams) XXX_Size() int {
+	return xxx_messageInfo_AcceptInvitationParams.Size(m)
+}
+func (m *AcceptInvitationParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_AcceptInvitationParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_AcceptInvitationParams proto.InternalMessageInfo
+
+func (m *AcceptInvitationParams) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type DeclineInvitationParams struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *DeclineInvitationParams) Reset()         { *m = DeclineInvitationParams{} }
+func (m *DeclineInvitationParams) String() string { return proto.CompactTextString(m) }
+func (*DeclineInvitationParams) ProtoMessage()    {}
+func (*DeclineInvitationParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{11}
+}
+
+func (m *DeclineInvitationParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_DeclineInvitationParams.Unmarshal(m, b)
+}
+func (m *DeclineInvitationParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_DeclineInvitationParams.Marshal(b, m, deterministic)
+}
+func (m *DeclineInvitationParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_DeclineInvitationParams.Merge(m, src)
+}
+func (m *DeclineInvitationParams) XXX_Size() int {
+	return xxx_messageInfo_DeclineInvitationParams.Size(m)
+}
+func (m *DeclineInvitationParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_DeclineInvitationParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_DeclineInvitationParams proto.InternalMessageInfo
+
+func (m *DeclineInvitationParams) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
+type CancelInvitationParams struct {
+	Id                   string   `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	XXX_NoUnkeyedLiteral struct{} `json:"-"`
+	XXX_unrecognized     []byte   `json:"-"`
+	XXX_sizecache        int32    `json:"-"`
+}
+
+func (m *CancelInvitationParams) Reset()         { *m = CancelInvitationParams{} }
+func (m *CancelInvitationParams) String() string { return proto.CompactTextString(m) }
+func (*CancelInvitationParams) ProtoMessage()    {}
+func (*CancelInvitationParams) Descriptor() ([]byte, []int) {
+	return fileDescriptor_6ff25b2b0946d60b, []int{12}
+}
+
+func (m *CancelInvitationParams) XXX_Unmarshal(b []byte) error {
+	return xxx_messageInfo_CancelInvitationParams.Unmarshal(m, b)
+}
+func (m *CancelInvitationParams) XXX_Marshal(b []byte, deterministic bool) ([]byte, error) {
+	return xxx_messageInfo_CancelInvitationParams.Marshal(b, m, deterministic)
+}
+func (m *CancelInvitationParams) XXX_Merge(src proto.Message) {
+	xxx_messageInfo_CancelInvitationParams.Merge(m, src)
+}
+func (m *CancelInvitationParams) XXX_Size() int {
+	return xxx_messageInfo_CancelInvitationParams.Size(m)
+}
+func (m *CancelInvitationParams) XXX_DiscardUnknown() {
+	xxx_messageInfo_CancelInvitationParams.DiscardUnknown(m)
+}
+
+var xxx_messageInfo_CancelInvitationParams proto.InternalMessageInfo
+
+func (m *CancelInvitationParams) GetId() string {
+	if m != nil {
+		return m.Id
+	}
+	return ""
+}
+
 func init() {
 	proto.RegisterType((*Empty)(nil), "com.bloom42.Empty")
+	proto.RegisterType((*CreateGroupParams)(nil), "com.bloom42.CreateGroupParams")
+	proto.RegisterType((*DeleteGroupParams)(nil), "com.bloom42.DeleteGroupParams")
+	proto.RegisterType((*UpdateGroupParams)(nil), "com.bloom42.UpdateGroupParams")
+	proto.RegisterType((*Group)(nil), "com.bloom42.Group")
+	proto.RegisterType((*GroupList)(nil), "com.bloom42.GroupList")
+	proto.RegisterType((*RemoveMembersParams)(nil), "com.bloom42.RemoveMembersParams")
+	proto.RegisterType((*InviteMembersParams)(nil), "com.bloom42.InviteMembersParams")
+	proto.RegisterType((*Invitation)(nil), "com.bloom42.Invitation")
+	proto.RegisterType((*InvitationList)(nil), "com.bloom42.InvitationList")
+	proto.RegisterType((*AcceptInvitationParams)(nil), "com.bloom42.AcceptInvitationParams")
+	proto.RegisterType((*DeclineInvitationParams)(nil), "com.bloom42.DeclineInvitationParams")
+	proto.RegisterType((*CancelInvitationParams)(nil), "com.bloom42.CancelInvitationParams")
 }
 
 func init() { proto.RegisterFile("rpc/groups/service.proto", fileDescriptor_6ff25b2b0946d60b) }
 
 var fileDescriptor_6ff25b2b0946d60b = []byte{
-	// 215 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xe2, 0x92, 0x28, 0x2a, 0x48, 0xd6,
-	0x4f, 0x2f, 0xca, 0x2f, 0x2d, 0x28, 0xd6, 0x2f, 0x4e, 0x2d, 0x2a, 0xcb, 0x4c, 0x4e, 0xd5, 0x2b,
-	0x28, 0xca, 0x2f, 0xc9, 0x17, 0xe2, 0x4e, 0xce, 0xcf, 0xd5, 0x4b, 0xca, 0xc9, 0xcf, 0xcf, 0x35,
-	0x31, 0x52, 0x62, 0xe7, 0x62, 0x75, 0xcd, 0x2d, 0x28, 0xa9, 0x34, 0x3a, 0xcc, 0xc2, 0xc5, 0xe6,
-	0x0e, 0x56, 0x2e, 0x64, 0xca, 0xc5, 0xed, 0x5c, 0x94, 0x9a, 0x58, 0x92, 0x0a, 0xe6, 0x0b, 0x09,
-	0xe9, 0x21, 0x69, 0xd0, 0x03, 0xab, 0x96, 0xc2, 0x22, 0x06, 0xd2, 0xe6, 0x92, 0x9a, 0x93, 0x4a,
-	0x86, 0xb6, 0xd0, 0x82, 0x14, 0x92, 0x6d, 0x33, 0xe1, 0xe2, 0xf2, 0xc9, 0x2c, 0x2e, 0x81, 0x3a,
-	0x99, 0x58, 0x5d, 0xe6, 0x5c, 0xbc, 0x20, 0x5d, 0x8e, 0x39, 0x39, 0xa4, 0x6b, 0x0c, 0x4a, 0xcd,
-	0xcd, 0x2f, 0x4b, 0xf5, 0x4d, 0xcd, 0x4d, 0x4a, 0x2d, 0x22, 0x49, 0xa3, 0x67, 0x5e, 0x59, 0x66,
-	0x09, 0xc9, 0x1a, 0xad, 0xb8, 0x04, 0x1c, 0x93, 0x93, 0x53, 0x0b, 0x4a, 0xc0, 0xda, 0x13, 0x4b,
-	0x32, 0xf3, 0xf3, 0x88, 0xd6, 0x6b, 0xcd, 0x25, 0xe8, 0x92, 0x9a, 0x9c, 0x93, 0x99, 0x97, 0x4a,
-	0x86, 0x66, 0x2b, 0x2e, 0x01, 0xe7, 0xc4, 0xbc, 0xe4, 0xd4, 0x1c, 0xd2, 0xf5, 0x3a, 0x71, 0x44,
-	0xb1, 0x41, 0xd2, 0x5c, 0x12, 0x1b, 0x38, 0xb1, 0x19, 0x03, 0x02, 0x00, 0x00, 0xff, 0xff, 0x3d,
-	0x4f, 0xd0, 0xce, 0x88, 0x02, 0x00, 0x00,
+	// 508 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x95, 0xcf, 0x8b, 0xd3, 0x40,
+	0x14, 0xc7, 0x69, 0x6b, 0xab, 0x79, 0xa1, 0x75, 0x3b, 0x42, 0x37, 0xac, 0x22, 0x21, 0xeb, 0x21,
+	0x7a, 0xe8, 0x42, 0x57, 0x50, 0xf1, 0xd4, 0xdd, 0xad, 0xb2, 0xac, 0x05, 0x09, 0x7a, 0xf1, 0xb2,
+	0xa4, 0xe9, 0x43, 0x06, 0x92, 0xcc, 0x30, 0x93, 0x2d, 0x78, 0xf6, 0x1f, 0x97, 0x99, 0xc4, 0x4d,
+	0x32, 0x99, 0x52, 0x94, 0x3d, 0xb5, 0xbc, 0x7e, 0xdf, 0xe7, 0xfd, 0xfa, 0x26, 0x05, 0x4f, 0xf0,
+	0xe4, 0xec, 0xa7, 0x60, 0x77, 0x5c, 0x9e, 0x49, 0x14, 0x3b, 0x9a, 0xe0, 0x9c, 0x0b, 0x56, 0x30,
+	0xe2, 0x26, 0x2c, 0x9b, 0x6f, 0x52, 0xc6, 0xb2, 0xb7, 0x8b, 0xe0, 0x31, 0x0c, 0x57, 0x19, 0x2f,
+	0x7e, 0x05, 0x12, 0xa6, 0x97, 0x02, 0xe3, 0x02, 0x3f, 0xab, 0x9c, 0xaf, 0xb1, 0x88, 0x33, 0x49,
+	0x08, 0x3c, 0xca, 0xe3, 0x0c, 0xbd, 0x9e, 0xdf, 0x0b, 0x9d, 0x48, 0x7f, 0x27, 0x3e, 0xb8, 0x5b,
+	0x94, 0x89, 0xa0, 0xbc, 0xa0, 0x2c, 0xf7, 0xfa, 0xfa, 0xa7, 0x66, 0x88, 0x84, 0x70, 0xc4, 0x91,
+	0xf1, 0x14, 0x6f, 0x0b, 0x76, 0x4b, 0xf3, 0x1d, 0x2d, 0xd0, 0x1b, 0xf8, 0x83, 0xd0, 0x89, 0x26,
+	0x65, 0xfc, 0x1b, 0xbb, 0xd6, 0xd1, 0xe0, 0x14, 0xa6, 0x57, 0x98, 0x62, 0xbb, 0xe8, 0x04, 0xfa,
+	0x74, 0x5b, 0x95, 0xec, 0xd3, 0x6d, 0x70, 0x0d, 0xd3, 0xef, 0x7c, 0xfb, 0x10, 0x9d, 0x05, 0x6b,
+	0x18, 0x6a, 0x88, 0x59, 0xe3, 0x1e, 0xd7, 0xdf, 0x8f, 0x1b, 0x74, 0x71, 0xef, 0xc0, 0xd1, 0xb8,
+	0x2f, 0x54, 0x16, 0xe4, 0x0d, 0x8c, 0xca, 0x75, 0x7b, 0x3d, 0x7f, 0x10, 0xba, 0x0b, 0x32, 0x6f,
+	0xec, 0x79, 0xae, 0x75, 0x51, 0xa5, 0x08, 0xce, 0xe1, 0x59, 0x84, 0x19, 0xdb, 0xe1, 0x1a, 0xb3,
+	0x0d, 0x0a, 0x59, 0x0d, 0xf5, 0x02, 0x9c, 0x3b, 0x89, 0x42, 0x55, 0x2f, 0x29, 0x4e, 0x54, 0x07,
+	0x54, 0x52, 0xb9, 0xb6, 0x7f, 0x49, 0xfa, 0x04, 0xa0, 0x93, 0x62, 0x7d, 0x19, 0x73, 0xec, 0x10,
+	0x86, 0xba, 0x23, 0x3d, 0xb7, 0xbd, 0xe5, 0x52, 0x10, 0xdc, 0xc0, 0xa4, 0xe6, 0xe8, 0x79, 0x3f,
+	0x80, 0x4b, 0xef, 0x23, 0x7f, 0x87, 0x3e, 0x6e, 0x11, 0xea, 0x8c, 0xa8, 0xa9, 0x0d, 0x42, 0x98,
+	0x2d, 0x93, 0x04, 0x79, 0x51, 0x0b, 0xf6, 0xdc, 0xfe, 0x35, 0x1c, 0x5f, 0x61, 0x92, 0xd2, 0x1c,
+	0x0f, 0x4a, 0x43, 0x98, 0x5d, 0xc6, 0x79, 0x82, 0xe9, 0x21, 0xe5, 0xe2, 0xf7, 0x08, 0x46, 0x7a,
+	0x38, 0x49, 0x96, 0xe0, 0x36, 0x5c, 0x4f, 0x5e, 0xb6, 0xda, 0xef, 0x3c, 0x0f, 0x27, 0x96, 0x05,
+	0x29, 0x44, 0xc3, 0xc3, 0x06, 0xa2, 0xe3, 0x6e, 0x03, 0xa1, 0x9f, 0x3d, 0x85, 0x68, 0x38, 0xdc,
+	0x40, 0x74, 0xbc, 0x6f, 0xed, 0xe2, 0x3d, 0x80, 0xba, 0x4a, 0x35, 0x96, 0xa5, 0xc8, 0xc9, 0xac,
+	0x9b, 0xa5, 0xef, 0xf8, 0x11, 0xc6, 0xea, 0x73, 0x99, 0xa6, 0xff, 0x91, 0xbc, 0x82, 0x71, 0xcb,
+	0xc8, 0xc4, 0x6f, 0x09, 0x2d, 0x26, 0xb7, 0x2e, 0x60, 0x05, 0xe3, 0x96, 0xb5, 0x0d, 0x8c, 0xc5,
+	0xf6, 0x56, 0xcc, 0x0d, 0x1c, 0x99, 0xbe, 0x22, 0xa7, 0x2d, 0x9d, 0xdd, 0x76, 0x56, 0xd8, 0x5a,
+	0xbd, 0x9b, 0x0c, 0xeb, 0x91, 0x57, 0xc6, 0x75, 0xad, 0xd6, 0xdc, 0xd7, 0x9b, 0x69, 0x4f, 0xa3,
+	0x37, 0xbb, 0x7b, 0xad, 0xb0, 0x0b, 0x78, 0xaa, 0xd6, 0x5f, 0x6b, 0xed, 0x57, 0x7b, 0xbe, 0xe7,
+	0x69, 0x54, 0xb9, 0x17, 0x4f, 0x7e, 0x54, 0x6f, 0xa3, 0xcd, 0x48, 0xff, 0x2f, 0x9c, 0xff, 0x09,
+	0x00, 0x00, 0xff, 0xff, 0x0f, 0x42, 0xfd, 0x2c, 0x33, 0x06, 0x00, 0x00,
 }

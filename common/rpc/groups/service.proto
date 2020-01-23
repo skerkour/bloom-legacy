@@ -6,17 +6,72 @@ option go_package = "groups";
 // Groups
 service Groups {
   // groups related
-  rpc CreateGroup(Empty) returns (Empty);
-  rpc DeleteGroup(Empty) returns (Empty);
-  rpc UpdateGroup(Empty) returns (Empty);
-  rpc ListGroups(Empty) returns (Empty);
-  rpc ListAllGroups(Empty) returns (Empty);
+  rpc CreateGroup(CreateGroupParams) returns (Group);
+  rpc DeleteGroup(DeleteGroupParams) returns (Empty);
+  rpc UpdateGroup(UpdateGroupParams) returns (Group);
+  rpc ListGroups(Empty) returns (GroupList);
+  rpc ListAllGroups(Empty) returns (GroupList);
   // members related
-  rpc RemoveMembers(Empty) returns (Empty);
-  rpc InviteMembers(Empty) returns (Empty);
-  rpc AcceptInvitation(Empty) returns (Empty);
-  rpc DeclineInvitation(Empty) returns (Empty);
-  rpc CancelInvitation(Empty) returns (Empty);
+  rpc RemoveMembers(RemoveMembersParams) returns (Empty);
+  rpc InviteMembers(InviteMembersParams) returns (Empty);
+  rpc AcceptInvitation(AcceptInvitationParams) returns (Empty);
+  rpc DeclineInvitation(DeclineInvitationParams) returns (Empty);
+  rpc CancelInvitation(CancelInvitationParams) returns (Empty);
+  rpc ListInvitations(Empty) returns (InvitationList);
 }
 
 message Empty {}
+
+message CreateGroupParams {
+  string name = 1;
+  string description = 2;
+  repeated string people_to_invite = 3;
+}
+
+message DeleteGroupParams {
+  string id = 1;
+}
+
+message UpdateGroupParams {
+  string name = 1;
+  string description = 2;
+}
+
+message Group {
+  string id = 1;
+  string name = 2;
+  string description = 3;
+}
+
+message GroupList {
+  repeated Group groups = 1;
+}
+
+message RemoveMembersParams {
+  repeated string usernames = 1;
+}
+
+message InviteMembersParams {
+  repeated string usernames = 1;
+}
+
+message Invitation {
+  string id = 1;
+  Group group = 2;
+}
+
+message InvitationList {
+  repeated Invitation invitations = 1;
+}
+
+message AcceptInvitationParams {
+  string id = 1;
+}
+
+message DeclineInvitationParams {
+  string id = 1;
+}
+
+message CancelInvitationParams {
+  string id = 1;
+}
