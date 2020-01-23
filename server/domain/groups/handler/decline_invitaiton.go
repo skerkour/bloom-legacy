@@ -5,7 +5,7 @@ import (
 	rpc "gitlab.com/bloom42/bloom/common/rpc/groups"
 )
 
-func (handler Handler) DeclineInvitation(ctx context.Context, _ *rpc.Empty) (*rpc.Empty, error) {
+func (handler Handler) DeclineInvitation(ctx context.Context, params *rpc.DeclineInvitationParams) (*rpc.Empty, error) {
 	ret := &rpc.Empty{}
 
 	return ret, nil
