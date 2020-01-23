@@ -1,0 +1,13 @@
+syntax = "proto3";
+
+// A generic empty message that you can re-use to avoid defining duplicated
+// empty messages in your APIs. A typical example is to use it as the request
+// or the response type of an API method. For instance:
+//
+//     service Foo {
+//       rpc Bar(com.bloom42.Empty) returns (com.bloom42.Empty);
+//     }
+//
+package com.bloom42;
+
+message Empty {}

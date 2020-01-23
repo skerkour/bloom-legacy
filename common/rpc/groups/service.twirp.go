@@ -23,6 +23,8 @@ import proto "github.com/golang/protobuf/proto"
 import twirp "github.com/twitchtv/twirp"
 import ctxsetters "github.com/twitchtv/twirp/ctxsetters"
 
+import com_bloom42 "rpc"
+
 // Imports only used by utility functions:
 import io "io"
 import json "encoding/json"
@@ -37,26 +39,26 @@ type Groups interface {
 	// groups related
 	CreateGroup(context.Context, *CreateGroupParams) (*Group, error)
 
-	DeleteGroup(context.Context, *DeleteGroupParams) (*Empty, error)
+	DeleteGroup(context.Context, *DeleteGroupParams) (*com_bloom42.Empty, error)
 
 	UpdateGroup(context.Context, *UpdateGroupParams) (*Group, error)
 
-	ListGroups(context.Context, *Empty) (*GroupList, error)
+	ListGroups(context.Context, *com_bloom42.Empty) (*GroupList, error)
 
-	ListAllGroups(context.Context, *Empty) (*GroupList, error)
+	ListAllGroups(context.Context, *com_bloom42.Empty) (*GroupList, error)
 
 	// members related
-	RemoveMembers(context.Context, *RemoveMembersParams) (*Empty, error)
+	RemoveMembers(context.Context, *RemoveMembersParams) (*com_bloom42.Empty, error)
 
-	InviteMembers(context.Context, *InviteMembersParams) (*Empty, error)
+	InviteMembers(context.Context, *InviteMembersParams) (*com_bloom42.Empty, error)
 
-	AcceptInvitation(context.Context, *AcceptInvitationParams) (*Empty, error)
+	AcceptInvitation(context.Context, *AcceptInvitationParams) (*com_bloom42.Empty, error)
 
-	DeclineInvitation(context.Context, *DeclineInvitationParams) (*Empty, error)
+	DeclineInvitation(context.Context, *DeclineInvitationParams) (*com_bloom42.Empty, error)
 
-	CancelInvitation(context.Context, *CancelInvitationParams) (*Empty, error)
+	CancelInvitation(context.Context, *CancelInvitationParams) (*com_bloom42.Empty, error)
 
-	ListInvitations(context.Context, *Empty) (*InvitationList, error)
+	ListInvitations(context.Context, *com_bloom42.Empty) (*InvitationList, error)
 }
 
 // ======================
@@ -123,11 +125,11 @@ func (c *groupsProtobufClient) CreateGroup(ctx context.Context, in *CreateGroupP
 	return out, nil
 }
 
-func (c *groupsProtobufClient) DeleteGroup(ctx context.Context, in *DeleteGroupParams) (*Empty, error) {
+func (c *groupsProtobufClient) DeleteGroup(ctx context.Context, in *DeleteGroupParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "DeleteGroup")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -163,7 +165,7 @@ func (c *groupsProtobufClient) UpdateGroup(ctx context.Context, in *UpdateGroupP
 	return out, nil
 }
 
-func (c *groupsProtobufClient) ListGroups(ctx context.Context, in *Empty) (*GroupList, error) {
+func (c *groupsProtobufClient) ListGroups(ctx context.Context, in *com_bloom42.Empty) (*GroupList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListGroups")
@@ -183,7 +185,7 @@ func (c *groupsProtobufClient) ListGroups(ctx context.Context, in *Empty) (*Grou
 	return out, nil
 }
 
-func (c *groupsProtobufClient) ListAllGroups(ctx context.Context, in *Empty) (*GroupList, error) {
+func (c *groupsProtobufClient) ListAllGroups(ctx context.Context, in *com_bloom42.Empty) (*GroupList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListAllGroups")
@@ -203,11 +205,11 @@ func (c *groupsProtobufClient) ListAllGroups(ctx context.Context, in *Empty) (*G
 	return out, nil
 }
 
-func (c *groupsProtobufClient) RemoveMembers(ctx context.Context, in *RemoveMembersParams) (*Empty, error) {
+func (c *groupsProtobufClient) RemoveMembers(ctx context.Context, in *RemoveMembersParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "RemoveMembers")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -223,11 +225,11 @@ func (c *groupsProtobufClient) RemoveMembers(ctx context.Context, in *RemoveMemb
 	return out, nil
 }
 
-func (c *groupsProtobufClient) InviteMembers(ctx context.Context, in *InviteMembersParams) (*Empty, error) {
+func (c *groupsProtobufClient) InviteMembers(ctx context.Context, in *InviteMembersParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "InviteMembers")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -243,11 +245,11 @@ func (c *groupsProtobufClient) InviteMembers(ctx context.Context, in *InviteMemb
 	return out, nil
 }
 
-func (c *groupsProtobufClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationParams) (*Empty, error) {
+func (c *groupsProtobufClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "AcceptInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[7], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -263,11 +265,11 @@ func (c *groupsProtobufClient) AcceptInvitation(ctx context.Context, in *AcceptI
 	return out, nil
 }
 
-func (c *groupsProtobufClient) DeclineInvitation(ctx context.Context, in *DeclineInvitationParams) (*Empty, error) {
+func (c *groupsProtobufClient) DeclineInvitation(ctx context.Context, in *DeclineInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "DeclineInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[8], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -283,11 +285,11 @@ func (c *groupsProtobufClient) DeclineInvitation(ctx context.Context, in *Declin
 	return out, nil
 }
 
-func (c *groupsProtobufClient) CancelInvitation(ctx context.Context, in *CancelInvitationParams) (*Empty, error) {
+func (c *groupsProtobufClient) CancelInvitation(ctx context.Context, in *CancelInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "CancelInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -303,7 +305,7 @@ func (c *groupsProtobufClient) CancelInvitation(ctx context.Context, in *CancelI
 	return out, nil
 }
 
-func (c *groupsProtobufClient) ListInvitations(ctx context.Context, in *Empty) (*InvitationList, error) {
+func (c *groupsProtobufClient) ListInvitations(ctx context.Context, in *com_bloom42.Empty) (*InvitationList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListInvitations")
@@ -387,11 +389,11 @@ func (c *groupsJSONClient) CreateGroup(ctx context.Context, in *CreateGroupParam
 	return out, nil
 }
 
-func (c *groupsJSONClient) DeleteGroup(ctx context.Context, in *DeleteGroupParams) (*Empty, error) {
+func (c *groupsJSONClient) DeleteGroup(ctx context.Context, in *DeleteGroupParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "DeleteGroup")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -427,7 +429,7 @@ func (c *groupsJSONClient) UpdateGroup(ctx context.Context, in *UpdateGroupParam
 	return out, nil
 }
 
-func (c *groupsJSONClient) ListGroups(ctx context.Context, in *Empty) (*GroupList, error) {
+func (c *groupsJSONClient) ListGroups(ctx context.Context, in *com_bloom42.Empty) (*GroupList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListGroups")
@@ -447,7 +449,7 @@ func (c *groupsJSONClient) ListGroups(ctx context.Context, in *Empty) (*GroupLis
 	return out, nil
 }
 
-func (c *groupsJSONClient) ListAllGroups(ctx context.Context, in *Empty) (*GroupList, error) {
+func (c *groupsJSONClient) ListAllGroups(ctx context.Context, in *com_bloom42.Empty) (*GroupList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListAllGroups")
@@ -467,11 +469,11 @@ func (c *groupsJSONClient) ListAllGroups(ctx context.Context, in *Empty) (*Group
 	return out, nil
 }
 
-func (c *groupsJSONClient) RemoveMembers(ctx context.Context, in *RemoveMembersParams) (*Empty, error) {
+func (c *groupsJSONClient) RemoveMembers(ctx context.Context, in *RemoveMembersParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "RemoveMembers")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -487,11 +489,11 @@ func (c *groupsJSONClient) RemoveMembers(ctx context.Context, in *RemoveMembersP
 	return out, nil
 }
 
-func (c *groupsJSONClient) InviteMembers(ctx context.Context, in *InviteMembersParams) (*Empty, error) {
+func (c *groupsJSONClient) InviteMembers(ctx context.Context, in *InviteMembersParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "InviteMembers")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -507,11 +509,11 @@ func (c *groupsJSONClient) InviteMembers(ctx context.Context, in *InviteMembersP
 	return out, nil
 }
 
-func (c *groupsJSONClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationParams) (*Empty, error) {
+func (c *groupsJSONClient) AcceptInvitation(ctx context.Context, in *AcceptInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "AcceptInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[7], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -527,11 +529,11 @@ func (c *groupsJSONClient) AcceptInvitation(ctx context.Context, in *AcceptInvit
 	return out, nil
 }
 
-func (c *groupsJSONClient) DeclineInvitation(ctx context.Context, in *DeclineInvitationParams) (*Empty, error) {
+func (c *groupsJSONClient) DeclineInvitation(ctx context.Context, in *DeclineInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "DeclineInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[8], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -547,11 +549,11 @@ func (c *groupsJSONClient) DeclineInvitation(ctx context.Context, in *DeclineInv
 	return out, nil
 }
 
-func (c *groupsJSONClient) CancelInvitation(ctx context.Context, in *CancelInvitationParams) (*Empty, error) {
+func (c *groupsJSONClient) CancelInvitation(ctx context.Context, in *CancelInvitationParams) (*com_bloom42.Empty, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "CancelInvitation")
-	out := new(Empty)
+	out := new(com_bloom42.Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[9], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -567,7 +569,7 @@ func (c *groupsJSONClient) CancelInvitation(ctx context.Context, in *CancelInvit
 	return out, nil
 }
 
-func (c *groupsJSONClient) ListInvitations(ctx context.Context, in *Empty) (*InvitationList, error) {
+func (c *groupsJSONClient) ListInvitations(ctx context.Context, in *com_bloom42.Empty) (*InvitationList, error) {
 	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
 	ctx = ctxsetters.WithServiceName(ctx, "Groups")
 	ctx = ctxsetters.WithMethodName(ctx, "ListInvitations")
@@ -840,7 +842,7 @@ func (s *groupsServer) serveDeleteGroupJSON(ctx context.Context, resp http.Respo
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.DeleteGroup(ctx, reqContent)
@@ -851,7 +853,7 @@ func (s *groupsServer) serveDeleteGroupJSON(ctx context.Context, resp http.Respo
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling DeleteGroup. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling DeleteGroup. nil responses are not supported"))
 		return
 	}
 
@@ -899,7 +901,7 @@ func (s *groupsServer) serveDeleteGroupProtobuf(ctx context.Context, resp http.R
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.DeleteGroup(ctx, reqContent)
@@ -910,7 +912,7 @@ func (s *groupsServer) serveDeleteGroupProtobuf(ctx context.Context, resp http.R
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling DeleteGroup. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling DeleteGroup. nil responses are not supported"))
 		return
 	}
 
@@ -1090,7 +1092,7 @@ func (s *groupsServer) serveListGroupsJSON(ctx context.Context, resp http.Respon
 		return
 	}
 
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -1150,7 +1152,7 @@ func (s *groupsServer) serveListGroupsProtobuf(ctx context.Context, resp http.Re
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
@@ -1219,7 +1221,7 @@ func (s *groupsServer) serveListAllGroupsJSON(ctx context.Context, resp http.Res
 		return
 	}
 
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -1279,7 +1281,7 @@ func (s *groupsServer) serveListAllGroupsProtobuf(ctx context.Context, resp http
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
@@ -1356,7 +1358,7 @@ func (s *groupsServer) serveRemoveMembersJSON(ctx context.Context, resp http.Res
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.RemoveMembers(ctx, reqContent)
@@ -1367,7 +1369,7 @@ func (s *groupsServer) serveRemoveMembersJSON(ctx context.Context, resp http.Res
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling RemoveMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling RemoveMembers. nil responses are not supported"))
 		return
 	}
 
@@ -1415,7 +1417,7 @@ func (s *groupsServer) serveRemoveMembersProtobuf(ctx context.Context, resp http
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.RemoveMembers(ctx, reqContent)
@@ -1426,7 +1428,7 @@ func (s *groupsServer) serveRemoveMembersProtobuf(ctx context.Context, resp http
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling RemoveMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling RemoveMembers. nil responses are not supported"))
 		return
 	}
 
@@ -1485,7 +1487,7 @@ func (s *groupsServer) serveInviteMembersJSON(ctx context.Context, resp http.Res
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.InviteMembers(ctx, reqContent)
@@ -1496,7 +1498,7 @@ func (s *groupsServer) serveInviteMembersJSON(ctx context.Context, resp http.Res
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling InviteMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling InviteMembers. nil responses are not supported"))
 		return
 	}
 
@@ -1544,7 +1546,7 @@ func (s *groupsServer) serveInviteMembersProtobuf(ctx context.Context, resp http
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.InviteMembers(ctx, reqContent)
@@ -1555,7 +1557,7 @@ func (s *groupsServer) serveInviteMembersProtobuf(ctx context.Context, resp http
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling InviteMembers. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling InviteMembers. nil responses are not supported"))
 		return
 	}
 
@@ -1614,7 +1616,7 @@ func (s *groupsServer) serveAcceptInvitationJSON(ctx context.Context, resp http.
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.AcceptInvitation(ctx, reqContent)
@@ -1625,7 +1627,7 @@ func (s *groupsServer) serveAcceptInvitationJSON(ctx context.Context, resp http.
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling AcceptInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling AcceptInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1673,7 +1675,7 @@ func (s *groupsServer) serveAcceptInvitationProtobuf(ctx context.Context, resp h
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.AcceptInvitation(ctx, reqContent)
@@ -1684,7 +1686,7 @@ func (s *groupsServer) serveAcceptInvitationProtobuf(ctx context.Context, resp h
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling AcceptInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling AcceptInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1743,7 +1745,7 @@ func (s *groupsServer) serveDeclineInvitationJSON(ctx context.Context, resp http
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.DeclineInvitation(ctx, reqContent)
@@ -1754,7 +1756,7 @@ func (s *groupsServer) serveDeclineInvitationJSON(ctx context.Context, resp http
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling DeclineInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling DeclineInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1802,7 +1804,7 @@ func (s *groupsServer) serveDeclineInvitationProtobuf(ctx context.Context, resp 
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.DeclineInvitation(ctx, reqContent)
@@ -1813,7 +1815,7 @@ func (s *groupsServer) serveDeclineInvitationProtobuf(ctx context.Context, resp 
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling DeclineInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling DeclineInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1872,7 +1874,7 @@ func (s *groupsServer) serveCancelInvitationJSON(ctx context.Context, resp http.
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.CancelInvitation(ctx, reqContent)
@@ -1883,7 +1885,7 @@ func (s *groupsServer) serveCancelInvitationJSON(ctx context.Context, resp http.
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling CancelInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling CancelInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1931,7 +1933,7 @@ func (s *groupsServer) serveCancelInvitationProtobuf(ctx context.Context, resp h
 	}
 
 	// Call service method
-	var respContent *Empty
+	var respContent *com_bloom42.Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Groups.CancelInvitation(ctx, reqContent)
@@ -1942,7 +1944,7 @@ func (s *groupsServer) serveCancelInvitationProtobuf(ctx context.Context, resp h
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling CancelInvitation. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling CancelInvitation. nil responses are not supported"))
 		return
 	}
 
@@ -1993,7 +1995,7 @@ func (s *groupsServer) serveListInvitationsJSON(ctx context.Context, resp http.R
 		return
 	}
 
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -2053,7 +2055,7 @@ func (s *groupsServer) serveListInvitationsProtobuf(ctx context.Context, resp ht
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(Empty)
+	reqContent := new(com_bloom42.Empty)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
@@ -2620,37 +2622,37 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 508 bytes of a gzipped FileDescriptorProto
+	// 511 bytes of a gzipped FileDescriptorProto
 	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0xac, 0x95, 0xcf, 0x8b, 0xd3, 0x40,
-	0x14, 0xc7, 0x69, 0x6b, 0xab, 0x79, 0xa1, 0x75, 0x3b, 0x42, 0x37, 0xac, 0x22, 0x21, 0xeb, 0x21,
-	0x7a, 0xe8, 0x42, 0x57, 0x50, 0xf1, 0xd4, 0xdd, 0xad, 0xb2, 0xac, 0x05, 0x09, 0x7a, 0xf1, 0xb2,
-	0xa4, 0xe9, 0x43, 0x06, 0x92, 0xcc, 0x30, 0x93, 0x2d, 0x78, 0xf6, 0x1f, 0x97, 0x99, 0xc4, 0x4d,
-	0x32, 0x99, 0x52, 0x94, 0x3d, 0xb5, 0xbc, 0x7e, 0xdf, 0xe7, 0xfd, 0xfa, 0x26, 0x05, 0x4f, 0xf0,
-	0xe4, 0xec, 0xa7, 0x60, 0x77, 0x5c, 0x9e, 0x49, 0x14, 0x3b, 0x9a, 0xe0, 0x9c, 0x0b, 0x56, 0x30,
-	0xe2, 0x26, 0x2c, 0x9b, 0x6f, 0x52, 0xc6, 0xb2, 0xb7, 0x8b, 0xe0, 0x31, 0x0c, 0x57, 0x19, 0x2f,
-	0x7e, 0x05, 0x12, 0xa6, 0x97, 0x02, 0xe3, 0x02, 0x3f, 0xab, 0x9c, 0xaf, 0xb1, 0x88, 0x33, 0x49,
-	0x08, 0x3c, 0xca, 0xe3, 0x0c, 0xbd, 0x9e, 0xdf, 0x0b, 0x9d, 0x48, 0x7f, 0x27, 0x3e, 0xb8, 0x5b,
-	0x94, 0x89, 0xa0, 0xbc, 0xa0, 0x2c, 0xf7, 0xfa, 0xfa, 0xa7, 0x66, 0x88, 0x84, 0x70, 0xc4, 0x91,
-	0xf1, 0x14, 0x6f, 0x0b, 0x76, 0x4b, 0xf3, 0x1d, 0x2d, 0xd0, 0x1b, 0xf8, 0x83, 0xd0, 0x89, 0x26,
-	0x65, 0xfc, 0x1b, 0xbb, 0xd6, 0xd1, 0xe0, 0x14, 0xa6, 0x57, 0x98, 0x62, 0xbb, 0xe8, 0x04, 0xfa,
-	0x74, 0x5b, 0x95, 0xec, 0xd3, 0x6d, 0x70, 0x0d, 0xd3, 0xef, 0x7c, 0xfb, 0x10, 0x9d, 0x05, 0x6b,
-	0x18, 0x6a, 0x88, 0x59, 0xe3, 0x1e, 0xd7, 0xdf, 0x8f, 0x1b, 0x74, 0x71, 0xef, 0xc0, 0xd1, 0xb8,
-	0x2f, 0x54, 0x16, 0xe4, 0x0d, 0x8c, 0xca, 0x75, 0x7b, 0x3d, 0x7f, 0x10, 0xba, 0x0b, 0x32, 0x6f,
-	0xec, 0x79, 0xae, 0x75, 0x51, 0xa5, 0x08, 0xce, 0xe1, 0x59, 0x84, 0x19, 0xdb, 0xe1, 0x1a, 0xb3,
-	0x0d, 0x0a, 0x59, 0x0d, 0xf5, 0x02, 0x9c, 0x3b, 0x89, 0x42, 0x55, 0x2f, 0x29, 0x4e, 0x54, 0x07,
-	0x54, 0x52, 0xb9, 0xb6, 0x7f, 0x49, 0xfa, 0x04, 0xa0, 0x93, 0x62, 0x7d, 0x19, 0x73, 0xec, 0x10,
-	0x86, 0xba, 0x23, 0x3d, 0xb7, 0xbd, 0xe5, 0x52, 0x10, 0xdc, 0xc0, 0xa4, 0xe6, 0xe8, 0x79, 0x3f,
-	0x80, 0x4b, 0xef, 0x23, 0x7f, 0x87, 0x3e, 0x6e, 0x11, 0xea, 0x8c, 0xa8, 0xa9, 0x0d, 0x42, 0x98,
-	0x2d, 0x93, 0x04, 0x79, 0x51, 0x0b, 0xf6, 0xdc, 0xfe, 0x35, 0x1c, 0x5f, 0x61, 0x92, 0xd2, 0x1c,
-	0x0f, 0x4a, 0x43, 0x98, 0x5d, 0xc6, 0x79, 0x82, 0xe9, 0x21, 0xe5, 0xe2, 0xf7, 0x08, 0x46, 0x7a,
-	0x38, 0x49, 0x96, 0xe0, 0x36, 0x5c, 0x4f, 0x5e, 0xb6, 0xda, 0xef, 0x3c, 0x0f, 0x27, 0x96, 0x05,
-	0x29, 0x44, 0xc3, 0xc3, 0x06, 0xa2, 0xe3, 0x6e, 0x03, 0xa1, 0x9f, 0x3d, 0x85, 0x68, 0x38, 0xdc,
-	0x40, 0x74, 0xbc, 0x6f, 0xed, 0xe2, 0x3d, 0x80, 0xba, 0x4a, 0x35, 0x96, 0xa5, 0xc8, 0xc9, 0xac,
-	0x9b, 0xa5, 0xef, 0xf8, 0x11, 0xc6, 0xea, 0x73, 0x99, 0xa6, 0xff, 0x91, 0xbc, 0x82, 0x71, 0xcb,
-	0xc8, 0xc4, 0x6f, 0x09, 0x2d, 0x26, 0xb7, 0x2e, 0x60, 0x05, 0xe3, 0x96, 0xb5, 0x0d, 0x8c, 0xc5,
-	0xf6, 0x56, 0xcc, 0x0d, 0x1c, 0x99, 0xbe, 0x22, 0xa7, 0x2d, 0x9d, 0xdd, 0x76, 0x56, 0xd8, 0x5a,
-	0xbd, 0x9b, 0x0c, 0xeb, 0x91, 0x57, 0xc6, 0x75, 0xad, 0xd6, 0xdc, 0xd7, 0x9b, 0x69, 0x4f, 0xa3,
-	0x37, 0xbb, 0x7b, 0xad, 0xb0, 0x0b, 0x78, 0xaa, 0xd6, 0x5f, 0x6b, 0xed, 0x57, 0x7b, 0xbe, 0xe7,
-	0x69, 0x54, 0xb9, 0x17, 0x4f, 0x7e, 0x54, 0x6f, 0xa3, 0xcd, 0x48, 0xff, 0x2f, 0x9c, 0xff, 0x09,
-	0x00, 0x00, 0xff, 0xff, 0x0f, 0x42, 0xfd, 0x2c, 0x33, 0x06, 0x00, 0x00,
+	0x14, 0xc7, 0x69, 0xeb, 0x16, 0xf3, 0x42, 0xbb, 0xdb, 0x11, 0xba, 0xa1, 0x8a, 0x84, 0xac, 0x87,
+	0xe8, 0xa1, 0x0b, 0x5d, 0x41, 0xc5, 0x53, 0x77, 0xb7, 0xca, 0xb2, 0x16, 0x24, 0xe8, 0xc5, 0xcb,
+	0x92, 0xa6, 0x0f, 0x19, 0x48, 0x32, 0xc3, 0x4c, 0xb6, 0xe0, 0xd9, 0x7f, 0x5c, 0x66, 0x12, 0x37,
+	0xc9, 0x64, 0x4a, 0x51, 0xf6, 0xd4, 0x32, 0xf9, 0xbe, 0xcf, 0xfb, 0xf5, 0x9d, 0x04, 0x3c, 0xc1,
+	0x93, 0xf3, 0x9f, 0x82, 0xdd, 0x73, 0x79, 0x2e, 0x51, 0xec, 0x68, 0x82, 0x73, 0x2e, 0x58, 0xc1,
+	0x88, 0x9b, 0xb0, 0x6c, 0xbe, 0x49, 0x19, 0xcb, 0xde, 0x2e, 0x66, 0xc7, 0x4a, 0x86, 0x19, 0x2f,
+	0x7e, 0x95, 0x4f, 0x03, 0x09, 0x93, 0x2b, 0x81, 0x71, 0x81, 0x9f, 0x55, 0xec, 0xd7, 0x58, 0xc4,
+	0x99, 0x24, 0x04, 0x9e, 0xe4, 0x71, 0x86, 0x5e, 0xcf, 0xef, 0x85, 0x4e, 0xa4, 0xff, 0x13, 0x1f,
+	0xdc, 0x2d, 0xca, 0x44, 0x50, 0x5e, 0x50, 0x96, 0x7b, 0x7d, 0xfd, 0xa8, 0x79, 0x44, 0x42, 0x38,
+	0xe1, 0xc8, 0x78, 0x8a, 0x77, 0x05, 0xbb, 0xa3, 0xf9, 0x8e, 0x16, 0xe8, 0x0d, 0xfc, 0x41, 0xe8,
+	0x44, 0xe3, 0xf2, 0xfc, 0x1b, 0xbb, 0xd1, 0xa7, 0xc1, 0x19, 0x4c, 0xae, 0x31, 0xc5, 0x76, 0xd2,
+	0x31, 0xf4, 0xe9, 0xb6, 0x4a, 0xd9, 0xa7, 0xdb, 0xe0, 0x06, 0x26, 0xdf, 0xf9, 0xf6, 0x31, 0x2a,
+	0x0b, 0xd6, 0x70, 0xa4, 0x21, 0x66, 0x8e, 0x07, 0x5c, 0x7f, 0x3f, 0x6e, 0xd0, 0xc5, 0xbd, 0x03,
+	0x47, 0xe3, 0xbe, 0x50, 0x59, 0x90, 0x37, 0x30, 0x2c, 0xc7, 0xee, 0xf5, 0xfc, 0x41, 0xe8, 0x2e,
+	0xc8, 0xbc, 0x31, 0xef, 0xb9, 0xd6, 0x45, 0x95, 0x22, 0xb8, 0x80, 0x67, 0x11, 0x66, 0x6c, 0x87,
+	0x6b, 0xcc, 0x36, 0x28, 0x64, 0xd5, 0xd4, 0x0b, 0x70, 0xee, 0x25, 0x0a, 0x95, 0xbd, 0xa4, 0x38,
+	0x51, 0x7d, 0xa0, 0x82, 0xca, 0xb1, 0xfd, 0x4b, 0xd0, 0x27, 0x00, 0x1d, 0x14, 0xeb, 0xcd, 0x98,
+	0x6d, 0x87, 0x70, 0xa4, 0x2b, 0xd2, 0x7d, 0xdb, 0x4b, 0x2e, 0x05, 0xc1, 0x2d, 0x8c, 0x6b, 0x8e,
+	0xee, 0xf7, 0x03, 0xb8, 0xf4, 0xe1, 0xe4, 0x6f, 0xd3, 0xa7, 0x2d, 0x42, 0x1d, 0x11, 0x35, 0xb5,
+	0x41, 0x08, 0xd3, 0x65, 0x92, 0x20, 0x2f, 0x6a, 0xc1, 0x9e, 0xdd, 0xbf, 0x86, 0xd3, 0x6b, 0x4c,
+	0x52, 0x9a, 0xe3, 0x41, 0x69, 0x08, 0xd3, 0xab, 0x38, 0x4f, 0x30, 0x3d, 0xa4, 0x5c, 0xfc, 0x1e,
+	0xc2, 0x50, 0x37, 0x27, 0xc9, 0x12, 0xdc, 0x86, 0xeb, 0xc9, 0xcb, 0x56, 0xf9, 0x9d, 0xfb, 0x30,
+	0xb3, 0x0c, 0x48, 0x21, 0x1a, 0x1e, 0x36, 0x10, 0x1d, 0x77, 0x1b, 0x88, 0x95, 0xba, 0x81, 0x0a,
+	0xd1, 0x70, 0xb8, 0x81, 0xe8, 0x78, 0xdf, 0x5a, 0xc5, 0x7b, 0x00, 0xb5, 0x95, 0xaa, 0x2d, 0x4b,
+	0x92, 0xd9, 0xb4, 0x1b, 0xa5, 0xf7, 0xf8, 0x11, 0x46, 0xea, 0x77, 0x99, 0xa6, 0xff, 0x11, 0xbc,
+	0x82, 0x51, 0xcb, 0xc8, 0xc4, 0x6f, 0x09, 0x2d, 0x26, 0xb7, 0x0e, 0x60, 0x05, 0xa3, 0x96, 0xb5,
+	0x0d, 0x8c, 0xc5, 0xf6, 0x56, 0xcc, 0x2d, 0x9c, 0x98, 0xbe, 0x22, 0x67, 0x2d, 0x9d, 0xdd, 0x76,
+	0x56, 0xd8, 0x5a, 0xbd, 0x9b, 0x0c, 0xeb, 0x91, 0x57, 0xc6, 0x76, 0xad, 0xd6, 0xdc, 0x57, 0x9b,
+	0x69, 0x4f, 0xa3, 0x36, 0xbb, 0x7b, 0xad, 0xb0, 0x4b, 0x38, 0x56, 0xe3, 0xaf, 0xb5, 0xf6, 0xad,
+	0x3d, 0xdf, 0x73, 0x1b, 0x55, 0xec, 0xe5, 0xd3, 0x1f, 0xd5, 0xdb, 0x68, 0x33, 0xd4, 0x5f, 0x80,
+	0x8b, 0x3f, 0x01, 0x00, 0x00, 0xff, 0xff, 0xff, 0x7e, 0x92, 0xd5, 0x3b, 0x06, 0x00, 0x00,
 }
