@@ -1,0 +1,23 @@
+syntax = "proto3";
+
+package com.bloom42;
+option go_package = "groups";
+
+// Groups
+service Groups {
+  // groups related
+  rpc CreateGroup(Empty) returns (Empty);
+  rpc DeleteGroup(Empty) returns (Empty);
+  rpc UpdateGroup(Empty) returns (Empty);
+  rpc ListGroups(Empty) returns (Empty);
+  rpc ListAllGroups(Empty) returns (Empty);
+  // members related
+  rpc RemoveMember(Empty) returns (Empty);
+  rpc InviteMember(Empty) returns (Empty);
+  rpc AcceptInvitation(Empty) returns (Empty);
+  rpc DeclineInvitation(Empty) returns (Empty);
+  rpc ResendInvitation(Empty) returns (Empty);
+  rpc CancelInvitation(Empty) returns (Empty);
+}
+
+message Empty {}

@@ -16,3 +16,4 @@ test:
 rpc:
 	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/accounts/service.proto
 	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/billing/service.proto
+	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/groups/service.proto
