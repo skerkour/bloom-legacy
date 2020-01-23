@@ -136,7 +136,7 @@ if (isDevelopment) {
 
 ipcMain.on('server:start', () => {
   console.log('mainProcess: starting server');
-  child = execFile('./blmcoreserver', (err, data) => {
+  child = execFile('./bloomcoreserver', (err, data) => {
     if (err) {
       console.error(err);
       return;

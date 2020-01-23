@@ -1,4 +1,4 @@
-NAME := blmcore
+NAME := bloomcore
 # VERSION := $(shell cat Cargo.toml | grep '^version =' | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
@@ -19,6 +19,9 @@ test:
 desktop:
 	go build -o dist/$(NAME)server server/*.go
 	cp dist/$(NAME)server ../desktop/$(NAME)server
+
+.PHONY: mobile
+mobile: android
 
 PHONY: android
 android: android_armv8 android_armv7 android_x86 # android_amd64

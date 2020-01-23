@@ -11,3 +11,4 @@ dist_electron
 build
 libblmcore.so
 blmcoreserver
+bloomcoreserver

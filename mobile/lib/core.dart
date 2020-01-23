@@ -50,7 +50,7 @@ Map<String, dynamic> _coreCall<P>(Message<P> message) {
   final ffi.Pointer<Utf8> cMessage = Utf8.toUtf8(jsonMessage);
 
   if (_call == null) {
-    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libblmcore.so');
+    final ffi.DynamicLibrary dylib = ffi.DynamicLibrary.open('libbloomcore.so');
     _call = dylib.lookupFunction<BlmCoreCall, BlmCoreCall>('blmcore_call');
   }
 
