@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-import "rpc/empty.proto";
-
-package com.bloom42;
+package com.bloom42.accounts;
 option go_package = "accounts";
 
 // Accounts
@@ -16,6 +14,8 @@ service Accounts {
   rpc RevokeSession(RevokeSessionParams) returns (Empty);
   rpc ListSessions(Empty) returns (Sessions);
 }
+
+message Empty {}
 
 message StartRegistrationParams {
   string display_name = 1;

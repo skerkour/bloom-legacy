@@ -1,8 +1,6 @@
 syntax = "proto3";
 
-import "rpc/empty.proto";
-
-package com.bloom42;
+package com.bloom42.groups;
 option go_package = "groups";
 
 // Groups
@@ -21,6 +19,8 @@ service Groups {
   rpc CancelInvitation(CancelInvitationParams) returns (Empty);
   rpc ListInvitations(Empty) returns (InvitationList);
 }
+
+message Empty {}
 
 message CreateGroupParams {
   string name = 1;

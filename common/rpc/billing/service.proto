@@ -1,8 +1,10 @@
 syntax = "proto3";
 
-package com.bloom42;
+package com.bloom42.billing;
 option go_package = "billing";
 
 // Billing
 service Billing {
 }
+
+message Empty {}

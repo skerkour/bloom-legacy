@@ -23,8 +23,6 @@ import proto "github.com/golang/protobuf/proto"
 import twirp "github.com/twitchtv/twirp"
 import ctxsetters "github.com/twitchtv/twirp/ctxsetters"
 
-import com_bloom42 "rpc"
-
 // Imports only used by utility functions:
 import io "io"
 import json "encoding/json"
@@ -38,19 +36,19 @@ import url "net/url"
 type Accounts interface {
 	StartRegistration(context.Context, *StartRegistrationParams) (*RegistrationStarted, error)
 
-	VerifyRegistration(context.Context, *VerifyRegistrationParams) (*com_bloom42.Empty, error)
+	VerifyRegistration(context.Context, *VerifyRegistrationParams) (*Empty, error)
 
 	CompleteRegistration(context.Context, *CompleteRegistrationParams) (*NewSession, error)
 
-	SendNewRegistrationCode(context.Context, *SendNewRegistrationCodeParams) (*com_bloom42.Empty, error)
+	SendNewRegistrationCode(context.Context, *SendNewRegistrationCodeParams) (*Empty, error)
 
 	SignIn(context.Context, *SignInParams) (*NewSession, error)
 
-	SignOut(context.Context, *com_bloom42.Empty) (*com_bloom42.Empty, error)
+	SignOut(context.Context, *Empty) (*Empty, error)
 
-	RevokeSession(context.Context, *RevokeSessionParams) (*com_bloom42.Empty, error)
+	RevokeSession(context.Context, *RevokeSessionParams) (*Empty, error)
 
-	ListSessions(context.Context, *com_bloom42.Empty) (*Sessions, error)
+	ListSessions(context.Context, *Empty) (*Sessions, error)
 }
 
 // ========================
@@ -95,7 +93,7 @@ func NewAccountsProtobufClient(addr string, client HTTPClient, opts ...twirp.Cli
 }
 
 func (c *accountsProtobufClient) StartRegistration(ctx context.Context, in *StartRegistrationParams) (*RegistrationStarted, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
 	out := new(RegistrationStarted)
@@ -114,11 +112,11 @@ func (c *accountsProtobufClient) StartRegistration(ctx context.Context, in *Star
 	return out, nil
 }
 
-func (c *accountsProtobufClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsProtobufClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -135,7 +133,7 @@ func (c *accountsProtobufClient) VerifyRegistration(ctx context.Context, in *Ver
 }
 
 func (c *accountsProtobufClient) CompleteRegistration(ctx context.Context, in *CompleteRegistrationParams) (*NewSession, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
 	out := new(NewSession)
@@ -154,11 +152,11 @@ func (c *accountsProtobufClient) CompleteRegistration(ctx context.Context, in *C
 	return out, nil
 }
 
-func (c *accountsProtobufClient) SendNewRegistrationCode(ctx context.Context, in *SendNewRegistrationCodeParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsProtobufClient) SendNewRegistrationCode(ctx context.Context, in *SendNewRegistrationCodeParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SendNewRegistrationCode")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -175,7 +173,7 @@ func (c *accountsProtobufClient) SendNewRegistrationCode(ctx context.Context, in
 }
 
 func (c *accountsProtobufClient) SignIn(ctx context.Context, in *SignInParams) (*NewSession, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(NewSession)
@@ -194,11 +192,11 @@ func (c *accountsProtobufClient) SignIn(ctx context.Context, in *SignInParams) (
 	return out, nil
 }
 
-func (c *accountsProtobufClient) SignOut(ctx context.Context, in *com_bloom42.Empty) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsProtobufClient) SignOut(ctx context.Context, in *Empty) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -214,11 +212,11 @@ func (c *accountsProtobufClient) SignOut(ctx context.Context, in *com_bloom42.Em
 	return out, nil
 }
 
-func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "RevokeSession")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doProtobufRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -234,8 +232,8 @@ func (c *accountsProtobufClient) RevokeSession(ctx context.Context, in *RevokeSe
 	return out, nil
 }
 
-func (c *accountsProtobufClient) ListSessions(ctx context.Context, in *com_bloom42.Empty) (*Sessions, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsProtobufClient) ListSessions(ctx context.Context, in *Empty) (*Sessions, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "ListSessions")
 	out := new(Sessions)
@@ -296,7 +294,7 @@ func NewAccountsJSONClient(addr string, client HTTPClient, opts ...twirp.ClientO
 }
 
 func (c *accountsJSONClient) StartRegistration(ctx context.Context, in *StartRegistrationParams) (*RegistrationStarted, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "StartRegistration")
 	out := new(RegistrationStarted)
@@ -315,11 +313,11 @@ func (c *accountsJSONClient) StartRegistration(ctx context.Context, in *StartReg
 	return out, nil
 }
 
-func (c *accountsJSONClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsJSONClient) VerifyRegistration(ctx context.Context, in *VerifyRegistrationParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "VerifyRegistration")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[1], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -336,7 +334,7 @@ func (c *accountsJSONClient) VerifyRegistration(ctx context.Context, in *VerifyR
 }
 
 func (c *accountsJSONClient) CompleteRegistration(ctx context.Context, in *CompleteRegistrationParams) (*NewSession, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "CompleteRegistration")
 	out := new(NewSession)
@@ -355,11 +353,11 @@ func (c *accountsJSONClient) CompleteRegistration(ctx context.Context, in *Compl
 	return out, nil
 }
 
-func (c *accountsJSONClient) SendNewRegistrationCode(ctx context.Context, in *SendNewRegistrationCodeParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsJSONClient) SendNewRegistrationCode(ctx context.Context, in *SendNewRegistrationCodeParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SendNewRegistrationCode")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[3], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -376,7 +374,7 @@ func (c *accountsJSONClient) SendNewRegistrationCode(ctx context.Context, in *Se
 }
 
 func (c *accountsJSONClient) SignIn(ctx context.Context, in *SignInParams) (*NewSession, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignIn")
 	out := new(NewSession)
@@ -395,11 +393,11 @@ func (c *accountsJSONClient) SignIn(ctx context.Context, in *SignInParams) (*New
 	return out, nil
 }
 
-func (c *accountsJSONClient) SignOut(ctx context.Context, in *com_bloom42.Empty) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsJSONClient) SignOut(ctx context.Context, in *Empty) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "SignOut")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[5], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -415,11 +413,11 @@ func (c *accountsJSONClient) SignOut(ctx context.Context, in *com_bloom42.Empty)
 	return out, nil
 }
 
-func (c *accountsJSONClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*com_bloom42.Empty, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsJSONClient) RevokeSession(ctx context.Context, in *RevokeSessionParams) (*Empty, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "RevokeSession")
-	out := new(com_bloom42.Empty)
+	out := new(Empty)
 	err := doJSONRequest(ctx, c.client, c.opts.Hooks, c.urls[6], in, out)
 	if err != nil {
 		twerr, ok := err.(twirp.Error)
@@ -435,8 +433,8 @@ func (c *accountsJSONClient) RevokeSession(ctx context.Context, in *RevokeSessio
 	return out, nil
 }
 
-func (c *accountsJSONClient) ListSessions(ctx context.Context, in *com_bloom42.Empty) (*Sessions, error) {
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+func (c *accountsJSONClient) ListSessions(ctx context.Context, in *Empty) (*Sessions, error) {
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithMethodName(ctx, "ListSessions")
 	out := new(Sessions)
@@ -480,11 +478,11 @@ func (s *accountsServer) writeError(ctx context.Context, resp http.ResponseWrite
 // AccountsPathPrefix is used for all URL paths on a twirp Accounts server.
 // Requests are always: POST AccountsPathPrefix/method
 // It can be used in an HTTP mux to route twirp requests along with non-twirp requests on other routes.
-const AccountsPathPrefix = "/twirp/com.bloom42.Accounts/"
+const AccountsPathPrefix = "/twirp/com.bloom42.accounts.Accounts/"
 
 func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) {
 	ctx := req.Context()
-	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42")
+	ctx = ctxsetters.WithPackageName(ctx, "com.bloom42.accounts")
 	ctx = ctxsetters.WithServiceName(ctx, "Accounts")
 	ctx = ctxsetters.WithResponseWriter(ctx, resp)
 
@@ -503,28 +501,28 @@ func (s *accountsServer) ServeHTTP(resp http.ResponseWriter, req *http.Request) 
 	}
 
 	switch req.URL.Path {
-	case "/twirp/com.bloom42.Accounts/StartRegistration":
+	case "/twirp/com.bloom42.accounts.Accounts/StartRegistration":
 		s.serveStartRegistration(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/VerifyRegistration":
+	case "/twirp/com.bloom42.accounts.Accounts/VerifyRegistration":
 		s.serveVerifyRegistration(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/CompleteRegistration":
+	case "/twirp/com.bloom42.accounts.Accounts/CompleteRegistration":
 		s.serveCompleteRegistration(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/SendNewRegistrationCode":
+	case "/twirp/com.bloom42.accounts.Accounts/SendNewRegistrationCode":
 		s.serveSendNewRegistrationCode(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/SignIn":
+	case "/twirp/com.bloom42.accounts.Accounts/SignIn":
 		s.serveSignIn(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/SignOut":
+	case "/twirp/com.bloom42.accounts.Accounts/SignOut":
 		s.serveSignOut(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/RevokeSession":
+	case "/twirp/com.bloom42.accounts.Accounts/RevokeSession":
 		s.serveRevokeSession(ctx, resp, req)
 		return
-	case "/twirp/com.bloom42.Accounts/ListSessions":
+	case "/twirp/com.bloom42.accounts.Accounts/ListSessions":
 		s.serveListSessions(ctx, resp, req)
 		return
 	default:
@@ -699,7 +697,7 @@ func (s *accountsServer) serveVerifyRegistrationJSON(ctx context.Context, resp h
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.VerifyRegistration(ctx, reqContent)
@@ -710,7 +708,7 @@ func (s *accountsServer) serveVerifyRegistrationJSON(ctx context.Context, resp h
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
 		return
 	}
 
@@ -758,7 +756,7 @@ func (s *accountsServer) serveVerifyRegistrationProtobuf(ctx context.Context, re
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.VerifyRegistration(ctx, reqContent)
@@ -769,7 +767,7 @@ func (s *accountsServer) serveVerifyRegistrationProtobuf(ctx context.Context, re
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling VerifyRegistration. nil responses are not supported"))
 		return
 	}
 
@@ -957,7 +955,7 @@ func (s *accountsServer) serveSendNewRegistrationCodeJSON(ctx context.Context, r
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.SendNewRegistrationCode(ctx, reqContent)
@@ -968,7 +966,7 @@ func (s *accountsServer) serveSendNewRegistrationCodeJSON(ctx context.Context, r
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling SendNewRegistrationCode. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling SendNewRegistrationCode. nil responses are not supported"))
 		return
 	}
 
@@ -1016,7 +1014,7 @@ func (s *accountsServer) serveSendNewRegistrationCodeProtobuf(ctx context.Contex
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.SendNewRegistrationCode(ctx, reqContent)
@@ -1027,7 +1025,7 @@ func (s *accountsServer) serveSendNewRegistrationCodeProtobuf(ctx context.Contex
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling SendNewRegistrationCode. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling SendNewRegistrationCode. nil responses are not supported"))
 		return
 	}
 
@@ -1207,7 +1205,7 @@ func (s *accountsServer) serveSignOutJSON(ctx context.Context, resp http.Respons
 		return
 	}
 
-	reqContent := new(com_bloom42.Empty)
+	reqContent := new(Empty)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -1215,7 +1213,7 @@ func (s *accountsServer) serveSignOutJSON(ctx context.Context, resp http.Respons
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.SignOut(ctx, reqContent)
@@ -1226,7 +1224,7 @@ func (s *accountsServer) serveSignOutJSON(ctx context.Context, resp http.Respons
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling SignOut. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling SignOut. nil responses are not supported"))
 		return
 	}
 
@@ -1267,14 +1265,14 @@ func (s *accountsServer) serveSignOutProtobuf(ctx context.Context, resp http.Res
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(com_bloom42.Empty)
+	reqContent := new(Empty)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.SignOut(ctx, reqContent)
@@ -1285,7 +1283,7 @@ func (s *accountsServer) serveSignOutProtobuf(ctx context.Context, resp http.Res
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling SignOut. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling SignOut. nil responses are not supported"))
 		return
 	}
 
@@ -1344,7 +1342,7 @@ func (s *accountsServer) serveRevokeSessionJSON(ctx context.Context, resp http.R
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.RevokeSession(ctx, reqContent)
@@ -1355,7 +1353,7 @@ func (s *accountsServer) serveRevokeSessionJSON(ctx context.Context, resp http.R
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling RevokeSession. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling RevokeSession. nil responses are not supported"))
 		return
 	}
 
@@ -1403,7 +1401,7 @@ func (s *accountsServer) serveRevokeSessionProtobuf(ctx context.Context, resp ht
 	}
 
 	// Call service method
-	var respContent *com_bloom42.Empty
+	var respContent *Empty
 	func() {
 		defer ensurePanicResponses(ctx, resp, s.hooks)
 		respContent, err = s.Accounts.RevokeSession(ctx, reqContent)
@@ -1414,7 +1412,7 @@ func (s *accountsServer) serveRevokeSessionProtobuf(ctx context.Context, resp ht
 		return
 	}
 	if respContent == nil {
-		s.writeError(ctx, resp, twirp.InternalError("received a nil *com_bloom42.Empty and nil error while calling RevokeSession. nil responses are not supported"))
+		s.writeError(ctx, resp, twirp.InternalError("received a nil *Empty and nil error while calling RevokeSession. nil responses are not supported"))
 		return
 	}
 
@@ -1465,7 +1463,7 @@ func (s *accountsServer) serveListSessionsJSON(ctx context.Context, resp http.Re
 		return
 	}
 
-	reqContent := new(com_bloom42.Empty)
+	reqContent := new(Empty)
 	unmarshaler := jsonpb.Unmarshaler{AllowUnknownFields: true}
 	if err = unmarshaler.Unmarshal(req.Body, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the json request could not be decoded"))
@@ -1525,7 +1523,7 @@ func (s *accountsServer) serveListSessionsProtobuf(ctx context.Context, resp htt
 		s.writeError(ctx, resp, wrapInternal(err, "failed to read request body"))
 		return
 	}
-	reqContent := new(com_bloom42.Empty)
+	reqContent := new(Empty)
 	if err = proto.Unmarshal(buf, reqContent); err != nil {
 		s.writeError(ctx, resp, malformedRequestError("the protobuf request could not be decoded"))
 		return
@@ -2092,39 +2090,39 @@ func callClientError(ctx context.Context, h *twirp.ClientHooks, err twirp.Error)
 }
 
 var twirpFileDescriptor0 = []byte{
-	// 532 bytes of a gzipped FileDescriptorProto
-	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0x5d, 0x6b, 0xdb, 0x3e,
-	0x14, 0xc6, 0x49, 0x9a, 0x17, 0xf7, 0x24, 0xff, 0xff, 0xd8, 0x59, 0xb6, 0xb8, 0x86, 0x42, 0x66,
-	0x56, 0x16, 0x76, 0x91, 0x6c, 0xd9, 0x6e, 0x06, 0x65, 0xd0, 0x95, 0x5c, 0x8c, 0x8d, 0x74, 0x24,
-	0x30, 0xf6, 0x72, 0x11, 0x54, 0xfb, 0xac, 0x13, 0x89, 0x2d, 0x63, 0x29, 0x2d, 0x81, 0x7d, 0xd8,
-	0x7d, 0x94, 0x61, 0x59, 0x09, 0x76, 0xa2, 0x94, 0xdd, 0xf9, 0x48, 0x8f, 0x9e, 0x47, 0x47, 0xfe,
-	0x49, 0xe0, 0xa5, 0x49, 0x30, 0x64, 0x41, 0x20, 0x56, 0xb1, 0x92, 0x43, 0x49, 0xe9, 0x2d, 0x0f,
-	0x68, 0x90, 0xa4, 0x42, 0x09, 0x6c, 0x05, 0x22, 0x1a, 0x5c, 0x2f, 0x85, 0x88, 0xde, 0x8c, 0xbc,
-	0x07, 0x99, 0x90, 0xa2, 0x44, 0xad, 0xf3, 0x59, 0x7f, 0x0a, 0xdd, 0x99, 0x62, 0xa9, 0x9a, 0xd2,
-	0x0d, 0x97, 0x2a, 0x65, 0x8a, 0x8b, 0xf8, 0x33, 0x4b, 0x59, 0x24, 0xf1, 0x29, 0xb4, 0x43, 0x2e,
-	0x93, 0x25, 0x5b, 0xcf, 0x63, 0x16, 0x91, 0x5b, 0xe9, 0x55, 0xfa, 0xc7, 0xd3, 0x96, 0x19, 0x9b,
-	0xb0, 0x88, 0xb0, 0x03, 0x75, 0x8a, 0x18, 0x5f, 0xba, 0x55, 0x3d, 0x97, 0x17, 0xfe, 0x19, 0x3c,
-	0x2a, 0xda, 0x69, 0x7f, 0x0a, 0xf1, 0x7f, 0xa8, 0xf2, 0xd0, 0xb8, 0x54, 0x79, 0xe8, 0xbf, 0x03,
-	0xf7, 0x0b, 0xa5, 0xfc, 0xe7, 0xda, 0x92, 0xbd, 0xa3, 0x45, 0x84, 0x5a, 0x20, 0x42, 0x32, 0x39,
-	0xfa, 0xdb, 0x1f, 0xc2, 0xe9, 0x8c, 0xe2, 0x70, 0x42, 0x77, 0x45, 0x83, 0x4b, 0x11, 0x92, 0xdd,
-	0xc4, 0x0f, 0xc0, 0xbb, 0x14, 0x51, 0xb2, 0x24, 0x45, 0xff, 0x10, 0xe9, 0x81, 0xb3, 0x92, 0x94,
-	0xea, 0xd6, 0xf3, 0xd8, 0x6d, 0x8d, 0x27, 0xe0, 0xb0, 0x95, 0xfa, 0x35, 0x5f, 0xd0, 0xda, 0x3d,
-	0xea, 0x55, 0xfa, 0xed, 0x69, 0x33, 0xab, 0x3f, 0xd2, 0xda, 0x1f, 0x43, 0x7b, 0xc6, 0x6f, 0xe2,
-	0x0f, 0x1b, 0xdb, 0xa2, 0x4d, 0xe5, 0x1e, 0x9b, 0x6a, 0xd9, 0x66, 0x04, 0x30, 0xa1, 0xbb, 0x19,
-	0x49, 0xc9, 0x45, 0xbc, 0xb7, 0xb7, 0x0e, 0xd4, 0x95, 0x58, 0x50, 0xbc, 0x39, 0x77, 0x5d, 0xf8,
-	0xbf, 0xa1, 0x79, 0x68, 0xc1, 0x29, 0x40, 0x90, 0x12, 0x53, 0x14, 0xce, 0x99, 0x32, 0xab, 0x8e,
-	0xcd, 0xc8, 0x85, 0xd2, 0xf2, 0x44, 0x77, 0x92, 0xc9, 0x13, 0x7c, 0x02, 0x8d, 0x90, 0x32, 0x86,
-	0xdc, 0x9a, 0x1e, 0x33, 0x55, 0xd6, 0xcc, 0x52, 0x04, 0xfa, 0xd4, 0xdc, 0x7a, 0xde, 0xcc, 0xa6,
-	0xf6, 0xcf, 0xc1, 0x31, 0xe9, 0x12, 0x5f, 0x82, 0x23, 0xcd, 0xb7, 0x5b, 0xe9, 0x1d, 0xf5, 0x5b,
-	0xa3, 0xce, 0xa0, 0x80, 0xe1, 0xc0, 0x08, 0xa7, 0x5b, 0x55, 0xce, 0xcc, 0xad, 0x58, 0x90, 0x99,
-	0xb2, 0xff, 0x94, 0xd1, 0x9f, 0x1a, 0x38, 0x17, 0x86, 0x73, 0xfc, 0x01, 0x0f, 0xf7, 0xd8, 0xc5,
-	0x67, 0xe5, 0x20, 0x3b, 0xdb, 0x5e, 0xaf, 0xa4, 0xb2, 0xd1, 0x7a, 0x05, 0xb8, 0x4f, 0x27, 0x9e,
-	0x95, 0xd6, 0x1d, 0xc2, 0xd7, 0xc3, 0x92, 0x6c, 0x9c, 0xdd, 0x37, 0xfc, 0x0a, 0x1d, 0x1b, 0x7d,
-	0xf8, 0xbc, 0xa4, 0x3d, 0x0c, 0xa8, 0xd7, 0x2d, 0x09, 0x0b, 0x74, 0x7c, 0x83, 0xee, 0x81, 0x8b,
-	0x80, 0x2f, 0x76, 0x8e, 0xfd, 0x9e, 0xeb, 0x62, 0xdd, 0xf4, 0x39, 0x34, 0x72, 0x9a, 0xf1, 0xa4,
-	0xec, 0x54, 0x40, 0xfc, 0xf0, 0xc6, 0x5e, 0x41, 0x33, 0x13, 0x5e, 0xad, 0x14, 0x5a, 0xcc, 0xad,
-	0x81, 0x63, 0xf8, 0xaf, 0xc4, 0x01, 0xee, 0xfe, 0xa9, 0x3d, 0x46, 0xac, 0x36, 0x6f, 0xa1, 0xfd,
-	0x89, 0x4b, 0xb5, 0x05, 0xd2, 0x16, 0xff, 0xd8, 0x86, 0xa4, 0x7c, 0x0f, 0xdf, 0x9d, 0xcd, 0x4b,
-	0x7a, 0xdd, 0xd0, 0x8f, 0xe4, 0xeb, 0xbf, 0x01, 0x00, 0x00, 0xff, 0xff, 0xe2, 0xd0, 0x20, 0xcc,
-	0x60, 0x05, 0x00, 0x00,
+	// 529 bytes of a gzipped FileDescriptorProto
+	0x1f, 0x8b, 0x08, 0x00, 0x00, 0x00, 0x00, 0x00, 0x02, 0xff, 0x8c, 0x94, 0x51, 0x8b, 0xd3, 0x40,
+	0x10, 0xc7, 0x69, 0xef, 0xda, 0xe6, 0xe6, 0xaa, 0xe0, 0x5a, 0xbc, 0x18, 0xa9, 0xd4, 0x05, 0xa1,
+	0x3e, 0x98, 0x4a, 0xcf, 0x17, 0x5f, 0x84, 0xb3, 0xf4, 0x41, 0x4e, 0xaa, 0xb4, 0xa0, 0xe0, 0x4b,
+	0xd9, 0x4b, 0xc6, 0x73, 0x6d, 0x93, 0x0d, 0xd9, 0xed, 0x1d, 0x01, 0x3f, 0xb4, 0x1f, 0x41, 0xb2,
+	0xd9, 0x94, 0xdc, 0x75, 0x13, 0xee, 0x2d, 0x33, 0x3b, 0xf3, 0x9f, 0x99, 0xdd, 0xdf, 0x04, 0xbc,
+	0x34, 0x09, 0x26, 0x2c, 0x08, 0xc4, 0x2e, 0x56, 0x72, 0x22, 0x31, 0xbd, 0xe1, 0x01, 0xfa, 0x49,
+	0x2a, 0x94, 0x20, 0x83, 0x40, 0x44, 0xfe, 0xd5, 0x56, 0x88, 0xe8, 0xfd, 0xd4, 0x2f, 0x63, 0x68,
+	0x0f, 0x3a, 0xf3, 0x28, 0x51, 0x19, 0x5d, 0xc2, 0xd9, 0x4a, 0xb1, 0x54, 0x2d, 0xf1, 0x9a, 0x4b,
+	0x95, 0x32, 0xc5, 0x45, 0xfc, 0x8d, 0xa5, 0x2c, 0x92, 0xe4, 0x15, 0xf4, 0x43, 0x2e, 0x93, 0x2d,
+	0xcb, 0xd6, 0x31, 0x8b, 0xd0, 0x6d, 0x8d, 0x5a, 0xe3, 0x93, 0xe5, 0xa9, 0xf1, 0x2d, 0x58, 0x84,
+	0x64, 0x00, 0x1d, 0x8c, 0x18, 0xdf, 0xba, 0x6d, 0x7d, 0x56, 0x18, 0xf4, 0x35, 0x3c, 0xad, 0xca,
+	0x69, 0x7d, 0x0c, 0xc9, 0x63, 0x68, 0xf3, 0xd0, 0xa8, 0xb4, 0x79, 0x48, 0x3f, 0x82, 0xfb, 0x1d,
+	0x53, 0xfe, 0x2b, 0xb3, 0xd4, 0xbe, 0x17, 0x4b, 0x08, 0x1c, 0x07, 0x22, 0x44, 0x53, 0x47, 0x7f,
+	0xd3, 0x09, 0x0c, 0x57, 0x18, 0x87, 0x0b, 0xbc, 0xad, 0x0a, 0xcc, 0x44, 0x88, 0x76, 0x11, 0x1a,
+	0x80, 0x37, 0x13, 0x51, 0xb2, 0x45, 0x85, 0x0f, 0x28, 0xe9, 0x81, 0xb3, 0x93, 0x98, 0xea, 0xd1,
+	0x8b, 0xb2, 0x7b, 0x9b, 0x3c, 0x07, 0x87, 0xed, 0xd4, 0xef, 0xf5, 0x06, 0x33, 0xf7, 0x68, 0xd4,
+	0x1a, 0xf7, 0x97, 0xbd, 0xdc, 0xbe, 0xc4, 0x8c, 0xce, 0xa1, 0xbf, 0xe2, 0xd7, 0xf1, 0xe7, 0x52,
+	0xb6, 0x2a, 0xd3, 0x6a, 0x90, 0x69, 0xdf, 0x95, 0x99, 0x02, 0x2c, 0xf0, 0x76, 0x85, 0x52, 0x72,
+	0x11, 0x1f, 0xf4, 0x36, 0x80, 0x8e, 0x12, 0x1b, 0x8c, 0xcb, 0x7b, 0xd7, 0x06, 0xfd, 0x0b, 0xbd,
+	0xba, 0x84, 0x21, 0x40, 0x90, 0x22, 0x53, 0x18, 0xae, 0x99, 0x32, 0x59, 0x27, 0xc6, 0x73, 0xa1,
+	0x74, 0x78, 0xa2, 0x27, 0xc9, 0xc3, 0x13, 0xf2, 0x0c, 0xba, 0x21, 0xe6, 0x10, 0xb9, 0xc7, 0xda,
+	0x67, 0xac, 0x7c, 0x98, 0xad, 0x08, 0xf4, 0xad, 0xb9, 0x9d, 0x62, 0x98, 0xd2, 0xa6, 0x73, 0x70,
+	0x4c, 0x75, 0x49, 0x3e, 0x80, 0x23, 0xcd, 0xb7, 0xdb, 0x1a, 0x1d, 0x8d, 0x4f, 0xa7, 0x43, 0xdf,
+	0xc6, 0xa1, 0x6f, 0x32, 0x96, 0xfb, 0xf0, 0x02, 0x9e, 0x1b, 0xb1, 0x41, 0x73, 0x64, 0x7f, 0x9d,
+	0xe9, 0xbf, 0x0e, 0x38, 0x17, 0x46, 0x85, 0x44, 0xf0, 0xe4, 0x00, 0x62, 0xf2, 0xb6, 0xa6, 0xa2,
+	0x9d, 0x76, 0xef, 0x8d, 0x3d, 0xdc, 0x06, 0x32, 0x03, 0x72, 0x08, 0x2e, 0xf1, 0xed, 0x02, 0x75,
+	0x88, 0x7b, 0x2f, 0xec, 0xf1, 0x7a, 0x2d, 0xc9, 0x1f, 0x18, 0xd8, 0x50, 0x25, 0xef, 0xec, 0x49,
+	0xf5, 0x58, 0x7b, 0x23, 0x7b, 0x46, 0x05, 0xae, 0x0d, 0x9c, 0xd5, 0xec, 0x11, 0x39, 0xaf, 0x7b,
+	0xb5, 0x86, 0xb5, 0x6b, 0x1e, 0x6c, 0x01, 0xdd, 0x62, 0x3d, 0x08, 0xad, 0xd1, 0xae, 0x2c, 0xcf,
+	0x03, 0x9a, 0x9f, 0x41, 0x2f, 0xcf, 0xf8, 0xba, 0x53, 0xa4, 0xa9, 0x6e, 0x73, 0x53, 0x3f, 0xe0,
+	0xd1, 0x1d, 0xe6, 0x48, 0x2d, 0x0c, 0x07, 0x60, 0x36, 0x0b, 0x5f, 0x42, 0xff, 0x0b, 0x97, 0x6a,
+	0xbf, 0x17, 0x8d, 0x2d, 0xbe, 0x6c, 0x5c, 0x11, 0xf9, 0x09, 0x7e, 0x3a, 0xa5, 0xf3, 0xaa, 0xab,
+	0x7f, 0xee, 0xe7, 0xff, 0x03, 0x00, 0x00, 0xff, 0xff, 0x75, 0xf9, 0x83, 0x93, 0xfa, 0x05, 0x00,
+	0x00,
 }
