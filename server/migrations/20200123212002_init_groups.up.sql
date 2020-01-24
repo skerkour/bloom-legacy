@@ -13,5 +13,5 @@ CREATE TABLE groups (
 CREATE TABLE groups_members (
     group_id UUID NOT NULL REFERENCES groups(id),
     user_id UUID NOT NULL REFERENCES users(id),
-    role TEXT NOT NULL,
+    role TEXT NOT NULL
 );
