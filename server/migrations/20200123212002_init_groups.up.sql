@@ -22,7 +22,7 @@ CREATE TABLE groups_invitations (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     group_id UUID NOT NULL REFERENCES groups(id),
-    user_id UUID NOT NULL REFERENCES users(id),
+    invitee_id UUID NOT NULL REFERENCES users(id),
 
     PRIMARY KEY(id)
 );

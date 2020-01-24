@@ -25,7 +25,7 @@ func (handler Handler) ListGroups(ctx context.Context, _ *rpc.Empty) (*rpc.Group
 	}
 
 	groups := []groups.Group{}
-	err := db.DB.Select(`SELECT * FROM groups
+	err := db.DB.Select(&groups, `SELECT * FROM groups
 		INNER JOIN groups_members ON groups.id = groups_members.group_id
 		WHERE groups_members.user_id = $1`, apiCtx.AuthenticatedUser.ID)
 	if err != nil {
@@ -42,6 +42,5 @@ func (handler Handler) ListGroups(ctx context.Context, _ *rpc.Empty) (*rpc.Group
 		}
 		ret.Groups = append(ret.Groups, &rpcGroup)
 	}
-
 	return ret, nil
 }
