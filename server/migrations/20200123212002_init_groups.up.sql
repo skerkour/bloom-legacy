@@ -24,6 +24,7 @@ CREATE TABLE groups_invitations (
 
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     invitee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    inviter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
     PRIMARY KEY(id)
 );
