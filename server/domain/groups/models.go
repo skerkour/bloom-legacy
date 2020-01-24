@@ -13,9 +13,10 @@ type Group struct {
 }
 
 type Membership struct {
-	GroupID string `json:"group_id" db:"group_id"`
-	UserID  string `json:"user_id" db:"user_id"`
-	Role    string `json:"role" db:"role"`
+	CreatedAt time.Time `json:"created_at" db:"created_at"`
+	GroupID   string    `json:"group_id" db:"group_id"`
+	UserID    string    `json:"user_id" db:"user_id"`
+	Role      string    `json:"role" db:"role"`
 }
 
 type Invitation struct {
