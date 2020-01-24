@@ -11,6 +11,19 @@ import (
 
 func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) twirp.Error {
 	logger := rz.FromCtx(ctx)
-	_ = logger
+	var err error
+
+	// validate action
+	if user.ID != invitation.InviteeID {
+		return twirp.NewError(twirp.NotFound, "Invitation not found.")
+	}
+
+	// delete invitation
+	queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
+	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
+	if err != nil {
+		logger.Error("groups.DeclineInvitation: deleting invitation", rz.Err(err))
+		return twirp.InternalError(ErrorDecliningInvitationMsg)
+	}
 	return nil
 }
