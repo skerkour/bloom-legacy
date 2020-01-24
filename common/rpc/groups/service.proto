@@ -29,11 +29,11 @@ message CreateGroupParams {
 }
 
 message DeleteGroupParams {
-  string groud_id = 1;
+  string group_id = 1;
 }
 
 message UpdateGroupParams {
-  string groud_id = 1;
+  string group_id = 1;
   string name = 2;
   string description = 3;
 }
@@ -50,12 +50,12 @@ message GroupList {
 }
 
 message RemoveMembersParams {
-  string groud_id = 1;
+  string group_id = 1;
   repeated string usernames = 2;
 }
 
 message InviteUsersParams {
-  string groud_id = 1;
+  string group_id = 1;
   repeated string usernames = 2;
 }
 
