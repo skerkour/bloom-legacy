@@ -50,7 +50,7 @@ CREATE TABLE pending_users (
     display_name TEXT NOT NULL,
 
     verification_code_hash TEXT NOT NULL,
-    trials BIGINT NOT NULL,
+    failed_verifications BIGINT NOT NULL,
     verified BOOLEAN NOT NULL,
 
     PRIMARY KEY(id)

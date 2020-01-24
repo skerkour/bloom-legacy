@@ -12,7 +12,7 @@ import (
 func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, code string) twirp.Error {
 	logger := rz.FromCtx(ctx)
 
-	if pendingUser.Trials+1 >= 10 {
+	if pendingUser.FailedVerifications+1 >= 10 {
 		return twirp.NewError(twirp.PermissionDenied, "Maximum trials reached. Please create a new account.")
 	}
 

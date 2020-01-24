@@ -25,7 +25,7 @@ type PendingUser struct {
 	Email                string    `json:"email" db:"email"`
 	DisplayName          string    `json:"display_name" db:"display_name"`
 	VerificationCodeHash string    `json:"verification_code_hash" db:"verification_code_hash"`
-	Trials               int64     `json:"trials" db:"trials"`
+	FailedVerifications  int64     `json:"failed_verifications" db:"failed_verifications"`
 	Verified             bool      `json:"verified" db:"verified"`
 }
 

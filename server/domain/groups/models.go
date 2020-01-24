@@ -11,3 +11,9 @@ type Group struct {
 	Name        string    `json:"name" db:"name"`
 	Description string    `json:"description" db:"description"`
 }
+
+type Membership struct {
+	GroupID string `json:"group_id" db:"group_id"`
+	UserID  string `json:"user_id" db:"user_id"`
+	Role    string `json:"role" db:"role"`
+}
