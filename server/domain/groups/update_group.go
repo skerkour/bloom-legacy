@@ -22,7 +22,7 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 		description = group.Description
 	}
 
-	if twerr := validateUpdateGroup(ctx, tx, user, *group, name, description); err != nil {
+	if twerr := validateUpdateGroup(ctx, tx, user.ID, group.ID, name, description); twerr != nil {
 		return twerr
 	}
 
@@ -42,21 +42,11 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 }
 
 // validateUpdateGroup Checks that user is member of group and he has administrator role
-func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group, name, description string) twirp.Error {
-	var memberhsip Membership
+func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, userID, groupID, name, description string) twirp.Error {
 	var err error
-	logger := rz.FromCtx(ctx)
 
-	queryGetMembership := "SELECT * FROM groups_members WHERE group_id = $1 AND user_id = $2"
-	err = tx.Get(&memberhsip, queryGetMembership, group.ID, user.ID)
-	if err != nil {
-		logger.Error("groups.UpdateGroup: fetching group membership", rz.Err(err),
-			rz.String("group_id", group.ID), rz.String("user_id", user.ID))
-		return twirp.NewError(twirp.NotFound, "Group not found.")
-	}
-
-	if memberhsip.Role != RoleAdministrator {
-		return twirp.NewError(twirp.PermissionDenied, "Administrator role is required to update group.")
+	if twerr := checkUserIsGroupAdmin(ctx, tx, userID, groupID); twerr != nil {
+		return twerr
 	}
 
 	if err = validator.GroupName(name); err != nil {

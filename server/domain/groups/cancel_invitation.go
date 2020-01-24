@@ -11,6 +11,19 @@ import (
 
 func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) twirp.Error {
 	logger := rz.FromCtx(ctx)
-	_ = logger
+	var err error
+
+	// verify that user is admin
+	if twerr := checkUserIsGroupAdmin(ctx, tx, user.ID, invitation.GroupID); twerr != nil {
+		return twerr
+	}
+
+	// delete invitation
+	queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
+	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
+	if err != nil {
+		logger.Error("groups.CancelInvitation: creating membership", rz.Err(err))
+		return twirp.InternalError(ErrorCancelingInvitationMsg)
+	}
 	return nil
 }

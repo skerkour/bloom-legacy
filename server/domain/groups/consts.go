@@ -8,6 +8,7 @@ const (
 	ErrorQuittingGroupMsg       = "Error quitting group. Please try again."
 	ErrorAcceptingInvitationMsg = "Error joining group. Please try again."
 	ErrorDecliningInvitationMsg = "Error declining invitaiton. Please try again."
+	ErrorCancelingInvitationMsg = "Error canceling invitaiton. Please try again."
 	RoleMember                  = "member"
 	RoleAdministrator           = "administrator"
 )
