@@ -39,8 +39,9 @@ message UpdateGroupParams {
 
 message Group {
   string id = 1;
-  string name = 2;
-  string description = 3;
+  string created_at = 2;
+  string name = 3;
+  string description = 4;
 }
 
 message GroupList {
