@@ -18,6 +18,7 @@ service Groups {
   rpc DeclineInvitation(DeclineInvitationParams) returns (Empty);
   rpc CancelInvitation(CancelInvitationParams) returns (Empty);
   rpc ListInvitations(Empty) returns (InvitationList);
+  rpc QuitGroup(QuitGroupParams) returns (Empty);
 }
 
 message Empty {}
@@ -69,13 +70,17 @@ message InvitationList {
 }
 
 message AcceptInvitationParams {
-  string id = 1;
+  string invitation_id = 1;
 }
 
 message DeclineInvitationParams {
-  string id = 1;
+  string invitation_id = 1;
 }
 
 message CancelInvitationParams {
-  string id = 1;
+  string invitation_id = 1;
+}
+
+message QuitGroupParams {
+  string group_id = 1;
 }
