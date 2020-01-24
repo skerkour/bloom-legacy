@@ -45,7 +45,7 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, userID, groupID, name, description string) twirp.Error {
 	var err error
 
-	if twerr := checkUserIsGroupAdmin(ctx, tx, userID, groupID); twerr != nil {
+	if twerr := CheckUserIsGroupAdmin(ctx, tx, userID, groupID); twerr != nil {
 		return twerr
 	}
 

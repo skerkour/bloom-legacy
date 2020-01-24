@@ -9,7 +9,7 @@ import (
 )
 
 // checkUserIsGroupAdmin Checks that user is member of group and he has administrator role
-func checkUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID string) twirp.Error {
+func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID string) twirp.Error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)

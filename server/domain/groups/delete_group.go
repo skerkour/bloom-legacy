@@ -13,7 +13,7 @@ func DeleteGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group)
 	logger := rz.FromCtx(ctx)
 	var err error
 
-	if twerr := checkUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
+	if twerr := CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
 		return twerr
 	}
 

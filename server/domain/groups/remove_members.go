@@ -14,7 +14,7 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	var err error
 	var remainingAdmins int
 
-	if twerr := checkUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
+	if twerr := CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
 		return twerr
 	}
 

@@ -28,7 +28,7 @@ func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) t
 	queryRemainingAdmins := "SELECT COUNT(*) FROM groups_members WHERE group_id = $1 AND role = $2"
 	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
 	if err != nil {
-		logger.Error("users.QuitGroup: error fetching remaining admins", rz.Err(err))
+		logger.Error("groups.QuitGroup: error fetching remaining admins", rz.Err(err))
 		return twirp.InternalError(ErrorQuittingGroupMsg)
 	}
 	if remainingAdmins != 0 {
