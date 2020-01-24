@@ -63,7 +63,7 @@ message InviteUsersParams {
 message Invitation {
   string id = 1;
   Group group = 2;
-  Issuer issuer = 3;
+  Inviter inviter = 3;
 }
 
 message InvitationList {
@@ -86,7 +86,7 @@ message QuitGroupParams {
   string group_id = 1;
 }
 
-message Issuer {
+message Inviter {
   string username = 1;
   string display_name = 2;
 }
