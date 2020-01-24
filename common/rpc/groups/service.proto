@@ -13,7 +13,7 @@ service Groups {
   rpc ListAllGroups(Empty) returns (GroupList);
   // members related
   rpc RemoveMembers(RemoveMembersParams) returns (Empty);
-  rpc InviteMembers(InviteMembersParams) returns (Empty);
+  rpc InviteUsers(InviteUsersParams) returns (Empty);
   rpc AcceptInvitation(AcceptInvitationParams) returns (Empty);
   rpc DeclineInvitation(DeclineInvitationParams) returns (Empty);
   rpc CancelInvitation(CancelInvitationParams) returns (Empty);
@@ -51,7 +51,7 @@ message RemoveMembersParams {
   repeated string usernames = 1;
 }
 
-message InviteMembersParams {
+message InviteUsersParams {
   repeated string usernames = 1;
 }
 
