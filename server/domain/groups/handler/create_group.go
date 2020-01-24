@@ -30,11 +30,23 @@ func (handler Handler) CreateGroup(ctx context.Context, params *rpc.CreateGroupP
 		return ret, twirp.InternalError(groups.ErrorCreateGroupMsg)
 	}
 
+	newGroup, twerr := groups.CreateGroup(ctx, tx, *apiCtx.AuthenticatedUser, params.Name, params.Description)
+	if twerr != nil {
+		tx.Rollback()
+		return ret, twerr
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.CreateGroup: Committing transaction", rz.Err(err))
 		return ret, twirp.InternalError(groups.ErrorCreateGroupMsg)
+	}
+
+	ret = &rpc.Group{
+		Id:          newGroup.ID,
+		Name:        newGroup.Name,
+		Description: newGroup.Description,
 	}
 
 	return ret, nil

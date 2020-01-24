@@ -48,16 +48,24 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 	}
 
 	// create group
-	queryCreateUser := `INSERT INTO groups
+	queryCreateGroup := `INSERT INTO groups
 		(id, created_at, updated_at, name, description)
 		VALUES ($1, $2, $3, $4, $5)`
-	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description)
+	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description)
 	if err != nil {
 		logger.Error("groups.CreateGroup: inserting new group", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCreateGroupMsg)
 	}
 
 	// admin creator to group
+	queryAddAdminToGroup := `INSERT INTO groups_members
+	(user_id, group_id, role)
+	VALUES ($1, $2, $3)`
+	_, err = tx.Exec(queryAddAdminToGroup, admin.ID, ret.ID, RoleAdministrator)
+	if err != nil {
+		logger.Error("groups.CreateGroup: inserting aadmin in new group", rz.Err(err))
+		return ret, twirp.InternalError(ErrorCreateGroupMsg)
+	}
 
 	return ret, nil
 }
