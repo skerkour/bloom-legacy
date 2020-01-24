@@ -12,6 +12,7 @@ import (
 func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Group, usernames []string) twirp.Error {
 	logger := rz.FromCtx(ctx)
 	var err error
+	var remainingAdmins int
 
 	if twerr := validateRemoveMembers(ctx, tx, user, group); err != nil {
 		return twerr
@@ -25,6 +26,18 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	if err != nil {
 		logger.Error("groups.RemoveMembers: removing members", rz.Err(err))
 		return twirp.InternalError(ErrorRemovingMembersMsg)
+	}
+
+	queryRemainingAdmins := `SELECT COUNT(*) FROM groups_members
+		INNER JOIN users ON users.id = groups_members.user_id
+		WHERE groups_members.role = $1`
+	err = tx.Get(&remainingAdmins, queryRemainingAdmins, RoleAdministrator)
+	if err != nil {
+		logger.Error("users.RemoveMembers: error fetching remaining admins", rz.Err(err))
+		return twirp.InternalError(ErrorRemovingMembersMsg)
+	}
+	if remainingAdmins != 0 {
+		return twirp.NewError(twirp.PermissionDenied, "At least one administrator should remain in group.")
 	}
 
 	return nil
