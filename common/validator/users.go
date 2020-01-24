@@ -9,7 +9,7 @@ import (
 	"strings"
 )
 
-func AccountFirstName(firstName string) error {
+func UserFirstName(firstName string) error {
 	firstNameLen := len(firstName)
 
 	if firstNameLen == 0 {
@@ -23,7 +23,7 @@ func AccountFirstName(firstName string) error {
 	return nil
 }
 
-func AccountLastName(lastName string) error {
+func UserLastName(lastName string) error {
 	lastNameLen := len(lastName)
 
 	if lastNameLen == 0 {
@@ -37,7 +37,7 @@ func AccountLastName(lastName string) error {
 	return nil
 }
 
-func AccountBio(bio string) error {
+func UserBio(bio string) error {
 	if len(bio) > consts.BIO_MAX_LENGTH {
 		return errors.New("bio is too long")
 	}
@@ -45,7 +45,7 @@ func AccountBio(bio string) error {
 	return nil
 }
 
-func AccountDisplayName(displayName string) error {
+func UserDisplayName(displayName string) error {
 	displayNameLen := len(displayName)
 
 	if displayNameLen == 0 {
@@ -59,7 +59,7 @@ func AccountDisplayName(displayName string) error {
 	return nil
 }
 
-func AccountPassword(password string, basicPassword map[string]bool) error {
+func UserPassword(password string, basicPassword map[string]bool) error {
 	passwordLength := len(password)
 
 	if passwordLength < consts.PASSWORD_MAX_LENGTH {
@@ -133,7 +133,7 @@ pub fn email<S: std::hash::BuildHasher>(
     return Ok(());
 }
 */
-func AccountEmail(email string, disposableEmailDomains map[string]bool) error {
+func UserEmail(email string, disposableEmailDomains map[string]bool) error {
 	if !govalidator.IsEmail(email) {
 		return errors.New("email is not valid")
 	}
@@ -142,7 +142,7 @@ func AccountEmail(email string, disposableEmailDomains map[string]bool) error {
 
 var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 
-func AccountUsername(username string) error {
+func UserUsername(username string) error {
 	usernameLength := len(username)
 
 	if usernameLength == 0 {

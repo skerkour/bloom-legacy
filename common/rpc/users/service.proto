@@ -1,10 +1,10 @@
 syntax = "proto3";
 
-package com.bloom42.accounts;
-option go_package = "accounts";
+package com.bloom42.users;
+option go_package = "users";
 
-// Accounts
-service Accounts {
+// Users
+service Users {
   rpc StartRegistration(StartRegistrationParams) returns (RegistrationStarted);
   rpc VerifyRegistration(VerifyRegistrationParams) returns (Empty);
   rpc CompleteRegistration(CompleteRegistrationParams) returns (NewSession);
