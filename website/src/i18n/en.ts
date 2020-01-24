@@ -142,8 +142,9 @@ export default {
       you don't need, or even influence elections. <br />
       On the other side, with Bloom, we work for the people who value respect and privacy: You.
       Not investors, not advertisers.`,
-      // On the other side, with Bloom, your data are encrypted and are not at the mercy of a tyranic government,
-      // a rogue employee, or an over jealous conjoint.`,
+    // On the other side, with Bloom, your data are encrypted and are not at the mercy of a
+    // tyranic government,
+    // a rogue employee, or an over jealous conjoint.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
     a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
       Our clients are the people paying us, not the advertisers.`,
