@@ -5,6 +5,7 @@ const (
 	ErrorDeleteGroupMsg     = "Error deleting group. Please try again."
 	ErrorRemovingMembersMsg = "Error removing members from group. Please try again."
 	ErrorUpdatingGroupMsg   = "Error updating group. Please try again."
+	ErrorQuittingGroupMsg   = "Error quitting group. Please try again."
 	RoleMember              = "member"
 	RoleAdministrator       = "administrator"
 )
