@@ -8,13 +8,13 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"gitlab.com/bloom42/bloom/common/consts"
-	accountsrpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
 	billingrpc "gitlab.com/bloom42/bloom/common/rpc/billing"
 	groupsrpc "gitlab.com/bloom42/bloom/common/rpc/groups"
+	usersrpc "gitlab.com/bloom42/bloom/common/rpc/users"
 	"gitlab.com/bloom42/bloom/server/config"
-	accountshandler "gitlab.com/bloom42/bloom/server/domain/accounts/handler"
 	billinghandler "gitlab.com/bloom42/bloom/server/domain/billing/handler"
 	groupshandler "gitlab.com/bloom42/bloom/server/domain/groups/handler"
+	usershandler "gitlab.com/bloom42/bloom/server/domain/users/handler"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
@@ -27,7 +27,7 @@ func Run() error {
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
 
-	accountsHandler := accountsrpc.NewAccountsServer(accountshandler.Handler{}, nil)
+	usersHandler := usersrpc.NewUsersServer(usershandler.Handler{}, nil)
 	groupsHandler := groupsrpc.NewGroupsServer(groupshandler.Handler{}, nil)
 	billingHandler := billingrpc.NewBillingServer(billinghandler.Handler{}, nil)
 
@@ -66,7 +66,7 @@ func Run() error {
 	router.Use(SetContextMiddleware)
 
 	router.Get("/", HelloWorlHandler)
-	router.Mount(accountsHandler.PathPrefix(), accountsHandler)
+	router.Mount(usersHandler.PathPrefix(), usersHandler)
 	router.Mount(billingHandler.PathPrefix(), billingHandler)
 	router.Mount(groupsHandler.PathPrefix(), groupsHandler)
 	router.NotFound(http.HandlerFunc(NotFoundHandler))

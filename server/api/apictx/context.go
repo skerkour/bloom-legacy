@@ -1,16 +1,16 @@
 package apictx
 
 import (
-	"gitlab.com/bloom42/bloom/server/domain/accounts"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
 type Context struct {
-	AuthenticatedAccount *accounts.Account `json:"authenticated_account"`
-	Session              *accounts.Session `json:"session"`
-	AuthenticatedService *string           `json:"authenticated_service"`
-	RequestID            string            `json:"request_id"`
-	IP                   string            `json:"ip"`
-	UserAgent            string            `json:"user_agent"`
+	AuthenticatedUser    *users.User    `json:"authenticated_user"`
+	Session              *users.Session `json:"session"`
+	AuthenticatedService *string        `json:"authenticated_service"`
+	RequestID            string         `json:"request_id"`
+	IP                   string         `json:"ip"`
+	UserAgent            string         `json:"user_agent"`
 }
 
 // key to use when setting the Context

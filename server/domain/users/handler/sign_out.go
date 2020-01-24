@@ -4,10 +4,10 @@ import (
 	"context"
 
 	"github.com/twitchtv/twirp"
-	rpc "gitlab.com/bloom42/bloom/common/rpc/accounts"
+	rpc "gitlab.com/bloom42/bloom/common/rpc/users"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/domain/accounts"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -18,18 +18,18 @@ func (s Handler) SignOut(ctx context.Context, _ *rpc.Empty) (*rpc.Empty, error) 
 	if !ok {
 		return ret, twirp.InternalError("internal error")
 	}
-	if apiCtx.AuthenticatedAccount == nil {
+	if apiCtx.AuthenticatedUser == nil {
 		twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
 		return ret, twerr
 	}
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("accounts.SignOut: Starting transaction", rz.Err(err))
-		return ret, twirp.InternalError(accounts.ErrorDeleteSessionMsg)
+		logger.Error("users.SignOut: Starting transaction", rz.Err(err))
+		return ret, twirp.InternalError(users.ErrorDeleteSessionMsg)
 	}
 
-	twerr := accounts.DeleteSession(ctx, tx, apiCtx.Session.ID, apiCtx.AuthenticatedAccount.ID)
+	twerr := users.DeleteSession(ctx, tx, apiCtx.Session.ID, apiCtx.AuthenticatedUser.ID)
 	if twerr != nil {
 		tx.Rollback()
 		return ret, twerr
@@ -38,8 +38,8 @@ func (s Handler) SignOut(ctx context.Context, _ *rpc.Empty) (*rpc.Empty, error) 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("accounts.SignOut: committing transaction", rz.Err(err))
-		return ret, twirp.InternalError(accounts.ErrorDeleteSessionMsg)
+		logger.Error("users.SignOut: committing transaction", rz.Err(err))
+		return ret, twirp.InternalError(users.ErrorDeleteSessionMsg)
 	}
 
 	return ret, nil

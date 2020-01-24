@@ -19,7 +19,7 @@ func (handler Handler) CreateGroup(ctx context.Context, params *rpc.CreateGroupP
 	if !ok {
 		return ret, twirp.InternalError("internal error")
 	}
-	if apiCtx.AuthenticatedAccount == nil {
+	if apiCtx.AuthenticatedUser == nil {
 		twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
 		return ret, twerr
 	}

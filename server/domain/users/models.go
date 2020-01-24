@@ -1,8 +1,8 @@
-package accounts
+package users
 
 import "time"
 
-type Account struct {
+type User struct {
 	ID          string     `json:"id" db:"id"`
 	CreatedAt   time.Time  `json:"created_at" db:"created_at"`
 	UpdatedAt   time.Time  `json:"updated_at" db:"updated_at"`
@@ -18,7 +18,7 @@ type Account struct {
 	DisabledAt  *time.Time `json:"disabled_at" db:"disabled_at"`
 }
 
-type PendingAccount struct {
+type PendingUser struct {
 	ID                   string    `json:"id" db:"id"`
 	CreatedAt            time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt            time.Time `json:"updated_at" db:"updated_at"`
@@ -33,7 +33,7 @@ type Session struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
-	AccountID string    `json:"account_id" db:"account_id"`
+	UserID    string    `json:"user_id" db:"user_id"`
 	TokenHash string    `json:"token_hash" db:"token_hash"`
 	IPAddr    string    `json:"ip" db:"ip"`
 	UserAgent string    `json:"user_agent" db:"user_agent"`

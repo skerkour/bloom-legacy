@@ -1,4 +1,4 @@
-package accounts
+package users
 
 import (
 	"bytes"
@@ -7,7 +7,7 @@ import (
 	"text/template"
 )
 
-const accountVerificationEmailTemplate = `
+const userVerificationEmailTemplate = `
 Welcome aboard {{ .Name }}! <br/>
 Your confirmation code is: <br/>
 <h2>{{ .FormattedCode }}</h2> <br/>
@@ -15,16 +15,16 @@ This code will only be valid for 30 minutes. <br/>
 If you did not ask for a code, please ignore this email.
 `
 
-type accountVerificationEmailData struct {
+type userVerificationEmailData struct {
 	Name          string
 	FormattedCode string
 }
 
-func SendAccountVerificationCode(toAddr, displayName, code string) error {
+func SendUserVerificationCode(toAddr, displayName, code string) error {
 	var content bytes.Buffer
-	tmpl := template.Must(template.New("accountVerificationEmailTemplate").Parse(accountVerificationEmailTemplate))
+	tmpl := template.Must(template.New("userVerificationEmailTemplate").Parse(userVerificationEmailTemplate))
 	formattedCode := code[:4] + "-" + code[4:]
-	data := accountVerificationEmailData{
+	data := userVerificationEmailData{
 		FormattedCode: formattedCode,
 		Name:          displayName,
 	}

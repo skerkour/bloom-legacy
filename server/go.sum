@@ -192,6 +192,7 @@ github.com/xanzy/go-gitlab v0.15.0/go.mod h1:8zdQa/ri1dfn8eS3Ir1SyfvOKlw7WBJ8DVT
 github.com/xdg/scram v0.0.0-20180814205039-7eeb5667e42c/go.mod h1:lB8K/P019DLNhemzwFU4jHLhdvlE6uDZjXFejJXr49I=
 github.com/xdg/stringprep v1.0.0/go.mod h1:Jhud4/sHMO4oL310DaZAKk9ZaJ08SJfe+sJh0HrGL1Y=
 github.com/xordataexchange/crypt v0.0.3-0.20170626215501-b2862e3d0a77/go.mod h1:aYKd//L2LvnjZzWKhF00oedf4jCCReLcmhLdhm1A27Q=
+gitlab.com/bloom42/bloom v0.0.0-20200124091130-2d2025e14a5a h1:+j9YH27ZDvEMCy3puWX5IOxtbmewLh34ChMQX07qe+k=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f h1:LzfQlG769M/TLZu9kh08jzmO5i4A+GAfu4KtqyX/jAQ=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122194330-054ee345e736 h1:+Chpqaz7WXtoavJ70hKBrLfug0+Bp8RT0GVanVuHAFE=
@@ -210,6 +211,8 @@ gitlab.com/bloom42/bloom/common v0.0.0-20200123203913-b9975218e266 h1:IV6VrofctZ
 gitlab.com/bloom42/bloom/common v0.0.0-20200123203913-b9975218e266/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200123204213-b8932c1f9654 h1:UhvmbkCBMbFxKi9oB+yMXvwAHqoMNHc04Ctg3xnG5vU=
 gitlab.com/bloom42/bloom/common v0.0.0-20200123204213-b8932c1f9654/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200124091130-2d2025e14a5a h1:iDQPf/NnqGfev2D2XzYanRPB3yVG+O53J2vrTvPNYqs=
+gitlab.com/bloom42/bloom/common v0.0.0-20200124091130-2d2025e14a5a/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899 h1:uZwZ8PQR7d7r4BJJDzSI+UKiF9JwlEXjkJF/uVXcJuo=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=

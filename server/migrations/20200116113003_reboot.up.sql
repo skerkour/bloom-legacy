@@ -1,6 +1,6 @@
 -- Your SQL goes here
 
-CREATE TABLE accounts (
+CREATE TABLE users (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -22,7 +22,7 @@ CREATE TABLE accounts (
 
     PRIMARY KEY(id)
 );
-CREATE UNIQUE INDEX idx_accounts_username ON accounts (username);
+CREATE UNIQUE INDEX idx_users_username ON users (username);
 
 
 CREATE TABLE sessions (
@@ -30,7 +30,7 @@ CREATE TABLE sessions (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-    account_id UUID NOT NULL REFERENCES accounts(id) ON DELETE CASCADE,
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
     token_hash TEXT NOT NULL,
     ip TEXT NOT NULL,
@@ -38,10 +38,10 @@ CREATE TABLE sessions (
 
     PRIMARY KEY(id)
 );
-CREATE INDEX idx_sessions_account_id ON sessions (account_id);
+CREATE INDEX idx_sessions_user_id ON sessions (user_id);
 
 
-CREATE TABLE pending_accounts (
+CREATE TABLE pending_users (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,

@@ -1,4 +1,4 @@
-package accounts
+package users
 
 import (
 	"context"
@@ -13,49 +13,49 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreateAccount(ctx context.Context, tx *sqlx.Tx, pendingAccount PendingAccount, username string, authKey []byte) (Account, twirp.Error) {
+func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, username string, authKey []byte) (User, twirp.Error) {
 	logger := rz.FromCtx(ctx)
 	var err error
-	var ret Account
-	var existingAccount int
+	var ret User
+	var existingUser int
 
 	// validate params
-	if err = validator.AccountUsername(username); err != nil {
+	if err = validator.UserUsername(username); err != nil {
 		return ret, twirp.InvalidArgumentError("username", err.Error())
 	}
 
 	// check if email does not already exist
-	queryCountExistingEmails := "SELECT COUNT(*) FROM accounts WHERE email = $1"
-	err = tx.Get(&existingAccount, queryCountExistingEmails, pendingAccount.Email)
+	queryCountExistingEmails := "SELECT COUNT(*) FROM users WHERE email = $1"
+	err = tx.Get(&existingUser, queryCountExistingEmails, pendingUser.Email)
 	if err != nil {
-		logger.Error("accounts.CreateAccount: error fetching existing emails counts", rz.Err(err))
+		logger.Error("users.CreateUser: error fetching existing emails counts", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
 	}
-	if existingAccount != 0 {
-		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("account with email: '%s' already exists", pendingAccount.Email))
+	if existingUser != 0 {
+		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", pendingUser.Email))
 	}
 
 	// verify that username isn't already in use
-	existingAccount = 0
-	queryCountExistingUsername := "SELECT COUNT(*) FROM accounts WHERE username = $1"
-	err = tx.Get(&existingAccount, queryCountExistingUsername, username)
+	existingUser = 0
+	queryCountExistingUsername := "SELECT COUNT(*) FROM users WHERE username = $1"
+	err = tx.Get(&existingUser, queryCountExistingUsername, username)
 	if err != nil {
-		logger.Error("accounts.CreateAccount: error fetching existing username counts", rz.Err(err))
+		logger.Error("users.CreateUser: error fetching existing username counts", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
 	}
-	if existingAccount != 0 {
+	if existingUser != 0 {
 		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("Username '%s' is already is use", username))
 	}
 
-	// verify that username was not used by a deleted account
-	existingAccount = 0
+	// verify that username was not used by a deleted user
+	existingUser = 0
 	queryCountDeletedUsername := "SELECT COUNT(*) FROM deleted_usernames WHERE username = $1"
-	err = tx.Get(&existingAccount, queryCountDeletedUsername, username)
+	err = tx.Get(&existingUser, queryCountDeletedUsername, username)
 	if err != nil {
-		logger.Error("accounts.CreateAccount: error fetching deleted username counts", rz.Err(err))
+		logger.Error("users.CreateUser: error fetching deleted username counts", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
 	}
-	if existingAccount != 0 {
+	if existingUser != 0 {
 		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("Username '%s' is already is use", username))
 	}
 
@@ -64,26 +64,26 @@ func CreateAccount(ctx context.Context, tx *sqlx.Tx, pendingAccount PendingAccou
 	// TODO: update params
 	authKeyHash, err := argon2id.HashPassword(authKey, argon2id.DefaultHashPasswordParams)
 	if err != nil {
-		logger.Error("accounts.CreateAccount: hashing auth key", rz.Err(err))
+		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
 	}
 
-	ret = Account{
+	ret = User{
 		ID:          newUuid.String(),
 		Username:    username,
-		Email:       pendingAccount.Email,
+		Email:       pendingUser.Email,
 		CreatedAt:   now,
 		UpdatedAt:   now,
-		DisplayName: pendingAccount.DisplayName,
+		DisplayName: pendingUser.DisplayName,
 		AuthKeyHash: authKeyHash,
 	}
 
-	queryCreateAccount := `INSERT INTO accounts
+	queryCreateUser := `INSERT INTO users
 		(id, created_at, updated_at, username, display_name, bio, email, first_name, last_name, is_admin, auth_key_hash)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)`
-	_, err = tx.Exec(queryCreateAccount, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username, ret.DisplayName, "", ret.Email, "", "", false, ret.AuthKeyHash)
+	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username, ret.DisplayName, "", ret.Email, "", "", false, ret.AuthKeyHash)
 	if err != nil {
-		logger.Error("accounts.CreateAccount: inserting new account", rz.Err(err))
+		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
 		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
 	}
 
