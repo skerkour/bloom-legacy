@@ -1,0 +1,10 @@
+syntax = "proto3";
+
+package com.bloom42.bitflow;
+option go_package = "bitflow";
+
+// Bitflow
+service Bitflow {
+}
+
+message Empty {}
