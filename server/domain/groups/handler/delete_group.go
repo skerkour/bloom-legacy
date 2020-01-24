@@ -33,11 +33,11 @@ func (handler Handler) DeleteGroup(ctx context.Context, params *rpc.DeleteGroupP
 	var group groups.Group
 
 	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
-	err = tx.Get(&group, queryGetGroup, params.Id)
+	err = tx.Get(&group, queryGetGroup, params.GroupId)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.DeleteGroup: fetching group", rz.Err(err),
-			rz.String("id", params.Id))
+			rz.String("id", params.GroupId))
 		return ret, twirp.NewError(twirp.NotFound, "Group not found.")
 	}
 

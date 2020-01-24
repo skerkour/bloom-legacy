@@ -29,7 +29,7 @@ func (handler Handler) ListAllGroups(ctx context.Context, _ *rpc.Empty) (*rpc.Gr
 	}
 
 	groups := []groups.Group{}
-	err := db.DB.Select(&groups, `SELECT * FROM groups`, apiCtx.AuthenticatedUser.ID)
+	err := db.DB.Select(&groups, `SELECT * FROM groups`)
 	if err != nil {
 		logger.Error("groups.ListAllGroups: fetching groups", rz.Err(err))
 		return ret, twirp.InternalError("Internal error. Please try again.")
