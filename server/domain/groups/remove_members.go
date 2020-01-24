@@ -29,9 +29,8 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	}
 
 	queryRemainingAdmins := `SELECT COUNT(*) FROM groups_members
-		INNER JOIN users ON users.id = groups_members.user_id
-		WHERE groups_members.role = $1`
-	err = tx.Get(&remainingAdmins, queryRemainingAdmins, RoleAdministrator)
+		WHERE group_id = $1 AND role = $2`
+	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
 	if err != nil {
 		logger.Error("users.RemoveMembers: error fetching remaining admins", rz.Err(err))
 		return twirp.InternalError(ErrorRemovingMembersMsg)
