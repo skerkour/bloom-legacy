@@ -27,7 +27,7 @@ func (s Handler) ListSessions(ctx context.Context, _ *rpc.Empty) (*rpc.Sessions,
 	sessions := []users.Session{}
 	err := db.DB.Select("SELCT * FROM sessions WHERE user_id = $1", apiCtx.AuthenticatedUser.ID)
 	if err != nil {
-		logger.Error("users.RevokeSession: Starting transaction", rz.Err(err))
+		logger.Error("users.ListSessions: fetching sessions", rz.Err(err))
 		return ret, twirp.InternalError("Internal error. Please try again.")
 	}
 

@@ -15,3 +15,14 @@ CREATE TABLE groups_members (
     user_id UUID NOT NULL REFERENCES users(id),
     role TEXT NOT NULL
 );
+
+CREATE TABLE groups_invitations (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    group_id UUID NOT NULL REFERENCES groups(id),
+    user_id UUID NOT NULL REFERENCES users(id),
+
+    PRIMARY KEY(id)
+);

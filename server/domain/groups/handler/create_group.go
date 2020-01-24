@@ -48,6 +48,5 @@ func (handler Handler) CreateGroup(ctx context.Context, params *rpc.CreateGroupP
 		Name:        newGroup.Name,
 		Description: newGroup.Description,
 	}
-
 	return ret, nil
 }

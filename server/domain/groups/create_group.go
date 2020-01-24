@@ -12,20 +12,6 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func validateCreateGroup(name, description string) twirp.Error {
-	var err error
-
-	if err = validator.GroupName(name); err != nil {
-		return twirp.InvalidArgumentError("name", err.Error())
-	}
-
-	if err = validator.GroupDescription(description); err != nil {
-		return twirp.InvalidArgumentError("description", err.Error())
-	}
-
-	return nil
-}
-
 func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, description string) (Group, twirp.Error) {
 	logger := rz.FromCtx(ctx)
 	ret := Group{}
@@ -68,4 +54,18 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 	}
 
 	return ret, nil
+}
+
+func validateCreateGroup(name, description string) twirp.Error {
+	var err error
+
+	if err = validator.GroupName(name); err != nil {
+		return twirp.InvalidArgumentError("name", err.Error())
+	}
+
+	if err = validator.GroupDescription(description); err != nil {
+		return twirp.InvalidArgumentError("description", err.Error())
+	}
+
+	return nil
 }
