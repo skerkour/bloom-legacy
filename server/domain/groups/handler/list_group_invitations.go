@@ -2,8 +2,6 @@ package handler
 
 import (
 	"context"
-	"time"
-
 	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/groups"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
@@ -55,20 +53,7 @@ func (handler Handler) ListGroupInvitations(ctx context.Context, params *rpc.Lis
 	}
 
 	for _, invitation := range invitations {
-		rpcInvitation := rpc.Invitation{
-			Id: invitation.ID,
-			Group: &rpc.Group{
-				Id:          invitation.GroupID,
-				CreatedAt:   invitation.GroupCreatedAt.Format(time.RFC3339),
-				Name:        invitation.GroupName,
-				Description: invitation.GroupDescription,
-			},
-			Inviter: &rpc.Inviter{
-				Username:    invitation.InviterUsername,
-				DisplayName: invitation.InviterDisplayName,
-			},
-		}
-		ret.Invitations = append(ret.Invitations, &rpcInvitation)
+		ret.Invitations = append(ret.Invitations, invitToRpcInvitation(invitation))
 	}
 	return ret, nil
 }

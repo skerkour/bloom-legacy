@@ -2,25 +2,12 @@ package handler
 
 import (
 	"context"
-	"time"
-
 	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/groups"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/libs/rz-go"
 )
-
-type invit struct {
-	ID                 string    `db:"invitation_id"`
-	CreatedAt          time.Time `db:"invitation_created_at"`
-	GroupID            string    `db:"group_id"`
-	GroupCreatedAt     time.Time `db:"group_created_at"`
-	GroupName          string    `db:"group_name"`
-	GroupDescription   string    `db:"group_description"`
-	InviterUsername    string    `db:"inviter_username"`
-	InviterDisplayName string    `db:"inviter_display_name"`
-}
 
 func (handler Handler) ListInvitations(ctx context.Context, _ *rpc.Empty) (*rpc.InvitationList, error) {
 	ret := &rpc.InvitationList{Invitations: []*rpc.Invitation{}}
@@ -46,20 +33,7 @@ func (handler Handler) ListInvitations(ctx context.Context, _ *rpc.Empty) (*rpc.
 	}
 
 	for _, invitation := range invitations {
-		rpcInvitation := rpc.Invitation{
-			Id: invitation.ID,
-			Group: &rpc.Group{
-				Id:          invitation.GroupID,
-				CreatedAt:   invitation.GroupCreatedAt.Format(time.RFC3339),
-				Name:        invitation.GroupName,
-				Description: invitation.GroupDescription,
-			},
-			Inviter: &rpc.Inviter{
-				Username:    invitation.InviterUsername,
-				DisplayName: invitation.InviterDisplayName,
-			},
-		}
-		ret.Invitations = append(ret.Invitations, &rpcInvitation)
+		ret.Invitations = append(ret.Invitations, invitToRpcInvitation(invitation))
 	}
 	return ret, nil
 }
