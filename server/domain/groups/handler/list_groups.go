@@ -29,7 +29,7 @@ func (handler Handler) ListGroups(ctx context.Context, _ *rpc.Empty) (*rpc.Group
 		INNER JOIN groups_members ON groups.id = groups_members.group_id
 		WHERE groups_members.user_id = $1`, apiCtx.AuthenticatedUser.ID)
 	if err != nil {
-		logger.Error("users.ListGroups: fetching groups", rz.Err(err))
+		logger.Error("groups.ListGroups: fetching groups", rz.Err(err))
 		return ret, twirp.InternalError("Internal error. Please try again.")
 	}
 
