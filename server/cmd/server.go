@@ -2,6 +2,7 @@ package cmd
 
 import (
 	"github.com/spf13/cobra"
+	"github.com/stripe/stripe-go"
 	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
@@ -25,6 +26,10 @@ var serverCmd = &cobra.Command{
 			log.Fatal("Initializing config", rz.Err(err))
 		}
 
+		// init 3rd party services
+		stripe.Key = config.Stripe.SecretKey
+
+		// init internal services
 		log.SetLogger(log.With(
 			rz.Fields(
 				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),

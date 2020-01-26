@@ -10,12 +10,14 @@ var Env string
 var Server ServerConfig
 var Database DatabaseConfig
 var SMTP SMTPConfig
+var Stripe StripeConfig
 
 type configuration struct {
 	Env      string         `sane:"env"`
 	Server   ServerConfig   `sane:"server"`
 	Database DatabaseConfig `sane:"database"`
 	SMTP     SMTPConfig     `sane:"smtp"`
+	Stripe   StripeConfig   `sane:"stripe"`
 }
 
 type DatabaseConfig struct {
@@ -32,6 +34,10 @@ type SMTPConfig struct {
 
 type ServerConfig struct {
 	Port uint16 `sane:"port"`
+}
+
+type StripeConfig struct {
+	SecretKey string `sane:"secret_key"`
 }
 
 func Init(configFile string) error {
