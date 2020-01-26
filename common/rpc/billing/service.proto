@@ -5,6 +5,9 @@ option go_package = "billing";
 
 // Billing
 service Billing {
+  rpc CreatePlan(Empty) returns (Empty);
+  rpc UpdatePlan(Empty) returns (Empty);
+  rpc DeletePlan(Empty) returns (Empty);
 }
 
 message Empty {}
