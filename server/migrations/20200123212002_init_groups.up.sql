@@ -11,7 +11,7 @@ CREATE TABLE groups (
 );
 
 CREATE TABLE groups_members (
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    joined_at TIMESTAMP WITH TIME ZONE NOT NULL,
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     role TEXT NOT NULL
