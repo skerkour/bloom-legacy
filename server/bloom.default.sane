@@ -22,7 +22,7 @@ s3 = {
 }
 
 sentry = {
-    server_url = "${SENTRY_SERVER_URL}", # optional
+    dsn = "${SENTRY_SERVER_URL}", # optional
 }
 
 bitflow = {

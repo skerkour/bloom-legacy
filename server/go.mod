@@ -3,6 +3,7 @@ module gitlab.com/bloom42/bloom/server
 go 1.13
 
 require (
+	github.com/getsentry/sentry-go v0.4.0
 	github.com/go-chi/chi v4.0.3+incompatible
 	github.com/go-chi/cors v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.8.0
