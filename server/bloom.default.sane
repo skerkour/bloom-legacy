@@ -1,6 +1,9 @@
 env = "test"
-# host = "localhost"
-port = 8000
+
+server = {
+    # host = "localhost"
+    port = 8000
+}
 
 database = {
     url = "${DATABASE_URL}",

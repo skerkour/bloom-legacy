@@ -71,6 +71,6 @@ func Run() error {
 	router.Mount(groupsHandler.PathPrefix(), groupsHandler)
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	log.Info("starting server", rz.Uint16("port", config.Port))
-	return http.ListenAndServe(fmt.Sprintf(":%d", config.Port), router)
+	log.Info("starting server", rz.Uint16("port", config.Server.Port))
+	return http.ListenAndServe(fmt.Sprintf(":%d", config.Server.Port), router)
 }

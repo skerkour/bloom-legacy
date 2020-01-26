@@ -6,14 +6,14 @@ import (
 )
 
 var DisposableEmailDomains map[string]bool
-var Database DatabaseConfig
-var Port uint16
 var Env string
+var Server ServerConfig
+var Database DatabaseConfig
 var SMTP SMTPConfig
 
 type configuration struct {
-	Port     uint16         `sane:"port"`
 	Env      string         `sane:"env"`
+	Server   ServerConfig   `sane:"server"`
 	Database DatabaseConfig `sane:"database"`
 	SMTP     SMTPConfig     `sane:"smtp"`
 }
@@ -30,23 +30,27 @@ type SMTPConfig struct {
 	Password string `sane:"password"`
 }
 
+type ServerConfig struct {
+	Port uint16 `sane:"port"`
+}
+
 func Init(configFile string) error {
-	var conf configuration
+	var parsedConfig configuration
 
 	data, err := ioutil.ReadFile(configFile)
 	if err != nil {
 		return err
 	}
 
-	err = sane.Unmarshal(data, &conf)
+	err = sane.Unmarshal(data, &parsedConfig)
 	if err != nil {
 		return err
 	}
 
-	Port = conf.Port
-	Env = conf.Env
-	Database = conf.Database
-	SMTP = conf.SMTP
+	Env = parsedConfig.Env
+	Server = parsedConfig.Server
+	Database = parsedConfig.Database
+	SMTP = parsedConfig.SMTP
 	// TODO
 	DisposableEmailDomains = map[string]bool{}
 
