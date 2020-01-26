@@ -37,7 +37,6 @@ smtp = {
 }
 
 stripe = {
-    public_key = "${STRIPE_PUBLIC_KEY}",
     secret_key = "${STRIPE_SECRET_KEY}",
 }
 
@@ -50,4 +49,4 @@ blacklists = {
     ]
 }
 
-disabled = [] # optional, you can disable service like disabled = ["phaser", "bitflow"]
+disabled_services = [] # optional, you can disable services like disabled = ["notes", "bitflow"]
