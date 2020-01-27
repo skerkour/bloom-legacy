@@ -43,18 +43,18 @@
               <v-list-item class="justify-center">
                 <v-btn
                   text
-                  to="/preferences"
-                  @click="accountMenu = false"
-                >
-                  <v-icon left>mdi-settings</v-icon> Preferences
-                </v-btn>
-
-                <v-btn
-                  text
                   to="/myaccount"
                   @click="accountMenu = false"
                 >
                   <v-icon left>mdi-account</v-icon> My Account
+                </v-btn>
+
+                <v-btn
+                  text
+                  to="/preferences"
+                  @click="accountMenu = false"
+                >
+                  <v-icon left>mdi-settings</v-icon> Preferences
                 </v-btn>
               </v-list-item>
             </v-list>

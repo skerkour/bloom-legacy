@@ -8,6 +8,23 @@
     <v-row>
       <v-col cols="12">
         <div class="headline">
+          My Plan
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col><v-divider/></v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <div class="headline">
           Payment methods
         </div>
       </v-col>
@@ -21,21 +38,6 @@
 
     <v-row>
       <v-col><v-divider/></v-col>
-    </v-row>
-
-
-    <v-row>
-      <v-col cols="12">
-        <div class="headline">
-          Subscriptions
-        </div>
-      </v-col>
-    </v-row>
-
-    <v-row>
-      <v-col cols="12">
-        <blm-myaccount-table-subscriptions :loading="isLoading" :subscriptions="subscriptions" />
-      </v-col>
     </v-row>
 
     <v-row>
