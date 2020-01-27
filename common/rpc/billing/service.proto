@@ -78,6 +78,10 @@ message AddPaymentMethodParams {
 message PaymentMethod {
   string id = 1;
   bool is_default = 2;
+  string stripe_id = 3;
+  string card_last_4 = 4;
+  int64 expiration_month = 5;
+  int64 expiration_year = 6;
 }
 
 message PaymentMethodList {
