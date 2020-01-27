@@ -14,7 +14,6 @@ service Billing {
   // user's methods
   rpc ListPlans(Empty) returns (PlanList);
   rpc ChangePlan(ChangePlanParams) returns (Plan);
-  rpc FirstSubscription(FirstSubscriptionParams) returns (Plan);
   rpc AddPaymentMethod(AddPaymentMethodParams) returns (PaymentMethod);
   rpc RemovePaymentMethod(RemovePaymentMethodParams) returns (Empty);
   rpc UpdateDefaultPaymentMethod(UpdateDefaultPaymentMethodParams) returns (PaymentMethod);
@@ -68,11 +67,7 @@ message DeletePlanParams {
 
 message ChangePlanParams {
   string plan_id = 1;
-}
-
-message FirstSubscriptionParams {
-  string plan_id = 1;
-  string stripe_payment_method = 2;
+  string stripe_payment_method = 2; // optional
 }
 
 message AddPaymentMethodParams {
