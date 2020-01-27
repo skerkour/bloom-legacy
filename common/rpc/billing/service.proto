@@ -17,8 +17,7 @@ service Billing {
   rpc AddPaymentMethod(AddPaymentMethodParams) returns (PaymentMethod);
   rpc RemovePaymentMethod(RemovePaymentMethodParams) returns (Empty);
   rpc UpdateDefaultPaymentMethod(UpdateDefaultPaymentMethodParams) returns (PaymentMethod);
-  rpc ListPaymentMethods(Empty) returns (PaymentMethodList);
-  rpc ListInvoices(Empty) returns (InvoiceList);
+  rpc GetBillingData(Empty) returns (BillingData);
 }
 
 message Empty {}
@@ -83,6 +82,12 @@ message PaymentMethod {
   string card_last_4 = 4;
   int64 expiration_month = 5;
   int64 expiration_year = 6;
+}
+
+message BillingData {
+  Plan plan = 1;
+  repeated PaymentMethod payment_methods = 2;
+  repeated Invoice invoices = 3;
 }
 
 message PaymentMethodList {
