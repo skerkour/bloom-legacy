@@ -72,6 +72,7 @@ message ChangePlanParams {
 
 message AddPaymentMethodParams {
   string stripe_payment_method = 1;
+  bool set_as_default = 2;
 }
 
 // TODO
