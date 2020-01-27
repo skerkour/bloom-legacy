@@ -9,7 +9,7 @@ service Billing {
   rpc CreatePlan(CreatePlanParams) returns (DetailedPlan);
   rpc UpdatePlan(UpdatePlanParams) returns (DetailedPlan);
   rpc DeletePlan(DeletePlanParams) returns (Empty);
-  rpc ListAllPlans(Empty) returns (DetailedPlan);
+  rpc ListAllPlans(Empty) returns (DetailedPlanList);
 
   // user's methods
   rpc ListPlans(Empty) returns (PlanList);
