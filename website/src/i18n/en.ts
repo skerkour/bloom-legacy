@@ -128,12 +128,12 @@ export default {
       Your data are encrypted on your own devices and (even if we wanted) we can't read them. <br />
       Also, we do not store financial data ourselves, we use  <a href="https://stripe.com" target="_blank" rel="noopener noreferer">Stripe</a>.`,
     q2: 'Where the encrypted data are stored?',
-    a2: `The (<a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="noopener noreferer">end-to-end</a>)
+    a2: `The <a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="noopener noreferer">end-to-end</a>
       encrypted data are stored in a  <a href="scaleway.com" target="_blank" rel="noopener noreferer">Scaleway</a>
       datacenter in a privacy friendly country: France.`,
     q3: 'Why Bloom is more ethical than other service providers?',
     a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
-      There are no ads, no affiliate marketing, no creepy tracking.
+      Also, there are no ads, no affiliate marketing, no creepy tracking.
       Just open technology for a fast, simple, and secure experience.`,
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',
     a4: `When you don't pay for a service, YOU are the product. <br />
@@ -147,7 +147,7 @@ export default {
     // a rogue employee, or an over jealous conjoint.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
     a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
-      Our clients are the people paying us, not the advertisers.`,
+      The people we value are our customers paying us, not the advertisers.`,
     q6: 'Do you issue refunds?',
     a6: `We do not issue refunds, but we offer a free tier
         to allow you to test our applications before subscribing.`,
