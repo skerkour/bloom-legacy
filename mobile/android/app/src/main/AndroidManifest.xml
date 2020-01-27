@@ -1,5 +1,5 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.bloom42.bloom">
+    package="com.bloom42.bloomx">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
