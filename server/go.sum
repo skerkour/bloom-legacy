@@ -294,6 +294,10 @@ github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDf
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
 gitlab.com/bloom42/bloom/common v0.0.0-20200124213701-398354050fc3 h1:RAc3NzlAp8cfR50zrcW9qDsNrV5H+ja/ZcL4xwXfLCo=
 gitlab.com/bloom42/bloom/common v0.0.0-20200124213701-398354050fc3/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127102156-1382ca3b164d h1:nPwOCS0ukD+49jb6q6h09IhuhY2XMfkUFVmpNiyOrUk=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127102156-1382ca3b164d/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127102829-bf28fad28b80 h1:WQtHzCrF5XhDaHBi5fpNRxXOEebXfgeBXjN+Dg9aeiU=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127102829-bf28fad28b80/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899 h1:uZwZ8PQR7d7r4BJJDzSI+UKiF9JwlEXjkJF/uVXcJuo=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
