@@ -158,7 +158,7 @@ export default {
   },
   features: {
     title: 'A safe place for all your data',
-    solution: 'We too, and that\'s why we build Bloom',
+    solution: 'We too, and that\'s why we built Bloom',
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
