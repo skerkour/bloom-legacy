@@ -57,6 +57,10 @@ export default class BlmAppBar extends Vue {
   left: 0px !important;
 }
 
+.theme--light.v-app-bar.v-toolbar.v-sheet {
+  background-color: #fff !important;
+}
+
 .blm-appbar-title-primary {
   font-family: rounded_elegance;
   font-size: 1.6em;
@@ -74,6 +78,10 @@ export default class BlmAppBar extends Vue {
 
   .blm-appbar-title-primary {
     color: white;
+  }
+
+  .v-app-bar.v-toolbar.v-sheet {
+    background-color: #b3d4fc !important;
   }
 }
 </style>

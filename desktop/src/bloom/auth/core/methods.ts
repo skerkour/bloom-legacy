@@ -1,9 +1,9 @@
 enum Method {
-  StartRegistration = 'accounts.start_registration',
-  VerifyRegistration = 'accounts.verify_registration',
-  CompleteRegistration = 'accounts.complete_registration',
-  SignIn = 'accounts.sign_in',
-  SignOut = 'accounts.sign_out',
+  StartRegistration = 'users.start_registration',
+  VerifyRegistration = 'users.verify_registration',
+  CompleteRegistration = 'users.complete_registration',
+  SignIn = 'users.sign_in',
+  SignOut = 'users.sign_out',
 }
 
 export default Method;

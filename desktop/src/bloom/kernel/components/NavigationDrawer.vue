@@ -85,7 +85,7 @@ export default class NavigationDrawer extends Vue {
 
 <style lang="scss" scoped>
 .blm-navigation-drawer {
-  margin-left: 80px;
+  margin-left: 72px;
 }
 
 .blm-drawer-space {

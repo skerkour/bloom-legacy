@@ -162,5 +162,6 @@ export default class LeftBar extends Vue {
 .blm-left-bar {
   z-index: 100;
   overflow-y: auto;
+  width: 72px !important;
 }
 </style>
