@@ -4,7 +4,7 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/calendar"
+	"gitlab.com/bloom42/bloom/core/domain/calendar"
 )
 
 func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut {

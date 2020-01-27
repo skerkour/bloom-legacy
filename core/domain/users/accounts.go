@@ -1,4 +1,4 @@
-package accounts
+package users
 
 import (
 	"golang.org/x/crypto/argon2"

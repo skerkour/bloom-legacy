@@ -4,63 +4,63 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/accounts"
-	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
-func handleAccountsMethod(method string, jsonParams json.RawMessage) MessageOut {
+func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "start_registration":
-		var params accounts.StartRegistrationParams
+		var params users.StartRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := accounts.StartRegistration(params)
+		res, err := users.StartRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "verify_registration":
-		var params accounts.VerifyRegistrationParams
+		var params users.VerifyRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := accounts.VerifyRegistration(params)
+		res, err := users.VerifyRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "complete_registration":
-		var params accounts.CompleteRegistrationParams
+		var params users.CompleteRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := accounts.CompleteRegistration(params)
+		res, err := users.CompleteRegistration(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "sign_in":
-		var params accounts.SignInParams
+		var params users.SignInParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := accounts.SignIn(params)
+		res, err := users.SignIn(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "sign_out":
-		err := accounts.SignOut()
+		err := users.SignOut()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
 	default:
-		return methodNotFoundError(method, "accounts")
+		return methodNotFoundError(method, "users")
 	}
 }

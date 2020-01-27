@@ -9,7 +9,7 @@ import (
 	"runtime"
 
 	_ "github.com/mattn/go-sqlite3"
-	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
 var DB *sql.DB

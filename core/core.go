@@ -31,8 +31,8 @@ func HandleMessage(messageIn MessageIn) ([]byte, error) {
 	var messageOut MessageOut
 
 	switch parts[0] {
-	case "accounts":
-		messageOut = handleAccountsMethod(parts[1], messageIn.Params)
+	case "users":
+		messageOut = handleUsersMethod(parts[1], messageIn.Params)
 	case "calculator":
 		messageOut = handleCalculatorMehtod(parts[1], messageIn.Params)
 	case "calendar":

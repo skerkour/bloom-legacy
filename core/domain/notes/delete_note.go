@@ -1,7 +1,7 @@
 package notes
 
 import (
-	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/db"
 )
 

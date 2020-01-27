@@ -12,10 +12,13 @@ github.com/twitchtv/twirp v5.10.0+incompatible h1:JSPKlRSaaKLbZ0EGgWUEnkwtEJLmrn
 github.com/twitchtv/twirp v5.10.0+incompatible/go.mod h1:RRJoFSAmTEh2weEqWtpPE3vFK5YBhA6bqp2l1kfCC5A=
 github.com/twitchtv/twirp v5.10.1+incompatible h1:35js8ID9rYPKkZ0qWnuZw+q+OuCWM1GIibu1F1YImjA=
 github.com/twitchtv/twirp v5.10.1+incompatible/go.mod h1:RRJoFSAmTEh2weEqWtpPE3vFK5YBhA6bqp2l1kfCC5A=
+gitlab.com/bloom42/bloom v0.0.0-20200127090540-a11887f64516 h1:6UboopbqqiF3OrtNemEk8piQj0+4+SaWMQn4yjjA9aM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f h1:LzfQlG769M/TLZu9kh08jzmO5i4A+GAfu4KtqyX/jAQ=
 gitlab.com/bloom42/bloom/common v0.0.0-20200118204040-58287761be5f/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122212055-f52779bf7f0f h1:ZmV+mHO+0E53lSGIbH2j3eqPskh4IEqhdpNgcl6rD8c=
 gitlab.com/bloom42/bloom/common v0.0.0-20200122212055-f52779bf7f0f/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127090540-a11887f64516 h1:eadthmufUCZtttghcJC3Vb8bGW0xhcnPuj0eBQwxxvY=
+gitlab.com/bloom42/bloom/common v0.0.0-20200127090540-a11887f64516/go.mod h1:vnDgHkFZYvF4HJtV1vxo0xHXAZvnSp5arRmd1lhvRXM=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d h1:2+ZP7EfsZV7Vvmx3TIqSlSzATMkTAKqM14YGFPoSKjI=
 golang.org/x/crypto v0.0.0-20200115085410-6d4e4cb37c7d/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=

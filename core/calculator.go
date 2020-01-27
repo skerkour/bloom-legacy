@@ -4,7 +4,7 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/calculator"
+	"gitlab.com/bloom42/bloom/core/domain/calculator"
 )
 
 func handleCalculatorMehtod(method string, jsonParams json.RawMessage) MessageOut {

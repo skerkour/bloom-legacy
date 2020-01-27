@@ -1,21 +1,21 @@
-package accounts
+package users
 
 import (
 	"context"
 	"errors"
 	"net/http"
 
-	"gitlab.com/bloom42/bloom/common/rpc/accounts"
+	"gitlab.com/bloom42/bloom/common/rpc/users"
 )
 
 func CompleteRegistration(params CompleteRegistrationParams) (Session, error) {
-	client := accounts.NewAccountsProtobufClient("http://localhost:8000", &http.Client{})
+	client := users.NewUsersProtobufClient("http://localhost:8000", &http.Client{})
 
 	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
 	if authKey == nil {
 		return Session{}, errors.New("Error deriving auth key")
 	}
-	rpcParams := accounts.CompleteRegistrationParams{
+	rpcParams := users.CompleteRegistrationParams{
 		Id:       params.ID,
 		Username: params.Username,
 		AuthKey:  authKey,

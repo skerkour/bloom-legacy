@@ -3,7 +3,7 @@ package core
 import (
 	"C"
 	"encoding/json"
-	"gitlab.com/bloom42/bloom/core/bloom/contacts"
+	"gitlab.com/bloom42/bloom/core/domain/contacts"
 )
 
 func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut {

@@ -4,7 +4,7 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/bloom/notes"
+	"gitlab.com/bloom42/bloom/core/domain/notes"
 )
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {

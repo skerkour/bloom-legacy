@@ -1,17 +1,17 @@
-package accounts
+package users
 
 import (
 	"context"
-	"gitlab.com/bloom42/bloom/core/bloom/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"net/http"
 
-	"gitlab.com/bloom42/bloom/common/rpc/accounts"
+	"gitlab.com/bloom42/bloom/common/rpc/users"
 )
 
 func VerifyRegistration(params VerifyRegistrationParams) (kernel.Empty, error) {
-	client := accounts.NewAccountsProtobufClient("http://localhost:8000", &http.Client{})
+	client := users.NewUsersProtobufClient("http://localhost:8000", &http.Client{})
 
-	rpcParams := accounts.VerifyRegistrationParams{
+	rpcParams := users.VerifyRegistrationParams{
 		Code: params.Code,
 		Id:   params.ID,
 	}
