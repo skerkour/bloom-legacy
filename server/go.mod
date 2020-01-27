@@ -14,7 +14,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v68.13.0+incompatible
 	github.com/twitchtv/twirp v5.10.1+incompatible
-	gitlab.com/bloom42/bloom/common v0.0.0-20200127112125-d967ca634bba
+	gitlab.com/bloom42/bloom/common v0.0.0-20200127112809-7dda4d752e3f
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0

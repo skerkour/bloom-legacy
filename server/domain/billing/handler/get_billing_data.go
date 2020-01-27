@@ -9,8 +9,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (s Handler) ListInvoices(ctx context.Context, params *rpc.Empty) (*rpc.InvoiceList, error) {
-	ret := &rpc.InvoiceList{}
+func (s Handler) GetBillingData(ctx context.Context, params *rpc.Empty) (*rpc.BillingData, error) {
+	ret := &rpc.BillingData{}
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
