@@ -15,7 +15,6 @@
             :erase-delay='250'
             erase-style='clear'
             :erase-on-complete='false'
-            caret-animation='blink'
             id="typewriter"
             @typed-char="onTypedChar"
           ></vue-typer>
@@ -180,6 +179,10 @@ export default class Index extends Vue {
 <style  lang="scss">
 span.nowrap{
   white-space: nowrap;
+}
+
+span.caret {
+  display: none !important;
 }
 </style>
 
