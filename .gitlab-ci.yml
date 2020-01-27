@@ -12,6 +12,7 @@ include:
   - template: SAST.gitlab-ci.yml
   - template: Container-Scanning.gitlab-ci.yml
   - template: Code-Quality.gitlab-ci.yml # https://docs.gitlab.com/ee/user/project/merge_requests/code_quality.html
+  - template: License-Management.gitlab-ci.yml # https://gitlab.com/help/user/application_security/license_compliance/index
 
 variables:
   # Go
