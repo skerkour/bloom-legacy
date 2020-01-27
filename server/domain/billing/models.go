@@ -26,14 +26,20 @@ type Plan struct {
 	StripeID                 string `json:"stripe_id" db:"stripe_id"`
 }
 
-type Subscription struct {
+type PaymentMethods struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+
+	IsDefault  bool   `json:"is_default" db:"is_default"`
+	CustomerID string `json:"customer_id" db:"customer_id"`
 }
 
 type Invoice struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+
+	StripeID   string `json:"stripe_id" db:"stripe_id"`
+	CustomerID string `json:"customer_id" db:"customer_id"`
 }

@@ -1,0 +1,50 @@
+CREATE TABLE billing_plans (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    name TEXT NOT NULL,
+    storage BIGINT NOT NULL,
+    parallel_bitflow_downloads BIGINT NOT NULL,
+    stripe_id TEXT NOT NULL,
+
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE billing_customers (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    stripe_id TEXT,
+
+    plan_id UUID NOT NULL REFERENCES billing_plans(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
+
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE billing_payment_methods (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    is_default BOOLEAN NOT NULL,
+
+    customer_id UUID NOT NULL REFERENCES billing_customers(id) ON DELETE CASCADE,
+
+    PRIMARY KEY(id)
+);
+
+CREATE TABLE billing_invoices (
+    id UUID NOT NULL,
+    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
+
+    stripe_id TEXT NOT NULL,
+
+    customer_id UUID NOT NULL REFERENCES billing_customers(id) ON DELETE CASCADE,
+
+    PRIMARY KEY(id)
+);
