@@ -31,6 +31,10 @@ CREATE TABLE billing_payment_methods (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     is_default BOOLEAN NOT NULL,
+    stripe_id TEXT NOT NULL,
+    card_last_4 TEXT NOT NULL,
+    card_expiration_month BIGINT NOT NULL,
+    card_expiration_year BIGINT NOT NULL,
 
     customer_id UUID NOT NULL REFERENCES billing_customers(id) ON DELETE CASCADE,
 
