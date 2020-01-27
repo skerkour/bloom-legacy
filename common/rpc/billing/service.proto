@@ -5,9 +5,103 @@ option go_package = "billing";
 
 // Billing
 service Billing {
-  rpc CreatePlan(Empty) returns (Empty);
-  rpc UpdatePlan(Empty) returns (Empty);
-  rpc DeletePlan(Empty) returns (Empty);
+  // admin's methods
+  rpc CreatePlan(CreatePlanParams) returns (DetailedPlan);
+  rpc UpdatePlan(UpdatePlanParams) returns (DetailedPlan);
+  rpc DeletePlan(DeletePlanParams) returns (Empty);
+  rpc ListAllPlans(Empty) returns (DetailedPlan);
+
+  // user's methods
+  rpc ListPlans(Empty) returns (PlanList);
+  rpc ChangePlan(ChangePlanParams) returns (Plan);
+  rpc FirstSubscription(FirstSubscriptionParams) returns (Plan);
+  rpc AddPaymentMethod(AddPaymentMethodParams) returns (PaymentMethod);
+  rpc RemovePaymentMethod(RemovePaymentMethodParams) returns (Empty);
+  rpc UpdateDefaultPaymentMethod(UpdateDefaultPaymentMethodParams) returns (PaymentMethod);
+  rpc ListPaymentMethods(Empty) returns (PaymentMethodList);
+  rpc ListInvoices(Empty) returns (InvoiceList);
 }
 
 message Empty {}
+
+message Plan {
+  string id = 1;
+  string name = 2;
+  uint64 storage = 3;
+  uint64 bitflow_parallel_downloads = 4;
+}
+
+message PlanList {
+  repeated Plan plans = 1;
+}
+
+message DetailedPlan {
+  string id = 1;
+  string name = 2;
+  string stripe_id = 3;
+  uint64 storage = 4;
+  uint64 bitflow_parallel_downloads = 5;
+}
+
+message DetailedPlanList {
+  repeated DetailedPlan plans = 1;
+}
+
+message CreatePlanParams {
+  string name = 1;
+  string stripe_id = 2;
+  uint64 storage = 3;
+  uint64 bitflow_parallel_downloads = 4;
+}
+
+message UpdatePlanParams {
+  string plan_id = 1;
+  string name = 2;
+  string stripe_id = 3;
+  uint64 storage = 4;
+  uint64 bitflow_parallel_downloads = 5;
+}
+
+message DeletePlanParams {
+  string plan_id = 1;
+}
+
+message ChangePlanParams {
+  string plan_id = 1;
+}
+
+message FirstSubscriptionParams {
+  string plan_id = 1;
+  string stripe_payment_method = 2;
+}
+
+message AddPaymentMethodParams {
+  string stripe_payment_method = 1;
+}
+
+// TODO
+message PaymentMethod {
+  string id = 1;
+  bool is_default = 2;
+}
+
+message PaymentMethodList {
+  repeated PaymentMethod payment_methods = 1;
+}
+
+message RemovePaymentMethodParams {
+  string payment_method_id = 1;
+}
+
+message UpdateDefaultPaymentMethodParams {
+  string payment_method_id = 1;
+}
+
+// TODO
+message Invoice {
+  string id = 1;
+}
+
+message InvoiceList {
+  repeated Invoice invoices = 1;
+}
