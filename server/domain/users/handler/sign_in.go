@@ -47,15 +47,13 @@ func (s Handler) SignIn(ctx context.Context, params *rpc.SignInParams) (*rpc.New
 	if err != nil {
 		tx.Rollback()
 		logger.Error("users.SignIn: finding user", rz.Err(err))
-		return &ret, twirp.InternalError(users.ErrorVerifyPendingUserMsg)
+		return &ret, twirp.NewError(twirp.PermissionDenied, "Invalid Username / Password combination")
 	}
 
 	// verify password
 	if !argon2id.VerifyPassword(params.AuthKey, user.AuthKeyHash) {
-		if err != nil {
-			tx.Rollback()
-			return &ret, twirp.NewError(twirp.PermissionDenied, "Invalid Username / Password combination")
-		}
+		tx.Rollback()
+		return &ret, twirp.NewError(twirp.PermissionDenied, "Invalid Username / Password combination")
 	}
 
 	newSession, token, twerr := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent)

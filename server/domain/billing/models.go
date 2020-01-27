@@ -1,5 +1,9 @@
 package billing
 
+import (
+	"time"
+)
+
 type Subscription struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
