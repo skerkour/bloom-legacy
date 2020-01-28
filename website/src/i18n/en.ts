@@ -96,6 +96,8 @@ export default {
     email: 'Using email:',
     twitter: 'By saying <i>Hi</i> on Twitter:',
     mastodon: 'On the fediverse:',
+    gitlab: 'Opening an issue on',
+    chatbox: 'Using the chatbox at the bottom right of this website',
   },
   download: {
     subtitle: 'Take back control!',

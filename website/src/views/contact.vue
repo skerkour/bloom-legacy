@@ -12,8 +12,15 @@
           {{ $t('contact.intro') }}
           <ul>
             <li>
+              <span v-html="$t('contact.chatbox')"></span>&nbsp;
+            </li>
+            <li>
               <span v-html="$t('contact.email')"></span>&nbsp;
               <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+            </li>
+            <li>
+              <span v-html="$t('contact.gitlab')"></span>&nbsp;
+              <a href="https://gitlab.com/bloom42/bloom/issues" target="_blank" rel="noopener">on GitLab</a>
             </li>
             <li>
               <span v-html="$t('contact.twitter')"></span>&nbsp;
@@ -42,6 +49,12 @@ export default class Index extends Vue {
   // data
   // computed
   // lifecycle
+  created() {
+    const crisp = (window as any).$crisp;
+    if (crisp) {
+      crisp.push(['do', 'chat:open']);
+    }
+  }
   // watch
   // methods
 }
