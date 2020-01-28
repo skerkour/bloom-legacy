@@ -158,7 +158,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Pro',
-      price: 12.99,
+      price: 13.99,
       description: `
       <ul>
         <li><b>All features from Basic</b></li>
@@ -178,7 +178,7 @@ export default class Pricing extends Vue {
           <li class="text-center bold"><b>+</b></li>
 
           <li>1TB storage</li>
-          <li>3 parallel Bitflow downloads</li>
+          <li>4 parallel Bitflow downloads</li>
         </ul>
       `,
     },
