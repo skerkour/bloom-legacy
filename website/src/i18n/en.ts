@@ -74,7 +74,7 @@ export default {
     },
     values: {
       title: 'Values',
-      description: 'Cooperation, Acuity, Transparency, Simplicity (<b>CATS</b> 🐱).',
+      description: 'Cooperation, Acuity, Transparency, Sustainability (<b>CATS</b> 🐱).',
     },
     team: {
       title: 'The Crew',
