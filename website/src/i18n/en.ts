@@ -157,8 +157,11 @@ export default {
     a7: `Due to how encryption works, unfortunately, if you lose your password and all your devices are logged out, you lose all your data. <br />
     If you forget your password but at least one of your devices is signed in, you can normally change your password, without losing nothing. <br />
     We recommend you to note your account's password on a sheet of paper and to hide it somewhere.`,
-    q8: '',
-    a8: '',
+    q8: 'Why Bloom is an application and not available through web browsers?',
+    a8: `In the beginning Bloom was available through web browsers. But after some time we were not satisfied with the poor experience it provided
+    and the tradeoffs we had to make. This is why we decided to switch to native applications only. It allows
+    offline support, strong encryption, better performance. We want Bloom to be as resilient as possible and the web does not provide
+    this feature.`,
   },
   features: {
     title: 'A safe place for all your data',
