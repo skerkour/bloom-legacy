@@ -50,10 +50,7 @@ export default class Index extends Vue {
   // computed
   // lifecycle
   created() {
-    const crisp = (window as any).$crisp;
-    if (crisp) {
-      crisp.push(['do', 'chat:open']);
-    }
+    (window as any).$crisp.push(['do', 'chat:open']);
   }
   // watch
   // methods
