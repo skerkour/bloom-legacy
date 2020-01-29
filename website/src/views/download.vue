@@ -11,7 +11,7 @@
           {{ $t('download.subtitle2') }}
         </h3>
         <div class="mt-5 mb-5"></div>
-        <blm-download-btn />
+        <blm-download-btn class="mt-5"/>
       </v-col>
     </v-row>
 

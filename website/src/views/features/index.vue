@@ -9,7 +9,7 @@
         <h4 class="display-1 mb-3">{{ $t('features.solution') }}</h4>
         <h5 class="display-1 font-weight-regular">{{ $t('features.title') }}</h5>
 
-        <blm-download-btn />
+        <blm-download-btn class="mt-5" />
 
         <blm-other-downloads-link />
       </v-col>

@@ -1,5 +1,5 @@
 <template>
-  <v-btn x-large color="primary" class="mt-5" :outlined="outlined">
+  <v-btn x-large color="primary" :outlined="outlined">
     <v-icon left v-text="icon" v-if="icon !== ''"/>
     {{ message }}
   </v-btn>

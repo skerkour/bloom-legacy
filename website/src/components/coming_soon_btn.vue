@@ -1,5 +1,5 @@
 <template>
-  <v-btn x-large color="primary" class="mt-5 text-left" :outlined="outlined" to="/download">
+  <v-btn x-large color="primary" class="text-left" :outlined="outlined" to="/download">
     {{ $t('labels.coming_soon_btn') }}
   </v-btn>
 </template>

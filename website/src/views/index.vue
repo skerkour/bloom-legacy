@@ -109,9 +109,15 @@
     </v-row>
 
 
-    <v-row class="justify-center mt-5">
-      <v-col cols="12" class="text-center mb-5 mt-5">
-        <v-btn to="/features" outlined x-large color="primary">
+    <v-row class="justify-center mb-5 mt-5">
+      <v-col cols="12" class="text-center d-block d-sm-none">
+        <blm-download-btn />
+      </v-col>
+      <v-col cols="12" class="text-center">
+        <div class="d-none d-sm-inline-block">
+          <blm-download-btn class="mr-5"/>
+        </div>
+        <v-btn to="/features" outlined x-large color="primary" class="ml-sm-5">
           {{ $t('landing.explore_features') }}
         </v-btn>
       </v-col>
