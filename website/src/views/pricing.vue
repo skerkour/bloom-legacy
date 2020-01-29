@@ -137,8 +137,12 @@ export default class Pricing extends Vue {
       description: `
       <ul>
         <li>1GB storage</li>
-        <li>1 Bitflow download every hour</li>
-        <li>Non priority support</li>
+        <li>Notes</li>
+        <li>QR Codes</li>
+        <li>Music</li>
+        <li>Gallery</li>
+        <li>1 Bitflow download / day</li>
+        <li>Community support</li>
       </ul>
       `,
     },
@@ -151,8 +155,10 @@ export default class Pricing extends Vue {
         <li class="text-center bold"><b>+</b></li>
 
         <li>100GB storage</li>
+        <li>Calendar</li>
+        <li>Contacts</li>
         <li>1 parallel Bitflow download</li>
-        <li>Lovely support</li>
+        <li>Friendly support</li>
       </ul>
       `,
     },
@@ -171,7 +177,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Ultra',
-      price: 25.99,
+      price: 26.99,
       description: `
         <ul>
           <li><b>All features from Pro</b></li>
@@ -179,6 +185,7 @@ export default class Pricing extends Vue {
 
           <li>1TB storage</li>
           <li>4 parallel Bitflow downloads</li>
+          <li>Priority support</li>
         </ul>
       `,
     },
