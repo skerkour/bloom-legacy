@@ -4,14 +4,10 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center">
         <h1 class="display-3 mb-5">
-          {{ $t('features.title') }}
+          {{ pain }}
         </h1>
-        <p>
-          {{ $t('labels.pain2') }} <br />
-          {{ $t('labels.pain1') }} <br />
-          {{ $t('labels.pain3') }} <br />
-          <b>{{ $t('features.solution') }}</b>
-        </p>
+        <h4 class="display-1 mb-3">{{ $t('features.solution') }}</h4>
+        <h5 class="display-1 font-weight-regular">{{ $t('features.title') }}</h5>
 
         <blm-download-btn />
 
@@ -71,6 +67,11 @@ export default class Features extends Vue {
   // props
   // data
   // computed
+  get pain(): any {
+    const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3')];
+    return pains[Math.floor(Math.random() * pains.length)];
+  }
+
   get features(): any[] {
     return [
       // {

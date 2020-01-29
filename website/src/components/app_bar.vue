@@ -57,4 +57,8 @@ export default class AppBar extends Vue {
 .blm-appbar-title {
   color: inherit;
 }
+
+.theme--light.v-app-bar.v-toolbar.v-sheet {
+  background-color: #fefefe;
+}
 </style>

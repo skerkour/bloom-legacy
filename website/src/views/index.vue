@@ -4,20 +4,21 @@
 
       <v-col cols="12" sm="6" class="text-center">
         <h1 class="display-3 mb-5">
-          <vue-typer
+          <!-- <vue-typer
             :text='pains'
             :repeat='Infinity'
             :shuffle='false'
             initial-action='typing'
             :pre-type-delay='60'
-            :type-delay='60'
+            :type-delay='20'
             :pre-erase-delay='7000'
             :erase-delay='250'
             erase-style='clear'
             :erase-on-complete='false'
             id="typewriter"
             @typed-char="onTypedChar"
-          ></vue-typer>
+          ></vue-typer> -->
+          {{ pain }}
         </h1>
 
         <h4 class="display-1 mb-5" v-html="$t('landing.subtitle2')"></h4>
@@ -138,8 +139,9 @@ export default class Index extends Vue {
   countWord = 0;
 
   // computed
-  get pains(): any[] {
-    return [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3')];
+  get pain(): any {
+    const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3')];
+    return pains[Math.floor(Math.random() * pains.length)];
   }
   // lifecycle
   // watch
