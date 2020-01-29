@@ -66,11 +66,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { shell } from 'electron';
 import SettingsDialog from '@/bloom/auth/components/SettingsDialog.vue';
-
-const { shell } = (window as any).require('electron');
-const config = require('@/config');
-
+import config from '@/config';
 
 @Component({
   components: {
@@ -95,6 +93,9 @@ export default class Auth extends Vue {
   // watch
   // methods
   openHelp() {
+    console.log('opening help');
+    console.log(shell);
+    console.log(config);
     shell.openExternal(config.HELP_URL);
   }
 

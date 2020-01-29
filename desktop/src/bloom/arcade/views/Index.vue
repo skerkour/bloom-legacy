@@ -23,7 +23,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 
-// const { BrowserWindow } = require('electron').remote;
 
 @Component
 export default class Index extends Vue {

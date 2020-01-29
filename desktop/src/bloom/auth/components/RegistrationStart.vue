@@ -48,14 +48,13 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { shell } from 'electron';
 import core from '@/core';
 import { StartRegistration, RegistrationStarted } from '../core/messages';
 import AuthMethod from '../core/methods';
 import { StorePendingAccount } from '../models';
 import { Mutations } from '@/store';
-
-const { shell } = (window as any).require('electron');
-const config = require('@/config');
+import config from '@/config';
 
 
 @Component

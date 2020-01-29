@@ -1,4 +1,6 @@
-const path = require('path');
+import path from 'path';
+
+declare const __static: string; // eslint-disable-line
 
 const WEBSITE_DOMAIN = 'bloom.sh';
 
@@ -16,5 +18,5 @@ export default {
   WEBSITE_URL: `https://${WEBSITE_DOMAIN}`,
   TERMS_URL: `https://${WEBSITE_DOMAIN}/terms`,
   PRIVACY_URL: `https://${WEBSITE_DOMAIN}/privacy`,
-  HELP_URL: `https://${WEBSITE_DOMAIN}/help`,
+  HELP_URL: `https://help.${WEBSITE_DOMAIN}`,
 };
