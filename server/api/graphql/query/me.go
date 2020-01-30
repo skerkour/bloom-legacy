@@ -18,7 +18,7 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		logger.Error("query.Me: error getting apiCtx from context")
 		return ret, gqlerrors.Internal()
 	}
-	if apiCtx.AuthenticatedUser != nil {
+	if apiCtx.AuthenticatedUser == nil {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
