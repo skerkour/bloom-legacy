@@ -27,13 +27,14 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 
 ## Download
 
-Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
+Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) <br/>
 iOS: Coming soon
 
 
-Linux: Coming soom
-MacOS: Coming soon
+Linux: Coming soom <br/>
+MacOS: Coming soon <br/>
 Windows: Coming soon
+
 
 ## Documentation
 
