@@ -142,7 +142,6 @@ export default class Pricing extends Vue {
         <li>Music</li>
         <li>Gallery</li>
         <li>1 Bitflow download / day</li>
-        <li>Community support</li>
       </ul>
       `,
     },
@@ -158,7 +157,6 @@ export default class Pricing extends Vue {
         <li>Calendar</li>
         <li>Contacts</li>
         <li>1 parallel Bitflow download</li>
-        <li>Friendly support</li>
       </ul>
       `,
     },
@@ -185,7 +183,6 @@ export default class Pricing extends Vue {
 
           <li>1TB storage</li>
           <li>4 parallel Bitflow downloads</li>
-          <li>Priority support</li>
         </ul>
       `,
     },
