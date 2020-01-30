@@ -10,14 +10,14 @@ exec:
   filename: api/graphql/generated.go
 
 model:
-  filename: api/graphql/models_gen.go
+  filename: api/graphql/model/models_gen.go
 
 resolver:
-  filename: api/graphql/resolvers.go
+  filename: api/graphql/resolver.go
   type: Resolver
 
 autobind: []
 
 models:
   Group:
-    model: gitlab.com/bloom42/bloom/server/api/graphql.Group
+    model: gitlab.com/bloom42/bloom/server/api/graphql/model.Group
