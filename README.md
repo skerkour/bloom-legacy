@@ -27,8 +27,13 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 
 ## Download
 
-[Available on the Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
+Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx)
+iOS: Coming soon
 
+
+Linux: Coming soom
+MacOS: Coming soon
+Windows: Coming soon
 
 ## Documentation
 
@@ -48,7 +53,7 @@ https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
 ## Forum
 
-When you want to talk about something that does not necessarily fir issues, you can use the forum
+When you want to talk about something that does not necessarily fit issues, you can use the forum
 to connect with the community: https://gitlab.com/bloom42/forum
 
 ## Licensing
