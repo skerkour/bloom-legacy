@@ -31,3 +31,8 @@ build:
 .PHONY: clean
 clean:
 	rm -rf dist
+
+
+.PHONY: gqlgen
+gqlgen:
+	go run github.com/99designs/gqlgen -v

@@ -1,0 +1,190 @@
+scalar Time
+scalar Bytes
+
+enum SessionDeviceOS {
+  LINUX
+  MACOS
+  WINDOWS
+  ANDROID
+  IOS
+}
+
+enum SessionDeviceType {
+  TV
+  CONSOLE
+  MOBILE
+  TABLET
+  WATCH
+  COMPUTER
+  CAR
+}
+
+enum GroupMemberRole {
+  ADMIN
+  MEMBER
+}
+
+type User {
+  id: String!
+  createdAt: Time
+  username: String!
+  firstName: String
+  lastName: String
+  displayName: String!
+  groups: [Group!]
+  paymentMethods: [PaymentMethod!]
+  invoices: [Invoice!]
+  sessions: [Session!]
+  groupInvitations: [GroupInvitation!]
+}
+
+type PaymentMethod {
+  id: String!
+  createdAt: Time!
+}
+
+type Group {
+  id: String!
+  createdAt: Time
+  name: String!
+  description: String!
+  members: [GroupMember!]
+  invitations: [GroupInvitation!]
+}
+
+type GroupMember {
+  user: User!
+  role: GroupMemberRole!
+}
+
+type GroupInvitation {
+  id: String!
+  group: Group!
+}
+
+type Invoice {
+  id: String!
+}
+
+type Plan {
+  id: String!
+}
+
+type Session {
+  id: String!
+  token: String
+  device: SessionDevice!
+}
+
+type SessionDevice {
+  os: SessionDeviceOS!
+  type: SessionDeviceType!
+}
+
+type RegistrationStarted {
+  id: String!
+}
+
+type SignedIn {
+  session: Session!
+  me: User!
+}
+
+type Query {
+  me: User!
+  user(username: String!): User
+  users(limit: Int = 25, offset: Int = 0): [User!]!
+  group(id: String!): Group
+  groups(limit: Int = 25, offset: Int = 0): [Group!]!
+  plans: [Plan!]!
+}
+
+################################################################################
+## Mutations
+################################################################################
+
+input RegisterInput {
+  displayName: String!
+  email: String!
+}
+
+input VerifyRegistrationInput {
+  id: String!
+  code: String!
+}
+
+input CompleteRegistrationInput {
+  id: String!
+  username: String!
+  authKey: Bytes!
+  device: SessionDeviceInput!
+}
+
+input SessionDeviceInput {
+  os: SessionDeviceOS!
+  type: SessionDeviceType!
+}
+
+input SignInInput {
+  username: String!
+  authKey: Bytes!
+  device: SessionDeviceInput!
+}
+
+input RevokeSessionInput {
+  id: String!
+}
+
+input SendNewRegistrationCodeInput {
+  id: String!
+}
+
+input CreateGroupInput {
+  name: String!
+  description: String!
+  usersToInvite: [String!]!
+}
+
+input DeleteGroupInput {
+  id: String!
+}
+
+input GroupInput {
+  id: String!
+  name: String!
+  description: String!
+}
+
+input RemoveGroupMembersInput {
+  usernames: [String!]!
+}
+
+type Mutation {
+  # users
+  register(input: RegisterInput!): RegistrationStarted!
+  verifyRegistration(input: VerifyRegistrationInput!): Boolean!
+  sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
+  completeRegistration(input: CompleteRegistrationInput!): SignedIn!
+  signIn(input: SignInInput!):  SignedIn!
+  revokeSession(input: RevokeSessionInput!): Boolean!
+
+  # groups
+  createGroup(input: CreateGroupInput!): Group!
+  deleteGroup(input: DeleteGroupInput!): Boolean!
+  updateGroup(input: GroupInput!): Group!
+  removeGroupMembers(input: RemoveGroupMembersInput!): Group!
+  inviteUsersToGroup: Boolean!
+  acceptGroupInvitation: Boolean!
+  declineGroupInvitation: Boolean!
+  cancelGroupInvitation: Boolean!
+  quitGroup: Boolean!
+
+  # billing
+  createBillingPlan: Boolean!
+  updateBillingPlan: Boolean!
+  deleteBillingPlan: Boolean!
+  changeBillingPlan: Boolean!
+  addPaymentMethod: Boolean!
+  removePaymentMethod: Boolean!
+  updateDefaultPaymentMethod: Boolean!
+}

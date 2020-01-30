@@ -1,0 +1,23 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema:
+  - schema.graphql
+
+exec:
+  filename: api/graphql/generated.go
+
+model:
+  filename: api/graphql/models_gen.go
+
+resolver:
+  filename: api/graphql/resolvers.go
+  type: Resolver
+
+autobind: []
+
+models:
+  Group:
+    model: gitlab.com/bloom42/bloom/server/api/graphql.Group
