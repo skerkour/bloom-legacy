@@ -2,37 +2,28 @@ package errors
 
 import (
 	"github.com/vektah/gqlparser/gqlerror"
+	"gitlab.com/bloom42/bloom/server/errors"
 )
 
-type Code int
+type Error = *gqlerror.Error
 
-const (
-	// Internal should be used for internal errors, where no other code fits
-	Internal Code = iota
-	// Not
-	NotFound
-	Unauthenticated
-	PermissionDenied
-)
+// New return a new `Error`, with the `Message` field filed
+// with `err.Message` and the `Extensions.code` field filed with `err.Code`
+func New(err error) Error {
+	var graphqlError *gqlerror.Error
 
-// New return a new `github.com/vektah/gqlparser/gqlerror.Error`, with the `Message` field filed
-// with `message` and the `Extensions.code` fields filed with a string representation of `code`
-func New(code Code, message string) *gqlerror.Error {
-	codeStr := "INTERNAL"
-
-	switch code {
-	case NotFound:
-		codeStr = "NOT_FOUND"
-	case PermissionDenied:
-		codeStr = "PERMISSION_DENIED"
-	case Unauthenticated:
-		codeStr = "UNAUTHENTICATED"
+	switch errValue := err.(type) {
+	case errors.Error:
+		graphqlError = &gqlerror.Error{
+			Message: errValue.Message,
+			Extensions: map[string]interface{}{
+				"code": errValue.Code,
+			},
+		}
+	default:
+		graphqlError = &gqlerror.Error{
+			Message: errValue.Error(),
+		}
 	}
-
-	return &gqlerror.Error{
-		Message: message,
-		Extensions: map[string]interface{}{
-			"code": codeStr,
-		},
-	}
+	return graphqlError
 }
