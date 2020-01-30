@@ -4,10 +4,11 @@
   <!-- <p align="center">Empowering people with open technologies 🌍 (Android, IOS, Linux, MacOS, Windows, Server, Website)</p> -->
 </p>
 
-You are done with your privacy invaded by advertisers? Tired of being abused by Big Companies?
-You no longer trust tech monopolies?
+You no longer trust tech monopolies?<br/>
+You are done with your privacy invaded by advertisers? <br/>
+Tired of being abused by Big Companies?
 
-**We too, and that's why we built Bloom.**
+**We too, so we built Bloom.**
 
 [Try it for free](https://bloom.sh/download)
 
