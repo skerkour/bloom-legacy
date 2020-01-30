@@ -6,7 +6,7 @@
 
 You no longer trust tech monopolies?<br/>
 You are done with your privacy invaded by advertisers? <br/>
-Tired of being abused by Big Companies?
+You are tired of being abused by Big Companies?
 
 **We too, so we built Bloom.**
 
