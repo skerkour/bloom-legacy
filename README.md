@@ -19,8 +19,8 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 2. [Documentation](#documentation)
 3. [Development](#development)
 4. [Contributing](#contributing)
-5. [Licensing](#licensing)
-6. [Sponsoring](#sponsoring)
+5. [Forum](#contributing)
+6. [Licensing](#licensing)
 7. [Security](#security)
 
 --------
@@ -45,6 +45,11 @@ See https://gitlab.com/bloom42/bloom/-/wikis/development
 Thank you for your interest in contributing! Please refer to
 https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
+
+## Forum
+
+When you want to talk about something that does not necessarily fir issues, you can use the forum
+to connect with the community: https://gitlab.com/bloom42/forum
 
 ## Licensing
 
