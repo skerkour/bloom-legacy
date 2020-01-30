@@ -39,6 +39,7 @@ type ResolverRoot interface {
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
+	User() UserResolver
 }
 
 type DirectiveRoot struct {
@@ -181,6 +182,13 @@ type QueryResolver interface {
 	Group(ctx context.Context, id string) (*model.Group, error)
 	Groups(ctx context.Context, limit *int, offset *int) ([]*model.Group, error)
 	Plans(ctx context.Context) ([]*model.Plan, error)
+}
+type UserResolver interface {
+	Groups(ctx context.Context, obj *model.User) ([]*model.Group, error)
+	PaymentMethods(ctx context.Context, obj *model.User) ([]*model.PaymentMethod, error)
+	Invoices(ctx context.Context, obj *model.User) ([]*model.Invoice, error)
+	Sessions(ctx context.Context, obj *model.User) ([]*model.Session, error)
+	GroupInvitations(ctx context.Context, obj *model.User) ([]*model.GroupInvitation, error)
 }
 
 type executableSchema struct {
@@ -775,7 +783,7 @@ input DeleteGroupInput {
 	id: String!
 }
 type Group {
-	id: String!
+	id: String
 	createdAt: Time
 	name: String!
 	description: String!
@@ -897,7 +905,7 @@ type SignedIn {
 }
 scalar Time
 type User {
-	id: String!
+	id: String
 	createdAt: Time
 	username: String!
 	firstName: String
@@ -1206,14 +1214,11 @@ func (ec *executionContext) _Group_id(ctx context.Context, field graphql.Collect
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -3055,14 +3060,11 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(string)
+	res := resTmp.(*string)
 	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -3237,13 +3239,13 @@ func (ec *executionContext) _User_groups(ctx context.Context, field graphql.Coll
 		Object:   "User",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
+		return ec.resolvers.User().Groups(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3268,13 +3270,13 @@ func (ec *executionContext) _User_paymentMethods(ctx context.Context, field grap
 		Object:   "User",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.PaymentMethods, nil
+		return ec.resolvers.User().PaymentMethods(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3299,13 +3301,13 @@ func (ec *executionContext) _User_invoices(ctx context.Context, field graphql.Co
 		Object:   "User",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Invoices, nil
+		return ec.resolvers.User().Invoices(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3330,13 +3332,13 @@ func (ec *executionContext) _User_sessions(ctx context.Context, field graphql.Co
 		Object:   "User",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Sessions, nil
+		return ec.resolvers.User().Sessions(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3361,13 +3363,13 @@ func (ec *executionContext) _User_groupInvitations(ctx context.Context, field gr
 		Object:   "User",
 		Field:    field,
 		Args:     nil,
-		IsMethod: false,
+		IsMethod: true,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.GroupInvitations, nil
+		return ec.resolvers.User().GroupInvitations(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4456,7 +4458,7 @@ func (ec *executionContext) unmarshalInputCompleteRegistrationInput(ctx context.
 			}
 		case "authKey":
 			var err error
-			it.AuthKey, err = ec.unmarshalNBytes2string(ctx, v)
+			it.AuthKey, err = ec.unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4666,7 +4668,7 @@ func (ec *executionContext) unmarshalInputSignInInput(ctx context.Context, obj i
 			}
 		case "authKey":
 			var err error
-			it.AuthKey, err = ec.unmarshalNBytes2string(ctx, v)
+			it.AuthKey, err = ec.unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -4727,9 +4729,6 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = graphql.MarshalString("Group")
 		case "id":
 			out.Values[i] = ec._Group_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				atomic.AddUint32(&invalids, 1)
-			}
 		case "createdAt":
 			out.Values[i] = ec._Group_createdAt(ctx, field, obj)
 		case "name":
@@ -5307,15 +5306,12 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = graphql.MarshalString("User")
 		case "id":
 			out.Values[i] = ec._User_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "createdAt":
 			out.Values[i] = ec._User_createdAt(ctx, field, obj)
 		case "username":
 			out.Values[i] = ec._User_username(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "firstName":
 			out.Values[i] = ec._User_firstName(ctx, field, obj)
@@ -5324,18 +5320,63 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 		case "displayName":
 			out.Values[i] = ec._User_displayName(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "groups":
-			out.Values[i] = ec._User_groups(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_groups(ctx, field, obj)
+				return res
+			})
 		case "paymentMethods":
-			out.Values[i] = ec._User_paymentMethods(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_paymentMethods(ctx, field, obj)
+				return res
+			})
 		case "invoices":
-			out.Values[i] = ec._User_invoices(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_invoices(ctx, field, obj)
+				return res
+			})
 		case "sessions":
-			out.Values[i] = ec._User_sessions(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_sessions(ctx, field, obj)
+				return res
+			})
 		case "groupInvitations":
-			out.Values[i] = ec._User_groupInvitations(ctx, field, obj)
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_groupInvitations(ctx, field, obj)
+				return res
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -5606,18 +5647,13 @@ func (ec *executionContext) marshalNBoolean2bool(ctx context.Context, sel ast.Se
 	return res
 }
 
-func (ec *executionContext) unmarshalNBytes2string(ctx context.Context, v interface{}) (string, error) {
-	return graphql.UnmarshalString(v)
+func (ec *executionContext) unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, v interface{}) (model.Bytes, error) {
+	var res model.Bytes
+	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalNBytes2string(ctx context.Context, sel ast.SelectionSet, v string) graphql.Marshaler {
-	res := graphql.MarshalString(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
+func (ec *executionContext) marshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, sel ast.SelectionSet, v model.Bytes) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNCompleteRegistrationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCompleteRegistrationInput(ctx context.Context, v interface{}) (model.CompleteRegistrationInput, error) {

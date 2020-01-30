@@ -6,7 +6,9 @@ import (
 )
 
 func (r *Resolver) Group(ctx context.Context, id string) (*model.Group, error) {
+	groupId := "lol"
+
 	return &model.Group{
-		ID: "lol",
+		ID: &groupId,
 	}, nil
 }

@@ -14,12 +14,18 @@ func New() Config {
 
 type Resolver struct{}
 
-func (r *Resolver) Group() GroupResolver {
-	return &model.GroupResolver{}
+func (r *Resolver) Query() QueryResolver {
+	return &query.Resolver{}
 }
+
 func (r *Resolver) Mutation() MutationResolver {
 	return &mutation.Resolver{}
 }
-func (r *Resolver) Query() QueryResolver {
-	return &query.Resolver{}
+
+func (r *Resolver) Group() GroupResolver {
+	return &model.GroupResolver{}
+}
+
+func (r *Resolver) User() UserResolver {
+	return &model.UserResolver{}
 }

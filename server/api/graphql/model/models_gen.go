@@ -12,7 +12,7 @@ import (
 type CompleteRegistrationInput struct {
 	ID       string              `json:"id"`
 	Username string              `json:"username"`
-	AuthKey  string              `json:"authKey"`
+	AuthKey  Bytes               `json:"authKey"`
 	Device   *SessionDeviceInput `json:"device"`
 }
 
@@ -94,27 +94,13 @@ type SessionDeviceInput struct {
 
 type SignInInput struct {
 	Username string              `json:"username"`
-	AuthKey  string              `json:"authKey"`
+	AuthKey  Bytes               `json:"authKey"`
 	Device   *SessionDeviceInput `json:"device"`
 }
 
 type SignedIn struct {
 	Session *Session `json:"session"`
 	Me      *User    `json:"me"`
-}
-
-type User struct {
-	ID               string             `json:"id"`
-	CreatedAt        *time.Time         `json:"createdAt"`
-	Username         string             `json:"username"`
-	FirstName        *string            `json:"firstName"`
-	LastName         *string            `json:"lastName"`
-	DisplayName      string             `json:"displayName"`
-	Groups           []*Group           `json:"groups"`
-	PaymentMethods   []*PaymentMethod   `json:"paymentMethods"`
-	Invoices         []*Invoice         `json:"invoices"`
-	Sessions         []*Session         `json:"sessions"`
-	GroupInvitations []*GroupInvitation `json:"groupInvitations"`
 }
 
 type VerifyRegistrationInput struct {

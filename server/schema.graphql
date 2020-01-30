@@ -25,7 +25,7 @@ enum GroupMemberRole {
 }
 
 type User {
-  id: String!
+  id: String
   createdAt: Time
   username: String!
   firstName: String
@@ -44,7 +44,7 @@ type PaymentMethod {
 }
 
 type Group {
-  id: String!
+  id: String
   createdAt: Time
   name: String!
   description: String!
