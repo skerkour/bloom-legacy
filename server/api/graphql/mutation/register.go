@@ -2,15 +2,15 @@ package mutation
 
 import (
 	"context"
+	"time"
+
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	gqlerrors "gitlab.com/bloom42/bloom/server/api/graphql/errors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
-	"time"
 )
 
 func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInput) (*model.RegistrationStarted, error) {
@@ -19,10 +19,10 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	var ret *model.RegistrationStarted
 	if !ok {
 		logger.Error("users.StartRegistration: error getting apiCtx from context")
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+		return ret, gqlerrors.Internal()
 	}
 	if apiCtx.AuthenticatedUser != nil {
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Must not be authenticated"))
+		return ret, gqlerrors.MustNotBeAuthenticated()
 	}
 
 	// sleep to prevent spam and bruteforce

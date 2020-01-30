@@ -27,3 +27,11 @@ func New(err error) Error {
 	}
 	return graphqlError
 }
+
+func MustNotBeAuthenticated() Error {
+	return New(errors.New(errors.PermissionDenied, "Must not be authenticated."))
+}
+
+func Internal() Error {
+	return New(errors.New(errors.Internal, ""))
+}

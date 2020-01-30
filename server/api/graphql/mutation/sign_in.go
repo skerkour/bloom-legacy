@@ -21,10 +21,10 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
 		logger.Error("users.SignIn: error getting apiCtx from context")
-		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		return &ret, gqlerrors.Internal()
 	}
 	if apiCtx.AuthenticatedUser != nil {
-		return &ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Must not be authenticated"))
+		return &ret, gqlerrors.MustNotBeAuthenticated()
 	}
 
 	// sleep to prevent spam and bruteforce

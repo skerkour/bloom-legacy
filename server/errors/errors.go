@@ -38,7 +38,9 @@ func New(code Code, message string) Error {
 		codeStr = "ALREADY_EXISTS"
 	default:
 		codeStr = "INTERNAL"
-		message = "Internal error. Please try again."
+		if message == "" {
+			message = "Internal error. Please try again."
+		}
 	}
 	return Error{
 		Code:    codeStr,
