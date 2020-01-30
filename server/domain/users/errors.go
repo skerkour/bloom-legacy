@@ -16,9 +16,9 @@ const (
 	ErrorDeletingSession
 	ErrorVerifyingPendingUser
 	ErrorSendingNewRegistrationCode
-	ErrorVerificationCodeIsNotValid
+	ErrorRegistrationCodeIsNotValid
 	ErrorMaximumVerificationTrialsReached
-	ErrorVerificationCodeExpired
+	ErrorRegistrationCodeExpired
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -47,13 +47,13 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Error verifying account. Please try again."
 	case ErrorSendingNewRegistrationCode:
 		message = "Error sending new verification code. Please try again."
-	case ErrorVerificationCodeIsNotValid:
+	case ErrorRegistrationCodeIsNotValid:
 		code = errors.PermissionDenied
 		message = "Verification code is not valid."
 	case ErrorMaximumVerificationTrialsReached:
 		code = errors.PermissionDenied
 		message = "Maximum trials reached. Please create a new account."
-	case ErrorVerificationCodeExpired:
+	case ErrorRegistrationCodeExpired:
 		code = errors.PermissionDenied
 		message = "Verification code expired. Please create a new account."
 	}
