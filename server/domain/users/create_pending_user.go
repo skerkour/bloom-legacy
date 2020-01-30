@@ -14,18 +14,18 @@ import (
 	"time"
 )
 
-func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, twirp.Error) {
+func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {
 	logger := rz.FromCtx(ctx)
 	var existingUser int
 	var err error
 
 	// validate params
 	if err = validator.UserDisplayName(displayName); err != nil {
-		return PendingUser{}, "", twirp.InvalidArgumentError("display_name", err.Error())
+		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
 	if err = validator.UserEmail(email, config.DisposableEmailDomains); err != nil {
-		return PendingUser{}, "", twirp.InvalidArgumentError("email", err.Error())
+		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error()) // twirp.InvalidArgumentError("email", err.Error())
 	}
 
 	// check if email does not already exist
@@ -33,7 +33,7 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	err = tx.Get(&existingUser, queryCountExistingEmails, email)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error fetching existing emails counts", rz.Err(err))
-		return PendingUser{}, "", twirp.InternalError(ErrorCreatePendingUserMsg)
+		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
 	}
 
 	if existingUser != 0 {
@@ -45,14 +45,14 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	verificationCode, err := rand.StringAlph(alphabetDigits, 8)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error generating verification code", rz.Err(err))
-		return PendingUser{}, "", twirp.InternalError(ErrorCreatePendingUserMsg)
+		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
 	}
 
 	// TODO: update params
 	codeHash, err := argon2id.HashPassword([]byte(verificationCode), argon2id.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: hashing verification code", rz.Err(err))
-		return PendingUser{}, "", twirp.InternalError(ErrorCreatePendingUserMsg)
+		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
 	}
 	ret := PendingUser{
 		ID:                   newUuid.String(),
@@ -72,7 +72,7 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 		ret.DisplayName, ret.VerificationCodeHash, ret.FailedVerifications, ret.Verified)
 	if err != nil {
 		logger.Error("error creating new user", rz.Err(err))
-		return ret, "", twirp.InternalError(ErrorCreatePendingUserMsg)
+		return ret, "", NewError(ErrorCreatingPendingUser)
 	}
 	return ret, verificationCode, nil
 }

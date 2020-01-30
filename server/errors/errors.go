@@ -1,5 +1,9 @@
 package errors
 
+import (
+	"fmt"
+)
+
 type Code int
 
 const (
@@ -9,6 +13,8 @@ const (
 	NotFound
 	Unauthenticated
 	PermissionDenied
+	InvalidArgument
+	AlreadyExists
 )
 
 type Error struct {
@@ -26,6 +32,10 @@ func New(code Code, message string) Error {
 		codeStr = "PERMISSION_DENIED"
 	case Unauthenticated:
 		codeStr = "UNAUTHENTICATED"
+	case InvalidArgument:
+		codeStr = "INVALID_ARGUMENT"
+	case AlreadyExists:
+		codeStr = "ALREADY_EXISTS"
 	}
 	return Error{
 		Code:    codeStr,
@@ -34,5 +44,5 @@ func New(code Code, message string) Error {
 }
 
 func (err Error) Error() string {
-	return err.Message
+	return fmt.Sprintf("%s: %s", err.Code, err.Message)
 }

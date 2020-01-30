@@ -2,18 +2,16 @@ package users
 
 import (
 	"context"
-	"fmt"
 	"time"
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, username string, authKey []byte) (User, twirp.Error) {
+func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, username string, authKey []byte) (User, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
 	var ret User
@@ -21,7 +19,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 
 	// validate params
 	if err = validator.UserUsername(username); err != nil {
-		return ret, twirp.InvalidArgumentError("username", err.Error())
+		return ret, NewErrorMessage(ErrorInvalidArgument, err.Error()) //twirp.InvalidArgumentError("username", err.Error())
 	}
 
 	// check if email does not already exist
@@ -29,10 +27,11 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 	err = tx.Get(&existingUser, queryCountExistingEmails, pendingUser.Email)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing emails counts", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
+		return ret, NewError(ErrorEmailAlreadyExists)
 	}
 	if existingUser != 0 {
-		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", pendingUser.Email))
+		return ret, NewError(ErrorEmailAlreadyExists)
+		// twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", pendingUser.Email))
 	}
 
 	// verify that username isn't already in use
@@ -41,10 +40,10 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 	err = tx.Get(&existingUser, queryCountExistingUsername, username)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing username counts", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
+		return ret, NewError(ErrorUsernameAlreadyExists)
 	}
 	if existingUser != 0 {
-		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("Username '%s' is already is use", username))
+		return ret, NewError(ErrorUsernameAlreadyExists)
 	}
 
 	// verify that username was not used by a deleted user
@@ -53,10 +52,10 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 	err = tx.Get(&existingUser, queryCountDeletedUsername, username)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching deleted username counts", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
+		return ret, NewError(ErrorUsernameAlreadyExists)
 	}
 	if existingUser != 0 {
-		return ret, twirp.InvalidArgumentError("email", fmt.Sprintf("Username '%s' is already is use", username))
+		return ret, NewError(ErrorUsernameAlreadyExists)
 	}
 
 	now := time.Now().UTC()
@@ -65,7 +64,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 	authKeyHash, err := argon2id.HashPassword(authKey, argon2id.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
+		return ret, NewError(ErrorCompletingRegistration)
 	}
 
 	ret = User{
@@ -84,7 +83,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, usern
 	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username, ret.DisplayName, "", ret.Email, "", "", false, ret.AuthKeyHash)
 	if err != nil {
 		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCompletingRegistrationMsg)
+		return ret, NewError(ErrorCompletingRegistration)
 	}
 
 	return ret, nil

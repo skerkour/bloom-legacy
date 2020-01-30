@@ -21,7 +21,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
 		logger.Error("users.SignIn: error getting apiCtx from context")
-		return &ret, gqlerror.New(errors.New(errors.Internal, users.ErrorSingingInMsg))
+		return &ret, gqlerror.New(users.NewError(users.ErrorSingingIn))
 	}
 	if apiCtx.AuthenticatedUser != nil {
 		return &ret, gqlerror.New(errors.New(errors.PermissionDenied, "Must not be authenticated"))
@@ -31,14 +31,14 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	sleep, err := rand.Int64(500, 800)
 	if err != nil {
 		logger.Error("users.SignIn: generating random int", rz.Err(err))
-		return &ret, gqlerror.New(errors.New(errors.Internal, users.ErrorSingingInMsg))
+		return &ret, gqlerror.New(users.NewError(users.ErrorSingingIn))
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("users.SignIn: Starting transaction", rz.Err(err))
-		return &ret, gqlerror.New(errors.New(errors.Internal, users.ErrorSingingInMsg))
+		return &ret, gqlerror.New(users.NewError(users.ErrorSingingIn))
 	}
 
 	// fetch user
@@ -56,17 +56,17 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 		return &ret, gqlerror.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
 	}
 
-	newSession, token, twerr := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent)
-	if twerr != nil {
+	newSession, token, err := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent)
+	if err != nil {
 		tx.Rollback()
-		return &ret, twerr
+		return &ret, gqlerror.New(err)
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("users.SignIn: committing transaction", rz.Err(err))
-		return &ret, gqlerror.New(errors.New(errors.Internal, users.ErrorSingingInMsg))
+		return &ret, gqlerror.New(users.NewError(users.ErrorSingingIn))
 	}
 
 	ret = model.SignedIn{
