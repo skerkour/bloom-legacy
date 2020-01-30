@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
+	"gitlab.com/bloom42/bloom/server/api/graphql/errors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -20,25 +20,24 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
 		logger.Error("users.SignIn: error getting apiCtx from context")
-		return &ret, twirp.InternalError(users.ErrorSingingInMsg)
+		return &ret, errors.New(errors.Internal, users.ErrorSingingInMsg)
 	}
 	if apiCtx.AuthenticatedUser != nil {
-		twerr := twirp.NewError(twirp.PermissionDenied, "Must not be authenticated")
-		return &ret, twerr
+		return &ret, errors.New(errors.PermissionDenied, "Must not be authenticated")
 	}
 
 	// sleep to prevent spam and bruteforce
 	sleep, err := rand.Int64(500, 800)
 	if err != nil {
 		logger.Error("users.SignIn: generating random int", rz.Err(err))
-		return &ret, twirp.InternalError(users.ErrorSingingInMsg)
+		return &ret, errors.New(errors.Internal, users.ErrorSingingInMsg)
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("users.SignIn: Starting transaction", rz.Err(err))
-		return &ret, twirp.InternalError(users.ErrorSingingInMsg)
+		return &ret, errors.New(errors.Internal, users.ErrorSingingInMsg)
 	}
 
 	// fetch user
@@ -47,13 +46,13 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	if err != nil {
 		tx.Rollback()
 		logger.Error("users.SignIn: finding user", rz.Err(err))
-		return &ret, twirp.NewError(twirp.PermissionDenied, "Invalid Username / Password combination")
+		return &ret, errors.New(errors.PermissionDenied, "Invalid Username / Password combination")
 	}
 
 	// verify password
 	if !argon2id.VerifyPassword(input.AuthKey, user.AuthKeyHash) {
 		tx.Rollback()
-		return &ret, twirp.NewError(twirp.PermissionDenied, "Invalid Username / Password combination")
+		return &ret, errors.New(errors.PermissionDenied, "Invalid Username / Password combination")
 	}
 
 	newSession, token, twerr := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent)
@@ -66,7 +65,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	if err != nil {
 		tx.Rollback()
 		logger.Error("users.SignIn: committing transaction", rz.Err(err))
-		return &ret, twirp.InternalError(users.ErrorSingingInMsg)
+		return &ret, errors.New(errors.Internal, users.ErrorSingingInMsg)
 	}
 
 	ret = model.SignedIn{

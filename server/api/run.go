@@ -10,14 +10,8 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"gitlab.com/bloom42/bloom/common/consts"
-	billingrpc "gitlab.com/bloom42/bloom/common/rpc/billing"
-	groupsrpc "gitlab.com/bloom42/bloom/common/rpc/groups"
-	usersrpc "gitlab.com/bloom42/bloom/common/rpc/users"
 	graphqlapi "gitlab.com/bloom42/bloom/server/api/graphql"
 	"gitlab.com/bloom42/bloom/server/config"
-	billinghandler "gitlab.com/bloom42/bloom/server/domain/billing/handler"
-	groupshandler "gitlab.com/bloom42/bloom/server/domain/groups/handler"
-	usershandler "gitlab.com/bloom42/bloom/server/domain/users/handler"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
@@ -30,9 +24,6 @@ func Run() error {
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
 
-	usersHandler := usersrpc.NewUsersServer(usershandler.Handler{}, nil)
-	groupsHandler := groupsrpc.NewGroupsServer(groupshandler.Handler{}, nil)
-	billingHandler := billingrpc.NewBillingServer(billinghandler.Handler{}, nil)
 	graphqlHandler := handler.NewDefaultServer(graphqlapi.NewExecutableSchema(graphqlapi.New()))
 
 	/*
@@ -70,9 +61,6 @@ func Run() error {
 	router.Use(SetContextMiddleware)
 
 	router.Get("/", HelloWorlHandler)
-	router.Mount(usersHandler.PathPrefix(), usersHandler)
-	router.Mount(billingHandler.PathPrefix(), billingHandler)
-	router.Mount(groupsHandler.PathPrefix(), groupsHandler)
 	router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 	router.Mount("/api/graphql", graphqlHandler)
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
