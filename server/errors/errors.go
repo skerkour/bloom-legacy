@@ -36,6 +36,9 @@ func New(code Code, message string) Error {
 		codeStr = "INVALID_ARGUMENT"
 	case AlreadyExists:
 		codeStr = "ALREADY_EXISTS"
+	default:
+		codeStr = "INTERNAL"
+		message = "Internal error. Please try again."
 	}
 	return Error{
 		Code:    codeStr,
