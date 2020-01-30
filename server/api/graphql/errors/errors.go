@@ -35,3 +35,7 @@ func MustNotBeAuthenticated() Error {
 func Internal() Error {
 	return New(errors.New(errors.Internal, ""))
 }
+
+func AuthenticationRequired() Error {
+	return New(errors.New(errors.Unauthenticated, "Authentication required."))
+}

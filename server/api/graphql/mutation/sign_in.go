@@ -20,7 +20,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
-		logger.Error("users.SignIn: error getting apiCtx from context")
+		logger.Error("mutation.SignIn: error getting apiCtx from context")
 		return &ret, gqlerrors.Internal()
 	}
 	if apiCtx.AuthenticatedUser != nil {
@@ -30,14 +30,14 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	// sleep to prevent spam and bruteforce
 	sleep, err := rand.Int64(500, 800)
 	if err != nil {
-		logger.Error("users.SignIn: generating random int", rz.Err(err))
+		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
 		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("users.SignIn: Starting transaction", rz.Err(err))
+		logger.Error("mutation.SignIn: Starting transaction", rz.Err(err))
 		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 
@@ -46,7 +46,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	err = tx.Get(&user, "SELECT * FROM users WHERE username = $1 FOR UPDATE", input.Username)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("users.SignIn: finding user", rz.Err(err))
+		logger.Error("mutation.SignIn: finding user", rz.Err(err))
 		return &ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
 	}
 
@@ -65,7 +65,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("users.SignIn: committing transaction", rz.Err(err))
+		logger.Error("mutation.SignIn: committing transaction", rz.Err(err))
 		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 

@@ -18,7 +18,7 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	var ret *model.RegistrationStarted
 	if !ok {
-		logger.Error("users.StartRegistration: error getting apiCtx from context")
+		logger.Error("mutation.Register: error getting apiCtx from context")
 		return ret, gqlerrors.Internal()
 	}
 	if apiCtx.AuthenticatedUser != nil {
@@ -28,7 +28,7 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	// sleep to prevent spam and bruteforce
 	sleep, err := rand.Int64(500, 800)
 	if err != nil {
-		logger.Error("users.StartRegistration: generating random int", rz.Err(err))
+		logger.Error("mutation.Register: generating random int", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
@@ -36,7 +36,7 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	// create pending user
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("users.StartRegistration: Starting transaction", rz.Err(err))
+		logger.Error("mutation.Register: Starting transaction", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
 	}
 
@@ -49,14 +49,14 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	err = users.SendUserVerificationCode(input.Email, input.DisplayName, verificationCode)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("users.StartRegistration: Sending confirmation email", rz.Err(err))
+		logger.Error("mutation.Register: Sending confirmation email", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("users.StartRegistration: Committing transaction", rz.Err(err))
+		logger.Error("mutation.Register: Committing transaction", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
 	}
 
