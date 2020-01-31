@@ -22,7 +22,7 @@ func (r *Resolver) RevokeSession(ctx context.Context, input model.RevokeSessionI
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("users.RevokeSession: Starting transaction", rz.Err(err))
+		logger.Error("mutation.RevokeSession: Starting transaction", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorDeletingSession))
 	}
 
@@ -35,7 +35,7 @@ func (r *Resolver) RevokeSession(ctx context.Context, input model.RevokeSessionI
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("users.RevokeSession: committing transaction", rz.Err(err))
+		logger.Error("mutation.RevokeSession: committing transaction", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorDeletingSession))
 	}
 

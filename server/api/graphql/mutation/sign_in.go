@@ -16,31 +16,31 @@ import (
 )
 
 func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error) {
-	var ret model.SignedIn
+	var ret *model.SignedIn
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 	apiCtx := apiutil.ApiCtxFromCtx(ctx)
 	if apiCtx == nil {
 		logger.Error("mutation.SignIn: error getting apiCtx from context")
-		return &ret, gqlerrors.Internal()
+		return ret, gqlerrors.Internal()
 	}
 
 	if currentUser != nil {
-		return &ret, gqlerrors.MustNotBeAuthenticated()
+		return ret, gqlerrors.MustNotBeAuthenticated()
 	}
 
 	// sleep to prevent spam and bruteforce
 	sleep, err := rand.Int64(500, 800)
 	if err != nil {
 		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
-		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("mutation.SignIn: Starting transaction", rz.Err(err))
-		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 
 	// fetch user
@@ -49,13 +49,13 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.SignIn: finding user", rz.Err(err))
-		return &ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
+		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
 	}
 
 	// verify password
 	if !argon2id.VerifyPassword(input.AuthKey, user.AuthKeyHash) {
 		tx.Rollback()
-		return &ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
+		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
 	}
 
 	device := users.SessionDevice{
@@ -66,22 +66,22 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	newSession, token, err := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent, device)
 	if err != nil {
 		tx.Rollback()
-		return &ret, gqlerrors.New(err)
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.SignIn: committing transaction", rz.Err(err))
-		return &ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 
-	ret = model.SignedIn{
+	ret = &model.SignedIn{
 		Session: &model.Session{
 			ID:     newSession.ID,
 			Token:  &token,
 			Device: nil,
 		},
 	}
-	return &ret, nil
+	return ret, nil
 }
