@@ -11,10 +11,3 @@ fmt:
 .PHONY: test
 test:
 	go test ./...
-
-.PHONY: rpc
-rpc:
-	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/users/service.proto
-	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/billing/service.proto
-	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/groups/service.proto
-	protoc --proto_path=${GOPATH}/src:. --twirp_out=. --go_out=. ./rpc/bitflow/service.proto
