@@ -10,13 +10,13 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) twirp.Error {
+func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
 	logger := rz.FromCtx(ctx)
 	var err error
 
 	// validate action
 	if user.ID != invitation.InviteeID {
-		return twirp.NewError(twirp.NotFound, "Invitation not found.")
+		return NewError(ErrorInvitationNotFound)
 	}
 
 	membership := Membership{
@@ -34,7 +34,7 @@ func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 		membership.UserID, membership.Role)
 	if err != nil {
 		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))
-		return twirp.InternalError(ErrorAcceptingInvitationMsg)
+		return NewError(ErrorAcceptingInvitation)
 	}
 
 	// delete invitation
@@ -42,7 +42,7 @@ func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
 		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))
-		return twirp.InternalError(ErrorAcceptingInvitationMsg)
+		return NewError(ErrorInvitationNotFound)
 	}
 	return nil
 }

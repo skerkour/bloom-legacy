@@ -8,13 +8,13 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) twirp.Error {
+func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) error {
 	logger := rz.FromCtx(ctx)
 	var remainingAdmins int
 	var err error
 
-	if twerr := checkUserIsGroupMember(ctx, tx, user.ID, group.ID); twerr != nil {
-		return twerr
+	if err = checkUserIsGroupMember(ctx, tx, user.ID, group.ID); err != nil {
+		return err
 	}
 
 	// delete membership
@@ -22,17 +22,18 @@ func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) t
 	_, err = tx.Exec(queryDeleteMembership, user.ID, group.ID)
 	if err != nil {
 		logger.Error("groups.QuitGroup: removing members", rz.Err(err))
-		return twirp.InternalError(ErrorQuittingGroupMsg)
+		return NewError(ErrorQuittingGroup)
 	}
 
 	queryRemainingAdmins := "SELECT COUNT(*) FROM groups_members WHERE group_id = $1 AND role = $2"
 	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
 	if err != nil {
 		logger.Error("groups.QuitGroup: error fetching remaining admins", rz.Err(err))
-		return twirp.InternalError(ErrorQuittingGroupMsg)
+		return NewError(ErrorQuittingGroup)
 	}
 	if remainingAdmins != 0 {
-		return twirp.NewError(twirp.PermissionDenied, "At least one administrator should remain in group.")
+		return NewError(ErrorAtLeastOneAdministratorShouldRemainsInGroup)
 	}
+
 	return nil
 }

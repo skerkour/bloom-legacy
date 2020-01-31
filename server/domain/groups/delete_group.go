@@ -9,12 +9,12 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func DeleteGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) twirp.Error {
+func DeleteGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) error {
 	logger := rz.FromCtx(ctx)
 	var err error
 
-	if twerr := CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
-		return twerr
+	if err = CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); err != nil {
+		return err
 	}
 
 	// delete group
@@ -22,7 +22,7 @@ func DeleteGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group)
 	_, err = tx.Exec(queryDeleteGroup, group.ID)
 	if err != nil {
 		logger.Error("groups.DeleteGroup: deleting group", rz.Err(err))
-		return twirp.InternalError(ErrorDeleteGroupMsg)
+		return NewError(ErrorDeletingGroup)
 	}
 
 	return nil

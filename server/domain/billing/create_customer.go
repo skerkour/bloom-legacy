@@ -6,7 +6,6 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-
 	"gitlab.com/bloom42/libs/rz-go"
 )
 

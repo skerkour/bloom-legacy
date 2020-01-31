@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) twirp.Error {
+func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
 	logger := rz.FromCtx(ctx)
 	var err error
 
@@ -23,7 +23,7 @@ func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
 		logger.Error("groups.CancelInvitation: creating membership", rz.Err(err))
-		return twirp.InternalError(ErrorCancelingInvitationMsg)
+		return NewError(ErrorCancelingInvitation)
 	}
 	return nil
 }

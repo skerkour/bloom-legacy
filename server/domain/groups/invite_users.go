@@ -4,12 +4,11 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, usernames []string) twirp.Error {
+func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, usernames []string) error {
 	logger := rz.FromCtx(ctx)
 	inviteesIds := []string{}
 	var err error
@@ -18,27 +17,27 @@ func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Gro
 	err = tx.Get(&inviteesIds, queryInviteesIds, usernames)
 	if err != nil {
 		logger.Error("groups.InviteUsers: error fetching invitees ids", rz.Err(err))
-		return twirp.InternalError(ErrorInvitingUsersMsg)
+		return NewError(ErrorInvitingUsers)
 	}
 	if len(inviteesIds) != len(usernames) {
-		return twirp.NewError(twirp.NotFound, "Some usernames were not found. Please verify your invitees list and retry.")
+		return NewError(ErrorUsernamesNotFound)
 	}
 
-	if twerr := validateInviteUsers(ctx, tx, inviter, group, inviteesIds); twerr != nil {
-		return twerr
+	if err = validateInviteUsers(ctx, tx, inviter, group, inviteesIds); err != nil {
+		return err
 	}
 
 	return nil
 }
 
-func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, inviteesIds []string) twirp.Error {
+func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, inviteesIds []string) error {
 	logger := rz.FromCtx(ctx)
 	var alreadyInUsers int
 	var err error
 
 	// check that inviter inviting is admin
-	if twerr := CheckUserIsGroupAdmin(ctx, tx, inviter.ID, group.ID); twerr != nil {
-		return twerr
+	if err = CheckUserIsGroupAdmin(ctx, tx, inviter.ID, group.ID); err != nil {
+		return err
 	}
 
 	//  check that user is not already in group or awaiting invitations
@@ -49,10 +48,10 @@ func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, g
 	err = tx.Get(&alreadyInUsers, queryAlreadyInGroupOrInvitations, group.ID, inviteesIds)
 	if err != nil {
 		logger.Error("groups.InviteUsers: error fetching users already in group or invitations", rz.Err(err))
-		return twirp.InternalError(ErrorInvitingUsersMsg)
+		return NewError(ErrorInvitingUsers)
 	}
 	if alreadyInUsers != 0 {
-		return twirp.NewError(twirp.PermissionDenied, "At least one user is already in group or invited. Please remove it and retry.")
+		return NewError(ErrorUserAlreadyInGroup)
 	}
 
 	return nil

@@ -9,7 +9,7 @@ import (
 )
 
 // checkUserIsGroupAdmin Checks that user is member of group and he has administrator role
-func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID string) twirp.Error {
+func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID string) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -19,18 +19,18 @@ func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID str
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
 			rz.String("group_id", groupID), rz.String("user_id", userID))
-		return twirp.NewError(twirp.NotFound, "Group not found.")
+		return NewError(ErrorGroupNotFound)
 	}
 
 	if memberhsip.Role != RoleAdministrator {
-		return twirp.NewError(twirp.PermissionDenied, "Administrator role is required to delete group.")
+		return NewErrorMessage(ErrorPermissionDenied, "Administrator role is required to delete group.")
 	}
 
 	return nil
 }
 
 // checkUserIsGroupMember Checks that user is member of group
-func checkUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID string) twirp.Error {
+func checkUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID string) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -40,7 +40,7 @@ func checkUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID st
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
 			rz.String("group_id", groupID), rz.String("user_id", userID))
-		return twirp.NewError(twirp.NotFound, "Group not found.")
+		return NewError(ErrorGroupNotFound)
 	}
 
 	return nil

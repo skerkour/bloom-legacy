@@ -9,13 +9,13 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) twirp.Error {
+func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
 	logger := rz.FromCtx(ctx)
 	var err error
 
 	// validate action
 	if user.ID != invitation.InviteeID {
-		return twirp.NewError(twirp.NotFound, "Invitation not found.")
+		return NewError(ErrorInvitationNotFound)
 	}
 
 	// delete invitation
@@ -23,7 +23,7 @@ func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invita
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
 		logger.Error("groups.DeclineInvitation: deleting invitation", rz.Err(err))
-		return twirp.InternalError(ErrorDecliningInvitationMsg)
+		return NewError(ErrorDecliningInvitation)
 	}
 	return nil
 }
