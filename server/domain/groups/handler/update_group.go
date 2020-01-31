@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	rpc "gitlab.com/bloom42/bloom/common/rpc/groups"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/groups"

@@ -1,7 +1,6 @@
 package handler
 
 import (
-	rpc "gitlab.com/bloom42/bloom/common/rpc/groups"
 	"time"
 )
 
