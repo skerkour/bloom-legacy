@@ -45,19 +45,19 @@ func (resolver *Resolver) VerifyRegistration(ctx context.Context, input model.Ve
 		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
 	}
 
-	twerr := users.VerifyPendingUser(ctx, tx, pendingUser, input.Code)
-	if twerr != nil {
+	err = users.VerifyPendingUser(ctx, tx, pendingUser, input.Code)
+	if err != nil {
 		tx.Rollback()
 		tx, _ := db.DB.Beginx()
 		if tx != nil {
-			twerr2 := users.FailPendingUserVerification(ctx, tx, pendingUser)
-			if twerr2 != nil {
+			err2 := users.FailPendingUserVerification(ctx, tx, pendingUser)
+			if err2 != nil {
 				tx.Rollback()
 				return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
 			}
 			tx.Commit()
 		}
-		return ret, twerr
+		return ret, err
 	}
 
 	err = tx.Commit()
