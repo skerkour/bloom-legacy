@@ -3,7 +3,6 @@ package billing
 import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/customer"
-	"github.com/twitchtv/twirp"
 )
 
 // creates a customer only for Stripe

@@ -3,7 +3,6 @@ package handler
 import (
 	"context"
 
-	"github.com/twitchtv/twirp"
 	rpc "gitlab.com/bloom42/bloom/common/rpc/billing"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
 	"gitlab.com/bloom42/libs/rz-go"

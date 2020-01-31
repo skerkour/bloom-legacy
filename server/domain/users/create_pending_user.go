@@ -2,16 +2,15 @@ package users
 
 import (
 	"context"
-	"fmt"
+	"time"
+
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"github.com/twitchtv/twirp"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
-	"time"
 )
 
 func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {
@@ -37,7 +36,7 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	}
 
 	if existingUser != 0 {
-		return PendingUser{}, "", twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", email))
+		return PendingUser{}, "", NewError(ErrorEmailAlreadyExists) // twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", email))
 	}
 
 	now := time.Now().UTC()
