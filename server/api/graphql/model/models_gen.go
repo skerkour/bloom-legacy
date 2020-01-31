@@ -13,6 +13,10 @@ type AcceptGroupInvitationInput struct {
 	ID string `json:"id"`
 }
 
+type CancelGroupInvitationInput struct {
+	ID string `json:"id"`
+}
+
 type CompleteRegistrationInput struct {
 	ID       string              `json:"id"`
 	Username string              `json:"username"`

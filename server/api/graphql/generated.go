@@ -70,9 +70,9 @@ type ComplexityRoot struct {
 	}
 
 	Mutation struct {
-		AcceptGroupInvitation      func(childComplexity int, input *model.AcceptGroupInvitationInput) int
+		AcceptGroupInvitation      func(childComplexity int, input model.AcceptGroupInvitationInput) int
 		AddPaymentMethod           func(childComplexity int) int
-		CancelGroupInvitation      func(childComplexity int) int
+		CancelGroupInvitation      func(childComplexity int, input model.CancelGroupInvitationInput) int
 		ChangeBillingPlan          func(childComplexity int) int
 		CompleteRegistration       func(childComplexity int, input model.CompleteRegistrationInput) int
 		CreateBillingPlan          func(childComplexity int) int
@@ -165,9 +165,9 @@ type MutationResolver interface {
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
 	RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error)
 	InviteUsersInGroup(ctx context.Context) (bool, error)
-	AcceptGroupInvitation(ctx context.Context, input *model.AcceptGroupInvitationInput) (bool, error)
+	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error)
 	DeclineGroupInvitation(ctx context.Context) (bool, error)
-	CancelGroupInvitation(ctx context.Context) (bool, error)
+	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
 	QuitGroup(ctx context.Context) (bool, error)
 	CreateBillingPlan(ctx context.Context) (bool, error)
 	UpdateBillingPlan(ctx context.Context) (bool, error)
@@ -295,7 +295,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.AcceptGroupInvitation(childComplexity, args["input"].(*model.AcceptGroupInvitationInput)), true
+		return e.complexity.Mutation.AcceptGroupInvitation(childComplexity, args["input"].(model.AcceptGroupInvitationInput)), true
 
 	case "Mutation.addPaymentMethod":
 		if e.complexity.Mutation.AddPaymentMethod == nil {
@@ -309,7 +309,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Mutation.CancelGroupInvitation(childComplexity), true
+		args, err := ec.field_Mutation_cancelGroupInvitation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CancelGroupInvitation(childComplexity, args["input"].(model.CancelGroupInvitationInput)), true
 
 	case "Mutation.changeBillingPlan":
 		if e.complexity.Mutation.ChangeBillingPlan == nil {
@@ -792,6 +797,9 @@ var parsedSchema = gqlparser.MustLoadSchema(
 	id: String!
 }
 scalar Bytes
+input CancelGroupInvitationInput {
+	id: String!
+}
 input CompleteRegistrationInput {
 	id: String!
 	username: String!
@@ -846,9 +854,9 @@ type Mutation {
 	updateGroup(input: GroupInput!): Group!
 	removeGroupMembers(input: RemoveGroupMembersInput!): Group!
 	inviteUsersInGroup: Boolean!
-	acceptGroupInvitation(input: AcceptGroupInvitationInput): Boolean!
+	acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
 	declineGroupInvitation: Boolean!
-	cancelGroupInvitation: Boolean!
+	cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
 	quitGroup: Boolean!
 	createBillingPlan: Boolean!
 	updateBillingPlan: Boolean!
@@ -957,9 +965,23 @@ input VerifyRegistrationInput {
 func (ec *executionContext) field_Mutation_acceptGroupInvitation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 *model.AcceptGroupInvitationInput
+	var arg0 model.AcceptGroupInvitationInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalOAcceptGroupInvitationInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx, tmp)
+		arg0, err = ec.unmarshalNAcceptGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_cancelGroupInvitation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.CancelGroupInvitationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNCancelGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCancelGroupInvitationInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2060,7 +2082,7 @@ func (ec *executionContext) _Mutation_acceptGroupInvitation(ctx context.Context,
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().AcceptGroupInvitation(rctx, args["input"].(*model.AcceptGroupInvitationInput))
+		return ec.resolvers.Mutation().AcceptGroupInvitation(rctx, args["input"].(model.AcceptGroupInvitationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2126,9 +2148,16 @@ func (ec *executionContext) _Mutation_cancelGroupInvitation(ctx context.Context,
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_cancelGroupInvitation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().CancelGroupInvitation(rctx)
+		return ec.resolvers.Mutation().CancelGroupInvitation(rctx, args["input"].(model.CancelGroupInvitationInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4571,6 +4600,24 @@ func (ec *executionContext) unmarshalInputAcceptGroupInvitationInput(ctx context
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCancelGroupInvitationInput(ctx context.Context, obj interface{}) (model.CancelGroupInvitationInput, error) {
+	var it model.CancelGroupInvitationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCompleteRegistrationInput(ctx context.Context, obj interface{}) (model.CompleteRegistrationInput, error) {
 	var it model.CompleteRegistrationInput
 	var asMap = obj.(map[string]interface{})
@@ -5776,6 +5823,10 @@ func (ec *executionContext) ___Type(ctx context.Context, sel ast.SelectionSet, o
 
 // region    ***************************** type.gotpl *****************************
 
+func (ec *executionContext) unmarshalNAcceptGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx context.Context, v interface{}) (model.AcceptGroupInvitationInput, error) {
+	return ec.unmarshalInputAcceptGroupInvitationInput(ctx, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	return graphql.UnmarshalBoolean(v)
 }
@@ -5797,6 +5848,10 @@ func (ec *executionContext) unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋser
 
 func (ec *executionContext) marshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, sel ast.SelectionSet, v model.Bytes) graphql.Marshaler {
 	return v
+}
+
+func (ec *executionContext) unmarshalNCancelGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCancelGroupInvitationInput(ctx context.Context, v interface{}) (model.CancelGroupInvitationInput, error) {
+	return ec.unmarshalInputCancelGroupInvitationInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNCompleteRegistrationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCompleteRegistrationInput(ctx context.Context, v interface{}) (model.CompleteRegistrationInput, error) {
@@ -6424,18 +6479,6 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		}
 	}
 	return res
-}
-
-func (ec *executionContext) unmarshalOAcceptGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx context.Context, v interface{}) (model.AcceptGroupInvitationInput, error) {
-	return ec.unmarshalInputAcceptGroupInvitationInput(ctx, v)
-}
-
-func (ec *executionContext) unmarshalOAcceptGroupInvitationInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx context.Context, v interface{}) (*model.AcceptGroupInvitationInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalOAcceptGroupInvitationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐAcceptGroupInvitationInput(ctx, v)
-	return &res, err
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

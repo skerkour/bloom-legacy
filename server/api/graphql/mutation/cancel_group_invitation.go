@@ -2,38 +2,42 @@ package mutation
 
 import (
 	"context"
+
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (r *Resolver) CancelGroupInvitation(ctx context.Context) (bool, error) {
-	ret := &rpc.Empty{}
+func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error) {
+	ret := false
 	logger := rz.FromCtx(ctx)
-	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
-	if !ok {
-		return ret, twirp.InternalError("internal error")
-	}
-	if apiCtx.AuthenticatedUser == nil {
-		twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
-		return ret, twerr
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser == nil {
+		return ret, gqlerrors.AuthenticationRequired()
 	}
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("groups.CancelInvitation: Starting transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorCancelingInvitationMsg)
+		logger.Error("mutation.CancelGroupInvitation: Starting transaction", rz.Err(err))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorCancelingInvitation))
 	}
 
 	var invitation groups.Invitation
 
 	queryGetInvitation := "SELECT * FROM groups_invitations WHERE id = $1 FOR UPDATE"
-	err = tx.Get(&invitation, queryGetInvitation, params.InvitationId)
+	err = tx.Get(&invitation, queryGetInvitation, input.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.CancelInvitation: fetching invitation", rz.Err(err),
-			rz.String("invitation_id", params.InvitationId))
-		return ret, twirp.NewError(twirp.NotFound, "Invitation not found.")
+		logger.Error("mutation.CancelGroupInvitation: fetching invitation", rz.Err(err),
+			rz.String("invitation_id", input.ID))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
 	}
 
-	twerr := groups.CancelInvitation(ctx, tx, *apiCtx.AuthenticatedUser, invitation)
+	twerr := groups.CancelInvitation(ctx, tx, *currentUser, invitation)
 	if twerr != nil {
 		tx.Rollback()
 		return ret, twerr
@@ -42,8 +46,8 @@ func (r *Resolver) CancelGroupInvitation(ctx context.Context) (bool, error) {
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.CancelInvitation: Committing transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorCancelingInvitationMsg)
+		logger.Error("mutation.CancelGroupInvitation: Committing transaction", rz.Err(err))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorCancelingInvitation))
 	}
 
 	return ret, nil
