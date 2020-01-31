@@ -73,6 +73,7 @@ type Plan {
 
 type Session {
   id: String!
+  createdAt: Time!
   token: String
   device: SessionDevice!
 }

@@ -77,9 +77,10 @@ type SendNewRegistrationCodeInput struct {
 }
 
 type Session struct {
-	ID     string         `json:"id"`
-	Token  *string        `json:"token"`
-	Device *SessionDevice `json:"device"`
+	ID        string         `json:"id"`
+	CreatedAt time.Time      `json:"createdAt"`
+	Token     *string        `json:"token"`
+	Device    *SessionDevice `json:"device"`
 }
 
 type SessionDevice struct {
