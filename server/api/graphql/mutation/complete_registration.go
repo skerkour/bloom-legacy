@@ -19,7 +19,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	currentUser := apiutil.UserFromCtx(ctx)
 	apiCtx := apiutil.ApiCtxFromCtx(ctx)
 	if apiCtx == nil {
-		logger.Error("mutation.SignIn: error getting apiCtx from context")
+		logger.Error("mutation.CompleteRegistration: error getting apiCtx from context")
 		return ret, gqlerrors.Internal()
 	}
 
