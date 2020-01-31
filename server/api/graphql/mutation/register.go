@@ -5,7 +5,7 @@ import (
 	"time"
 
 	gqlerrors "gitlab.com/bloom42/bloom/server/api/graphql/errors"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlutil"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -16,7 +16,7 @@ import (
 func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInput) (*model.RegistrationStarted, error) {
 	logger := rz.FromCtx(ctx)
 	var ret *model.RegistrationStarted
-	currentUser := gqlutil.UserFromCtx(ctx)
+	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser != nil {
 		return ret, gqlerrors.MustNotBeAuthenticated()

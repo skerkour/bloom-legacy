@@ -5,7 +5,7 @@ import (
 	"time"
 
 	gqlerrors "gitlab.com/bloom42/bloom/server/api/graphql/errors"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlutil"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -18,8 +18,8 @@ import (
 func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error) {
 	var ret model.SignedIn
 	logger := rz.FromCtx(ctx)
-	currentUser := gqlutil.UserFromCtx(ctx)
-	apiCtx := gqlutil.ApiCtxFromCtx(ctx)
+	currentUser := apiutil.UserFromCtx(ctx)
+	apiCtx := apiutil.ApiCtxFromCtx(ctx)
 	if apiCtx == nil {
 		logger.Error("mutation.SignIn: error getting apiCtx from context")
 		return &ret, gqlerrors.Internal()
