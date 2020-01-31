@@ -175,7 +175,7 @@ type Mutation {
   deleteGroup(input: DeleteGroupInput!): Boolean!
   updateGroup(input: GroupInput!): Group!
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
-  inviteUsersToGroup: Boolean!
+  inviteUsersInGroup: Boolean!
   acceptGroupInvitation: Boolean!
   declineGroupInvitation: Boolean!
   cancelGroupInvitation: Boolean!

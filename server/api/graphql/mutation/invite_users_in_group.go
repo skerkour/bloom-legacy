@@ -1,17 +1,11 @@
-package handler
+package mutation
 
 import (
 	"context"
-
-	"gitlab.com/bloom42/bloom/server/api/apictx"
-	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/domain/groups"
-	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (handler Handler) RemoveMembers(ctx context.Context, params *rpc.RemoveMembersParams) (*rpc.Empty, error) {
+func (r *Resolver) InviteUsersInGroup(ctx context.Context) (bool, error) {
 	ret := &rpc.Empty{}
-
 	logger := rz.FromCtx(ctx)
 	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	if !ok {
@@ -24,8 +18,8 @@ func (handler Handler) RemoveMembers(ctx context.Context, params *rpc.RemoveMemb
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("groups.RemoveMembers: Starting transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorRemovingMembersMsg)
+		logger.Error("groups.InviteUsers: Starting transaction", rz.Err(err))
+		return ret, twirp.InternalError(groups.ErrorInvitingUsersMsg)
 	}
 
 	var group groups.Group
@@ -34,12 +28,12 @@ func (handler Handler) RemoveMembers(ctx context.Context, params *rpc.RemoveMemb
 	err = tx.Get(&group, queryGetGroup, params.GroupId)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.DeleteGroup: fetching group", rz.Err(err),
+		logger.Error("groups.InviteUsers: fetching group", rz.Err(err),
 			rz.String("id", params.GroupId))
 		return ret, twirp.NewError(twirp.NotFound, "Group not found.")
 	}
 
-	twerr := groups.RemoveMembers(ctx, tx, *apiCtx.AuthenticatedUser, group, params.Usernames)
+	twerr := groups.InviteUsers(ctx, tx, *apiCtx.AuthenticatedUser, group, params.Usernames)
 	if twerr != nil {
 		tx.Rollback()
 		return ret, twerr
@@ -48,8 +42,8 @@ func (handler Handler) RemoveMembers(ctx context.Context, params *rpc.RemoveMemb
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.RemoveMembers: Committing transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorRemovingMembersMsg)
+		logger.Error("groups.InviteUsers: Committing transaction", rz.Err(err))
+		return ret, twirp.InternalError(groups.ErrorInvitingUsersMsg)
 	}
 
 	return ret, nil
