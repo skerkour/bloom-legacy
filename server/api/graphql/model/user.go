@@ -12,6 +12,7 @@ type User struct {
 	FirstName   *string    `json:"firstName"`
 	LastName    *string    `json:"lastName"`
 	DisplayName string     `json:"displayName"`
+	IsAdmin     bool       `json:"isAdmin"`
 }
 
 type UserResolver struct{}

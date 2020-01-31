@@ -30,13 +30,20 @@ type PendingUser struct {
 }
 
 type Session struct {
-	ID        string    `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
-	UserID    string    `json:"user_id" db:"user_id"`
-	TokenHash string    `json:"token_hash" db:"token_hash"`
-	IPAddr    string    `json:"ip" db:"ip"`
-	UserAgent string    `json:"user_agent" db:"user_agent"`
+	ID         string    `json:"id" db:"id"`
+	CreatedAt  time.Time `json:"created_at" db:"created_at"`
+	UpdatedAt  time.Time `json:"updated_at" db:"updated_at"`
+	TokenHash  string    `json:"token_hash" db:"token_hash"`
+	IPAddr     string    `json:"ip" db:"ip"`
+	UserAgent  string    `json:"user_agent" db:"user_agent"`
+	DeviceOS   string    `json:"device_os" db:"device_os"`
+	DeviceType string    `json:"device_type" db:"device_type"`
+	UserID     string    `json:"user_id" db:"user_id"`
+}
+
+type SessionDevice struct {
+	OS   string
+	Type string
 }
 
 type DeletedUsername struct {

@@ -140,6 +140,7 @@ type ComplexityRoot struct {
 		Groups           func(childComplexity int) int
 		ID               func(childComplexity int) int
 		Invoices         func(childComplexity int) int
+		IsAdmin          func(childComplexity int) int
 		LastName         func(childComplexity int) int
 		PaymentMethods   func(childComplexity int) int
 		Sessions         func(childComplexity int) int
@@ -675,6 +676,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Invoices(childComplexity), true
 
+	case "User.isAdmin":
+		if e.complexity.User.IsAdmin == nil {
+			break
+		}
+
+		return e.complexity.User.IsAdmin(childComplexity), true
+
 	case "User.lastName":
 		if e.complexity.User.LastName == nil {
 			break
@@ -911,6 +919,7 @@ type User {
 	firstName: String
 	lastName: String
 	displayName: String!
+	isAdmin: Boolean!
 	groups: [Group!]
 	paymentMethods: [PaymentMethod!]
 	invoices: [Invoice!]
@@ -3228,6 +3237,40 @@ func (ec *executionContext) _User_displayName(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _User_isAdmin(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsAdmin, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _User_groups(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5319,6 +5362,11 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			out.Values[i] = ec._User_lastName(ctx, field, obj)
 		case "displayName":
 			out.Values[i] = ec._User_displayName(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "isAdmin":
+			out.Values[i] = ec._User_isAdmin(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}

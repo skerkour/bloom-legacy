@@ -31,6 +31,7 @@ type User {
   firstName: String
   lastName: String
   displayName: String!
+  isAdmin: Boolean!
   groups: [Group!]
   paymentMethods: [PaymentMethod!]
   invoices: [Invoice!]

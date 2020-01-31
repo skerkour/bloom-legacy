@@ -56,7 +56,12 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 		return &ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
 	}
 
-	newSession, token, err := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent)
+	device := users.SessionDevice{
+		OS:   input.Device.Os.String(),
+		Type: input.Device.Type.String(),
+	}
+
+	newSession, token, err := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent, device)
 	if err != nil {
 		tx.Rollback()
 		return &ret, gqlerrors.New(err)

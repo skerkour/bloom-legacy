@@ -31,6 +31,7 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		FirstName:   &currentUser.FirstName,
 		LastName:    &currentUser.LastName,
 		DisplayName: currentUser.DisplayName,
+		IsAdmin:     currentUser.IsAdmin,
 	}
 
 	return ret, nil
