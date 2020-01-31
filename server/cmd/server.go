@@ -4,6 +4,7 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/cobra"
 	"github.com/stripe/stripe-go"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
@@ -33,6 +34,10 @@ var serverCmd = &cobra.Command{
 				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
 			),
 		))
+
+		if config.Env == consts.ENV_DEVELOPMENT {
+			log.SetLogger(log.With(rz.Formatter(rz.FormatterConsole())))
+		}
 
 		// init 3rd party services
 		stripe.Key = config.Stripe.SecretKey
