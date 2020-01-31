@@ -1,4 +1,4 @@
-package errors
+package gqlerrors
 
 import (
 	"github.com/vektah/gqlparser/gqlerror"

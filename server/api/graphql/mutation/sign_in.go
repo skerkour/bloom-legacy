@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	gqlerrors "gitlab.com/bloom42/bloom/server/api/graphql/errors"
 	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
