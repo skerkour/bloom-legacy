@@ -14,8 +14,8 @@ func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	var err error
 
 	// verify that user is admin
-	if twerr := CheckUserIsGroupAdmin(ctx, tx, user.ID, invitation.GroupID); twerr != nil {
-		return twerr
+	if err = CheckUserIsGroupAdmin(ctx, tx, user.ID, invitation.GroupID); err != nil {
+		return err
 	}
 
 	// delete invitation

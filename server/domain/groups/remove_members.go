@@ -14,8 +14,8 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	var err error
 	var remainingAdmins int
 
-	if twerr := CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); twerr != nil {
-		return twerr
+	if err = CheckUserIsGroupAdmin(ctx, tx, user.ID, group.ID); err != nil {
+		return err
 	}
 
 	// delete memberships
@@ -25,7 +25,7 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	_, err = tx.Exec(queryDeleteMemberships, usernames)
 	if err != nil {
 		logger.Error("groups.RemoveMembers: removing members", rz.Err(err))
-		return NewError(ErrorsRemovingMembersFromGroup)
+		return NewError(ErrorRemovingMembersFromGroup)
 	}
 
 	queryRemainingAdmins := `SELECT COUNT(*) FROM groups_members
@@ -33,7 +33,7 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
 	if err != nil {
 		logger.Error("users.RemoveMembers: error fetching remaining admins", rz.Err(err))
-		return NewError(ErrorsRemovingMembersFromGroup)
+		return NewError(ErrorRemovingMembersFromGroup)
 	}
 	if remainingAdmins != 0 {
 		return NewError(ErrorAtLeastOneAdministratorShouldRemainsInGroup)

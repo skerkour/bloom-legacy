@@ -19,7 +19,6 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v68.13.0+incompatible
-	github.com/twitchtv/twirp v5.10.1+incompatible
 	github.com/vektah/gqlparser v1.2.1
 	gitlab.com/bloom42/bloom/common v0.0.0-20200131135300-ecb6e6c5a33d
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899

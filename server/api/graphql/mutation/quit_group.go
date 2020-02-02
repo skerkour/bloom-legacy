@@ -37,10 +37,10 @@ func (r *Resolver) QuitGroup(ctx context.Context, input model.QuitGroupInput) (b
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 
-	twerr := groups.QuitGroup(ctx, tx, *currentUser, group)
-	if twerr != nil {
+	err = groups.QuitGroup(ctx, tx, *currentUser, group)
+	if err != nil {
 		tx.Rollback()
-		return ret, twerr
+		return ret, err
 	}
 
 	err = tx.Commit()

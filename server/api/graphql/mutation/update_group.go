@@ -2,56 +2,59 @@ package mutation
 
 import (
 	"context"
+
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/libs/rz-go"
 )
 
 func (r *Resolver) UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error) {
-	ret := &rpc.Group{}
+	var ret *model.Group
 	logger := rz.FromCtx(ctx)
-	apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
-	if !ok {
-		return ret, twirp.InternalError("internal error")
-	}
-	if apiCtx.AuthenticatedUser == nil {
-		twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
-		return ret, twerr
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser == nil {
+		return ret, gqlerrors.AuthenticationRequired()
 	}
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("groups.UpdateGroup: Starting transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorUpdatingGroupMsg)
+		logger.Error("mutation.UpdateGroup: Starting transaction", rz.Err(err))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorRemovingMembersFromGroup))
 	}
 
 	var group groups.Group
 
 	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
-	err = tx.Get(&group, queryGetGroup, params.GroupId)
+	err = tx.Get(&group, queryGetGroup, input.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.UpdateGroup: fetching group", rz.Err(err),
-			rz.String("id", params.GroupId))
-		return ret, twirp.NewError(twirp.NotFound, "Group not found.")
+		logger.Error("mutation.UpdateGroup: fetching group", rz.Err(err),
+			rz.String("id", input.ID))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 
-	twerr := groups.UpdateGroup(ctx, tx, *apiCtx.AuthenticatedUser, &group, params.Name, params.Description)
-	if twerr != nil {
+	err = groups.UpdateGroup(ctx, tx, *currentUser, &group, input.Name, input.Description)
+	if err != nil {
 		tx.Rollback()
-		return ret, twerr
+		return ret, err
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.UpdateGroup: Committing transaction", rz.Err(err))
-		return ret, twirp.InternalError(groups.ErrorUpdatingGroupMsg)
+		logger.Error("mutation.UpdateGroup: Committing transaction", rz.Err(err))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorRemovingMembersFromGroup))
 	}
 
-	ret = &rpc.Group{
-		Id:          group.ID,
-		CreatedAt:   group.CreatedAt.Format(time.RFC3339),
+	ret = &model.Group{
+		ID:          &group.ID,
 		Name:        group.Name,
 		Description: group.Description,
+		CreatedAt:   &group.CreatedAt,
 	}
 	return ret, nil
 }

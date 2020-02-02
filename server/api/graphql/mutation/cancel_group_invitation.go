@@ -37,10 +37,10 @@ func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.Cancel
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
 	}
 
-	twerr := groups.CancelInvitation(ctx, tx, *currentUser, invitation)
-	if twerr != nil {
+	err = groups.CancelInvitation(ctx, tx, *currentUser, invitation)
+	if err != nil {
 		tx.Rollback()
-		return ret, twerr
+		return ret, err
 	}
 
 	err = tx.Commit()

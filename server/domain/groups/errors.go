@@ -22,7 +22,7 @@ const (
 	ErrorQuittingGroup
 	ErrorAtLeastOneAdministratorShouldRemainsInGroup
 	ErrorUpdatingGroup
-	ErrorsRemovingMembersFromGroup
+	ErrorRemovingMembersFromGroup
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -67,7 +67,7 @@ func NewError(domainError DomainError) errors.Error {
 		message = "At least one administrator should remain in group."
 	case ErrorUpdatingGroup:
 		message = "Error updating group. Please try again."
-	case ErrorsRemovingMembersFromGroup:
+	case ErrorRemovingMembersFromGroup:
 		message = "Error removing members from group. Please try again."
 	}
 
