@@ -61,6 +61,7 @@ type GroupMember {
 type GroupInvitation {
   id: String!
   group: Group!
+  inviter: User!
 }
 
 type Invoice {
@@ -173,6 +174,11 @@ input DeclineGroupInvitation {
   id: String!
 }
 
+input InviteUsersInGroupInput {
+  id: String!
+  usernames: [String!]!
+}
+
 type Mutation {
   # users
   register(input: RegisterInput!): RegistrationStarted!
@@ -187,7 +193,7 @@ type Mutation {
   deleteGroup(input: DeleteGroupInput!): Boolean!
   updateGroup(input: GroupInput!): Group!
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
-  inviteUsersInGroup: Boolean!
+  inviteUsersInGroup(input: InviteUsersInGroupInput!): Boolean!
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
   declineGroupInvitation(input: DeclineGroupInvitation!): Boolean!
   cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!

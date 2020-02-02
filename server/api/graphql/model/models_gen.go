@@ -45,13 +45,19 @@ type GroupInput struct {
 }
 
 type GroupInvitation struct {
-	ID    string `json:"id"`
-	Group *Group `json:"group"`
+	ID      string `json:"id"`
+	Group   *Group `json:"group"`
+	Inviter *User  `json:"inviter"`
 }
 
 type GroupMember struct {
 	User *User           `json:"user"`
 	Role GroupMemberRole `json:"role"`
+}
+
+type InviteUsersInGroupInput struct {
+	ID        string   `json:"id"`
+	Usernames []string `json:"usernames"`
 }
 
 type Invoice struct {

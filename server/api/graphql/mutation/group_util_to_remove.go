@@ -15,18 +15,18 @@ type invit struct {
 	InviterDisplayName string    `db:"inviter_display_name"`
 }
 
-func invitToRpcInvitation(invitation invit) *rpc.Invitation {
-	return &rpc.Invitation{
-		Id: invitation.ID,
-		Group: &rpc.Group{
-			Id:          invitation.GroupID,
-			CreatedAt:   invitation.GroupCreatedAt.Format(time.RFC3339),
-			Name:        invitation.GroupName,
-			Description: invitation.GroupDescription,
-		},
-		Inviter: &rpc.Inviter{
-			Username:    invitation.InviterUsername,
-			DisplayName: invitation.InviterDisplayName,
-		},
-	}
-}
+// func invitToRpcInvitation(invitation invit) *rpc.Invitation {
+// 	return &rpc.Invitation{
+// 		Id: invitation.ID,
+// 		Group: &rpc.Group{
+// 			Id:          invitation.GroupID,
+// 			CreatedAt:   invitation.GroupCreatedAt.Format(time.RFC3339),
+// 			Name:        invitation.GroupName,
+// 			Description: invitation.GroupDescription,
+// 		},
+// 		Inviter: &rpc.Inviter{
+// 			Username:    invitation.InviterUsername,
+// 			DisplayName: invitation.InviterDisplayName,
+// 		},
+// 	}
+// }
