@@ -77,7 +77,7 @@ type ComplexityRoot struct {
 		CompleteRegistration       func(childComplexity int, input model.CompleteRegistrationInput) int
 		CreateBillingPlan          func(childComplexity int) int
 		CreateGroup                func(childComplexity int, input model.CreateGroupInput) int
-		DeclineGroupInvitation     func(childComplexity int) int
+		DeclineGroupInvitation     func(childComplexity int, input model.DeclineGroupInvitation) int
 		DeleteBillingPlan          func(childComplexity int) int
 		DeleteGroup                func(childComplexity int, input model.DeleteGroupInput) int
 		InviteUsersInGroup         func(childComplexity int) int
@@ -166,7 +166,7 @@ type MutationResolver interface {
 	RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error)
 	InviteUsersInGroup(ctx context.Context) (bool, error)
 	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error)
-	DeclineGroupInvitation(ctx context.Context) (bool, error)
+	DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitation) (bool, error)
 	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
 	QuitGroup(ctx context.Context) (bool, error)
 	CreateBillingPlan(ctx context.Context) (bool, error)
@@ -359,7 +359,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Mutation.DeclineGroupInvitation(childComplexity), true
+		args, err := ec.field_Mutation_declineGroupInvitation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DeclineGroupInvitation(childComplexity, args["input"].(model.DeclineGroupInvitation)), true
 
 	case "Mutation.deleteBillingPlan":
 		if e.complexity.Mutation.DeleteBillingPlan == nil {
@@ -811,6 +816,9 @@ input CreateGroupInput {
 	description: String!
 	usersToInvite: [String!]!
 }
+input DeclineGroupInvitation {
+	id: String!
+}
 input DeleteGroupInput {
 	id: String!
 }
@@ -855,7 +863,7 @@ type Mutation {
 	removeGroupMembers(input: RemoveGroupMembersInput!): Group!
 	inviteUsersInGroup: Boolean!
 	acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
-	declineGroupInvitation: Boolean!
+	declineGroupInvitation(input: DeclineGroupInvitation!): Boolean!
 	cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
 	quitGroup: Boolean!
 	createBillingPlan: Boolean!
@@ -1010,6 +1018,20 @@ func (ec *executionContext) field_Mutation_createGroup_args(ctx context.Context,
 	var arg0 model.CreateGroupInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalNCreateGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCreateGroupInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_declineGroupInvitation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.DeclineGroupInvitation
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNDeclineGroupInvitation2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeclineGroupInvitation(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2114,9 +2136,16 @@ func (ec *executionContext) _Mutation_declineGroupInvitation(ctx context.Context
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_declineGroupInvitation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DeclineGroupInvitation(rctx)
+		return ec.resolvers.Mutation().DeclineGroupInvitation(rctx, args["input"].(model.DeclineGroupInvitation))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4684,6 +4713,24 @@ func (ec *executionContext) unmarshalInputCreateGroupInput(ctx context.Context, 
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputDeclineGroupInvitation(ctx context.Context, obj interface{}) (model.DeclineGroupInvitation, error) {
+	var it model.DeclineGroupInvitation
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputDeleteGroupInput(ctx context.Context, obj interface{}) (model.DeleteGroupInput, error) {
 	var it model.DeleteGroupInput
 	var asMap = obj.(map[string]interface{})
@@ -5860,6 +5907,10 @@ func (ec *executionContext) unmarshalNCompleteRegistrationInput2gitlabᚗcomᚋb
 
 func (ec *executionContext) unmarshalNCreateGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCreateGroupInput(ctx context.Context, v interface{}) (model.CreateGroupInput, error) {
 	return ec.unmarshalInputCreateGroupInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNDeclineGroupInvitation2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeclineGroupInvitation(ctx context.Context, v interface{}) (model.DeclineGroupInvitation, error) {
+	return ec.unmarshalInputDeclineGroupInvitation(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNDeleteGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeleteGroupInput(ctx context.Context, v interface{}) (model.DeleteGroupInput, error) {

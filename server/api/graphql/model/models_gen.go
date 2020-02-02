@@ -30,6 +30,10 @@ type CreateGroupInput struct {
 	UsersToInvite []string `json:"usersToInvite"`
 }
 
+type DeclineGroupInvitation struct {
+	ID string `json:"id"`
+}
+
 type DeleteGroupInput struct {
 	ID string `json:"id"`
 }

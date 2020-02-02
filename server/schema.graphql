@@ -169,6 +169,10 @@ input CancelGroupInvitationInput {
   id: String!
 }
 
+input DeclineGroupInvitation {
+  id: String!
+}
+
 type Mutation {
   # users
   register(input: RegisterInput!): RegistrationStarted!
@@ -185,7 +189,7 @@ type Mutation {
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
   inviteUsersInGroup: Boolean!
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
-  declineGroupInvitation: Boolean!
+  declineGroupInvitation(input: DeclineGroupInvitation!): Boolean!
   cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
   quitGroup: Boolean!
 
