@@ -127,7 +127,9 @@ export default {
       <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank" rel="noopener noreferer">Argon2id</a>,
       <a href="https://en.wikipedia.org/wiki/BLAKE_(hash_function)" target="_blank" rel="noopener noreferer">Blake2b</a>)
       to securely store your all your data.
-      Your data are encrypted on your own devices and (even if we wanted) we can't read them. <br />
+      Your data are encrypted on your own devices and (even if we wanted) we can't read them.
+      You can learn more about our cryptographic architecture on
+      <a href="https://gitlab.com/bloom42/bloom/-/wikis/cryptography" target="_blank" rel="noopener noreferer">the wiki</a>.<br />
       Also, we do not store financial data ourselves, we use  <a href="https://stripe.com" target="_blank" rel="noopener noreferer">Stripe</a>.`,
     q2: 'Where the encrypted data are stored?',
     a2: `The <a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="noopener noreferer">end-to-end</a>
