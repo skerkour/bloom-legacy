@@ -23,7 +23,7 @@ func (r *Resolver) UpdateGroup(ctx context.Context, input model.GroupInput) (*mo
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("mutation.UpdateGroup: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorRemovingMembersFromGroup))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorUpdatingGroup))
 	}
 
 	var group groups.Group
@@ -40,14 +40,14 @@ func (r *Resolver) UpdateGroup(ctx context.Context, input model.GroupInput) (*mo
 	err = groups.UpdateGroup(ctx, tx, *currentUser, &group, input.Name, input.Description)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.UpdateGroup: Committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorRemovingMembersFromGroup))
+		return ret, gqlerrors.New(groups.NewError(groups.ErrorUpdatingGroup))
 	}
 
 	ret = &model.Group{

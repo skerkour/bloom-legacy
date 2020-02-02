@@ -40,7 +40,7 @@ func (r *Resolver) DeleteGroup(ctx context.Context, input model.DeleteGroupInput
 	err = groups.DeleteGroup(ctx, tx, *currentUser, group)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

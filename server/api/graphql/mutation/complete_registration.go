@@ -54,14 +54,14 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	err = users.DeletePendingUser(ctx, tx, pendingUser.ID)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	// create user
 	newUser, err := users.CreateUser(ctx, tx, pendingUser, input.Username, input.AuthKey)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	// start session
@@ -73,7 +73,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	newSession, token, err := users.StartSession(ctx, tx, newUser.ID, apiCtx.IP, apiCtx.UserAgent, device)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

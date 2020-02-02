@@ -40,7 +40,7 @@ func (r *Resolver) RemoveGroupMembers(ctx context.Context, input model.RemoveGro
 	err = groups.RemoveMembers(ctx, tx, *currentUser, group, input.Usernames)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

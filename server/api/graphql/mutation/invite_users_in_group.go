@@ -40,7 +40,7 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 	err = groups.InviteUsers(ctx, tx, *currentUser, group, input.Usernames)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

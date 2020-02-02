@@ -40,7 +40,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 	err = groups.AcceptInvitation(ctx, tx, *currentUser, invitation)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

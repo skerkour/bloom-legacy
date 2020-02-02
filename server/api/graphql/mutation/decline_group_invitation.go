@@ -40,7 +40,7 @@ func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.Decli
 	err = groups.DeclineInvitation(ctx, tx, *currentUser, invitation)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

@@ -57,7 +57,7 @@ func (resolver *Resolver) VerifyRegistration(ctx context.Context, input model.Ve
 			}
 			tx.Commit()
 		}
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

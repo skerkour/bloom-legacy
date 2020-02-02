@@ -55,14 +55,14 @@ func (resolver *Resolver) SendNewRegistrationCode(ctx context.Context, input mod
 	verificationCode, err := users.GenerateNewRegistrationCode(ctx, tx, &pendingUser)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = users.SendUserVerificationCode(pendingUser.Email, pendingUser.DisplayName, verificationCode)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutaiton.SendNewRegistrationCode: sending email", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

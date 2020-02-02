@@ -40,7 +40,7 @@ func (r *Resolver) QuitGroup(ctx context.Context, input model.QuitGroupInput) (b
 	err = groups.QuitGroup(ctx, tx, *currentUser, group)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

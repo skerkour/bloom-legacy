@@ -40,14 +40,14 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	newPendingUser, verificationCode, err := users.CreatePendingUser(ctx, tx, input.DisplayName, input.Email)
 	if err != nil {
 		tx.Rollback()
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+		return ret, gqlerrors.New(err)
 	}
 
 	err = users.SendUserVerificationCode(input.Email, input.DisplayName, verificationCode)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.Register: Sending confirmation email", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()

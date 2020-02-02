@@ -29,7 +29,7 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 	newGroup, err := groups.CreateGroup(ctx, tx, *currentUser, input.Name, input.Description)
 	if err != nil {
 		tx.Rollback()
-		return ret, err
+		return ret, gqlerrors.New(err)
 	}
 
 	err = tx.Commit()
