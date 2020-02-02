@@ -73,6 +73,10 @@ type Plan struct {
 	ID string `json:"id"`
 }
 
+type QuitGroupInput struct {
+	ID string `json:"id"`
+}
+
 type RegisterInput struct {
 	DisplayName string `json:"displayName"`
 	Email       string `json:"email"`

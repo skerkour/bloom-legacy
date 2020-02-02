@@ -82,7 +82,7 @@ type ComplexityRoot struct {
 		DeleteBillingPlan          func(childComplexity int) int
 		DeleteGroup                func(childComplexity int, input model.DeleteGroupInput) int
 		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
-		QuitGroup                  func(childComplexity int) int
+		QuitGroup                  func(childComplexity int, input model.QuitGroupInput) int
 		Register                   func(childComplexity int, input model.RegisterInput) int
 		RemoveGroupMembers         func(childComplexity int, input model.RemoveGroupMembersInput) int
 		RemovePaymentMethod        func(childComplexity int) int
@@ -169,7 +169,7 @@ type MutationResolver interface {
 	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error)
 	DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitation) (bool, error)
 	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
-	QuitGroup(ctx context.Context) (bool, error)
+	QuitGroup(ctx context.Context, input model.QuitGroupInput) (bool, error)
 	CreateBillingPlan(ctx context.Context) (bool, error)
 	UpdateBillingPlan(ctx context.Context) (bool, error)
 	DeleteBillingPlan(ctx context.Context) (bool, error)
@@ -410,7 +410,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			break
 		}
 
-		return e.complexity.Mutation.QuitGroup(childComplexity), true
+		args, err := ec.field_Mutation_quitGroup_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.QuitGroup(childComplexity, args["input"].(model.QuitGroupInput)), true
 
 	case "Mutation.register":
 		if e.complexity.Mutation.Register == nil {
@@ -883,7 +888,7 @@ type Mutation {
 	acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
 	declineGroupInvitation(input: DeclineGroupInvitation!): Boolean!
 	cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
-	quitGroup: Boolean!
+	quitGroup(input: QuitGroupInput!): Boolean!
 	createBillingPlan: Boolean!
 	updateBillingPlan: Boolean!
 	deleteBillingPlan: Boolean!
@@ -906,6 +911,9 @@ type Query {
 	group(id: String!): Group
 	groups(limit: Int = 25, offset: Int = 0): [Group!]!
 	plans: [Plan!]!
+}
+input QuitGroupInput {
+	id: String!
 }
 input RegisterInput {
 	displayName: String!
@@ -1078,6 +1086,20 @@ func (ec *executionContext) field_Mutation_inviteUsersInGroup_args(ctx context.C
 	var arg0 model.InviteUsersInGroupInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalNInviteUsersInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUsersInGroupInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_quitGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.QuitGroupInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNQuitGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐQuitGroupInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2291,9 +2313,16 @@ func (ec *executionContext) _Mutation_quitGroup(ctx context.Context, field graph
 	}
 
 	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_quitGroup_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().QuitGroup(rctx)
+		return ec.resolvers.Mutation().QuitGroup(rctx, args["input"].(model.QuitGroupInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4876,6 +4905,24 @@ func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Co
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputQuitGroupInput(ctx context.Context, obj interface{}) (model.QuitGroupInput, error) {
+	var it model.QuitGroupInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputRegisterInput(ctx context.Context, obj interface{}) (model.RegisterInput, error) {
 	var it model.RegisterInput
 	var asMap = obj.(map[string]interface{})
@@ -6192,6 +6239,10 @@ func (ec *executionContext) marshalNPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋser
 		return graphql.Null
 	}
 	return ec._Plan(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNQuitGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐQuitGroupInput(ctx context.Context, v interface{}) (model.QuitGroupInput, error) {
+	return ec.unmarshalInputQuitGroupInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNRegisterInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRegisterInput(ctx context.Context, v interface{}) (model.RegisterInput, error) {
