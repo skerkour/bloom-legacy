@@ -6,7 +6,7 @@ import (
 )
 
 // creates a customer only for Stripe
-func CreateStripeCustomer(billingEmail, defaultStripePaymentMethod string) twirp.Error {
+func CreateStripeCustomer(billingEmail, defaultStripePaymentMethod string) error {
 	var err error
 
 	// create Stripe customer

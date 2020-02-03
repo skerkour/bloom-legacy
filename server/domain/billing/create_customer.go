@@ -10,7 +10,7 @@ import (
 )
 
 // creates a customer only for us
-func CreateCustomer(ctx context.Context, tx *sqlx.Tx, userID, groupID *string) (Customer, twirp.Error) {
+func CreateCustomer(ctx context.Context, tx *sqlx.Tx, userID, groupID *string) (Customer, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
 	var ret Customer
@@ -38,7 +38,7 @@ func CreateCustomer(ctx context.Context, tx *sqlx.Tx, userID, groupID *string) (
 		ret.StripeID, ret.UserID, ret.GroupID)
 	if err != nil {
 		logger.Error("billing.CreateCustomer: inserting new customer", rz.Err(err))
-		return ret, twirp.InternalError(ErrorCreatingCustomerMsg)
+		return ret, NewError(ErrorCreatingCustomer)
 	}
 	return ret, nil
 }
