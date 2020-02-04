@@ -2,6 +2,6 @@
 
 # Attack us, we will strike back twice, attack one of our customers and we will phase you :)
 
-Contact: security@bloom.sh
+Contact: hello@bloom.sh
 Encryption:
 Acknowledgements:
