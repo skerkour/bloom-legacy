@@ -915,8 +915,8 @@ var parsedSchema = gqlparser.MustLoadSchema(
 input AddPaymentMethodInput {
 	stripeId: String!
 	cardLast4: String!
-	expirationMonth: Int!
-	expirationYear: Int!
+	cardExpirationMonth: Int!
+	cardExpirationYear: Int!
 }
 enum BillingPLanTier {
 	BASIC
@@ -5261,15 +5261,15 @@ func (ec *executionContext) unmarshalInputAddPaymentMethodInput(ctx context.Cont
 			if err != nil {
 				return it, err
 			}
-		case "expirationMonth":
+		case "cardExpirationMonth":
 			var err error
-			it.ExpirationMonth, err = ec.unmarshalNInt2int(ctx, v)
+			it.CardExpirationMonth, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "expirationYear":
+		case "cardExpirationYear":
 			var err error
-			it.ExpirationYear, err = ec.unmarshalNInt2int(ctx, v)
+			it.CardExpirationYear, err = ec.unmarshalNInt2int(ctx, v)
 			if err != nil {
 				return it, err
 			}

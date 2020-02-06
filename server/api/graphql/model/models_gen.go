@@ -14,10 +14,10 @@ type AcceptGroupInvitationInput struct {
 }
 
 type AddPaymentMethodInput struct {
-	StripeID        string `json:"stripeId"`
-	CardLast4       string `json:"cardLast4"`
-	ExpirationMonth int    `json:"expirationMonth"`
-	ExpirationYear  int    `json:"expirationYear"`
+	StripeID            string `json:"stripeId"`
+	CardLast4           string `json:"cardLast4"`
+	CardExpirationMonth int    `json:"cardExpirationMonth"`
+	CardExpirationYear  int    `json:"cardExpirationYear"`
 }
 
 type BillingPlan struct {

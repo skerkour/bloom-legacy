@@ -218,8 +218,8 @@ input ChangeBillingPlanInput {
 input AddPaymentMethodInput {
   stripeId: String!
   cardLast4: String!
-  expirationMonth: Int!
-  expirationYear: Int!
+  cardExpirationMonth: Int!
+  cardExpirationYear: Int!
 }
 
 input RemovePaymentMethodInput {

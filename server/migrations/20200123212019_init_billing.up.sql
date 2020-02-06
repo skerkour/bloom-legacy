@@ -4,9 +4,11 @@ CREATE TABLE billing_plans (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     name TEXT NOT NULL,
-    storage BIGINT NOT NULL,
-    parallel_bitflow_downloads BIGINT NOT NULL,
+    price DOUBLE PRECISION NOT NULL,
+    description TEXT NOT NULL,
     stripe_id TEXT NOT NULL,
+    is_active BOOLEAN NOT NULL,
+    tier TEXT NOT NULL,
 
     PRIMARY KEY(id)
 );
