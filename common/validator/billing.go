@@ -32,3 +32,15 @@ func BillingPlanTier(tier string) error {
 
 	return nil
 }
+
+func BillingPlanPrice(price float64) error {
+	if price < 0.0 {
+		return errors.New("price can't be less than 0")
+	}
+
+	if price > 1000000.0 {
+		return errors.New("price can't be more than 1M")
+	}
+
+	return nil
+}
