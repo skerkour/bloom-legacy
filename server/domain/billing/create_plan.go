@@ -40,11 +40,11 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, name, stripeId, description, t
 		Tier:        tier,
 	}
 
-	// create group
-	queryCreateGroup := `INSERT INTO billing_plans
+	// create plan
+	queryCreatePlan := `INSERT INTO billing_plans
 		(id, created_at, updated_at, name, description, stripe_id, price, is_active, tier)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
-	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description,
+	_, err = tx.Exec(queryCreatePlan, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description,
 		ret.StripeID, ret.Price, ret.IsActive, ret.Tier)
 	if err != nil {
 		logger.Error("billing.CreatePlan: inserting new plan", rz.Err(err))
@@ -65,16 +65,12 @@ func validateCreatePlan(name, description, tier, stripeId string, price float64)
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if price < 0.0 {
-		NewErrorMessage(ErrorInvalidArgument, "price can't be less than 0")
+	if err = validator.BillingPlanPrice(price); err != nil {
+		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if price > 1000000.0 {
-		NewErrorMessage(ErrorInvalidArgument, "price can't be more than 1M")
-	}
-
-	if !strings.HasPrefix(stripeId, "plan_") {
-		NewErrorMessage(ErrorInvalidArgument, "stripe_id does not match the pattern \"plan_*\"")
+	if err = validator.BillingPlanStripeId(stripeId); err != nil {
+		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
 	return nil
