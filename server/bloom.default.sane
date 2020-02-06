@@ -33,8 +33,6 @@ bitflow = {
 smtp = {
     port = 587,
     host = "${SMTP_HOST}",
-    # in development, host, username and password can be left as empty strings: ""
-    # if empty, emails will be printed in the console
     username = "${SMTP_USERNAME}",
     password = "${SMTP_PASSWORD}",
 }
