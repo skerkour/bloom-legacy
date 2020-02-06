@@ -47,7 +47,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 	}
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "You have no right to access the invitations field"))
+		return ret, PermissionDeniedToAccessField()
 	}
 
 	ret = []*GroupInvitation{}
@@ -84,7 +84,7 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) ([]*Group,
 	}
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "You have no right to access the sessions field"))
+		return ret, PermissionDeniedToAccessField()
 	}
 
 	ret = []*Group{}
@@ -157,9 +157,20 @@ func (resolver *UserResolver) StripePublicKey(ctx context.Context, user *User) (
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "You have no right to access this field"))
+		return ret, PermissionDeniedToAccessField()
 	}
 
 	ret = &config.Stripe.PublicKey
 	return ret, nil
+}
+
+func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*BillingPlan, error) {
+	var ret *BillingPlan
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	panic("not implemented")
 }

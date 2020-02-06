@@ -47,9 +47,12 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	BillingPlan struct {
-		ID    func(childComplexity int) int
-		Name  func(childComplexity int) int
-		Price func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IsActive    func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Price       func(childComplexity int) int
+		Tier        func(childComplexity int) int
 	}
 
 	Group struct {
@@ -137,6 +140,7 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
+		BillingPlan      func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		DisplayName      func(childComplexity int) int
 		FirstName        func(childComplexity int) int
@@ -196,6 +200,7 @@ type UserResolver interface {
 	Sessions(ctx context.Context, obj *model.User) ([]*model.Session, error)
 	GroupInvitations(ctx context.Context, obj *model.User) ([]*model.GroupInvitation, error)
 	StripePublicKey(ctx context.Context, obj *model.User) (*string, error)
+	BillingPlan(ctx context.Context, obj *model.User) (*model.BillingPlan, error)
 }
 
 type executableSchema struct {
@@ -213,12 +218,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
+	case "BillingPlan.description":
+		if e.complexity.BillingPlan.Description == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Description(childComplexity), true
+
 	case "BillingPlan.id":
 		if e.complexity.BillingPlan.ID == nil {
 			break
 		}
 
 		return e.complexity.BillingPlan.ID(childComplexity), true
+
+	case "BillingPlan.isActive":
+		if e.complexity.BillingPlan.IsActive == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.IsActive(childComplexity), true
 
 	case "BillingPlan.name":
 		if e.complexity.BillingPlan.Name == nil {
@@ -233,6 +252,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingPlan.Price(childComplexity), true
+
+	case "BillingPlan.tier":
+		if e.complexity.BillingPlan.Tier == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Tier(childComplexity), true
 
 	case "Group.createdAt":
 		if e.complexity.Group.CreatedAt == nil {
@@ -721,6 +747,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.SignedIn.Session(childComplexity), true
 
+	case "User.billingPlan":
+		if e.complexity.User.BillingPlan == nil {
+			break
+		}
+
+		return e.complexity.User.BillingPlan(childComplexity), true
+
 	case "User.createdAt":
 		if e.complexity.User.CreatedAt == nil {
 			break
@@ -894,6 +927,9 @@ type BillingPlan {
 	id: String!
 	price: Float!
 	name: String!
+	description: String!
+	isActive: Boolean!
+	tier: BillingPLanTier!
 }
 input BillingPlanInput {
 	id: String
@@ -902,6 +938,7 @@ input BillingPlanInput {
 	tier: BillingPLanTier!
 	stripeId: String!
 	description: String!
+	isActive: String!
 }
 scalar Bytes
 input CancelGroupInvitationInput {
@@ -1079,6 +1116,7 @@ type User {
 	sessions: [Session!]
 	groupInvitations: [GroupInvitation!]
 	stripePublicKey: String
+	billingPlan: BillingPlan
 }
 input VerifyRegistrationInput {
 	id: String!
@@ -1621,6 +1659,108 @@ func (ec *executionContext) _BillingPlan_name(ctx context.Context, field graphql
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_description(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Description, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_isActive(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.IsActive, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Tier, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.BillingPLanTier)
+	fc.Result = res
+	return ec.marshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -3999,6 +4139,37 @@ func (ec *executionContext) _User_stripePublicKey(ctx context.Context, field gra
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _User_billingPlan(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.User().BillingPlan(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.BillingPlan)
+	fc.Result = res
+	return ec.marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5150,6 +5321,12 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
+		case "isActive":
+			var err error
+			it.IsActive, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -5613,6 +5790,21 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 			}
 		case "name":
 			out.Values[i] = ec._BillingPlan_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "description":
+			out.Values[i] = ec._BillingPlan_description(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "isActive":
+			out.Values[i] = ec._BillingPlan_isActive(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "tier":
+			out.Values[i] = ec._BillingPlan_tier(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -6285,6 +6477,17 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._User_stripePublicKey(ctx, field, obj)
+				return res
+			})
+		case "billingPlan":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_billingPlan(ctx, field, obj)
 				return res
 			})
 		default:
@@ -7272,6 +7475,17 @@ func (ec *executionContext) marshalN__TypeKind2string(ctx context.Context, sel a
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) marshalOBillingPlan2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v model.BillingPlan) graphql.Marshaler {
+	return ec._BillingPlan(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v *model.BillingPlan) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._BillingPlan(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

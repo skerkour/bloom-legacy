@@ -44,6 +44,7 @@ type User {
   sessions: [Session!]
   groupInvitations: [GroupInvitation!]
   stripePublicKey: String
+  billingPlan: BillingPlan
 }
 
 type PaymentMethod {
@@ -79,6 +80,9 @@ type BillingPlan {
   id: String!
   price: Float!
   name: String!
+  description: String!
+  isActive: Boolean!
+  tier: BillingPLanTier!
 }
 
 type Session {
@@ -200,6 +204,7 @@ input BillingPlanInput {
   tier: BillingPLanTier!
   stripeId: String!
   description: String!
+  isActive: String!
 }
 
 input DeleteBillingPlanInput {
