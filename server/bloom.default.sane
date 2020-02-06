@@ -51,5 +51,3 @@ blacklists = {
         "assets/common_passwords_200.txt",
     ]
 }
-
-disabled_services = [] # optional, you can disable services like disabled = ["notes", "bitflow"]
