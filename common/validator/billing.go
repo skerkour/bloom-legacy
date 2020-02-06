@@ -1,5 +1,12 @@
 package validator
 
+import (
+	"errors"
+	"fmt"
+
+	"gitlab.com/bloom42/bloom/common/consts"
+)
+
 func BillingPlanName(name string) error {
 	nameLen := len(name)
 
