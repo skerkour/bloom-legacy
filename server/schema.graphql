@@ -43,6 +43,7 @@ type User {
   invoices: [Invoice!]
   sessions: [Session!]
   groupInvitations: [GroupInvitation!]
+  stripePublicKey: String
 }
 
 type PaymentMethod {
@@ -74,8 +75,10 @@ type Invoice {
   id: String!
 }
 
-type Plan {
+type BillingPlan {
   id: String!
+  price: Float!
+  name: String!
 }
 
 type Session {
@@ -105,7 +108,7 @@ type Query {
   users(limit: Int = 25, offset: Int = 0): [User!]!
   group(id: String!): Group
   groups(limit: Int = 25, offset: Int = 0): [Group!]!
-  plans: [Plan!]!
+  billingPlans: [BillingPlan!]!
 }
 
 ################################################################################
@@ -193,8 +196,10 @@ input QuitGroupInput {
 input BillingPlanInput {
   id: String
   name: String!
+  price: Float!
   tier: BillingPLanTier!
   stripeId: String!
+  description: String!
 }
 
 input DeleteBillingPlanInput {

@@ -1,8 +1,9 @@
 package config
 
 import (
-	"gitlab.com/bloom42/libs/sane-go"
 	"io/ioutil"
+
+	"gitlab.com/bloom42/libs/sane-go"
 )
 
 var DisposableEmailDomains map[string]bool
@@ -40,6 +41,7 @@ type ServerConfig struct {
 
 type StripeConfig struct {
 	SecretKey string `sane:"secret_key"`
+	PublicKey string `sane:"public_key"`
 }
 
 type SentryConfig struct {

@@ -46,6 +46,12 @@ type DirectiveRoot struct {
 }
 
 type ComplexityRoot struct {
+	BillingPlan struct {
+		ID    func(childComplexity int) int
+		Name  func(childComplexity int) int
+		Price func(childComplexity int) int
+	}
+
 	Group struct {
 		CreatedAt   func(childComplexity int) int
 		Description func(childComplexity int) int
@@ -100,17 +106,13 @@ type ComplexityRoot struct {
 		ID        func(childComplexity int) int
 	}
 
-	Plan struct {
-		ID func(childComplexity int) int
-	}
-
 	Query struct {
-		Group  func(childComplexity int, id string) int
-		Groups func(childComplexity int, limit *int, offset *int) int
-		Me     func(childComplexity int) int
-		Plans  func(childComplexity int) int
-		User   func(childComplexity int, username string) int
-		Users  func(childComplexity int, limit *int, offset *int) int
+		BillingPlans func(childComplexity int) int
+		Group        func(childComplexity int, id string) int
+		Groups       func(childComplexity int, limit *int, offset *int) int
+		Me           func(childComplexity int) int
+		User         func(childComplexity int, username string) int
+		Users        func(childComplexity int, limit *int, offset *int) int
 	}
 
 	RegistrationStarted struct {
@@ -146,6 +148,7 @@ type ComplexityRoot struct {
 		LastName         func(childComplexity int) int
 		PaymentMethods   func(childComplexity int) int
 		Sessions         func(childComplexity int) int
+		StripePublicKey  func(childComplexity int) int
 		Username         func(childComplexity int) int
 	}
 }
@@ -184,7 +187,7 @@ type QueryResolver interface {
 	Users(ctx context.Context, limit *int, offset *int) ([]*model.User, error)
 	Group(ctx context.Context, id string) (*model.Group, error)
 	Groups(ctx context.Context, limit *int, offset *int) ([]*model.Group, error)
-	Plans(ctx context.Context) ([]*model.Plan, error)
+	BillingPlans(ctx context.Context) ([]*model.BillingPlan, error)
 }
 type UserResolver interface {
 	Groups(ctx context.Context, obj *model.User) ([]*model.Group, error)
@@ -192,6 +195,7 @@ type UserResolver interface {
 	Invoices(ctx context.Context, obj *model.User) ([]*model.Invoice, error)
 	Sessions(ctx context.Context, obj *model.User) ([]*model.Session, error)
 	GroupInvitations(ctx context.Context, obj *model.User) ([]*model.GroupInvitation, error)
+	StripePublicKey(ctx context.Context, obj *model.User) (*string, error)
 }
 
 type executableSchema struct {
@@ -208,6 +212,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "BillingPlan.id":
+		if e.complexity.BillingPlan.ID == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.ID(childComplexity), true
+
+	case "BillingPlan.name":
+		if e.complexity.BillingPlan.Name == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Name(childComplexity), true
+
+	case "BillingPlan.price":
+		if e.complexity.BillingPlan.Price == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Price(childComplexity), true
 
 	case "Group.createdAt":
 		if e.complexity.Group.CreatedAt == nil {
@@ -571,12 +596,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PaymentMethod.ID(childComplexity), true
 
-	case "Plan.id":
-		if e.complexity.Plan.ID == nil {
+	case "Query.billingPlans":
+		if e.complexity.Query.BillingPlans == nil {
 			break
 		}
 
-		return e.complexity.Plan.ID(childComplexity), true
+		return e.complexity.Query.BillingPlans(childComplexity), true
 
 	case "Query.group":
 		if e.complexity.Query.Group == nil {
@@ -608,13 +633,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Me(childComplexity), true
-
-	case "Query.plans":
-		if e.complexity.Query.Plans == nil {
-			break
-		}
-
-		return e.complexity.Query.Plans(childComplexity), true
 
 	case "Query.user":
 		if e.complexity.Query.User == nil {
@@ -780,6 +798,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Sessions(childComplexity), true
 
+	case "User.stripePublicKey":
+		if e.complexity.User.StripePublicKey == nil {
+			break
+		}
+
+		return e.complexity.User.StripePublicKey(childComplexity), true
+
 	case "User.username":
 		if e.complexity.User.Username == nil {
 			break
@@ -865,11 +890,18 @@ enum BillingPLanTier {
 	PRO
 	ULTRA
 }
+type BillingPlan {
+	id: String!
+	price: Float!
+	name: String!
+}
 input BillingPlanInput {
 	id: String
 	name: String!
+	price: Float!
 	tier: BillingPLanTier!
 	stripeId: String!
+	description: String!
 }
 scalar Bytes
 input CancelGroupInvitationInput {
@@ -962,16 +994,13 @@ type PaymentMethod {
 	id: String!
 	createdAt: Time!
 }
-type Plan {
-	id: String!
-}
 type Query {
 	me: User!
 	user(username: String!): User
 	users(limit: Int = 25, offset: Int = 0): [User!]!
 	group(id: String!): Group
 	groups(limit: Int = 25, offset: Int = 0): [Group!]!
-	plans: [Plan!]!
+	billingPlans: [BillingPlan!]!
 }
 input QuitGroupInput {
 	id: String!
@@ -1049,6 +1078,7 @@ type User {
 	invoices: [Invoice!]
 	sessions: [Session!]
 	groupInvitations: [GroupInvitation!]
+	stripePublicKey: String
 }
 input VerifyRegistrationInput {
 	id: String!
@@ -1490,6 +1520,108 @@ func (ec *executionContext) field___Type_fields_args(ctx context.Context, rawArg
 // endregion ************************** directives.gotpl **************************
 
 // region    **************************** field.gotpl *****************************
+
+func (ec *executionContext) _BillingPlan_id(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_price(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Price, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(float64)
+	fc.Result = res
+	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_name(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Name, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
 	defer func() {
@@ -2857,40 +2989,6 @@ func (ec *executionContext) _PaymentMethod_createdAt(ctx context.Context, field 
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Plan_id(ctx context.Context, field graphql.CollectedField, obj *model.Plan) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "Plan",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.ID, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3083,7 +3181,7 @@ func (ec *executionContext) _Query_groups(ctx context.Context, field graphql.Col
 	return ec.marshalNGroup2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_plans(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_billingPlans(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -3100,7 +3198,7 @@ func (ec *executionContext) _Query_plans(ctx context.Context, field graphql.Coll
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Plans(rctx)
+		return ec.resolvers.Query().BillingPlans(rctx)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3112,9 +3210,9 @@ func (ec *executionContext) _Query_plans(ctx context.Context, field graphql.Coll
 		}
 		return graphql.Null
 	}
-	res := resTmp.([]*model.Plan)
+	res := resTmp.([]*model.BillingPlan)
 	fc.Result = res
-	return ec.marshalNPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPlanᚄ(ctx, field.Selections, res)
+	return ec.marshalNBillingPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanᚄ(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3868,6 +3966,37 @@ func (ec *executionContext) _User_groupInvitations(ctx context.Context, field gr
 	res := resTmp.([]*model.GroupInvitation)
 	fc.Result = res
 	return ec.marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationᚄ(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_stripePublicKey(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.User().StripePublicKey(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) ___Directive_name(ctx context.Context, field graphql.CollectedField, obj *introspection.Directive) (ret graphql.Marshaler) {
@@ -4997,6 +5126,12 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
+		case "price":
+			var err error
+			it.Price, err = ec.unmarshalNFloat2float64(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		case "tier":
 			var err error
 			it.Tier, err = ec.unmarshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx, v)
@@ -5006,6 +5141,12 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 		case "stripeId":
 			var err error
 			it.StripeID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "description":
+			var err error
+			it.Description, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5449,6 +5590,43 @@ func (ec *executionContext) unmarshalInputVerifyRegistrationInput(ctx context.Co
 
 // region    **************************** object.gotpl ****************************
 
+var billingPlanImplementors = []string{"BillingPlan"}
+
+func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionSet, obj *model.BillingPlan) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, billingPlanImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BillingPlan")
+		case "id":
+			out.Values[i] = ec._BillingPlan_id(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "price":
+			out.Values[i] = ec._BillingPlan_price(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "name":
+			out.Values[i] = ec._BillingPlan_name(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var groupImplementors = []string{"Group"}
 
 func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, obj *model.Group) graphql.Marshaler {
@@ -5771,33 +5949,6 @@ func (ec *executionContext) _PaymentMethod(ctx context.Context, sel ast.Selectio
 	return out
 }
 
-var planImplementors = []string{"Plan"}
-
-func (ec *executionContext) _Plan(ctx context.Context, sel ast.SelectionSet, obj *model.Plan) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, planImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Plan")
-		case "id":
-			out.Values[i] = ec._Plan_id(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -5877,7 +6028,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
-		case "plans":
+		case "billingPlans":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -5885,7 +6036,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_plans(ctx, field)
+				res = ec._Query_billingPlans(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -6123,6 +6274,17 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 					}
 				}()
 				res = ec._User_groupInvitations(ctx, field, obj)
+				return res
+			})
+		case "stripePublicKey":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._User_stripePublicKey(ctx, field, obj)
 				return res
 			})
 		default:
@@ -6398,6 +6560,57 @@ func (ec *executionContext) marshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋblo
 	return v
 }
 
+func (ec *executionContext) marshalNBillingPlan2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v model.BillingPlan) graphql.Marshaler {
+	return ec._BillingPlan(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNBillingPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.BillingPlan) graphql.Marshaler {
+	ret := make(graphql.Array, len(v))
+	var wg sync.WaitGroup
+	isLen1 := len(v) == 1
+	if !isLen1 {
+		wg.Add(len(v))
+	}
+	for i := range v {
+		i := i
+		fc := &graphql.FieldContext{
+			Index:  &i,
+			Result: &v[i],
+		}
+		ctx := graphql.WithFieldContext(ctx, fc)
+		f := func(i int) {
+			defer func() {
+				if r := recover(); r != nil {
+					ec.Error(ctx, ec.Recover(ctx, r))
+					ret = nil
+				}
+			}()
+			if !isLen1 {
+				defer wg.Done()
+			}
+			ret[i] = ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, sel, v[i])
+		}
+		if isLen1 {
+			f(i)
+		} else {
+			go f(i)
+		}
+
+	}
+	wg.Wait()
+	return ret
+}
+
+func (ec *executionContext) marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v *model.BillingPlan) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._BillingPlan(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBillingPlanInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanInput(ctx context.Context, v interface{}) (model.BillingPlanInput, error) {
 	return ec.unmarshalInputBillingPlanInput(ctx, v)
 }
@@ -6455,6 +6668,20 @@ func (ec *executionContext) unmarshalNDeleteBillingPlanInput2gitlabᚗcomᚋbloo
 
 func (ec *executionContext) unmarshalNDeleteGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeleteGroupInput(ctx context.Context, v interface{}) (model.DeleteGroupInput, error) {
 	return ec.unmarshalInputDeleteGroupInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
+	return graphql.UnmarshalFloat(v)
+}
+
+func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
+	res := graphql.MarshalFloat(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) marshalNGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {
@@ -6593,57 +6820,6 @@ func (ec *executionContext) marshalNPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbl
 		return graphql.Null
 	}
 	return ec._PaymentMethod(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNPlan2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPlan(ctx context.Context, sel ast.SelectionSet, v model.Plan) graphql.Marshaler {
-	return ec._Plan(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPlanᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Plan) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPlan(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
-func (ec *executionContext) marshalNPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPlan(ctx context.Context, sel ast.SelectionSet, v *model.Plan) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Plan(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalNQuitGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐQuitGroupInput(ctx context.Context, v interface{}) (model.QuitGroupInput, error) {

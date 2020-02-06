@@ -20,11 +20,19 @@ type AddPaymentMethodInput struct {
 	ExpirationYear  int    `json:"expirationYear"`
 }
 
+type BillingPlan struct {
+	ID    string  `json:"id"`
+	Price float64 `json:"price"`
+	Name  string  `json:"name"`
+}
+
 type BillingPlanInput struct {
-	ID       *string         `json:"id"`
-	Name     string          `json:"name"`
-	Tier     BillingPLanTier `json:"tier"`
-	StripeID string          `json:"stripeId"`
+	ID          *string         `json:"id"`
+	Name        string          `json:"name"`
+	Price       float64         `json:"price"`
+	Tier        BillingPLanTier `json:"tier"`
+	StripeID    string          `json:"stripeId"`
+	Description string          `json:"description"`
 }
 
 type CancelGroupInvitationInput struct {
@@ -93,10 +101,6 @@ type Invoice struct {
 type PaymentMethod struct {
 	ID        string    `json:"id"`
 	CreatedAt time.Time `json:"createdAt"`
-}
-
-type Plan struct {
-	ID string `json:"id"`
 }
 
 type QuitGroupInput struct {

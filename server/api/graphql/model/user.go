@@ -6,6 +6,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -148,5 +149,17 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) ([]*Sess
 		ret = append(ret, &sess)
 	}
 
+	return ret, nil
+}
+
+func (resolver *UserResolver) StripePublicKey(ctx context.Context, user *User) (*string, error) {
+	var ret *string
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "You have no right to access this field"))
+	}
+
+	ret = &config.Stripe.PublicKey
 	return ret, nil
 }
