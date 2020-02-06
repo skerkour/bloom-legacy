@@ -14,6 +14,7 @@ const (
 	ErrorUpdatingPlan
 	ErrorAdminRolRequired
 	ErrorPlanNotFound
+	ErrorChangingBillingPlan
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -37,6 +38,8 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorPlanNotFound:
 		code = errors.NotFound
 		message = "Plan not found."
+	case ErrorChangingBillingPlan:
+		message = "Error changing plan. Please try again."
 	}
 
 	return errors.New(code, message)
