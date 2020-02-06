@@ -40,6 +40,7 @@ smtp = {
 }
 
 stripe = {
+    public_key = "${STRIPE_PUBLIC_KEY}",
     secret_key = "${STRIPE_SECRET_KEY}",
 }
 
