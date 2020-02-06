@@ -39,3 +39,7 @@ func Internal() Error {
 func AuthenticationRequired() Error {
 	return New(errors.New(errors.Unauthenticated, "Authentication required."))
 }
+
+func AdminRoleRequired() Error {
+	return New(errors.New(errors.PermissionDenied, "Admin role required."))
+}

@@ -24,7 +24,8 @@ enum GroupMemberRole {
   MEMBER
 }
 
-enum BillingPLanTier {
+enum BillingPlanTier {
+  FREE
   BASIC
   PRO
   ULTRA
@@ -82,7 +83,7 @@ type BillingPlan {
   name: String!
   description: String!
   isActive: Boolean!
-  tier: BillingPLanTier!
+  tier: BillingPlanTier!
 }
 
 type Session {
@@ -201,10 +202,10 @@ input BillingPlanInput {
   id: String
   name: String!
   price: Float!
-  tier: BillingPLanTier!
+  tier: BillingPlanTier!
   stripeId: String!
   description: String!
-  isActive: String!
+  isActive: String
 }
 
 input DeleteBillingPlanInput {

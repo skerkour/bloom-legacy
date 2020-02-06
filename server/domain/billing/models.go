@@ -21,10 +21,12 @@ type Plan struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
-	Name                     string `json:"name" db:"name"`
-	Storage                  int64  `json:"storage" db:"storage"`
-	ParallelBitflowDownloads int64  `json:"parallel_bitflow_downloads" db:"parallel_bitflow_downloads"`
-	StripeID                 string `json:"stripe_id" db:"stripe_id"`
+	Name        string  `json:"name" db:"name"`
+	StripeID    string  `json:"stripe_id" db:"stripe_id"`
+	Price       float64 `json:"price" db:"price"`
+	Description string  `json:"description" db:"description"`
+	IsActive    bool    `json:"is_active" db:"is_active"`
+	Tier        string  `json:"tier" db:"tier"`
 }
 
 type PaymentMethods struct {
@@ -32,11 +34,11 @@ type PaymentMethods struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
-	IsDefault       bool   `json:"is_default" db:"is_default"`
-	StripeID        string `json:"stripe_id" db:"stripe_id"`
-	CardLast4       string `json:"card_last_4" db:"card_last_4"`
-	ExpirationMonth int64  `json:"expiration_month" db:"expiration_month"`
-	ExpirationYear  int64  `json:"expiration_year" db:"expiration_year"`
+	IsDefault           bool   `json:"is_default" db:"is_default"`
+	StripeID            string `json:"stripe_id" db:"stripe_id"`
+	CardLast4           string `json:"card_last_4" db:"card_last_4"`
+	CardExpirationMonth int64  `json:"card_expiration_month" db:"card_expiration_month"`
+	CardExpirationYear  int64  `json:"card_expiration_year" db:"card_expiration_year"`
 
 	CustomerID string `json:"customer_id" db:"customer_id"`
 }

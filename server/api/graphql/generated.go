@@ -918,27 +918,28 @@ input AddPaymentMethodInput {
 	cardExpirationMonth: Int!
 	cardExpirationYear: Int!
 }
-enum BillingPLanTier {
-	BASIC
-	PRO
-	ULTRA
-}
 type BillingPlan {
 	id: String!
 	price: Float!
 	name: String!
 	description: String!
 	isActive: Boolean!
-	tier: BillingPLanTier!
+	tier: BillingPlanTier!
 }
 input BillingPlanInput {
 	id: String
 	name: String!
 	price: Float!
-	tier: BillingPLanTier!
+	tier: BillingPlanTier!
 	stripeId: String!
 	description: String!
-	isActive: String!
+	isActive: String
+}
+enum BillingPlanTier {
+	FREE
+	BASIC
+	PRO
+	ULTRA
 }
 scalar Bytes
 input CancelGroupInvitationInput {
@@ -1758,9 +1759,9 @@ func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.BillingPLanTier)
+	res := resTmp.(model.BillingPlanTier)
 	fc.Result = res
-	return ec.marshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx, field.Selections, res)
+	return ec.marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -5305,7 +5306,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			}
 		case "tier":
 			var err error
-			it.Tier, err = ec.unmarshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx, v)
+			it.Tier, err = ec.unmarshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5323,7 +5324,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			}
 		case "isActive":
 			var err error
-			it.IsActive, err = ec.unmarshalNString2string(ctx, v)
+			it.IsActive, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6754,15 +6755,6 @@ func (ec *executionContext) unmarshalNAddPaymentMethodInput2gitlabᚗcomᚋbloom
 	return ec.unmarshalInputAddPaymentMethodInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx context.Context, v interface{}) (model.BillingPLanTier, error) {
-	var res model.BillingPLanTier
-	return res, res.UnmarshalGQL(v)
-}
-
-func (ec *executionContext) marshalNBillingPLanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPLanTier(ctx context.Context, sel ast.SelectionSet, v model.BillingPLanTier) graphql.Marshaler {
-	return v
-}
-
 func (ec *executionContext) marshalNBillingPlan2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v model.BillingPlan) graphql.Marshaler {
 	return ec._BillingPlan(ctx, sel, &v)
 }
@@ -6816,6 +6808,15 @@ func (ec *executionContext) marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloo
 
 func (ec *executionContext) unmarshalNBillingPlanInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanInput(ctx context.Context, v interface{}) (model.BillingPlanInput, error) {
 	return ec.unmarshalInputBillingPlanInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx context.Context, v interface{}) (model.BillingPlanTier, error) {
+	var res model.BillingPlanTier
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx context.Context, sel ast.SelectionSet, v model.BillingPlanTier) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {

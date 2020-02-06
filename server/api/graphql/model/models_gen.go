@@ -26,17 +26,17 @@ type BillingPlan struct {
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
 	IsActive    bool            `json:"isActive"`
-	Tier        BillingPLanTier `json:"tier"`
+	Tier        BillingPlanTier `json:"tier"`
 }
 
 type BillingPlanInput struct {
 	ID          *string         `json:"id"`
 	Name        string          `json:"name"`
 	Price       float64         `json:"price"`
-	Tier        BillingPLanTier `json:"tier"`
+	Tier        BillingPlanTier `json:"tier"`
 	StripeID    string          `json:"stripeId"`
 	Description string          `json:"description"`
-	IsActive    string          `json:"isActive"`
+	IsActive    *string         `json:"isActive"`
 }
 
 type CancelGroupInvitationInput struct {
@@ -170,46 +170,48 @@ type VerifyRegistrationInput struct {
 	Code string `json:"code"`
 }
 
-type BillingPLanTier string
+type BillingPlanTier string
 
 const (
-	BillingPLanTierBasic BillingPLanTier = "BASIC"
-	BillingPLanTierPro   BillingPLanTier = "PRO"
-	BillingPLanTierUltra BillingPLanTier = "ULTRA"
+	BillingPlanTierFree  BillingPlanTier = "FREE"
+	BillingPlanTierBasic BillingPlanTier = "BASIC"
+	BillingPlanTierPro   BillingPlanTier = "PRO"
+	BillingPlanTierUltra BillingPlanTier = "ULTRA"
 )
 
-var AllBillingPLanTier = []BillingPLanTier{
-	BillingPLanTierBasic,
-	BillingPLanTierPro,
-	BillingPLanTierUltra,
+var AllBillingPlanTier = []BillingPlanTier{
+	BillingPlanTierFree,
+	BillingPlanTierBasic,
+	BillingPlanTierPro,
+	BillingPlanTierUltra,
 }
 
-func (e BillingPLanTier) IsValid() bool {
+func (e BillingPlanTier) IsValid() bool {
 	switch e {
-	case BillingPLanTierBasic, BillingPLanTierPro, BillingPLanTierUltra:
+	case BillingPlanTierFree, BillingPlanTierBasic, BillingPlanTierPro, BillingPlanTierUltra:
 		return true
 	}
 	return false
 }
 
-func (e BillingPLanTier) String() string {
+func (e BillingPlanTier) String() string {
 	return string(e)
 }
 
-func (e *BillingPLanTier) UnmarshalGQL(v interface{}) error {
+func (e *BillingPlanTier) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = BillingPLanTier(str)
+	*e = BillingPlanTier(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid BillingPLanTier", str)
+		return fmt.Errorf("%s is not a valid BillingPlanTier", str)
 	}
 	return nil
 }
 
-func (e BillingPLanTier) MarshalGQL(w io.Writer) {
+func (e BillingPlanTier) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 

@@ -8,6 +8,8 @@ type DomainError int
 
 const (
 	ErrorCreatingCustomer DomainError = iota
+	ErrorInvalidArgument
+	ErrorCreatingPlan
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -16,6 +18,11 @@ func NewError(domainError DomainError) errors.Error {
 
 	switch domainError {
 	case ErrorCreatingCustomer:
+	case ErrorInvalidArgument:
+		code = errors.InvalidArgument
+		message = "Invalid argument. Please fix before retrying."
+	case ErrorCreatingPlan:
+		message = "Error creating plan. Please try again."
 	}
 
 	return errors.New(code, message)
