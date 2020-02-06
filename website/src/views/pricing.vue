@@ -32,7 +32,7 @@
       </v-col>
     </v-row>
 
-    <v-row class="justify-center">
+    <v-row class="justify-center mt-5">
       <v-col cols="12" sm="10" md="8" class="text-center">
         <blm-download-btn />
         <blm-other-downloads-link />
@@ -142,12 +142,13 @@ export default class Pricing extends Vue {
         <li>Music</li>
         <li>Gallery</li>
         <li>1 Bitflow download / day</li>
+        <li>Community Support</li>
       </ul>
       `,
     },
     {
       name: 'Basic',
-      price: 6.99,
+      price: 7,
       description: `
       <ul>
         <li><b>All features from Free</b></li>
@@ -157,12 +158,13 @@ export default class Pricing extends Vue {
         <li>Calendar</li>
         <li>Contacts</li>
         <li>1 parallel Bitflow download</li>
+        <li>Friendly Support</li>
       </ul>
       `,
     },
     {
       name: 'Pro',
-      price: 13.99,
+      price: 14,
       description: `
       <ul>
         <li><b>All features from Basic</b></li>
@@ -175,7 +177,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Ultra',
-      price: 26.99,
+      price: 28,
       description: `
         <ul>
           <li><b>All features from Pro</b></li>
@@ -183,6 +185,7 @@ export default class Pricing extends Vue {
 
           <li>1TB storage</li>
           <li>4 parallel Bitflow downloads</li>
+          <li>Priority Support</li>
         </ul>
       `,
     },

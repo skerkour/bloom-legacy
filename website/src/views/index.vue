@@ -128,7 +128,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { VueTyper } from 'vue-typer';
 import DownloadBtn from '@/components/coming_soon_btn.vue';
 import OtherDownloadsLink from '@/components/other_downloads_link.vue';
 
@@ -136,7 +135,6 @@ import OtherDownloadsLink from '@/components/other_downloads_link.vue';
   components: {
     'blm-download-btn': DownloadBtn,
     'blm-other-downloads-link': OtherDownloadsLink,
-    VueTyper,
   },
 })
 export default class Index extends Vue {
