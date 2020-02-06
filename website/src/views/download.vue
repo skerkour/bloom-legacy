@@ -3,8 +3,11 @@
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" xl="8" class="text-center">
-        <h2 class="display-3 mb-5">{{ $t('labels.pain1') }}</h2>
-        <h1 class="display-2 mb-5">
+        <h2 :class="{'display-1': $vuetify.breakpoint.smAndDown,
+        'display-3': $vuetify.breakpoint. mdAndUp}" class="mb-5">{{ $t('labels.pain1') }}</h2>
+        <h1 :class="{'headline': $vuetify.breakpoint.smAndDown,
+        'display-2': $vuetify.breakpoint. mdAndUp,
+        'font-weight-bold': $vuetify.breakpoint.smAndDown}" class="mb-5">
           {{ $t('download.subtitle') }}
         </h1>
         <h3 class="headline mb-5 mt-5">

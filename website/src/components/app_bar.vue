@@ -8,25 +8,23 @@
 
     <v-spacer></v-spacer>
 
-    <v-toolbar-items>
-      <v-btn
+    <v-toolbar-items class="">
+      <v-btn class="subtitle-1 font-weight-medium"
         text
         to="/download"
       >{{ $t('appbar.download') }}</v-btn>
-      <v-btn
+      <v-btn class="subtitle-1 font-weight-medium"
         text
         to="/features"
         exact
       >{{ $t('appbar.features') }}</v-btn>
-      <v-btn
+      <v-btn class="subtitle-1 font-weight-medium d-none d-sm-flex"
         text
         to="/faq"
-        class="d-none d-sm-flex"
       >{{ $t('footer.product.faq') }}</v-btn>
-      <v-btn
+      <v-btn class="subtitle-1 font-weight-medium d-none d-sm-flex"
         text
         to="/pricing"
-        class="d-none d-sm-flex"
       >{{ $t('footer.product.pricing') }}</v-btn>
       <!-- <v-btn text>Help</v-btn> -->
       <blm-locales-menu />

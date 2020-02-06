@@ -3,7 +3,8 @@
     <v-row class="justify-center align-center">
 
       <v-col cols="12" sm="6" class="text-center">
-        <h1 class="display-3 mb-5">
+        <h1 :class="{'display-1': $vuetify.breakpoint.smAndDown,
+        'display-3': $vuetify.breakpoint. mdAndUp, 'mb-5': true}">
           <!-- <vue-typer
             :text='pains'
             :repeat='Infinity'
@@ -21,7 +22,9 @@
           {{ pain }}
         </h1>
 
-        <h4 class="display-1 mb-5" v-html="$t('landing.subtitle2')"></h4>
+        <h4 :class="{'headline': $vuetify.breakpoint.smAndDown,
+        'display-1': $vuetify.breakpoint. mdAndUp, 'mb-5': true}"
+        v-html="$t('landing.subtitle2')"></h4>
         <h4 class="headline mb-4">{{ $t('landing.mission') }}</h4>
 
         <blm-download-btn />

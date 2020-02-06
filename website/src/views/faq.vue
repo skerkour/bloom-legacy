@@ -3,7 +3,9 @@
 
     <v-row class="justify-center">
       <v-col cols="10" sm="8" md="12" class="text-center">
-        <h1 class="display-3 mb-5">{{ $t('faq.title') }}</h1>
+        <h1 :class="{'display-1': $vuetify.breakpoint.smAndDown,
+        'display-3': $vuetify.breakpoint. mdAndUp, 'mb-5': $vuetify.breakpoint. mdAndUp}">
+        {{ $t('faq.title') }}</h1>
       </v-col>
     </v-row>
 

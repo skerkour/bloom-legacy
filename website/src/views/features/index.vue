@@ -3,11 +3,15 @@
 
     <v-row class="justify-center">
       <v-col cols="12" sm="10" md="8" class="text-center">
-        <h1 class="display-3 mb-5">
+        <h1 :class="{'display-1': $vuetify.breakpoint.smAndDown,
+        'display-3': $vuetify.breakpoint. mdAndUp, 'mb-5': true}">
           {{ pain }}
         </h1>
-        <h4 class="display-1 mb-3">{{ $t('features.solution') }}</h4>
-        <h5 class="display-1 font-weight-regular">{{ $t('features.title') }}</h5>
+        <h4 :class="{'headline': $vuetify.breakpoint.smAndDown,
+        'display-1': $vuetify.breakpoint. mdAndUp}" class="mb-3">{{ $t('features.solution') }}</h4>
+        <h5 :class="{'headline': $vuetify.breakpoint.smAndDown,
+        'display-1': $vuetify.breakpoint. mdAndUp}"
+          class="font-weight-regular">{{ $t('features.title') }}</h5>
 
         <blm-download-btn class="mt-5" />
 

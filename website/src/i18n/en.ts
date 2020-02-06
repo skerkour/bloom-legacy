@@ -6,6 +6,7 @@ export default {
     pain1: 'You are done with your privacy invaded by advertisers?',
     pain2: 'Tired of being abused by Big Companies?',
     pain3: 'You no longer trust tech monopolies?',
+    pain4: 'Privacy is not dead!',
   },
   appbar: {
     download: 'Download',
@@ -167,7 +168,7 @@ export default {
   },
   features: {
     title: 'A safe place for all your data',
-    solution: 'We too, and that\'s why we built Bloom',
+    solution: 'That\'s why we built Bloom',
     drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
     <b>1GB free.</b>`,
     drive: {
