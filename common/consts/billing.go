@@ -1,0 +1,6 @@
+package consts
+
+const (
+	BILLING_PLAN_NAME_MAX_LENGTH = 15
+	BILLING_PLAN_NAME_MIN_LENGTH = 3
+)
