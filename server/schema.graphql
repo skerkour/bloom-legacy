@@ -24,6 +24,12 @@ enum GroupMemberRole {
   MEMBER
 }
 
+enum BillingPLanTier {
+  BASIC
+  PRO
+  ULTRA
+}
+
 type User {
   id: String
   createdAt: Time
@@ -184,6 +190,36 @@ input QuitGroupInput {
   id: String!
 }
 
+input BillingPlanInput {
+  id: String
+  name: String!
+  tier: BillingPLanTier!
+  stripeId: String!
+}
+
+input DeleteBillingPlanInput {
+  id: String!
+}
+
+input ChangeBillingPlanInput {
+  id: String!
+}
+
+input AddPaymentMethodInput {
+  stripeId: String!
+  cardLast4: String!
+  expirationMonth: Int!
+  expirationYear: Int!
+}
+
+input RemovePaymentMethodInput {
+  id: String!
+}
+
+input ChangeDefaultPaymentMethodInput {
+  id: String!
+}
+
 type Mutation {
   # users
   register(input: RegisterInput!): RegistrationStarted!
@@ -205,11 +241,11 @@ type Mutation {
   quitGroup(input: QuitGroupInput!): Boolean!
 
   # billing
-  createBillingPlan: Boolean!
-  updateBillingPlan: Boolean!
-  deleteBillingPlan: Boolean!
-  changeBillingPlan: Boolean!
-  addPaymentMethod: Boolean!
-  removePaymentMethod: Boolean!
-  updateDefaultPaymentMethod: Boolean!
+  createBillingPlan(input: BillingPlanInput!): Boolean!
+  updateBillingPlan(input: BillingPlanInput!): Boolean!
+  deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
+  changeBillingPlan(input: ChangeBillingPlanInput!): Boolean!
+  addPaymentMethod(input: AddPaymentMethodInput!): Boolean!
+  removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
+  changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
 }

@@ -13,7 +13,29 @@ type AcceptGroupInvitationInput struct {
 	ID string `json:"id"`
 }
 
+type AddPaymentMethodInput struct {
+	StripeID        string `json:"stripeId"`
+	CardLast4       string `json:"cardLast4"`
+	ExpirationMonth int    `json:"expirationMonth"`
+	ExpirationYear  int    `json:"expirationYear"`
+}
+
+type BillingPlanInput struct {
+	ID       *string         `json:"id"`
+	Name     string          `json:"name"`
+	Tier     BillingPLanTier `json:"tier"`
+	StripeID string          `json:"stripeId"`
+}
+
 type CancelGroupInvitationInput struct {
+	ID string `json:"id"`
+}
+
+type ChangeBillingPlanInput struct {
+	ID string `json:"id"`
+}
+
+type ChangeDefaultPaymentMethodInput struct {
 	ID string `json:"id"`
 }
 
@@ -31,6 +53,10 @@ type CreateGroupInput struct {
 }
 
 type DeclineGroupInvitationInput struct {
+	ID string `json:"id"`
+}
+
+type DeleteBillingPlanInput struct {
 	ID string `json:"id"`
 }
 
@@ -91,6 +117,10 @@ type RemoveGroupMembersInput struct {
 	Usernames []string `json:"usernames"`
 }
 
+type RemovePaymentMethodInput struct {
+	ID string `json:"id"`
+}
+
 type RevokeSessionInput struct {
 	ID string `json:"id"`
 }
@@ -130,6 +160,49 @@ type SignedIn struct {
 type VerifyRegistrationInput struct {
 	ID   string `json:"id"`
 	Code string `json:"code"`
+}
+
+type BillingPLanTier string
+
+const (
+	BillingPLanTierBasic BillingPLanTier = "BASIC"
+	BillingPLanTierPro   BillingPLanTier = "PRO"
+	BillingPLanTierUltra BillingPLanTier = "ULTRA"
+)
+
+var AllBillingPLanTier = []BillingPLanTier{
+	BillingPLanTierBasic,
+	BillingPLanTierPro,
+	BillingPLanTierUltra,
+}
+
+func (e BillingPLanTier) IsValid() bool {
+	switch e {
+	case BillingPLanTierBasic, BillingPLanTierPro, BillingPLanTierUltra:
+		return true
+	}
+	return false
+}
+
+func (e BillingPLanTier) String() string {
+	return string(e)
+}
+
+func (e *BillingPLanTier) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = BillingPLanTier(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid BillingPLanTier", str)
+	}
+	return nil
+}
+
+func (e BillingPLanTier) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
 type GroupMemberRole string
