@@ -172,15 +172,15 @@ type MutationResolver interface {
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
 	RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error)
-	InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (bool, error)
+	InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (*model.Group, error)
 	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error)
 	DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (bool, error)
 	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
 	QuitGroup(ctx context.Context, input model.QuitGroupInput) (bool, error)
-	CreateBillingPlan(ctx context.Context, input model.BillingPlanInput) (bool, error)
-	UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (bool, error)
+	CreateBillingPlan(ctx context.Context, input model.BillingPlanInput) (*model.BillingPlan, error)
+	UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (*model.BillingPlan, error)
 	DeleteBillingPlan(ctx context.Context, input model.DeleteBillingPlanInput) (bool, error)
-	ChangeBillingPlan(ctx context.Context, input model.ChangeBillingPlanInput) (bool, error)
+	ChangeBillingPlan(ctx context.Context, input model.ChangeBillingPlanInput) (*model.BillingPlan, error)
 	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (bool, error)
 	RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error)
 	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (bool, error)
@@ -1014,15 +1014,15 @@ type Mutation {
 	deleteGroup(input: DeleteGroupInput!): Boolean!
 	updateGroup(input: GroupInput!): Group!
 	removeGroupMembers(input: RemoveGroupMembersInput!): Group!
-	inviteUsersInGroup(input: InviteUsersInGroupInput!): Boolean!
+	inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
 	acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
 	declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
 	cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
 	quitGroup(input: QuitGroupInput!): Boolean!
-	createBillingPlan(input: BillingPlanInput!): Boolean!
-	updateBillingPlan(input: BillingPlanInput!): Boolean!
+	createBillingPlan(input: BillingPlanInput!): BillingPlan!
+	updateBillingPlan(input: BillingPlanInput!): BillingPlan!
 	deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
-	changeBillingPlan(input: ChangeBillingPlanInput!): Boolean!
+	changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
 	addPaymentMethod(input: AddPaymentMethodInput!): Boolean!
 	removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
 	changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
@@ -2605,9 +2605,9 @@ func (ec *executionContext) _Mutation_inviteUsersInGroup(ctx context.Context, fi
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.Group)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_acceptGroupInvitation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2810,9 +2810,9 @@ func (ec *executionContext) _Mutation_createBillingPlan(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.BillingPlan)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_updateBillingPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2851,9 +2851,9 @@ func (ec *executionContext) _Mutation_updateBillingPlan(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.BillingPlan)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_deleteBillingPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -2933,9 +2933,9 @@ func (ec *executionContext) _Mutation_changeBillingPlan(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.BillingPlan)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_addPaymentMethod(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {

@@ -11,8 +11,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (bool, error) {
-	ret := false
+func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (*model.Group, error) {
+	var ret *model.Group
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -48,6 +48,13 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 		tx.Rollback()
 		logger.Error("mutation.InviteUsersInGroup: Committing transaction", rz.Err(err))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitingUsers))
+	}
+
+	ret = &model.Group{
+		ID:          &group.ID,
+		CreatedAt:   &group.CreatedAt,
+		Name:        group.Name,
+		Description: group.Description,
 	}
 
 	return ret, nil

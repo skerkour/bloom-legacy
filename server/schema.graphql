@@ -244,17 +244,17 @@ type Mutation {
   deleteGroup(input: DeleteGroupInput!): Boolean!
   updateGroup(input: GroupInput!): Group!
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
-  inviteUsersInGroup(input: InviteUsersInGroupInput!): Boolean!
+  inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
   declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
   cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
   quitGroup(input: QuitGroupInput!): Boolean!
 
   # billing
-  createBillingPlan(input: BillingPlanInput!): Boolean!
-  updateBillingPlan(input: BillingPlanInput!): Boolean!
+  createBillingPlan(input: BillingPlanInput!): BillingPlan!
+  updateBillingPlan(input: BillingPlanInput!): BillingPlan!
   deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
-  changeBillingPlan(input: ChangeBillingPlanInput!): Boolean!
+  changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
   addPaymentMethod(input: AddPaymentMethodInput!): Boolean!
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
