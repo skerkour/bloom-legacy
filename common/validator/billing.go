@@ -24,3 +24,11 @@ func BillingPlanName(name string) error {
 
 	return nil
 }
+
+func BillingPlanTier(tier string) error {
+	if tier != "FREE" && tier != "BASIC" && tier != "PRO" && tier != "ULTRA" {
+		return errors.New("tier should be either FREE, BASIC, PRO or ULTRA")
+	}
+
+	return nil
+}
