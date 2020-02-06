@@ -3,6 +3,7 @@ package validator
 import (
 	"errors"
 	"fmt"
+	"strings"
 
 	"gitlab.com/bloom42/bloom/common/consts"
 )
@@ -40,6 +41,14 @@ func BillingPlanPrice(price float64) error {
 
 	if price > 1000000.0 {
 		return errors.New("price can't be more than 1M")
+	}
+
+	return nil
+}
+
+func BillingPlanStripeId(stripeId string) error {
+	if !strings.HasPrefix(stripeId, "plan_") {
+		return errors.New("stripe_id does not match the pattern \"plan_*\"")
 	}
 
 	return nil
