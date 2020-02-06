@@ -205,7 +205,7 @@ input BillingPlanInput {
   tier: BillingPlanTier!
   stripeId: String!
   description: String!
-  isActive: String
+  isActive: Boolean
 }
 
 input DeleteBillingPlanInput {

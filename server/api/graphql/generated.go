@@ -933,7 +933,7 @@ input BillingPlanInput {
 	tier: BillingPlanTier!
 	stripeId: String!
 	description: String!
-	isActive: String
+	isActive: Boolean
 }
 enum BillingPlanTier {
 	FREE
@@ -5324,7 +5324,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			}
 		case "isActive":
 			var err error
-			it.IsActive, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			it.IsActive, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
 			if err != nil {
 				return it, err
 			}

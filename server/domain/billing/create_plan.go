@@ -8,13 +8,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/validator"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreatePlan(ctx context.Context, tx *sqlx.Tx, name, stripeId, description, tier string, price float64) (*Plan, error) {
+func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, tier string, price float64) (*Plan, error) {
 	var ret *Plan
 	var err error
 	logger := rz.FromCtx(ctx)
+
+	if !user.IsAdmin {
+		return ret, NewError(ErrorAdminRolRequired)
+	}
 
 	// clean and validate params
 	name = strings.TrimSpace(name)

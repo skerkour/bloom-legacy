@@ -36,7 +36,7 @@ type BillingPlanInput struct {
 	Tier        BillingPlanTier `json:"tier"`
 	StripeID    string          `json:"stripeId"`
 	Description string          `json:"description"`
-	IsActive    *string         `json:"isActive"`
+	IsActive    *bool           `json:"isActive"`
 }
 
 type CancelGroupInvitationInput struct {

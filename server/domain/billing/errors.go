@@ -10,6 +10,10 @@ const (
 	ErrorCreatingCustomer DomainError = iota
 	ErrorInvalidArgument
 	ErrorCreatingPlan
+	ErrorDeletingPlan
+	ErrorUpdatingPlan
+	ErrorAdminRolRequired
+	ErrorPlanNotFound
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -23,6 +27,16 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Invalid argument. Please fix before retrying."
 	case ErrorCreatingPlan:
 		message = "Error creating plan. Please try again."
+	case ErrorDeletingPlan:
+		message = "Error deleting plan. Please try again."
+	case ErrorAdminRolRequired:
+		code = errors.PermissionDenied
+		message = "Administrator role is required to perform this action."
+	case ErrorUpdatingPlan:
+		message = "Error updating plan. Please try again."
+	case ErrorPlanNotFound:
+		code = errors.NotFound
+		message = "Plan not found."
 	}
 
 	return errors.New(code, message)

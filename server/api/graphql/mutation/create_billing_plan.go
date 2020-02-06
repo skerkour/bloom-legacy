@@ -16,10 +16,6 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
-	}
-
 	if !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
@@ -30,7 +26,7 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 		return ret, gqlerrors.New(billing.NewError(billing.ErrorCreatingPlan))
 	}
 
-	newPlan, err := billing.CreatePlan(ctx, tx, input.Name, input.StripeID, input.Description, input.Tier.String(), input.Price)
+	newPlan, err := billing.CreatePlan(ctx, tx, currentUser, input.Name, input.StripeID, input.Description, input.Tier.String(), input.Price)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
