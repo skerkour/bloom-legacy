@@ -974,8 +974,6 @@ input ChangeBillingPlanInput {
 }
 input ChangeDefaultPaymentMethodInput {
 	id: String!
-	userId: String
-	groupId: String
 }
 input CompleteRegistrationInput {
 	id: String!
@@ -5507,18 +5505,6 @@ func (ec *executionContext) unmarshalInputChangeDefaultPaymentMethodInput(ctx co
 		case "id":
 			var err error
 			it.ID, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "userId":
-			var err error
-			it.UserID, err = ec.unmarshalOString2ᚖstring(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "groupId":
-			var err error
-			it.GroupID, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}

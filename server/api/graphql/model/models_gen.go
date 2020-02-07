@@ -48,9 +48,7 @@ type ChangeBillingPlanInput struct {
 }
 
 type ChangeDefaultPaymentMethodInput struct {
-	ID      string  `json:"id"`
-	UserID  *string `json:"userId"`
-	GroupID *string `json:"groupId"`
+	ID string `json:"id"`
 }
 
 type CompleteRegistrationInput struct {

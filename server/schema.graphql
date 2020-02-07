@@ -232,8 +232,6 @@ input RemovePaymentMethodInput {
 
 input ChangeDefaultPaymentMethodInput {
   id: String!
-  userId: String
-  groupId: String
 }
 
 type Mutation {
