@@ -31,13 +31,10 @@ CREATE TABLE sessions (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     token_hash TEXT NOT NULL,
-    ip TEXT NOT NULL,
-    user_agent TEXT NOT NULL,
     device_os TEXT NOT NULL,
     device_type TEXT NOT NULL,
 
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-
 
     PRIMARY KEY(id)
 );

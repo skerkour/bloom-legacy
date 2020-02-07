@@ -63,7 +63,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 		Type: input.Device.Type.String(),
 	}
 
-	newSession, token, err := users.StartSession(ctx, tx, user.ID, apiCtx.IP, apiCtx.UserAgent, device)
+	newSession, token, err := users.StartSession(ctx, tx, user.ID, device)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

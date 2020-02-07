@@ -70,7 +70,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		Type: input.Device.Type.String(),
 	}
 
-	newSession, token, err := users.StartSession(ctx, tx, newUser.ID, apiCtx.IP, apiCtx.UserAgent, device)
+	newSession, token, err := users.StartSession(ctx, tx, newUser.ID, device)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
