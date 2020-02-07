@@ -14,10 +14,8 @@ type AcceptGroupInvitationInput struct {
 }
 
 type AddPaymentMethodInput struct {
-	StripeID            string `json:"stripeId"`
-	CardLast4           string `json:"cardLast4"`
-	CardExpirationMonth int    `json:"cardExpirationMonth"`
-	CardExpirationYear  int    `json:"cardExpirationYear"`
+	StripeID string  `json:"stripeId"`
+	GroupID  *string `json:"groupId"`
 }
 
 type BillingPlan struct {
@@ -44,7 +42,9 @@ type CancelGroupInvitationInput struct {
 }
 
 type ChangeBillingPlanInput struct {
-	ID string `json:"id"`
+	ID      string  `json:"id"`
+	UserID  *string `json:"userId"`
+	GroupID *string `json:"groupId"`
 }
 
 type ChangeDefaultPaymentMethodInput struct {
@@ -105,8 +105,11 @@ type Invoice struct {
 }
 
 type PaymentMethod struct {
-	ID        string    `json:"id"`
-	CreatedAt time.Time `json:"createdAt"`
+	ID                  string    `json:"id"`
+	CreatedAt           time.Time `json:"createdAt"`
+	CardLast4           string    `json:"cardLast4"`
+	CardExpirationMonth int       `json:"cardExpirationMonth"`
+	CardExpirationYear  int       `json:"cardExpirationYear"`
 }
 
 type QuitGroupInput struct {

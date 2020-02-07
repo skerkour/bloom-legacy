@@ -51,6 +51,9 @@ type User {
 type PaymentMethod {
   id: String!
   createdAt: Time!
+  cardLast4: String!
+  cardExpirationMonth: Int!
+  cardExpirationYear: Int!
 }
 
 type Group {
@@ -214,13 +217,13 @@ input DeleteBillingPlanInput {
 
 input ChangeBillingPlanInput {
   id: String!
+  userId: String
+  groupId: String
 }
 
 input AddPaymentMethodInput {
   stripeId: String!
-  cardLast4: String!
-  cardExpirationMonth: Int!
-  cardExpirationYear: Int!
+  groupId: String
 }
 
 input RemovePaymentMethodInput {
@@ -258,7 +261,7 @@ type Mutation {
   updateBillingPlan(input: BillingPlanInput!): BillingPlan!
   deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
   changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
-  addPaymentMethod(input: AddPaymentMethodInput!): Boolean!
+  addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
 }

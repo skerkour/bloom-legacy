@@ -15,6 +15,8 @@ const (
 	ErrorAdminRolRequired
 	ErrorPlanNotFound
 	ErrorChangingBillingPlan
+	ErrorStripeIdNotValid
+	ErrorAddingPaymentMethod
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -40,6 +42,11 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Plan not found."
 	case ErrorChangingBillingPlan:
 		message = "Error changing plan. Please try again."
+	case ErrorStripeIdNotValid:
+		code = errors.InvalidArgument
+		message = "\"stripe_id\" argument is not valid."
+	case ErrorAddingPaymentMethod:
+		message = "Error adding payment method. Please try again."
 	}
 
 	return errors.New(code, message)

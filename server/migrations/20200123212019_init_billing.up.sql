@@ -18,6 +18,7 @@ CREATE TABLE billing_customers (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
+    email TEXT NOT NULL,
     stripe_id TEXT,
 
     plan_id UUID NOT NULL REFERENCES billing_plans(id) ON DELETE CASCADE,

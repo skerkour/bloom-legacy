@@ -105,8 +105,11 @@ type ComplexityRoot struct {
 	}
 
 	PaymentMethod struct {
-		CreatedAt func(childComplexity int) int
-		ID        func(childComplexity int) int
+		CardExpirationMonth func(childComplexity int) int
+		CardExpirationYear  func(childComplexity int) int
+		CardLast4           func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		ID                  func(childComplexity int) int
 	}
 
 	Query struct {
@@ -181,7 +184,7 @@ type MutationResolver interface {
 	UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (*model.BillingPlan, error)
 	DeleteBillingPlan(ctx context.Context, input model.DeleteBillingPlanInput) (bool, error)
 	ChangeBillingPlan(ctx context.Context, input model.ChangeBillingPlanInput) (*model.BillingPlan, error)
-	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (bool, error)
+	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (*model.PaymentMethod, error)
 	RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error)
 	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (bool, error)
 }
@@ -608,6 +611,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.VerifyRegistration(childComplexity, args["input"].(model.VerifyRegistrationInput)), true
 
+	case "PaymentMethod.cardExpirationMonth":
+		if e.complexity.PaymentMethod.CardExpirationMonth == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.CardExpirationMonth(childComplexity), true
+
+	case "PaymentMethod.cardExpirationYear":
+		if e.complexity.PaymentMethod.CardExpirationYear == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.CardExpirationYear(childComplexity), true
+
+	case "PaymentMethod.cardLast4":
+		if e.complexity.PaymentMethod.CardLast4 == nil {
+			break
+		}
+
+		return e.complexity.PaymentMethod.CardLast4(childComplexity), true
+
 	case "PaymentMethod.createdAt":
 		if e.complexity.PaymentMethod.CreatedAt == nil {
 			break
@@ -914,9 +938,7 @@ var parsedSchema = gqlparser.MustLoadSchema(
 }
 input AddPaymentMethodInput {
 	stripeId: String!
-	cardLast4: String!
-	cardExpirationMonth: Int!
-	cardExpirationYear: Int!
+	groupId: String
 }
 type BillingPlan {
 	id: String!
@@ -947,6 +969,8 @@ input CancelGroupInvitationInput {
 }
 input ChangeBillingPlanInput {
 	id: String!
+	userId: String
+	groupId: String
 }
 input ChangeDefaultPaymentMethodInput {
 	id: String!
@@ -1026,13 +1050,16 @@ type Mutation {
 	updateBillingPlan(input: BillingPlanInput!): BillingPlan!
 	deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
 	changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
-	addPaymentMethod(input: AddPaymentMethodInput!): Boolean!
+	addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
 	removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
 	changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
 }
 type PaymentMethod {
 	id: String!
 	createdAt: Time!
+	cardLast4: String!
+	cardExpirationMonth: Int!
+	cardExpirationYear: Int!
 }
 type Query {
 	me: User!
@@ -2972,14 +2999,11 @@ func (ec *executionContext) _Mutation_addPaymentMethod(ctx context.Context, fiel
 		return graphql.Null
 	}
 	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.PaymentMethod)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalOPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_removePaymentMethod(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3130,6 +3154,108 @@ func (ec *executionContext) _PaymentMethod_createdAt(ctx context.Context, field 
 	res := resTmp.(time.Time)
 	fc.Result = res
 	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_cardLast4(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardLast4, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_cardExpirationMonth(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardExpirationMonth, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _PaymentMethod_cardExpirationYear(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "PaymentMethod",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.CardExpirationYear, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(int)
+	fc.Result = res
+	return ec.marshalNInt2int(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -5258,21 +5384,9 @@ func (ec *executionContext) unmarshalInputAddPaymentMethodInput(ctx context.Cont
 			if err != nil {
 				return it, err
 			}
-		case "cardLast4":
+		case "groupId":
 			var err error
-			it.CardLast4, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "cardExpirationMonth":
-			var err error
-			it.CardExpirationMonth, err = ec.unmarshalNInt2int(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "cardExpirationYear":
-			var err error
-			it.CardExpirationYear, err = ec.unmarshalNInt2int(ctx, v)
+			it.GroupID, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -5363,6 +5477,18 @@ func (ec *executionContext) unmarshalInputChangeBillingPlanInput(ctx context.Con
 		case "id":
 			var err error
 			it.ID, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "userId":
+			var err error
+			it.UserID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupId":
+			var err error
+			it.GroupID, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6100,9 +6226,6 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "addPaymentMethod":
 			out.Values[i] = ec._Mutation_addPaymentMethod(ctx, field)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
 		case "removePaymentMethod":
 			out.Values[i] = ec._Mutation_removePaymentMethod(ctx, field)
 			if out.Values[i] == graphql.Null {
@@ -6142,6 +6265,21 @@ func (ec *executionContext) _PaymentMethod(ctx context.Context, sel ast.Selectio
 			}
 		case "createdAt":
 			out.Values[i] = ec._PaymentMethod_createdAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "cardLast4":
+			out.Values[i] = ec._PaymentMethod_cardLast4(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "cardExpirationMonth":
+			out.Values[i] = ec._PaymentMethod_cardExpirationMonth(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "cardExpirationYear":
+			out.Values[i] = ec._PaymentMethod_cardExpirationYear(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -7720,6 +7858,10 @@ func (ec *executionContext) marshalOInvoice2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloom
 	return ret
 }
 
+func (ec *executionContext) marshalOPaymentMethod2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v model.PaymentMethod) graphql.Marshaler {
+	return ec._PaymentMethod(ctx, sel, &v)
+}
+
 func (ec *executionContext) marshalOPaymentMethod2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethodᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.PaymentMethod) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -7758,6 +7900,13 @@ func (ec *executionContext) marshalOPaymentMethod2ᚕᚖgitlabᚗcomᚋbloom42�
 	}
 	wg.Wait()
 	return ret
+}
+
+func (ec *executionContext) marshalOPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v *model.PaymentMethod) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._PaymentMethod(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {

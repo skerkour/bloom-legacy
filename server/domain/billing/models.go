@@ -9,6 +9,7 @@ type Customer struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
+	Email    string  `json:"email" db:"email"`
 	StripeID *string `json:"stripe_id" db:"stripe_id"`
 
 	PlanID  string  `json:"plan_id" db:"plan_id"`
@@ -29,7 +30,7 @@ type Plan struct {
 	Tier        string  `json:"tier" db:"tier"`
 }
 
-type PaymentMethods struct {
+type PaymentMethod struct {
 	ID        string    `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
