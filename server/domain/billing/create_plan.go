@@ -17,11 +17,14 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	var err error
 	logger := rz.FromCtx(ctx)
 
+	// clean and validate params
+	if user == nil {
+		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+	}
 	if !user.IsAdmin {
 		return ret, NewError(ErrorAdminRolRequired)
 	}
 
-	// clean and validate params
 	name = strings.TrimSpace(name)
 	stripeId = strings.TrimSpace(stripeId)
 	description = strings.TrimSpace(description)

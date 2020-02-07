@@ -25,6 +25,7 @@ const (
 	ErrorFindingPlans
 	ErrorChangingDefaultPaymentMethod
 	ErrorPaymentMethodIsAlreadyDefault
+	ErrorUserIsNull
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -76,6 +77,8 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorPaymentMethodIsAlreadyDefault:
 		code = errors.InvalidArgument
 		message = "Payment method is already the default. Please change and try again."
+	case ErrorUserIsNull:
+		message = "User is null"
 	}
 
 	return errors.New(code, message)

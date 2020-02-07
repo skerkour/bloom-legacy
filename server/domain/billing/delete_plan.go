@@ -12,6 +12,10 @@ func DeletePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, planId strin
 	var err error
 	logger := rz.FromCtx(ctx)
 
+	// validate params
+	if user == nil {
+		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+	}
 	if !user.IsAdmin {
 		return NewError(ErrorAdminRolRequired)
 	}

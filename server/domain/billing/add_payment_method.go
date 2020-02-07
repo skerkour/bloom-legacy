@@ -24,7 +24,11 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	now := time.Now().UTC()
 	isDefault := false
 
-	// validate params
+	// clean and validate params
+	if user == nil {
+		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+	}
+	stripeId = strings.TrimSpace(stripeId)
 	if !strings.HasPrefix(stripeId, "pm_") {
 		return ret, NewError(ErrorStripeIdNotValid)
 	}

@@ -17,6 +17,11 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 	existingPaymentMethodsCount := 0
 	var plan *Plan
 
+	// validate params
+	if user == nil {
+		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+	}
+
 	// start DB transaction
 	tx, err := db.DB.Beginx()
 	if err != nil {

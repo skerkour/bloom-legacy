@@ -16,6 +16,11 @@ func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, 
 	var err error
 	var ret Customer
 
+	// validate params
+	if user == nil {
+		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+	}
+
 	// TODO: fetch basic plan
 	defaultPlanID := ""
 
