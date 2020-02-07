@@ -40,12 +40,13 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 	}
 
 	ret = &model.BillingPlan{
-		ID:          newPlan.ID,
-		Name:        newPlan.Name,
-		Description: newPlan.Description,
-		Tier:        model.BillingPlanTier(newPlan.Tier),
-		Price:       newPlan.Price,
-		IsActive:    newPlan.IsActive,
+		ID:             newPlan.ID,
+		Name:           newPlan.Name,
+		Description:    newPlan.Description,
+		Tier:           model.BillingPlanTier(newPlan.Tier),
+		Price:          newPlan.Price,
+		IsActive:       newPlan.IsActive,
+		AllowedStorage: model.Int64(billing.GetAllowedStorageFromPlanTier(newPlan.Tier)),
 	}
 	return ret, nil
 }

@@ -47,12 +47,13 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	BillingPlan struct {
-		Description func(childComplexity int) int
-		ID          func(childComplexity int) int
-		IsActive    func(childComplexity int) int
-		Name        func(childComplexity int) int
-		Price       func(childComplexity int) int
-		Tier        func(childComplexity int) int
+		AllowedStorage func(childComplexity int) int
+		Description    func(childComplexity int) int
+		ID             func(childComplexity int) int
+		IsActive       func(childComplexity int) int
+		Name           func(childComplexity int) int
+		Price          func(childComplexity int) int
+		Tier           func(childComplexity int) int
 	}
 
 	Group struct {
@@ -186,7 +187,7 @@ type MutationResolver interface {
 	ChangeBillingPlan(ctx context.Context, input model.ChangeBillingPlanInput) (*model.BillingPlan, error)
 	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (*model.PaymentMethod, error)
 	RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error)
-	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (bool, error)
+	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (*model.PaymentMethod, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context) (*model.User, error)
@@ -220,6 +221,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	ec := executionContext{nil, e}
 	_ = ec
 	switch typeName + "." + field {
+
+	case "BillingPlan.allowedStorage":
+		if e.complexity.BillingPlan.AllowedStorage == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.AllowedStorage(childComplexity), true
 
 	case "BillingPlan.description":
 		if e.complexity.BillingPlan.Description == nil {
@@ -947,6 +955,7 @@ type BillingPlan {
 	description: String!
 	isActive: Boolean!
 	tier: BillingPlanTier!
+	allowedStorage: Int64!
 }
 input BillingPlanInput {
 	id: String
@@ -1021,6 +1030,7 @@ enum GroupMemberRole {
 	ADMIN
 	MEMBER
 }
+scalar Int64
 input InviteUsersInGroupInput {
 	id: String!
 	usernames: [String!]!
@@ -1050,7 +1060,7 @@ type Mutation {
 	changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
 	addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
 	removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
-	changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
+	changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 }
 type PaymentMethod {
 	id: String!
@@ -1789,6 +1799,40 @@ func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql
 	res := resTmp.(model.BillingPlanTier)
 	fc.Result = res
 	return ec.marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_allowedStorage(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AllowedStorage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Int64)
+	fc.Result = res
+	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -3081,9 +3125,9 @@ func (ec *executionContext) _Mutation_changeDefaultPaymentMethod(ctx context.Con
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.PaymentMethod)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaymentMethod_id(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
@@ -5935,6 +5979,11 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "allowedStorage":
+			out.Values[i] = ec._BillingPlan_allowedStorage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -7130,6 +7179,15 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, v interface{}) (model.Int64, error) {
+	var res model.Int64
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, sel ast.SelectionSet, v model.Int64) graphql.Marshaler {
+	return v
 }
 
 func (ec *executionContext) unmarshalNInviteUsersInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUsersInGroupInput(ctx context.Context, v interface{}) (model.InviteUsersInGroupInput, error) {

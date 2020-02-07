@@ -19,12 +19,13 @@ type AddPaymentMethodInput struct {
 }
 
 type BillingPlan struct {
-	ID          string          `json:"id"`
-	Price       float64         `json:"price"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	IsActive    bool            `json:"isActive"`
-	Tier        BillingPlanTier `json:"tier"`
+	ID             string          `json:"id"`
+	Price          float64         `json:"price"`
+	Name           string          `json:"name"`
+	Description    string          `json:"description"`
+	IsActive       bool            `json:"isActive"`
+	Tier           BillingPlanTier `json:"tier"`
+	AllowedStorage Int64           `json:"allowedStorage"`
 }
 
 type BillingPlanInput struct {

@@ -10,49 +10,50 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string, planId string) error {
+func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string, planId string) (*Plan, error) {
 	logger := rz.FromCtx(ctx)
 	var customer *Customer
 	var err error
+	var ret *Plan
 
 	// validate params
 	if actor == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
-		return NewError(ErrorChangingPlan)
+		return ret, NewError(ErrorChangingPlan)
 	}
 
 	if userId != nil && groupId != nil {
-		return NewError(ErrorUserIdAndGroupIdCantBeBothNonNull)
+		return ret, NewError(ErrorUserIdAndGroupIdCantBeBothNonNull)
 	}
 
 	// start DB transaction
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("billing.ChangePlan: Starting transaction", rz.Err(err))
-		return NewError(ErrorChangingPlan)
+		return ret, NewError(ErrorChangingPlan)
 	}
 
 	if userId != nil {
 		if *userId != actor.ID && !actor.IsAdmin {
 			tx.Rollback()
-			return NewError(ErrorAdminRoleRequired)
+			return ret, NewError(ErrorAdminRoleRequired)
 		}
 		customer, err = FindCustomerByUserId(ctx, tx, *userId)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return ret, err
 		}
 	} else { // groupId != nil
 		if !actor.IsAdmin {
 			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID, *groupId); err != nil {
 				tx.Rollback()
-				return err
+				return ret, err
 			}
 		}
 		customer, err = FindCustomerByGroupId(ctx, tx, *groupId)
 		if err != nil {
 			tx.Rollback()
-			return err
+			return ret, err
 		}
 	}
 
@@ -60,25 +61,25 @@ func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string,
 	if err != nil {
 		tx.Rollback()
 		logger.Warn("billing.ChangePlan:f inding newPlan", rz.Err(err), rz.String("id", planId))
-		return err
+		return ret, err
 	}
 
 	oldPlan, err := FindPlanActiveById(ctx, tx, customer.PlanID)
 	if err != nil {
 		tx.Rollback()
 		logger.Warn("billing.ChangePlan: finding old plan", rz.Err(err), rz.String("id", customer.PlanID))
-		return err
+		return ret, err
 	}
 
 	// check the ability to change plan (used storage)
 	if newPlan.ID == oldPlan.ID {
 		tx.Rollback()
-		return NewError(ErrorOldPlanIsTheSameAsNewPlan)
+		return ret, NewError(ErrorOldPlanIsTheSameAsNewPlan)
 	}
 	newAllowedStorage := GetAllowedStorageFromPlanTier(newPlan.Tier)
 	if customer.UsedStorage > newAllowedStorage {
 		tx.Rollback()
-		return NewError(ErrorTooMuchStorageUsedForNewPlan)
+		return ret, NewError(ErrorTooMuchStorageUsedForNewPlan)
 	}
 	// update customer
 	queryUpdate := "UPDATE billing_customers SET updated_at = $1, plan_id = $2 WHERE id = $3"
@@ -90,7 +91,7 @@ func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string,
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangePlan: customer", rz.Err(err))
-		return NewError(ErrorChangingPlan)
+		return ret, NewError(ErrorChangingPlan)
 	}
 
 	// commit db transaction
@@ -98,8 +99,9 @@ func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string,
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangePlan: Committing transaction", rz.Err(err))
-		return NewError(ErrorChangingPlan)
+		return ret, NewError(ErrorChangingPlan)
 	}
 
-	return nil
+	ret = newPlan
+	return ret, nil
 }

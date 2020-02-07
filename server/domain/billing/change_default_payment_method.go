@@ -10,61 +10,61 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string) error {
+func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string) (*PaymentMethod, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
-	var paymentMethod *PaymentMethod
+	var ret *PaymentMethod
 	var customer *Customer
 	now := time.Now().UTC()
 
 	// validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
-		return NewError(ErrorChangingDefaultPaymentMethod)
+		return ret, NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
 	// start DB transaction
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("billing.ChangeDefaultPaymentMethod: Starting transaction", rz.Err(err))
-		return NewError(ErrorChangingDefaultPaymentMethod)
+		return ret, NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
-	paymentMethod, err = FindPaymentMethodById(ctx, tx, id)
+	ret, err = FindPaymentMethodById(ctx, tx, id)
 	if err != nil {
 		tx.Rollback()
-		return err
+		return ret, err
 	}
 
-	if paymentMethod.IsDefault {
+	if ret.IsDefault {
 		if err != nil {
 			tx.Rollback()
-			return NewError(ErrorPaymentMethodIsAlreadyDefault)
+			return ret, NewError(ErrorPaymentMethodIsAlreadyDefault)
 		}
 	}
 
-	customer, err = FindCustomerByPaymentMethod(ctx, tx, paymentMethod)
+	customer, err = FindCustomerByPaymentMethod(ctx, tx, ret)
 	if err != nil {
 		tx.Rollback()
-		return NewError(ErrorPaymentMethodNotFound)
+		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 
 	if customer.GroupID != nil {
 		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *customer.GroupID); err != nil {
 			tx.Rollback()
-			return err
+			return ret, err
 		}
 	} else {
 		if user.ID != *customer.UserID {
 			tx.Rollback()
-			return NewError(ErrorPaymentMethodNotFound)
+			return ret, NewError(ErrorPaymentMethodNotFound)
 		}
 	}
 
 	oldDefaultPaymentMethod, err := FindPaymentMethodByCustomer(ctx, tx, customer, true)
 	if err != nil {
 		tx.Rollback()
-		return NewError(ErrorPaymentMethodNotFound)
+		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 
 	queryUpdate := "UPDATE billing_payment_methods SET is_default = $1, updated_at = $2 WHERE id = $3"
@@ -76,16 +76,16 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangeDefaultPaymentMethod: updating old payment method", rz.Err(err))
-		return NewError(ErrorChangingDefaultPaymentMethod)
+		return ret, NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
-	paymentMethod.UpdatedAt = now
-	paymentMethod.IsDefault = true
-	_, err = tx.Exec(queryUpdate, paymentMethod.IsDefault, paymentMethod.UpdatedAt, paymentMethod.ID)
+	ret.UpdatedAt = now
+	ret.IsDefault = true
+	_, err = tx.Exec(queryUpdate, ret.IsDefault, ret.UpdatedAt, ret.ID)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangeDefaultPaymentMethod: updating new payment method", rz.Err(err))
-		return NewError(ErrorChangingDefaultPaymentMethod)
+		return ret, NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
 	// commit db transaction
@@ -93,8 +93,8 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangeDefaultPaymentMethod: Committing transaction", rz.Err(err))
-		return NewError(ErrorChangingDefaultPaymentMethod)
+		return ret, NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
-	return nil
+	return ret, nil
 }

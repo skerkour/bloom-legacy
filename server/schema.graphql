@@ -1,5 +1,6 @@
 scalar Time
 scalar Bytes
+scalar Int64
 
 enum SessionDeviceOS {
   LINUX
@@ -87,6 +88,7 @@ type BillingPlan {
   description: String!
   isActive: Boolean!
   tier: BillingPlanTier!
+  allowedStorage: Int64!
 }
 
 type Session {
@@ -261,5 +263,5 @@ type Mutation {
   changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
   addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
-  changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): Boolean!
+  changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 }
