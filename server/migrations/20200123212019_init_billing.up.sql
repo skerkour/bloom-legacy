@@ -20,6 +20,7 @@ CREATE TABLE billing_customers (
 
     email TEXT NOT NULL,
     stripe_id TEXT,
+    used_storage BIGINT NOT NULL,
 
     plan_id UUID NOT NULL REFERENCES billing_plans(id) ON DELETE CASCADE,
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,

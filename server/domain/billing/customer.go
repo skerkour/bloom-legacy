@@ -13,8 +13,9 @@ type Customer struct {
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
-	Email    string  `json:"email" db:"email"`
-	StripeID *string `json:"stripe_id" db:"stripe_id"`
+	Email       string  `json:"email" db:"email"`
+	StripeID    *string `json:"stripe_id" db:"stripe_id"`
+	UsedStorage int64   `json:"used_storage" db:"used_storage"`
 
 	PlanID  string  `json:"plan_id" db:"plan_id"`
 	UserID  *string `json:"user_id" db:"user_id"`

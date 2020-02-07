@@ -23,6 +23,8 @@ const (
 	ErrorRemovingDefaultPaymentMethod
 	ErrorRemovingDefaultPaymentMethodOnNonFreePlan
 	ErrorFindingPlans
+	ErrorChangingDefaultPaymentMethod
+	ErrorPaymentMethodIsAlreadyDefault
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -69,6 +71,11 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Please change your plan to FREE before removeing your payment method."
 	case ErrorFindingPlans:
 		message = "Error finding plans. Please try again."
+	case ErrorChangingDefaultPaymentMethod:
+		message = "Error changing payment method. Please try again."
+	case ErrorPaymentMethodIsAlreadyDefault:
+		code = errors.InvalidArgument
+		message = "Payment method is already the default. Please change and try again."
 	}
 
 	return errors.New(code, message)

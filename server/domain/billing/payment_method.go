@@ -33,9 +33,27 @@ func FindPaymentMethodById(ctx context.Context, tx *sqlx.Tx, id string) (*Paymen
 	if err != nil {
 		logger.Error("billing.FindPaymentMethodById: finding payment method", rz.Err(err),
 			rz.String("id", id))
-		return ret, NewError(ErrorPlanNotFound)
+		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 
 	ret = &paymentMethod
-	return ret, err
+	return ret, nil
+}
+
+func FindPaymentMethodByCustomer(ctx context.Context, tx *sqlx.Tx, customer *Customer, isDefault bool) (*PaymentMethod, error) {
+	var ret *PaymentMethod
+	var paymentMethod PaymentMethod
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT * FROM billing_payment_methods WHERE customer_id = $1 AND is_default = $2"
+	err = tx.Get(&paymentMethod, queryFind, customer.ID, isDefault)
+	if err != nil {
+		logger.Error("billing.FindPaymentMethodByCustomer: finding payment method", rz.Err(err),
+			rz.String("customer_id", customer.ID))
+		return ret, NewError(ErrorPaymentMethodNotFound)
+	}
+
+	ret = &paymentMethod
+	return ret, nil
 }
