@@ -27,8 +27,10 @@ func BillingPlanName(name string) error {
 }
 
 func BillingPlanTier(tier string) error {
-	if tier != "FREE" && tier != "BASIC" && tier != "PRO" && tier != "ULTRA" {
-		return errors.New("tier should be either FREE, BASIC, PRO or ULTRA")
+	if tier != consts.BILLING_FREE_TIER && tier != consts.BILLING_BASIC_TIER &&
+		tier != consts.BILLING_PRO_TIER && tier != consts.BILLING_ULTRA_TIER {
+		return fmt.Errorf("tier should be either %s, %s, %s or %s", consts.BILLING_FREE_TIER, consts.BILLING_BASIC_TIER,
+			consts.BILLING_PRO_TIER, consts.BILLING_ULTRA_TIER)
 	}
 
 	return nil
