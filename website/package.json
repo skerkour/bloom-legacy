@@ -16,16 +16,16 @@
     "vue-i18n": "^8.15.3",
     "vue-property-decorator": "^8.3.0",
     "vue-router": "^3.1.5",
-    "vuetify": "^2.2.8"
+    "vuetify": "^2.2.11"
   },
   "devDependencies": {
     "@types/store": "^2.0.2",
     "@typescript-eslint/eslint-plugin": "^2.19.0",
     "@typescript-eslint/parser": "^2.19.0",
-    "@vue/cli-plugin-babel": "^4.1.2",
-    "@vue/cli-plugin-eslint": "^4.1.2",
-    "@vue/cli-plugin-typescript": "^4.1.2",
-    "@vue/cli-service": "^4.1.2",
+    "@vue/cli-plugin-babel": "^4.2.0",
+    "@vue/cli-plugin-eslint": "^4.2.0",
+    "@vue/cli-plugin-typescript": "^4.2.0",
+    "@vue/cli-service": "^4.2.0",
     "@vue/eslint-config-airbnb": "^5.0.2",
     "@vue/eslint-config-typescript": "^5.0.1",
     "babel-eslint": "^10.0.3",
