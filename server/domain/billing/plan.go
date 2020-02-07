@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/libs/rz-go"
 )
@@ -22,16 +23,33 @@ type Plan struct {
 	Tier        string  `json:"tier" db:"tier"`
 }
 
-func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error) {
+func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
 	var ret *Plan
 	var plan Plan
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1"
+	queryFindPlan := "SELECT * FROM billing_plans WHERE tier = $1 AND is_active = $2"
+	err = tx.Get(&plan, queryFindPlan, consts.BILLING_FREE_TIER, true)
+	if err != nil {
+		logger.Error("billing.FindDefaultPlan: finding plan by id", rz.Err(err))
+		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	ret = &plan
+	return ret, err
+}
+
+func FindPlanActiveById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error) {
+	var ret *Plan
+	var plan Plan
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1 AND is_active = true"
 	err = tx.Get(&plan, queryFindPlan, planId)
 	if err != nil {
-		logger.Error("billing.FindPlanById: finding plan by id", rz.Err(err),
+		logger.Error("billing.FindPlanActiveById: finding plan by id", rz.Err(err),
 			rz.String("id", planId))
 		return ret, NewError(ErrorPlanNotFound)
 	}

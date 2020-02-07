@@ -11,27 +11,32 @@ import (
 )
 
 // creates a customer only for us
-func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, groupID *string) (Customer, error) {
+func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, groupID *string) (*Customer, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
-	var ret Customer
+	var ret *Customer
 
 	// validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+		return ret, NewError(ErrorCreatingCustomer)
 	}
 
-	// TODO: fetch basic plan
-	defaultPlanID := ""
+	// find default plan
+	defaultPlan, err := FindDefaultPlan(ctx, tx)
+	if err != nil {
+		logger.Error("billing.CreateCustomer: finding default plan", rz.Err(err))
+		return ret, err
+	}
 
 	// create customer
 	now := time.Now().UTC()
 	newUuid := uuid.New()
-	ret = Customer{
+	ret = &Customer{
 		ID:          newUuid.String(),
 		CreatedAt:   now,
 		UpdatedAt:   now,
-		PlanID:      defaultPlanID,
+		PlanID:      defaultPlan.ID,
 		StripeID:    nil,
 		Email:       user.Email,
 		UsedStorage: 0,
@@ -48,5 +53,6 @@ func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, 
 		logger.Error("billing.CreateCustomer: inserting new customer", rz.Err(err))
 		return ret, NewError(ErrorCreatingCustomer)
 	}
+
 	return ret, nil
 }

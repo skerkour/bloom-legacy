@@ -12,9 +12,8 @@ const (
 	ErrorCreatingPlan
 	ErrorDeletingPlan
 	ErrorUpdatingPlan
-	ErrorAdminRolRequired
+	ErrorAdminRoleRequired
 	ErrorPlanNotFound
-	ErrorChangingBillingPlan
 	ErrorStripeIdNotValid
 	ErrorAddingPaymentMethod
 	ErrorRemovingPaymentMethod
@@ -26,6 +25,10 @@ const (
 	ErrorChangingDefaultPaymentMethod
 	ErrorPaymentMethodIsAlreadyDefault
 	ErrorUserIsNull
+	ErrorUserIdAndGroupIdCantBeBothNonNull
+	ErrorChangingPlan
+	ErrorOldPlanIsTheSameAsNewPlan
+	ErrorTooMuchStorageUsedForNewPlan
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -41,7 +44,7 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Error creating plan. Please try again."
 	case ErrorDeletingPlan:
 		message = "Error deleting plan. Please try again."
-	case ErrorAdminRolRequired:
+	case ErrorAdminRoleRequired:
 		code = errors.PermissionDenied
 		message = "Administrator role is required to perform this action."
 	case ErrorUpdatingPlan:
@@ -49,7 +52,7 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorPlanNotFound:
 		code = errors.NotFound
 		message = "Plan not found."
-	case ErrorChangingBillingPlan:
+	case ErrorChangingPlan:
 		message = "Error changing plan. Please try again."
 	case ErrorStripeIdNotValid:
 		code = errors.InvalidArgument
@@ -79,6 +82,15 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Payment method is already the default. Please change and try again."
 	case ErrorUserIsNull:
 		message = "User is null"
+	case ErrorUserIdAndGroupIdCantBeBothNonNull:
+		code = errors.InvalidArgument
+		message = "\"user_id\" and \"group_id\" can't be both non null. Please fix and try again."
+	case ErrorOldPlanIsTheSameAsNewPlan:
+		code = errors.InvalidArgument
+		message = "The new plan is the same as the new plan. Please fix and try again."
+	case ErrorTooMuchStorageUsedForNewPlan:
+		code = errors.InvalidArgument
+		message = "Your used storage is superior to the allowed storage for the new plan. Please fix and try again."
 	}
 
 	return errors.New(code, message)

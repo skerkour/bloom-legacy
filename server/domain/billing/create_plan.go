@@ -20,9 +20,10 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	// clean and validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+		return ret, NewError(ErrorCreatingPlan)
 	}
 	if !user.IsAdmin {
-		return ret, NewError(ErrorAdminRolRequired)
+		return ret, NewError(ErrorAdminRoleRequired)
 	}
 
 	name = strings.TrimSpace(name)

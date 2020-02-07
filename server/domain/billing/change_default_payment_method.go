@@ -20,6 +20,7 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	// validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+		return NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
 	// start DB transaction
@@ -74,7 +75,7 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	_, err = tx.Exec(queryUpdate, oldDefaultPaymentMethod.IsDefault, oldDefaultPaymentMethod.UpdatedAt, oldDefaultPaymentMethod.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("billing.ChangeDefaultPaymentMethod:updating old payment method", rz.Err(err))
+		logger.Error("billing.ChangeDefaultPaymentMethod: updating old payment method", rz.Err(err))
 		return NewError(ErrorChangingDefaultPaymentMethod)
 	}
 
@@ -83,7 +84,7 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	_, err = tx.Exec(queryUpdate, paymentMethod.IsDefault, paymentMethod.UpdatedAt, paymentMethod.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("billing.ChangeDefaultPaymentMethod:updating new payment method", rz.Err(err))
+		logger.Error("billing.ChangeDefaultPaymentMethod: updating new payment method", rz.Err(err))
 		return NewError(ErrorChangingDefaultPaymentMethod)
 	}
 

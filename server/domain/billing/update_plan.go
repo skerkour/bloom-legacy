@@ -17,9 +17,10 @@ func UpdatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, plan *Plan, 
 	// clean and validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+		return plan, NewError(ErrorUpdatingPlan)
 	}
 	if !user.IsAdmin {
-		return plan, NewError(ErrorAdminRolRequired)
+		return plan, NewError(ErrorAdminRoleRequired)
 	}
 
 	name = strings.TrimSpace(name)

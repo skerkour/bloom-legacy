@@ -20,6 +20,7 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 	// validate params
 	if user == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
+		return NewError(ErrorRemovingPaymentMethod)
 	}
 
 	// start DB transaction
@@ -64,7 +65,7 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 
 	if paymentMethod.IsDefault {
 		if existingPaymentMethodsCount == 1 {
-			plan, err = FindPlanById(ctx, tx, customer.PlanID)
+			plan, err = FindPlanActiveById(ctx, tx, customer.PlanID)
 			if err != nil {
 				tx.Rollback()
 				return err
