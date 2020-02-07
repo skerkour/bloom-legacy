@@ -34,7 +34,7 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		return ret, gqlerrors.New(errors.New(errors.InvalidArgument, "plan.isActive should not be null"))
 	}
 
-	plan, err := billing.FindPlanById(ctx, tx, currentUser, *input.ID)
+	plan, err := billing.FindPlanById(ctx, tx, *input.ID)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

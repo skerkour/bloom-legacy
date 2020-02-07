@@ -17,6 +17,12 @@ const (
 	ErrorChangingBillingPlan
 	ErrorStripeIdNotValid
 	ErrorAddingPaymentMethod
+	ErrorRemovingPaymentMethod
+	ErrorPaymentMethodNotFound
+	ErrorCustomerNotFound
+	ErrorRemovingDefaultPaymentMethod
+	ErrorRemovingDefaultPaymentMethodOnNonFreePlan
+	ErrorFindingPlans
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -47,6 +53,22 @@ func NewError(domainError DomainError) errors.Error {
 		message = "\"stripe_id\" argument is not valid."
 	case ErrorAddingPaymentMethod:
 		message = "Error adding payment method. Please try again."
+	case ErrorRemovingPaymentMethod:
+		message = "Error removing payment method. Please try again."
+	case ErrorPaymentMethodNotFound:
+		code = errors.NotFound
+		message = "Payment method not found."
+	case ErrorCustomerNotFound:
+		code = errors.NotFound
+		message = "Customer not found."
+	case ErrorRemovingDefaultPaymentMethod:
+		code = errors.PermissionDenied
+		message = "Please change your default payment method before removing it."
+	case ErrorRemovingDefaultPaymentMethodOnNonFreePlan:
+		code = errors.PermissionDenied
+		message = "Please change your plan to FREE before removeing your payment method."
+	case ErrorFindingPlans:
+		message = "Error finding plans. Please try again."
 	}
 
 	return errors.New(code, message)

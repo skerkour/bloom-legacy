@@ -23,7 +23,6 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	var stripeCustomerId string
 	now := time.Now().UTC()
 	isDefault := false
-	existingPaymentMethods := 0
 
 	// validate params
 	if !strings.HasPrefix(stripeId, "pm_") {
@@ -58,6 +57,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	}
 
 	if customer.StripeID == nil {
+		isDefault = true
 		// create stripe customer + update customer
 		customerParams := &stripe.CustomerParams{
 			PaymentMethod: stripe.String(stripeId),
@@ -93,18 +93,6 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		tx.Rollback()
 		logger.Error("billing.AddPaymentMethod: fetching stripe payment method", rz.Err(err))
 		return ret, NewError(ErrorAddingPaymentMethod)
-	}
-
-	// find count of existing payment method for this customer
-	queryCountExistingPaymentMethods := "SELECT COUNT(*) FROM billing_payment_methods WHERE customer_id = $1"
-	err = tx.Get(&existingPaymentMethods, queryCountExistingPaymentMethods, customer.ID)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("billing.AddPaymentMethod: error fetching existing payment methods counts", rz.Err(err))
-		return ret, NewError(ErrorAddingPaymentMethod)
-	}
-	if existingPaymentMethods == 0 {
-		isDefault = true
 	}
 
 	// create payment method
