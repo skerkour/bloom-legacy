@@ -57,7 +57,7 @@ class _QrCodesState extends State<QrCodesView> {
 
   FloatingActionButton _buildFloatingActionButton() {
     return FloatingActionButton(
-      onPressed: () => showModalBottomSheet(
+      onPressed: () => showModalBottomSheet<dynamic>(
         context: context,
         builder: (BuildContext bc) {
           return QrCodesBottomSheet();
