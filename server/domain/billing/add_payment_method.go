@@ -30,6 +30,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		return ret, NewError(ErrorStripeIdNotValid)
 	}
 
+	// start DB transaction
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("billing.AddPaymentMethod: Starting transaction", rz.Err(err))
@@ -127,6 +128,14 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.AddPaymentMethod: inserting new payment method", rz.Err(err))
+		return ret, NewError(ErrorAddingPaymentMethod)
+	}
+
+	// commit db transaction
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("billing.AddPaymentMethod: Committing transaction", rz.Err(err))
 		return ret, NewError(ErrorAddingPaymentMethod)
 	}
 
