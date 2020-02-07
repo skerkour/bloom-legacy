@@ -15,6 +15,7 @@
 
     <v-row>
       <v-col cols="12">
+        <!-- TODO: display all plans, with a button to change -->
       </v-col>
     </v-row>
 
