@@ -51,7 +51,7 @@ const router = new Router({
 
 
 router.beforeEach((to, _, next) => {
-  if (store.state.is_authenticated === false) {
+  if (store.state.isAuthenticated === false) {
     if (to.path.startsWith('/auth')) {
       next();
     } else {
@@ -62,7 +62,7 @@ router.beforeEach((to, _, next) => {
   }
 
   // if (to.meta.auth && to.meta.auth.required === true) {
-  //   if (store.state.is_authenticated) {
+  //   if (store.state.isAuthenticated) {
   //     next();
   //   } else if (to.meta.auth.redirect) {
   //     next({ path: to.meta.auth.redirect });
@@ -70,7 +70,7 @@ router.beforeEach((to, _, next) => {
   //     next({ path: '/sign-in' });
   //   }
   // } else if (to.meta.auth && to.meta.auth.forbidden) {
-  //   if (store.state.is_authenticated) {
+  //   if (store.state.isAuthenticated) {
   //     next({ path: '/' });
   //   } else {
   //     next();

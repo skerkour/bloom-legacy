@@ -7,11 +7,12 @@ import * as model from '@/api/model';
 Vue.use(Vuex);
 
 interface AppState {
-  is_authenticated: boolean,
+  isAuthenticated: boolean,
   darkMode: boolean,
   pending_account?: StorePendingAccount,
   username?: string,
   displayName?: string,
+  isAdmin: boolean,
 }
 
 export enum Mutations {
@@ -24,19 +25,22 @@ export enum Mutations {
 
 export default new Vuex.Store<AppState>({
   state: {
-    is_authenticated: false,
+    isAuthenticated: false,
     darkMode: false,
+    isAdmin: false,
   },
   mutations: {
     [Mutations.SIGN_IN](state: AppState, params: model.SignedIn) {
-      state.is_authenticated = true;
+      state.isAuthenticated = true;
       state.username = params.me.username;
       state.displayName = params.me.displayName;
+      state.isAdmin = params.me.isAdmin;
     },
     [Mutations.SIGN_OUT](state) {
-      state.is_authenticated = false;
+      state.isAuthenticated = false;
       state.username = undefined;
       state.displayName = undefined;
+      state.isAdmin = false;
     },
     [Mutations.SET_PENDING_ACCOUNT](state: AppState, pendginAccount: StorePendingAccount) {
       state.pending_account = pendginAccount;
