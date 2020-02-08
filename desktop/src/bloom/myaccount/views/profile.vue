@@ -33,7 +33,7 @@
             <v-subheader>Avatar</v-subheader>
           </v-col>
           <v-col cols="12" sm="9">
-            <blm-myaccount-form-avatar :avatar="me.avatar" />
+            <blm-myaccount-form-avatar :avatar="avatarUrl" />
           </v-col>
         </v-row>
 
@@ -43,7 +43,7 @@
             <v-subheader>Username</v-subheader>
           </v-col>
           <v-col cols="12" sm="9">
-            <v-text-field :value="me.username" disabled label="Username" prefix="@" />
+            <v-text-field :value="$store.state.me.username" disabled label="Username" prefix="@" />
           </v-col>
         </v-row>
 
@@ -123,12 +123,13 @@ export default class Profile extends Vue {
     displayName: 'Sylvain Kerkour',
     email: 'dontexist@bloom.sh',
     bio: 'Hello World',
-    username: 'sylvain',
-    avatar: 'https://cdn.vuetifyjs.com/images/john.jpg',
   };
 
-
   // computed
+  get avatarUrl() {
+    return this.$store.state.me?.avatarUrl ? this.$store.state.me?.avatarUrl : '/assets/imgs/profile.jpg';
+  }
+
   // lifecycle
   // watch
   // methods
