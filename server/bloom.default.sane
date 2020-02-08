@@ -1,5 +1,7 @@
 env = "test"
 
+website = "https://bloom.sh"
+
 server = {
     # host = "localhost"
     port = 8000

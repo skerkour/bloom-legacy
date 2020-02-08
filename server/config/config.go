@@ -13,6 +13,7 @@ var Database DatabaseConfig
 var SMTP SMTPConfig
 var Stripe StripeConfig
 var Sentry SentryConfig
+var Website string
 
 type configuration struct {
 	Env      string         `sane:"env"`
@@ -21,6 +22,7 @@ type configuration struct {
 	SMTP     SMTPConfig     `sane:"smtp"`
 	Stripe   StripeConfig   `sane:"stripe"`
 	Sentry   SentryConfig   `sane:"sentry"`
+	Website  string         `sane:"website"`
 }
 
 type DatabaseConfig struct {
@@ -67,6 +69,7 @@ func Init(configFile string) error {
 	SMTP = parsedConfig.SMTP
 	Stripe = parsedConfig.Stripe
 	Sentry = parsedConfig.Sentry
+	Website = parsedConfig.Website
 	// TODO
 	DisposableEmailDomains = map[string]bool{}
 
