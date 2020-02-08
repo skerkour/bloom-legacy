@@ -34,7 +34,7 @@
             color="error"
             @click="revokeSession(item.id)"
             :loading="item.isLoading">
-              Revoke access
+              Revoke
           </v-btn>
         </td>
       </template>
