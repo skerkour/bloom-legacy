@@ -9,7 +9,6 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
@@ -44,18 +43,16 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	}
 
 	// fetch user
-	var user users.User
-	err = tx.Get(&user, "SELECT * FROM users WHERE username = $1 FOR UPDATE", input.Username)
+	user, err := users.FindUserByUsername(ctx, tx, input.Username)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("mutation.SignIn: finding user", rz.Err(err))
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
+		return ret, gqlerrors.New(users.NewError(users.ErrorInvalidUsernamePasswordCombination))
 	}
 
 	// verify password
 	if !argon2id.VerifyPassword(input.AuthKey, user.AuthKeyHash) {
 		tx.Rollback()
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "Invalid Username / Password combination"))
+		return ret, gqlerrors.New(users.NewError(users.ErrorInvalidUsernamePasswordCombination))
 	}
 
 	device := users.SessionDevice{
@@ -78,9 +75,21 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 
 	ret = &model.SignedIn{
 		Session: &model.Session{
-			ID:     newSession.ID,
-			Token:  &token,
-			Device: nil,
+			ID:    newSession.ID,
+			Token: &token,
+			Device: &model.SessionDevice{
+				Os:   model.SessionDeviceOs(device.OS),
+				Type: model.SessionDeviceType(device.Type),
+			},
+		},
+		Me: &model.User{
+			ID:          &user.ID,
+			CreatedAt:   &user.CreatedAt,
+			Username:    user.Username,
+			FirstName:   &user.FirstName,
+			LastName:    &user.LastName,
+			DisplayName: user.DisplayName,
+			IsAdmin:     user.IsAdmin,
 		},
 	}
 	return ret, nil

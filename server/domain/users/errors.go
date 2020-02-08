@@ -19,6 +19,8 @@ const (
 	ErrorRegistrationCodeIsNotValid
 	ErrorMaximumVerificationTrialsReached
 	ErrorRegistrationCodeExpired
+	ErrorUserNotFound
+	ErrorInvalidUsernamePasswordCombination
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -56,6 +58,12 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorRegistrationCodeExpired:
 		code = errors.PermissionDenied
 		message = "Verification code expired. Please create a new account."
+	case ErrorUserNotFound:
+		code = errors.NotFound
+		message = "User not found."
+	case ErrorInvalidUsernamePasswordCombination:
+		code = errors.PermissionDenied
+		message = "Invalid Username / Password combination"
 	}
 
 	return errors.New(code, message)

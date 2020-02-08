@@ -85,9 +85,21 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 
 	ret = &model.SignedIn{
 		Session: &model.Session{
-			ID:     newSession.ID,
-			Token:  &token,
-			Device: nil,
+			ID:    newSession.ID,
+			Token: &token,
+			Device: &model.SessionDevice{
+				Os:   model.SessionDeviceOs(device.OS),
+				Type: model.SessionDeviceType(device.Type),
+			},
+		},
+		Me: &model.User{
+			ID:          &newUser.ID,
+			CreatedAt:   &newUser.CreatedAt,
+			Username:    newUser.Username,
+			FirstName:   &newUser.FirstName,
+			LastName:    &newUser.LastName,
+			DisplayName: newUser.DisplayName,
+			IsAdmin:     newUser.IsAdmin,
 		},
 	}
 	return ret, nil
