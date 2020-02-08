@@ -64,8 +64,8 @@ func Run() error {
 	// routes
 	router.Get("/", IndexHandler)
 	router.Get("/api", HelloWorlHandler)
-	router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 	router.Mount("/api/graphql", graphqlHandler)
+	router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
 	log.Info("starting server", rz.Uint16("port", config.Server.Port))
