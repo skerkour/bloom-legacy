@@ -1,8 +1,8 @@
 <template>
   <v-container fluid>
     <v-switch
-      :input-value="$store.state.dark_mode"
-      :label="`${$store.state.dark_mode ? 'Dark' : 'Light'}`"
+      :input-value="$store.state.darkMode"
+      :label="`${$store.state.darkMode ? 'Dark' : 'Light'}`"
       v-on:change="onDarkModeChanged"
     />
   </v-container>
@@ -24,7 +24,7 @@ export default class Index extends Vue {
   onDarkModeChanged() {
     // TODO(z0mbie42): save to settings
     this.$store.commit(Mutations.SWITCH_DARK_MODE.toString());
-    this.$vuetify.theme.dark = this.$store.state.dark_mode;
+    this.$vuetify.theme.dark = this.$store.state.darkMode;
   }
 }
 </script>

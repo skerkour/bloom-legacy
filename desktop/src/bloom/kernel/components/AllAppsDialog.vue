@@ -84,4 +84,11 @@ export default class AllAppsDialog extends Vue {
 .blm-app-icon-name {
   margin-top: 10px;
 }
+
+.theme--dark.v-toolbar.v-sheet {
+  background-color: #363636;
+}
+.v-card.v-sheet.theme--dark {
+  background-color: #363636;
+}
 </style>

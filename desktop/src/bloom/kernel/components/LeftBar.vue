@@ -138,7 +138,6 @@ export default class LeftBar extends Vue {
   showAllAppsDialog = false;
   apps = getApps();
 
-
   // computed
   // lifecycle
   // watch
