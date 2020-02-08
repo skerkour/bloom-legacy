@@ -36,3 +36,4 @@ clean:
 .PHONY: gqlgen
 gqlgen:
 	go run github.com/99designs/gqlgen -v
+	cp api/graphql/model/{models_gen.go,int64.go,bytes.go} ../core/api/model
