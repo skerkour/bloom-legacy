@@ -72,7 +72,8 @@ export default class Features extends Vue {
   // data
   // computed
   get pain(): any {
-    const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3')];
+    const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3'),
+      this.$t('labels.pain4')];
     return pains[Math.floor(Math.random() * pains.length)];
   }
 
