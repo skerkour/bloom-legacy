@@ -7,12 +7,8 @@ type SignInParams struct {
 }
 
 type StartRegistrationParams struct {
-	DisplayName string `json:"display_name"`
+	DisplayName string `json:"displayName"`
 	Email       string `json:"email"`
-}
-
-type RegistrationStarted struct {
-	ID string `json:"id"`
 }
 
 type VerifyRegistrationParams struct {
@@ -21,9 +17,6 @@ type VerifyRegistrationParams struct {
 }
 
 type CompleteRegistrationParams struct {
-	// ID       string `json:"id"`
-	// Username string `json:"username"`
-	// AuthKey  string `json:"auth_key"`
 	ID       string `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -31,11 +24,6 @@ type CompleteRegistrationParams struct {
 
 type RegistrationSendNewCodeParams struct {
 	ID string `json:"id"`
-}
-
-type Session struct {
-	ID    string `json:"id"`
-	Token string `json:"token"`
 }
 
 type RevokeSessionParams struct {
