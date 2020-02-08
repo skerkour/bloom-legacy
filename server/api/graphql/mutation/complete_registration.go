@@ -94,6 +94,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		},
 		Me: &model.User{
 			ID:          &newUser.ID,
+			AvatarURL:   nil,
 			CreatedAt:   &newUser.CreatedAt,
 			Username:    newUser.Username,
 			FirstName:   &newUser.FirstName,

@@ -18,6 +18,7 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 
 	ret = &model.User{
 		ID:          &currentUser.ID,
+		AvatarURL:   nil,
 		CreatedAt:   &currentUser.CreatedAt,
 		Username:    currentUser.Username,
 		FirstName:   &currentUser.FirstName,

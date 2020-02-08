@@ -84,6 +84,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 		},
 		Me: &model.User{
 			ID:          &user.ID,
+			AvatarURL:   nil,
 			CreatedAt:   &user.CreatedAt,
 			Username:    user.Username,
 			FirstName:   &user.FirstName,

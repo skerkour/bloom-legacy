@@ -16,6 +16,7 @@ import (
 
 type User struct {
 	ID          *string    `json:"id"`
+	AvatarURL   *string    `json:"avatardUrl"`
 	CreatedAt   *time.Time `json:"createdAt"`
 	Username    string     `json:"username"`
 	FirstName   *string    `json:"firstName"`
