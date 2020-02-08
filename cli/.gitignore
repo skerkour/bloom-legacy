@@ -12,3 +12,4 @@ bloom.sane
 assets/
 /dist/
 bloomserver
+/bloom
