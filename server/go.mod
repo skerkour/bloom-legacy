@@ -20,7 +20,7 @@ require (
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v68.13.0+incompatible
 	github.com/vektah/gqlparser v1.2.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200207150645-3319fef1b61c
+	gitlab.com/bloom42/bloom/common v0.0.0-20200208103006-c6ba170ccbb1
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
