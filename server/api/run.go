@@ -42,7 +42,7 @@ func Run() error {
 	router.Use(middleware.Recoverer)
 	// router.Use(middleware.Timeout(60 * time.Second))
 	if config.Env == consts.ENV_PRODUCTION {
-		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh"}
+		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh", "https://bloom42.com"}
 	} else {
 		allowedOrigins = []string{"*"}
 	}
@@ -60,6 +60,7 @@ func Run() error {
 	}
 	router.Use(SetContextMiddleware)
 
+	// routes
 	router.Get("/", HelloWorlHandler)
 	router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 	router.Mount("/api/graphql", graphqlHandler)
