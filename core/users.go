@@ -4,8 +4,8 @@ import (
 	"C"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/users"
 )
 
 func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {

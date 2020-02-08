@@ -2,29 +2,36 @@ package users
 
 import (
 	"context"
-	"net/http"
 
-	rpc "gitlab.com/bloom42/bloom/common/rpc/users"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/common/validator"
+	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-// See https://bloom.sh/the-guide/projects/bloom/security/authentication.html#registration for the spec
-func StartRegistration(params StartRegistrationParams) (RegistrationStarted, error) {
-	client := rpc.NewUsersProtobufClient("http://localhost:8000", &http.Client{})
+// See https://bloom.sh/the-guide/projects/bloom/cryptography#registration for the spec
+func StartRegistration(params StartRegistrationParams) (model.RegistrationStarted, error) {
+	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	var ret model.RegistrationStarted
 
 	if err := validator.UserDisplayName(params.DisplayName); err != nil {
-		return RegistrationStarted{}, err
+		return model.RegistrationStarted{}, err
 	}
 
-	rpcParams := rpc.StartRegistrationParams{
+	input := model.RegisterInput{
 		Email:       params.Email,
 		DisplayName: params.DisplayName,
 	}
+	req := graphql.NewRequest(`
+        mutation ($input: RegisterInput!) {
+			register (input:$input) {
+				id
+			}
+		}
+	`)
+	req.Var("input", input)
 
-	res, err := client.StartRegistration(context.Background(), &rpcParams)
-	if err != nil {
-		return RegistrationStarted{}, err
-	}
+	err := client.Do(context.Background(), req, &ret)
 
-	return RegistrationStarted{ID: res.Id}, nil
+	return ret, err
 }

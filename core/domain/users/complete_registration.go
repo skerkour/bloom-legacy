@@ -3,30 +3,50 @@ package users
 import (
 	"context"
 	"errors"
-	"net/http"
 
-	"gitlab.com/bloom42/bloom/common/rpc/users"
+	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/coreutil"
+	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-func CompleteRegistration(params CompleteRegistrationParams) (Session, error) {
-	client := users.NewUsersProtobufClient("http://localhost:8000", &http.Client{})
+func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, error) {
+	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	var ret model.SignedIn
 
 	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
 	if authKey == nil {
-		return Session{}, errors.New("Error deriving auth key")
-	}
-	rpcParams := users.CompleteRegistrationParams{
-		Id:       params.ID,
-		Username: params.Username,
-		AuthKey:  authKey,
+		return ret, errors.New("Error deriving auth key")
 	}
 
-	session, err := client.CompleteRegistration(context.Background(), &rpcParams)
-	if err != nil {
-		return Session{}, err
+	input := model.CompleteRegistrationInput{
+		ID:       params.ID,
+		Username: params.Username,
+		AuthKey:  authKey,
+		Device: &model.SessionDeviceInput{
+			Os:   model.SessionDeviceOs(coreutil.GetDeviceOS()),
+			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
+		},
 	}
-	return Session{
-		ID:    session.Id,
-		Token: session.Token,
-	}, nil
+
+	req := graphql.NewRequest(`
+        mutation ($input: CompleteRegistrationInput!) {
+			completeRegistration (input: $input) {
+				session {
+					id
+					token
+				}
+				mese {
+					username
+					displayName
+					isAdmin
+				}
+			}
+		}
+	`)
+	req.Var("input", input)
+
+	err := client.Do(context.Background(), req, &ret)
+
+	return ret, err
 }
