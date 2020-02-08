@@ -18,7 +18,7 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 
 1. [Download](#download)
 2. [Documentation](#documentation)
-3. [Development](#development)
+3. [Development instructions](#development-instructions)
 4. [Contributing](#contributing)
 5. [Forum](#contributing)
 6. [Licensing](#licensing)
@@ -42,7 +42,7 @@ Windows: Coming soon
 See [the wiki](https://gitlab.com/bloom42/bloom/-/wikis)
 
 
-## Development
+## Development instructions
 
 See https://gitlab.com/bloom42/bloom/-/wikis/development
 
