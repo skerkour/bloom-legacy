@@ -42,16 +42,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import apps from '../apps';
+import getApps from '@/bloom/kernel/apps';
 
 @Component
 export default class AllAppsDialog extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
 
-
   // data
-  apps = apps;
+  apps = getApps();
 
   // computed
   get show() {

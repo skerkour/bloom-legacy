@@ -124,7 +124,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AllAppsDialog from './AllAppsDialog.vue';
-import apps from '../apps';
+import getApps from '@/bloom/kernel/apps';
 
 @Component({
   components: {
@@ -136,7 +136,7 @@ export default class LeftBar extends Vue {
   // data
   accountMenu = false;
   showAllAppsDialog = false;
-  apps = apps;
+  apps = getApps();
 
 
   // computed
