@@ -14,14 +14,13 @@
           v-model="accountMenu"
           :close-on-content-click="false"
           :nudge-width="200"
-          offset-x
         >
           <template v-slot:activator="{ on }">
             <v-list-item-avatar
               v-on="on"
               class="blm-pointer"
             >
-              <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" />
+              <v-img :src="avatarUrl" />
             </v-list-item-avatar>
 
             <!-- <v-list-item-title>John Leider</v-list-item-title> -->
@@ -31,12 +30,12 @@
             <v-list>
               <v-list-item>
                 <v-list-item-avatar>
-                  <v-img src="https://cdn.vuetifyjs.com/images/john.jpg" alt="Profile Picture" />
+                  <v-img :src="avatarUrl" alt="Profile Picture" />
                 </v-list-item-avatar>
 
-                <v-list-item-content>
-                  <v-list-item-title>Sylvain Kerkour</v-list-item-title>
-                  <v-list-item-subtitle>z0mbie42</v-list-item-subtitle>
+                <v-list-item-content class="text-left">
+                  <v-list-item-title>{{ $store.state.me.displayName }}</v-list-item-title>
+                  <v-list-item-subtitle>@{{ $store.state.me.username }}</v-list-item-subtitle>
                 </v-list-item-content>
               </v-list-item>
 
@@ -139,6 +138,10 @@ export default class LeftBar extends Vue {
   apps = getApps();
 
   // computed
+  get avatarUrl() {
+    return this.$store.state.me?.avatarUrl ? this.$store.state.me?.avatarUrl : '/assets/imgs/profile.jpg';
+  }
+
   // lifecycle
   // watch
   // methods

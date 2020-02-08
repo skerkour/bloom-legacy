@@ -59,7 +59,7 @@ export default function getApps() {
     },
   ];
 
-  if (store.state.isAdmin) {
+  if (store.state.me?.isAdmin) {
     apps.push({
       name: 'Admin',
       path: '/admin',

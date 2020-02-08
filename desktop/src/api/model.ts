@@ -395,6 +395,7 @@ export type User = {
    __typename?: 'User',
   id?: Maybe<Scalars['String']>,
   createdAt?: Maybe<Scalars['Time']>,
+  avatarUrl?: Maybe<Scalars['String']>,
   username: Scalars['String'],
   firstName?: Maybe<Scalars['String']>,
   lastName?: Maybe<Scalars['String']>,
