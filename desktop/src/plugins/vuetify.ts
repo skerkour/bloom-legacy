@@ -12,6 +12,6 @@ export default new Vuetify({
     // loading: 'mdi-loading',
   },
   theme: {
-    dark: store.state.dark_mode,
+    dark: store.state.darkMode,
   },
 });

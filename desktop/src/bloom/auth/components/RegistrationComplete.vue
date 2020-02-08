@@ -56,8 +56,7 @@ import core from '@/core';
 import { CompleteRegistration } from '../core/messages';
 import AuthMethod from '../core/methods';
 import { Mutations } from '@/store';
-
-const { log } = require('@bloom42/astro');
+import * as model from '@/api/model';
 
 @Component
 export default class RegistrationComplete extends Vue {
@@ -101,10 +100,9 @@ export default class RegistrationComplete extends Vue {
       password: this.password,
     };
     try {
-      const res = await core.call(AuthMethod.CompleteRegistration, params);
-      log.debug(res);
+      const res: model.SignedIn = await core.call(AuthMethod.CompleteRegistration, params);
       this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
-      this.$store.commit(Mutations.SIGN_IN.toString());
+      this.$store.commit(Mutations.SIGN_IN.toString(), res);
       this.$router.push({ path: '/' });
     } catch (err) {
       this.error = err.message;

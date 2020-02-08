@@ -2,13 +2,16 @@
 import Vue from 'vue';
 import Vuex from 'vuex';
 import { StorePendingAccount } from '@/bloom/auth/models';
+import * as model from '@/api/model';
 
 Vue.use(Vuex);
 
 interface AppState {
   is_authenticated: boolean,
-  dark_mode: boolean,
+  darkMode: boolean,
   pending_account?: StorePendingAccount,
+  username?: string,
+  displayName?: string,
 }
 
 export enum Mutations {
@@ -22,14 +25,18 @@ export enum Mutations {
 export default new Vuex.Store<AppState>({
   state: {
     is_authenticated: false,
-    dark_mode: false,
+    darkMode: false,
   },
   mutations: {
-    [Mutations.SIGN_IN](state) {
+    [Mutations.SIGN_IN](state: AppState, params: model.SignedIn) {
       state.is_authenticated = true;
+      state.username = params.me.username;
+      state.displayName = params.me.displayName;
     },
     [Mutations.SIGN_OUT](state) {
       state.is_authenticated = false;
+      state.username = undefined;
+      state.displayName = undefined;
     },
     [Mutations.SET_PENDING_ACCOUNT](state: AppState, pendginAccount: StorePendingAccount) {
       state.pending_account = pendginAccount;
@@ -38,7 +45,7 @@ export default new Vuex.Store<AppState>({
       state.pending_account = undefined;
     },
     [Mutations.SWITCH_DARK_MODE](state: AppState) {
-      state.dark_mode = !state.dark_mode;
+      state.darkMode = !state.darkMode;
     },
   },
   actions: {

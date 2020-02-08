@@ -44,6 +44,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import { Mutations } from '@/store';
+import * as model from '@/api/model';
 import core from '@/core';
 import { SignIn } from '../core/messages';
 import AuthMethod from '../core/methods';
@@ -72,8 +73,8 @@ export default class SignInForm extends Vue {
     };
 
     try {
-      await core.call(AuthMethod.SignIn, params);
-      this.$store.commit(Mutations.SIGN_IN.toString());
+      const res: model.SignedIn = await core.call(AuthMethod.SignIn, params);
+      this.$store.commit(Mutations.SIGN_IN.toString(), res);
       this.$router.push({ path: '/' });
     } catch (err) {
       this.error = err.message;

@@ -79,7 +79,7 @@ export default class RegistrationStart extends Vue {
     this.isLoading = true;
     this.error = '';
     const params: StartRegistration = {
-      display_name: this.displayName,
+      displayName: this.displayName,
       email: this.email,
     };
     try {
