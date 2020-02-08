@@ -1,21 +1,35 @@
 package users
 
 import (
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"context"
+
+	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-func VerifyRegistration(params VerifyRegistrationParams) (kernel.Empty, error) {
-	// client := users.NewUsersProtobufClient("http://localhost:8000", &http.Client{})
+func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
+	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	ret := false
 
-	// rpcParams := users.VerifyRegistrationParams{
-	// 	Code: params.Code,
-	// 	Id:   params.ID,
-	// }
+	input := model.VerifyRegistrationInput{
+		ID:   params.ID,
+		Code: params.Code,
+	}
+	var resp struct {
+		VerifyRegistration *bool `json:"verifyRegistration"`
+	}
+	req := graphql.NewRequest(`
+        mutation ($input: VerifyRegistrationInput!) {
+			verifyRegistration(input: $input)
+		}
+	`)
+	req.Var("input", input)
 
-	// _, err := client.VerifyRegistration(context.Background(), &rpcParams)
-	// if err != nil {
-	// 	return kernel.Empty{}, err
-	// }
+	err := client.Do(context.Background(), req, &resp)
+	if resp.VerifyRegistration != nil {
+		ret = *resp.VerifyRegistration
+	}
 
-	return kernel.Empty{}, nil
+	return ret, err
 }

@@ -28,7 +28,9 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
 		},
 	}
-
+	var resp struct {
+		CompleteRegistration *model.SignedIn `json:"completeRegistration"`
+	}
 	req := graphql.NewRequest(`
         mutation ($input: CompleteRegistrationInput!) {
 			completeRegistration (input: $input) {
@@ -36,7 +38,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 					id
 					token
 				}
-				mese {
+				me {
 					username
 					displayName
 					isAdmin
@@ -46,7 +48,10 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &ret)
+	err := client.Do(context.Background(), req, &resp)
+	if resp.CompleteRegistration != nil {
+		ret = *resp.CompleteRegistration
+	}
 
 	return ret, err
 }

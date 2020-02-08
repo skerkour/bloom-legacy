@@ -22,6 +22,9 @@ func StartRegistration(params StartRegistrationParams) (model.RegistrationStarte
 		Email:       params.Email,
 		DisplayName: params.DisplayName,
 	}
+	var resp struct {
+		Register *model.RegistrationStarted `json:"register"`
+	}
 	req := graphql.NewRequest(`
         mutation ($input: RegisterInput!) {
 			register (input:$input) {
@@ -31,7 +34,10 @@ func StartRegistration(params StartRegistrationParams) (model.RegistrationStarte
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &ret)
+	err := client.Do(context.Background(), req, &resp)
+	if resp.Register != nil {
+		ret = *resp.Register
+	}
 
 	return ret, err
 }
