@@ -21,6 +21,7 @@
           :rules="emailRules"
           :disabled="isLoading"
           @keyup="lowercaseEmail"
+          @keyup.enter.native="register"
         />
       </v-flex>
 

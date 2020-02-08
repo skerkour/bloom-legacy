@@ -17,7 +17,6 @@
           :disabled="isLoading"
           prefix="@"
           @keyup="usernameLower"
-          @keyup.enter.native="completeRegistration"
         />
       </v-flex>
 
@@ -30,7 +29,7 @@
           :append-icon="showPassword ? 'mdi-eye-off' : 'mdi-eye'"
           @click:append="showPassword = !showPassword"
           :disabled="isLoading"
-          @keyup.enter.native="register"
+          @keyup.enter.native="completeRegistration"
         />
       </v-flex>
 
