@@ -42,6 +42,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 					username
 					displayName
 					isAdmin
+					avatarUrl
 				}
 			}
 		}

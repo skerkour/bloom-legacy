@@ -12,4 +12,5 @@ type User struct {
 	LastName    *string    `json:"lastName"`
 	DisplayName string     `json:"displayName"`
 	IsAdmin     bool       `json:"isAdmin"`
+	AvatarURL   *string    `json:"avatardUrl"`
 }
