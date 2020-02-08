@@ -47,7 +47,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &ret)
+	err := client.Do(context.Background(), req, &resp)
 	if resp.SignIn != nil {
 		ret = *resp.SignIn
 	}
