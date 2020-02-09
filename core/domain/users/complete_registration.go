@@ -52,6 +52,9 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	err := client.Do(context.Background(), req, &resp)
 	if resp.CompleteRegistration != nil {
 		ret = *resp.CompleteRegistration
+		if ret.Session != nil && ret.Session.Token != nil {
+			client.Authenticate(ret.Session.ID, *ret.Session.Token)
+		}
 	}
 
 	return ret, err
