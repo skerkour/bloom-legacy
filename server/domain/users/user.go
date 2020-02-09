@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -31,6 +32,22 @@ func FindUserById(ctx context.Context, tx *sqlx.Tx, id string) (*User, error) {
 
 	queryFind := "SELECT * FROM users WHERE id = $1"
 	err = tx.Get(ret, queryFind, id)
+	if err != nil {
+		logger.Error("users.FindUserById: finding user", rz.Err(err),
+			rz.String("id", id))
+		return ret, NewError(ErrorUserNotFound)
+	}
+
+	return ret, err
+}
+
+func FindUserByIdNoTx(ctx context.Context, id string) (*User, error) {
+	ret := &User{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT * FROM users WHERE id = $1"
+	err = db.DB.Get(ret, queryFind, id)
 	if err != nil {
 		logger.Error("users.FindUserById: finding user", rz.Err(err),
 			rz.String("id", id))

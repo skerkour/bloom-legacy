@@ -2,6 +2,8 @@ package users
 
 import (
 	"context"
+	"encoding/base64"
+	"fmt"
 	"time"
 
 	"github.com/google/uuid"
@@ -15,15 +17,16 @@ import (
 func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device SessionDevice) (Session, string, error) {
 	logger := rz.FromCtx(ctx)
 	ret := Session{}
+	var token string
 
-	token, err := rand.TokenBase64(uint64(consts.SESSION_TOKEN_BYTES))
+	tokenSecret, err := rand.Bytes(uint64(consts.SESSION_TOKEN_BYTES))
 	if err != nil {
 		logger.Error("users.StartSession: generating sessions token", rz.Err(err))
 		return ret, token, NewError(ErrorSingingIn)
 	}
 
 	// TODO: update params
-	tokenHash, err := argon2id.HashPassword([]byte(token), argon2id.DefaultHashPasswordParams)
+	tokenHash, err := argon2id.HashPassword(tokenSecret, argon2id.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.StartSession: hashing auth key", rz.Err(err))
 		return ret, token, NewError(ErrorSingingIn)
@@ -52,5 +55,6 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device Sessio
 		return ret, token, NewError(ErrorSingingIn)
 	}
 
+	token = base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", ret.ID, tokenSecret)))
 	return ret, token, nil
 }

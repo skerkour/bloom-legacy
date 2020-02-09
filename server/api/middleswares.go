@@ -2,11 +2,19 @@ package api
 
 import (
 	"context"
+	"encoding/base64"
+	"encoding/json"
+	"errors"
 	"net"
 	"net/http"
+	"strings"
 
 	"github.com/google/uuid"
 	"gitlab.com/bloom42/bloom/server/api/apictx"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/domain/users"
+	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
 )
@@ -79,60 +87,114 @@ func SetLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler 
 	}
 }
 
-/*
+type graphqlRes struct {
+	Data   interface{}    `json:"data"`
+	Errors []graphqlError `json:"errors"`
+}
+
+type graphqlError struct {
+	Message    string            `json:"message"`
+	Path       []string          `json:"path"`
+	Extensions map[string]string `json:"extensions"`
+}
+
+func InvalidSession(w http.ResponseWriter, r *http.Request, code string, message string) {
+
+	w.Header().Set("Content-Type", "application/json")
+	b, err := json.Marshal(graphqlRes{
+		Data: nil,
+		Errors: []graphqlError{
+			graphqlError{Message: message, Path: []string{}, Extensions: map[string]string{"code": code}},
+		},
+	})
+	if err != nil {
+		http.Error(w, err.Error(), 500)
+		return
+	}
+	w.WriteHeader(200)
+	w.Write(b)
+}
+
+const uuidStrLen = 36
+
+// decodeSession returns the sesssionID, sessionToken, err
+func decodeSession(token string) (string, []byte, error) {
+	var err error
+	var data []byte
+	var sessionID string
+	sessionToken := []byte{}
+
+	data, err = base64.StdEncoding.DecodeString(token)
+	if err != nil {
+		return sessionID, sessionToken, err
+	}
+
+	if len(data) < uuidStrLen+4 {
+		return sessionID, sessionToken, errors.New("Token is not valid (too short)")
+	}
+
+	sessionIdBytes := data[:uuidStrLen]
+	sessionToken = data[uuidStrLen+1:]
+
+	return string(sessionIdBytes), sessionToken, nil
+}
+
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		authenticatedAccount := &domain.Account{}
-		currentSession := &domain.Session{}
+		currentUser := &users.User{}
+		currentSession := &users.Session{}
 
 		reqCtx := r.Context()
 
-		ctx := reqCtx.Value("api_context").(*apictx.Context)
+		apiCtx := apiutil.ApiCtxFromCtx(r.Context())
 		authHeader := r.Header.Get("authorization")
 
 		if authHeader != "" {
+
 			parts := strings.FieldsFunc(authHeader, isSpace)
 			if len(parts) != 2 || (parts[0] != "Basic" && parts[0] != "Secret") {
-				InvalidAuthorizationHeader(w, r)
+				InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid1")
 				return
 			}
 
 			if parts[0] == "Basic" {
 
-			sessionID, sessionToken, err := util.DecodeSession(parts[1])
-			if err != nil {
-				InvalidToken(w, r)
-				return
-			}
-
-			currentSession.ID = sessionID
-			goes.DB.First(currentSession).Related(authenticatedAccount)
-			if authenticatedAccount.ID != "" {
-				if util.VerifyHashedString(currentSession.Token, sessionToken) != true {
-					// given sessionToken does not match with the actual hashed sesisonToken
-					InvalidSession(w, r)
+				sessionID, sessionToken, err := decodeSession(parts[1])
+				if err != nil {
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid2")
 					return
 				}
-				ctx.AuthenticatedAccount = authenticatedAccount
-				ctx.Session = currentSession
+
+				currentSession.ID = sessionID
+				// find session with ID and associated user
+				currentSession, err = users.FindSessionByIdNoTx(reqCtx, sessionID)
+				if err != nil {
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid3")
+					return
+				}
+				currentUser, err = users.FindUserByIdNoTx(reqCtx, currentSession.UserID)
+				if err != nil {
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid4")
+					return
+				}
+				if !argon2id.VerifyPassword(sessionToken, currentSession.TokenHash) {
+					// given sessionToken does not match with the actual hashed sesisonToken
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid5")
+					return
+				}
+				apiCtx.AuthenticatedUser = currentUser
+				apiCtx.Session = currentSession
 
 				// update session's fields if necessary
-				go session.Access(reqCtx, *authenticatedAccount, *currentSession, ctx.IP, ctx.UserAgent, ctx.RequestID)
-			} else {
-				// session not found or not active
-				InvalidSession(w, r)
-				return
-			}
+				// go session.Access(reqCtx, *authenticatedAccount, *currentSession, ctx.IP, ctx.UserAgent, ctx.RequestID)
+
 			} else { // Secret
 				secret := parts[1]
-				if secret == config.BitflowSecret {
+				if secret == config.Bitflow.Secret {
 					service := "bitflow"
-					ctx.AuthenticatedService = &service
-				} else if secret == config.PhaserSecret {
-					service := "phaser"
-					ctx.AuthenticatedService = &service
+					apiCtx.AuthenticatedService = &service
 				} else {
-					InvalidSecret(w, r)
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
 					return
 				}
 			}
@@ -141,4 +203,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		next.ServeHTTP(w, r.WithContext(reqCtx))
 	})
 }
-*/
+
+func isSpace(c rune) bool {
+	return c == ' '
+}

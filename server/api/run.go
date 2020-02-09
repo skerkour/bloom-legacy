@@ -60,6 +60,7 @@ func Run() error {
 		router.Use(SetSecurityHeadersMiddleware)
 	}
 	router.Use(SetContextMiddleware)
+	router.Use(AuthMiddleware)
 
 	// routes
 	router.Get("/", IndexHandler)

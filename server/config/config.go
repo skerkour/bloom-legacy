@@ -17,6 +17,7 @@ var SMTP SMTPConfig
 var Stripe StripeConfig
 var Sentry SentryConfig
 var WebsiteUrl string
+var Bitflow BitflowConfig
 
 type configuration struct {
 	Env        string         `sane:"env"`
@@ -26,6 +27,7 @@ type configuration struct {
 	Stripe     StripeConfig   `sane:"stripe"`
 	Sentry     SentryConfig   `sane:"sentry"`
 	WebsiteUrl string         `sane:"website_url"`
+	Bitflow    BitflowConfig  `sane:"bitflow"`
 }
 
 type DatabaseConfig struct {
@@ -53,6 +55,10 @@ type SentryConfig struct {
 	Dsn string `sane:"dsn"`
 }
 
+type BitflowConfig struct {
+	Secret string `sane:"secret"`
+}
+
 func Init(configFile string) error {
 	var parsedConfig configuration
 
@@ -75,6 +81,7 @@ func Init(configFile string) error {
 	Stripe = parsedConfig.Stripe
 	Sentry = parsedConfig.Sentry
 	WebsiteUrl = parsedConfig.WebsiteUrl
+	Bitflow = parsedConfig.Bitflow
 	// TODO
 	DisposableEmailDomains = map[string]bool{}
 
