@@ -60,6 +60,12 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
+	case "fetch_my_profile":
+		res, err := users.FetchMyProfile()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	default:
 		return methodNotFoundError(method, "users")
 	}
