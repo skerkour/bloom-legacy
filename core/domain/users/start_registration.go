@@ -3,15 +3,15 @@ package users
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/common/validator"
+	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
 // See https://bloom.sh/the-guide/projects/bloom/cryptography#registration for the spec
 func StartRegistration(params StartRegistrationParams) (model.RegistrationStarted, error) {
-	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	client := api.Client()
 	var ret model.RegistrationStarted
 
 	if err := validator.UserDisplayName(params.DisplayName); err != nil {

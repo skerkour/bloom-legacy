@@ -3,13 +3,13 @@ package users
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
 func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
-	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	client := api.Client()
 	ret := false
 
 	input := model.VerifyRegistrationInput{

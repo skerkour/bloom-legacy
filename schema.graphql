@@ -113,7 +113,7 @@ type SignedIn {
   me: User!
 }
 
-type SeverVerion {
+type ServerVersion {
   os: String!
   arch: String!
   version: String!
@@ -127,7 +127,7 @@ type Query {
   group(id: String!): Group
   groups(limit: Int = 25, offset: Int = 0): [Group!]!
   billingPlans: [BillingPlan!]!
-  serverVersion: SeverVerion
+  serverVersion: ServerVersion
 }
 
 ################################################################################

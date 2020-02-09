@@ -3,7 +3,6 @@ package users
 type SignInParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
-	// AuthKey  string `json:"auth_key"`
 }
 
 type StartRegistrationParams struct {

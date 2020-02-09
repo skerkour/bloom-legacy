@@ -4,14 +4,14 @@ import (
 	"context"
 	"errors"
 
-	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/coreutil"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
 func SignIn(params SignInParams) (model.SignedIn, error) {
-	client := graphql.NewClient(consts.API_BASE_URL + "/graphql")
+	client := api.Client()
 	var ret model.SignedIn
 
 	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
@@ -51,6 +51,9 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	err := client.Do(context.Background(), req, &resp)
 	if resp.SignIn != nil {
 		ret = *resp.SignIn
+		if ret.Session != nil && ret.Session.Token != nil {
+			client.Authenticate(ret.Session.ID, *ret.Session.Token)
+		}
 	}
 	return ret, err
 }

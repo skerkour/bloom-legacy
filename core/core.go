@@ -43,6 +43,8 @@ func HandleMessage(messageIn MessageIn) ([]byte, error) {
 		messageOut = handleCoreMethod(parts[1], messageIn.Params)
 	case "notes":
 		messageOut = handleNotesMethod(parts[1], messageIn.Params)
+	case "admin":
+		messageOut = handleAdminMehtod(parts[1], messageIn.Params)
 	default:
 		messageOut = serviceNotFoundError(parts[0])
 	}

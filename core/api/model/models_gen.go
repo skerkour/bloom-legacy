@@ -141,6 +141,13 @@ type SendNewRegistrationCodeInput struct {
 	ID string `json:"id"`
 }
 
+type ServerVersion struct {
+	Os        string `json:"os"`
+	Arch      string `json:"arch"`
+	Version   string `json:"version"`
+	GitCommit string `json:"gitCommit"`
+}
+
 type Session struct {
 	ID        string         `json:"id"`
 	CreatedAt time.Time      `json:"createdAt"`
@@ -156,13 +163,6 @@ type SessionDevice struct {
 type SessionDeviceInput struct {
 	Os   SessionDeviceOs   `json:"os"`
 	Type SessionDeviceType `json:"type"`
-}
-
-type SeverVerion struct {
-	Os        string `json:"os"`
-	Arch      string `json:"arch"`
-	Version   string `json:"version"`
-	GitCommit string `json:"gitCommit"`
 }
 
 type SignInInput struct {
