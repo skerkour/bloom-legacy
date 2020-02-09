@@ -15,6 +15,7 @@ func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
 
 	replacer := strings.NewReplacer("-", "", " ", "", "	", "")
 	code := replacer.Replace(params.Code)
+	code = strings.ToLower(code)
 
 	input := model.VerifyRegistrationInput{
 		ID:   params.ID,

@@ -86,7 +86,7 @@ export default class RegistrationVerify extends Vue {
   email = '';
   success = '';
   showSendNewCode = false;
-  codeMask = '####-####';
+  codeMask = 'XXXX-XXXX';
 
   // computed
   get canVerify(): boolean {
@@ -127,7 +127,7 @@ export default class RegistrationVerify extends Vue {
     this.success = '';
     this.showSendNewCode = false;
     this.isLoading = true;
-    const code = this.cleanCode();
+    const { code } = this;
     const params: VerifyRegistration = {
       id: this.pendingAccountId,
       code,
@@ -149,10 +149,6 @@ export default class RegistrationVerify extends Vue {
     if (this.canVerify) {
       this.verify();
     }
-  }
-
-  cleanCode(): string {
-    return this.code.slice(0, 4) + this.code.slice(5);
   }
 
   async sendNewCode() {
