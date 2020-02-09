@@ -3,11 +3,12 @@ package users
 import (
 	"context"
 
+	"time"
+
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
-	"time"
 )
 
 func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) (string, error) {
@@ -15,7 +16,7 @@ func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *
 	var err error
 
 	now := time.Now().UTC()
-	verificationCode, err := rand.StringAlph(alphabetDigits, 8)
+	verificationCode, err := rand.StringAlph(userVerificationCodeAlphabet, 8)
 	if err != nil {
 		logger.Error("users.GenerateNewRegistrationCode: error generating verification code", rz.Err(err))
 		return "", NewError(ErrorSendingNewRegistrationCode)

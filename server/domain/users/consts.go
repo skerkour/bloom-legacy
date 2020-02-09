@@ -1,5 +1,5 @@
 package users
 
 const (
-	alphabetDigits = "0123456789"
+	userVerificationCodeAlphabet = "abcdefghijklmopqrstuvwxyz0123456789"
 )

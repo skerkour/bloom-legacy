@@ -41,7 +41,7 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 
 	now := time.Now().UTC()
 	newUuid := uuid.New()
-	verificationCode, err := rand.StringAlph(alphabetDigits, 8)
+	verificationCode, err := rand.StringAlph(userVerificationCodeAlphabet, 8)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error generating verification code", rz.Err(err))
 		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
