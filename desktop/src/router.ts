@@ -51,7 +51,7 @@ const router = new Router({
 
 
 router.beforeEach((to, _, next) => {
-  if (store.state.isAuthenticated === false) {
+  if (store.state.session === null) {
     if (to.path.startsWith('/auth')) {
       next();
     } else {

@@ -102,9 +102,9 @@ export default class RegistrationVerify extends Vue {
     // if (this.$route.query.id) {
     //   this.pendingAccountId = this.$route.query.id as string;
     // }
-    if (this.$store.state.pending_account) {
-      this.pendingAccountId = this.$store.state.pending_account.id;
-      this.email = this.$store.state.pending_account.email;
+    if (this.$store.state.pendingAccount) {
+      this.pendingAccountId = this.$store.state.pendingAccount.id;
+      this.email = this.$store.state.pendingAccount.email;
     } else {
       this.$router.push({ path: '/auth/registration/start' });
     }

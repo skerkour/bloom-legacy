@@ -7,10 +7,10 @@ import * as models from '@/api/models';
 Vue.use(Vuex);
 
 interface AppState {
-  isAuthenticated: boolean,
   darkMode: boolean,
-  pending_account?: StorePendingAccount,
+  pendingAccount?: StorePendingAccount,
   me: models.User | null,
+  session: models.Session | null,
 }
 
 export enum Mutations {
@@ -23,24 +23,25 @@ export enum Mutations {
 
 export default new Vuex.Store<AppState>({
   state: {
-    isAuthenticated: false,
     darkMode: false,
     me: null,
+    session: null,
   },
   mutations: {
     [Mutations.SIGN_IN](state: AppState, params: models.SignedIn) {
-      state.isAuthenticated = true;
+      state.session = params.session;
+      state.session.token = null;
       state.me = params.me;
     },
     [Mutations.SIGN_OUT](state) {
-      state.isAuthenticated = false;
+      state.session = null;
       state.me = null;
     },
     [Mutations.SET_PENDING_ACCOUNT](state: AppState, pendginAccount: StorePendingAccount) {
-      state.pending_account = pendginAccount;
+      state.pendingAccount = pendginAccount;
     },
     [Mutations.CLEAR_PENDING_ACCOUNT](state: AppState) {
-      state.pending_account = undefined;
+      state.pendingAccount = undefined;
     },
     [Mutations.SWITCH_DARK_MODE](state: AppState) {
       state.darkMode = !state.darkMode;
