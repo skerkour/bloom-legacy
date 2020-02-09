@@ -10,7 +10,7 @@ import (
 func DeleteSession(ctx context.Context, tx *sqlx.Tx, sessionId, userId string) error {
 	logger := rz.FromCtx(ctx)
 
-	queryDeleteSession := "DELETE FROM session WHERE id = $1 AND user_id = $2"
+	queryDeleteSession := "DELETE FROM sessions WHERE id = $1 AND user_id = $2"
 	_, err := tx.Exec(queryDeleteSession, sessionId, userId)
 	if err != nil {
 		logger.Error("users.DeleteSession: error deleting sessiong", rz.Err(err),
