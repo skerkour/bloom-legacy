@@ -110,6 +110,7 @@ export default {
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
     coming_soon: 'Coming soon',
+    cli: 'See CLI instructions',
   },
   pricing: {
     title: 'Pricing',

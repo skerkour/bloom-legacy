@@ -49,63 +49,90 @@
         </v-card>
       </v-col>
 
-      <v-col cols="12" sm="6" md="3" class="text-center">
-        <v-card
-          class="mx-auto pt-5"
-          max-width="400"
-        >
-          <img
-            class="white--text align-end mb-5"
-            height="100px"
-            src="/static/imgs/download/apple.svg"
-            contain
-          />
-          <v-divider />
-          <v-card-actions class="text-center justify-center">
-            <!-- <v-btn text>macOS</v-btn> -->
-            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+      <v-col cols="12" md="9">
+        <v-row>
 
-      <v-col cols="12" sm="6" md="3" class="text-center">
-        <v-card
-          class="mx-auto pt-5"
-          max-width="400"
-        >
-          <img
-            class="white--text align-end mb-5"
-            height="100px"
-            src="/static/imgs/download/windows.svg"
-            contain
-          />
-          <v-divider />
-          <v-card-actions class="text-center justify-center">
-            <!-- <v-btn text>Windows</v-btn> -->
-            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+          <v-col cols="12" sm="6" md="3" class="text-center">
+            <v-card
+              class="mx-auto pt-5"
+              max-width="400"
+            >
+              <img
+                class="white--text align-end mb-5"
+                height="100px"
+                src="/static/imgs/download/apple.svg"
+                contain
+              />
+              <v-divider />
+              <v-card-actions class="text-center justify-center">
+                <!-- <v-btn text>macOS</v-btn> -->
+                <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
 
-      <v-col cols="12" sm="6" md="3" class="text-center">
-        <v-card
-          class="mx-auto pt-5"
-          max-width="400"
-        >
-          <img
-            class="white--text align-end mb-5"
-            height="100px"
-            src="/static/imgs/download/linux.svg"
-            contain
-          />
-          <v-divider />
-          <v-card-actions class="text-center justify-center">
-            <!-- <v-btn text>Linux</v-btn> -->
-            <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
-          </v-card-actions>
-        </v-card>
-      </v-col>
+          <v-col cols="12" sm="6" md="3" class="text-center">
+            <v-card
+              class="mx-auto pt-5"
+              max-width="400"
+            >
+              <img
+                class="white--text align-end mb-5"
+                height="100px"
+                src="/static/imgs/download/windows.svg"
+                contain
+              />
+              <v-divider />
+              <v-card-actions class="text-center justify-center">
+                <!-- <v-btn text>Windows</v-btn> -->
+                <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
 
+          <v-col cols="12" sm="6" md="3" class="text-center">
+            <v-card
+              class="mx-auto pt-5"
+              max-width="400"
+            >
+              <img
+                class="white--text align-end mb-5"
+                height="100px"
+                src="/static/imgs/download/linux.svg"
+                contain
+              />
+              <v-divider />
+              <v-card-actions class="text-center justify-center">
+                <!-- <v-btn text>Linux</v-btn> -->
+                <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
+              </v-card-actions>
+            </v-card>
+          </v-col>
+
+
+          <v-col cols="12" sm="6" md="3" class="text-center">
+            <a href="https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j"
+              target="_blank" rel="noopener">
+              <v-card
+                class="mx-auto pt-5"
+                max-width="400"
+              >
+                <img
+                  class="white--text align-end mb-5"
+                  height="100px"
+                  src="/static/imgs/download/cli.svg"
+                  contain
+                />
+                <v-divider />
+                <v-card-actions class="text-center justify-center">
+                  <v-btn text color="primary">{{ $t('download.cli') }}</v-btn>
+                </v-card-actions>
+              </v-card>
+            </a>
+          </v-col>
+
+       </v-row>
+      </v-col>
 
     </v-row>
 
@@ -179,27 +206,34 @@
 
     </v-row>
 
-
+  <blm-download-dialog-cli
+    :visible="isCliDialogVisible"
+    @closed="cliDialogClosed"
+  />
   </v-container>
 </template>
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DownloadBtn from '@/components/coming_soon_btn.vue';
+import BlmDownloadBtn from '@/components/coming_soon_btn.vue';
 
 
 @Component({
   components: {
-    'blm-download-btn': DownloadBtn,
+    BlmDownloadBtn,
   },
 })
 export default class Download extends Vue {
   // props
   // data
+
   // computed
   // lifecycle
   // watch
   // methods
+  openCliInstructions() {
+
+  }
 }
 </script>
 
