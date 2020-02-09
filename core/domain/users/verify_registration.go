@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"strings"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
@@ -12,9 +13,12 @@ func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
 	client := api.Client()
 	ret := false
 
+	replacer := strings.NewReplacer("-", "", " ", "", "	", "")
+	code := replacer.Replace(params.Code)
+
 	input := model.VerifyRegistrationInput{
 		ID:   params.ID,
-		Code: params.Code,
+		Code: code,
 	}
 	var resp struct {
 		VerifyRegistration *bool `json:"verifyRegistration"`
