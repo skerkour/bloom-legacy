@@ -9,15 +9,15 @@ import (
 	"gitlab.com/bloom42/bloom/version"
 )
 
-func (resolver *Resolver) ServerVersion(ctx context.Context) (*model.SeverVerion, error) {
-	var ret *model.SeverVerion
+func (resolver *Resolver) ServerVersion(ctx context.Context) (*model.ServerVersion, error) {
+	var ret *model.ServerVersion
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	ret = &model.SeverVerion{
+	ret = &model.ServerVersion{
 		Os:        version.OS,
 		Arch:      version.Arch,
 		Version:   version.Version,

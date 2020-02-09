@@ -7,13 +7,13 @@ schema:
   - schema.graphql
 
 exec:
-  filename: api/graphql/generated.go
+  filename: server/api/graphql/generated.go
 
 model:
-  filename: api/graphql/model/models_gen.go
+  filename: server/api/graphql/model/models_gen.go
 
 resolver:
-  filename: api/graphql/resolver.go
+  filename: server/api/graphql/resolver.go
   type: Resolver
 
 autobind:

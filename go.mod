@@ -14,6 +14,7 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.0.0
+	github.com/mattn/go-sqlite3 v2.0.2+incompatible // indirect
 	github.com/pkg/errors v0.9.1 // indirect
 	github.com/spf13/cobra v0.0.5
 	github.com/stripe/stripe-go v68.18.0+incompatible
@@ -22,5 +23,6 @@ require (
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
+	golang.org/x/sys v0.0.0-20200122134326-e047566fdf82 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )

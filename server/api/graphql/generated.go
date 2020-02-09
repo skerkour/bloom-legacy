@@ -127,6 +127,13 @@ type ComplexityRoot struct {
 		ID func(childComplexity int) int
 	}
 
+	ServerVersion struct {
+		Arch      func(childComplexity int) int
+		GitCommit func(childComplexity int) int
+		Os        func(childComplexity int) int
+		Version   func(childComplexity int) int
+	}
+
 	Session struct {
 		CreatedAt func(childComplexity int) int
 		Device    func(childComplexity int) int
@@ -137,13 +144,6 @@ type ComplexityRoot struct {
 	SessionDevice struct {
 		Os   func(childComplexity int) int
 		Type func(childComplexity int) int
-	}
-
-	SeverVerion struct {
-		Arch      func(childComplexity int) int
-		GitCommit func(childComplexity int) int
-		Os        func(childComplexity int) int
-		Version   func(childComplexity int) int
 	}
 
 	SignedIn struct {
@@ -205,7 +205,7 @@ type QueryResolver interface {
 	Group(ctx context.Context, id string) (*model.Group, error)
 	Groups(ctx context.Context, limit *int, offset *int) ([]*model.Group, error)
 	BillingPlans(ctx context.Context) ([]*model.BillingPlan, error)
-	ServerVersion(ctx context.Context) (*model.SeverVerion, error)
+	ServerVersion(ctx context.Context) (*model.ServerVersion, error)
 }
 type UserResolver interface {
 	Groups(ctx context.Context, obj *model.User) ([]*model.Group, error)
@@ -740,6 +740,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RegistrationStarted.ID(childComplexity), true
 
+	case "ServerVersion.arch":
+		if e.complexity.ServerVersion.Arch == nil {
+			break
+		}
+
+		return e.complexity.ServerVersion.Arch(childComplexity), true
+
+	case "ServerVersion.gitCommit":
+		if e.complexity.ServerVersion.GitCommit == nil {
+			break
+		}
+
+		return e.complexity.ServerVersion.GitCommit(childComplexity), true
+
+	case "ServerVersion.os":
+		if e.complexity.ServerVersion.Os == nil {
+			break
+		}
+
+		return e.complexity.ServerVersion.Os(childComplexity), true
+
+	case "ServerVersion.version":
+		if e.complexity.ServerVersion.Version == nil {
+			break
+		}
+
+		return e.complexity.ServerVersion.Version(childComplexity), true
+
 	case "Session.createdAt":
 		if e.complexity.Session.CreatedAt == nil {
 			break
@@ -781,34 +809,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SessionDevice.Type(childComplexity), true
-
-	case "SeverVerion.arch":
-		if e.complexity.SeverVerion.Arch == nil {
-			break
-		}
-
-		return e.complexity.SeverVerion.Arch(childComplexity), true
-
-	case "SeverVerion.gitCommit":
-		if e.complexity.SeverVerion.GitCommit == nil {
-			break
-		}
-
-		return e.complexity.SeverVerion.GitCommit(childComplexity), true
-
-	case "SeverVerion.os":
-		if e.complexity.SeverVerion.Os == nil {
-			break
-		}
-
-		return e.complexity.SeverVerion.Os(childComplexity), true
-
-	case "SeverVerion.version":
-		if e.complexity.SeverVerion.Version == nil {
-			break
-		}
-
-		return e.complexity.SeverVerion.Version(childComplexity), true
 
 	case "SignedIn.me":
 		if e.complexity.SignedIn.Me == nil {
@@ -992,236 +992,286 @@ func (ec *executionContext) introspectType(name string) (*introspection.Type, er
 	return introspection.WrapTypeFromDef(parsedSchema, parsedSchema.Types[name]), nil
 }
 
-var parsedSchema = gqlparser.MustLoadSchema(
-	&ast.Source{Name: "schema.graphql", Input: `input AcceptGroupInvitationInput {
-	id: String!
-}
-input AddPaymentMethodInput {
-	stripeId: String!
-	groupId: String
-}
-type BillingPlan {
-	id: String!
-	price: Float!
-	name: String!
-	description: String!
-	isActive: Boolean!
-	tier: BillingPlanTier!
-	allowedStorage: Int64!
-}
-input BillingPlanInput {
-	id: String
-	name: String!
-	price: Float!
-	tier: BillingPlanTier!
-	stripeId: String!
-	description: String!
-	isActive: Boolean
-}
-enum BillingPlanTier {
-	FREE
-	BASIC
-	PRO
-	ULTRA
-}
+var sources = []*ast.Source{
+	&ast.Source{Name: "schema.graphql", Input: `scalar Time
 scalar Bytes
-input CancelGroupInvitationInput {
-	id: String!
-}
-input ChangeBillingPlanInput {
-	id: String!
-	userId: String
-	groupId: String
-}
-input ChangeDefaultPaymentMethodInput {
-	id: String!
-}
-input CompleteRegistrationInput {
-	id: String!
-	username: String!
-	authKey: Bytes!
-	device: SessionDeviceInput!
-}
-input CreateGroupInput {
-	name: String!
-	description: String!
-	usersToInvite: [String!]!
-}
-input DeclineGroupInvitationInput {
-	id: String!
-}
-input DeleteBillingPlanInput {
-	id: String!
-}
-input DeleteGroupInput {
-	id: String!
-}
-type Group {
-	id: String
-	createdAt: Time
-	name: String!
-	description: String!
-	members: [GroupMember!]
-	invitations: [GroupInvitation!]
-}
-input GroupInput {
-	id: String!
-	name: String!
-	description: String!
-}
-type GroupInvitation {
-	id: String!
-	group: Group!
-	inviter: User!
-}
-type GroupMember {
-	user: User!
-	role: GroupMemberRole!
-}
-enum GroupMemberRole {
-	ADMIN
-	MEMBER
-}
 scalar Int64
-input InviteUsersInGroupInput {
-	id: String!
-	usernames: [String!]!
-}
-type Invoice {
-	id: String!
-}
-type Mutation {
-	register(input: RegisterInput!): RegistrationStarted!
-	verifyRegistration(input: VerifyRegistrationInput!): Boolean!
-	sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
-	completeRegistration(input: CompleteRegistrationInput!): SignedIn!
-	signIn(input: SignInInput!): SignedIn!
-	revokeSession(input: RevokeSessionInput!): Boolean!
-	createGroup(input: CreateGroupInput!): Group!
-	deleteGroup(input: DeleteGroupInput!): Boolean!
-	updateGroup(input: GroupInput!): Group!
-	removeGroupMembers(input: RemoveGroupMembersInput!): Group!
-	inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
-	acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
-	declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
-	cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
-	quitGroup(input: QuitGroupInput!): Boolean!
-	createBillingPlan(input: BillingPlanInput!): BillingPlan!
-	updateBillingPlan(input: BillingPlanInput!): BillingPlan!
-	deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
-	changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
-	addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
-	removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
-	changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
-}
-type PaymentMethod {
-	id: String!
-	createdAt: Time!
-	cardLast4: String!
-	cardExpirationMonth: Int!
-	cardExpirationYear: Int!
-}
-type Query {
-	me: User!
-	user(username: String!): User
-	users(limit: Int = 25, offset: Int = 0): [User!]!
-	group(id: String!): Group
-	groups(limit: Int = 25, offset: Int = 0): [Group!]!
-	billingPlans: [BillingPlan!]!
-	serverVersion: SeverVerion
-}
-input QuitGroupInput {
-	id: String!
-}
-input RegisterInput {
-	displayName: String!
-	email: String!
-}
-type RegistrationStarted {
-	id: String!
-}
-input RemoveGroupMembersInput {
-	id: String!
-	usernames: [String!]!
-}
-input RemovePaymentMethodInput {
-	id: String!
-}
-input RevokeSessionInput {
-	id: String!
-}
-input SendNewRegistrationCodeInput {
-	id: String!
-}
-type Session {
-	id: String!
-	createdAt: Time!
-	token: String
-	device: SessionDevice!
-}
-type SessionDevice {
-	os: SessionDeviceOS!
-	type: SessionDeviceType!
-}
-input SessionDeviceInput {
-	os: SessionDeviceOS!
-	type: SessionDeviceType!
-}
+
 enum SessionDeviceOS {
-	LINUX
-	MACOS
-	WINDOWS
-	ANDROID
-	IOS
+  LINUX
+  MACOS
+  WINDOWS
+  ANDROID
+  IOS
 }
+
 enum SessionDeviceType {
-	TV
-	CONSOLE
-	MOBILE
-	TABLET
-	WATCH
-	COMPUTER
-	CAR
+  TV
+  CONSOLE
+  MOBILE
+  TABLET
+  WATCH
+  COMPUTER
+  CAR
 }
-type SeverVerion {
-	os: String!
-	arch: String!
-	version: String!
-	gitCommit: String!
+
+enum GroupMemberRole {
+  ADMIN
+  MEMBER
 }
-input SignInInput {
-	username: String!
-	authKey: Bytes!
-	device: SessionDeviceInput!
+
+enum BillingPlanTier {
+  FREE
+  BASIC
+  PRO
+  ULTRA
 }
-type SignedIn {
-	session: Session!
-	me: User!
-}
-scalar Time
+
 type User {
-	id: String
-	createdAt: Time
-	avatarUrl: String
-	username: String!
-	firstName: String
-	lastName: String
-	displayName: String!
-	isAdmin: Boolean!
-	groups: [Group!]
-	paymentMethods: [PaymentMethod!]
-	invoices: [Invoice!]
-	sessions: [Session!]
-	groupInvitations: [GroupInvitation!]
-	stripePublicKey: String
-	billingPlan: BillingPlan
+  id: String
+  createdAt: Time
+  avatarUrl: String
+  username: String!
+  firstName: String
+  lastName: String
+  displayName: String!
+  isAdmin: Boolean!
+  groups: [Group!]
+  paymentMethods: [PaymentMethod!]
+  invoices: [Invoice!]
+  sessions: [Session!]
+  groupInvitations: [GroupInvitation!]
+  stripePublicKey: String
+  billingPlan: BillingPlan
 }
+
+type PaymentMethod {
+  id: String!
+  createdAt: Time!
+  cardLast4: String!
+  cardExpirationMonth: Int!
+  cardExpirationYear: Int!
+}
+
+type Group {
+  id: String
+  createdAt: Time
+  name: String!
+  description: String!
+  members: [GroupMember!]
+  invitations: [GroupInvitation!]
+}
+
+type GroupMember {
+  user: User!
+  role: GroupMemberRole!
+}
+
+type GroupInvitation {
+  id: String!
+  group: Group!
+  inviter: User!
+}
+
+type Invoice {
+  id: String!
+}
+
+type BillingPlan {
+  id: String!
+  price: Float!
+  name: String!
+  description: String!
+  isActive: Boolean!
+  tier: BillingPlanTier!
+  allowedStorage: Int64!
+}
+
+type Session {
+  id: String!
+  createdAt: Time!
+  token: String
+  device: SessionDevice!
+}
+
+type SessionDevice {
+  os: SessionDeviceOS!
+  type: SessionDeviceType!
+}
+
+type RegistrationStarted {
+  id: String!
+}
+
+type SignedIn {
+  session: Session!
+  me: User!
+}
+
+type ServerVersion {
+  os: String!
+  arch: String!
+  version: String!
+  gitCommit: String!
+}
+
+type Query {
+  me: User!
+  user(username: String!): User
+  users(limit: Int = 25, offset: Int = 0): [User!]!
+  group(id: String!): Group
+  groups(limit: Int = 25, offset: Int = 0): [Group!]!
+  billingPlans: [BillingPlan!]!
+  serverVersion: ServerVersion
+}
+
+################################################################################
+## Mutations
+################################################################################
+
+input RegisterInput {
+  displayName: String!
+  email: String!
+}
+
 input VerifyRegistrationInput {
-	id: String!
-	code: String!
+  id: String!
+  code: String!
 }
-`},
-)
+
+input CompleteRegistrationInput {
+  id: String!
+  username: String!
+  authKey: Bytes!
+  device: SessionDeviceInput!
+}
+
+input SessionDeviceInput {
+  os: SessionDeviceOS!
+  type: SessionDeviceType!
+}
+
+input SignInInput {
+  username: String!
+  authKey: Bytes!
+  device: SessionDeviceInput!
+}
+
+input RevokeSessionInput {
+  id: String!
+}
+
+input SendNewRegistrationCodeInput {
+  id: String!
+}
+
+input CreateGroupInput {
+  name: String!
+  description: String!
+  usersToInvite: [String!]!
+}
+
+input DeleteGroupInput {
+  id: String!
+}
+
+input GroupInput {
+  id: String!
+  name: String!
+  description: String!
+}
+
+input RemoveGroupMembersInput {
+  id: String!
+  usernames: [String!]!
+}
+
+input AcceptGroupInvitationInput {
+  id: String!
+}
+
+input CancelGroupInvitationInput {
+  id: String!
+}
+
+input DeclineGroupInvitationInput {
+  id: String!
+}
+
+input InviteUsersInGroupInput {
+  id: String!
+  usernames: [String!]!
+}
+
+input QuitGroupInput {
+  id: String!
+}
+
+input BillingPlanInput {
+  id: String
+  name: String!
+  price: Float!
+  tier: BillingPlanTier!
+  stripeId: String!
+  description: String!
+  isActive: Boolean
+}
+
+input DeleteBillingPlanInput {
+  id: String!
+}
+
+input ChangeBillingPlanInput {
+  id: String!
+  userId: String
+  groupId: String
+}
+
+input AddPaymentMethodInput {
+  stripeId: String!
+  groupId: String
+}
+
+input RemovePaymentMethodInput {
+  id: String!
+}
+
+input ChangeDefaultPaymentMethodInput {
+  id: String!
+}
+
+type Mutation {
+  # users
+  register(input: RegisterInput!): RegistrationStarted!
+  verifyRegistration(input: VerifyRegistrationInput!): Boolean!
+  sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
+  completeRegistration(input: CompleteRegistrationInput!): SignedIn!
+  signIn(input: SignInInput!):  SignedIn!
+  revokeSession(input: RevokeSessionInput!): Boolean!
+
+  # groups
+  createGroup(input: CreateGroupInput!): Group!
+  deleteGroup(input: DeleteGroupInput!): Boolean!
+  updateGroup(input: GroupInput!): Group!
+  removeGroupMembers(input: RemoveGroupMembersInput!): Group!
+  inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
+  declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
+  cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
+  quitGroup(input: QuitGroupInput!): Boolean!
+
+  # billing
+  createBillingPlan(input: BillingPlanInput!): BillingPlan!
+  updateBillingPlan(input: BillingPlanInput!): BillingPlan!
+  deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
+  changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
+  addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
+  removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
+  changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
+}
+`, BuiltIn: false},
+}
+var parsedSchema = gqlparser.MustLoadSchema(sources...)
 
 // endregion ************************** generated!.gotpl **************************
 
@@ -3612,9 +3662,9 @@ func (ec *executionContext) _Query_serverVersion(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.SeverVerion)
+	res := resTmp.(*model.ServerVersion)
 	fc.Result = res
-	return ec.marshalOSeverVerion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx, field.Selections, res)
+	return ec.marshalOServerVersion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐServerVersion(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -3704,6 +3754,142 @@ func (ec *executionContext) _RegistrationStarted_id(ctx context.Context, field g
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.ID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ServerVersion_os(ctx context.Context, field graphql.CollectedField, obj *model.ServerVersion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ServerVersion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Os, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ServerVersion_arch(ctx context.Context, field graphql.CollectedField, obj *model.ServerVersion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ServerVersion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Arch, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ServerVersion_version(ctx context.Context, field graphql.CollectedField, obj *model.ServerVersion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ServerVersion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Version, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _ServerVersion_gitCommit(ctx context.Context, field graphql.CollectedField, obj *model.ServerVersion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "ServerVersion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GitCommit, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -3919,142 +4105,6 @@ func (ec *executionContext) _SessionDevice_type(ctx context.Context, field graph
 	res := resTmp.(model.SessionDeviceType)
 	fc.Result = res
 	return ec.marshalNSessionDeviceType2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionDeviceType(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _SeverVerion_os(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "SeverVerion",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Os, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _SeverVerion_arch(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "SeverVerion",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Arch, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _SeverVerion_version(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "SeverVerion",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Version, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _SeverVerion_gitCommit(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "SeverVerion",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.GitCommit, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(string)
-	fc.Result = res
-	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _SignedIn_session(ctx context.Context, field graphql.CollectedField, obj *model.SignedIn) (ret graphql.Marshaler) {
@@ -6733,6 +6783,48 @@ func (ec *executionContext) _RegistrationStarted(ctx context.Context, sel ast.Se
 	return out
 }
 
+var serverVersionImplementors = []string{"ServerVersion"}
+
+func (ec *executionContext) _ServerVersion(ctx context.Context, sel ast.SelectionSet, obj *model.ServerVersion) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, serverVersionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("ServerVersion")
+		case "os":
+			out.Values[i] = ec._ServerVersion_os(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "arch":
+			out.Values[i] = ec._ServerVersion_arch(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "version":
+			out.Values[i] = ec._ServerVersion_version(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "gitCommit":
+			out.Values[i] = ec._ServerVersion_gitCommit(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var sessionImplementors = []string{"Session"}
 
 func (ec *executionContext) _Session(ctx context.Context, sel ast.SelectionSet, obj *model.Session) graphql.Marshaler {
@@ -6790,48 +6882,6 @@ func (ec *executionContext) _SessionDevice(ctx context.Context, sel ast.Selectio
 			}
 		case "type":
 			out.Values[i] = ec._SessionDevice_type(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var severVerionImplementors = []string{"SeverVerion"}
-
-func (ec *executionContext) _SeverVerion(ctx context.Context, sel ast.SelectionSet, obj *model.SeverVerion) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, severVerionImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("SeverVerion")
-		case "os":
-			out.Values[i] = ec._SeverVerion_os(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "arch":
-			out.Values[i] = ec._SeverVerion_arch(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "version":
-			out.Values[i] = ec._SeverVerion_version(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "gitCommit":
-			out.Values[i] = ec._SeverVerion_gitCommit(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8266,6 +8316,17 @@ func (ec *executionContext) marshalOPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbl
 	return ec._PaymentMethod(ctx, sel, v)
 }
 
+func (ec *executionContext) marshalOServerVersion2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐServerVersion(ctx context.Context, sel ast.SelectionSet, v model.ServerVersion) graphql.Marshaler {
+	return ec._ServerVersion(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOServerVersion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐServerVersion(ctx context.Context, sel ast.SelectionSet, v *model.ServerVersion) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._ServerVersion(ctx, sel, v)
+}
+
 func (ec *executionContext) marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -8304,17 +8365,6 @@ func (ec *executionContext) marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloom
 	}
 	wg.Wait()
 	return ret
-}
-
-func (ec *executionContext) marshalOSeverVerion2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx context.Context, sel ast.SelectionSet, v model.SeverVerion) graphql.Marshaler {
-	return ec._SeverVerion(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOSeverVerion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx context.Context, sel ast.SelectionSet, v *model.SeverVerion) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._SeverVerion(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {
