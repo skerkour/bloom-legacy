@@ -31,7 +31,7 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) <br/>
 iOS: Coming soon
 
-CLI: [See instruction](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br />
+CLI: [See instructions](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br />
 Linux: Coming soom <br/>
 MacOS: Coming soon <br/>
 Windows: Coming soon
