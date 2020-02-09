@@ -151,6 +151,7 @@ export default class Index extends Vue {
       this.$t('labels.pain4')];
     return pains[Math.floor(Math.random() * pains.length)];
   }
+
   // lifecycle
   // watch
   // methods

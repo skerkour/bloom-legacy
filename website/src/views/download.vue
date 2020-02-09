@@ -4,7 +4,7 @@
     <v-row class="justify-center">
       <v-col cols="12" sm="10" xl="8" class="text-center">
         <h2 :class="{'display-1': $vuetify.breakpoint.smAndDown,
-        'display-3': $vuetify.breakpoint. mdAndUp}" class="mb-5">{{ $t('labels.pain1') }}</h2>
+        'display-3': $vuetify.breakpoint. mdAndUp}" class="mb-5">{{ pain }}</h2>
         <h1 :class="{'headline': $vuetify.breakpoint.smAndDown,
         'display-2': $vuetify.breakpoint. mdAndUp,
         'font-weight-bold': $vuetify.breakpoint.smAndDown}" class="mb-5">
@@ -226,8 +226,13 @@ import BlmDownloadBtn from '@/components/coming_soon_btn.vue';
 export default class Download extends Vue {
   // props
   // data
-
   // computed
+  get pain(): any {
+    const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3'),
+      this.$t('labels.pain4')];
+    return pains[Math.floor(Math.random() * pains.length)];
+  }
+
   // lifecycle
   // watch
   // methods
