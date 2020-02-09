@@ -158,6 +158,13 @@ type SessionDeviceInput struct {
 	Type SessionDeviceType `json:"type"`
 }
 
+type SeverVerion struct {
+	Os        string `json:"os"`
+	Arch      string `json:"arch"`
+	Version   string `json:"version"`
+	GitCommit string `json:"gitCommit"`
+}
+
 type SignInInput struct {
 	Username string              `json:"username"`
 	AuthKey  Bytes               `json:"authKey"`

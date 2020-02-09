@@ -114,12 +114,13 @@ type ComplexityRoot struct {
 	}
 
 	Query struct {
-		BillingPlans func(childComplexity int) int
-		Group        func(childComplexity int, id string) int
-		Groups       func(childComplexity int, limit *int, offset *int) int
-		Me           func(childComplexity int) int
-		User         func(childComplexity int, username string) int
-		Users        func(childComplexity int, limit *int, offset *int) int
+		BillingPlans  func(childComplexity int) int
+		Group         func(childComplexity int, id string) int
+		Groups        func(childComplexity int, limit *int, offset *int) int
+		Me            func(childComplexity int) int
+		ServerVersion func(childComplexity int) int
+		User          func(childComplexity int, username string) int
+		Users         func(childComplexity int, limit *int, offset *int) int
 	}
 
 	RegistrationStarted struct {
@@ -136,6 +137,13 @@ type ComplexityRoot struct {
 	SessionDevice struct {
 		Os   func(childComplexity int) int
 		Type func(childComplexity int) int
+	}
+
+	SeverVerion struct {
+		Arch      func(childComplexity int) int
+		GitCommit func(childComplexity int) int
+		Os        func(childComplexity int) int
+		Version   func(childComplexity int) int
 	}
 
 	SignedIn struct {
@@ -197,6 +205,7 @@ type QueryResolver interface {
 	Group(ctx context.Context, id string) (*model.Group, error)
 	Groups(ctx context.Context, limit *int, offset *int) ([]*model.Group, error)
 	BillingPlans(ctx context.Context) ([]*model.BillingPlan, error)
+	ServerVersion(ctx context.Context) (*model.SeverVerion, error)
 }
 type UserResolver interface {
 	Groups(ctx context.Context, obj *model.User) ([]*model.Group, error)
@@ -693,6 +702,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Query.Me(childComplexity), true
 
+	case "Query.serverVersion":
+		if e.complexity.Query.ServerVersion == nil {
+			break
+		}
+
+		return e.complexity.Query.ServerVersion(childComplexity), true
+
 	case "Query.user":
 		if e.complexity.Query.User == nil {
 			break
@@ -765,6 +781,34 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SessionDevice.Type(childComplexity), true
+
+	case "SeverVerion.arch":
+		if e.complexity.SeverVerion.Arch == nil {
+			break
+		}
+
+		return e.complexity.SeverVerion.Arch(childComplexity), true
+
+	case "SeverVerion.gitCommit":
+		if e.complexity.SeverVerion.GitCommit == nil {
+			break
+		}
+
+		return e.complexity.SeverVerion.GitCommit(childComplexity), true
+
+	case "SeverVerion.os":
+		if e.complexity.SeverVerion.Os == nil {
+			break
+		}
+
+		return e.complexity.SeverVerion.Os(childComplexity), true
+
+	case "SeverVerion.version":
+		if e.complexity.SeverVerion.Version == nil {
+			break
+		}
+
+		return e.complexity.SeverVerion.Version(childComplexity), true
 
 	case "SignedIn.me":
 		if e.complexity.SignedIn.Me == nil {
@@ -1084,6 +1128,7 @@ type Query {
 	group(id: String!): Group
 	groups(limit: Int = 25, offset: Int = 0): [Group!]!
 	billingPlans: [BillingPlan!]!
+	serverVersion: SeverVerion
 }
 input QuitGroupInput {
 	id: String!
@@ -1137,6 +1182,12 @@ enum SessionDeviceType {
 	WATCH
 	COMPUTER
 	CAR
+}
+type SeverVerion {
+	os: String!
+	arch: String!
+	version: String!
+	gitCommit: String!
 }
 input SignInInput {
 	username: String!
@@ -3535,6 +3586,37 @@ func (ec *executionContext) _Query_billingPlans(ctx context.Context, field graph
 	return ec.marshalNBillingPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanᚄ(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Query_serverVersion(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Query",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Query().ServerVersion(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.SeverVerion)
+	fc.Result = res
+	return ec.marshalOSeverVerion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3837,6 +3919,142 @@ func (ec *executionContext) _SessionDevice_type(ctx context.Context, field graph
 	res := resTmp.(model.SessionDeviceType)
 	fc.Result = res
 	return ec.marshalNSessionDeviceType2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionDeviceType(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SeverVerion_os(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "SeverVerion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Os, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SeverVerion_arch(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "SeverVerion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Arch, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SeverVerion_version(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "SeverVerion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Version, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _SeverVerion_gitCommit(ctx context.Context, field graphql.CollectedField, obj *model.SeverVerion) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "SeverVerion",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.GitCommit, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _SignedIn_session(ctx context.Context, field graphql.CollectedField, obj *model.SignedIn) (ret graphql.Marshaler) {
@@ -6462,6 +6680,17 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
+		case "serverVersion":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Query_serverVersion(ctx, field)
+				return res
+			})
 		case "__type":
 			out.Values[i] = ec._Query___type(ctx, field)
 		case "__schema":
@@ -6561,6 +6790,48 @@ func (ec *executionContext) _SessionDevice(ctx context.Context, sel ast.Selectio
 			}
 		case "type":
 			out.Values[i] = ec._SessionDevice_type(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var severVerionImplementors = []string{"SeverVerion"}
+
+func (ec *executionContext) _SeverVerion(ctx context.Context, sel ast.SelectionSet, obj *model.SeverVerion) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, severVerionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("SeverVerion")
+		case "os":
+			out.Values[i] = ec._SeverVerion_os(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "arch":
+			out.Values[i] = ec._SeverVerion_arch(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "version":
+			out.Values[i] = ec._SeverVerion_version(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "gitCommit":
+			out.Values[i] = ec._SeverVerion_gitCommit(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -8033,6 +8304,17 @@ func (ec *executionContext) marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloom
 	}
 	wg.Wait()
 	return ret
+}
+
+func (ec *executionContext) marshalOSeverVerion2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx context.Context, sel ast.SelectionSet, v model.SeverVerion) graphql.Marshaler {
+	return ec._SeverVerion(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOSeverVerion2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSeverVerion(ctx context.Context, sel ast.SelectionSet, v *model.SeverVerion) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._SeverVerion(ctx, sel, v)
 }
 
 func (ec *executionContext) unmarshalOString2string(ctx context.Context, v interface{}) (string, error) {

@@ -13,6 +13,6 @@ var GoVersion string
 const (
 	OS      = runtime.GOOS
 	Arch    = runtime.GOARCH
-	Name    = "bloomserver"
+	Name    = "bloom"
 	Version = "0.1.0"
 )
