@@ -2,6 +2,9 @@ package config
 
 import (
 	"io/ioutil"
+	"os"
+	"regexp"
+	"strings"
 
 	"gitlab.com/bloom42/libs/sane-go"
 )
@@ -58,7 +61,9 @@ func Init(configFile string) error {
 		return err
 	}
 
-	err = sane.Unmarshal(data, &parsedConfig)
+	configFileDataStr := replaceEnvVars(string(data))
+
+	err = sane.Unmarshal([]byte(configFileDataStr), &parsedConfig)
 	if err != nil {
 		return err
 	}
@@ -74,4 +79,14 @@ func Init(configFile string) error {
 	DisposableEmailDomains = map[string]bool{}
 
 	return nil
+}
+
+func replaceEnvVars(configFileData string) string {
+	r := regexp.MustCompile(`\${([^}]*)}`)
+	matches := r.FindAllStringSubmatch(configFileData, -1)
+	for _, v := range matches {
+		envVar := os.Getenv(v[1])
+		configFileData = strings.Replace(configFileData, v[0], envVar, 1)
+	}
+	return configFileData
 }
