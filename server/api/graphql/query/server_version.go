@@ -6,7 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/version"
+	"gitlab.com/bloom42/bloom/version"
 )
 
 func (resolver *Resolver) ServerVersion(ctx context.Context) (*model.SeverVerion, error) {

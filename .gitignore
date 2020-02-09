@@ -53,6 +53,10 @@ node_modules/
 *.iws
 .idea/
 
-# Database files
+# project files
 /db
 /bloom
+/dist/
+/.tmp/
+/bloom.sane
+/assets/**/GeoLite2-City.mmdb

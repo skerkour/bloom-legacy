@@ -1,11 +1,11 @@
-package cmd
+package cli
 
 import (
 	"encoding/json"
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/bloom/server/version"
+	"gitlab.com/bloom42/bloom/version"
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
 

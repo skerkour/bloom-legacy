@@ -18,7 +18,7 @@ test:
 .PHONY: dev
 dev:
 	# go run main.go server
-	gowatch -build="make build" -command="dist/bloomserver server"
+	gowatch -build="make build" -command="dist/$(NAME) server"
 
 .PHONY: build
 build:
@@ -27,6 +27,7 @@ build:
 		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
 	cp -r migrations dist/
 	cp bloom.default.sane dist/bloom.sane
+
 
 .PHONY: clean
 clean:
@@ -37,3 +38,8 @@ clean:
 gqlgen:
 	go run github.com/99designs/gqlgen -v
 	cp api/graphql/model/{models_gen.go,int64.go,bytes.go} ../core/api/model
+
+
+.PHONY: tidy
+tidy:
+	go mod tidy

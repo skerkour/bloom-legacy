@@ -1,4 +1,4 @@
-package cmd
+package cli
 
 import (
 	"github.com/golang-migrate/migrate/v4"

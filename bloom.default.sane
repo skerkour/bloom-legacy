@@ -1,6 +1,6 @@
 env = "test"
 
-website = "https://bloom.sh"
+website_url = "https://bloom.sh"
 
 server = {
     # host = "localhost"
