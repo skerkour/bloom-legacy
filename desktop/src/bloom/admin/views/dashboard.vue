@@ -8,7 +8,10 @@
       <v-col cols="12" sm="6" md="3">
         <v-card outlined>
           <v-card-title>Bloom</v-card-title>
-          <v-card-text>Server: v{{ data.serverVersion.version }}</v-card-text>
+          <v-card-text>
+            Server: v{{ data.serverVersion.version }}
+            | {{ data.serverVersion.os }}-{{ data.serverVersion.arch }}
+          </v-card-text>
         </v-card>
       </v-col>
 
@@ -17,7 +20,7 @@
         <router-link to="/admin/users">
           <v-card outlined>
             <v-card-title>Users</v-card-title>
-            <v-card-text>{{ users }}</v-card-text>
+            <v-card-text>{{ totalUsers }}</v-card-text>
           </v-card>
         </router-link>
       </v-col>
@@ -41,6 +44,7 @@ export default class Dashboard extends Vue {
   data: models.DashboardData | null = null;
   isLoading = false;
   error = '';
+  totalUsers = 100000;
 
   // computed
   // lifecycle
