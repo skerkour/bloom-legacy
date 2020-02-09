@@ -286,7 +286,7 @@ export type Query = {
   group?: Maybe<Group>,
   groups: Array<Group>,
   billingPlans: Array<BillingPlan>,
-  serverVersion?: Maybe<SeverVerion>,
+  serverVersion?: Maybe<ServerVersion>,
 };
 
 
@@ -342,6 +342,14 @@ export type SendNewRegistrationCodeInput = {
   id: Scalars['String'],
 };
 
+export type ServerVersion = {
+   __typename?: 'ServerVersion',
+  os: Scalars['String'],
+  arch: Scalars['String'],
+  version: Scalars['String'],
+  gitCommit: Scalars['String'],
+};
+
 export type Session = {
    __typename?: 'Session',
   id: Scalars['String'],
@@ -378,14 +386,6 @@ export enum SessionDeviceType {
   Computer = 'COMPUTER',
   Car = 'CAR'
 }
-
-export type SeverVerion = {
-   __typename?: 'SeverVerion',
-  os: Scalars['String'],
-  arch: Scalars['String'],
-  version: Scalars['String'],
-  gitCommit: Scalars['String'],
-};
 
 export type SignedIn = {
    __typename?: 'SignedIn',

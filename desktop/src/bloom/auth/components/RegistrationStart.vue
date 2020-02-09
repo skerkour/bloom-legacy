@@ -52,7 +52,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import { shell } from 'electron';
 import core from '@/core';
 import { StartRegistration } from '../core/messages';
-import { RegistrationStarted } from '@/api/model';
+import { RegistrationStarted } from '@/api/models';
 import AuthMethod from '../core/methods';
 import { StorePendingAccount } from '../models';
 import { Mutations } from '@/store';

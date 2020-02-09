@@ -4,11 +4,11 @@
       {{ error }}
     </v-alert>
 
-    <v-row>
+    <v-row v-if="data">
       <v-col cols="12" sm="6" md="3">
         <v-card outlined>
           <v-card-title>Bloom</v-card-title>
-          <v-card-text>v{{ version }}</v-card-text>
+          <v-card-text>Server: v{{ data.serverVersion.version }}</v-card-text>
         </v-card>
       </v-col>
 
@@ -23,25 +23,45 @@
       </v-col>
 
     </v-row>
+
   </v-container>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import * as models from '@/api/models';
+import core from '@/core';
+import AdminMethods from '@/bloom/admin/core/methods';
 
 @Component
 export default class Dashboard extends Vue {
   // props
   // data
+  data: models.DashboardData | null = null;
+  isLoading = false;
   error = '';
-  version = '1.0.0';
-  users = 9000;
 
   // computed
   // lifecycle
+  created() {
+    this.fetchData();
+  }
+
   // watch
   // methods
+  async fetchData() {
+    this.error = '';
+    this.isLoading = true;
+
+    try {
+      this.data = await core.call(AdminMethods.FetDashBoardData, models.Empty);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }
 </script>
 

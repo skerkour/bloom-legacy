@@ -1,6 +1,6 @@
 /* eslint-disable camelcase, import/prefer-default-export */
 
-import * as model from '@/api/model';
+import * as models from '@/api/models';
 
 export type StartRegistration = {
   email: string,
@@ -26,7 +26,7 @@ export type SignIn = {
 export type Message = SignIn
  | CompleteRegistration
  | VerifyRegistration
- | model.RegistrationStarted
+ | models.RegistrationStarted
  | boolean
- | model.SignedIn
+ | models.SignedIn
  | StartRegistration;
