@@ -15,7 +15,7 @@
       </v-col>
     </v-row>
 
-    <v-row>
+    <v-row v-if="me">
       <v-col xs="12" sm="10" md="8" xl="7">
 
 
@@ -104,6 +104,9 @@ import EmailForm from '../components/email_form.vue';
 import DisplayNameForm from '../components/display_name_form.vue';
 import BioForm from '../components/bio_form.vue';
 import AvatarForm from '../components/avatar_form.vue';
+import * as models from '@/api/models';
+import core from '@/core';
+import MyAccountMethods from '@/bloom/myaccount/core/methods';
 
 
 @Component({
@@ -119,20 +122,32 @@ export default class Profile extends Vue {
   // data
   initialLoading = false;
   error = '';
-  me = {
-    displayName: 'Sylvain Kerkour',
-    email: 'dontexist@bloom.sh',
-    bio: 'Hello World',
-  };
+  me: models.User | null = null;
 
   // computed
   get avatarUrl() {
-    return this.$store.state.me?.avatarUrl ? this.$store.state.me?.avatarUrl : '/assets/imgs/profile.jpg';
+    return this.me?.avatarUrl ? this.me?.avatarUrl : '/assets/imgs/profile.jpg';
   }
 
   // lifecycle
+  created() {
+    this.fetchData();
+  }
+
   // watch
   // methods
+  async fetchData() {
+    this.error = '';
+    this.initialLoading = true;
+
+    try {
+      this.me = await core.call(MyAccountMethods.FetchMyProfile, models.Empty);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.initialLoading = false;
+    }
+  }
 }
 </script>
 
