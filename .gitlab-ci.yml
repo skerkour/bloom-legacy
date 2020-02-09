@@ -139,7 +139,6 @@ test:server:
   tags:
     - docker
   script:
-    - cd server
     - cp bloom.default.sane bloom.sane
     - make test
   services:
@@ -245,8 +244,8 @@ build:server:
   tags:
     - docker
   script:
-    - cd server
     - make build
+
 
 build:website:
   stage: build
