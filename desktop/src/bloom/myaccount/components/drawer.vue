@@ -10,21 +10,21 @@
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item exact link to="/myaccount/billing">
-      <v-list-item-icon>
-        <v-icon>mdi-credit-card</v-icon>
-      </v-list-item-icon>
-      <v-list-item-content>
-        <v-list-item-title>Billing</v-list-item-title>
-      </v-list-item-content>
-    </v-list-item>
-
     <v-list-item exact link to="/myaccount/security">
       <v-list-item-icon>
         <v-icon>mdi-shield-check</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
         <v-list-item-title>Security</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
+    <v-list-item exact link to="/myaccount/billing">
+      <v-list-item-icon>
+        <v-icon>mdi-credit-card</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Billing</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
