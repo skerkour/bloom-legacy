@@ -43,7 +43,7 @@ func Run() error {
 	router.Use(middleware.RedirectSlashes)
 	// router.Use(middleware.Timeout(60 * time.Second))
 	if config.Env == consts.ENV_PRODUCTION {
-		allowedOrigins = []string{"https://*.bloom.sh", "https://bloom.sh", "https://bloom42.com"}
+		allowedOrigins = []string{"https://*.bloom.sh", config.WebsiteUrl, "https://bloom42.com"}
 	} else {
 		allowedOrigins = []string{"*"}
 	}
