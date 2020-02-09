@@ -21,6 +21,7 @@ const (
 	ErrorRegistrationCodeExpired
 	ErrorUserNotFound
 	ErrorInvalidUsernamePasswordCombination
+	ErrorSessionNotFound
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -64,6 +65,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorInvalidUsernamePasswordCombination:
 		code = errors.PermissionDenied
 		message = "Invalid Username / Password combination"
+	case ErrorSessionNotFound:
+		code = errors.NotFound
+		message = "Session not found."
 	}
 
 	return errors.New(code, message)

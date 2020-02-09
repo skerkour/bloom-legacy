@@ -10,7 +10,6 @@ import (
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -129,17 +128,14 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) ([]*Sess
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
-		return ret, gqlerrors.New(errors.New(errors.PermissionDenied, "You have no right to access the sessions field"))
+		return ret, gqlerrors.AdminRoleRequired()
 	}
 
 	ret = []*Session{}
-	logger := rz.FromCtx(ctx)
 
-	sessions := []users.Session{}
-	err := db.DB.Select(&sessions, "SELCT * FROM sessions WHERE user_id = $1", currentUser.ID)
+	sessions, err := users.FindAllSessionsByUserId(ctx, *user.ID)
 	if err != nil {
-		logger.Error("User.sessions: fetching sessions", rz.Err(err))
-		return ret, gqlerrors.Internal()
+		return ret, gqlerrors.New(err)
 	}
 
 	for _, session := range sessions {
@@ -147,7 +143,10 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) ([]*Sess
 			ID:        session.ID,
 			CreatedAt: session.CreatedAt,
 			Token:     nil,
-			Device:    nil,
+			Device: &SessionDevice{
+				Os:   SessionDeviceOs(session.DeviceOS),
+				Type: SessionDeviceType(session.DeviceType),
+			},
 		}
 		ret = append(ret, &sess)
 	}
