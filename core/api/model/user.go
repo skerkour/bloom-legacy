@@ -15,4 +15,5 @@ type User struct {
 	IsAdmin     bool       `json:"isAdmin"`
 	Bio         string     `json:"bio"`
 	Email       *string    `json:"email"`
+	Sessions    *[]Session `json:"sessions"`
 }
