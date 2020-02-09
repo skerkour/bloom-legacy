@@ -2,18 +2,19 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
+	"gitlab.com/bloom42/bloom/cli/server"
+	"gitlab.com/bloom42/bloom/cli/version"
 )
 
-var configFileFlag string
-
 func init() {
-	rootCmd.PersistentFlags().StringVarP(&configFileFlag, "cofnig", "c", "bloom.sane", "Configuration file")
+	rootCmd.AddCommand(server.ServerCmd)
+	rootCmd.AddCommand(version.VersionCmd)
 }
 
 var rootCmd = &cobra.Command{
-	Use:   "bloomserver",
-	Short: "Bloom server",
-	Long:  "Bloom server. Visit https://bloom.sh for more information",
+	Use:   "bloom",
+	Short: "Bloom",
+	Long:  "Bloom: A safe palce for all your data. Visit https://bloom.sh for more information.",
 	Run: func(cmd *cobra.Command, args []string) {
 		cmd.Help()
 	},

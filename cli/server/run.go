@@ -1,4 +1,4 @@
-package cli
+package server
 
 import (
 	"github.com/getsentry/sentry-go"
@@ -14,12 +14,12 @@ import (
 )
 
 func init() {
-	rootCmd.AddCommand(serverCmd)
+	ServerCmd.AddCommand(runCmd)
 }
 
-var serverCmd = &cobra.Command{
-	Use:     "server",
-	Aliases: []string{"server", "s"},
+var runCmd = &cobra.Command{
+	Use:     "run",
+	Aliases: []string{"r"},
 	Short:   "Run the server",
 	Long:    "Run the server",
 	Run: func(cmd *cobra.Command, args []string) {

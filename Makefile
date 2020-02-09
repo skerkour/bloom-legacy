@@ -2,7 +2,7 @@ NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
 VERSION := $(shell cat version/version.go| grep "\sVersion\s=" | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
-GO_PKG = gitlab.com/bloom42/bloom/server
+GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
 
 .PHONY: all
 all: build
@@ -18,7 +18,7 @@ test:
 .PHONY: dev
 dev:
 	# go run main.go server
-	gowatch -build="make build" -exclude-dir=website -exclude-dir=mobile  -exclude-dir=desktop -command="dist/$(NAME) server"
+	gowatch -build="make build" -exclude-dir=website -exclude-dir=mobile  -exclude-dir=desktop -command="dist/$(NAME) server run"
 
 .PHONY: build
 build:

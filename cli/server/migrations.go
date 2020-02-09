@@ -1,4 +1,4 @@
-package cli
+package server
 
 import (
 	"github.com/golang-migrate/migrate/v4"
@@ -13,7 +13,7 @@ import (
 func init() {
 	migrationsCmd.AddCommand(migrationsRunCmd)
 	migrationsCmd.AddCommand(migrationsRevertCmd)
-	rootCmd.AddCommand(migrationsCmd)
+	ServerCmd.AddCommand(migrationsCmd)
 }
 
 // migrationsCmd is the bloomserver's `version` command. It display various information about the current phaser executable

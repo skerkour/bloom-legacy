@@ -1,4 +1,4 @@
-package cli
+package version
 
 import (
 	"encoding/json"
@@ -22,12 +22,11 @@ type versionJSON struct {
 var versionOutputFormat string
 
 func init() {
-	versionCmd.Flags().StringVarP(&versionOutputFormat, "format", "f", "text", "The ouput format. Valid values are [text, json]")
-	rootCmd.AddCommand(versionCmd)
+	VersionCmd.Flags().StringVarP(&versionOutputFormat, "format", "f", "text", "The ouput format. Valid values are [text, json]")
 }
 
-// versionCmd is the bloomserver's `version` command. It display various information about the current phaser executable
-var versionCmd = &cobra.Command{
+// VersionCmd is the bloom `version` command. It display various information about the current phaser executable
+var VersionCmd = &cobra.Command{
 	Use:     "version",
 	Aliases: []string{"v"},
 	Short:   "Display the version and build information",
