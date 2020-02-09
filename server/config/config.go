@@ -43,7 +43,8 @@ type SMTPConfig struct {
 }
 
 type ServerConfig struct {
-	Port uint16 `sane:"port"`
+	Port    uint16    `sane:"port"`
+	Domains *[]string `sane:"domains"`
 }
 
 type StripeConfig struct {

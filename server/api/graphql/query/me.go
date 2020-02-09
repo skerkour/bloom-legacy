@@ -25,6 +25,8 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		LastName:    &currentUser.LastName,
 		DisplayName: currentUser.DisplayName,
 		IsAdmin:     currentUser.IsAdmin,
+		Bio:         currentUser.Bio,
+		Email:       &currentUser.Email,
 	}
 
 	return ret, nil

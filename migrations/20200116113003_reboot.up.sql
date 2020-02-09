@@ -8,15 +8,13 @@ CREATE TABLE users (
     avatar_id TEXT,
     username TEXT NOT NULL,
     display_name TEXT NOT NULL,
-    bio TEXT NOT NULL,
-
     email TEXT NOT NULL,
     first_name TEXT NOT NULL,
     last_name TEXT NOT NULL,
-
     is_admin BOOLEAN NOT NULL,
     disabled_at TIMESTAMP WITH TIME ZONE,
     auth_key_hash TEXT NOT NULL,
+    bio TEXT NOT NULL,
     -- password_reset_id TEXT,
     -- password_reset_token_hash TEXT,
 

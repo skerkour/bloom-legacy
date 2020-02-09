@@ -39,7 +39,9 @@ type User {
   username: String!
   firstName: String
   lastName: String
+  email: String
   displayName: String!
+  bio: String!
   isAdmin: Boolean!
   groups: [Group!]
   paymentMethods: [PaymentMethod!]
