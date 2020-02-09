@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="10" lg="9">
         <blm-myaccount-table-devices :loading="isLoading" :devices="devices"
-          :current="$store.state.session" />
+          :current="$store.state.session" @revoked="onSessionRevoked" />
       </v-col>
     </v-row>
   </v-container>
@@ -56,6 +56,10 @@ export default class Devices extends Vue {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  onSessionRevoked(session: models.Session) {
+    this.me!.sessions = this.me!.sessions!.filter((s) => s.id !== session.id);
   }
 }
 </script>

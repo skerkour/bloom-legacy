@@ -28,7 +28,7 @@
           <v-btn
             v-else
             color="error"
-            @click="revokeSession(item.id)"
+            @click="revokeSession(item)"
             :loading="item.isLoading">
               Revoke
           </v-btn>
@@ -45,6 +45,11 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
+import { RevokeSessionParams } from '@/bloom/myaccount/core/messages';
+import core from '@/core';
+import MyAccountMethods from '@/bloom/myaccount/core/methods';
+
+const { log } = require('@bloom42/astro');
 
 @Component
 export default class DevicesTable extends Vue {
@@ -76,7 +81,17 @@ export default class DevicesTable extends Vue {
   // lifecycle
   // watch
   // methods
-  revokeSession() {
+  async revokeSession(session: models.Session) {
+    (session as any).isLoading = true; // eslint-disable-line
+    const params: RevokeSessionParams = {
+      id: session.id,
+    };
+    try {
+      await core.call(MyAccountMethods.RevokeSession, params);
+      this.$emit('revoked', session);
+    } catch (err) {
+      log.error(err.message);
+    }
   }
 
   getDeviceTypeIcon(device: models.SessionDevice): string {
