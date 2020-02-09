@@ -5,7 +5,7 @@
       {{ error }}
     </v-alert>
 
-    <v-row v-if="initialLoading">
+    <v-row v-if="initialLoading" class="justify-center text-center">
       <v-col cols="12">
         <v-progress-circular
           indeterminate
