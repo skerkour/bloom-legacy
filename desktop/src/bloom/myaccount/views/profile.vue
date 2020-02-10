@@ -64,7 +64,7 @@
             <v-subheader>Bio</v-subheader>
           </v-col>
           <v-col cols="12" sm="9">
-            <blm-myaccount-form-bio :bio="me.bio" />
+            <blm-myaccount-form-bio :bio="me.bio" @updated="bioUpdated" />
           </v-col>
         </v-row>
 
@@ -154,6 +154,10 @@ export default class Profile extends Vue {
   displayNameUpdated(displayName: string) {
     this.me!.displayName = displayName;
     this.$store.commit(Mutations.UPDATE_DISPLAY_NAME.toString(), displayName);
+  }
+
+  bioUpdated(bio: string) {
+    this.me!.bio = bio;
   }
 }
 </script>
