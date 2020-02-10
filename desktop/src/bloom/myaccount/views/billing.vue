@@ -16,7 +16,7 @@
     </v-row>
 
     <v-row v-if="me">
-      <v-col xs="12" sm="10" md="8">
+      <v-col xs="12" lg="10" xl="8">
 
         <v-row>
           <v-col cols="12">
