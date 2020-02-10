@@ -1,6 +1,7 @@
 enum Method {
   FetchDashBoardData = 'admin.fetch_dashboard_data',
-  FetcBillinghPlans = 'billing.fetch_plans',
+  FetchBillinghPlans = 'billing.fetch_plans',
+  DeleteBillingPlan = 'billing.delete_plan',
 }
 
 export default Method;

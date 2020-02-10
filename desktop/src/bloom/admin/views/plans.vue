@@ -13,7 +13,6 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BlmAdminTablePlans from '../components/plans_table.vue';
-// import InvoicesTable from '../components/invoices_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
 import AdminMethods from '@/bloom/admin/core/methods';
@@ -44,7 +43,7 @@ export default class Plans extends Vue {
     this.isLoading = true;
 
     try {
-      this.plans = await core.call(AdminMethods.FetcBillinghPlans, core.Empty);
+      this.plans = await core.call(AdminMethods.FetchBillinghPlans, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

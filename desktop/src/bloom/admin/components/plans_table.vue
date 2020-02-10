@@ -1,10 +1,13 @@
 <template>
   <v-container fluid class="text-left">
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+      {{ error }}
+    </v-alert>
     <v-data-table
       :headers="headers"
       :items="plans"
       item-key="id"
-      :loading="loading"
+      :loading="isLoading"
       loading-text="Loading... Please wait"
       hide-default-footer>
       <template v-slot:no-data>
@@ -80,6 +83,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
+import core from '@/core';
+import AdminMethods from '@/bloom/admin/core/methods';
 
 @Component
 export default class PlansTable extends Vue {
@@ -88,8 +93,10 @@ export default class PlansTable extends Vue {
   @Prop({ type: Array }) plans!: models.BillingPlan[];
 
   // data
+  error = '';
   showEditPlanDialog = false;
   planToEdit: models.BillingPlan | null = null;
+  loadingInternal = false;
   headers = [
     {
       align: 'left',
@@ -130,6 +137,9 @@ export default class PlansTable extends Vue {
   ];
 
   // computed
+  get isLoading(): boolean {
+    return this.loading || this.loadingInternal;
+  }
   // lifecycle
   // watch
   // methods
@@ -149,8 +159,24 @@ export default class PlansTable extends Vue {
   }
 
   async deletePlan(plan: models.BillingPlan) {
-    console.log(plan);
-    this.closeEditPlanDialog();
+    const conf = window.confirm(`Do you really want to delete ${plan.name}?`); // eslint-disable-line
+    if (!conf) {
+      return;
+    }
+
+    this.loadingInternal = true;
+    this.error = '';
+    const input: models.DeleteBillingPlanInput = {
+      id: plan.id,
+    };
+    try {
+      this.plans = await core.call(AdminMethods.DeleteBillingPlan, input);
+      this.closeEditPlanDialog();
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loadingInternal = false;
+    }
   }
 }
 </script>
