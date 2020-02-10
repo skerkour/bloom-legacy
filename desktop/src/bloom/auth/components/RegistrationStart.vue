@@ -9,7 +9,7 @@
           v-model="displayName"
           :rules="fulleNameRules"
           :disabled="isLoading"
-           hint="This will be public, 'Sylvain kerkour' for example"
+          hint="This is your public name, 'Sylvain kerkour' for example"
         />
       </v-flex>
 

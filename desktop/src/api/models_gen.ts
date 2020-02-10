@@ -141,6 +141,7 @@ export type Mutation = {
   completeRegistration: SignedIn,
   signIn: SignedIn,
   revokeSession: Scalars['Boolean'],
+  updateUserProfile: User,
   createGroup: Group,
   deleteGroup: Scalars['Boolean'],
   updateGroup: Group,
@@ -187,6 +188,11 @@ export type MutationSignInArgs = {
 
 export type MutationRevokeSessionArgs = {
   input: RevokeSessionInput
+};
+
+
+export type MutationUpdateUserProfileArgs = {
+  input: UpdateUserProfileInput
 };
 
 
@@ -399,6 +405,14 @@ export type SignInInput = {
   device: SessionDeviceInput,
 };
 
+
+export type UpdateUserProfileInput = {
+  id?: Maybe<Scalars['String']>,
+  displayName?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
+  firstName?: Maybe<Scalars['String']>,
+  lastName?: Maybe<Scalars['String']>,
+};
 
 export type User = {
    __typename?: 'User',

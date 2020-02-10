@@ -5,6 +5,8 @@
         <v-text-field
           label="Display name"
           v-model="newDisplayName"
+          hint="This is your public name, 'Sylvain kerkour' for example"
+          persistent-hint
         />
       </v-col>
     </v-row>
