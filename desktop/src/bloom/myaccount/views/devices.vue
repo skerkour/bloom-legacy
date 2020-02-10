@@ -1,5 +1,8 @@
 <template>
   <v-container fluid>
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+      {{ error }}
+    </v-alert>
     <v-row justify="center">
       <v-col cols="12" sm="10" lg="9">
         <blm-myaccount-table-devices :loading="isLoading" :devices="devices"

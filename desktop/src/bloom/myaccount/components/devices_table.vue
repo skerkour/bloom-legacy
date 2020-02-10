@@ -1,5 +1,9 @@
 <template>
   <v-container fluid class="text-left">
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
+      {{ error }}
+    </v-alert>
+
     <v-data-table
       :headers="headers"
       :items="devices"
@@ -49,8 +53,6 @@ import { RevokeSessionParams } from '@/bloom/myaccount/core/messages';
 import core from '@/core';
 import MyAccountMethods from '@/bloom/myaccount/core/methods';
 
-const { log } = require('@bloom42/astro');
-
 @Component
 export default class DevicesTable extends Vue {
   // props
@@ -59,6 +61,7 @@ export default class DevicesTable extends Vue {
   @Prop({ type: Object }) current!: models.Session;
 
   // data
+  error = '';
   headers = [
     {
       sortable: true,
@@ -82,15 +85,17 @@ export default class DevicesTable extends Vue {
   // watch
   // methods
   async revokeSession(session: models.Session) {
+    this.error = '';
     (session as any).isLoading = true; // eslint-disable-line
     const params: RevokeSessionParams = {
       id: session.id,
     };
+
     try {
       await core.call(MyAccountMethods.RevokeSession, params);
       this.$emit('revoked', session);
     } catch (err) {
-      log.error(err.message);
+      this.error = err.message;
     }
   }
 
