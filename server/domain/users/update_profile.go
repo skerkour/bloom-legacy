@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -59,35 +60,45 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 			tx.Rollback()
 			return ret, err
 		}
+	} else {
+		ret = user
 	}
 
 	queryParams := []interface{}{now}
 	ret.UpdatedAt = now
-	query := "UPDATE users SET (updated_at = ?"
+	i := 1
+	query := fmt.Sprintf("UPDATE users SET updated_at = $%d", i)
 
 	if input.Bio != nil {
-		query += ", bio = ?"
+		i += 1
+		query += fmt.Sprintf(", bio = $%d", i)
 		queryParams = append(queryParams, *input.Bio)
 		ret.Bio = *input.Bio
 	}
 	if input.DisplayName != nil {
-		query += ", display_name = ?"
+		i += 1
+		query += fmt.Sprintf(", display_name = $%d", i)
 		queryParams = append(queryParams, *input.DisplayName)
 		ret.DisplayName = *input.DisplayName
 	}
 	if input.FirstName != nil {
-		query += ", first_name = ?"
+		i += 1
+		query += fmt.Sprintf(", first_name = $%d", i)
 		queryParams = append(queryParams, *input.FirstName)
 		ret.FirstName = *input.FirstName
 	}
 	if input.LastName != nil {
-		query += ", last_name = ?"
+		i += 1
+		query += fmt.Sprintf(", last_name = $%d", i)
 		queryParams = append(queryParams, *input.LastName)
 		ret.LastName = *input.LastName
 	}
 
+	i += 1
+	query += fmt.Sprintf(" WHERE id = $%d", i)
 	queryParams = append(queryParams, ret.ID)
-	query += ") WHERE id = ?"
+
+	fmt.Println("QUERYYY", query)
 
 	_, err = tx.Exec(query, queryParams...)
 	if err != nil {
