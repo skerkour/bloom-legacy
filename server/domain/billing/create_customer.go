@@ -45,7 +45,7 @@ func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, 
 	}
 
 	queryCreateCustomer := `INSERT INTO billing_customers
-		(id, created_at, updated_at, plan_id, stripe_id, email, user_storage, user_id, group_id)
+		(id, created_at, updated_at, plan_id, stripe_id, email, used_storage, user_id, group_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
 	_, err = tx.Exec(queryCreateCustomer, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.PlanID,
 		ret.StripeID, ret.Email, ret.UsedStorage, ret.UserID, ret.GroupID)

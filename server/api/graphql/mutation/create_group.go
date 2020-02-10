@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/libs/rz-go"
 )
@@ -27,6 +28,13 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 	}
 
 	newGroup, err := groups.CreateGroup(ctx, tx, *currentUser, input.Name, input.Description)
+	if err != nil {
+		tx.Rollback()
+		return ret, gqlerrors.New(err)
+	}
+
+	// create customer profile
+	_, err = billing.CreateCustomer(ctx, tx, currentUser, nil, &newGroup.ID)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

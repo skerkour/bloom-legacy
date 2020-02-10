@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"
@@ -59,6 +60,13 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 
 	// create user
 	newUser, err := users.CreateUser(ctx, tx, pendingUser, input.Username, input.AuthKey)
+	if err != nil {
+		tx.Rollback()
+		return ret, gqlerrors.New(err)
+	}
+
+	// create customer profile
+	_, err = billing.CreateCustomer(ctx, tx, &newUser, &newUser.ID, nil)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
