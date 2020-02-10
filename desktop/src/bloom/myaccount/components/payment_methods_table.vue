@@ -2,7 +2,7 @@
   <v-container fluid>
     <v-data-table
       :headers="headers"
-      :items="methods"
+      :items="paymentMethods"
       item-key="id"
       :loading="loading"
       loading-text="Loading... Please wait"
@@ -25,12 +25,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import * as models from '@/api/models';
 
 @Component
 export default class Security extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Array }) methods!: any[];
+  @Prop({ type: Array }) paymentMethods!: models.PaymentMethod[];
 
   // data
   headers = [

@@ -25,12 +25,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import * as models from '@/api/models';
 
 @Component
 export default class InvoicesTable extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Array }) invoices!: any[];
+  @Prop({ type: Array }) invoices!: models.Invoice[];
 
   // data
   headers = [

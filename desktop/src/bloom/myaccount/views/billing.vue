@@ -62,7 +62,7 @@
 
         <v-row>
           <v-col cols="12">
-            <blm-myaccount-table-payment-methods :loading="isLoading" :methods="methods" />
+            <blm-myaccount-table-payment-methods :loading="isLoading" :methods="paymentMethods"/>
           </v-col>
         </v-row>
 
@@ -93,7 +93,6 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
-import SubscriptionsTable from '../components/subscriptions_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
 import MyAccountMethods from '@/bloom/myaccount/core/methods';
@@ -103,7 +102,6 @@ import MyAccountMethods from '@/bloom/myaccount/core/methods';
   components: {
     'blm-myaccount-table-payment-methods': PaymentMethodsTable,
     'blm-myaccount-table-invoices': InvoicesTable,
-    'blm-myaccount-table-subscriptions': SubscriptionsTable,
   },
 })
 export default class Billing extends Vue {
@@ -111,13 +109,24 @@ export default class Billing extends Vue {
   // data
   error = '';
   isLoading = false;
-  methods = [];
-  invoices = [];
-  subscriptions = [];
   plans: models.BillingPlan[] = [];
   me: models.User | null = null;
 
   // computed
+  get invoices(): models.Invoice[] {
+    if (this.me === null) {
+      return [];
+    }
+    return this.me.invoices!;
+  }
+
+  get paymentMethods(): models.PaymentMethod[] {
+    if (this.me === null) {
+      return [];
+    }
+    return this.me.paymentMethods!;
+  }
+
   // lifecycle
   created() {
     this.fetchData();
