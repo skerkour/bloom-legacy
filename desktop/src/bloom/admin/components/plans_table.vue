@@ -35,10 +35,44 @@
           <span>{{ item.description | truncate }}</span>
         </td>
         <td>
-          <span>Actions</span>
+          <v-icon small @click="editPlan(item)">mdi-pencil</v-icon>
         </td>
       </template>
     </v-data-table>
+
+
+    <v-dialog v-model="showEditPlanDialog" width="500">
+      <v-card v-if="planToEdit">
+        <v-card-title class="headline" primary-title>
+          {{ planToEdit.name }}
+          <v-spacer />
+          <v-btn icon @click="deletePlan(planToEdit)">
+            <v-icon>mdi-delete</v-icon>
+          </v-btn>
+        </v-card-title>
+
+        <v-card-text>
+          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
+          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
+          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
+          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
+          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
+          anim id est laborum.
+        </v-card-text>
+
+        <v-divider></v-divider>
+
+        <v-card-actions>
+          <v-spacer />
+          <v-btn text @click="closeEditPlanDialog">
+            Close
+          </v-btn>
+           <v-btn color="success" @click="planToEdit">
+            Update
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -54,6 +88,8 @@ export default class PlansTable extends Vue {
   @Prop({ type: Array }) plans!: models.BillingPlan[];
 
   // data
+  showEditPlanDialog = false;
+  planToEdit: models.BillingPlan | null = null;
   headers = [
     {
       align: 'left',
@@ -92,10 +128,30 @@ export default class PlansTable extends Vue {
       value: 'actions',
     },
   ];
+
   // computed
   // lifecycle
   // watch
-  // invoices
+  // methods
+  editPlan(plan: models.BillingPlan) {
+    this.showEditPlanDialog = true;
+    this.planToEdit = plan;
+  }
+
+  closeEditPlanDialog() {
+    this.planToEdit = null;
+    this.showEditPlanDialog = false;
+  }
+
+  async updatePlan(plan: models.BillingPlan) {
+    console.log(plan);
+    this.closeEditPlanDialog();
+  }
+
+  async deletePlan(plan: models.BillingPlan) {
+    console.log(plan);
+    this.closeEditPlanDialog();
+  }
 }
 </script>
 
