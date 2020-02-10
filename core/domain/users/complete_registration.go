@@ -39,6 +39,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 					token
 				}
 				me {
+					id
 					username
 					displayName
 					isAdmin
@@ -51,9 +52,14 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 
 	err := client.Do(context.Background(), req, &resp)
 	if resp.CompleteRegistration != nil {
-		ret = *resp.CompleteRegistration
-		if ret.Session != nil && ret.Session.Token != nil {
-			client.Authenticate(ret.Session.ID, *ret.Session.Token)
+		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
+			client.Authenticate(resp.CompleteRegistration.Session.ID, *resp.CompleteRegistration.Session.Token)
+			err = PersistSession(resp.CompleteRegistration)
+			if err != nil {
+				return ret, err
+			}
+			ret = *resp.CompleteRegistration
+			ret.Session.Token = nil
 		}
 	}
 

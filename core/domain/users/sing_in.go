@@ -38,6 +38,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 					token
 				}
 				me {
+					id
 					username
 					displayName
 					isAdmin
@@ -50,9 +51,14 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 
 	err := client.Do(context.Background(), req, &resp)
 	if resp.SignIn != nil {
-		ret = *resp.SignIn
-		if ret.Session != nil && ret.Session.Token != nil {
-			client.Authenticate(ret.Session.ID, *ret.Session.Token)
+		if resp.SignIn.Session != nil && resp.SignIn.Session.Token != nil {
+			client.Authenticate(resp.SignIn.Session.ID, *resp.SignIn.Session.Token)
+			err = PersistSession(resp.SignIn)
+			if err != nil {
+				return ret, err
+			}
+			ret = *resp.SignIn
+			ret.Session.Token = nil
 		}
 	}
 	return ret, err

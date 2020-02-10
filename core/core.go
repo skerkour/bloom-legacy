@@ -5,17 +5,40 @@ import (
 	"errors"
 	"strings"
 
+	"gitlab.com/bloom42/bloom/core/api"
+	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/users"
 )
+
+func Init() (*model.SignedIn, error) {
+	var ret *model.SignedIn
+	client := api.Client()
+
+	err := db.Init()
+	if err != nil {
+		return ret, err
+	}
+
+	ret, err = users.FindPersistedSession()
+	if err != nil {
+		return ret, nil
+	}
+	if ret != nil {
+		client.Authenticate(ret.Session.ID, *ret.Session.Token)
+	}
+
+	return ret, err
+}
 
 func handleCoreMethod(method string, _ json.RawMessage) MessageOut {
 	switch method {
 	case "init":
-		err := db.Init()
+		res, err := Init()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: InitRes{Success: true}}
+		return MessageOut{Data: res}
 	default:
 		return methodNotFoundError(method, "core")
 	}

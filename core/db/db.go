@@ -120,5 +120,15 @@ func Init() error {
 		return err
 	}
 
+	_, err = DB.Exec(`
+	CREATE TABLE IF NOT EXISTS preferences (
+		key TEXT PRIMARY KEY NOT NULL,
+		value TEXT NOT NULL
+	)
+	`)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
