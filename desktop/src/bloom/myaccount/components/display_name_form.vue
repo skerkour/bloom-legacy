@@ -22,7 +22,8 @@
     <v-row>
       <v-col cols="12" class="text-right pt-0">
         <v-btn text :disabled="!updatable" @click="cancel">Cancel</v-btn>
-        <v-btn color="primary" :disabled="!updatable" class="mx-3">Update</v-btn>
+        <v-btn color="primary" :disabled="!updatable" class="mx-3" @click="update"
+          :loading="isLoading">Update</v-btn>
 
       </v-col>
     </v-row>
@@ -33,6 +34,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
+import * as models from '@/api/models';
+import core from '@/core';
+import MyAccountMethods from '@/bloom/myaccount/core/methods';
 
 @Component
 export default class DisplayNameForm extends Vue {
@@ -42,6 +46,7 @@ export default class DisplayNameForm extends Vue {
   // data
   newDisplayName = '';
   error = '';
+  isLoading = false;
 
   // computed
   get updatable() {
@@ -57,6 +62,23 @@ export default class DisplayNameForm extends Vue {
   // methods
   cancel() {
     this.newDisplayName = this.displayName;
+  }
+
+  async update() {
+    this.error = '';
+    this.isLoading = true;
+
+    const input: models.UpdateUserProfileInput = {
+      displayName: this.newDisplayName,
+    };
+    try {
+      const user: models.User = await core.call(MyAccountMethods.UpdateProfile, input);
+      this.$emit('updated', user.displayName);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>

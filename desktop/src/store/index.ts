@@ -19,6 +19,7 @@ export enum Mutations {
   SET_PENDING_ACCOUNT,
   CLEAR_PENDING_ACCOUNT,
   SWITCH_DARK_MODE,
+  UPDATE_DISPLAY_NAME,
 }
 
 export default new Vuex.Store<AppState>({
@@ -44,6 +45,9 @@ export default new Vuex.Store<AppState>({
     },
     [Mutations.SWITCH_DARK_MODE](state: AppState) {
       state.darkMode = !state.darkMode;
+    },
+    [Mutations.UPDATE_DISPLAY_NAME](state: AppState, displayName: string) {
+      state.me!.displayName = displayName;
     },
   },
   actions: {

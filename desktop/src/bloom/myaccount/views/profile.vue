@@ -53,7 +53,8 @@
             <v-subheader>Display name</v-subheader>
           </v-col>
           <v-col cols="12" sm="9">
-            <blm-myaccount-form-displayname :display-name="me.displayName" />
+            <blm-myaccount-form-displayname :display-name="me.displayName"
+              @updated="displayNameUpdated"/>
           </v-col>
         </v-row>
 
@@ -107,6 +108,7 @@ import AvatarForm from '../components/avatar_form.vue';
 import * as models from '@/api/models';
 import core from '@/core';
 import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import { Mutations } from '@/store';
 
 
 @Component({
@@ -147,6 +149,11 @@ export default class Profile extends Vue {
     } finally {
       this.initialLoading = false;
     }
+  }
+
+  displayNameUpdated(displayName: string) {
+    this.me!.displayName = displayName;
+    this.$store.commit(Mutations.UPDATE_DISPLAY_NAME.toString(), displayName);
   }
 }
 </script>
