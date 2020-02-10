@@ -94,9 +94,10 @@ func FindPlanForUser(ctx context.Context, userId string) (*Plan, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	queryFind := `SELECT * FROM billing_plans, billing_customers
-	WHERE billing_plans.id = billing_customers.plan_id AND billing_customers.user_id = $1`
-	err = db.DB.Select(ret, queryFind, userId)
+	queryFind := `SELECT billing_plans.* FROM billing_plans
+	INNER JOIN billing_customers ON billing_plans.id = billing_customers.plan_id
+	WHERE billing_customers.user_id = $1`
+	err = db.DB.Get(ret, queryFind, userId)
 	if err != nil {
 		logger.Error("billing.FindPlanForUser: finding plan", rz.Err(err))
 		return ret, NewError(ErrorPlanNotFound)
