@@ -4,7 +4,9 @@ import (
 	"C"
 	"encoding/json"
 
+	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/billing"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
 func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
@@ -21,6 +23,17 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "delete_plan":
+		var params model.DeleteBillingPlanInput
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = billing.DeletePlan(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: kernel.Empty{}}
 	default:
 		return methodNotFoundError(method, "billing")
 	}
