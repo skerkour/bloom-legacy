@@ -79,7 +79,7 @@ func FindPlansForAdmin(ctx context.Context) ([]Plan, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	queryFind := "SELECT * FROM billing_plans WHERE"
+	queryFind := "SELECT * FROM billing_plans"
 	err = db.DB.Select(&ret, queryFind)
 	if err != nil {
 		logger.Error("billing.FindPlansForAdmin: finding plans", rz.Err(err))
