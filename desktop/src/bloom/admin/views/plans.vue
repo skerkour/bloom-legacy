@@ -4,7 +4,8 @@
       {{ error }}
     </v-alert>
 
-    <blm-admin-table-plans :loading="isLoading" :plans="plans" />
+    <blm-admin-table-plans :loading="isLoading" :plans="plans"
+      @deleted="onPlanDeleted" @updated="onPlanUpdated" @created="onPlanCreated" />
 
   </v-container>
 </template>
@@ -49,6 +50,20 @@ export default class Plans extends Vue {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  onPlanDeleted(deletedPlan: models.BillingPlan) {
+    this.plans = this.plans.filter((plan: models.BillingPlan) => plan.id !== deletedPlan.id);
+  }
+
+  onPlanUpdated(updatedPlan: models.BillingPlan) {
+    const pos = this.plans.map((plan: models.BillingPlan) => plan.id).indexOf(updatedPlan.id);
+    this.plans.splice(pos, 1);
+    this.plans = [updatedPlan, ...this.plans];
+  }
+
+  onPlanCreated(newPlan: models.BillingPlan) {
+    this.plans.push(newPlan);
   }
 }
 </script>

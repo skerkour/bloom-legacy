@@ -3,6 +3,16 @@
     <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
       {{ error }}
     </v-alert>
+
+
+    <v-toolbar flat dense>
+      <v-spacer />
+        <v-btn color="primary" class="new-btn" @click="newPlan">
+          New <v-icon right>mdi-plus</v-icon>
+        </v-btn>
+    </v-toolbar>
+
+
     <v-data-table
       :headers="headers"
       :items="plans"
@@ -32,7 +42,7 @@
           <span>{{ item.tier }}</span>
         </td>
         <td>
-          <span>{{ item.storage }}</span>
+          <span>{{ item.storage | filesize }}</span>
         </td>
         <td>
           <span>{{ item.description | truncate }}</span>
@@ -55,12 +65,39 @@
         </v-card-title>
 
         <v-card-text>
-          Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor
-          incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud
-          exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure
-          dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur.
-          Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit
-          anim id est laborum.
+          <v-row>
+            <v-col cols="12">
+              <v-text-field label="Name" outlined v-model="planToEdit.name"></v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-textarea
+                label="Decription"
+                v-model="planToEdit.description"
+              ></v-textarea>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Stripe ID" outlined v-model="planToEdit.stripeId"></v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-select
+                :items="billingTiers"
+                label="Tier"
+                outlined
+                v-model="planToEdit.tier"
+              ></v-select>
+            </v-col>
+
+            <v-col cols="12">
+               <v-switch
+                v-model="planToEdit.isActive"
+                :label="`IsActive: ${planToEdit.isActive}`"
+              ></v-switch>
+            </v-col>
+
+          </v-row>
         </v-card-text>
 
         <v-divider></v-divider>
@@ -70,7 +107,10 @@
           <v-btn text @click="closeEditPlanDialog">
             Close
           </v-btn>
-           <v-btn color="success" @click="planToEdit">
+          <v-btn color="primary" @click="createPlan(planToEdit)" v-if="isNewPlan">
+            Create
+          </v-btn>
+           <v-btn color="primary" @click="updatePlan(planToEdit)" v-else>
             Update
           </v-btn>
         </v-card-actions>
@@ -97,6 +137,7 @@ export default class PlansTable extends Vue {
   showEditPlanDialog = false;
   planToEdit: models.BillingPlan | null = null;
   loadingInternal = false;
+  isNewPlan = false;
   headers = [
     {
       align: 'left',
@@ -135,27 +176,68 @@ export default class PlansTable extends Vue {
       value: 'actions',
     },
   ];
+  billingTiers = ['FREE', 'BASIC', 'PRO', 'ULTRA'];
 
   // computed
   get isLoading(): boolean {
     return this.loading || this.loadingInternal;
   }
+
   // lifecycle
   // watch
   // methods
   editPlan(plan: models.BillingPlan) {
+    this.planToEdit = { ...plan };
     this.showEditPlanDialog = true;
-    this.planToEdit = plan;
+  }
+
+  newPlan() {
+    this.isNewPlan = true;
+    this.planToEdit = {
+      id: '',
+      price: 0.0,
+      name: '',
+      description: '',
+      isActive: false,
+      tier: models.BillingPlanTier.Free,
+      storage: 0,
+      stripeId: '',
+    };
+    this.showEditPlanDialog = true;
   }
 
   closeEditPlanDialog() {
-    this.planToEdit = null;
     this.showEditPlanDialog = false;
+    this.planToEdit = null;
+    this.isNewPlan = false;
   }
 
   async updatePlan(plan: models.BillingPlan) {
-    console.log(plan);
-    this.closeEditPlanDialog();
+    this.loadingInternal = true;
+    this.error = '';
+    try {
+      const updatedPlan = await core.call(AdminMethods.UpdatedBillingPlan, plan);
+      this.closeEditPlanDialog();
+      this.$emit('updated', updatedPlan);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loadingInternal = false;
+    }
+  }
+
+  async createPlan(plan: models.BillingPlan) {
+    this.loadingInternal = true;
+    this.error = '';
+    try {
+      const newPlan = await core.call(AdminMethods.CreateBillingPlan, plan);
+      this.closeEditPlanDialog();
+      this.$emit('created', newPlan);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loadingInternal = false;
+    }
   }
 
   async deletePlan(plan: models.BillingPlan) {
@@ -170,8 +252,9 @@ export default class PlansTable extends Vue {
       id: plan.id,
     };
     try {
-      this.plans = await core.call(AdminMethods.DeleteBillingPlan, input);
+      await core.call(AdminMethods.DeleteBillingPlan, input);
       this.closeEditPlanDialog();
+      this.$emit('deleted', plan);
     } catch (err) {
       this.error = err.message;
     } finally {
