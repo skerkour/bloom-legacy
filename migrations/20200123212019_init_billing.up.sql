@@ -13,6 +13,11 @@ CREATE TABLE billing_plans (
     PRIMARY KEY(id)
 );
 
+INSERT INTO billing_plans
+		(id, created_at, updated_at, name, description, stripe_id, price, is_active, tier)
+		VALUES ('42fb1c42-caca-418d-81f3-a6313c4a0a42', '2020-02-10T14:33:39+00:00', '2020-02-10T14:33:39+00:00',
+    'Free', '', 'plan_Gck0Zy9Qx5qaGk', 0.0, true, 'FREE');
+
 CREATE TABLE billing_customers (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
