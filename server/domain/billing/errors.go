@@ -31,6 +31,7 @@ const (
 	ErrorTooMuchStorageUsedForNewPlan
 	ErrorPlanStorageCantBeNegative
 	ErrorCantDeleteDefaultPlan
+	ErrorCantDeletePlanWithSubscribers
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -99,6 +100,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorCantDeleteDefaultPlan:
 		code = errors.InvalidArgument
 		message = "Can't delete default plan. Please fix and try again."
+	case ErrorCantDeletePlanWithSubscribers:
+		code = errors.InvalidArgument
+		message = "Can't delete plan with subscribers. Please fix and try again."
 	}
 
 	return errors.New(code, message)

@@ -54,6 +54,10 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		return ret, gqlerrors.New(billing.NewError(billing.ErrorCreatingPlan))
 	}
 
+	var stripeId *string
+	if currentUser.IsAdmin {
+		stripeId = &plan.StripeID
+	}
 	ret = &model.BillingPlan{
 		ID:          plan.ID,
 		Name:        plan.Name,
@@ -62,6 +66,7 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		Price:       plan.Price,
 		IsActive:    plan.IsActive,
 		Storage:     model.Int64(plan.Storage),
+		StripeID:    stripeId,
 	}
 	return ret, nil
 }

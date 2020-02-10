@@ -40,6 +40,18 @@ func DeletePlan(ctx context.Context, user *users.User, planId string) error {
 		return NewError(ErrorCantDeleteDefaultPlan)
 	}
 
+	subscribersCount, err := GetSubscribersCountForPlanIdTx(ctx, tx, planId)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("billing.DeletePlan: finding subscribers count", rz.Err(err))
+		return err
+	}
+
+	if subscribersCount != 0 {
+		tx.Rollback()
+		return NewError(ErrorCantDeletePlanWithSubscribers)
+	}
+
 	// delete plan
 	queryDeleteGroup := "DELETE FROM billing_plans WHERE id = $1"
 	_, err = tx.Exec(queryDeleteGroup, planId)

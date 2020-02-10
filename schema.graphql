@@ -93,6 +93,7 @@ type BillingPlan {
   tier: BillingPlanTier!
   storage: Int64!
   stripeId: String
+  subscribers: Int64
 }
 
 type Session {

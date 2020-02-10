@@ -18,17 +18,6 @@ type AddPaymentMethodInput struct {
 	GroupID  *string `json:"groupId"`
 }
 
-type BillingPlan struct {
-	ID          string          `json:"id"`
-	Price       float64         `json:"price"`
-	Name        string          `json:"name"`
-	Description string          `json:"description"`
-	IsActive    bool            `json:"isActive"`
-	Tier        BillingPlanTier `json:"tier"`
-	Storage     Int64           `json:"storage"`
-	StripeID    *string         `json:"stripeId"`
-}
-
 type BillingPlanInput struct {
 	ID          *string         `json:"id"`
 	Name        string          `json:"name"`

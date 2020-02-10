@@ -29,3 +29,7 @@ func (r *Resolver) Group() GroupResolver {
 func (r *Resolver) User() UserResolver {
 	return &model.UserResolver{}
 }
+
+func (r *Resolver) BillingPlan() BillingPlanResolver {
+	return &model.BillingPlanResolver{}
+}

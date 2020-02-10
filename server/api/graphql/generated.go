@@ -36,6 +36,7 @@ type Config struct {
 }
 
 type ResolverRoot interface {
+	BillingPlan() BillingPlanResolver
 	Group() GroupResolver
 	Mutation() MutationResolver
 	Query() QueryResolver
@@ -54,6 +55,7 @@ type ComplexityRoot struct {
 		Price       func(childComplexity int) int
 		Storage     func(childComplexity int) int
 		StripeID    func(childComplexity int) int
+		Subscribers func(childComplexity int) int
 		Tier        func(childComplexity int) int
 	}
 
@@ -174,6 +176,9 @@ type ComplexityRoot struct {
 	}
 }
 
+type BillingPlanResolver interface {
+	Subscribers(ctx context.Context, obj *model.BillingPlan) (*model.Int64, error)
+}
 type GroupResolver interface {
 	Members(ctx context.Context, obj *model.Group) ([]*model.GroupMember, error)
 	Invitations(ctx context.Context, obj *model.Group) ([]*model.GroupInvitation, error)
@@ -285,6 +290,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingPlan.StripeID(childComplexity), true
+
+	case "BillingPlan.subscribers":
+		if e.complexity.BillingPlan.Subscribers == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Subscribers(childComplexity), true
 
 	case "BillingPlan.tier":
 		if e.complexity.BillingPlan.Tier == nil {
@@ -1126,6 +1138,7 @@ type BillingPlan {
   tier: BillingPlanTier!
   storage: Int64!
   stripeId: String
+  subscribers: Int64
 }
 
 type Session {
@@ -2039,6 +2052,37 @@ func (ec *executionContext) _BillingPlan_stripeId(ctx context.Context, field gra
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_subscribers(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.BillingPlan().Subscribers(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Int64)
+	fc.Result = res
+	return ec.marshalOInt642ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -6510,40 +6554,51 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 		case "id":
 			out.Values[i] = ec._BillingPlan_id(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "price":
 			out.Values[i] = ec._BillingPlan_price(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "name":
 			out.Values[i] = ec._BillingPlan_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "description":
 			out.Values[i] = ec._BillingPlan_description(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "isActive":
 			out.Values[i] = ec._BillingPlan_isActive(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "tier":
 			out.Values[i] = ec._BillingPlan_tier(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "storage":
 			out.Values[i] = ec._BillingPlan_storage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
-				invalids++
+				atomic.AddUint32(&invalids, 1)
 			}
 		case "stripeId":
 			out.Values[i] = ec._BillingPlan_stripeId(ctx, field, obj)
+		case "subscribers":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._BillingPlan_subscribers(ctx, field, obj)
+				return res
+			})
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -8491,6 +8546,30 @@ func (ec *executionContext) marshalOInt2ᚖint(ctx context.Context, sel ast.Sele
 		return graphql.Null
 	}
 	return ec.marshalOInt2int(ctx, sel, *v)
+}
+
+func (ec *executionContext) unmarshalOInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, v interface{}) (model.Int64, error) {
+	var res model.Int64
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalOInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, sel ast.SelectionSet, v model.Int64) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOInt642ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, v interface{}) (*model.Int64, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOInt642ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, sel ast.SelectionSet, v *model.Int64) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOInvoice2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoiceᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.Invoice) graphql.Marshaler {
