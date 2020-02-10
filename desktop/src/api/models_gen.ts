@@ -30,6 +30,7 @@ export type BillingPlan = {
   tier: BillingPlanTier,
   storage: Scalars['Int64'],
   stripeId?: Maybe<Scalars['String']>,
+  subscribers?: Maybe<Scalars['Int64']>,
 };
 
 export type BillingPlanInput = {

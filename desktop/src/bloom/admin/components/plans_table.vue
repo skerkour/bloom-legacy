@@ -32,6 +32,9 @@
             <span>{{ item.name }}</span>
           </td>
           <td>
+            <span>{{ item.subscribers }}</span>
+          </td>
+          <td>
             <v-chip color="success" outlined v-if="item.isActive">
               Active
             </v-chip>
@@ -43,10 +46,10 @@
             <span>{{ item.tier }}</span>
           </td>
           <td>
-            <span>{{ item.storage | filesize }}</span>
+            <span>{{ item.price }} €</span>
           </td>
           <td>
-            <span>{{ item.description | truncate }}</span>
+            <span>{{ item.storage | filesize }}</span>
           </td>
           <td>
             <v-icon small @click="editPlan(item)">mdi-pencil</v-icon>
@@ -83,20 +86,25 @@
             </v-col>
 
             <v-col cols="12">
-              <v-text-field label="Storage" outlined v-model="planToEdit.storage"></v-text-field>
-            </v-col>
-
-            <v-col cols="12">
-              <v-text-field label="Stripe ID" outlined v-model="planToEdit.stripeId"></v-text-field>
-            </v-col>
-
-            <v-col cols="12">
               <v-select
                 :items="billingTiers"
                 label="Tier"
                 outlined
                 v-model="planToEdit.tier"
               ></v-select>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Price" outlined v-model="planToEdit.price"
+                prepend-icon="mdi-currency-eur" />
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Storage" outlined v-model="planToEdit.storage"></v-text-field>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Stripe ID" outlined v-model="planToEdit.stripeId"></v-text-field>
             </v-col>
 
             <v-col cols="12">
@@ -157,6 +165,12 @@ export default class PlansTable extends Vue {
     {
       align: 'left',
       sortable: true,
+      text: 'Subscribers',
+      value: 'subscribers',
+    },
+    {
+      align: 'left',
+      sortable: true,
       text: 'Is active',
       value: 'isActive',
     },
@@ -169,14 +183,14 @@ export default class PlansTable extends Vue {
     {
       align: 'left',
       sortable: true,
-      text: 'Storage',
-      value: 'storage',
+      text: 'Price',
+      value: 'price',
     },
     {
       align: 'left',
       sortable: true,
-      text: 'Description',
-      value: 'description',
+      text: 'Storage',
+      value: 'storage',
     },
     {
       align: 'left',
@@ -225,10 +239,14 @@ export default class PlansTable extends Vue {
     this.loadingInternal = true;
     this.error = '';
 
-    if (typeof plan.storage === 'string') {
-      plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
-    }
     try {
+      if (typeof plan.storage === 'string') {
+        plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
+      }
+      if (typeof plan.price === 'string') {
+        plan.price = parseFloat(plan.price); // eslint-disable-line
+      }
+
       const updatedPlan = await core.call(AdminMethods.UpdatedBillingPlan, plan);
       this.closeEditPlanDialog();
       this.$emit('updated', updatedPlan);
@@ -243,10 +261,14 @@ export default class PlansTable extends Vue {
     this.loadingInternal = true;
     this.error = '';
 
-    if (typeof plan.storage === 'string') {
-      plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
-    }
     try {
+      if (typeof plan.storage === 'string') {
+        plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
+      }
+      if (typeof plan.price === 'string') {
+        plan.price = parseFloat(plan.price); // eslint-disable-line
+      }
+
       const newPlan = await core.call(AdminMethods.CreateBillingPlan, plan);
       this.closeEditPlanDialog();
       this.$emit('created', newPlan);
