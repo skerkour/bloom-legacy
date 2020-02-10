@@ -1,6 +1,6 @@
 <template>
   <v-container fluid class="text-left">
-    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+    <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
       {{ error }}
     </v-alert>
 
@@ -27,29 +27,31 @@
       </template>
 
       <template v-slot:item="{ item }">
-        <td>
-          <span>{{ item.name }}</span>
-        </td>
-        <td>
-          <v-chip color="success" outlined v-if="item.isActive">
-            Active
-          </v-chip>
-          <v-chip color="error" outlined v-else>
-            Inactive
-          </v-chip>
-        </td>
-        <td>
-          <span>{{ item.tier }}</span>
-        </td>
-        <td>
-          <span>{{ item.storage | filesize }}</span>
-        </td>
-        <td>
-          <span>{{ item.description | truncate }}</span>
-        </td>
-        <td>
-          <v-icon small @click="editPlan(item)">mdi-pencil</v-icon>
-        </td>
+        <tr>
+          <td>
+            <span>{{ item.name }}</span>
+          </td>
+          <td>
+            <v-chip color="success" outlined v-if="item.isActive">
+              Active
+            </v-chip>
+            <v-chip color="error" outlined v-else>
+              Inactive
+            </v-chip>
+          </td>
+          <td>
+            <span>{{ item.tier }}</span>
+          </td>
+          <td>
+            <span>{{ item.storage | filesize }}</span>
+          </td>
+          <td>
+            <span>{{ item.description | truncate }}</span>
+          </td>
+          <td>
+            <v-icon small @click="editPlan(item)">mdi-pencil</v-icon>
+          </td>
+        </tr>
       </template>
     </v-data-table>
 
@@ -65,6 +67,9 @@
         </v-card-title>
 
         <v-card-text>
+          <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
+            {{ error }}
+          </v-alert>
           <v-row>
             <v-col cols="12">
               <v-text-field label="Name" outlined v-model="planToEdit.name"></v-text-field>
@@ -75,6 +80,10 @@
                 label="Decription"
                 v-model="planToEdit.description"
               ></v-textarea>
+            </v-col>
+
+            <v-col cols="12">
+              <v-text-field label="Storage" outlined v-model="planToEdit.storage"></v-text-field>
             </v-col>
 
             <v-col cols="12">
@@ -215,6 +224,10 @@ export default class PlansTable extends Vue {
   async updatePlan(plan: models.BillingPlan) {
     this.loadingInternal = true;
     this.error = '';
+
+    if (typeof plan.storage === 'string') {
+      plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
+    }
     try {
       const updatedPlan = await core.call(AdminMethods.UpdatedBillingPlan, plan);
       this.closeEditPlanDialog();
@@ -229,6 +242,10 @@ export default class PlansTable extends Vue {
   async createPlan(plan: models.BillingPlan) {
     this.loadingInternal = true;
     this.error = '';
+
+    if (typeof plan.storage === 'string') {
+      plan.storage = parseInt(plan.storage, 10); // eslint-disable-line
+    }
     try {
       const newPlan = await core.call(AdminMethods.CreateBillingPlan, plan);
       this.closeEditPlanDialog();
