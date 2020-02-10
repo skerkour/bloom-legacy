@@ -141,7 +141,7 @@ export default class Profile extends Vue {
     this.initialLoading = true;
 
     try {
-      this.me = await core.call(MyAccountMethods.FetchMyProfile, models.Empty);
+      this.me = await core.call(MyAccountMethods.FetchMyProfile, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

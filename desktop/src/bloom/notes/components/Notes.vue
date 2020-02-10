@@ -70,7 +70,7 @@ export default class Index extends Vue {
     this.isLoading = true;
 
     try {
-      const res = await core.call(NotesMethod.ListNotes, core.empty);
+      const res = await core.call(NotesMethod.ListNotes, core.Empty);
       this.notes = (res as Notes).notes;
     } catch (err) {
       log.error(err);
@@ -84,7 +84,7 @@ export default class Index extends Vue {
     this.isLoading = true;
 
     try {
-      const res = await core.call(NotesMethod.ListArchived, core.empty);
+      const res = await core.call(NotesMethod.ListArchived, core.Empty);
       this.notes = (res as Notes).notes;
     } catch (err) {
       this.error = err.message;

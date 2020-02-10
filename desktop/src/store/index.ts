@@ -30,7 +30,6 @@ export default new Vuex.Store<AppState>({
   mutations: {
     [Mutations.SIGN_IN](state: AppState, params: models.SignedIn) {
       state.session = params.session;
-      state.session.token = null;
       state.me = params.me;
     },
     [Mutations.SIGN_OUT](state) {

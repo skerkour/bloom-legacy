@@ -2,7 +2,7 @@ import Vue from 'vue';
 import { ipcRenderer } from 'electron';
 import App from '@/App.vue';
 import router from '@/router';
-import store from '@/store';
+import store, { Mutations } from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
 import core from './core';
@@ -32,7 +32,10 @@ function sleep(ms: number) {
 async function main() {
   await ipcRenderer.send('server:start');
   await sleep(1000);
-  await core.init();
+  const signedIn = await core.init();
+  if (signedIn !== null) {
+    store.commit(Mutations.SIGN_IN.toString(), signedIn);
+  }
 
   Vue.use(filters);
 

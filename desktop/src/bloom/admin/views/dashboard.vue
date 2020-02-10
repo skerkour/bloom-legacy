@@ -59,7 +59,7 @@ export default class Dashboard extends Vue {
     this.isLoading = true;
 
     try {
-      this.data = await core.call(AdminMethods.FetchDashBoardData, models.Empty);
+      this.data = await core.call(AdminMethods.FetchDashBoardData, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

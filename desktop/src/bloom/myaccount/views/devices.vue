@@ -50,7 +50,7 @@ export default class Devices extends Vue {
     this.isLoading = true;
 
     try {
-      this.me = await core.call(MyAccountMethods.FetchMySessions, models.Empty);
+      this.me = await core.call(MyAccountMethods.FetchMySessions, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

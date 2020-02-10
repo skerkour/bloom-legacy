@@ -1,10 +1,11 @@
 import axios from 'axios';
+import * as models from '@/api/models';
 
 const { log } = require('@bloom42/astro');
 
 const CALL_URL = 'http://localhost:8042/electronCall';
 
-const empty = {};
+const Empty = {};
 
 async function call(method: string, params: any): Promise<any> {
   const message = JSON.stringify({
@@ -31,13 +32,13 @@ function toIsoDate(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-async function init(): Promise<void> {
-  return call('core.init', empty);
+async function init(): Promise<models.SignedIn | null> {
+  return call('core.init', Empty);
 }
 
 export default {
   call,
   toIsoDate,
-  empty,
+  Empty,
   init,
 };
