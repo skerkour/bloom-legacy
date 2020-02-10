@@ -176,6 +176,14 @@ type SignedIn struct {
 	Me      *User    `json:"me"`
 }
 
+type UpdateUserProfileInput struct {
+	ID          *string `json:"id"`
+	DisplayName *string `json:"displayName"`
+	Bio         *string `json:"bio"`
+	FirstName   *string `json:"firstName"`
+	LastName    *string `json:"lastName"`
+}
+
 type VerifyRegistrationInput struct {
 	ID   string `json:"id"`
 	Code string `json:"code"`

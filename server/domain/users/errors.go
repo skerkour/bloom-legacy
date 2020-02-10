@@ -22,6 +22,9 @@ const (
 	ErrorUserNotFound
 	ErrorInvalidUsernamePasswordCombination
 	ErrorSessionNotFound
+	ErrorUpdatingProfile
+	ErrorUserIsNull
+	ErrorAllFieldsAreEmpty
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -68,6 +71,13 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorSessionNotFound:
 		code = errors.NotFound
 		message = "Session not found."
+	case ErrorUpdatingProfile:
+		message = "Error updating profile. Please try again."
+	case ErrorUserIsNull:
+		message = "User is null."
+	case ErrorAllFieldsAreEmpty:
+		code = errors.InvalidArgument
+		message = "All fields are empty. Please fix and try again."
 	}
 
 	return errors.New(code, message)

@@ -102,6 +102,7 @@ type ComplexityRoot struct {
 		SignIn                     func(childComplexity int, input model.SignInInput) int
 		UpdateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
 		UpdateGroup                func(childComplexity int, input model.GroupInput) int
+		UpdateUserProfile          func(childComplexity int, input model.UpdateUserProfileInput) int
 		VerifyRegistration         func(childComplexity int, input model.VerifyRegistrationInput) int
 	}
 
@@ -183,6 +184,7 @@ type MutationResolver interface {
 	CompleteRegistration(ctx context.Context, input model.CompleteRegistrationInput) (*model.SignedIn, error)
 	SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error)
 	RevokeSession(ctx context.Context, input model.RevokeSessionInput) (bool, error)
+	UpdateUserProfile(ctx context.Context, input model.UpdateUserProfileInput) (*model.User, error)
 	CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error)
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
@@ -618,6 +620,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.UpdateGroup(childComplexity, args["input"].(model.GroupInput)), true
+
+	case "Mutation.updateUserProfile":
+		if e.complexity.Mutation.UpdateUserProfile == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_updateUserProfile_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.UpdateUserProfile(childComplexity, args["input"].(model.UpdateUserProfileInput)), true
 
 	case "Mutation.verifyRegistration":
 		if e.complexity.Mutation.VerifyRegistration == nil {
@@ -1258,6 +1272,14 @@ input ChangeDefaultPaymentMethodInput {
   id: String!
 }
 
+input UpdateUserProfileInput {
+  id: String
+  displayName: String
+  bio: String
+  firstName: String
+  lastName: String
+}
+
 type Mutation {
   # users
   register(input: RegisterInput!): RegistrationStarted!
@@ -1266,6 +1288,7 @@ type Mutation {
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   signIn(input: SignInInput!):  SignedIn!
   revokeSession(input: RevokeSessionInput!): Boolean!
+  updateUserProfile(input: UpdateUserProfileInput!): User!
 
   # groups
   createGroup(input: CreateGroupInput!): Group!
@@ -1581,6 +1604,20 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 	var arg0 model.GroupInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalNGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_updateUserProfile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.UpdateUserProfileInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNUpdateUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUpdateUserProfileInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2603,6 +2640,47 @@ func (ec *executionContext) _Mutation_revokeSession(ctx context.Context, field g
 	res := resTmp.(bool)
 	fc.Result = res
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_updateUserProfile(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_updateUserProfile_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().UpdateUserProfile(rctx, args["input"].(model.UpdateUserProfileInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -6297,6 +6375,48 @@ func (ec *executionContext) unmarshalInputSignInInput(ctx context.Context, obj i
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputUpdateUserProfileInput(ctx context.Context, obj interface{}) (model.UpdateUserProfileInput, error) {
+	var it model.UpdateUserProfileInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "id":
+			var err error
+			it.ID, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "displayName":
+			var err error
+			it.DisplayName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "bio":
+			var err error
+			it.Bio, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "firstName":
+			var err error
+			it.FirstName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "lastName":
+			var err error
+			it.LastName, err = ec.unmarshalOString2ᚖstring(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputVerifyRegistrationInput(ctx context.Context, obj interface{}) (model.VerifyRegistrationInput, error) {
 	var it model.VerifyRegistrationInput
 	var asMap = obj.(map[string]interface{})
@@ -6582,6 +6702,11 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "revokeSession":
 			out.Values[i] = ec._Mutation_revokeSession(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "updateUserProfile":
+			out.Values[i] = ec._Mutation_updateUserProfile(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -7844,6 +7969,10 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 		}
 	}
 	return res
+}
+
+func (ec *executionContext) unmarshalNUpdateUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUpdateUserProfileInput(ctx context.Context, v interface{}) (model.UpdateUserProfileInput, error) {
+	return ec.unmarshalInputUpdateUserProfileInput(ctx, v)
 }
 
 func (ec *executionContext) marshalNUser2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {

@@ -15,6 +15,14 @@ type PendingUser struct {
 	Verified             bool      `json:"verified" db:"verified"`
 }
 
+type UpdateProfileInput struct {
+	ID          *string `json:"id"`
+	DisplayName *string `json:"displayName"`
+	Bio         *string `json:"bio"`
+	FirstName   *string `json:"firstName"`
+	LastName    *string `json:"lastName"`
+}
+
 type DeletedUsername struct {
 	Username string `json:"username" db:"username"`
 }

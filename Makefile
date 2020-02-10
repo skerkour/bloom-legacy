@@ -9,11 +9,11 @@ all: build
 
 .PHONY: fmt
 fmt:
-	go fmt ./...
+	go fmt ./cli/... ./server/... ./version/...
 
 .PHONY: test
 test:
-	go test ./...
+	go test ./cli/... ./server/... ./version/...
 
 .PHONY: dev
 dev:
