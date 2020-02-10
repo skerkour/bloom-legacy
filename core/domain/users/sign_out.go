@@ -15,6 +15,11 @@ func SignOut() error {
 		return errors.New("You are not authenticated. Aborting sign out operation.")
 	}
 
+	err := DeletePersistedSession()
+	if err != nil {
+		return err
+	}
+
 	input := model.RevokeSessionInput{
 		ID: *client.SessionID,
 	}
@@ -28,7 +33,7 @@ func SignOut() error {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
 		client.Deauthenticate()
 	}
