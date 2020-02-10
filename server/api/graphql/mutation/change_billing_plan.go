@@ -24,13 +24,13 @@ func (r *Resolver) ChangeBillingPlan(ctx context.Context, input model.ChangeBill
 	}
 
 	ret = &model.BillingPlan{
-		ID:             newPlan.ID,
-		Name:           newPlan.Name,
-		Description:    newPlan.Description,
-		Tier:           model.BillingPlanTier(newPlan.Tier),
-		Price:          newPlan.Price,
-		IsActive:       newPlan.IsActive,
-		AllowedStorage: model.Int64(billing.GetAllowedStorageFromPlanTier(newPlan.Tier)),
+		ID:          newPlan.ID,
+		Name:        newPlan.Name,
+		Description: newPlan.Description,
+		Tier:        model.BillingPlanTier(newPlan.Tier),
+		Price:       newPlan.Price,
+		IsActive:    newPlan.IsActive,
+		Storage:     model.Int64(newPlan.Storage),
 	}
 	return ret, nil
 }

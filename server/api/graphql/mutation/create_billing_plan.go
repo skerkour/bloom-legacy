@@ -26,7 +26,8 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 		return ret, gqlerrors.New(billing.NewError(billing.ErrorCreatingPlan))
 	}
 
-	newPlan, err := billing.CreatePlan(ctx, tx, currentUser, input.Name, input.StripeID, input.Description, input.Tier.String(), input.Price)
+	newPlan, err := billing.CreatePlan(ctx, tx, currentUser, input.Name, input.StripeID,
+		input.Description, input.Tier.String(), input.Price, int64(input.Storage))
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -40,13 +41,13 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 	}
 
 	ret = &model.BillingPlan{
-		ID:             newPlan.ID,
-		Name:           newPlan.Name,
-		Description:    newPlan.Description,
-		Tier:           model.BillingPlanTier(newPlan.Tier),
-		Price:          newPlan.Price,
-		IsActive:       newPlan.IsActive,
-		AllowedStorage: model.Int64(billing.GetAllowedStorageFromPlanTier(newPlan.Tier)),
+		ID:          newPlan.ID,
+		Name:        newPlan.Name,
+		Description: newPlan.Description,
+		Tier:        model.BillingPlanTier(newPlan.Tier),
+		Price:       newPlan.Price,
+		IsActive:    newPlan.IsActive,
+		Storage:     model.Int64(newPlan.Storage),
 	}
 	return ret, nil
 }

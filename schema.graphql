@@ -91,7 +91,8 @@ type BillingPlan {
   description: String!
   isActive: Boolean!
   tier: BillingPlanTier!
-  allowedStorage: Int64!
+  storage: Int64!
+  stripeId: String
 }
 
 type Session {
@@ -222,6 +223,7 @@ input BillingPlanInput {
   stripeId: String!
   description: String!
   isActive: Boolean
+  storage: Int64!
 }
 
 input DeleteBillingPlanInput {

@@ -41,7 +41,7 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 	}
 
 	plan, err = billing.UpdatePlan(ctx, tx, currentUser, plan, input.Name, input.StripeID,
-		input.Description, input.Tier.String(), input.Price, *input.IsActive)
+		input.Description, input.Tier.String(), input.Price, *input.IsActive, int64(input.Storage))
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -61,6 +61,7 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		Tier:        model.BillingPlanTier(plan.Tier),
 		Price:       plan.Price,
 		IsActive:    plan.IsActive,
+		Storage:     model.Int64(plan.Storage),
 	}
 	return ret, nil
 }

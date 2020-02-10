@@ -29,6 +29,7 @@ const (
 	ErrorChangingPlan
 	ErrorOldPlanIsTheSameAsNewPlan
 	ErrorTooMuchStorageUsedForNewPlan
+	ErrorPlanStorageCantBeNegative
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -91,6 +92,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorTooMuchStorageUsedForNewPlan:
 		code = errors.InvalidArgument
 		message = "Your used storage is superior to the allowed storage for the new plan. Please fix and try again."
+	case ErrorPlanStorageCantBeNegative:
+		code = errors.InvalidArgument
+		message = "Plan storage can't be negative. Please fix and try again."
 	}
 
 	return errors.New(code, message)

@@ -47,13 +47,14 @@ type DirectiveRoot struct {
 
 type ComplexityRoot struct {
 	BillingPlan struct {
-		AllowedStorage func(childComplexity int) int
-		Description    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		IsActive       func(childComplexity int) int
-		Name           func(childComplexity int) int
-		Price          func(childComplexity int) int
-		Tier           func(childComplexity int) int
+		Description func(childComplexity int) int
+		ID          func(childComplexity int) int
+		IsActive    func(childComplexity int) int
+		Name        func(childComplexity int) int
+		Price       func(childComplexity int) int
+		Storage     func(childComplexity int) int
+		StripeID    func(childComplexity int) int
+		Tier        func(childComplexity int) int
 	}
 
 	Group struct {
@@ -236,13 +237,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 	_ = ec
 	switch typeName + "." + field {
 
-	case "BillingPlan.allowedStorage":
-		if e.complexity.BillingPlan.AllowedStorage == nil {
-			break
-		}
-
-		return e.complexity.BillingPlan.AllowedStorage(childComplexity), true
-
 	case "BillingPlan.description":
 		if e.complexity.BillingPlan.Description == nil {
 			break
@@ -277,6 +271,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingPlan.Price(childComplexity), true
+
+	case "BillingPlan.storage":
+		if e.complexity.BillingPlan.Storage == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Storage(childComplexity), true
+
+	case "BillingPlan.stripeId":
+		if e.complexity.BillingPlan.StripeID == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.StripeID(childComplexity), true
 
 	case "BillingPlan.tier":
 		if e.complexity.BillingPlan.Tier == nil {
@@ -1116,7 +1124,8 @@ type BillingPlan {
   description: String!
   isActive: Boolean!
   tier: BillingPlanTier!
-  allowedStorage: Int64!
+  storage: Int64!
+  stripeId: String
 }
 
 type Session {
@@ -1247,6 +1256,7 @@ input BillingPlanInput {
   stripeId: String!
   description: String!
   isActive: Boolean
+  storage: Int64!
 }
 
 input DeleteBillingPlanInput {
@@ -1966,7 +1976,7 @@ func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql
 	return ec.marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _BillingPlan_allowedStorage(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+func (ec *executionContext) _BillingPlan_storage(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1983,7 +1993,7 @@ func (ec *executionContext) _BillingPlan_allowedStorage(ctx context.Context, fie
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.AllowedStorage, nil
+		return obj.Storage, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -1998,6 +2008,37 @@ func (ec *executionContext) _BillingPlan_allowedStorage(ctx context.Context, fie
 	res := resTmp.(model.Int64)
 	fc.Result = res
 	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingPlan_stripeId(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingPlan",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StripeID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -5955,6 +5996,12 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
+		case "storage":
+			var err error
+			it.Storage, err = ec.unmarshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, v)
+			if err != nil {
+				return it, err
+			}
 		}
 	}
 
@@ -6490,11 +6537,13 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "allowedStorage":
-			out.Values[i] = ec._BillingPlan_allowedStorage(ctx, field, obj)
+		case "storage":
+			out.Values[i] = ec._BillingPlan_storage(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "stripeId":
+			out.Values[i] = ec._BillingPlan_stripeId(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

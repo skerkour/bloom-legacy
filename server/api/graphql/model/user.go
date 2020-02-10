@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
@@ -169,10 +170,30 @@ func (resolver *UserResolver) StripePublicKey(ctx context.Context, user *User) (
 func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*BillingPlan, error) {
 	var ret *BillingPlan
 	currentUser := apiutil.UserFromCtx(ctx)
+	var stripeId *string
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	panic("not implemented")
+	plan, err := billing.FindPlanForUser(ctx, *user.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+
+	if currentUser.IsAdmin {
+		stripeId = &plan.StripeID
+	}
+
+	ret = &BillingPlan{
+		ID:          plan.ID,
+		Price:       plan.Price,
+		Name:        plan.Name,
+		Description: plan.Description,
+		IsActive:    plan.IsActive,
+		StripeID:    stripeId,
+		Tier:        BillingPlanTier(plan.Tier),
+		Storage:     Int64(plan.Storage),
+	}
+	return ret, nil
 }

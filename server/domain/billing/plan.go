@@ -21,6 +21,7 @@ type Plan struct {
 	Description string  `json:"description" db:"description"`
 	IsActive    bool    `json:"is_active" db:"is_active"`
 	Tier        string  `json:"tier" db:"tier"`
+	Storage     int64   `json:"storage" db:"storage"`
 }
 
 func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
@@ -82,6 +83,22 @@ func FindPlansForAdmin(ctx context.Context) ([]Plan, error) {
 	err = db.DB.Select(&ret, queryFind)
 	if err != nil {
 		logger.Error("billing.FindPlansForAdmin: finding plans", rz.Err(err))
+		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	return ret, err
+}
+
+func FindPlanForUser(ctx context.Context, userId string) (*Plan, error) {
+	ret := &Plan{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := `SELECT * FROM billing_plans, billing_customers
+	WHERE billing_plans.id = billing_customers.plan_id AND billing_customers.user_id = $1`
+	err = db.DB.Select(ret, queryFind, userId)
+	if err != nil {
+		logger.Error("billing.FindPlanForUser: finding plan", rz.Err(err))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 
