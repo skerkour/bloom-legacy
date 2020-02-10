@@ -41,9 +41,9 @@ func UpdatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, plan *Plan, 
 	plan.Storage = storage
 
 	// create group
-	queryUpdatePlan := `UPDATE billing_plans
-		(updated_at, name, description, stripe_id, price, is_active, tier)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8) WHERE id = $9`
+	queryUpdatePlan := `UPDATE billing_plans SET updated_at = $1, name = $2, description = $3,
+		stripe_id = $4, price = $5, is_active = $6, tier = $7, storage = $8
+		WHERE id = $9`
 	_, err = tx.Exec(queryUpdatePlan, plan.UpdatedAt, plan.Name, plan.Description,
 		plan.StripeID, plan.Price, plan.IsActive, plan.Tier, plan.Storage, plan.ID)
 	if err != nil {

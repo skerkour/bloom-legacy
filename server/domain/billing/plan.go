@@ -59,6 +59,24 @@ func FindPlanActiveById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan,
 	return ret, err
 }
 
+func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error) {
+	var ret *Plan
+	var plan Plan
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1"
+	err = tx.Get(&plan, queryFindPlan, planId)
+	if err != nil {
+		logger.Error("billing.FindPlanById: finding plan by id", rz.Err(err),
+			rz.String("id", planId))
+		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	ret = &plan
+	return ret, err
+}
+
 func FindPlansForUser(ctx context.Context) ([]Plan, error) {
 	ret := []Plan{}
 	var err error
