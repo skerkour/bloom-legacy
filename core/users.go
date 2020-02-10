@@ -4,6 +4,7 @@ import (
 	"C"
 	"encoding/json"
 
+	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 )
@@ -83,6 +84,17 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
+	case "update_profile":
+		var input model.UpdateUserProfileInput
+		err := json.Unmarshal(jsonParams, &input)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		user, err := users.UpdateProfile(input)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: user}
 	default:
 		return methodNotFoundError(method, "users")
 	}

@@ -48,3 +48,7 @@ android_x86:
 .PHONY: clean
 clean:
 	rm -rf dist
+
+.PHONY: tidy
+tidy:
+	go mod tidy
