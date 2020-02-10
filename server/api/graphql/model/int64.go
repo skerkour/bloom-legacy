@@ -1,6 +1,7 @@
 package model
 
 import (
+	"encoding/json"
 	"fmt"
 	"io"
 	"strconv"
@@ -16,27 +17,39 @@ func (i Int64) MarshalGQL(w io.Writer) {
 func (i *Int64) UnmarshalGQL(v interface{}) error {
 	var err error
 
-	switch v := v.(type) {
+	switch value := v.(type) {
 	case string:
-		ii, err := strconv.ParseInt(v, 10, 64)
+		ii, err := strconv.ParseInt(value, 10, 64)
 		if err != nil {
 			return nil
 		}
 		*i = Int64(ii)
 	case *string:
-		ii, err := strconv.ParseInt(*v, 10, 64)
+		ii, err := strconv.ParseInt(*value, 10, 64)
 		if err != nil {
 			return nil
 		}
 		*i = Int64(ii)
 	case []byte:
-		ii, err := strconv.ParseInt(string(v), 10, 64)
+		ii, err := strconv.ParseInt(string(value), 10, 64)
+		if err != nil {
+			return nil
+		}
+		*i = Int64(ii)
+	case int:
+		*i = Int64(int64(value))
+	case int32:
+		*i = Int64(int64(value))
+	case int64:
+		*i = Int64(value)
+	case json.Number:
+		ii, err := strconv.ParseInt(string(value), 10, 64)
 		if err != nil {
 			return nil
 		}
 		*i = Int64(ii)
 	default:
-		err = fmt.Errorf("%T is not []byte", v)
+		err = fmt.Errorf("%T type is not deserializable for Int64", v)
 	}
 
 	return err

@@ -19,6 +19,10 @@ func (r *Resolver) BillingPlans(ctx context.Context) ([]*model.BillingPlan, erro
 	}
 
 	for _, plan := range plans {
+		var stripeId *string
+		if currentUser.IsAdmin {
+			stripeId = &plan.StripeID
+		}
 		billingPlan := &model.BillingPlan{
 			ID:          plan.ID,
 			Name:        plan.Name,
@@ -26,6 +30,8 @@ func (r *Resolver) BillingPlans(ctx context.Context) ([]*model.BillingPlan, erro
 			Price:       plan.Price,
 			IsActive:    plan.IsActive,
 			Tier:        model.BillingPlanTier(plan.Tier),
+			Storage:     model.Int64(plan.Storage),
+			StripeID:    stripeId,
 		}
 		ret = append(ret, billingPlan)
 	}
