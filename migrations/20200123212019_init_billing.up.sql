@@ -28,7 +28,7 @@ CREATE TABLE billing_customers (
     stripe_id TEXT,
     used_storage BIGINT NOT NULL,
 
-    plan_id UUID NOT NULL REFERENCES billing_plans(id) ON DELETE CASCADE,
+    plan_id UUID NOT NULL REFERENCES billing_plans(id),
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
 
