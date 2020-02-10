@@ -19,13 +19,14 @@ type AddPaymentMethodInput struct {
 }
 
 type BillingPlan struct {
-	ID             string          `json:"id"`
-	Price          float64         `json:"price"`
-	Name           string          `json:"name"`
-	Description    string          `json:"description"`
-	IsActive       bool            `json:"isActive"`
-	Tier           BillingPlanTier `json:"tier"`
-	AllowedStorage Int64           `json:"allowedStorage"`
+	ID          string          `json:"id"`
+	Price       float64         `json:"price"`
+	Name        string          `json:"name"`
+	Description string          `json:"description"`
+	IsActive    bool            `json:"isActive"`
+	Tier        BillingPlanTier `json:"tier"`
+	Storage     Int64           `json:"storage"`
+	StripeID    *string         `json:"stripeId"`
 }
 
 type BillingPlanInput struct {
@@ -36,6 +37,7 @@ type BillingPlanInput struct {
 	StripeID    string          `json:"stripeId"`
 	Description string          `json:"description"`
 	IsActive    *bool           `json:"isActive"`
+	Storage     Int64           `json:"storage"`
 }
 
 type CancelGroupInvitationInput struct {
