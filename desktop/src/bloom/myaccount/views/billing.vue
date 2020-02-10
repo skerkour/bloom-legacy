@@ -21,7 +21,7 @@
         <v-row>
           <v-col cols="12">
             <div class="headline">
-              My Plan
+              Plans
             </div>
           </v-col>
         </v-row>
@@ -31,7 +31,7 @@
             v-for="plan in plans" :key="plan.id">
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
-                :class="{ 'on-hover': hover }">
+            :class="{ 'on-hover': hover, 'blm-billing-myplan': plan.tier === me.billingPlan.tier }">
                 <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
                 <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
                   <div class="d-inline-block">
@@ -51,9 +51,6 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col><v-divider/></v-col>
-        </v-row>
 
         <v-row>
           <v-col cols="12">
@@ -69,13 +66,6 @@
           </v-col>
         </v-row>
 
-        <v-row>
-          <v-col><v-divider/></v-col>
-        </v-row>
-
-        <v-row>
-          <v-col><v-divider/></v-col>
-        </v-row>
 
         <v-row>
           <v-col cols="12">
@@ -153,5 +143,30 @@ export default class Billing extends Vue {
 </script>
 
 
-<style lang="scss" scoped>
+<style lang="scss">
+.blm-pricing-card-text ul {
+  list-style-type: none;
+}
+
+.blm-pricing-card-text ul li {
+  margin-top: 9px;
+}
+
+.blm-billing-myplan {
+  border: thin solid green !important;
+}
+</style>
+
+<style scoped lang="scss">
+.v-card__text {
+  font-size: 20px !important;
+}
+
+.v-application p {
+  margin-bottom: 0px;
+}
+
+.blm-pricing-card {
+  height: 100%;
+}
 </style>

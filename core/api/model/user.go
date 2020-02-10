@@ -16,7 +16,7 @@ type User struct {
 	Bio            string           `json:"bio"`
 	Email          *string          `json:"email"`
 	Sessions       *[]Session       `json:"sessions"`
-	BillingPlan    *[]BillingPlan   `json:"billingPlan"`
+	BillingPlan    *BillingPlan     `json:"billingPlan"`
 	Invoices       *[]Invoice       `json:"invoices"`
 	PaymentMethods *[]PaymentMethod `json:"paymentMethods"`
 }
