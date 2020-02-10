@@ -5,57 +5,93 @@
       {{ error }}
     </v-alert>
 
-    <v-row>
+    <v-row v-if="isLoading" class="justify-center text-center">
       <v-col cols="12">
-        <div class="headline">
-          My Plan
-        </div>
+        <v-progress-circular
+          indeterminate
+          color="primary"
+          size="50"
+        />
       </v-col>
     </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <!-- TODO: display all plans, with a button to change -->
-      </v-col>
-    </v-row>
+    <v-row v-if="me">
+      <v-col xs="12" sm="10" md="8">
 
-    <v-row>
-      <v-col><v-divider/></v-col>
-    </v-row>
+        <v-row>
+          <v-col cols="12">
+            <div class="headline">
+              My Plan
+            </div>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <div class="headline">
-          Payment methods
-        </div>
-      </v-col>
-    </v-row>
+        <v-row justify="space-around" align="stretch">
+          <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
+            v-for="plan in plans" :key="plan.id">
+            <v-hover v-slot:default="{ hover }">
+              <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
+                :class="{ 'on-hover': hover }">
+                <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
+                <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
+                  <div class="d-inline-block">
+                    <span class="display-3 font-weight-bold">Free</span>
+                  </div>
+                </div>
+                <div class="v-card--plan__price pa-5 col col-12" v-else>
+                  <div class="d-inline-block">
+                    <span class="display-3 font-weight-bold">{{ plan.price }}€</span>
+                  </div>
+                  <span class="caption"> /mo </span>
+                </div>
+                <v-card-text class="blm-pricing-card-text" v-html="plan.description">
+                </v-card-text>
+              </v-card>
+            </v-hover>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <blm-myaccount-table-payment-methods :loading="isLoading" :methods="methods" />
-      </v-col>
-    </v-row>
+        <v-row>
+          <v-col><v-divider/></v-col>
+        </v-row>
 
-    <v-row>
-      <v-col><v-divider/></v-col>
-    </v-row>
+        <v-row>
+          <v-col cols="12">
+            <div class="headline">
+              Payment methods
+            </div>
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col><v-divider/></v-col>
-    </v-row>
+        <v-row>
+          <v-col cols="12">
+            <blm-myaccount-table-payment-methods :loading="isLoading" :methods="methods" />
+          </v-col>
+        </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <div class="headline">
-          Invoices
-        </div>
-      </v-col>
-    </v-row>
+        <v-row>
+          <v-col><v-divider/></v-col>
+        </v-row>
 
-    <v-row>
-      <v-col cols="12">
-        <blm-myaccount-table-invoices :loading="isLoading" :invoices="invoices" />
+        <v-row>
+          <v-col><v-divider/></v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <div class="headline">
+              Invoices
+            </div>
+          </v-col>
+        </v-row>
+
+        <v-row>
+          <v-col cols="12">
+            <blm-myaccount-table-invoices :loading="isLoading" :invoices="invoices" />
+          </v-col>
+        </v-row>
+
+
       </v-col>
     </v-row>
 
@@ -68,6 +104,10 @@ import { Component, Vue } from 'vue-property-decorator';
 import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
 import SubscriptionsTable from '../components/subscriptions_table.vue';
+import * as models from '@/api/models';
+import core from '@/core';
+import MyAccountMethods from '@/bloom/myaccount/core/methods';
+
 
 @Component({
   components: {
@@ -84,11 +124,31 @@ export default class Billing extends Vue {
   methods = [];
   invoices = [];
   subscriptions = [];
+  plans: models.BillingPlan[] = [];
+  me: models.User | null = null;
 
   // computed
   // lifecycle
+  created() {
+    this.fetchData();
+  }
+
   // watch
   // methods
+  async fetchData() {
+    this.error = '';
+    this.isLoading = true;
+
+    try {
+      const res = await core.call(MyAccountMethods.FetchMyBillingProfile, core.Empty);
+      this.me = res.me;
+      this.plans = res.billingPlans;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
 }
 </script>
 

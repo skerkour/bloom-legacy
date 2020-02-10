@@ -28,7 +28,8 @@ export type BillingPlan = {
   description: Scalars['String'],
   isActive: Scalars['Boolean'],
   tier: BillingPlanTier,
-  allowedStorage: Scalars['Int64'],
+  storage: Scalars['Int64'],
+  stripeId?: Maybe<Scalars['String']>,
 };
 
 export type BillingPlanInput = {
@@ -39,6 +40,7 @@ export type BillingPlanInput = {
   stripeId: Scalars['String'],
   description: Scalars['String'],
   isActive?: Maybe<Scalars['Boolean']>,
+  storage: Scalars['Int64'],
 };
 
 export enum BillingPlanTier {
