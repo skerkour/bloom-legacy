@@ -25,6 +25,7 @@ func UpdatePlan(input model.BillingPlanInput) (*model.BillingPlan, error) {
 				storage
 				isActive
 				stripeId
+				subscribers
 			}
 		}
 	`)

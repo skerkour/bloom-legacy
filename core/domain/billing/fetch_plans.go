@@ -25,6 +25,7 @@ func FetchPlans() (*[]model.BillingPlan, error) {
 			storage
 			isActive
 			stripeId
+			subscribers
 		}
 	}
 	`)
