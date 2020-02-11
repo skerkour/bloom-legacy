@@ -23,7 +23,7 @@ func FetchPlans() (*[]model.BillingPlan, error) {
 			name
 			description
 			storage
-			isActive
+			isPublic
 			stripeId
 			subscribers
 		}

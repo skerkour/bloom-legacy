@@ -23,9 +23,9 @@ func CreatePlan(input model.BillingPlanInput) (*model.BillingPlan, error) {
 				name
 				description
 				storage
-				isActive
 				stripeId
 				subscribers
+				isPublic
 			}
 		}
 	`)
