@@ -20,7 +20,7 @@ CREATE TABLE users (
 
     PRIMARY KEY(id)
 );
-CREATE UNIQUE INDEX idx_users_username ON users (username);
+CREATE UNIQUE INDEX users_username_idx ON users (username);
 
 
 CREATE TABLE sessions (
@@ -36,7 +36,7 @@ CREATE TABLE sessions (
 
     PRIMARY KEY(id)
 );
-CREATE INDEX idx_sessions_user_id ON sessions (user_id);
+CREATE INDEX sessions_user_id_idx ON sessions (user_id);
 
 
 CREATE TABLE pending_users (
@@ -60,4 +60,4 @@ CREATE TABLE deleted_usernames (
 
     PRIMARY KEY(username)
 );
-CREATE INDEX idx_deleted_usernames_username ON deleted_usernames (username);
+CREATE INDEX deleted_usernames_username_idx ON deleted_usernames (username);

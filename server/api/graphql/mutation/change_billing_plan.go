@@ -28,8 +28,8 @@ func (r *Resolver) ChangeBillingPlan(ctx context.Context, input model.ChangeBill
 		Name:        newPlan.Name,
 		Description: newPlan.Description,
 		Tier:        model.BillingPlanTier(newPlan.Tier),
-		Price:       newPlan.Price,
-		IsActive:    newPlan.IsActive,
+		Price:       model.Int64(newPlan.Price),
+		IsPublic:    newPlan.IsPublic,
 		Storage:     model.Int64(newPlan.Storage),
 	}
 	return ret, nil

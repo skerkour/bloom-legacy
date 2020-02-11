@@ -30,9 +30,6 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 	if input.ID == nil {
 		return ret, gqlerrors.New(errors.New(errors.InvalidArgument, "plan.id should not be null"))
 	}
-	if input.IsActive == nil {
-		return ret, gqlerrors.New(errors.New(errors.InvalidArgument, "plan.isActive should not be null"))
-	}
 
 	plan, err := billing.FindPlanById(ctx, tx, *input.ID)
 	if err != nil {
@@ -41,7 +38,7 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 	}
 
 	plan, err = billing.UpdatePlan(ctx, tx, currentUser, plan, input.Name, input.StripeID,
-		input.Description, input.Tier.String(), input.Price, *input.IsActive, int64(input.Storage))
+		input.Description, input.Tier.String(), input.IsPublic, int64(input.Storage))
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -63,8 +60,8 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		Name:        plan.Name,
 		Description: plan.Description,
 		Tier:        model.BillingPlanTier(plan.Tier),
-		Price:       plan.Price,
-		IsActive:    plan.IsActive,
+		Price:       model.Int64(plan.Price),
+		IsPublic:    plan.IsPublic,
 		Storage:     model.Int64(plan.Storage),
 		StripeID:    stripeId,
 	}

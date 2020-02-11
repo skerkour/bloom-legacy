@@ -65,7 +65,7 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 
 	if paymentMethod.IsDefault {
 		if existingPaymentMethodsCount == 1 {
-			plan, err = FindPlanActiveById(ctx, tx, customer.PlanID)
+			plan, err = FindPublicPlanById(ctx, tx, customer.PlanID)
 			if err != nil {
 				tx.Rollback()
 				return err

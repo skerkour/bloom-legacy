@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -18,11 +19,13 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	var existingUser int
 	var err error
 
-	// validate params
+	// clean and validate params
 	if err = validator.UserDisplayName(displayName); err != nil {
 		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
+	email = strings.ToLower(email)
+	email = strings.TrimSpace(email)
 	if err = validator.UserEmail(email, config.DisposableEmailDomains); err != nil {
 		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error()) // twirp.InvalidArgumentError("email", err.Error())
 	}

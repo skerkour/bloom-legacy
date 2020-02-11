@@ -50,7 +50,7 @@ type ComplexityRoot struct {
 	BillingPlan struct {
 		Description func(childComplexity int) int
 		ID          func(childComplexity int) int
-		IsActive    func(childComplexity int) int
+		IsPublic    func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Price       func(childComplexity int) int
 		Storage     func(childComplexity int) int
@@ -256,12 +256,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BillingPlan.ID(childComplexity), true
 
-	case "BillingPlan.isActive":
-		if e.complexity.BillingPlan.IsActive == nil {
+	case "BillingPlan.isPublic":
+		if e.complexity.BillingPlan.IsPublic == nil {
 			break
 		}
 
-		return e.complexity.BillingPlan.IsActive(childComplexity), true
+		return e.complexity.BillingPlan.IsPublic(childComplexity), true
 
 	case "BillingPlan.name":
 		if e.complexity.BillingPlan.Name == nil {
@@ -1131,10 +1131,10 @@ type Invoice {
 
 type BillingPlan {
   id: String!
-  price: Float!
+  price: Int64!
   name: String!
   description: String!
-  isActive: Boolean!
+  isPublic: Boolean!
   tier: BillingPlanTier!
   storage: Int64!
   stripeId: String
@@ -1264,11 +1264,10 @@ input QuitGroupInput {
 input BillingPlanInput {
   id: String
   name: String!
-  price: Float!
   tier: BillingPlanTier!
   stripeId: String!
   description: String!
-  isActive: Boolean
+  isPublic: Boolean!
   storage: Int64!
 }
 
@@ -1848,9 +1847,9 @@ func (ec *executionContext) _BillingPlan_price(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(float64)
+	res := resTmp.(model.Int64)
 	fc.Result = res
-	return ec.marshalNFloat2float64(ctx, field.Selections, res)
+	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_name(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -1921,7 +1920,7 @@ func (ec *executionContext) _BillingPlan_description(ctx context.Context, field 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _BillingPlan_isActive(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+func (ec *executionContext) _BillingPlan_isPublic(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -1938,7 +1937,7 @@ func (ec *executionContext) _BillingPlan_isActive(ctx context.Context, field gra
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.IsActive, nil
+		return obj.IsPublic, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6010,12 +6009,6 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-		case "price":
-			var err error
-			it.Price, err = ec.unmarshalNFloat2float64(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "tier":
 			var err error
 			it.Tier, err = ec.unmarshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, v)
@@ -6034,9 +6027,9 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-		case "isActive":
+		case "isPublic":
 			var err error
-			it.IsActive, err = ec.unmarshalOBoolean2ᚖbool(ctx, v)
+			it.IsPublic, err = ec.unmarshalNBoolean2bool(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -6571,8 +6564,8 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "isActive":
-			out.Values[i] = ec._BillingPlan_isActive(ctx, field, obj)
+		case "isPublic":
+			out.Values[i] = ec._BillingPlan_isPublic(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
@@ -7741,20 +7734,6 @@ func (ec *executionContext) unmarshalNDeleteBillingPlanInput2gitlabᚗcomᚋbloo
 
 func (ec *executionContext) unmarshalNDeleteGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeleteGroupInput(ctx context.Context, v interface{}) (model.DeleteGroupInput, error) {
 	return ec.unmarshalInputDeleteGroupInput(ctx, v)
-}
-
-func (ec *executionContext) unmarshalNFloat2float64(ctx context.Context, v interface{}) (float64, error) {
-	return graphql.UnmarshalFloat(v)
-}
-
-func (ec *executionContext) marshalNFloat2float64(ctx context.Context, sel ast.SelectionSet, v float64) graphql.Marshaler {
-	res := graphql.MarshalFloat(v)
-	if res == graphql.Null {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-	}
-	return res
 }
 
 func (ec *executionContext) marshalNGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {

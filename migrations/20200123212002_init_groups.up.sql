@@ -17,6 +17,10 @@ CREATE TABLE groups_members (
     role TEXT NOT NULL
 );
 
+CREATE INDEX groups_members_group_id_idx ON groups_members (group_id);
+CREATE INDEX groups_members_user_id_idx ON groups_members (user_id);
+
+
 CREATE TABLE groups_invitations (
     id UUID NOT NULL,
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
@@ -28,3 +32,5 @@ CREATE TABLE groups_invitations (
 
     PRIMARY KEY(id)
 );
+CREATE INDEX groups_invitations_group_id_idx ON groups_invitations (group_id);
+CREATE INDEX groups_invitations_invitee_id ON groups_invitations (invitee_id);

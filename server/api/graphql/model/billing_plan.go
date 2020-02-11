@@ -12,10 +12,10 @@ type BillingPlanResolver struct{}
 
 type BillingPlan struct {
 	ID          string          `json:"id"`
-	Price       float64         `json:"price"`
+	Price       Int64           `json:"price"`
 	Name        string          `json:"name"`
 	Description string          `json:"description"`
-	IsActive    bool            `json:"isActive"`
+	IsPublic    bool            `json:"isPublic"`
 	Tier        BillingPlanTier `json:"tier"`
 	Storage     Int64           `json:"storage"`
 	StripeID    *string         `json:"stripeId"`

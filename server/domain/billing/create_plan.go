@@ -7,12 +7,13 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
+	"github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, tier string, price float64, storage int64) (*Plan, error) {
+func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, tier string, storage int64, isPublic bool) (*Plan, error) {
 	var ret *Plan
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -30,8 +31,13 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	stripeId = strings.TrimSpace(stripeId)
 	description = strings.TrimSpace(description)
 	tier = strings.TrimSpace(tier)
-	if err = validateCreatePlan(name, description, tier, stripeId, price, storage); err != nil {
+	if err = validateCreatePlan(name, description, tier, stripeId, storage); err != nil {
 		return ret, err
+	}
+
+	stripePlan, err := plan.Get(stripeId, nil)
+	if err != nil {
+		return ret, NewError(ErrorPlanNotFound)
 	}
 
 	now := time.Now().UTC()
@@ -44,18 +50,18 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 		Name:        name,
 		Description: description,
 		StripeID:    stripeId,
-		Price:       price,
-		IsActive:    false,
+		Price:       stripePlan.Amount,
+		IsPublic:    isPublic,
 		Tier:        tier,
 		Storage:     storage,
 	}
 
 	// create plan
 	queryCreatePlan := `INSERT INTO billing_plans
-		(id, created_at, updated_at, name, description, stripe_id, price, is_active, tier, storage)
+		(id, created_at, updated_at, name, description, stripe_id, price, is_public, tier, storage)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 	_, err = tx.Exec(queryCreatePlan, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description,
-		ret.StripeID, ret.Price, ret.IsActive, ret.Tier, ret.Storage)
+		ret.StripeID, ret.Price, ret.IsPublic, ret.Tier, ret.Storage)
 	if err != nil {
 		logger.Error("billing.CreatePlan: inserting new plan", rz.Err(err))
 		return ret, NewError(ErrorCreatingPlan)
@@ -64,7 +70,7 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	return ret, err
 }
 
-func validateCreatePlan(name, description, tier, stripeId string, price float64, storage int64) error {
+func validateCreatePlan(name, description, tier, stripeId string, storage int64) error {
 	var err error
 
 	if err = validator.BillingPlanName(name); err != nil {
@@ -75,9 +81,9 @@ func validateCreatePlan(name, description, tier, stripeId string, price float64,
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if err = validator.BillingPlanPrice(price); err != nil {
-		return NewErrorMessage(ErrorInvalidArgument, err.Error())
-	}
+	// if err = validator.BillingPlanPrice(price); err != nil {
+	// 	return NewErrorMessage(ErrorInvalidArgument, err.Error())
+	// }
 
 	if err = validator.BillingPlanStripeId(stripeId); err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())

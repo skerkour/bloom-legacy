@@ -86,10 +86,10 @@ type Invoice {
 
 type BillingPlan {
   id: String!
-  price: Float!
+  price: Int64!
   name: String!
   description: String!
-  isActive: Boolean!
+  isPublic: Boolean!
   tier: BillingPlanTier!
   storage: Int64!
   stripeId: String
@@ -219,11 +219,10 @@ input QuitGroupInput {
 input BillingPlanInput {
   id: String
   name: String!
-  price: Float!
   tier: BillingPlanTier!
   stripeId: String!
   description: String!
-  isActive: Boolean
+  isPublic: Boolean!
   storage: Int64!
 }
 

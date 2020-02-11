@@ -187,10 +187,10 @@ func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*Bil
 
 	ret = &BillingPlan{
 		ID:          plan.ID,
-		Price:       plan.Price,
+		Price:       Int64(plan.Price),
 		Name:        plan.Name,
 		Description: plan.Description,
-		IsActive:    plan.IsActive,
+		IsPublic:    plan.IsPublic,
 		StripeID:    stripeId,
 		Tier:        BillingPlanTier(plan.Tier),
 		Storage:     Int64(plan.Storage),

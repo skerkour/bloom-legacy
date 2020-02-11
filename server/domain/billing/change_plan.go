@@ -57,14 +57,19 @@ func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string,
 		}
 	}
 
-	newPlan, err := FindPlanActiveById(ctx, tx, planId)
+	newPlan, err := FindPlanById(ctx, tx, planId)
 	if err != nil {
 		tx.Rollback()
 		logger.Warn("billing.ChangePlan:f inding newPlan", rz.Err(err), rz.String("id", planId))
 		return ret, err
 	}
 
-	oldPlan, err := FindPlanActiveById(ctx, tx, customer.PlanID)
+	if !actor.IsAdmin && !newPlan.IsPublic {
+		tx.Rollback()
+		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	oldPlan, err := FindPlanById(ctx, tx, customer.PlanID)
 	if err != nil {
 		tx.Rollback()
 		logger.Warn("billing.ChangePlan: finding old plan", rz.Err(err), rz.String("id", customer.PlanID))
