@@ -35,18 +35,18 @@
             <span>{{ item.subscribers }}</span>
           </td>
           <td>
-            <v-chip color="success" outlined v-if="item.isActive">
-              Active
+            <v-chip color="success" outlined v-if="item.isPublic">
+              Public
             </v-chip>
             <v-chip color="error" outlined v-else>
-              Inactive
+              Private
             </v-chip>
           </td>
           <td>
             <span>{{ item.tier }}</span>
           </td>
           <td>
-            <span>{{ item.price }} €</span>
+            <span>{{ item.price / 100 }} €</span>
           </td>
           <td>
             <span>{{ item.storage | filesize }}</span>
@@ -95,7 +95,7 @@
             </v-col>
 
             <v-col cols="12">
-              <v-text-field label="Price" outlined v-model="planToEdit.price"
+              <v-text-field label="Price" outlined v-model="planToEdit.price" disabled
                 prepend-icon="mdi-currency-eur" />
             </v-col>
 
@@ -109,8 +109,8 @@
 
             <v-col cols="12">
                <v-switch
-                v-model="planToEdit.isActive"
-                :label="`IsActive: ${planToEdit.isActive}`"
+                v-model="planToEdit.isPublic"
+                :label="`Is Public: ${planToEdit.isPublic}`"
               ></v-switch>
             </v-col>
 
@@ -171,8 +171,8 @@ export default class PlansTable extends Vue {
     {
       align: 'left',
       sortable: true,
-      text: 'Is active',
-      value: 'isActive',
+      text: 'Is Public',
+      value: 'isPublic',
     },
     {
       align: 'left',
@@ -221,7 +221,7 @@ export default class PlansTable extends Vue {
       price: 0.0,
       name: '',
       description: '',
-      isActive: false,
+      isPublic: false,
       tier: models.BillingPlanTier.Free,
       storage: 0,
       stripeId: '',

@@ -23,10 +23,10 @@ export type AddPaymentMethodInput = {
 export type BillingPlan = {
    __typename?: 'BillingPlan',
   id: Scalars['String'],
-  price: Scalars['Float'],
+  price: Scalars['Int64'],
   name: Scalars['String'],
   description: Scalars['String'],
-  isActive: Scalars['Boolean'],
+  isPublic: Scalars['Boolean'],
   tier: BillingPlanTier,
   storage: Scalars['Int64'],
   stripeId?: Maybe<Scalars['String']>,
@@ -36,11 +36,10 @@ export type BillingPlan = {
 export type BillingPlanInput = {
   id?: Maybe<Scalars['String']>,
   name: Scalars['String'],
-  price: Scalars['Float'],
   tier: BillingPlanTier,
   stripeId: Scalars['String'],
   description: Scalars['String'],
-  isActive?: Maybe<Scalars['Boolean']>,
+  isPublic: Scalars['Boolean'],
   storage: Scalars['Int64'],
 };
 
