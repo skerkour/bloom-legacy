@@ -2,7 +2,7 @@ export default {
   labels: {
     other_downloads: 'Other downloads',
     learn_more: 'Learn more',
-    coming_soon_btn: 'Coming January 2020',
+    coming_soon_btn: 'Coming early 2020',
   },
   appbar: {
     download: 'Download',
