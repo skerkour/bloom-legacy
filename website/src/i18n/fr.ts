@@ -2,7 +2,7 @@ export default {
   labels: {
     other_downloads: 'Tous les Téléchargements',
     learn_more: 'Plus d\'info',
-    coming_soon_btn: 'Sortie en Janvier 2020',
+    coming_soon_btn: 'Sortie début 2020',
   },
   appbar: {
     download: 'Télécharger',
