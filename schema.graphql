@@ -32,6 +32,13 @@ enum BillingPlanTier {
   ULTRA
 }
 
+type PageInfo {
+  endCursor: String
+  hasNextPage: Boolean!
+  hasPreviousPage: Boolean!
+  startCursor: String
+}
+
 type User {
   id: String
   createdAt: Time
