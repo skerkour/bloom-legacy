@@ -16,7 +16,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import BlmAdminTablePlans from '../components/plans_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import AdminMethods from '@/bloom/admin/core/methods';
+import AdminMethods from '@/ui/admin/core/methods';
 
 
 @Component({

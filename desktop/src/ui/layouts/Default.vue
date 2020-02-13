@@ -22,9 +22,9 @@ import {
   Watch,
 } from 'vue-property-decorator';
 import { Route } from 'vue-router';
-import BlmAppBar from '@/bloom/kernel/components/AppBar.vue';
-import LeftBar from '@/bloom/kernel/components/LeftBar.vue';
-import NavigationDrawer from '@/bloom/kernel/components/NavigationDrawer.vue';
+import BlmAppBar from '@/ui/kernel/components/AppBar.vue';
+import LeftBar from '@/ui/kernel/components/LeftBar.vue';
+import NavigationDrawer from '@/ui/kernel/components/NavigationDrawer.vue';
 
 
 @Component({

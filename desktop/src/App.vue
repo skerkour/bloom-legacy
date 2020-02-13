@@ -9,8 +9,8 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import DefaultLayout from '@/bloom/layouts/Default.vue';
-import AuthLayout from '@/bloom/layouts/Auth.vue';
+import DefaultLayout from '@/ui/layouts/Default.vue';
+import AuthLayout from '@/ui/layouts/Auth.vue';
 
 @Component({
   components: {

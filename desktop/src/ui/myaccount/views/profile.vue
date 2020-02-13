@@ -107,7 +107,7 @@ import BioForm from '../components/bio_form.vue';
 import AvatarForm from '../components/avatar_form.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import MyAccountMethods from '@/ui/myaccount/core/methods';
 import { Mutations } from '@/store';
 
 

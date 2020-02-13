@@ -123,7 +123,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import AllAppsDialog from './AllAppsDialog.vue';
-import getApps from '@/bloom/kernel/apps';
+import getApps from '@/ui/kernel/apps';
 
 @Component({
   components: {

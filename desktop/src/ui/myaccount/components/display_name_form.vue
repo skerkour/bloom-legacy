@@ -36,7 +36,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import MyAccountMethods from '@/ui/myaccount/core/methods';
 
 @Component
 export default class DisplayNameForm extends Vue {

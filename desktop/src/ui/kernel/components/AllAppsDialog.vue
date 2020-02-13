@@ -42,7 +42,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import getApps from '@/bloom/kernel/apps';
+import getApps from '@/ui/kernel/apps';
 
 @Component
 export default class AllAppsDialog extends Vue {

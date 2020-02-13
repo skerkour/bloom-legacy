@@ -29,15 +29,15 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import MusicDrawer from '@/bloom/music/components/drawer.vue';
-import BitflowDrawer from '@/bloom/bitflow/components/drawer.vue';
-import NotesDrawer from '@/bloom/notes/components/Drawer.vue';
-import DriveDrawer from '@/bloom/drive/components/drawer.vue';
-import GalleryDrawer from '@/bloom/gallery/components/drawer.vue';
-import AdminDrawer from '@/bloom/admin/components/drawer.vue';
-import PreferencesDrawer from '@/bloom/preferences/components/drawer.vue';
-import MyAccountDrawer from '@/bloom/myaccount/components/drawer.vue';
-import BooksDrawer from '@/bloom/books/components/drawer.vue';
+import MusicDrawer from '@/ui/music/components/drawer.vue';
+import BitflowDrawer from '@/ui/bitflow/components/drawer.vue';
+import NotesDrawer from '@/ui/notes/components/Drawer.vue';
+import DriveDrawer from '@/ui/drive/components/drawer.vue';
+import GalleryDrawer from '@/ui/gallery/components/drawer.vue';
+import AdminDrawer from '@/ui/admin/components/drawer.vue';
+import PreferencesDrawer from '@/ui/preferences/components/drawer.vue';
+import MyAccountDrawer from '@/ui/myaccount/components/drawer.vue';
+import BooksDrawer from '@/ui/books/components/drawer.vue';
 
 const APPS_WITH_DRAWER = [
   'music',

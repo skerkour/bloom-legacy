@@ -35,7 +35,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import core from '@/core';
-import AdminMethods from '@/bloom/admin/core/methods';
+import AdminMethods from '@/ui/admin/core/methods';
 
 @Component
 export default class Dashboard extends Vue {
