@@ -18,6 +18,18 @@ type AddPaymentMethodInput struct {
 	GroupID  *string `json:"groupId"`
 }
 
+type BillingPlanConnection struct {
+	Edges      []*BillingPlanEdge `json:"edges"`
+	Nodes      []*BillingPlan     `json:"nodes"`
+	PageInfo   *PageInfo          `json:"pageInfo"`
+	TotalCount Int64              `json:"totalCount"`
+}
+
+type BillingPlanEdge struct {
+	Cursor string       `json:"cursor"`
+	Node   *BillingPlan `json:"node"`
+}
+
 type BillingPlanInput struct {
 	ID          *string         `json:"id"`
 	Name        string          `json:"name"`
@@ -26,6 +38,13 @@ type BillingPlanInput struct {
 	Description string          `json:"description"`
 	IsPublic    bool            `json:"isPublic"`
 	Storage     Int64           `json:"storage"`
+}
+
+type BloomMetadata struct {
+	Os        string `json:"os"`
+	Arch      string `json:"arch"`
+	Version   string `json:"version"`
+	GitCommit string `json:"gitCommit"`
 }
 
 type CancelGroupInvitationInput struct {
@@ -67,6 +86,18 @@ type DeleteGroupInput struct {
 	ID string `json:"id"`
 }
 
+type GroupConnection struct {
+	Edges      []*GroupEdge `json:"edges"`
+	Nodes      []*Group     `json:"nodes"`
+	PageInfo   *PageInfo    `json:"pageInfo"`
+	TotalCount Int64        `json:"totalCount"`
+}
+
+type GroupEdge struct {
+	Cursor string `json:"cursor"`
+	Node   *Group `json:"node"`
+}
+
 type GroupInput struct {
 	ID          string `json:"id"`
 	Name        string `json:"name"`
@@ -79,9 +110,33 @@ type GroupInvitation struct {
 	Inviter *User  `json:"inviter"`
 }
 
+type GroupInvitationConnection struct {
+	Edges      []*GroupInvitationEdge `json:"edges"`
+	Nodes      []*GroupInvitation     `json:"nodes"`
+	PageInfo   *PageInfo              `json:"pageInfo"`
+	TotalCount Int64                  `json:"totalCount"`
+}
+
+type GroupInvitationEdge struct {
+	Cursor string           `json:"cursor"`
+	Node   *GroupInvitation `json:"node"`
+}
+
 type GroupMember struct {
 	User *User           `json:"user"`
 	Role GroupMemberRole `json:"role"`
+}
+
+type GroupMemberConnection struct {
+	Edges      []*GroupMemberEdge `json:"edges"`
+	Nodes      []*GroupMember     `json:"nodes"`
+	PageInfo   *PageInfo          `json:"pageInfo"`
+	TotalCount Int64              `json:"totalCount"`
+}
+
+type GroupMemberEdge struct {
+	Cursor string       `json:"cursor"`
+	Node   *GroupMember `json:"node"`
 }
 
 type InviteUsersInGroupInput struct {
@@ -93,12 +148,43 @@ type Invoice struct {
 	ID string `json:"id"`
 }
 
+type InvoiceConnection struct {
+	Edges      []*InvoiceEdge `json:"edges"`
+	Nodes      []*Invoice     `json:"nodes"`
+	PageInfo   *PageInfo      `json:"pageInfo"`
+	TotalCount Int64          `json:"totalCount"`
+}
+
+type InvoiceEdge struct {
+	Cursor string   `json:"cursor"`
+	Node   *Invoice `json:"node"`
+}
+
+type PageInfo struct {
+	EndCursor       *string `json:"endCursor"`
+	HasNextPage     bool    `json:"hasNextPage"`
+	HasPreviousPage bool    `json:"hasPreviousPage"`
+	StartCursor     *string `json:"startCursor"`
+}
+
 type PaymentMethod struct {
 	ID                  string    `json:"id"`
 	CreatedAt           time.Time `json:"createdAt"`
 	CardLast4           string    `json:"cardLast4"`
 	CardExpirationMonth int       `json:"cardExpirationMonth"`
 	CardExpirationYear  int       `json:"cardExpirationYear"`
+}
+
+type PaymentMethodConnection struct {
+	Edges      []*PaymentMethodEdge `json:"edges"`
+	Nodes      []*PaymentMethod     `json:"nodes"`
+	PageInfo   *PageInfo            `json:"pageInfo"`
+	TotalCount Int64                `json:"totalCount"`
+}
+
+type PaymentMethodEdge struct {
+	Cursor string         `json:"cursor"`
+	Node   *PaymentMethod `json:"node"`
 }
 
 type QuitGroupInput struct {
@@ -131,18 +217,18 @@ type SendNewRegistrationCodeInput struct {
 	ID string `json:"id"`
 }
 
-type ServerVersion struct {
-	Os        string `json:"os"`
-	Arch      string `json:"arch"`
-	Version   string `json:"version"`
-	GitCommit string `json:"gitCommit"`
-}
-
 type Session struct {
 	ID        string         `json:"id"`
 	CreatedAt time.Time      `json:"createdAt"`
 	Token     *string        `json:"token"`
 	Device    *SessionDevice `json:"device"`
+}
+
+type SessionConnection struct {
+	Edges      []*SessionEdge `json:"edges"`
+	Nodes      []*Session     `json:"nodes"`
+	PageInfo   *PageInfo      `json:"pageInfo"`
+	TotalCount Int64          `json:"totalCount"`
 }
 
 type SessionDevice struct {
@@ -153,6 +239,11 @@ type SessionDevice struct {
 type SessionDeviceInput struct {
 	Os   SessionDeviceOs   `json:"os"`
 	Type SessionDeviceType `json:"type"`
+}
+
+type SessionEdge struct {
+	Cursor string   `json:"cursor"`
+	Node   *Session `json:"node"`
 }
 
 type SignInInput struct {
@@ -172,6 +263,18 @@ type UpdateUserProfileInput struct {
 	Bio         *string `json:"bio"`
 	FirstName   *string `json:"firstName"`
 	LastName    *string `json:"lastName"`
+}
+
+type UserConnection struct {
+	Edges      []*UserEdge `json:"edges"`
+	Nodes      []*User     `json:"nodes"`
+	PageInfo   *PageInfo   `json:"pageInfo"`
+	TotalCount Int64       `json:"totalCount"`
+}
+
+type UserEdge struct {
+	Cursor string `json:"cursor"`
+	Node   *User  `json:"node"`
 }
 
 type VerifyRegistrationInput struct {

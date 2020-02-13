@@ -40,7 +40,7 @@ type invit struct {
 }
 
 func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) (*GroupInvitationConnection, error) {
-	var ret []*GroupInvitation
+	var ret *GroupInvitationConnection
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -52,7 +52,6 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	ret = []*GroupInvitation{}
 	invitations := []invit{}
 	err := db.DB.Select(&invitations, `SELECT invit.id AS invitation_id, invit.created_at AS invitation_created_at,
 	groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
@@ -64,6 +63,12 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 		return ret, gqlerrors.Internal()
 	}
 
+	ret = &GroupInvitationConnection{
+		Edges:      []*GroupInvitationEdge{},
+		Nodes:      []*GroupInvitation{},
+		TotalCount: Int64(len(invitations)),
+	}
+
 	for _, invitation := range invitations {
 		invitatio := &GroupInvitation{
 			ID: invitation.ID,
@@ -72,13 +77,17 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 				Description: invitation.GroupDescription,
 			},
 		}
-		ret = append(ret, invitatio)
+		edge := &GroupInvitationEdge{
+			Node: invitatio,
+		}
+		ret.Nodes = append(ret.Nodes, invitatio)
+		ret.Edges = append(ret.Edges, edge)
 	}
 	return ret, nil
 }
 
 func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupConnection, error) {
-	var ret []*Group
+	var ret *GroupConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
@@ -89,7 +98,6 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	ret = []*Group{}
 	logger := rz.FromCtx(ctx)
 
 	groups := []groups.Group{}
@@ -101,8 +109,14 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		return ret, gqlerrors.Internal()
 	}
 
+	ret = &GroupConnection{
+		Edges:      []*GroupEdge{},
+		Nodes:      []*Group{},
+		TotalCount: Int64(len(groups)),
+	}
+
 	for _, group := range groups {
-		grp := Group{
+		grp := &Group{
 			ID:          &group.ID,
 			CreatedAt:   &group.CreatedAt,
 			Name:        group.Name,
@@ -110,7 +124,11 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 			//	members: [GroupMember!]
 			// invitations: [GroupInvitation!]
 		}
-		ret = append(ret, &grp)
+		edge := &GroupEdge{
+			Node: grp,
+		}
+		ret.Nodes = append(ret.Nodes, grp)
+		ret.Edges = append(ret.Edges, edge)
 	}
 	return ret, nil
 }
@@ -124,22 +142,26 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 }
 
 func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*SessionConnection, error) {
-	var ret []*Session
+	var ret *SessionConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	ret = []*Session{}
-
 	sessions, err := users.FindAllSessionsByUserId(ctx, *user.ID)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
 
+	ret = &SessionConnection{
+		Edges:      []*SessionEdge{},
+		Nodes:      []*Session{},
+		TotalCount: Int64(len(sessions)),
+	}
+
 	for _, session := range sessions {
-		sess := Session{
+		sess := &Session{
 			ID:        session.ID,
 			CreatedAt: session.CreatedAt,
 			Token:     nil,
@@ -148,7 +170,11 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 				Type: SessionDeviceType(session.DeviceType),
 			},
 		}
-		ret = append(ret, &sess)
+		edge := &SessionEdge{
+			Node: sess,
+		}
+		ret.Nodes = append(ret.Nodes, sess)
+		ret.Edges = append(ret.Edges, edge)
 	}
 
 	return ret, nil

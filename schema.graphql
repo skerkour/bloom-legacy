@@ -105,8 +105,8 @@ type Group {
   createdAt: Time
   name: String!
   description: String!
-  members: [GroupMember!]
-  invitations: [GroupInvitation!]
+  members: GroupMemberConnection
+  invitations: GroupInvitationConnection
 }
 
 type GroupConnection {
@@ -246,14 +246,21 @@ type BloomMetadata {
 }
 
 type Query {
-  # Get information about current user
+  """Get information about current user"""
   me: User!
+  """Find an user"""
   user(username: String): User
+  """Find all users"""
   users: UserConnection
+  """Find a group"""
   group(id: ID!): Group
+  """Find all users"""
   groups: GroupConnection
+  """Find all billing plans visible to the current user"""
   billingPlans: BillingPlanConnection
+  """Metadata about Bloom server"""
   metadata: BloomMetadata
+  """The stripe public key"""
   stripePublicKey: String
 }
 
@@ -382,23 +389,37 @@ input UpdateUserProfileInput {
 
 type Mutation {
   # users
+  """Start registration"""
   register(input: RegisterInput!): RegistrationStarted!
+  """Verify pending account"""
   verifyRegistration(input: VerifyRegistrationInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
+  """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
+  """Sign in"""
   signIn(input: SignInInput!):  SignedIn!
   revokeSession(input: RevokeSessionInput!): Boolean!
+  """Update an user profile, both private and public information"""
   updateUserProfile(input: UpdateUserProfileInput!): User!
 
   # groups
+  """Create a group"""
   createGroup(input: CreateGroupInput!): Group!
+  """Delete a group"""
   deleteGroup(input: DeleteGroupInput!): Boolean!
+  """Update a group information"""
   updateGroup(input: GroupInput!): Group!
+  """Remove users from a group"""
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
+  """Invite users in a group"""
   inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  """Accept a group invitaiton and join it"""
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
+  """Decline a group invitation"""
   declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
+  """Cancel a group invitation"""
   cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
+  """Quit a group"""
   quitGroup(input: QuitGroupInput!): Boolean!
 
   # billing

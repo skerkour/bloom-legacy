@@ -66,7 +66,7 @@ func Run() error {
 	router.Get("/", IndexHandler)
 	router.Get("/api", HelloWorlHandler)
 	router.Mount("/api/graphql", graphqlHandler)
-	if config.Env != consts.ENV_DEVELOPMENT {
+	if config.Env == consts.ENV_DEVELOPMENT {
 		router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 	}
 	router.NotFound(http.HandlerFunc(NotFoundHandler))

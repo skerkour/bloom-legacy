@@ -283,8 +283,8 @@ type BillingPlanResolver interface {
 	Subscribers(ctx context.Context, obj *model.BillingPlan) (*model.UserConnection, error)
 }
 type GroupResolver interface {
-	Members(ctx context.Context, obj *model.Group) ([]*model.GroupMember, error)
-	Invitations(ctx context.Context, obj *model.Group) ([]*model.GroupInvitation, error)
+	Members(ctx context.Context, obj *model.Group) (*model.GroupMemberConnection, error)
+	Invitations(ctx context.Context, obj *model.Group) (*model.GroupInvitationConnection, error)
 }
 type MutationResolver interface {
 	Register(ctx context.Context, input model.RegisterInput) (*model.RegistrationStarted, error)
@@ -1607,8 +1607,8 @@ type Group {
   createdAt: Time
   name: String!
   description: String!
-  members: [GroupMember!]
-  invitations: [GroupInvitation!]
+  members: GroupMemberConnection
+  invitations: GroupInvitationConnection
 }
 
 type GroupConnection {
@@ -1748,14 +1748,21 @@ type BloomMetadata {
 }
 
 type Query {
-  # Get information about current user
+  """Get information about current user"""
   me: User!
+  """Find an user"""
   user(username: String): User
+  """Find all users"""
   users: UserConnection
+  """Find a group"""
   group(id: ID!): Group
+  """Find all users"""
   groups: GroupConnection
+  """Find all billing plans visible to the current user"""
   billingPlans: BillingPlanConnection
+  """Metadata about Bloom server"""
   metadata: BloomMetadata
+  """The stripe public key"""
   stripePublicKey: String
 }
 
@@ -1884,23 +1891,37 @@ input UpdateUserProfileInput {
 
 type Mutation {
   # users
+  """Start registration"""
   register(input: RegisterInput!): RegistrationStarted!
+  """Verify pending account"""
   verifyRegistration(input: VerifyRegistrationInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
+  """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
+  """Sign in"""
   signIn(input: SignInInput!):  SignedIn!
   revokeSession(input: RevokeSessionInput!): Boolean!
+  """Update an user profile, both private and public information"""
   updateUserProfile(input: UpdateUserProfileInput!): User!
 
   # groups
+  """Create a group"""
   createGroup(input: CreateGroupInput!): Group!
+  """Delete a group"""
   deleteGroup(input: DeleteGroupInput!): Boolean!
+  """Update a group information"""
   updateGroup(input: GroupInput!): Group!
+  """Remove users from a group"""
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
+  """Invite users in a group"""
   inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  """Accept a group invitaiton and join it"""
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
+  """Decline a group invitation"""
   declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
+  """Cancel a group invitation"""
   cancelGroupInvitation(input: CancelGroupInvitationInput!): Boolean!
+  """Quit a group"""
   quitGroup(input: QuitGroupInput!): Boolean!
 
   # billing
@@ -3107,9 +3128,9 @@ func (ec *executionContext) _Group_members(ctx context.Context, field graphql.Co
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.GroupMember)
+	res := resTmp.(*model.GroupMemberConnection)
 	fc.Result = res
-	return ec.marshalOGroupMember2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberᚄ(ctx, field.Selections, res)
+	return ec.marshalOGroupMemberConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_invitations(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -3138,9 +3159,9 @@ func (ec *executionContext) _Group_invitations(ctx context.Context, field graphq
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.([]*model.GroupInvitation)
+	res := resTmp.(*model.GroupInvitationConnection)
 	fc.Result = res
-	return ec.marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationᚄ(ctx, field.Selections, res)
+	return ec.marshalOGroupInvitationConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupConnection) (ret graphql.Marshaler) {
@@ -10467,34 +10488,6 @@ func (ec *executionContext) unmarshalNGroupInput2gitlabᚗcomᚋbloom42ᚋbloom�
 	return ec.unmarshalInputGroupInput(ctx, v)
 }
 
-func (ec *executionContext) marshalNGroupInvitation2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx context.Context, sel ast.SelectionSet, v model.GroupInvitation) graphql.Marshaler {
-	return ec._GroupInvitation(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx context.Context, sel ast.SelectionSet, v *model.GroupInvitation) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GroupInvitation(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalNGroupMember2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v model.GroupMember) graphql.Marshaler {
-	return ec._GroupMember(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v *model.GroupMember) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._GroupMember(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, v interface{}) (model.GroupMemberRole, error) {
 	var res model.GroupMemberRole
 	return res, res.UnmarshalGQL(v)
@@ -11296,46 +11289,6 @@ func (ec *executionContext) marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42
 	return ret
 }
 
-func (ec *executionContext) marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.GroupInvitation) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx context.Context, sel ast.SelectionSet, v *model.GroupInvitation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11449,51 +11402,22 @@ func (ec *executionContext) marshalOGroupMember2ᚕᚖgitlabᚗcomᚋbloom42ᚋb
 	return ret
 }
 
-func (ec *executionContext) marshalOGroupMember2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberᚄ(ctx context.Context, sel ast.SelectionSet, v []*model.GroupMember) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalNGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v *model.GroupMember) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
 	return ec._GroupMember(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOGroupMemberConnection2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupMemberConnection) graphql.Marshaler {
+	return ec._GroupMemberConnection(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOGroupMemberConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberConnection(ctx context.Context, sel ast.SelectionSet, v *model.GroupMemberConnection) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._GroupMemberConnection(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOGroupMemberEdge2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberEdge(ctx context.Context, sel ast.SelectionSet, v model.GroupMemberEdge) graphql.Marshaler {

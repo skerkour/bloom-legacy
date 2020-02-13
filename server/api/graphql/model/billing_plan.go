@@ -22,7 +22,7 @@ type BillingPlan struct {
 }
 
 func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (*UserConnection, error) {
-	var ret *Int64
+	var ret *UserConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
@@ -34,7 +34,8 @@ func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *Bill
 		return ret, gqlerrors.New(err)
 	}
 
-	countInt64 := Int64(count)
-	ret = &countInt64
+	ret = &UserConnection{
+		TotalCount: Int64(count),
+	}
 	return ret, nil
 }

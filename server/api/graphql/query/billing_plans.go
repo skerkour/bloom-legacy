@@ -39,7 +39,7 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 			Storage:     model.Int64(plan.Storage),
 			StripeID:    stripeId,
 		}
-		edge := model.BillingPlanEdge{
+		edge := &model.BillingPlanEdge{
 			Node: billingPlan,
 		}
 		ret.Nodes = append(ret.Nodes, billingPlan)
