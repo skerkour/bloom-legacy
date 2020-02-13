@@ -8,14 +8,13 @@ import (
 	"gitlab.com/bloom42/bloom/server/config"
 )
 
-func (resolver *Resolver) StripePublicKey(ctx context.Context) (*string, error) {
-	var ret *string
+// StripePublicKey returns the stripe public key. For billing purpose
+func (resolver *Resolver) StripePublicKey(ctx context.Context) (string, error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+		return "", gqlerrors.AuthenticationRequired()
 	}
 
-	ret = &config.Stripe.PublicKey
-	return ret, nil
+	return config.Stripe.PublicKey, nil
 }

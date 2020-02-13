@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/version"
 )
 
+// Metadata returns infrmation about the Bloom server
 func (resolver *Resolver) Metadata(ctx context.Context) (*model.BloomMetadata, error) {
 	var ret *model.BloomMetadata
 	currentUser := apiutil.UserFromCtx(ctx)

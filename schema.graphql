@@ -261,7 +261,7 @@ type Query {
   """Metadata about Bloom server"""
   metadata: BloomMetadata
   """The stripe public key"""
-  stripePublicKey: String
+  stripePublicKey: String!
 }
 
 ####################################################################################################

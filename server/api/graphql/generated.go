@@ -319,7 +319,7 @@ type QueryResolver interface {
 	Groups(ctx context.Context) (*model.GroupConnection, error)
 	BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error)
 	Metadata(ctx context.Context) (*model.BloomMetadata, error)
-	StripePublicKey(ctx context.Context) (*string, error)
+	StripePublicKey(ctx context.Context) (string, error)
 }
 type UserResolver interface {
 	Groups(ctx context.Context, obj *model.User) (*model.GroupConnection, error)
@@ -1763,7 +1763,7 @@ type Query {
   """Metadata about Bloom server"""
   metadata: BloomMetadata
   """The stripe public key"""
-  stripePublicKey: String
+  stripePublicKey: String!
 }
 
 ####################################################################################################
@@ -5841,11 +5841,14 @@ func (ec *executionContext) _Query_stripePublicKey(ctx context.Context, field gr
 		return graphql.Null
 	}
 	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
 		return graphql.Null
 	}
-	res := resTmp.(*string)
+	res := resTmp.(string)
 	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -9738,6 +9741,9 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 					}
 				}()
 				res = ec._Query_stripePublicKey(ctx, field)
+				if res == graphql.Null {
+					atomic.AddUint32(&invalids, 1)
+				}
 				return res
 			})
 		case "__type":

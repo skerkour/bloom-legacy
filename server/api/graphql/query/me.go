@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
+// Me returns the current user
 func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 	var ret *model.User
 	currentUser := apiutil.UserFromCtx(ctx)

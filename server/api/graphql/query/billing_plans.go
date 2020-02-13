@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 )
 
+// BillingPlans find all visible billing plans for current user
 func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error) {
 	var ret *model.BillingPlanConnection
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -25,9 +26,9 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 	}
 
 	for _, plan := range plans {
-		var stripeId *string
+		var stripeID *string
 		if currentUser.IsAdmin {
-			stripeId = &plan.StripeID
+			stripeID = &plan.StripeID
 		}
 		billingPlan := &model.BillingPlan{
 			ID:          plan.ID,
@@ -37,7 +38,7 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 			IsPublic:    plan.IsPublic,
 			Tier:        model.BillingPlanTier(plan.Tier),
 			Storage:     model.Int64(plan.Storage),
-			StripeID:    stripeId,
+			StripeID:    stripeID,
 		}
 		edge := &model.BillingPlanEdge{
 			Node: billingPlan,

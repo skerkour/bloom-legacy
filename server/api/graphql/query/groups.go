@@ -6,6 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
+// Groups finds all groups
 func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 	var ret *model.GroupConnection
 	// ret := &rpc.GroupList{Groups: []*rpc.Group{}}
