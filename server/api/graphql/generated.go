@@ -164,7 +164,7 @@ type ComplexityRoot struct {
 		SignIn                     func(childComplexity int, input model.SignInInput) int
 		UpdateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
 		UpdateGroup                func(childComplexity int, input model.GroupInput) int
-		UpdateUserProfile          func(childComplexity int, input model.UpdateUserProfileInput) int
+		UpdateUserProfile          func(childComplexity int, input model.UserProfileInput) int
 		VerifyRegistration         func(childComplexity int, input model.VerifyRegistrationInput) int
 	}
 
@@ -282,7 +282,7 @@ type MutationResolver interface {
 	CompleteRegistration(ctx context.Context, input model.CompleteRegistrationInput) (*model.SignedIn, error)
 	SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error)
 	RevokeSession(ctx context.Context, input model.RevokeSessionInput) (bool, error)
-	UpdateUserProfile(ctx context.Context, input model.UpdateUserProfileInput) (*model.User, error)
+	UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error)
 	CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error)
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
@@ -946,7 +946,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.UpdateUserProfile(childComplexity, args["input"].(model.UpdateUserProfileInput)), true
+		return e.complexity.Mutation.UpdateUserProfile(childComplexity, args["input"].(model.UserProfileInput)), true
 
 	case "Mutation.verifyRegistration":
 		if e.complexity.Mutation.VerifyRegistration == nil {
@@ -1605,8 +1605,10 @@ type InvoiceEdge {
 
 type BillingPlan {
   id: ID!
+  """amount to pay in cents"""
   price: Int64!
   name: String!
+  """plan's description, in HTML """
   description: String!
   isPublic: Boolean!
   product: BillingProduct!
@@ -1685,7 +1687,7 @@ type Query {
   billingPlans: BillingPlanConnection
   """Metadata about Bloom server"""
   metadata: BloomMetadata
-  """The stripe public key"""
+  """The stripe public key to be used"""
   stripePublicKey: String!
 }
 
@@ -1732,6 +1734,7 @@ input SendNewRegistrationCodeInput {
 input CreateGroupInput {
   name: String!
   description: String!
+  """users to invite, by username"""
   usersToInvite: [String!]!
 }
 
@@ -1741,13 +1744,14 @@ input DeleteGroupInput {
 
 input GroupInput {
   id: ID!
-  name: String!
-  description: String!
+  name: String
+  description: String
 }
 
 input RemoveGroupMembersInput {
   id: ID!
-  usernames: [String!]!
+  """members to remvove, by username"""
+  members: [String!]!
 }
 
 input AcceptGroupInvitationInput {
@@ -1764,7 +1768,8 @@ input DeclineGroupInvitationInput {
 
 input InviteUsersInGroupInput {
   id: ID!
-  usernames: [String!]!
+  """users to invite, by username"""
+  users: [String!]!
 }
 
 input QuitGroupInput {
@@ -1793,18 +1798,22 @@ input ChangeBillingPlanInput {
 
 input AddPaymentMethodInput {
   stripeId: String!
+  """if groupId is null, add to current user"""
   groupId: String
 }
 
+"""remove payment method with ` + "`" + `id` + "`" + `"""
 input RemovePaymentMethodInput {
   id: ID!
 }
 
+"""set payment method with ` + "`" + `id` + "`" + ` as the default one"""
 input ChangeDefaultPaymentMethodInput {
   id: ID!
 }
 
-input UpdateUserProfileInput {
+input UserProfileInput {
+  """id is reserved for admins"""
   id: ID
   displayName: String
   bio: String
@@ -1825,7 +1834,7 @@ type Mutation {
   signIn(input: SignInInput!):  SignedIn!
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
-  updateUserProfile(input: UpdateUserProfileInput!): User!
+  updateUserProfile(input: UserProfileInput!): User!
 
   # groups
   """Create a group"""
@@ -2161,9 +2170,9 @@ func (ec *executionContext) field_Mutation_updateGroup_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_updateUserProfile_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.UpdateUserProfileInput
+	var arg0 model.UserProfileInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNUpdateUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUpdateUserProfileInput(ctx, tmp)
+		arg0, err = ec.unmarshalNUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUserProfileInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4180,7 +4189,7 @@ func (ec *executionContext) _Mutation_updateUserProfile(ctx context.Context, fie
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().UpdateUserProfile(rctx, args["input"].(model.UpdateUserProfileInput))
+		return ec.resolvers.Mutation().UpdateUserProfile(rctx, args["input"].(model.UserProfileInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8141,13 +8150,13 @@ func (ec *executionContext) unmarshalInputGroupInput(ctx context.Context, obj in
 			}
 		case "name":
 			var err error
-			it.Name, err = ec.unmarshalNString2string(ctx, v)
+			it.Name, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "description":
 			var err error
-			it.Description, err = ec.unmarshalNString2string(ctx, v)
+			it.Description, err = ec.unmarshalOString2ᚖstring(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8169,9 +8178,9 @@ func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Co
 			if err != nil {
 				return it, err
 			}
-		case "usernames":
+		case "users":
 			var err error
-			it.Usernames, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			it.Users, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8235,9 +8244,9 @@ func (ec *executionContext) unmarshalInputRemoveGroupMembersInput(ctx context.Co
 			if err != nil {
 				return it, err
 			}
-		case "usernames":
+		case "members":
 			var err error
-			it.Usernames, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			it.Members, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8355,8 +8364,8 @@ func (ec *executionContext) unmarshalInputSignInInput(ctx context.Context, obj i
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputUpdateUserProfileInput(ctx context.Context, obj interface{}) (model.UpdateUserProfileInput, error) {
-	var it model.UpdateUserProfileInput
+func (ec *executionContext) unmarshalInputUserProfileInput(ctx context.Context, obj interface{}) (model.UserProfileInput, error) {
+	var it model.UserProfileInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
@@ -10359,10 +10368,6 @@ func (ec *executionContext) marshalNTime2timeᚐTime(ctx context.Context, sel as
 	return res
 }
 
-func (ec *executionContext) unmarshalNUpdateUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUpdateUserProfileInput(ctx context.Context, v interface{}) (model.UpdateUserProfileInput, error) {
-	return ec.unmarshalInputUpdateUserProfileInput(ctx, v)
-}
-
 func (ec *executionContext) marshalNUser2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
 }
@@ -10375,6 +10380,10 @@ func (ec *executionContext) marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋser
 		return graphql.Null
 	}
 	return ec._User(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNUserProfileInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUserProfileInput(ctx context.Context, v interface{}) (model.UserProfileInput, error) {
+	return ec.unmarshalInputUserProfileInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNVerifyRegistrationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐVerifyRegistrationInput(ctx context.Context, v interface{}) (model.VerifyRegistrationInput, error) {

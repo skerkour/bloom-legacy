@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
-func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UpdateUserProfileInput) (*model.User, error) {
+func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error) {
 	var ret *model.User
 	var err error
 	currentUser := apiutil.UserFromCtx(ctx)

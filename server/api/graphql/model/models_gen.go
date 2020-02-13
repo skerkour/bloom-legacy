@@ -14,8 +14,9 @@ type AcceptGroupInvitationInput struct {
 }
 
 type AddPaymentMethodInput struct {
-	StripeID string  `json:"stripeId"`
-	GroupID  *string `json:"groupId"`
+	StripeID string `json:"stripeId"`
+	// if groupId is null, add to current user
+	GroupID *string `json:"groupId"`
 }
 
 type BillingPlanConnection struct {
@@ -56,6 +57,7 @@ type ChangeBillingPlanInput struct {
 	GroupID *string `json:"groupId"`
 }
 
+// set payment method with `id` as the default one
 type ChangeDefaultPaymentMethodInput struct {
 	ID string `json:"id"`
 }
@@ -68,8 +70,9 @@ type CompleteRegistrationInput struct {
 }
 
 type CreateGroupInput struct {
-	Name          string   `json:"name"`
-	Description   string   `json:"description"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	// users to invite, by username
 	UsersToInvite []string `json:"usersToInvite"`
 }
 
@@ -97,9 +100,9 @@ type GroupEdge struct {
 }
 
 type GroupInput struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	ID          string  `json:"id"`
+	Name        *string `json:"name"`
+	Description *string `json:"description"`
 }
 
 type GroupInvitation struct {
@@ -133,8 +136,9 @@ type GroupMemberEdge struct {
 }
 
 type InviteUsersInGroupInput struct {
-	ID        string   `json:"id"`
-	Usernames []string `json:"usernames"`
+	ID string `json:"id"`
+	// users to invite, by username
+	Users []string `json:"users"`
 }
 
 type Invoice struct {
@@ -192,10 +196,12 @@ type RegistrationStarted struct {
 }
 
 type RemoveGroupMembersInput struct {
-	ID        string   `json:"id"`
-	Usernames []string `json:"usernames"`
+	ID string `json:"id"`
+	// members to remvove, by username
+	Members []string `json:"members"`
 }
 
+// remove payment method with `id`
 type RemovePaymentMethodInput struct {
 	ID string `json:"id"`
 }
@@ -247,14 +253,6 @@ type SignedIn struct {
 	Me      *User    `json:"me"`
 }
 
-type UpdateUserProfileInput struct {
-	ID          *string `json:"id"`
-	DisplayName *string `json:"displayName"`
-	Bio         *string `json:"bio"`
-	FirstName   *string `json:"firstName"`
-	LastName    *string `json:"lastName"`
-}
-
 type UserConnection struct {
 	Edges      []*UserEdge `json:"edges"`
 	PageInfo   *PageInfo   `json:"pageInfo"`
@@ -264,6 +262,15 @@ type UserConnection struct {
 type UserEdge struct {
 	Cursor string `json:"cursor"`
 	Node   *User  `json:"node"`
+}
+
+type UserProfileInput struct {
+	// id is reserved for admins
+	ID          *string `json:"id"`
+	DisplayName *string `json:"displayName"`
+	Bio         *string `json:"bio"`
+	FirstName   *string `json:"firstName"`
+	LastName    *string `json:"lastName"`
 }
 
 type VerifyRegistrationInput struct {

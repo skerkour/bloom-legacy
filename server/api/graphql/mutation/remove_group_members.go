@@ -37,7 +37,7 @@ func (r *Resolver) RemoveGroupMembers(ctx context.Context, input model.RemoveGro
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 
-	err = groups.RemoveMembers(ctx, tx, *currentUser, group, input.Usernames)
+	err = groups.RemoveMembers(ctx, tx, *currentUser, group, input.Members)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

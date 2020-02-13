@@ -37,7 +37,7 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 
-	err = groups.InviteUsers(ctx, tx, *currentUser, group, input.Usernames)
+	err = groups.InviteUsers(ctx, tx, *currentUser, group, input.Users)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

@@ -10,24 +10,31 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group, name, description string) error {
+func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group, name, description *string) error {
 	logger := rz.FromCtx(ctx)
 	var err error
+	var newName string
+	var newDescription string
 
-	if name == "" { // default value of proto3 is empty
-		name = group.Name
-	}
-	if description == "" { // default value of proto3 is empty
-		description = group.Description
+	if name == nil {
+		newName = group.Name
+	} else {
+		newName = *name
 	}
 
-	if err = validateUpdateGroup(ctx, tx, user.ID, group.ID, name, description); err != nil {
+	if description == nil {
+		newDescription = group.Description
+	} else {
+		newDescription = *description
+	}
+
+	if err = validateUpdateGroup(ctx, tx, user.ID, group.ID, newName, newDescription); err != nil {
 		return err
 	}
 
 	group.UpdatedAt = time.Now().UTC()
-	group.Name = name
-	group.Description = description
+	group.Name = newName
+	group.Description = newDescription
 	queryUpdateGroup := `UPDATE groups
 		SET updated_at = $1, name = $2, description = $3
 		WHERE id = $4`

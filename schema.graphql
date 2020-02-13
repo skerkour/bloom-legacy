@@ -170,8 +170,10 @@ type InvoiceEdge {
 
 type BillingPlan {
   id: ID!
+  """amount to pay in cents"""
   price: Int64!
   name: String!
+  """plan's description, in HTML """
   description: String!
   isPublic: Boolean!
   product: BillingProduct!
@@ -250,7 +252,7 @@ type Query {
   billingPlans: BillingPlanConnection
   """Metadata about Bloom server"""
   metadata: BloomMetadata
-  """The stripe public key"""
+  """The stripe public key to be used"""
   stripePublicKey: String!
 }
 
@@ -297,6 +299,7 @@ input SendNewRegistrationCodeInput {
 input CreateGroupInput {
   name: String!
   description: String!
+  """users to invite, by username"""
   usersToInvite: [String!]!
 }
 
@@ -306,13 +309,14 @@ input DeleteGroupInput {
 
 input GroupInput {
   id: ID!
-  name: String!
-  description: String!
+  name: String
+  description: String
 }
 
 input RemoveGroupMembersInput {
   id: ID!
-  usernames: [String!]!
+  """members to remvove, by username"""
+  members: [String!]!
 }
 
 input AcceptGroupInvitationInput {
@@ -329,7 +333,8 @@ input DeclineGroupInvitationInput {
 
 input InviteUsersInGroupInput {
   id: ID!
-  usernames: [String!]!
+  """users to invite, by username"""
+  users: [String!]!
 }
 
 input QuitGroupInput {
@@ -358,18 +363,22 @@ input ChangeBillingPlanInput {
 
 input AddPaymentMethodInput {
   stripeId: String!
+  """if groupId is null, add to current user"""
   groupId: String
 }
 
+"""remove payment method with `id`"""
 input RemovePaymentMethodInput {
   id: ID!
 }
 
+"""set payment method with `id` as the default one"""
 input ChangeDefaultPaymentMethodInput {
   id: ID!
 }
 
-input UpdateUserProfileInput {
+input UserProfileInput {
+  """id is reserved for admins"""
   id: ID
   displayName: String
   bio: String
@@ -390,7 +399,7 @@ type Mutation {
   signIn(input: SignInInput!):  SignedIn!
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
-  updateUserProfile(input: UpdateUserProfileInput!): User!
+  updateUserProfile(input: UserProfileInput!): User!
 
   # groups
   """Create a group"""
