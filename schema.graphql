@@ -1,6 +1,7 @@
 scalar Time
 scalar Bytes
 scalar Int64
+scalar ID
 
 enum SessionDeviceOS {
   LINUX
@@ -40,7 +41,7 @@ type PageInfo {
 }
 
 type User {
-  id: String
+  id: ID
   createdAt: Time
   avatarUrl: String
   username: String!
@@ -50,25 +51,51 @@ type User {
   displayName: String!
   bio: String!
   isAdmin: Boolean!
-  groups: [Group!]
-  paymentMethods: [PaymentMethod!]
-  invoices: [Invoice!]
-  sessions: [Session!]
-  groupInvitations: [GroupInvitation!]
+  groups: GroupConnection
+  paymentMethods: PaymentMethodConnection
+  invoices: InvoiceConnection
+  sessions: SessionConnection
+  groupInvitations: GroupInvitationConnection
   stripePublicKey: String
   billingPlan: BillingPlan
 }
 
+type UserConnection {
+  edges: [UserEdge]
+  node: [User]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type UserEdge {
+  cursor: String!
+  node: User
+}
+
+
 type PaymentMethod {
-  id: String!
+  id: ID!
   createdAt: Time!
   cardLast4: String!
   cardExpirationMonth: Int!
   cardExpirationYear: Int!
 }
 
+type PaymentMethodConnection {
+  edges: [PaymentMethodEdge]
+  node: [PaymentMethod]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type PaymentMethodEdge {
+  cursor: String!
+  node: PaymentMethod
+}
+
+
 type Group {
-  id: String
+  id: ID
   createdAt: Time
   name: String!
   description: String!
@@ -76,23 +103,75 @@ type Group {
   invitations: [GroupInvitation!]
 }
 
+type GroupConnection {
+  edges: [GroupEdge]
+  node: [Group]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type GroupEdge {
+  cursor: String!
+  node: Group
+}
+
+
 type GroupMember {
   user: User!
   role: GroupMemberRole!
 }
 
+type GroupMemberConnection {
+  edges: [GroupMemberEdge]
+  node: [GroupMember]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type GroupMemberEdge {
+  cursor: String!
+  node: GroupMember
+}
+
+
 type GroupInvitation {
-  id: String!
+  id: ID!
   group: Group!
   inviter: User!
 }
 
-type Invoice {
-  id: String!
+type GroupInvitationConnection {
+  edges: [GroupInvitationEdge]
+  node: [GroupInvitation]
+  pageInfo: PageInfo!
+  totalCount: Int64!
 }
 
+type GroupInvitationEdge {
+  cursor: String!
+  node: GroupInvitation
+}
+
+
+type Invoice {
+  id: ID!
+}
+
+type InvoiceConnection {
+  edges: [InvoiceEdge]
+  node: [Invoice]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type InvoiceEdge {
+  cursor: String!
+  node: Invoice
+}
+
+
 type BillingPlan {
-  id: String!
+  id: ID!
   price: Int64!
   name: String!
   description: String!
@@ -100,31 +179,60 @@ type BillingPlan {
   tier: BillingPlanTier!
   storage: Int64!
   stripeId: String
-  subscribers: Int64
+  subscribers: UserConnection
 }
 
+type BillingPlanConnection {
+  edges: [BillingPlanEdge]
+  node: [BillingPlan]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type BillingPlanEdge {
+  cursor: String!
+  node: BillingPlan
+}
+
+
 type Session {
-  id: String!
+  id: ID!
   createdAt: Time!
   token: String
   device: SessionDevice!
 }
+
+type SessionConnection {
+  edges: [SessionEdge]
+  node: [Session]
+  pageInfo: PageInfo!
+  totalCount: Int64!
+}
+
+type SessionEdge {
+  cursor: String!
+  node: Session
+}
+
 
 type SessionDevice {
   os: SessionDeviceOS!
   type: SessionDeviceType!
 }
 
+
 type RegistrationStarted {
-  id: String!
+  id: ID!
 }
+
 
 type SignedIn {
   session: Session!
   me: User!
 }
 
-type ServerVersion {
+
+type BloomMetadata {
   os: String!
   arch: String!
   version: String!
@@ -135,10 +243,10 @@ type Query {
   me: User!
   user(username: String!): User
   users(limit: Int = 25, offset: Int = 0): [User!]!
-  group(id: String!): Group
+  group(id: ID!): Group
   groups(limit: Int = 25, offset: Int = 0): [Group!]!
-  billingPlans: [BillingPlan!]!
-  serverVersion: ServerVersion
+  billingPlans: BillingPlanConnection
+  metadata: BloomMetadata
 }
 
 ################################################################################
@@ -151,12 +259,12 @@ input RegisterInput {
 }
 
 input VerifyRegistrationInput {
-  id: String!
+  id: ID!
   code: String!
 }
 
 input CompleteRegistrationInput {
-  id: String!
+  id: ID!
   username: String!
   authKey: Bytes!
   device: SessionDeviceInput!
@@ -174,11 +282,11 @@ input SignInInput {
 }
 
 input RevokeSessionInput {
-  id: String!
+  id: ID!
 }
 
 input SendNewRegistrationCodeInput {
-  id: String!
+  id: ID!
 }
 
 input CreateGroupInput {
@@ -188,43 +296,43 @@ input CreateGroupInput {
 }
 
 input DeleteGroupInput {
-  id: String!
+  id: ID!
 }
 
 input GroupInput {
-  id: String!
+  id: ID!
   name: String!
   description: String!
 }
 
 input RemoveGroupMembersInput {
-  id: String!
+  id: ID!
   usernames: [String!]!
 }
 
 input AcceptGroupInvitationInput {
-  id: String!
+  id: ID!
 }
 
 input CancelGroupInvitationInput {
-  id: String!
+  id: ID!
 }
 
 input DeclineGroupInvitationInput {
-  id: String!
+  id: ID!
 }
 
 input InviteUsersInGroupInput {
-  id: String!
+  id: ID!
   usernames: [String!]!
 }
 
 input QuitGroupInput {
-  id: String!
+  id: ID!
 }
 
 input BillingPlanInput {
-  id: String
+  id: ID
   name: String!
   tier: BillingPlanTier!
   stripeId: String!
@@ -234,11 +342,11 @@ input BillingPlanInput {
 }
 
 input DeleteBillingPlanInput {
-  id: String!
+  id: ID!
 }
 
 input ChangeBillingPlanInput {
-  id: String!
+  id: ID!
   userId: String
   groupId: String
 }
@@ -249,15 +357,15 @@ input AddPaymentMethodInput {
 }
 
 input RemovePaymentMethodInput {
-  id: String!
+  id: ID!
 }
 
 input ChangeDefaultPaymentMethodInput {
-  id: String!
+  id: ID!
 }
 
 input UpdateUserProfileInput {
-  id: String
+  id: ID
   displayName: String
   bio: String
   firstName: String
