@@ -9,13 +9,19 @@ import (
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 )
 
-func (r *Resolver) BillingPlans(ctx context.Context) ([]*model.BillingPlan, error) {
-	ret := []*model.BillingPlan{}
+func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error) {
+	var ret *model.BillingPlanConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	plans, err := billing.FindPlans(ctx, currentUser)
 	if err != nil {
 		return ret, gqlerrors.New(err)
+	}
+
+	ret = &model.BillingPlanConnection{
+		Edges:      []*model.BillingPlanEdge{},
+		Nodes:      []*model.BillingPlan{},
+		TotalCount: model.Int64(len(plans)),
 	}
 
 	for _, plan := range plans {
@@ -33,7 +39,11 @@ func (r *Resolver) BillingPlans(ctx context.Context) ([]*model.BillingPlan, erro
 			Storage:     model.Int64(plan.Storage),
 			StripeID:    stripeId,
 		}
-		ret = append(ret, billingPlan)
+		edge := model.BillingPlanEdge{
+			Node: billingPlan,
+		}
+		ret.Nodes = append(ret.Nodes, billingPlan)
+		ret.Edges = append(ret.Edges, edge)
 	}
 
 	return ret, nil

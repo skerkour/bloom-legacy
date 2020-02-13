@@ -9,15 +9,15 @@ import (
 	"gitlab.com/bloom42/bloom/version"
 )
 
-func (resolver *Resolver) ServerVersion(ctx context.Context) (*model.ServerVersion, error) {
-	var ret *model.ServerVersion
+func (resolver *Resolver) Metadata(ctx context.Context) (*model.BloomMetadata, error) {
+	var ret *model.BloomMetadata
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	ret = &model.ServerVersion{
+	ret = &model.BloomMetadata{
 		Os:        version.OS,
 		Arch:      version.Arch,
 		Version:   version.Version,

@@ -1,7 +1,10 @@
+####################################################################################################
+## Scalars & Enums
+####################################################################################################
+
 scalar Time
 scalar Bytes
 scalar Int64
-scalar ID
 
 enum SessionDeviceOS {
   LINUX
@@ -33,6 +36,10 @@ enum BillingPlanTier {
   ULTRA
 }
 
+####################################################################################################
+## Queries & Types
+####################################################################################################
+
 type PageInfo {
   endCursor: String
   hasNextPage: Boolean!
@@ -56,13 +63,12 @@ type User {
   invoices: InvoiceConnection
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
-  stripePublicKey: String
   billingPlan: BillingPlan
 }
 
 type UserConnection {
   edges: [UserEdge]
-  node: [User]
+  nodes: [User]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -83,7 +89,7 @@ type PaymentMethod {
 
 type PaymentMethodConnection {
   edges: [PaymentMethodEdge]
-  node: [PaymentMethod]
+  nodes: [PaymentMethod]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -105,7 +111,7 @@ type Group {
 
 type GroupConnection {
   edges: [GroupEdge]
-  node: [Group]
+  nodes: [Group]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -123,7 +129,7 @@ type GroupMember {
 
 type GroupMemberConnection {
   edges: [GroupMemberEdge]
-  node: [GroupMember]
+  nodes: [GroupMember]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -142,7 +148,7 @@ type GroupInvitation {
 
 type GroupInvitationConnection {
   edges: [GroupInvitationEdge]
-  node: [GroupInvitation]
+  nodes: [GroupInvitation]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -159,7 +165,7 @@ type Invoice {
 
 type InvoiceConnection {
   edges: [InvoiceEdge]
-  node: [Invoice]
+  nodes: [Invoice]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -184,7 +190,7 @@ type BillingPlan {
 
 type BillingPlanConnection {
   edges: [BillingPlanEdge]
-  node: [BillingPlan]
+  nodes: [BillingPlan]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -204,7 +210,7 @@ type Session {
 
 type SessionConnection {
   edges: [SessionEdge]
-  node: [Session]
+  nodes: [Session]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -240,18 +246,20 @@ type BloomMetadata {
 }
 
 type Query {
+  # Get information about current user
   me: User!
-  user(username: String!): User
-  users(limit: Int = 25, offset: Int = 0): [User!]!
+  user(username: String): User
+  users: UserConnection
   group(id: ID!): Group
-  groups(limit: Int = 25, offset: Int = 0): [Group!]!
+  groups: GroupConnection
   billingPlans: BillingPlanConnection
   metadata: BloomMetadata
+  stripePublicKey: String
 }
 
-################################################################################
-## Mutations
-################################################################################
+####################################################################################################
+## Mutations & Inputs
+####################################################################################################
 
 input RegisterInput {
   displayName: String!

@@ -15,11 +15,11 @@ type Group struct {
 
 type GroupResolver struct{}
 
-func (r *GroupResolver) Members(ctx context.Context, obj *Group) ([]*GroupMember, error) {
+func (r *GroupResolver) Members(ctx context.Context, obj *Group) (*GroupMemberConnection, error) {
 	return nil, errors.New("Forbidden")
 }
-func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) ([]*GroupInvitation, error) {
-	var ret []*GroupInvitation
+func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvitationConnection, error) {
+	var ret *GroupInvitationConnection
 	// logger := rz.FromCtx(ctx)
 	// apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	// if !ok {

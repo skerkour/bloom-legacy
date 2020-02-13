@@ -6,7 +6,6 @@ import (
 
 	"gitlab.com/bloom42/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
@@ -40,7 +39,7 @@ type invit struct {
 	InviterDisplayName string    `db:"inviter_display_name"`
 }
 
-func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) ([]*GroupInvitation, error) {
+func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) (*GroupInvitationConnection, error) {
 	var ret []*GroupInvitation
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -78,7 +77,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 	return ret, nil
 }
 
-func (resolver *UserResolver) Groups(ctx context.Context, user *User) ([]*Group, error) {
+func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupConnection, error) {
 	var ret []*Group
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -116,15 +115,15 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) ([]*Group,
 	return ret, nil
 }
 
-func (resolver *UserResolver) Invoices(ctx context.Context, user *User) ([]*Invoice, error) {
+func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*InvoiceConnection, error) {
 	return nil, nil
 }
 
-func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) ([]*PaymentMethod, error) {
+func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*PaymentMethodConnection, error) {
 	return nil, nil
 }
 
-func (resolver *UserResolver) Sessions(ctx context.Context, user *User) ([]*Session, error) {
+func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*SessionConnection, error) {
 	var ret []*Session
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -152,18 +151,6 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) ([]*Sess
 		ret = append(ret, &sess)
 	}
 
-	return ret, nil
-}
-
-func (resolver *UserResolver) StripePublicKey(ctx context.Context, user *User) (*string, error) {
-	var ret *string
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	ret = &config.Stripe.PublicKey
 	return ret, nil
 }
 

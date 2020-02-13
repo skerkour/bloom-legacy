@@ -2,11 +2,12 @@ package query
 
 import (
 	"context"
+
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
-func (r *Resolver) Groups(ctx context.Context, limit *int, offset *int) ([]*model.Group, error) {
-	var ret []*model.Group
+func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
+	var ret *model.GroupConnection
 	// ret := &rpc.GroupList{Groups: []*rpc.Group{}}
 	// logger := rz.FromCtx(ctx)
 	// apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)

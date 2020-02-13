@@ -21,7 +21,7 @@ type BillingPlan struct {
 	StripeID    *string         `json:"stripeId"`
 }
 
-func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (*Int64, error) {
+func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (*UserConnection, error) {
 	var ret *Int64
 	currentUser := apiutil.UserFromCtx(ctx)
 
