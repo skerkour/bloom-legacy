@@ -10,12 +10,14 @@ import (
 )
 
 type AcceptGroupInvitationInput struct {
+	// group id
 	ID string `json:"id"`
 }
 
 type AddPaymentMethodInput struct {
-	StripeID string  `json:"stripeId"`
-	GroupID  *string `json:"groupId"`
+	StripeID string `json:"stripeId"`
+	// if groupId is null, add to current user
+	GroupID *string `json:"groupId"`
 }
 
 type BillingPlanConnection struct {
@@ -30,13 +32,15 @@ type BillingPlanEdge struct {
 }
 
 type BillingPlanInput struct {
-	ID          *string        `json:"id"`
-	Name        string         `json:"name"`
-	Product     BillingProduct `json:"product"`
-	StripeID    string         `json:"stripeId"`
-	Description string         `json:"description"`
-	IsPublic    bool           `json:"isPublic"`
-	Storage     Int64          `json:"storage"`
+	ID      *string        `json:"id"`
+	Name    string         `json:"name"`
+	Product BillingProduct `json:"product"`
+	// the strip id of the stripe plan. starting with 'plan_'
+	StripeID string `json:"stripeId"`
+	// HTML description
+	Description string `json:"description"`
+	IsPublic    bool   `json:"isPublic"`
+	Storage     Int64  `json:"storage"`
 }
 
 type BloomMetadata struct {
@@ -47,20 +51,24 @@ type BloomMetadata struct {
 }
 
 type CancelGroupInvitationInput struct {
+	// group id
 	ID string `json:"id"`
 }
 
+// if groupId and userId are null (reserved for admins), add to current user
 type ChangeBillingPlanInput struct {
 	ID      string  `json:"id"`
 	UserID  *string `json:"userId"`
 	GroupID *string `json:"groupId"`
 }
 
+// set payment method with `id` as the default one
 type ChangeDefaultPaymentMethodInput struct {
 	ID string `json:"id"`
 }
 
 type CompleteRegistrationInput struct {
+	// pending user id
 	ID       string              `json:"id"`
 	Username string              `json:"username"`
 	AuthKey  Bytes               `json:"authKey"`
@@ -68,12 +76,14 @@ type CompleteRegistrationInput struct {
 }
 
 type CreateGroupInput struct {
-	Name          string   `json:"name"`
-	Description   string   `json:"description"`
+	Name        string `json:"name"`
+	Description string `json:"description"`
+	// users to invite, by username
 	UsersToInvite []string `json:"usersToInvite"`
 }
 
 type DeclineGroupInvitationInput struct {
+	// group id
 	ID string `json:"id"`
 }
 
@@ -97,15 +107,17 @@ type GroupEdge struct {
 }
 
 type GroupInput struct {
-	ID          string `json:"id"`
-	Name        string `json:"name"`
-	Description string `json:"description"`
+	// group id
+	ID          string  `json:"id"`
+	Name        *string `json:"name"`
+	Description *string `json:"description"`
 }
 
 type GroupInvitation struct {
 	ID      string `json:"id"`
 	Group   *Group `json:"group"`
 	Inviter *User  `json:"inviter"`
+	Invitee *User  `json:"invitee"`
 }
 
 type GroupInvitationConnection struct {
@@ -133,8 +145,10 @@ type GroupMemberEdge struct {
 }
 
 type InviteUsersInGroupInput struct {
-	ID        string   `json:"id"`
-	Usernames []string `json:"usernames"`
+	// group id
+	ID string `json:"id"`
+	// users to invite, by username
+	Users []string `json:"users"`
 }
 
 type Invoice struct {
@@ -179,6 +193,7 @@ type PaymentMethodEdge struct {
 }
 
 type QuitGroupInput struct {
+	// group id
 	ID string `json:"id"`
 }
 
@@ -192,10 +207,13 @@ type RegistrationStarted struct {
 }
 
 type RemoveGroupMembersInput struct {
-	ID        string   `json:"id"`
-	Usernames []string `json:"usernames"`
+	// group id
+	ID string `json:"id"`
+	// members to remvove, by username
+	Members []string `json:"members"`
 }
 
+// remove payment method with `id`
 type RemovePaymentMethodInput struct {
 	ID string `json:"id"`
 }
@@ -247,14 +265,6 @@ type SignedIn struct {
 	Me      *User    `json:"me"`
 }
 
-type UpdateUserProfileInput struct {
-	ID          *string `json:"id"`
-	DisplayName *string `json:"displayName"`
-	Bio         *string `json:"bio"`
-	FirstName   *string `json:"firstName"`
-	LastName    *string `json:"lastName"`
-}
-
 type UserConnection struct {
 	Edges      []*UserEdge `json:"edges"`
 	PageInfo   *PageInfo   `json:"pageInfo"`
@@ -266,7 +276,17 @@ type UserEdge struct {
 	Node   *User  `json:"node"`
 }
 
+type UserProfileInput struct {
+	// id is reserved for admins
+	ID          *string `json:"id"`
+	DisplayName *string `json:"displayName"`
+	Bio         *string `json:"bio"`
+	FirstName   *string `json:"firstName"`
+	LastName    *string `json:"lastName"`
+}
+
 type VerifyRegistrationInput struct {
+	// pending user id
 	ID   string `json:"id"`
 	Code string `json:"code"`
 }

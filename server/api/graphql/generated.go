@@ -100,6 +100,7 @@ type ComplexityRoot struct {
 	GroupInvitation struct {
 		Group   func(childComplexity int) int
 		ID      func(childComplexity int) int
+		Invitee func(childComplexity int) int
 		Inviter func(childComplexity int) int
 	}
 
@@ -550,6 +551,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupInvitation.ID(childComplexity), true
+
+	case "GroupInvitation.invitee":
+		if e.complexity.GroupInvitation.Invitee == nil {
+			break
+		}
+
+		return e.complexity.GroupInvitation.Invitee(childComplexity), true
 
 	case "GroupInvitation.inviter":
 		if e.complexity.GroupInvitation.Inviter == nil {
@@ -1573,6 +1581,7 @@ type GroupInvitation {
   id: ID!
   group: Group!
   inviter: User!
+  invitee: User!
 }
 
 type GroupInvitationConnection {
@@ -1701,11 +1710,13 @@ input RegisterInput {
 }
 
 input VerifyRegistrationInput {
+  """pending user id"""
   id: ID!
   code: String!
 }
 
 input CompleteRegistrationInput {
+  """pending user id"""
   id: ID!
   username: String!
   authKey: Bytes!
@@ -1743,36 +1754,43 @@ input DeleteGroupInput {
 }
 
 input GroupInput {
+  """group id"""
   id: ID!
   name: String
   description: String
 }
 
 input RemoveGroupMembersInput {
+  """group id"""
   id: ID!
   """members to remvove, by username"""
   members: [String!]!
 }
 
 input AcceptGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input CancelGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input DeclineGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input InviteUsersInGroupInput {
+  """group id"""
   id: ID!
   """users to invite, by username"""
   users: [String!]!
 }
 
 input QuitGroupInput {
+  """group id"""
   id: ID!
 }
 
@@ -1780,7 +1798,9 @@ input BillingPlanInput {
   id: ID
   name: String!
   product: BillingProduct!
+  """the strip id of the stripe plan. starting with 'plan_'"""
   stripeId: String!
+  """HTML description"""
   description: String!
   isPublic: Boolean!
   storage: Int64!
@@ -1790,6 +1810,7 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
+"""if groupId and userId are null (reserved for admins), add to current user"""
 input ChangeBillingPlanInput {
   id: ID!
   userId: String
@@ -1832,6 +1853,7 @@ type Mutation {
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   """Sign in"""
   signIn(input: SignInInput!):  SignedIn!
+  """Revoke a session. Use it for sign out."""
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
   updateUserProfile(input: UserProfileInput!): User!
@@ -3315,6 +3337,40 @@ func (ec *executionContext) _GroupInvitation_inviter(ctx context.Context, field 
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
 		return obj.Inviter, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.User)
+	fc.Result = res
+	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupInvitation_invitee(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupInvitation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Invitee, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -8757,6 +8813,11 @@ func (ec *executionContext) _GroupInvitation(ctx context.Context, sel ast.Select
 			}
 		case "inviter":
 			out.Values[i] = ec._GroupInvitation_inviter(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "invitee":
+			out.Values[i] = ec._GroupInvitation_invitee(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

@@ -138,6 +138,7 @@ type GroupInvitation {
   id: ID!
   group: Group!
   inviter: User!
+  invitee: User!
 }
 
 type GroupInvitationConnection {
@@ -266,11 +267,13 @@ input RegisterInput {
 }
 
 input VerifyRegistrationInput {
+  """pending user id"""
   id: ID!
   code: String!
 }
 
 input CompleteRegistrationInput {
+  """pending user id"""
   id: ID!
   username: String!
   authKey: Bytes!
@@ -308,36 +311,43 @@ input DeleteGroupInput {
 }
 
 input GroupInput {
+  """group id"""
   id: ID!
   name: String
   description: String
 }
 
 input RemoveGroupMembersInput {
+  """group id"""
   id: ID!
   """members to remvove, by username"""
   members: [String!]!
 }
 
 input AcceptGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input CancelGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input DeclineGroupInvitationInput {
+  """group id"""
   id: ID!
 }
 
 input InviteUsersInGroupInput {
+  """group id"""
   id: ID!
   """users to invite, by username"""
   users: [String!]!
 }
 
 input QuitGroupInput {
+  """group id"""
   id: ID!
 }
 
@@ -345,7 +355,9 @@ input BillingPlanInput {
   id: ID
   name: String!
   product: BillingProduct!
+  """the strip id of the stripe plan. starting with 'plan_'"""
   stripeId: String!
+  """HTML description"""
   description: String!
   isPublic: Boolean!
   storage: Int64!
@@ -355,6 +367,7 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
+"""if groupId and userId are null (reserved for admins), add to current user"""
 input ChangeBillingPlanInput {
   id: ID!
   userId: String
@@ -397,6 +410,7 @@ type Mutation {
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   """Sign in"""
   signIn(input: SignInInput!):  SignedIn!
+  """Revoke a session. Use it for sign out."""
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
   updateUserProfile(input: UserProfileInput!): User!
