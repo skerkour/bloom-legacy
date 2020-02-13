@@ -13,7 +13,7 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, tier string, storage int64, isPublic bool) (*Plan, error) {
+func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, product string, storage int64, isPublic bool) (*Plan, error) {
 	var ret *Plan
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -30,8 +30,8 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	name = strings.TrimSpace(name)
 	stripeId = strings.TrimSpace(stripeId)
 	description = strings.TrimSpace(description)
-	tier = strings.TrimSpace(tier)
-	if err = validateCreatePlan(name, description, tier, stripeId, storage); err != nil {
+	product = strings.TrimSpace(product)
+	if err = validateCreatePlan(name, description, product, stripeId, storage); err != nil {
 		return ret, err
 	}
 
@@ -52,16 +52,16 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 		StripeID:    stripeId,
 		Price:       stripePlan.Amount,
 		IsPublic:    isPublic,
-		Tier:        tier,
+		Product:     product,
 		Storage:     storage,
 	}
 
 	// create plan
 	queryCreatePlan := `INSERT INTO billing_plans
-		(id, created_at, updated_at, name, description, stripe_id, price, is_public, tier, storage)
+		(id, created_at, updated_at, name, description, stripe_id, price, is_public, product, storage)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 	_, err = tx.Exec(queryCreatePlan, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description,
-		ret.StripeID, ret.Price, ret.IsPublic, ret.Tier, ret.Storage)
+		ret.StripeID, ret.Price, ret.IsPublic, ret.Product, ret.Storage)
 	if err != nil {
 		logger.Error("billing.CreatePlan: inserting new plan", rz.Err(err))
 		return ret, NewError(ErrorCreatingPlan)
@@ -70,14 +70,14 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	return ret, err
 }
 
-func validateCreatePlan(name, description, tier, stripeId string, storage int64) error {
+func validateCreatePlan(name, description, product, stripeId string, storage int64) error {
 	var err error
 
 	if err = validator.BillingPlanName(name); err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if err = validator.BillingPlanTier(tier); err != nil {
+	if err = validator.BillingProduct(product); err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 

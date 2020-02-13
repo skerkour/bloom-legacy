@@ -81,7 +81,7 @@ func ChangePlan(ctx context.Context, actor *users.User, userId, groupId *string,
 		tx.Rollback()
 		return ret, NewError(ErrorOldPlanIsTheSameAsNewPlan)
 	}
-	newAllowedStorage := GetAllowedStorageFromPlanTier(newPlan.Tier)
+	newAllowedStorage := GetAllowedStorageFromPlanProduct(newPlan.Product)
 	if customer.UsedStorage > newAllowedStorage {
 		tx.Rollback()
 		return ret, NewError(ErrorTooMuchStorageUsedForNewPlan)

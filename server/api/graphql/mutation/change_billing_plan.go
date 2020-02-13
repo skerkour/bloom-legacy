@@ -27,7 +27,7 @@ func (r *Resolver) ChangeBillingPlan(ctx context.Context, input model.ChangeBill
 		ID:          newPlan.ID,
 		Name:        newPlan.Name,
 		Description: newPlan.Description,
-		Tier:        model.BillingPlanTier(newPlan.Tier),
+		Product:     model.BillingProduct(newPlan.Product),
 		Price:       model.Int64(newPlan.Price),
 		IsPublic:    newPlan.IsPublic,
 		Storage:     model.Int64(newPlan.Storage),

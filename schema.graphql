@@ -12,6 +12,7 @@ enum SessionDeviceOS {
   WINDOWS
   ANDROID
   IOS
+  OTHER
 }
 
 enum SessionDeviceType {
@@ -22,6 +23,7 @@ enum SessionDeviceType {
   WATCH
   COMPUTER
   CAR
+  OTHER
 }
 
 enum GroupMemberRole {
@@ -29,7 +31,7 @@ enum GroupMemberRole {
   MEMBER
 }
 
-enum BillingPlanTier {
+enum BillingProduct {
   FREE
   BASIC
   PRO
@@ -172,7 +174,7 @@ type BillingPlan {
   name: String!
   description: String!
   isPublic: Boolean!
-  tier: BillingPlanTier!
+  product: BillingProduct!
   storage: Int64!
   stripeId: String
   subscribers: UserConnection
@@ -337,7 +339,7 @@ input QuitGroupInput {
 input BillingPlanInput {
   id: ID
   name: String!
-  tier: BillingPlanTier!
+  product: BillingProduct!
   stripeId: String!
   description: String!
   isPublic: Boolean!

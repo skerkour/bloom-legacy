@@ -199,7 +199,7 @@ func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*Bil
 		Description: plan.Description,
 		IsPublic:    plan.IsPublic,
 		StripeID:    stripeId,
-		Tier:        BillingPlanTier(plan.Tier),
+		Product:     BillingProduct(plan.Product),
 		Storage:     Int64(plan.Storage),
 	}
 	return ret, nil

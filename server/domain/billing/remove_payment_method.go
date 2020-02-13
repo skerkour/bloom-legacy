@@ -70,7 +70,7 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 				tx.Rollback()
 				return err
 			}
-			if plan.Tier != "FREE" {
+			if plan.Product != "FREE" {
 				tx.Rollback()
 				return NewError(ErrorRemovingDefaultPaymentMethodOnNonFreePlan)
 			}

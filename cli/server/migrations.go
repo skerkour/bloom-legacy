@@ -10,7 +10,10 @@ import (
 	"gitlab.com/bloom42/libs/rz-go/log"
 )
 
+var allMigrationsFlag bool
+
 func init() {
+	migrationsCmd.PersistentFlags().BoolVarP(&allMigrationsFlag, "all", "a", false, "Run or rever all migrations")
 	migrationsCmd.AddCommand(migrationsRunCmd)
 	migrationsCmd.AddCommand(migrationsRevertCmd)
 	ServerCmd.AddCommand(migrationsCmd)
@@ -41,7 +44,12 @@ var migrationsRunCmd = &cobra.Command{
 			log.Fatal("Initializing DB connection", rz.Err(err))
 		}
 
-		err = migrate.Up()
+		if allMigrationsFlag {
+			err = migrate.Up()
+		} else {
+			err = migrate.Steps(1)
+		}
+
 		if err != nil {
 			log.Fatal("Running migrations", rz.Err(err))
 		}
@@ -64,9 +72,13 @@ var migrationsRevertCmd = &cobra.Command{
 			log.Fatal("Initializing DB connection", rz.Err(err))
 		}
 
-		err = migrate.Steps(-1)
+		if allMigrationsFlag {
+			err = migrate.Down()
+		} else {
+			err = migrate.Steps(-1)
+		}
 		if err != nil {
-			log.Fatal("Running migrations", rz.Err(err))
+			log.Fatal("Reverting migrations", rz.Err(err))
 		}
 	},
 }

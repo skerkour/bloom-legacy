@@ -19,7 +19,7 @@ type Plan struct {
 	Price       int64  `json:"price" db:"price"`
 	Description string `json:"description" db:"description"`
 	IsPublic    bool   `json:"is_public" db:"is_public"`
-	Tier        string `json:"tier" db:"tier"`
+	Product     string `json:"product" db:"product"`
 	Storage     int64  `json:"storage" db:"storage"`
 }
 
@@ -29,8 +29,8 @@ func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	// queryFindPlan := "SELECT * FROM billing_plans WHERE tier = $1 AND is_public = $2"
-	// err = tx.Get(&plan, queryFindPlan, consts.BILLING_FREE_TIER, true)
+	// queryFindPlan := "SELECT * FROM billing_plans WHERE product = $1 AND is_public = $2"
+	// err = tx.Get(&plan, queryFindPlan, consts.BILLING_PRODUCT_FREE, true)
 	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1"
 	err = tx.Get(&plan, queryFindPlan, DefaultBillingPlanId)
 	if err != nil {

@@ -53,10 +53,10 @@ type ComplexityRoot struct {
 		IsPublic    func(childComplexity int) int
 		Name        func(childComplexity int) int
 		Price       func(childComplexity int) int
+		Product     func(childComplexity int) int
 		Storage     func(childComplexity int) int
 		StripeID    func(childComplexity int) int
 		Subscribers func(childComplexity int) int
-		Tier        func(childComplexity int) int
 	}
 
 	BillingPlanConnection struct {
@@ -369,6 +369,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BillingPlan.Price(childComplexity), true
 
+	case "BillingPlan.product":
+		if e.complexity.BillingPlan.Product == nil {
+			break
+		}
+
+		return e.complexity.BillingPlan.Product(childComplexity), true
+
 	case "BillingPlan.storage":
 		if e.complexity.BillingPlan.Storage == nil {
 			break
@@ -389,13 +396,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingPlan.Subscribers(childComplexity), true
-
-	case "BillingPlan.tier":
-		if e.complexity.BillingPlan.Tier == nil {
-			break
-		}
-
-		return e.complexity.BillingPlan.Tier(childComplexity), true
 
 	case "BillingPlanConnection.edges":
 		if e.complexity.BillingPlanConnection.Edges == nil {
@@ -1447,6 +1447,7 @@ enum SessionDeviceOS {
   WINDOWS
   ANDROID
   IOS
+  OTHER
 }
 
 enum SessionDeviceType {
@@ -1457,6 +1458,7 @@ enum SessionDeviceType {
   WATCH
   COMPUTER
   CAR
+  OTHER
 }
 
 enum GroupMemberRole {
@@ -1464,7 +1466,7 @@ enum GroupMemberRole {
   MEMBER
 }
 
-enum BillingPlanTier {
+enum BillingProduct {
   FREE
   BASIC
   PRO
@@ -1607,7 +1609,7 @@ type BillingPlan {
   name: String!
   description: String!
   isPublic: Boolean!
-  tier: BillingPlanTier!
+  product: BillingProduct!
   storage: Int64!
   stripeId: String
   subscribers: UserConnection
@@ -1772,7 +1774,7 @@ input QuitGroupInput {
 input BillingPlanInput {
   id: ID
   name: String!
-  tier: BillingPlanTier!
+  product: BillingProduct!
   stripeId: String!
   description: String!
   isPublic: Boolean!
@@ -2432,7 +2434,7 @@ func (ec *executionContext) _BillingPlan_isPublic(ctx context.Context, field gra
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
+func (ec *executionContext) _BillingPlan_product(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2449,7 +2451,7 @@ func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Tier, nil
+		return obj.Product, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -2461,9 +2463,9 @@ func (ec *executionContext) _BillingPlan_tier(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.BillingPlanTier)
+	res := resTmp.(model.BillingProduct)
 	fc.Result = res
-	return ec.marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, field.Selections, res)
+	return ec.marshalNBillingProduct2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingProduct(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_storage(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -7903,9 +7905,9 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-		case "tier":
+		case "product":
 			var err error
-			it.Tier, err = ec.unmarshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx, v)
+			it.Product, err = ec.unmarshalNBillingProduct2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingProduct(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8463,8 +8465,8 @@ func (ec *executionContext) _BillingPlan(ctx context.Context, sel ast.SelectionS
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
-		case "tier":
-			out.Values[i] = ec._BillingPlan_tier(ctx, field, obj)
+		case "product":
+			out.Values[i] = ec._BillingPlan_product(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
@@ -10035,12 +10037,12 @@ func (ec *executionContext) unmarshalNBillingPlanInput2gitlabᚗcomᚋbloom42ᚋ
 	return ec.unmarshalInputBillingPlanInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx context.Context, v interface{}) (model.BillingPlanTier, error) {
-	var res model.BillingPlanTier
+func (ec *executionContext) unmarshalNBillingProduct2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingProduct(ctx context.Context, v interface{}) (model.BillingProduct, error) {
+	var res model.BillingProduct
 	return res, res.UnmarshalGQL(v)
 }
 
-func (ec *executionContext) marshalNBillingPlanTier2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanTier(ctx context.Context, sel ast.SelectionSet, v model.BillingPlanTier) graphql.Marshaler {
+func (ec *executionContext) marshalNBillingProduct2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingProduct(ctx context.Context, sel ast.SelectionSet, v model.BillingProduct) graphql.Marshaler {
 	return v
 }
 

@@ -35,7 +35,7 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 			Description: plan.Description,
 			Price:       model.Int64(plan.Price),
 			IsPublic:    plan.IsPublic,
-			Tier:        model.BillingPlanTier(plan.Tier),
+			Product:     model.BillingProduct(plan.Product),
 			Storage:     model.Int64(plan.Storage),
 			StripeID:    stripeID,
 		}
