@@ -1,7 +1,7 @@
 /* eslint-disable camelcase */
 import Vue from 'vue';
 import Vuex from 'vuex';
-import { StorePendingAccount } from '@/bloom/auth/models';
+import { StorePendingAccount } from '@/ui/auth/models';
 import * as models from '@/api/models';
 
 Vue.use(Vuex);

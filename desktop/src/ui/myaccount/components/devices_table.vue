@@ -49,9 +49,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
-import { RevokeSessionParams } from '@/bloom/myaccount/core/messages';
+import { RevokeSessionParams } from '@/ui/myaccount/core/messages';
 import core from '@/core';
-import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import MyAccountMethods from '@/ui/myaccount/core/methods';
 
 @Component
 export default class DevicesTable extends Vue {

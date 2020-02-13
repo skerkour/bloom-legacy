@@ -18,7 +18,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import DevicesTable from '../components/devices_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import MyAccountMethods from '@/ui/myaccount/core/methods';
 
 
 @Component({

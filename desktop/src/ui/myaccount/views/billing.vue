@@ -95,7 +95,7 @@ import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/bloom/myaccount/core/methods';
+import MyAccountMethods from '@/ui/myaccount/core/methods';
 
 
 @Component({
