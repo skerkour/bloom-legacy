@@ -30,13 +30,13 @@ type BillingPlanEdge struct {
 }
 
 type BillingPlanInput struct {
-	ID          *string         `json:"id"`
-	Name        string          `json:"name"`
-	Tier        BillingPlanTier `json:"tier"`
-	StripeID    string          `json:"stripeId"`
-	Description string          `json:"description"`
-	IsPublic    bool            `json:"isPublic"`
-	Storage     Int64           `json:"storage"`
+	ID          *string        `json:"id"`
+	Name        string         `json:"name"`
+	Product     BillingProduct `json:"product"`
+	StripeID    string         `json:"stripeId"`
+	Description string         `json:"description"`
+	IsPublic    bool           `json:"isPublic"`
+	Storage     Int64          `json:"storage"`
 }
 
 type BloomMetadata struct {
@@ -271,48 +271,48 @@ type VerifyRegistrationInput struct {
 	Code string `json:"code"`
 }
 
-type BillingPlanTier string
+type BillingProduct string
 
 const (
-	BillingPlanTierFree  BillingPlanTier = "FREE"
-	BillingPlanTierBasic BillingPlanTier = "BASIC"
-	BillingPlanTierPro   BillingPlanTier = "PRO"
-	BillingPlanTierUltra BillingPlanTier = "ULTRA"
+	BillingProductFree  BillingProduct = "FREE"
+	BillingProductBasic BillingProduct = "BASIC"
+	BillingProductPro   BillingProduct = "PRO"
+	BillingProductUltra BillingProduct = "ULTRA"
 )
 
-var AllBillingPlanTier = []BillingPlanTier{
-	BillingPlanTierFree,
-	BillingPlanTierBasic,
-	BillingPlanTierPro,
-	BillingPlanTierUltra,
+var AllBillingProduct = []BillingProduct{
+	BillingProductFree,
+	BillingProductBasic,
+	BillingProductPro,
+	BillingProductUltra,
 }
 
-func (e BillingPlanTier) IsValid() bool {
+func (e BillingProduct) IsValid() bool {
 	switch e {
-	case BillingPlanTierFree, BillingPlanTierBasic, BillingPlanTierPro, BillingPlanTierUltra:
+	case BillingProductFree, BillingProductBasic, BillingProductPro, BillingProductUltra:
 		return true
 	}
 	return false
 }
 
-func (e BillingPlanTier) String() string {
+func (e BillingProduct) String() string {
 	return string(e)
 }
 
-func (e *BillingPlanTier) UnmarshalGQL(v interface{}) error {
+func (e *BillingProduct) UnmarshalGQL(v interface{}) error {
 	str, ok := v.(string)
 	if !ok {
 		return fmt.Errorf("enums must be strings")
 	}
 
-	*e = BillingPlanTier(str)
+	*e = BillingProduct(str)
 	if !e.IsValid() {
-		return fmt.Errorf("%s is not a valid BillingPlanTier", str)
+		return fmt.Errorf("%s is not a valid BillingProduct", str)
 	}
 	return nil
 }
 
-func (e BillingPlanTier) MarshalGQL(w io.Writer) {
+func (e BillingProduct) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
 
@@ -365,6 +365,7 @@ const (
 	SessionDeviceOsWindows SessionDeviceOs = "WINDOWS"
 	SessionDeviceOsAndroid SessionDeviceOs = "ANDROID"
 	SessionDeviceOsIos     SessionDeviceOs = "IOS"
+	SessionDeviceOsOther   SessionDeviceOs = "OTHER"
 )
 
 var AllSessionDeviceOs = []SessionDeviceOs{
@@ -373,11 +374,12 @@ var AllSessionDeviceOs = []SessionDeviceOs{
 	SessionDeviceOsWindows,
 	SessionDeviceOsAndroid,
 	SessionDeviceOsIos,
+	SessionDeviceOsOther,
 }
 
 func (e SessionDeviceOs) IsValid() bool {
 	switch e {
-	case SessionDeviceOsLinux, SessionDeviceOsMacos, SessionDeviceOsWindows, SessionDeviceOsAndroid, SessionDeviceOsIos:
+	case SessionDeviceOsLinux, SessionDeviceOsMacos, SessionDeviceOsWindows, SessionDeviceOsAndroid, SessionDeviceOsIos, SessionDeviceOsOther:
 		return true
 	}
 	return false
@@ -414,6 +416,7 @@ const (
 	SessionDeviceTypeWatch    SessionDeviceType = "WATCH"
 	SessionDeviceTypeComputer SessionDeviceType = "COMPUTER"
 	SessionDeviceTypeCar      SessionDeviceType = "CAR"
+	SessionDeviceTypeOther    SessionDeviceType = "OTHER"
 )
 
 var AllSessionDeviceType = []SessionDeviceType{
@@ -424,11 +427,12 @@ var AllSessionDeviceType = []SessionDeviceType{
 	SessionDeviceTypeWatch,
 	SessionDeviceTypeComputer,
 	SessionDeviceTypeCar,
+	SessionDeviceTypeOther,
 }
 
 func (e SessionDeviceType) IsValid() bool {
 	switch e {
-	case SessionDeviceTypeTv, SessionDeviceTypeConsole, SessionDeviceTypeMobile, SessionDeviceTypeTablet, SessionDeviceTypeWatch, SessionDeviceTypeComputer, SessionDeviceTypeCar:
+	case SessionDeviceTypeTv, SessionDeviceTypeConsole, SessionDeviceTypeMobile, SessionDeviceTypeTablet, SessionDeviceTypeWatch, SessionDeviceTypeComputer, SessionDeviceTypeCar, SessionDeviceTypeOther:
 		return true
 	}
 	return false
