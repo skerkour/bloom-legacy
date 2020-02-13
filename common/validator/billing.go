@@ -26,11 +26,11 @@ func BillingPlanName(name string) error {
 	return nil
 }
 
-func BillingPlanTier(tier string) error {
-	if tier != consts.BILLING_FREE_TIER && tier != consts.BILLING_BASIC_TIER &&
-		tier != consts.BILLING_PRO_TIER && tier != consts.BILLING_ULTRA_TIER {
-		return fmt.Errorf("tier should be either %s, %s, %s or %s", consts.BILLING_FREE_TIER, consts.BILLING_BASIC_TIER,
-			consts.BILLING_PRO_TIER, consts.BILLING_ULTRA_TIER)
+func BillingPlanProduct(product string) error {
+	if product != consts.BILLING_PRODUCT_FREE && product != consts.BILLING_PRODUCT_BASIC &&
+		product != consts.BILLING_PRODUCT_PRO && product != consts.BILLING_PRODUCT_ULTRA {
+		return fmt.Errorf("product should be either %s, %s, %s or %s", consts.BILLING_PRODUCT_FREE, consts.BILLING_PRODUCT_BASIC,
+			consts.BILLING_PRODUCT_PRO, consts.BILLING_PRODUCT_ULTRA)
 	}
 
 	return nil
