@@ -20,7 +20,6 @@ type AddPaymentMethodInput struct {
 
 type BillingPlanConnection struct {
 	Edges      []*BillingPlanEdge `json:"edges"`
-	Nodes      []*BillingPlan     `json:"nodes"`
 	PageInfo   *PageInfo          `json:"pageInfo"`
 	TotalCount Int64              `json:"totalCount"`
 }
@@ -88,7 +87,6 @@ type DeleteGroupInput struct {
 
 type GroupConnection struct {
 	Edges      []*GroupEdge `json:"edges"`
-	Nodes      []*Group     `json:"nodes"`
 	PageInfo   *PageInfo    `json:"pageInfo"`
 	TotalCount Int64        `json:"totalCount"`
 }
@@ -112,7 +110,6 @@ type GroupInvitation struct {
 
 type GroupInvitationConnection struct {
 	Edges      []*GroupInvitationEdge `json:"edges"`
-	Nodes      []*GroupInvitation     `json:"nodes"`
 	PageInfo   *PageInfo              `json:"pageInfo"`
 	TotalCount Int64                  `json:"totalCount"`
 }
@@ -122,21 +119,17 @@ type GroupInvitationEdge struct {
 	Node   *GroupInvitation `json:"node"`
 }
 
-type GroupMember struct {
-	User *User           `json:"user"`
-	Role GroupMemberRole `json:"role"`
-}
-
 type GroupMemberConnection struct {
 	Edges      []*GroupMemberEdge `json:"edges"`
-	Nodes      []*GroupMember     `json:"nodes"`
 	PageInfo   *PageInfo          `json:"pageInfo"`
 	TotalCount Int64              `json:"totalCount"`
 }
 
 type GroupMemberEdge struct {
-	Cursor string       `json:"cursor"`
-	Node   *GroupMember `json:"node"`
+	Cursor   string           `json:"cursor"`
+	Node     *User            `json:"node"`
+	Role     *GroupMemberRole `json:"role"`
+	JoinedAt *time.Time       `json:"joinedAt"`
 }
 
 type InviteUsersInGroupInput struct {
@@ -150,7 +143,6 @@ type Invoice struct {
 
 type InvoiceConnection struct {
 	Edges      []*InvoiceEdge `json:"edges"`
-	Nodes      []*Invoice     `json:"nodes"`
 	PageInfo   *PageInfo      `json:"pageInfo"`
 	TotalCount Int64          `json:"totalCount"`
 }
@@ -177,7 +169,6 @@ type PaymentMethod struct {
 
 type PaymentMethodConnection struct {
 	Edges      []*PaymentMethodEdge `json:"edges"`
-	Nodes      []*PaymentMethod     `json:"nodes"`
 	PageInfo   *PageInfo            `json:"pageInfo"`
 	TotalCount Int64                `json:"totalCount"`
 }
@@ -226,7 +217,6 @@ type Session struct {
 
 type SessionConnection struct {
 	Edges      []*SessionEdge `json:"edges"`
-	Nodes      []*Session     `json:"nodes"`
 	PageInfo   *PageInfo      `json:"pageInfo"`
 	TotalCount Int64          `json:"totalCount"`
 }
@@ -267,7 +257,6 @@ type UpdateUserProfileInput struct {
 
 type UserConnection struct {
 	Edges      []*UserEdge `json:"edges"`
-	Nodes      []*User     `json:"nodes"`
 	PageInfo   *PageInfo   `json:"pageInfo"`
 	TotalCount Int64       `json:"totalCount"`
 }

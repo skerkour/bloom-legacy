@@ -65,7 +65,6 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 
 	ret = &GroupInvitationConnection{
 		Edges:      []*GroupInvitationEdge{},
-		Nodes:      []*GroupInvitation{},
 		TotalCount: Int64(len(invitations)),
 	}
 
@@ -80,7 +79,6 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 		edge := &GroupInvitationEdge{
 			Node: invitatio,
 		}
-		ret.Nodes = append(ret.Nodes, invitatio)
 		ret.Edges = append(ret.Edges, edge)
 	}
 	return ret, nil
@@ -111,7 +109,6 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 
 	ret = &GroupConnection{
 		Edges:      []*GroupEdge{},
-		Nodes:      []*Group{},
 		TotalCount: Int64(len(groups)),
 	}
 
@@ -127,7 +124,6 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		edge := &GroupEdge{
 			Node: grp,
 		}
-		ret.Nodes = append(ret.Nodes, grp)
 		ret.Edges = append(ret.Edges, edge)
 	}
 	return ret, nil
@@ -156,7 +152,6 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 
 	ret = &SessionConnection{
 		Edges:      []*SessionEdge{},
-		Nodes:      []*Session{},
 		TotalCount: Int64(len(sessions)),
 	}
 
@@ -173,7 +168,6 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 		edge := &SessionEdge{
 			Node: sess,
 		}
-		ret.Nodes = append(ret.Nodes, sess)
 		ret.Edges = append(ret.Edges, edge)
 	}
 

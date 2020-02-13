@@ -21,7 +21,6 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 
 	ret = &model.BillingPlanConnection{
 		Edges:      []*model.BillingPlanEdge{},
-		Nodes:      []*model.BillingPlan{},
 		TotalCount: model.Int64(len(plans)),
 	}
 
@@ -43,7 +42,6 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 		edge := &model.BillingPlanEdge{
 			Node: billingPlan,
 		}
-		ret.Nodes = append(ret.Nodes, billingPlan)
 		ret.Edges = append(ret.Edges, edge)
 	}
 

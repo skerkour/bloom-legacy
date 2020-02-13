@@ -2,7 +2,6 @@ package model
 
 import (
 	"context"
-	"errors"
 	"time"
 )
 
@@ -16,10 +15,11 @@ type Group struct {
 type GroupResolver struct{}
 
 func (r *GroupResolver) Members(ctx context.Context, obj *Group) (*GroupMemberConnection, error) {
-	return nil, errors.New("Forbidden")
+	panic("not implemented")
 }
+
 func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvitationConnection, error) {
-	var ret *GroupInvitationConnection
+	panic("not implemented")
 	// logger := rz.FromCtx(ctx)
 	// apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
 	// if !ok {
@@ -63,5 +63,4 @@ func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvi
 	// for _, invitation := range invitations {
 	// 	ret.Invitations = append(ret.Invitations, invitToRpcInvitation(invitation))
 	// }
-	return ret, nil
 }

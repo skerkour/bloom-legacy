@@ -61,7 +61,6 @@ type ComplexityRoot struct {
 
 	BillingPlanConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -89,7 +88,6 @@ type ComplexityRoot struct {
 
 	GroupConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -107,7 +105,6 @@ type ComplexityRoot struct {
 
 	GroupInvitationConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -117,21 +114,17 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
-	GroupMember struct {
-		Role func(childComplexity int) int
-		User func(childComplexity int) int
-	}
-
 	GroupMemberConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
 
 	GroupMemberEdge struct {
-		Cursor func(childComplexity int) int
-		Node   func(childComplexity int) int
+		Cursor   func(childComplexity int) int
+		JoinedAt func(childComplexity int) int
+		Node     func(childComplexity int) int
+		Role     func(childComplexity int) int
 	}
 
 	Invoice struct {
@@ -140,7 +133,6 @@ type ComplexityRoot struct {
 
 	InvoiceConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -193,7 +185,6 @@ type ComplexityRoot struct {
 
 	PaymentMethodConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -227,7 +218,6 @@ type ComplexityRoot struct {
 
 	SessionConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -268,7 +258,6 @@ type ComplexityRoot struct {
 
 	UserConnection struct {
 		Edges      func(childComplexity int) int
-		Nodes      func(childComplexity int) int
 		PageInfo   func(childComplexity int) int
 		TotalCount func(childComplexity int) int
 	}
@@ -415,13 +404,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BillingPlanConnection.Edges(childComplexity), true
 
-	case "BillingPlanConnection.nodes":
-		if e.complexity.BillingPlanConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.BillingPlanConnection.Nodes(childComplexity), true
-
 	case "BillingPlanConnection.pageInfo":
 		if e.complexity.BillingPlanConnection.PageInfo == nil {
 			break
@@ -527,13 +509,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupConnection.Edges(childComplexity), true
 
-	case "GroupConnection.nodes":
-		if e.complexity.GroupConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.GroupConnection.Nodes(childComplexity), true
-
 	case "GroupConnection.pageInfo":
 		if e.complexity.GroupConnection.PageInfo == nil {
 			break
@@ -590,13 +565,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupInvitationConnection.Edges(childComplexity), true
 
-	case "GroupInvitationConnection.nodes":
-		if e.complexity.GroupInvitationConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.GroupInvitationConnection.Nodes(childComplexity), true
-
 	case "GroupInvitationConnection.pageInfo":
 		if e.complexity.GroupInvitationConnection.PageInfo == nil {
 			break
@@ -625,33 +593,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupInvitationEdge.Node(childComplexity), true
 
-	case "GroupMember.role":
-		if e.complexity.GroupMember.Role == nil {
-			break
-		}
-
-		return e.complexity.GroupMember.Role(childComplexity), true
-
-	case "GroupMember.user":
-		if e.complexity.GroupMember.User == nil {
-			break
-		}
-
-		return e.complexity.GroupMember.User(childComplexity), true
-
 	case "GroupMemberConnection.edges":
 		if e.complexity.GroupMemberConnection.Edges == nil {
 			break
 		}
 
 		return e.complexity.GroupMemberConnection.Edges(childComplexity), true
-
-	case "GroupMemberConnection.nodes":
-		if e.complexity.GroupMemberConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.GroupMemberConnection.Nodes(childComplexity), true
 
 	case "GroupMemberConnection.pageInfo":
 		if e.complexity.GroupMemberConnection.PageInfo == nil {
@@ -674,12 +621,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupMemberEdge.Cursor(childComplexity), true
 
+	case "GroupMemberEdge.joinedAt":
+		if e.complexity.GroupMemberEdge.JoinedAt == nil {
+			break
+		}
+
+		return e.complexity.GroupMemberEdge.JoinedAt(childComplexity), true
+
 	case "GroupMemberEdge.node":
 		if e.complexity.GroupMemberEdge.Node == nil {
 			break
 		}
 
 		return e.complexity.GroupMemberEdge.Node(childComplexity), true
+
+	case "GroupMemberEdge.role":
+		if e.complexity.GroupMemberEdge.Role == nil {
+			break
+		}
+
+		return e.complexity.GroupMemberEdge.Role(childComplexity), true
 
 	case "Invoice.id":
 		if e.complexity.Invoice.ID == nil {
@@ -694,13 +655,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.InvoiceConnection.Edges(childComplexity), true
-
-	case "InvoiceConnection.nodes":
-		if e.complexity.InvoiceConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.InvoiceConnection.Nodes(childComplexity), true
 
 	case "InvoiceConnection.pageInfo":
 		if e.complexity.InvoiceConnection.PageInfo == nil {
@@ -1076,13 +1030,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PaymentMethodConnection.Edges(childComplexity), true
 
-	case "PaymentMethodConnection.nodes":
-		if e.complexity.PaymentMethodConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.PaymentMethodConnection.Nodes(childComplexity), true
-
 	case "PaymentMethodConnection.pageInfo":
 		if e.complexity.PaymentMethodConnection.PageInfo == nil {
 			break
@@ -1218,13 +1165,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SessionConnection.Edges(childComplexity), true
-
-	case "SessionConnection.nodes":
-		if e.complexity.SessionConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.SessionConnection.Nodes(childComplexity), true
 
 	case "SessionConnection.pageInfo":
 		if e.complexity.SessionConnection.PageInfo == nil {
@@ -1401,13 +1341,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.UserConnection.Edges(childComplexity), true
 
-	case "UserConnection.nodes":
-		if e.complexity.UserConnection.Nodes == nil {
-			break
-		}
-
-		return e.complexity.UserConnection.Nodes(childComplexity), true
-
 	case "UserConnection.pageInfo":
 		if e.complexity.UserConnection.PageInfo == nil {
 			break
@@ -1570,7 +1503,6 @@ type User {
 
 type UserConnection {
   edges: [UserEdge]
-  nodes: [User]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1591,7 +1523,6 @@ type PaymentMethod {
 
 type PaymentMethodConnection {
   edges: [PaymentMethodEdge]
-  nodes: [PaymentMethod]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1613,7 +1544,6 @@ type Group {
 
 type GroupConnection {
   edges: [GroupEdge]
-  nodes: [Group]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1623,22 +1553,17 @@ type GroupEdge {
   node: Group
 }
 
-
-type GroupMember {
-  user: User!
-  role: GroupMemberRole!
-}
-
 type GroupMemberConnection {
   edges: [GroupMemberEdge]
-  nodes: [GroupMember]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
 
 type GroupMemberEdge {
   cursor: String!
-  node: GroupMember
+  node: User
+  role: GroupMemberRole
+  joinedAt: Time
 }
 
 
@@ -1650,7 +1575,6 @@ type GroupInvitation {
 
 type GroupInvitationConnection {
   edges: [GroupInvitationEdge]
-  nodes: [GroupInvitation]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1667,7 +1591,6 @@ type Invoice {
 
 type InvoiceConnection {
   edges: [InvoiceEdge]
-  nodes: [Invoice]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1692,7 +1615,6 @@ type BillingPlan {
 
 type BillingPlanConnection {
   edges: [BillingPlanEdge]
-  nodes: [BillingPlan]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -1712,7 +1634,6 @@ type Session {
 
 type SessionConnection {
   edges: [SessionEdge]
-  nodes: [Session]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -2672,37 +2593,6 @@ func (ec *executionContext) _BillingPlanConnection_edges(ctx context.Context, fi
 	return ec.marshalOBillingPlanEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlanEdge(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _BillingPlanConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlanConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "BillingPlanConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.BillingPlan)
-	fc.Result = res
-	return ec.marshalOBillingPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _BillingPlanConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlanConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3195,37 +3085,6 @@ func (ec *executionContext) _GroupConnection_edges(ctx context.Context, field gr
 	return ec.marshalOGroupEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupEdge(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GroupConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.GroupConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Group)
-	fc.Result = res
-	return ec.marshalOGroup2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GroupConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.GroupConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3492,37 +3351,6 @@ func (ec *executionContext) _GroupInvitationConnection_edges(ctx context.Context
 	return ec.marshalOGroupInvitationEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationEdge(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GroupInvitationConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitationConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupInvitationConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.GroupInvitation)
-	fc.Result = res
-	return ec.marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GroupInvitationConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitationConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3656,74 +3484,6 @@ func (ec *executionContext) _GroupInvitationEdge_node(ctx context.Context, field
 	return ec.marshalOGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GroupMember_user(ctx context.Context, field graphql.CollectedField, obj *model.GroupMember) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupMember",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.User, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(*model.User)
-	fc.Result = res
-	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _GroupMember_role(ctx context.Context, field graphql.CollectedField, obj *model.GroupMember) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupMember",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Role, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		if !graphql.HasFieldError(ctx, fc) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	res := resTmp.(model.GroupMemberRole)
-	fc.Result = res
-	return ec.marshalNGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GroupMemberConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -3753,37 +3513,6 @@ func (ec *executionContext) _GroupMemberConnection_edges(ctx context.Context, fi
 	res := resTmp.([]*model.GroupMemberEdge)
 	fc.Result = res
 	return ec.marshalOGroupMemberEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _GroupMemberConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupMemberConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.GroupMember)
-	fc.Result = res
-	return ec.marshalOGroupMember2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupMemberConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberConnection) (ret graphql.Marshaler) {
@@ -3914,9 +3643,71 @@ func (ec *executionContext) _GroupMemberEdge_node(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.GroupMember)
+	res := resTmp.(*model.User)
 	fc.Result = res
-	return ec.marshalOGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx, field.Selections, res)
+	return ec.marshalOUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupMemberEdge_role(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupMemberEdge",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Role, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.GroupMemberRole)
+	fc.Result = res
+	return ec.marshalOGroupMemberRole2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupMemberEdge_joinedAt(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberEdge) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupMemberEdge",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.JoinedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*time.Time)
+	fc.Result = res
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invoice_id(ctx context.Context, field graphql.CollectedField, obj *model.Invoice) (ret graphql.Marshaler) {
@@ -3982,37 +3773,6 @@ func (ec *executionContext) _InvoiceConnection_edges(ctx context.Context, field 
 	res := resTmp.([]*model.InvoiceEdge)
 	fc.Result = res
 	return ec.marshalOInvoiceEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoiceEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _InvoiceConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "InvoiceConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Invoice)
-	fc.Result = res
-	return ec.marshalOInvoice2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _InvoiceConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceConnection) (ret graphql.Marshaler) {
@@ -5419,37 +5179,6 @@ func (ec *executionContext) _PaymentMethodConnection_edges(ctx context.Context, 
 	return ec.marshalOPaymentMethodEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethodEdge(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _PaymentMethodConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethodConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "PaymentMethodConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.PaymentMethod)
-	fc.Result = res
-	return ec.marshalOPaymentMethod2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _PaymentMethodConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethodConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6116,37 +5845,6 @@ func (ec *executionContext) _SessionConnection_edges(ctx context.Context, field 
 	res := resTmp.([]*model.SessionEdge)
 	fc.Result = res
 	return ec.marshalOSessionEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _SessionConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.SessionConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "SessionConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.Session)
-	fc.Result = res
-	return ec.marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _SessionConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.SessionConnection) (ret graphql.Marshaler) {
@@ -6955,37 +6653,6 @@ func (ec *executionContext) _UserConnection_edges(ctx context.Context, field gra
 	res := resTmp.([]*model.UserEdge)
 	fc.Result = res
 	return ec.marshalOUserEdge2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUserEdge(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _UserConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "UserConnection",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Nodes, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.([]*model.User)
-	fc.Result = res
-	return ec.marshalOUser2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserConnection_pageInfo(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
@@ -8843,8 +8510,6 @@ func (ec *executionContext) _BillingPlanConnection(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("BillingPlanConnection")
 		case "edges":
 			out.Values[i] = ec._BillingPlanConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._BillingPlanConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._BillingPlanConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9008,8 +8673,6 @@ func (ec *executionContext) _GroupConnection(ctx context.Context, sel ast.Select
 			out.Values[i] = graphql.MarshalString("GroupConnection")
 		case "edges":
 			out.Values[i] = ec._GroupConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._GroupConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._GroupConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9110,8 +8773,6 @@ func (ec *executionContext) _GroupInvitationConnection(ctx context.Context, sel 
 			out.Values[i] = graphql.MarshalString("GroupInvitationConnection")
 		case "edges":
 			out.Values[i] = ec._GroupInvitationConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._GroupInvitationConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._GroupInvitationConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9162,38 +8823,6 @@ func (ec *executionContext) _GroupInvitationEdge(ctx context.Context, sel ast.Se
 	return out
 }
 
-var groupMemberImplementors = []string{"GroupMember"}
-
-func (ec *executionContext) _GroupMember(ctx context.Context, sel ast.SelectionSet, obj *model.GroupMember) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, groupMemberImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("GroupMember")
-		case "user":
-			out.Values[i] = ec._GroupMember_user(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		case "role":
-			out.Values[i] = ec._GroupMember_role(ctx, field, obj)
-			if out.Values[i] == graphql.Null {
-				invalids++
-			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
 var groupMemberConnectionImplementors = []string{"GroupMemberConnection"}
 
 func (ec *executionContext) _GroupMemberConnection(ctx context.Context, sel ast.SelectionSet, obj *model.GroupMemberConnection) graphql.Marshaler {
@@ -9207,8 +8836,6 @@ func (ec *executionContext) _GroupMemberConnection(ctx context.Context, sel ast.
 			out.Values[i] = graphql.MarshalString("GroupMemberConnection")
 		case "edges":
 			out.Values[i] = ec._GroupMemberConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._GroupMemberConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._GroupMemberConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9248,6 +8875,10 @@ func (ec *executionContext) _GroupMemberEdge(ctx context.Context, sel ast.Select
 			}
 		case "node":
 			out.Values[i] = ec._GroupMemberEdge_node(ctx, field, obj)
+		case "role":
+			out.Values[i] = ec._GroupMemberEdge_role(ctx, field, obj)
+		case "joinedAt":
+			out.Values[i] = ec._GroupMemberEdge_joinedAt(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -9299,8 +8930,6 @@ func (ec *executionContext) _InvoiceConnection(ctx context.Context, sel ast.Sele
 			out.Values[i] = graphql.MarshalString("InvoiceConnection")
 		case "edges":
 			out.Values[i] = ec._InvoiceConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._InvoiceConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._InvoiceConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9585,8 +9214,6 @@ func (ec *executionContext) _PaymentMethodConnection(ctx context.Context, sel as
 			out.Values[i] = graphql.MarshalString("PaymentMethodConnection")
 		case "edges":
 			out.Values[i] = ec._PaymentMethodConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._PaymentMethodConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._PaymentMethodConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -9840,8 +9467,6 @@ func (ec *executionContext) _SessionConnection(ctx context.Context, sel ast.Sele
 			out.Values[i] = graphql.MarshalString("SessionConnection")
 		case "edges":
 			out.Values[i] = ec._SessionConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._SessionConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._SessionConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -10089,8 +9714,6 @@ func (ec *executionContext) _UserConnection(ctx context.Context, sel ast.Selecti
 			out.Values[i] = graphql.MarshalString("UserConnection")
 		case "edges":
 			out.Values[i] = ec._UserConnection_edges(ctx, field, obj)
-		case "nodes":
-			out.Values[i] = ec._UserConnection_nodes(ctx, field, obj)
 		case "pageInfo":
 			out.Values[i] = ec._UserConnection_pageInfo(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -10492,15 +10115,6 @@ func (ec *executionContext) marshalNGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋse
 
 func (ec *executionContext) unmarshalNGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInput(ctx context.Context, v interface{}) (model.GroupInput, error) {
 	return ec.unmarshalInputGroupInput(ctx, v)
-}
-
-func (ec *executionContext) unmarshalNGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, v interface{}) (model.GroupMemberRole, error) {
-	var res model.GroupMemberRole
-	return res, res.UnmarshalGQL(v)
-}
-
-func (ec *executionContext) marshalNGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, sel ast.SelectionSet, v model.GroupMemberRole) graphql.Marshaler {
-	return v
 }
 
 func (ec *executionContext) unmarshalNID2string(ctx context.Context, v interface{}) (string, error) {
@@ -10995,46 +10609,6 @@ func (ec *executionContext) marshalOBillingPlan2gitlabᚗcomᚋbloom42ᚋbloom�
 	return ec._BillingPlan(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOBillingPlan2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v []*model.BillingPlan) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx context.Context, sel ast.SelectionSet, v *model.BillingPlan) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11142,46 +10716,6 @@ func (ec *executionContext) marshalOGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋserve
 	return ec._Group(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOGroup2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v []*model.Group) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v *model.Group) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11255,46 +10789,6 @@ func (ec *executionContext) marshalOGroupInvitation2gitlabᚗcomᚋbloom42ᚋblo
 	return ec._GroupInvitation(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOGroupInvitation2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx context.Context, sel ast.SelectionSet, v []*model.GroupInvitation) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOGroupInvitation2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitation(ctx context.Context, sel ast.SelectionSet, v *model.GroupInvitation) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11364,57 +10858,6 @@ func (ec *executionContext) marshalOGroupInvitationEdge2ᚖgitlabᚗcomᚋbloom4
 	return ec._GroupInvitationEdge(ctx, sel, v)
 }
 
-func (ec *executionContext) marshalOGroupMember2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v model.GroupMember) graphql.Marshaler {
-	return ec._GroupMember(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOGroupMember2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v []*model.GroupMember) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
-func (ec *executionContext) marshalOGroupMember2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMember(ctx context.Context, sel ast.SelectionSet, v *model.GroupMember) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._GroupMember(ctx, sel, v)
-}
-
 func (ec *executionContext) marshalOGroupMemberConnection2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberConnection(ctx context.Context, sel ast.SelectionSet, v model.GroupMemberConnection) graphql.Marshaler {
 	return ec._GroupMemberConnection(ctx, sel, &v)
 }
@@ -11477,6 +10920,30 @@ func (ec *executionContext) marshalOGroupMemberEdge2ᚖgitlabᚗcomᚋbloom42ᚋ
 	return ec._GroupMemberEdge(ctx, sel, v)
 }
 
+func (ec *executionContext) unmarshalOGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, v interface{}) (model.GroupMemberRole, error) {
+	var res model.GroupMemberRole
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalOGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, sel ast.SelectionSet, v model.GroupMemberRole) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOGroupMemberRole2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, v interface{}) (*model.GroupMemberRole, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOGroupMemberRole2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOGroupMemberRole2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupMemberRole(ctx context.Context, sel ast.SelectionSet, v *model.GroupMemberRole) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
+}
+
 func (ec *executionContext) unmarshalOID2string(ctx context.Context, v interface{}) (string, error) {
 	return graphql.UnmarshalID(v)
 }
@@ -11502,46 +10969,6 @@ func (ec *executionContext) marshalOID2ᚖstring(ctx context.Context, sel ast.Se
 
 func (ec *executionContext) marshalOInvoice2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v model.Invoice) graphql.Marshaler {
 	return ec._Invoice(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOInvoice2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v []*model.Invoice) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOInvoice2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) marshalOInvoice2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v *model.Invoice) graphql.Marshaler {
@@ -11617,46 +11044,6 @@ func (ec *executionContext) marshalOPaymentMethod2gitlabᚗcomᚋbloom42ᚋbloom
 	return ec._PaymentMethod(ctx, sel, &v)
 }
 
-func (ec *executionContext) marshalOPaymentMethod2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v []*model.PaymentMethod) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
-}
-
 func (ec *executionContext) marshalOPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx context.Context, sel ast.SelectionSet, v *model.PaymentMethod) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
@@ -11728,46 +11115,6 @@ func (ec *executionContext) marshalOPaymentMethodEdge2ᚖgitlabᚗcomᚋbloom42�
 
 func (ec *executionContext) marshalOSession2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v model.Session) graphql.Marshaler {
 	return ec._Session(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOSession2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v []*model.Session) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOSession2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) marshalOSession2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v *model.Session) graphql.Marshaler {
@@ -11887,46 +11234,6 @@ func (ec *executionContext) marshalOTime2ᚖtimeᚐTime(ctx context.Context, sel
 
 func (ec *executionContext) marshalOUser2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {
 	return ec._User(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalOUser2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v []*model.User) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	ret := make(graphql.Array, len(v))
-	var wg sync.WaitGroup
-	isLen1 := len(v) == 1
-	if !isLen1 {
-		wg.Add(len(v))
-	}
-	for i := range v {
-		i := i
-		fc := &graphql.FieldContext{
-			Index:  &i,
-			Result: &v[i],
-		}
-		ctx := graphql.WithFieldContext(ctx, fc)
-		f := func(i int) {
-			defer func() {
-				if r := recover(); r != nil {
-					ec.Error(ctx, ec.Recover(ctx, r))
-					ret = nil
-				}
-			}()
-			if !isLen1 {
-				defer wg.Done()
-			}
-			ret[i] = ec.marshalOUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, sel, v[i])
-		}
-		if isLen1 {
-			f(i)
-		} else {
-			go f(i)
-		}
-
-	}
-	wg.Wait()
-	return ret
 }
 
 func (ec *executionContext) marshalOUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v *model.User) graphql.Marshaler {
