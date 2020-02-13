@@ -5,5 +5,5 @@ import (
 )
 
 type DashboardData struct {
-	ServerVersion *model.ServerVersion `json:"serverVersion"`
+	Metadata *model.BloomMetadata `json:"metadata"`
 }

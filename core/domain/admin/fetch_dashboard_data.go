@@ -13,7 +13,7 @@ func FetchDashboardData() (DashboardData, error) {
 
 	req := graphql.NewRequest(`
 	query {
-		serverVersion {
+		metadata {
 			os
 			arch
 			version
