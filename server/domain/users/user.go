@@ -72,3 +72,19 @@ func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*Use
 
 	return ret, err
 }
+
+func FindUserByUsernameNoTx(ctx context.Context, username string) (*User, error) {
+	ret := &User{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT * FROM users WHERE username = $1"
+	err = db.DB.Get(ret, queryFind, username)
+	if err != nil {
+		logger.Error("users.FindUserByUsernameNoTx: finding user", rz.Err(err),
+			rz.String("username", username))
+		return ret, NewError(ErrorUserNotFound)
+	}
+
+	return ret, err
+}
