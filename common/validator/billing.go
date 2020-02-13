@@ -26,7 +26,7 @@ func BillingPlanName(name string) error {
 	return nil
 }
 
-func BillingPlanProduct(product string) error {
+func BillingProduct(product string) error {
 	if product != consts.BILLING_PRODUCT_FREE && product != consts.BILLING_PRODUCT_BASIC &&
 		product != consts.BILLING_PRODUCT_PRO && product != consts.BILLING_PRODUCT_ULTRA {
 		return fmt.Errorf("product should be either %s, %s, %s or %s", consts.BILLING_PRODUCT_FREE, consts.BILLING_PRODUCT_BASIC,
