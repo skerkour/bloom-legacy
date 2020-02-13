@@ -53,6 +53,7 @@
                 <ul>
                   <li><v-icon color="success">mdi-check</v-icon> Drive</li>
                   <li><v-icon color="success">mdi-check</v-icon> Notes</li>
+                  <li><v-icon color="success">mdi-check</v-icon> <b>Encryption</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> Torrents</li>
                   <li><v-icon color="success">mdi-check</v-icon> Calendar</li>
                   <li><v-icon color="success">mdi-check</v-icon> Contacts</li>
