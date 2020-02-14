@@ -44,9 +44,9 @@ type BillingPlanInput struct {
 }
 
 type BillingSubscription struct {
-	SubscribedAt time.Time    `json:"subscribedAt"`
-	UsedStorage  Int64        `json:"usedStorage"`
-	Plan         *BillingPlan `json:"plan"`
+	UpdatedAt   time.Time    `json:"updatedAt"`
+	UsedStorage Int64        `json:"usedStorage"`
+	Plan        *BillingPlan `json:"plan"`
 }
 
 type BloomMetadata struct {
@@ -62,8 +62,8 @@ type CancelGroupInvitationInput struct {
 }
 
 // if groupId and userId are null (reserved for admins), add to current user
-type ChangeBillingPlanInput struct {
-	ID      string  `json:"id"`
+type ChangeBillingSubscriptionInput struct {
+	PlanID  string  `json:"planId"`
 	UserID  *string `json:"userId"`
 	GroupID *string `json:"groupId"`
 }

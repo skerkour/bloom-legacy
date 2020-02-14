@@ -100,8 +100,8 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 	}
 
 	ret = &BillingSubscription{
-		SubscribedAt: customer.PlanUpdatedAt,
-		UsedStorage:  Int64(customer.UsedStorage),
+		UpdatedAt:   customer.SubscriptionUpdatedAt,
+		UsedStorage: Int64(customer.UsedStorage),
 		Plan: &BillingPlan{
 			ID:          plan.ID,
 			Price:       Int64(plan.Price),

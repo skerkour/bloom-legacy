@@ -71,9 +71,9 @@ type ComplexityRoot struct {
 	}
 
 	BillingSubscription struct {
-		Plan         func(childComplexity int) int
-		SubscribedAt func(childComplexity int) int
-		UsedStorage  func(childComplexity int) int
+		Plan        func(childComplexity int) int
+		UpdatedAt   func(childComplexity int) int
+		UsedStorage func(childComplexity int) int
 	}
 
 	BloomMetadata struct {
@@ -155,7 +155,7 @@ type ComplexityRoot struct {
 		AcceptGroupInvitation      func(childComplexity int, input model.AcceptGroupInvitationInput) int
 		AddPaymentMethod           func(childComplexity int, input model.AddPaymentMethodInput) int
 		CancelGroupInvitation      func(childComplexity int, input model.CancelGroupInvitationInput) int
-		ChangeBillingPlan          func(childComplexity int, input model.ChangeBillingPlanInput) int
+		ChangeBillingSubscription  func(childComplexity int, input model.ChangeBillingSubscriptionInput) int
 		ChangeDefaultPaymentMethod func(childComplexity int, input model.ChangeDefaultPaymentMethodInput) int
 		CompleteRegistration       func(childComplexity int, input model.CompleteRegistrationInput) int
 		CreateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
@@ -305,7 +305,7 @@ type MutationResolver interface {
 	CreateBillingPlan(ctx context.Context, input model.BillingPlanInput) (*model.BillingPlan, error)
 	UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (*model.BillingPlan, error)
 	DeleteBillingPlan(ctx context.Context, input model.DeleteBillingPlanInput) (bool, error)
-	ChangeBillingPlan(ctx context.Context, input model.ChangeBillingPlanInput) (*model.BillingPlan, error)
+	ChangeBillingSubscription(ctx context.Context, input model.ChangeBillingSubscriptionInput) (*model.BillingSubscription, error)
 	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (*model.PaymentMethod, error)
 	RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error)
 	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (*model.PaymentMethod, error)
@@ -449,12 +449,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.BillingSubscription.Plan(childComplexity), true
 
-	case "BillingSubscription.subscribedAt":
-		if e.complexity.BillingSubscription.SubscribedAt == nil {
+	case "BillingSubscription.updatedAt":
+		if e.complexity.BillingSubscription.UpdatedAt == nil {
 			break
 		}
 
-		return e.complexity.BillingSubscription.SubscribedAt(childComplexity), true
+		return e.complexity.BillingSubscription.UpdatedAt(childComplexity), true
 
 	case "BillingSubscription.usedStorage":
 		if e.complexity.BillingSubscription.UsedStorage == nil {
@@ -772,17 +772,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CancelGroupInvitation(childComplexity, args["input"].(model.CancelGroupInvitationInput)), true
 
-	case "Mutation.changeBillingPlan":
-		if e.complexity.Mutation.ChangeBillingPlan == nil {
+	case "Mutation.changeBillingSubscription":
+		if e.complexity.Mutation.ChangeBillingSubscription == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_changeBillingPlan_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_changeBillingSubscription_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.ChangeBillingPlan(childComplexity, args["input"].(model.ChangeBillingPlanInput)), true
+		return e.complexity.Mutation.ChangeBillingSubscription(childComplexity, args["input"].(model.ChangeBillingSubscriptionInput)), true
 
 	case "Mutation.changeDefaultPaymentMethod":
 		if e.complexity.Mutation.ChangeDefaultPaymentMethod == nil {
@@ -1685,7 +1685,7 @@ type BillingPlanEdge {
 
 
 type BillingSubscription {
-  subscribedAt: Time!
+  updatedAt: Time!
   usedStorage: Int64!
   plan: BillingPlan!
 }
@@ -1864,8 +1864,8 @@ input DeleteBillingPlanInput {
 }
 
 """if groupId and userId are null (reserved for admins), add to current user"""
-input ChangeBillingPlanInput {
-  id: ID!
+input ChangeBillingSubscriptionInput {
+  planId: ID!
   userId: String
   groupId: String
 }
@@ -1935,7 +1935,7 @@ type Mutation {
   createBillingPlan(input: BillingPlanInput!): BillingPlan!
   updateBillingPlan(input: BillingPlanInput!): BillingPlan!
   deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
-  changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
+  changeBillingSubscription(input: ChangeBillingSubscriptionInput!): BillingSubscription!
   addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
@@ -1990,12 +1990,12 @@ func (ec *executionContext) field_Mutation_cancelGroupInvitation_args(ctx contex
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_changeBillingPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_changeBillingSubscription_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.ChangeBillingPlanInput
+	var arg0 model.ChangeBillingSubscriptionInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNChangeBillingPlanInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChangeBillingPlanInput(ctx, tmp)
+		arg0, err = ec.unmarshalNChangeBillingSubscriptionInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChangeBillingSubscriptionInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2812,7 +2812,7 @@ func (ec *executionContext) _BillingPlanEdge_node(ctx context.Context, field gra
 	return ec.marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _BillingSubscription_subscribedAt(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+func (ec *executionContext) _BillingSubscription_updatedAt(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -2829,7 +2829,7 @@ func (ec *executionContext) _BillingSubscription_subscribedAt(ctx context.Contex
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.SubscribedAt, nil
+		return obj.UpdatedAt, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -4971,7 +4971,7 @@ func (ec *executionContext) _Mutation_deleteBillingPlan(ctx context.Context, fie
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_changeBillingPlan(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_changeBillingSubscription(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -4987,7 +4987,7 @@ func (ec *executionContext) _Mutation_changeBillingPlan(ctx context.Context, fie
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_changeBillingPlan_args(ctx, rawArgs)
+	args, err := ec.field_Mutation_changeBillingSubscription_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -4995,7 +4995,7 @@ func (ec *executionContext) _Mutation_changeBillingPlan(ctx context.Context, fie
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().ChangeBillingPlan(rctx, args["input"].(model.ChangeBillingPlanInput))
+		return ec.resolvers.Mutation().ChangeBillingSubscription(rctx, args["input"].(model.ChangeBillingSubscriptionInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5007,9 +5007,9 @@ func (ec *executionContext) _Mutation_changeBillingPlan(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.BillingPlan)
+	res := resTmp.(*model.BillingSubscription)
 	fc.Result = res
-	return ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
+	return ec.marshalNBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_addPaymentMethod(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -8241,15 +8241,15 @@ func (ec *executionContext) unmarshalInputCancelGroupInvitationInput(ctx context
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputChangeBillingPlanInput(ctx context.Context, obj interface{}) (model.ChangeBillingPlanInput, error) {
-	var it model.ChangeBillingPlanInput
+func (ec *executionContext) unmarshalInputChangeBillingSubscriptionInput(ctx context.Context, obj interface{}) (model.ChangeBillingSubscriptionInput, error) {
+	var it model.ChangeBillingSubscriptionInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "planId":
 			var err error
-			it.ID, err = ec.unmarshalNID2string(ctx, v)
+			it.PlanID, err = ec.unmarshalNID2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8855,8 +8855,8 @@ func (ec *executionContext) _BillingSubscription(ctx context.Context, sel ast.Se
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("BillingSubscription")
-		case "subscribedAt":
-			out.Values[i] = ec._BillingSubscription_subscribedAt(ctx, field, obj)
+		case "updatedAt":
+			out.Values[i] = ec._BillingSubscription_updatedAt(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -9429,8 +9429,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "changeBillingPlan":
-			out.Values[i] = ec._Mutation_changeBillingPlan(ctx, field)
+		case "changeBillingSubscription":
+			out.Values[i] = ec._Mutation_changeBillingSubscription(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -10383,6 +10383,20 @@ func (ec *executionContext) marshalNBillingProduct2gitlabᚗcomᚋbloom42ᚋbloo
 	return v
 }
 
+func (ec *executionContext) marshalNBillingSubscription2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx context.Context, sel ast.SelectionSet, v model.BillingSubscription) graphql.Marshaler {
+	return ec._BillingSubscription(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx context.Context, sel ast.SelectionSet, v *model.BillingSubscription) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._BillingSubscription(ctx, sel, v)
+}
+
 func (ec *executionContext) unmarshalNBoolean2bool(ctx context.Context, v interface{}) (bool, error) {
 	return graphql.UnmarshalBoolean(v)
 }
@@ -10410,8 +10424,8 @@ func (ec *executionContext) unmarshalNCancelGroupInvitationInput2gitlabᚗcomᚋ
 	return ec.unmarshalInputCancelGroupInvitationInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNChangeBillingPlanInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChangeBillingPlanInput(ctx context.Context, v interface{}) (model.ChangeBillingPlanInput, error) {
-	return ec.unmarshalInputChangeBillingPlanInput(ctx, v)
+func (ec *executionContext) unmarshalNChangeBillingSubscriptionInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChangeBillingSubscriptionInput(ctx context.Context, v interface{}) (model.ChangeBillingSubscriptionInput, error) {
+	return ec.unmarshalInputChangeBillingSubscriptionInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNChangeDefaultPaymentMethodInput2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChangeDefaultPaymentMethodInput(ctx context.Context, v interface{}) (model.ChangeDefaultPaymentMethodInput, error) {

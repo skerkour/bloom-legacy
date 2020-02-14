@@ -198,7 +198,7 @@ type BillingPlanEdge {
 
 
 type BillingSubscription {
-  subscribedAt: Time!
+  updatedAt: Time!
   usedStorage: Int64!
   plan: BillingPlan!
 }
@@ -377,8 +377,8 @@ input DeleteBillingPlanInput {
 }
 
 """if groupId and userId are null (reserved for admins), add to current user"""
-input ChangeBillingPlanInput {
-  id: ID!
+input ChangeBillingSubscriptionInput {
+  planId: ID!
   userId: String
   groupId: String
 }
@@ -448,7 +448,7 @@ type Mutation {
   createBillingPlan(input: BillingPlanInput!): BillingPlan!
   updateBillingPlan(input: BillingPlanInput!): BillingPlan!
   deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
-  changeBillingPlan(input: ChangeBillingPlanInput!): BillingPlan!
+  changeBillingSubscription(input: ChangeBillingSubscriptionInput!): BillingSubscription!
   addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
