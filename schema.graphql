@@ -107,6 +107,7 @@ type Group {
   description: String!
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
+  subscription: BillingSubscription
 }
 
 type GroupConnection {

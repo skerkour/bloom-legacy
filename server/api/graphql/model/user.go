@@ -183,11 +183,11 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	plan, err := billing.FindPlanForUser(ctx, *user.ID)
+	customer, err := billing.FindCustomerByUserIdNoTx(ctx, *user.ID)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
-	customer, err := billing.FindCustomerByUserIdNoTx(ctx, *user.ID)
+	plan, err := billing.FindPlanForCustomer(ctx, customer)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

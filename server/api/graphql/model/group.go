@@ -3,6 +3,11 @@ package model
 import (
 	"context"
 	"time"
+
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
 )
 
 type Group struct {
@@ -63,4 +68,49 @@ func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvi
 	// for _, invitation := range invitations {
 	// 	ret.Invitations = append(ret.Invitations, invitToRpcInvitation(invitation))
 	// }
+}
+
+func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (*BillingSubscription, error) {
+	var ret *BillingSubscription
+	currentUser := apiutil.UserFromCtx(ctx)
+	var stripeId *string
+	var err error
+
+	if group.ID == nil {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	if err != nil && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	customer, err := billing.FindCustomerByGroupIdNoTx(ctx, *group.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+	plan, err := billing.FindPlanForCustomer(ctx, customer)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+
+	if currentUser.IsAdmin {
+		stripeId = &plan.StripeID
+	}
+
+	ret = &BillingSubscription{
+		SubscribedAt: customer.PlanUpdatedAt,
+		UsedStorage:  Int64(customer.UsedStorage),
+		Plan: &BillingPlan{
+			ID:          plan.ID,
+			Price:       Int64(plan.Price),
+			Name:        plan.Name,
+			Description: plan.Description,
+			IsPublic:    plan.IsPublic,
+			StripeID:    stripeId,
+			Product:     BillingProduct(plan.Product),
+			Storage:     Int64(plan.Storage),
+		},
+	}
+	return ret, nil
 }

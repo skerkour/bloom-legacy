@@ -84,12 +84,13 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
-		CreatedAt   func(childComplexity int) int
-		Description func(childComplexity int) int
-		ID          func(childComplexity int) int
-		Invitations func(childComplexity int) int
-		Members     func(childComplexity int) int
-		Name        func(childComplexity int) int
+		CreatedAt    func(childComplexity int) int
+		Description  func(childComplexity int) int
+		ID           func(childComplexity int) int
+		Invitations  func(childComplexity int) int
+		Members      func(childComplexity int) int
+		Name         func(childComplexity int) int
+		Subscription func(childComplexity int) int
 	}
 
 	GroupConnection struct {
@@ -281,6 +282,7 @@ type BillingPlanResolver interface {
 type GroupResolver interface {
 	Members(ctx context.Context, obj *model.Group) (*model.GroupMemberConnection, error)
 	Invitations(ctx context.Context, obj *model.Group) (*model.GroupInvitationConnection, error)
+	Subscription(ctx context.Context, obj *model.Group) (*model.BillingSubscription, error)
 }
 type MutationResolver interface {
 	Register(ctx context.Context, input model.RegisterInput) (*model.RegistrationStarted, error)
@@ -529,6 +531,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.Name(childComplexity), true
+
+	case "Group.subscription":
+		if e.complexity.Group.Subscription == nil {
+			break
+		}
+
+		return e.complexity.Group.Subscription(childComplexity), true
 
 	case "GroupConnection.edges":
 		if e.complexity.GroupConnection.Edges == nil {
@@ -1577,6 +1586,7 @@ type Group {
   description: String!
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
+  subscription: BillingSubscription
 }
 
 type GroupConnection {
@@ -3221,6 +3231,37 @@ func (ec *executionContext) _Group_invitations(ctx context.Context, field graphq
 	res := resTmp.(*model.GroupInvitationConnection)
 	fc.Result = res
 	return ec.marshalOGroupInvitationConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_subscription(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Group().Subscription(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.BillingSubscription)
+	fc.Result = res
+	return ec.marshalOBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupConnection) (ret graphql.Marshaler) {
@@ -8887,6 +8928,17 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 					}
 				}()
 				res = ec._Group_invitations(ctx, field, obj)
+				return res
+			})
+		case "subscription":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Group_subscription(ctx, field, obj)
 				return res
 			})
 		default:

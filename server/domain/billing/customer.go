@@ -78,6 +78,24 @@ func FindCustomerByGroupId(ctx context.Context, tx *sqlx.Tx, groupId string) (*C
 	return ret, err
 }
 
+func FindCustomerByGroupIdNoTx(ctx context.Context, groupId string) (*Customer, error) {
+	var ret *Customer
+	var customer Customer
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT * FROM billing_customers WHERE group_id = $1"
+	err = db.DB.Get(&customer, queryFind, groupId)
+	if err != nil {
+		logger.Error("billing.FindCustomerByGroupIdNoTx: finding customer", rz.Err(err),
+			rz.String("id", groupId))
+		return ret, NewError(ErrorCustomerNotFound)
+	}
+
+	ret = &customer
+	return ret, err
+}
+
 func FindCustomerByPaymentMethod(ctx context.Context, tx *sqlx.Tx, paymentMethod *PaymentMethod) (*Customer, error) {
 	var ret *Customer
 	var customer Customer

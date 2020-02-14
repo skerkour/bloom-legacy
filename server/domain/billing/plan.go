@@ -156,3 +156,18 @@ func FindPlanForUser(ctx context.Context, userId string) (*Plan, error) {
 
 	return ret, err
 }
+
+func FindPlanForCustomer(ctx context.Context, customer *Customer) (*Plan, error) {
+	ret := &Plan{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT billing_plans.* FROM billing_plans WHERE id = $1"
+	err = db.DB.Get(ret, queryFind, customer.PlanID)
+	if err != nil {
+		logger.Error("billing.FindPlanForCustomer: finding plan", rz.Err(err))
+		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	return ret, err
+}
