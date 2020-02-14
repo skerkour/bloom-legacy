@@ -61,7 +61,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		}
 	}
 
-	if customer.StripeID == nil {
+	if customer.StripeCustomerID == nil {
 		isDefault = true
 		// create stripe customer + update customer
 		customerParams := &stripe.CustomerParams{
@@ -79,17 +79,17 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		}
 		stripeCustomerId = stripeCustomer.ID
 		customer.UpdatedAt = now
-		customer.StripeID = &stripeCustomerId
-		queryUpdate := `UPDATE billing_customers (updated_at, stripe_id)
+		customer.StripeCustomerID = &stripeCustomerId
+		queryUpdate := `UPDATE billing_customers (updated_at, stripe_customer_id)
 			VALUES ($1, $2) WHERE id = $3`
-		_, err = tx.Exec(queryUpdate, customer.UpdatedAt, customer.StripeID, customer.ID)
+		_, err = tx.Exec(queryUpdate, customer.UpdatedAt, customer.StripeCustomerID, customer.ID)
 		if err != nil {
 			tx.Rollback()
 			logger.Error("billing.AddPaymentMethod: updating customer with stripe_id", rz.Err(err))
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		stripeCustomerId = *customer.StripeID
+		stripeCustomerId = *customer.StripeCustomerID
 	}
 
 	// fetch the stripe payment method

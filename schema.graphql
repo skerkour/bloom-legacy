@@ -200,6 +200,8 @@ type BillingPlanEdge {
 type BillingSubscription {
   updatedAt: Time!
   usedStorage: Int64!
+  stripeCustomerId: String
+  stripeSubscriptionId: String
   plan: BillingPlan!
 }
 

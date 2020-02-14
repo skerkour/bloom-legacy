@@ -32,6 +32,8 @@ const (
 	ErrorPlanStorageCantBeNegative
 	ErrorCantDeleteDefaultPlan
 	ErrorCantDeletePlanWithSubscribers
+	ErrorStripeCustomerIDIsNUll
+	ErrorCreatingStripeSubscription
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -103,6 +105,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorCantDeletePlanWithSubscribers:
 		code = errors.InvalidArgument
 		message = "Can't delete plan with subscribers. Please fix and try again."
+	case ErrorStripeCustomerIDIsNUll:
+		code = errors.InvalidArgument
+		message = "Please add a payment method before chaging plan."
 	}
 
 	return errors.New(code, message)

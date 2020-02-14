@@ -44,9 +44,11 @@ type BillingPlanInput struct {
 }
 
 type BillingSubscription struct {
-	UpdatedAt   time.Time    `json:"updatedAt"`
-	UsedStorage Int64        `json:"usedStorage"`
-	Plan        *BillingPlan `json:"plan"`
+	UpdatedAt            time.Time    `json:"updatedAt"`
+	UsedStorage          Int64        `json:"usedStorage"`
+	StripeCustomerID     *string      `json:"stripeCustomerId"`
+	StripeSubscriptionID *string      `json:"stripeSubscriptionId"`
+	Plan                 *BillingPlan `json:"plan"`
 }
 
 type BloomMetadata struct {

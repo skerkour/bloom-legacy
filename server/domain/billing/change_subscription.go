@@ -4,6 +4,8 @@ import (
 	"context"
 	"time"
 
+	"github.com/stripe/stripe-go"
+	"github.com/stripe/stripe-go/sub"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -17,6 +19,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 	var err error
 	var retPlan *Plan
 	now := time.Now().UTC()
+	var stripeSubscription *stripe.Subscription
 
 	// validate params
 	if actor == nil {
@@ -59,6 +62,13 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 		}
 	}
 
+	if customer.StripeCustomerID == nil {
+		if err != nil {
+			tx.Rollback()
+			return customer, retPlan, NewError(ErrorStripeCustomerIDIsNUll)
+		}
+	}
+
 	newPlan, err := FindPlanById(ctx, tx, planId)
 	if err != nil {
 		tx.Rollback()
@@ -88,15 +98,57 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 		tx.Rollback()
 		return customer, retPlan, NewError(ErrorTooMuchStorageUsedForNewPlan)
 	}
+
+	if customer.StripeSubscriptionID == nil {
+		// create stripe subscription
+		items := []*stripe.SubscriptionItemsParams{
+			{
+				Plan: stripe.String(newPlan.StripeID),
+			},
+		}
+		params := &stripe.SubscriptionParams{
+			Customer: stripe.String(*customer.StripeCustomerID),
+			Items:    items,
+		}
+		// params.AddExpand("latest_invoice.payment_intent")
+		stripeSubscription, err = sub.New(params)
+		if err != nil {
+			tx.Rollback()
+			return customer, retPlan, NewError(ErrorCreatingStripeSubscription)
+		}
+		customer.StripeSubscriptionID = &stripeSubscription.ID
+	} else {
+		// update subscription
+		stripeSubscription, err := sub.Get(*customer.StripeSubscriptionID, nil)
+		if err != nil {
+			tx.Rollback()
+			return customer, retPlan, NewError(ErrorCreatingStripeSubscription)
+		}
+		params := &stripe.SubscriptionParams{
+			CancelAtPeriodEnd: stripe.Bool(false),
+			Items: []*stripe.SubscriptionItemsParams{
+				{
+					ID:   stripe.String(stripeSubscription.Items.Data[0].ID),
+					Plan: stripe.String(newPlan.StripeID),
+				},
+			},
+		}
+		stripeSubscription, err = sub.Update(stripeSubscription.ID, params)
+		if err != nil {
+			tx.Rollback()
+			return customer, retPlan, NewError(ErrorCreatingStripeSubscription)
+		}
+	}
+
 	// update customer
-	queryUpdate := "UPDATE billing_customers SET updated_at = $1, plan_id = $2, subscription_updated_at = $3 WHERE id = $4"
-
-	// update oldDefaultPaymentMethod
-
 	customer.UpdatedAt = now
 	customer.PlanID = newPlan.ID
 	customer.SubscriptionUpdatedAt = now
-	_, err = tx.Exec(queryUpdate, customer.UpdatedAt, customer.PlanID, customer.SubscriptionUpdatedAt, customer.ID)
+	queryUpdate := `UPDATE billing_customers
+		SET updated_at = $1, plan_id = $2, subscription_updated_at = $3, stripe_subscription_id = $4
+		WHERE id = $5`
+	_, err = tx.Exec(queryUpdate, customer.UpdatedAt, customer.PlanID, customer.SubscriptionUpdatedAt,
+		customer.StripeSubscriptionID, customer.ID)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("billing.ChangeSubscription: customer", rz.Err(err))

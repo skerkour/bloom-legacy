@@ -71,9 +71,11 @@ type ComplexityRoot struct {
 	}
 
 	BillingSubscription struct {
-		Plan        func(childComplexity int) int
-		UpdatedAt   func(childComplexity int) int
-		UsedStorage func(childComplexity int) int
+		Plan                 func(childComplexity int) int
+		StripeCustomerID     func(childComplexity int) int
+		StripeSubscriptionID func(childComplexity int) int
+		UpdatedAt            func(childComplexity int) int
+		UsedStorage          func(childComplexity int) int
 	}
 
 	BloomMetadata struct {
@@ -448,6 +450,20 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingSubscription.Plan(childComplexity), true
+
+	case "BillingSubscription.stripeCustomerId":
+		if e.complexity.BillingSubscription.StripeCustomerID == nil {
+			break
+		}
+
+		return e.complexity.BillingSubscription.StripeCustomerID(childComplexity), true
+
+	case "BillingSubscription.stripeSubscriptionId":
+		if e.complexity.BillingSubscription.StripeSubscriptionID == nil {
+			break
+		}
+
+		return e.complexity.BillingSubscription.StripeSubscriptionID(childComplexity), true
 
 	case "BillingSubscription.updatedAt":
 		if e.complexity.BillingSubscription.UpdatedAt == nil {
@@ -1687,6 +1703,8 @@ type BillingPlanEdge {
 type BillingSubscription {
   updatedAt: Time!
   usedStorage: Int64!
+  stripeCustomerId: String
+  stripeSubscriptionId: String
   plan: BillingPlan!
 }
 
@@ -2878,6 +2896,68 @@ func (ec *executionContext) _BillingSubscription_usedStorage(ctx context.Context
 	res := resTmp.(model.Int64)
 	fc.Result = res
 	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingSubscription_stripeCustomerId(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingSubscription",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StripeCustomerID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingSubscription_stripeSubscriptionId(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingSubscription",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.StripeSubscriptionID, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingSubscription_plan(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
@@ -8865,6 +8945,10 @@ func (ec *executionContext) _BillingSubscription(ctx context.Context, sel ast.Se
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "stripeCustomerId":
+			out.Values[i] = ec._BillingSubscription_stripeCustomerId(ctx, field, obj)
+		case "stripeSubscriptionId":
+			out.Values[i] = ec._BillingSubscription_stripeSubscriptionId(ctx, field, obj)
 		case "plan":
 			out.Values[i] = ec._BillingSubscription_plan(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

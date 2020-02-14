@@ -25,7 +25,8 @@ CREATE TABLE billing_customers (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     email TEXT NOT NULL,
-    stripe_id TEXT,
+    stripe_customer_id TEXT,
+    stripe_subscription_id TEXT,
     used_storage BIGINT NOT NULL,
     subscription_updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 

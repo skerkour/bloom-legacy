@@ -15,7 +15,8 @@ type Customer struct {
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
 	Email                 string    `json:"email" db:"email"`
-	StripeID              *string   `json:"stripe_id" db:"stripe_id"`
+	StripeCustomerID      *string   `json:"stripe_customer_id" db:"stripe_customer_id"`
+	StripeSubscriptionID  *string   `json:"stripe_subscription_id" db:"stripe_subscription_id"`
 	UsedStorage           int64     `json:"used_storage" db:"used_storage"`
 	SubscriptionUpdatedAt time.Time `json:"subscription_updated_at" db:"subscription_updated_at"`
 

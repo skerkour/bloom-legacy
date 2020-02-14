@@ -74,7 +74,9 @@ func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvi
 func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (*BillingSubscription, error) {
 	var ret *BillingSubscription
 	currentUser := apiutil.UserFromCtx(ctx)
-	var stripeId *string
+	var stripePlanId *string
+	var stripeCustomerId *string
+	var stripeSubscriptionId *string
 	var err error
 
 	if group.ID == nil {
@@ -96,19 +98,23 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 	}
 
 	if currentUser.IsAdmin {
-		stripeId = &plan.StripeID
+		stripePlanId = &plan.StripeID
+		stripeCustomerId = customer.StripeCustomerID
+		stripeSubscriptionId = customer.StripeSubscriptionID
 	}
 
 	ret = &BillingSubscription{
-		UpdatedAt:   customer.SubscriptionUpdatedAt,
-		UsedStorage: Int64(customer.UsedStorage),
+		UpdatedAt:            customer.SubscriptionUpdatedAt,
+		UsedStorage:          Int64(customer.UsedStorage),
+		StripeCustomerID:     stripeCustomerId,
+		StripeSubscriptionID: stripeSubscriptionId,
 		Plan: &BillingPlan{
 			ID:          plan.ID,
 			Price:       Int64(plan.Price),
 			Name:        plan.Name,
 			Description: plan.Description,
 			IsPublic:    plan.IsPublic,
-			StripeID:    stripeId,
+			StripeID:    stripePlanId,
 			Product:     BillingProduct(plan.Product),
 			Storage:     Int64(plan.Storage),
 		},

@@ -177,7 +177,9 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*BillingSubscription, error) {
 	var ret *BillingSubscription
 	currentUser := apiutil.UserFromCtx(ctx)
-	var stripeId *string
+	var stripePlanId *string
+	var stripeCustomerId *string
+	var stripeSubscriptionId *string
 
 	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
@@ -193,7 +195,9 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 	}
 
 	if currentUser.IsAdmin {
-		stripeId = &plan.StripeID
+		stripePlanId = &plan.StripeID
+		stripeCustomerId = customer.StripeCustomerID
+		stripeSubscriptionId = customer.StripeSubscriptionID
 	}
 
 	ret = &BillingSubscription{
@@ -205,10 +209,12 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 			Name:        plan.Name,
 			Description: plan.Description,
 			IsPublic:    plan.IsPublic,
-			StripeID:    stripeId,
+			StripeID:    stripePlanId,
 			Product:     BillingProduct(plan.Product),
 			Storage:     Int64(plan.Storage),
 		},
+		StripeCustomerID:     stripeCustomerId,
+		StripeSubscriptionID: stripeSubscriptionId,
 	}
 	return ret, nil
 }
