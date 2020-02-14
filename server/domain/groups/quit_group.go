@@ -2,6 +2,7 @@ package groups
 
 import (
 	"context"
+
 	"github.com/jmoiron/sqlx"
 
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -13,7 +14,7 @@ func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) e
 	var remainingAdmins int
 	var err error
 
-	if err = checkUserIsGroupMember(ctx, tx, user.ID, group.ID); err != nil {
+	if err = CheckUserIsGroupMember(ctx, tx, user.ID, group.ID); err != nil {
 		return err
 	}
 

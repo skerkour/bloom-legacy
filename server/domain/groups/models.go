@@ -1,7 +1,11 @@
 package groups
 
 import (
+	"context"
 	"time"
+
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/libs/rz-go"
 )
 
 type Group struct {
@@ -26,4 +30,20 @@ type Invitation struct {
 
 	GroupID   string `json:"group_id" db:"group_id"`
 	InviteeID string `json:"invitee_id" db:"invitee_id"`
+}
+
+func FindGroupById(ctx context.Context, id string) (*Group, error) {
+	ret := &Group{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := "SELECT * FROM groups WHERE id = $1"
+	err = db.DB.Get(ret, queryFind, id)
+	if err != nil {
+		logger.Error("groups.FindGroupById: finding user", rz.Err(err),
+			rz.String("id", id))
+		return ret, NewError(ErrorGroupNotFound)
+	}
+
+	return ret, err
 }
