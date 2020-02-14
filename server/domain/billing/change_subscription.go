@@ -101,14 +101,17 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 
 	if customer.StripeSubscriptionID == nil {
 		// create stripe subscription
+		firstDayOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.UTC)
+		firstDayofNextMonth := firstDayOfMonth.AddDate(0, 1, 0)
 		items := []*stripe.SubscriptionItemsParams{
 			{
 				Plan: stripe.String(newPlan.StripeID),
 			},
 		}
 		params := &stripe.SubscriptionParams{
-			Customer: stripe.String(*customer.StripeCustomerID),
-			Items:    items,
+			Customer:           stripe.String(*customer.StripeCustomerID),
+			Items:              items,
+			BillingCycleAnchor: stripe.Int64(firstDayofNextMonth.Unix()),
 		}
 		// params.AddExpand("latest_invoice.payment_intent")
 		stripeSubscription, err = sub.New(params)
