@@ -70,6 +70,12 @@ type ComplexityRoot struct {
 		Node   func(childComplexity int) int
 	}
 
+	BillingSubscription struct {
+		Plan         func(childComplexity int) int
+		SubscribedAt func(childComplexity int) int
+		UsedStorage  func(childComplexity int) int
+	}
+
 	BloomMetadata struct {
 		Arch      func(childComplexity int) int
 		GitCommit func(childComplexity int) int
@@ -240,7 +246,6 @@ type ComplexityRoot struct {
 
 	User struct {
 		AvatarURL        func(childComplexity int) int
-		BillingPlan      func(childComplexity int) int
 		Bio              func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
 		DisplayName      func(childComplexity int) int
@@ -254,6 +259,7 @@ type ComplexityRoot struct {
 		LastName         func(childComplexity int) int
 		PaymentMethods   func(childComplexity int) int
 		Sessions         func(childComplexity int) int
+		Subscription     func(childComplexity int) int
 		Username         func(childComplexity int) int
 	}
 
@@ -317,7 +323,7 @@ type UserResolver interface {
 	Invoices(ctx context.Context, obj *model.User) (*model.InvoiceConnection, error)
 	Sessions(ctx context.Context, obj *model.User) (*model.SessionConnection, error)
 	GroupInvitations(ctx context.Context, obj *model.User) (*model.GroupInvitationConnection, error)
-	BillingPlan(ctx context.Context, obj *model.User) (*model.BillingPlan, error)
+	Subscription(ctx context.Context, obj *model.User) (*model.BillingSubscription, error)
 }
 
 type executableSchema struct {
@@ -432,6 +438,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BillingPlanEdge.Node(childComplexity), true
+
+	case "BillingSubscription.plan":
+		if e.complexity.BillingSubscription.Plan == nil {
+			break
+		}
+
+		return e.complexity.BillingSubscription.Plan(childComplexity), true
+
+	case "BillingSubscription.subscribedAt":
+		if e.complexity.BillingSubscription.SubscribedAt == nil {
+			break
+		}
+
+		return e.complexity.BillingSubscription.SubscribedAt(childComplexity), true
+
+	case "BillingSubscription.usedStorage":
+		if e.complexity.BillingSubscription.UsedStorage == nil {
+			break
+		}
+
+		return e.complexity.BillingSubscription.UsedStorage(childComplexity), true
 
 	case "BloomMetadata.arch":
 		if e.complexity.BloomMetadata.Arch == nil {
@@ -1237,13 +1264,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.AvatarURL(childComplexity), true
 
-	case "User.billingPlan":
-		if e.complexity.User.BillingPlan == nil {
-			break
-		}
-
-		return e.complexity.User.BillingPlan(childComplexity), true
-
 	case "User.bio":
 		if e.complexity.User.Bio == nil {
 			break
@@ -1334,6 +1354,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.Sessions(childComplexity), true
+
+	case "User.subscription":
+		if e.complexity.User.Subscription == nil {
+			break
+		}
+
+		return e.complexity.User.Subscription(childComplexity), true
 
 	case "User.username":
 		if e.complexity.User.Username == nil {
@@ -1508,7 +1535,7 @@ type User {
   invoices: InvoiceConnection
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
-  billingPlan: BillingPlan
+  subscription: BillingSubscription
 }
 
 type UserConnection {
@@ -1635,6 +1662,13 @@ type BillingPlanConnection {
 type BillingPlanEdge {
   cursor: String!
   node: BillingPlan
+}
+
+
+type BillingSubscription {
+  subscribedAt: Time!
+  usedStorage: Int64!
+  plan: BillingPlan!
 }
 
 
@@ -2757,6 +2791,108 @@ func (ec *executionContext) _BillingPlanEdge_node(ctx context.Context, field gra
 	res := resTmp.(*model.BillingPlan)
 	fc.Result = res
 	return ec.marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingSubscription_subscribedAt(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingSubscription",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.SubscribedAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(time.Time)
+	fc.Result = res
+	return ec.marshalNTime2timeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingSubscription_usedStorage(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingSubscription",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.UsedStorage, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Int64)
+	fc.Result = res
+	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _BillingSubscription_plan(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "BillingSubscription",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Plan, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(*model.BillingPlan)
+	fc.Result = res
+	return ec.marshalNBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BloomMetadata_os(ctx context.Context, field graphql.CollectedField, obj *model.BloomMetadata) (ret graphql.Marshaler) {
@@ -6660,7 +6796,7 @@ func (ec *executionContext) _User_groupInvitations(ctx context.Context, field gr
 	return ec.marshalOGroupInvitationConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroupInvitationConnection(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _User_billingPlan(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+func (ec *executionContext) _User_subscription(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -6677,7 +6813,7 @@ func (ec *executionContext) _User_billingPlan(ctx context.Context, field graphql
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.User().BillingPlan(rctx, obj)
+		return ec.resolvers.User().Subscription(rctx, obj)
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6686,9 +6822,9 @@ func (ec *executionContext) _User_billingPlan(ctx context.Context, field graphql
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.BillingPlan)
+	res := resTmp.(*model.BillingSubscription)
 	fc.Result = res
-	return ec.marshalOBillingPlan2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingPlan(ctx, field.Selections, res)
+	return ec.marshalOBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
@@ -8627,6 +8763,43 @@ func (ec *executionContext) _BillingPlanEdge(ctx context.Context, sel ast.Select
 	return out
 }
 
+var billingSubscriptionImplementors = []string{"BillingSubscription"}
+
+func (ec *executionContext) _BillingSubscription(ctx context.Context, sel ast.SelectionSet, obj *model.BillingSubscription) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, billingSubscriptionImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("BillingSubscription")
+		case "subscribedAt":
+			out.Values[i] = ec._BillingSubscription_subscribedAt(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "usedStorage":
+			out.Values[i] = ec._BillingSubscription_usedStorage(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "plan":
+			out.Values[i] = ec._BillingSubscription_plan(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var bloomMetadataImplementors = []string{"BloomMetadata"}
 
 func (ec *executionContext) _BloomMetadata(ctx context.Context, sel ast.SelectionSet, obj *model.BloomMetadata) graphql.Marshaler {
@@ -9751,7 +9924,7 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 				res = ec._User_groupInvitations(ctx, field, obj)
 				return res
 			})
-		case "billingPlan":
+		case "subscription":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -9759,7 +9932,7 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._User_billingPlan(ctx, field, obj)
+				res = ec._User_subscription(ctx, field, obj)
 				return res
 			})
 		default:
@@ -10748,6 +10921,17 @@ func (ec *executionContext) marshalOBillingPlanEdge2ᚖgitlabᚗcomᚋbloom42ᚋ
 		return graphql.Null
 	}
 	return ec._BillingPlanEdge(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOBillingSubscription2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx context.Context, sel ast.SelectionSet, v model.BillingSubscription) graphql.Marshaler {
+	return ec._BillingSubscription(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx context.Context, sel ast.SelectionSet, v *model.BillingSubscription) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._BillingSubscription(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOBloomMetadata2gitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBloomMetadata(ctx context.Context, sel ast.SelectionSet, v model.BloomMetadata) graphql.Marshaler {

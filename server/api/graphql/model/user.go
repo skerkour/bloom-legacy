@@ -174,8 +174,8 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 	return ret, nil
 }
 
-func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*BillingPlan, error) {
-	var ret *BillingPlan
+func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*BillingSubscription, error) {
+	var ret *BillingSubscription
 	currentUser := apiutil.UserFromCtx(ctx)
 	var stripeId *string
 
@@ -187,20 +187,28 @@ func (resolver *UserResolver) BillingPlan(ctx context.Context, user *User) (*Bil
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
+	customer, err := billing.FindCustomerByUserIdNoTx(ctx, *user.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
 
 	if currentUser.IsAdmin {
 		stripeId = &plan.StripeID
 	}
 
-	ret = &BillingPlan{
-		ID:          plan.ID,
-		Price:       Int64(plan.Price),
-		Name:        plan.Name,
-		Description: plan.Description,
-		IsPublic:    plan.IsPublic,
-		StripeID:    stripeId,
-		Product:     BillingProduct(plan.Product),
-		Storage:     Int64(plan.Storage),
+	ret = &BillingSubscription{
+		SubscribedAt: customer.PlanUpdatedAt,
+		UsedStorage:  Int64(customer.UsedStorage),
+		Plan: &BillingPlan{
+			ID:          plan.ID,
+			Price:       Int64(plan.Price),
+			Name:        plan.Name,
+			Description: plan.Description,
+			IsPublic:    plan.IsPublic,
+			StripeID:    stripeId,
+			Product:     BillingProduct(plan.Product),
+			Storage:     Int64(plan.Storage),
+		},
 	}
 	return ret, nil
 }

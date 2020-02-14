@@ -65,7 +65,7 @@ type User {
   invoices: InvoiceConnection
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
-  billingPlan: BillingPlan
+  subscription: BillingSubscription
 }
 
 type UserConnection {
@@ -192,6 +192,13 @@ type BillingPlanConnection {
 type BillingPlanEdge {
   cursor: String!
   node: BillingPlan
+}
+
+
+type BillingSubscription {
+  subscribedAt: Time!
+  usedStorage: Int64!
+  plan: BillingPlan!
 }
 
 

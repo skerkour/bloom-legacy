@@ -43,6 +43,12 @@ type BillingPlanInput struct {
 	Storage     Int64  `json:"storage"`
 }
 
+type BillingSubscription struct {
+	SubscribedAt time.Time    `json:"subscribedAt"`
+	UsedStorage  Int64        `json:"usedStorage"`
+	Plan         *BillingPlan `json:"plan"`
+}
+
 type BloomMetadata struct {
 	Os        string `json:"os"`
 	Arch      string `json:"arch"`
