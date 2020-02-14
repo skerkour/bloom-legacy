@@ -22,6 +22,7 @@ CREATE TABLE users (
 );
 CREATE UNIQUE INDEX users_username_idx ON users (username);
 CREATE UNIQUE INDEX users_email_idx ON users (email);
+CREATE UNIQUE INDEX users_avatar_id_idx ON users (avatar_id);
 
 
 CREATE TABLE sessions (

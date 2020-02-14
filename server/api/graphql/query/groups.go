@@ -3,42 +3,45 @@ package query
 import (
 	"context"
 
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
 )
 
 // Groups finds all groups
 func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 	var ret *model.GroupConnection
-	// ret := &rpc.GroupList{Groups: []*rpc.Group{}}
-	// logger := rz.FromCtx(ctx)
-	// apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
-	// if !ok {
-	// 	return ret, twirp.InternalError("internal error")
-	// }
-	// if apiCtx.AuthenticatedUser == nil {
-	// 	twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
-	// 	return ret, twerr
-	// }
+	currentUser := apiutil.UserFromCtx(ctx)
 
-	// if !apiCtx.AuthenticatedUser.IsAdmin {
-	// 	return ret, twirp.NewError(twirp.PermissionDenied, "permission denied")
-	// }
+	if currentUser == nil || !currentUser.IsAdmin {
+		return ret, gqlerrors.AdminRoleRequired()
+	}
 
-	// groups := []groups.Group{}
-	// err := db.DB.Select(&groups, `SELECT * FROM groups`)
-	// if err != nil {
-	// 	logger.Error("groups.ListAllGroups: fetching groups", rz.Err(err))
-	// 	return ret, twirp.InternalError("Internal error. Please try again.")
-	// }
+	groups, err := groups.FindAllGroups(ctx)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
 
-	// for _, group := range groups {
-	// 	rpcGroup := rpc.Group{
-	// 		Id:          group.ID,
-	// 		CreatedAt:   group.CreatedAt.Format(time.RFC3339),
-	// 		Name:        group.Name,
-	// 		Description: group.Description,
-	// 	}
-	// 	ret.Groups = append(ret.Groups, &rpcGroup)
-	// }
+	ret = &model.GroupConnection{
+		Edges:      []*model.GroupEdge{},
+		TotalCount: model.Int64(len(groups)),
+	}
+
+	for _, group := range groups {
+		groupModel := &model.Group{
+			ID:          &group.ID,
+			CreatedAt:   &group.CreatedAt,
+			Name:        group.Name,
+			Description: group.Description,
+			AvatarURL:   nil,
+		}
+		edge := &model.GroupEdge{
+			Node: groupModel,
+		}
+		ret.Edges = append(ret.Edges, edge)
+	}
+
+	return ret, nil
 	return ret, nil
 }

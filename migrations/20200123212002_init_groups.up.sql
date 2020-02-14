@@ -9,6 +9,8 @@ CREATE TABLE groups (
 
     PRIMARY KEY(id)
 );
+CREATE UNIQUE INDEX groups_avatar_id_idx ON groups (avatar_id);
+
 
 CREATE TABLE groups_members (
     joined_at TIMESTAMP WITH TIME ZONE NOT NULL,

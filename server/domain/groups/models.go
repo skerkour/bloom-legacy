@@ -14,6 +14,7 @@ type Group struct {
 	UpdatedAt   time.Time `json:"updated_at" db:"updated_at"`
 	Name        string    `json:"name" db:"name"`
 	Description string    `json:"description" db:"description"`
+	AvatardID   *string   `json:"avatar_id" db:"avatar_id"`
 }
 
 type Membership struct {

@@ -33,6 +33,7 @@ func (r *Resolver) Group(ctx context.Context, id string) (*model.Group, error) {
 		CreatedAt:   &group.CreatedAt,
 		Name:        group.Name,
 		Description: group.Description,
+		AvatarURL:   nil,
 	}
 
 	return ret, nil

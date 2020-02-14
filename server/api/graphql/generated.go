@@ -84,6 +84,7 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
+		AvatarURL    func(childComplexity int) int
 		CreatedAt    func(childComplexity int) int
 		Description  func(childComplexity int) int
 		ID           func(childComplexity int) int
@@ -489,6 +490,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BloomMetadata.Version(childComplexity), true
+
+	case "Group.avatarUrl":
+		if e.complexity.Group.AvatarURL == nil {
+			break
+		}
+
+		return e.complexity.Group.AvatarURL(childComplexity), true
 
 	case "Group.createdAt":
 		if e.complexity.Group.CreatedAt == nil {
@@ -1582,6 +1590,7 @@ type PaymentMethodEdge {
 type Group {
   id: ID
   createdAt: Time
+  avatarUrl: String
   name: String!
   description: String!
   members: GroupMemberConnection
@@ -3101,6 +3110,37 @@ func (ec *executionContext) _Group_createdAt(ctx context.Context, field graphql.
 	res := resTmp.(*time.Time)
 	fc.Result = res
 	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_avatarUrl(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.AvatarURL, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_name(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -8898,6 +8938,8 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 			out.Values[i] = ec._Group_id(ctx, field, obj)
 		case "createdAt":
 			out.Values[i] = ec._Group_createdAt(ctx, field, obj)
+		case "avatarUrl":
+			out.Values[i] = ec._Group_avatarUrl(ctx, field, obj)
 		case "name":
 			out.Values[i] = ec._Group_name(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

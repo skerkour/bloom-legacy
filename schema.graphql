@@ -103,6 +103,7 @@ type PaymentMethodEdge {
 type Group {
   id: ID
   createdAt: Time
+  avatarUrl: String
   name: String!
   description: String!
   members: GroupMemberConnection
