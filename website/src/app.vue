@@ -28,7 +28,6 @@ import Footer from '@/components/footer.vue';
 export default class App extends Vue {
   alert = true;
   alertHtml = `
-  Looking for the web application? Head to <a href="https://legacy.bloom.sh">https://legacy.bloom.sh</a><br/>
     What's happening? <a href="https://fatalentropy.com/2019-december-update">Read the announcement &#9432;</a>
   `;
 }
