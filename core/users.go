@@ -85,7 +85,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: kernel.Empty{}}
 	case "update_profile":
-		var input model.UpdateUserProfileInput
+		var input model.UserProfileInput
 		err := json.Unmarshal(jsonParams, &input)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

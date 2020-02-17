@@ -8,14 +8,14 @@ import (
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-func UpdateProfile(input model.UpdateUserProfileInput) (*model.User, error) {
+func UpdateProfile(input model.UserProfileInput) (*model.User, error) {
 	client := api.Client()
 
 	var resp struct {
 		UpdateUserProfile *model.User `json:"updateUserProfile"`
 	}
 	req := graphql.NewRequest(`
-	mutation ($input: UpdateUserProfileInput!) {
+	mutation ($input: UserProfileInput!) {
 		updateUserProfile(input: $input) {
 			id
 			displayName
