@@ -127,8 +127,9 @@ import {
   Watch,
 } from 'vue-property-decorator';
 import core from '@/core';
-import { DeleteEvent, CreateEvent, Event as EventModel } from '../core/messages';
-import CalendarMethod from '../core/methods';
+import {
+  DeleteEvent, CreateEvent, Event as EventModel, Method,
+} from '@/core/calendar';
 
 
 const { log } = require('@bloom42/astro');
@@ -229,7 +230,7 @@ export default class EventDialog extends Vue {
       end_at: core.toIsoDate(this.endAt)!,
     };
     try {
-      const res = await core.call(CalendarMethod.CreateEvent, params);
+      const res = await core.call(Method.CreateEvent, params);
       this.$emit('created', (res as Event));
     } catch (err) {
       this.error = err.message;
@@ -247,7 +248,7 @@ export default class EventDialog extends Vue {
     event.start_at = core.toIsoDate(this.startAt)!;
     event.end_at = core.toIsoDate(this.endAt)!;
     try {
-      const res = await core.call(CalendarMethod.UpdateEvent, event);
+      const res = await core.call(Method.UpdateEvent, event);
       this.$emit('updated', (res as Event));
     } catch (err) {
       this.error = err.message;
@@ -263,7 +264,7 @@ export default class EventDialog extends Vue {
       id: this.event!.id,
     };
     try {
-      await core.call(CalendarMethod.DeleteEvent, params);
+      await core.call(Method.DeleteEvent, params);
       this.$emit('deleted', this.event);
       this.close(true);
     } catch (err) {

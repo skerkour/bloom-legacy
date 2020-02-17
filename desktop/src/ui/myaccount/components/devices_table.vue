@@ -49,9 +49,8 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
-import { RevokeSessionParams } from '@/ui/myaccount/core/messages';
+import { RevokeSessionParams, Method } from '@/core/users';
 import core from '@/core';
-import MyAccountMethods from '@/ui/myaccount/core/methods';
 
 @Component
 export default class DevicesTable extends Vue {
@@ -92,7 +91,7 @@ export default class DevicesTable extends Vue {
     };
 
     try {
-      await core.call(MyAccountMethods.RevokeSession, params);
+      await core.call(Method.RevokeSession, params);
       this.$emit('revoked', session);
     } catch (err) {
       this.error = err.message;

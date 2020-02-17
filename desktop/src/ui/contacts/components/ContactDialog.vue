@@ -422,8 +422,8 @@ import {
   Phone,
   CreateContactParams,
   DeleteContact,
-} from '../core/messages';
-import ContactsMethod from '../core/methods';
+  Method,
+} from '@/core/contacts';
 
 
 const DEFAULT_EMAIL = { email: '', label: 'Other' };
@@ -554,7 +554,7 @@ export default class ContactDialog extends Vue {
       device_id: '',
     };
     try {
-      const res = await core.call(ContactsMethod.CreateContact, params);
+      const res = await core.call(Method.CreateContact, params);
       this.$emit('created', (res as Contact));
     } catch (err) {
       this.error = err.message;
@@ -577,7 +577,7 @@ export default class ContactDialog extends Vue {
     contact.organizations = this.organizations;
     contact.addresses = [];
     try {
-      const res = await core.call(ContactsMethod.UpdateContact, contact);
+      const res = await core.call(Method.UpdateContact, contact);
       this.$emit('updated', (res as Contact));
     } catch (err) {
       this.error = err.message;
@@ -593,7 +593,7 @@ export default class ContactDialog extends Vue {
       id: this.contact!.id,
     };
     try {
-      await core.call(ContactsMethod.DeleteContact, params);
+      await core.call(Method.DeleteContact, params);
       this.$emit('deleted', this.contact);
     } catch (err) {
       this.error = err.message;

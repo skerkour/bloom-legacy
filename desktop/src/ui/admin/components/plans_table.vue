@@ -141,7 +141,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import core from '@/core';
-import AdminMethods from '@/ui/admin/core/methods';
+import { Method as BillingMethod } from '@/core/billing';
 
 @Component
 export default class PlansTable extends Vue {
@@ -247,7 +247,7 @@ export default class PlansTable extends Vue {
         plan.price = parseFloat(plan.price); // eslint-disable-line
       }
 
-      const updatedPlan = await core.call(AdminMethods.UpdatedBillingPlan, plan);
+      const updatedPlan = await core.call(BillingMethod.UpdatedPlan, plan);
       this.closeEditPlanDialog();
       this.$emit('updated', updatedPlan);
     } catch (err) {
@@ -269,7 +269,7 @@ export default class PlansTable extends Vue {
         plan.price = parseFloat(plan.price); // eslint-disable-line
       }
 
-      const newPlan = await core.call(AdminMethods.CreateBillingPlan, plan);
+      const newPlan = await core.call(BillingMethod.CreatePlan, plan);
       this.closeEditPlanDialog();
       this.$emit('created', newPlan);
     } catch (err) {
@@ -291,7 +291,7 @@ export default class PlansTable extends Vue {
       id: plan.id,
     };
     try {
-      await core.call(AdminMethods.DeleteBillingPlan, input);
+      await core.call(BillingMethod.DeletePlan, input);
       this.closeEditPlanDialog();
       this.$emit('deleted', plan);
     } catch (err) {

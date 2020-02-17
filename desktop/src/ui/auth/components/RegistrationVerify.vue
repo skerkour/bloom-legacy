@@ -63,8 +63,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { mask } from 'vue-the-mask';
 import core from '@/core';
-import { VerifyRegistration } from '../core/messages';
-import AuthMethod from '../core/methods';
+import { VerifyRegistration, Method } from '@/core/users';
 
 
 const RESEND_TIMEOUT = 42_000;
@@ -133,7 +132,7 @@ export default class RegistrationVerify extends Vue {
       code,
     };
     try {
-      await core.call(AuthMethod.VerifyRegistration, params);
+      await core.call(Method.VerifyRegistration, params);
       this.$router.push({ path: '/auth/registration/complete', params: { pendingAccountId: this.pendingAccountId } });
     } catch (err) {
       this.error = err.message;

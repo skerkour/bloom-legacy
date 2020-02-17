@@ -18,7 +18,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import DevicesTable from '../components/devices_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/ui/myaccount/core/methods';
+import { Method } from '@/core/users';
 
 
 @Component({
@@ -53,7 +53,7 @@ export default class Devices extends Vue {
     this.isLoading = true;
 
     try {
-      this.me = await core.call(MyAccountMethods.FetchMySessions, core.Empty);
+      this.me = await core.call(Method.FetchMySessions, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

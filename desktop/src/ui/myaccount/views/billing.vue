@@ -95,7 +95,7 @@ import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/ui/myaccount/core/methods';
+import { Method } from '@/core/billing';
 
 
 @Component({
@@ -139,7 +139,7 @@ export default class Billing extends Vue {
     this.isLoading = true;
 
     try {
-      const res = await core.call(MyAccountMethods.FetchMyBillingProfile, core.Empty);
+      const res = await core.call(Method.FetchMyProfile, core.Empty);
       this.me = res.me;
       this.plans = res.billingPlans;
     } catch (err) {

@@ -36,7 +36,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/ui/myaccount/core/methods';
+import { Method } from '@/core/users';
 
 @Component
 export default class DisplayNameForm extends Vue {
@@ -72,7 +72,7 @@ export default class DisplayNameForm extends Vue {
       displayName: this.newDisplayName,
     };
     try {
-      const user: models.User = await core.call(MyAccountMethods.UpdateProfile, input);
+      const user: models.User = await core.call(Method.UpdateProfile, input);
       this.$emit('updated', user.displayName);
     } catch (err) {
       this.error = err.message;

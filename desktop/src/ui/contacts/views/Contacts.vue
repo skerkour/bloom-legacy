@@ -70,8 +70,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import core from '@/core';
-import { Contact, Contacts } from '../core/messages';
-import ContactsMethod from '../core/methods';
+import { Contact, Contacts, Method } from '@/core/contacts';
 import ContactDialog from '../components/ContactDialog.vue';
 
 
@@ -125,7 +124,7 @@ export default class Index extends Vue {
     this.error = '';
     this.isLoading = true;
     try {
-      const res = await core.call(ContactsMethod.ListContacts, core.Empty);
+      const res = await core.call(Method.ListContacts, core.Empty);
       this.contacts = (res as Contacts).contacts;
     } catch (err) {
       log.error(err);

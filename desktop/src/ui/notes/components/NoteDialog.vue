@@ -80,8 +80,7 @@ import {
   Vue,
 } from 'vue-property-decorator';
 import core from '@/core';
-import { Note, CreateNote } from '../core/messages';
-import NotesMethod from '../core/methods';
+import { Note, CreateNote, Method } from '@/core/notes';
 
 @Component
 export default class NoteDialog extends Vue {
@@ -143,7 +142,7 @@ export default class NoteDialog extends Vue {
       color: '#ffffff',
     };
     try {
-      const res = await core.call(NotesMethod.CreateNote, params);
+      const res = await core.call(Method.CreateNote, params);
       this.$emit('created', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -159,7 +158,7 @@ export default class NoteDialog extends Vue {
     note.title = this.title;
     note.body = this.body;
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -183,7 +182,7 @@ export default class NoteDialog extends Vue {
     const note = { ...this.note } as Note;
     note.is_pinned = true;
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -198,7 +197,7 @@ export default class NoteDialog extends Vue {
     const note = { ...this.note } as Note;
     note.is_pinned = false;
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;

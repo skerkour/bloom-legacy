@@ -107,7 +107,7 @@ import BioForm from '../components/bio_form.vue';
 import AvatarForm from '../components/avatar_form.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import MyAccountMethods from '@/ui/myaccount/core/methods';
+import { Method } from '@/core/users';
 import { Mutations } from '@/store';
 
 
@@ -143,7 +143,7 @@ export default class Profile extends Vue {
     this.initialLoading = true;
 
     try {
-      this.me = await core.call(MyAccountMethods.FetchMyProfile, core.Empty);
+      this.me = await core.call(Method.FetchMyProfile, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

@@ -35,7 +35,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import core from '@/core';
-import AdminMethods from '@/ui/admin/core/methods';
+import { Method as AdminMethod } from '@/core/admin';
 
 @Component
 export default class Dashboard extends Vue {
@@ -59,7 +59,7 @@ export default class Dashboard extends Vue {
     this.isLoading = true;
 
     try {
-      this.data = await core.call(AdminMethods.FetchDashBoardData, core.Empty);
+      this.data = await core.call(AdminMethod.FetchDashBoardData, core.Empty);
     } catch (err) {
       this.error = err.message;
     } finally {

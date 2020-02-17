@@ -1,9 +1,11 @@
-enum Method {
-  FetchBillinghPlans = 'billing.fetch_plans',
-  DeleteBillingPlan = 'billing.delete_plan',
-  UpdatedBillingPlan = 'billing.update_plan',
-  CreateBillingPlan = 'billing.create_plan',
+/* eslint-disable import/prefer-default-export */
 
+enum Method {
+  FetchPlans = 'billing.fetch_plans',
+  DeletePlan = 'billing.delete_plan',
+  UpdatedPlan = 'billing.update_plan',
+  CreatePlan = 'billing.create_plan',
+  FetchMyProfile = 'billing.fetch_my_profile',
 }
 
-export default Method;
+export { Method };

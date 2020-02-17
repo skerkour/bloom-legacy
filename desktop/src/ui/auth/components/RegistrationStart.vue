@@ -51,9 +51,8 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { shell } from 'electron';
 import core from '@/core';
-import { StartRegistration } from '../core/messages';
+import { StartRegistration, Method } from '@/core/users';
 import { RegistrationStarted } from '@/api/models';
-import AuthMethod from '../core/methods';
 import { StorePendingAccount } from '../models';
 import { Mutations } from '@/store';
 import config from '@/config';
@@ -83,7 +82,7 @@ export default class RegistrationStart extends Vue {
       email: this.email,
     };
     try {
-      const res = await core.call(AuthMethod.StartRegistration, params);
+      const res = await core.call(Method.StartRegistration, params);
 
       const pendingAccount: StorePendingAccount = {
         email: this.email,

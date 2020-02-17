@@ -33,8 +33,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import BlmNote from './Note.vue';
 import NoteDialog from './NoteDialog.vue';
 import core from '@/core';
-import { Note, Notes } from '../core/messages';
-import NotesMethod from '../core/methods';
+import { Note, Notes, Method } from '@/core/notes';
 
 
 const { log } = require('@bloom42/astro');
@@ -70,7 +69,7 @@ export default class Index extends Vue {
     this.isLoading = true;
 
     try {
-      const res = await core.call(NotesMethod.ListNotes, core.Empty);
+      const res = await core.call(Method.ListNotes, core.Empty);
       this.notes = (res as Notes).notes;
     } catch (err) {
       log.error(err);
@@ -84,7 +83,7 @@ export default class Index extends Vue {
     this.isLoading = true;
 
     try {
-      const res = await core.call(NotesMethod.ListArchived, core.Empty);
+      const res = await core.call(Method.ListArchived, core.Empty);
       this.notes = (res as Notes).notes;
     } catch (err) {
       this.error = err.message;

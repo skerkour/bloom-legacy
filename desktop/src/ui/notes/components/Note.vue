@@ -132,8 +132,7 @@
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
 import NoteDialog from './NoteDialog.vue';
-import { Note, DeleteNote } from '../core/messages';
-import NotesMethod from '../core/methods';
+import { Note, DeleteNote, Method } from '@/core/notes';
 import core from '@/core';
 
 @Component({
@@ -161,7 +160,7 @@ export default class BlmNote extends Vue {
     note.archived_at = new Date().toISOString() as unknown as Date;
 
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('archived', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -177,7 +176,7 @@ export default class BlmNote extends Vue {
     note.archived_at = null;
 
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('unarchived', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -193,7 +192,7 @@ export default class BlmNote extends Vue {
     note.is_pinned = true;
 
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -209,7 +208,7 @@ export default class BlmNote extends Vue {
     note.is_pinned = false;
 
     try {
-      const res = await core.call(NotesMethod.UpdateNote, note);
+      const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -226,7 +225,7 @@ export default class BlmNote extends Vue {
     };
 
     try {
-      await core.call(NotesMethod.DeleteNote, params);
+      await core.call(Method.DeleteNote, params);
       this.$emit('deleted', this.note);
     } catch (err) {
       this.error = err.message;

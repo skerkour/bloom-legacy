@@ -53,8 +53,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import core from '@/core';
-import { CompleteRegistration } from '../core/messages';
-import AuthMethod from '../core/methods';
+import { CompleteRegistration, Method } from '@/core/users';
 import { Mutations } from '@/store';
 import * as models from '@/api/models';
 
@@ -100,7 +99,7 @@ export default class RegistrationComplete extends Vue {
       password: this.password,
     };
     try {
-      const res: models.SignedIn = await core.call(AuthMethod.CompleteRegistration, params);
+      const res: models.SignedIn = await core.call(Method.CompleteRegistration, params);
       this.$store.commit(Mutations.CLEAR_PENDING_ACCOUNT.toString());
       this.$store.commit(Mutations.SIGN_IN.toString(), res);
       this.$router.push({ path: '/' });

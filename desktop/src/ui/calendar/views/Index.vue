@@ -102,8 +102,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import EventDialog from '../components/EventDialog.vue';
 import core from '@/core';
-import { ListEvents, Event as EventModel, Events } from '../core/messages';
-import CalendarMethod from '../core/methods';
+import {
+  ListEvents, Event as EventModel, Events, Method,
+} from '@/core/calendar';
 
 @Component({
   components: {
@@ -171,7 +172,7 @@ export default class Index extends Vue {
       end_at: endAt,
     };
     try {
-      const res = await core.call(CalendarMethod.ListEvents, params);
+      const res = await core.call(Method.ListEvents, params);
       this.events = (res as Events).events;
     } catch (err) {
       this.error = err.message;
