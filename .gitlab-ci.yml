@@ -33,7 +33,7 @@ variables:
   POSTGRES_PASSWORD: postgres
   POSTGRES_DB: postgres
   POSTGRES_HOST: postgres
-  POSTGRES_VERSION: 12
+  POSTGRES_VERSION: 11
   DATABASE_URL: postgres://postgres:postgres@postgres:5432/postgres?sslmode=disable
   HOST: http://localhost:8000
   AWS_SECRET_ACCESS_KEY: test
