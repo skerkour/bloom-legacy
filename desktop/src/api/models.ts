@@ -1,7 +1,7 @@
-import { ServerVersion, Maybe } from './models_gen';
+import { BloomMetadata, Maybe } from './models_gen';
 
 export * from './models_gen';
 
 export type DashboardData = {
-  serverVersion: Maybe<ServerVersion>,
+  metadata: Maybe<BloomMetadata>,
 };

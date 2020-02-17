@@ -12,61 +12,101 @@ export type Scalars = {
 };
 
 export type AcceptGroupInvitationInput = {
-  id: Scalars['String'],
+  /** group id */
+  id: Scalars['ID'],
 };
 
 export type AddPaymentMethodInput = {
   stripeId: Scalars['String'],
+  /** if groupId is null, add to current user */
   groupId?: Maybe<Scalars['String']>,
 };
 
 export type BillingPlan = {
    __typename?: 'BillingPlan',
-  id: Scalars['String'],
+  id: Scalars['ID'],
+  /** amount to pay in cents */
   price: Scalars['Int64'],
   name: Scalars['String'],
+  /** plan's description, in HTML  */
   description: Scalars['String'],
   isPublic: Scalars['Boolean'],
-  tier: BillingPlanTier,
+  product: BillingProduct,
   storage: Scalars['Int64'],
   stripeId?: Maybe<Scalars['String']>,
-  subscribers?: Maybe<Scalars['Int64']>,
+  subscribers?: Maybe<UserConnection>,
+};
+
+export type BillingPlanConnection = {
+   __typename?: 'BillingPlanConnection',
+  edges?: Maybe<Array<Maybe<BillingPlanEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type BillingPlanEdge = {
+   __typename?: 'BillingPlanEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<BillingPlan>,
 };
 
 export type BillingPlanInput = {
-  id?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['ID']>,
   name: Scalars['String'],
-  tier: BillingPlanTier,
+  product: BillingProduct,
+  /** the strip id of the stripe plan. starting with 'plan_' */
   stripeId: Scalars['String'],
+  /** HTML description */
   description: Scalars['String'],
   isPublic: Scalars['Boolean'],
   storage: Scalars['Int64'],
 };
 
-export enum BillingPlanTier {
+export enum BillingProduct {
   Free = 'FREE',
   Basic = 'BASIC',
   Pro = 'PRO',
   Ultra = 'ULTRA'
 }
 
-
-export type CancelGroupInvitationInput = {
-  id: Scalars['String'],
+export type BillingSubscription = {
+   __typename?: 'BillingSubscription',
+  updatedAt: Scalars['Time'],
+  usedStorage: Scalars['Int64'],
+  stripeCustomerId?: Maybe<Scalars['String']>,
+  stripeSubscriptionId?: Maybe<Scalars['String']>,
+  plan: BillingPlan,
 };
 
-export type ChangeBillingPlanInput = {
-  id: Scalars['String'],
+export type BloomMetadata = {
+   __typename?: 'BloomMetadata',
+  os: Scalars['String'],
+  arch: Scalars['String'],
+  version: Scalars['String'],
+  gitCommit: Scalars['String'],
+};
+
+
+export type CancelGroupInvitationInput = {
+  /** group id */
+  id: Scalars['ID'],
+};
+
+/** if groupId and userId are null (reserved for admins), add to current user */
+export type ChangeBillingSubscriptionInput = {
+  planId: Scalars['ID'],
   userId?: Maybe<Scalars['String']>,
   groupId?: Maybe<Scalars['String']>,
 };
 
+/** set payment method with `id` as the default one */
 export type ChangeDefaultPaymentMethodInput = {
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type CompleteRegistrationInput = {
-  id: Scalars['String'],
+  /** pending user id */
+  id: Scalars['ID'],
   username: Scalars['String'],
   authKey: Scalars['Bytes'],
   device: SessionDeviceInput,
@@ -75,48 +115,89 @@ export type CompleteRegistrationInput = {
 export type CreateGroupInput = {
   name: Scalars['String'],
   description: Scalars['String'],
+  /** users to invite, by username */
   usersToInvite: Array<Scalars['String']>,
 };
 
 export type DeclineGroupInvitationInput = {
-  id: Scalars['String'],
+  /** group id */
+  id: Scalars['ID'],
 };
 
 export type DeleteBillingPlanInput = {
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type DeleteGroupInput = {
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type Group = {
    __typename?: 'Group',
-  id?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['ID']>,
   createdAt?: Maybe<Scalars['Time']>,
+  avatarUrl?: Maybe<Scalars['String']>,
   name: Scalars['String'],
   description: Scalars['String'],
-  members?: Maybe<Array<GroupMember>>,
-  invitations?: Maybe<Array<GroupInvitation>>,
+  members?: Maybe<GroupMemberConnection>,
+  invitations?: Maybe<GroupInvitationConnection>,
+  subscription?: Maybe<BillingSubscription>,
+};
+
+export type GroupConnection = {
+   __typename?: 'GroupConnection',
+  edges?: Maybe<Array<Maybe<GroupEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type GroupEdge = {
+   __typename?: 'GroupEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<Group>,
 };
 
 export type GroupInput = {
-  id: Scalars['String'],
-  name: Scalars['String'],
-  description: Scalars['String'],
+  /** group id */
+  id: Scalars['ID'],
+  name?: Maybe<Scalars['String']>,
+  description?: Maybe<Scalars['String']>,
 };
 
 export type GroupInvitation = {
    __typename?: 'GroupInvitation',
-  id: Scalars['String'],
+  id: Scalars['ID'],
   group: Group,
   inviter: User,
+  invitee: User,
 };
 
-export type GroupMember = {
-   __typename?: 'GroupMember',
-  user: User,
-  role: GroupMemberRole,
+export type GroupInvitationConnection = {
+   __typename?: 'GroupInvitationConnection',
+  edges?: Maybe<Array<Maybe<GroupInvitationEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type GroupInvitationEdge = {
+   __typename?: 'GroupInvitationEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<GroupInvitation>,
+};
+
+export type GroupMemberConnection = {
+   __typename?: 'GroupMemberConnection',
+  edges?: Maybe<Array<Maybe<GroupMemberEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type GroupMemberEdge = {
+   __typename?: 'GroupMemberEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<User>,
+  role?: Maybe<GroupMemberRole>,
+  joinedAt?: Maybe<Scalars['Time']>,
 };
 
 export enum GroupMemberRole {
@@ -126,37 +207,67 @@ export enum GroupMemberRole {
 
 
 export type InviteUsersInGroupInput = {
-  id: Scalars['String'],
-  usernames: Array<Scalars['String']>,
+  /** group id */
+  id: Scalars['ID'],
+  /** users to invite, by username */
+  users: Array<Scalars['String']>,
 };
 
 export type Invoice = {
    __typename?: 'Invoice',
-  id: Scalars['String'],
+  id: Scalars['ID'],
+};
+
+export type InvoiceConnection = {
+   __typename?: 'InvoiceConnection',
+  edges?: Maybe<Array<Maybe<InvoiceEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type InvoiceEdge = {
+   __typename?: 'InvoiceEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<Invoice>,
 };
 
 export type Mutation = {
    __typename?: 'Mutation',
+  /** Start registration */
   register: RegistrationStarted,
+  /** Verify pending account */
   verifyRegistration: Scalars['Boolean'],
   sendNewRegistrationCode: Scalars['Boolean'],
+  /** Complete registration and create account */
   completeRegistration: SignedIn,
+  /** Sign in */
   signIn: SignedIn,
+  /** Revoke a session. Use it for sign out. */
   revokeSession: Scalars['Boolean'],
+  /** Update an user profile, both private and public information */
   updateUserProfile: User,
+  /** Create a group */
   createGroup: Group,
+  /** Delete a group */
   deleteGroup: Scalars['Boolean'],
+  /** Update a group information */
   updateGroup: Group,
+  /** Remove users from a group */
   removeGroupMembers: Group,
+  /** Invite users in a group */
   inviteUsersInGroup: Group,
+  /** Accept a group invitaiton and join it */
   acceptGroupInvitation: Scalars['Boolean'],
+  /** Decline a group invitation */
   declineGroupInvitation: Scalars['Boolean'],
+  /** Cancel a group invitation */
   cancelGroupInvitation: Scalars['Boolean'],
+  /** Quit a group */
   quitGroup: Scalars['Boolean'],
   createBillingPlan: BillingPlan,
   updateBillingPlan: BillingPlan,
   deleteBillingPlan: Scalars['Boolean'],
-  changeBillingPlan: BillingPlan,
+  changeBillingSubscription: BillingSubscription,
   addPaymentMethod?: Maybe<PaymentMethod>,
   removePaymentMethod: Scalars['Boolean'],
   changeDefaultPaymentMethod: PaymentMethod,
@@ -194,7 +305,7 @@ export type MutationRevokeSessionArgs = {
 
 
 export type MutationUpdateUserProfileArgs = {
-  input: UpdateUserProfileInput
+  input: UserProfileInput
 };
 
 
@@ -258,8 +369,8 @@ export type MutationDeleteBillingPlanArgs = {
 };
 
 
-export type MutationChangeBillingPlanArgs = {
-  input: ChangeBillingPlanInput
+export type MutationChangeBillingSubscriptionArgs = {
+  input: ChangeBillingSubscriptionInput
 };
 
 
@@ -277,50 +388,69 @@ export type MutationChangeDefaultPaymentMethodArgs = {
   input: ChangeDefaultPaymentMethodInput
 };
 
+export type PageInfo = {
+   __typename?: 'PageInfo',
+  endCursor?: Maybe<Scalars['String']>,
+  hasNextPage: Scalars['Boolean'],
+  hasPreviousPage: Scalars['Boolean'],
+  startCursor?: Maybe<Scalars['String']>,
+};
+
 export type PaymentMethod = {
    __typename?: 'PaymentMethod',
-  id: Scalars['String'],
+  id: Scalars['ID'],
   createdAt: Scalars['Time'],
   cardLast4: Scalars['String'],
   cardExpirationMonth: Scalars['Int'],
   cardExpirationYear: Scalars['Int'],
 };
 
+export type PaymentMethodConnection = {
+   __typename?: 'PaymentMethodConnection',
+  edges?: Maybe<Array<Maybe<PaymentMethodEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type PaymentMethodEdge = {
+   __typename?: 'PaymentMethodEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<PaymentMethod>,
+};
+
 export type Query = {
    __typename?: 'Query',
+  /** Get information about current user */
   me: User,
+  /** Find an user */
   user?: Maybe<User>,
-  users: Array<User>,
+  /** Find all users */
+  users?: Maybe<UserConnection>,
+  /** Find a group */
   group?: Maybe<Group>,
-  groups: Array<Group>,
-  billingPlans: Array<BillingPlan>,
-  serverVersion?: Maybe<ServerVersion>,
+  /** Find all users */
+  groups?: Maybe<GroupConnection>,
+  /** Find all billing plans visible to the current user */
+  billingPlans?: Maybe<BillingPlanConnection>,
+  /** Metadata about Bloom server */
+  metadata?: Maybe<BloomMetadata>,
+  /** The stripe public key to be used */
+  stripePublicKey: Scalars['String'],
 };
 
 
 export type QueryUserArgs = {
-  username: Scalars['String']
-};
-
-
-export type QueryUsersArgs = {
-  limit?: Maybe<Scalars['Int']>,
-  offset?: Maybe<Scalars['Int']>
+  username?: Maybe<Scalars['String']>
 };
 
 
 export type QueryGroupArgs = {
-  id: Scalars['String']
-};
-
-
-export type QueryGroupsArgs = {
-  limit?: Maybe<Scalars['Int']>,
-  offset?: Maybe<Scalars['Int']>
+  id: Scalars['ID']
 };
 
 export type QuitGroupInput = {
-  id: Scalars['String'],
+  /** group id */
+  id: Scalars['ID'],
 };
 
 export type RegisterInput = {
@@ -330,40 +460,42 @@ export type RegisterInput = {
 
 export type RegistrationStarted = {
    __typename?: 'RegistrationStarted',
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type RemoveGroupMembersInput = {
-  id: Scalars['String'],
-  usernames: Array<Scalars['String']>,
+  /** group id */
+  id: Scalars['ID'],
+  /** members to remvove, by username */
+  members: Array<Scalars['String']>,
 };
 
+/** remove payment method with `id` */
 export type RemovePaymentMethodInput = {
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type RevokeSessionInput = {
-  id: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type SendNewRegistrationCodeInput = {
-  id: Scalars['String'],
-};
-
-export type ServerVersion = {
-   __typename?: 'ServerVersion',
-  os: Scalars['String'],
-  arch: Scalars['String'],
-  version: Scalars['String'],
-  gitCommit: Scalars['String'],
+  id: Scalars['ID'],
 };
 
 export type Session = {
    __typename?: 'Session',
-  id: Scalars['String'],
+  id: Scalars['ID'],
   createdAt: Scalars['Time'],
   token?: Maybe<Scalars['String']>,
   device: SessionDevice,
+};
+
+export type SessionConnection = {
+   __typename?: 'SessionConnection',
+  edges?: Maybe<Array<Maybe<SessionEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
 };
 
 export type SessionDevice = {
@@ -382,7 +514,8 @@ export enum SessionDeviceOs {
   Macos = 'MACOS',
   Windows = 'WINDOWS',
   Android = 'ANDROID',
-  Ios = 'IOS'
+  Ios = 'IOS',
+  Other = 'OTHER'
 }
 
 export enum SessionDeviceType {
@@ -392,8 +525,15 @@ export enum SessionDeviceType {
   Tablet = 'TABLET',
   Watch = 'WATCH',
   Computer = 'COMPUTER',
-  Car = 'CAR'
+  Car = 'CAR',
+  Other = 'OTHER'
 }
+
+export type SessionEdge = {
+   __typename?: 'SessionEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<Session>,
+};
 
 export type SignedIn = {
    __typename?: 'SignedIn',
@@ -408,17 +548,9 @@ export type SignInInput = {
 };
 
 
-export type UpdateUserProfileInput = {
-  id?: Maybe<Scalars['String']>,
-  displayName?: Maybe<Scalars['String']>,
-  bio?: Maybe<Scalars['String']>,
-  firstName?: Maybe<Scalars['String']>,
-  lastName?: Maybe<Scalars['String']>,
-};
-
 export type User = {
    __typename?: 'User',
-  id?: Maybe<Scalars['String']>,
+  id?: Maybe<Scalars['ID']>,
   createdAt?: Maybe<Scalars['Time']>,
   avatarUrl?: Maybe<Scalars['String']>,
   username: Scalars['String'],
@@ -428,16 +560,38 @@ export type User = {
   displayName: Scalars['String'],
   bio: Scalars['String'],
   isAdmin: Scalars['Boolean'],
-  groups?: Maybe<Array<Group>>,
-  paymentMethods?: Maybe<Array<PaymentMethod>>,
-  invoices?: Maybe<Array<Invoice>>,
-  sessions?: Maybe<Array<Session>>,
-  groupInvitations?: Maybe<Array<GroupInvitation>>,
-  stripePublicKey?: Maybe<Scalars['String']>,
-  billingPlan?: Maybe<BillingPlan>,
+  groups?: Maybe<GroupConnection>,
+  paymentMethods?: Maybe<PaymentMethodConnection>,
+  invoices?: Maybe<InvoiceConnection>,
+  sessions?: Maybe<SessionConnection>,
+  groupInvitations?: Maybe<GroupInvitationConnection>,
+  subscription?: Maybe<BillingSubscription>,
+};
+
+export type UserConnection = {
+   __typename?: 'UserConnection',
+  edges?: Maybe<Array<Maybe<UserEdge>>>,
+  pageInfo: PageInfo,
+  totalCount: Scalars['Int64'],
+};
+
+export type UserEdge = {
+   __typename?: 'UserEdge',
+  cursor: Scalars['String'],
+  node?: Maybe<User>,
+};
+
+export type UserProfileInput = {
+  /** id is reserved for admins */
+  id?: Maybe<Scalars['ID']>,
+  displayName?: Maybe<Scalars['String']>,
+  bio?: Maybe<Scalars['String']>,
+  firstName?: Maybe<Scalars['String']>,
+  lastName?: Maybe<Scalars['String']>,
 };
 
 export type VerifyRegistrationInput = {
-  id: Scalars['String'],
+  /** pending user id */
+  id: Scalars['ID'],
   code: Scalars['String'],
 };
