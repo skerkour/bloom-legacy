@@ -19,7 +19,7 @@ test:
 dev:
 	# go run main.go server
 	gowatch -exclude-dir=website -exclude-dir=mobile -exclude-dir=desktop -exclude-dir=.git \
-	-log-prefix=false -build="make build" -command="dist/$(NAME) server run" -verbose
+	-log-prefix=false -build="make build" -command="dist/$(NAME) server run"
 
 .PHONY: build
 build:
