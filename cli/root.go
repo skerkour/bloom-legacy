@@ -4,6 +4,8 @@ import (
 	"github.com/spf13/cobra"
 	"gitlab.com/bloom42/bloom/cli/server"
 	"gitlab.com/bloom42/bloom/cli/version"
+	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/libs/rz-go/log"
 )
 
 func init() {
@@ -21,5 +23,6 @@ var rootCmd = &cobra.Command{
 }
 
 func Execute() error {
+	log.SetLogger(log.With(rz.Formatter(rz.FormatterCLI())))
 	return rootCmd.Execute()
 }
