@@ -21,7 +21,7 @@
         <v-row>
           <v-col cols="12">
             <div class="headline">
-              Plans
+              Subscription
             </div>
           </v-col>
         </v-row>
@@ -41,12 +41,22 @@
                 </div>
                 <div class="v-card--plan__price pa-5 col col-12" v-else>
                   <div class="d-inline-block">
-                    <span class="display-3 font-weight-bold">{{ plan.price }}€</span>
+                    <span class="display-3 font-weight-bold">{{ plan.price / 100 }}€</span>
                   </div>
                   <span class="caption"> /mo </span>
                 </div>
                 <v-card-text class="blm-pricing-card-text" v-html="plan.description">
                 </v-card-text>
+                <v-card-actions class="justify-center blm-pricing-card-actions text-center pb-3">
+                  <v-btn color="primary" v-if="plan.product !== me.subscription.plan.product"
+                      @click="updateSubscription(plan)">
+                    <span v-if="plan.price > me.subscription.plan.price">Upgrade</span>
+                    <span v-else>Downgrade</span>
+                  </v-btn>
+                  <v-btn outlined color="success" v-else>
+                    Current plan
+                  </v-btn>
+                </v-card-actions>
               </v-card>
             </v-hover>
           </v-col>
@@ -151,6 +161,10 @@ export default class Billing extends Vue {
       this.isLoading = false;
     }
   }
+
+  async updateSubscription(newPlan: models.BillingPlan) {
+    console.log(newPlan);
+  }
 }
 </script>
 
@@ -180,5 +194,13 @@ export default class Billing extends Vue {
 
 .blm-pricing-card {
   height: 100%;
+  padding-bottom: 50px;
+  position: relative;
+}
+
+.blm-pricing-card-actions {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
 }
 </style>
