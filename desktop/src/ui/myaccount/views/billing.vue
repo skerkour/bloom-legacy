@@ -117,14 +117,15 @@ export default class Billing extends Vue {
     if (this.me === null) {
       return [];
     }
-    return this.me.invoices!;
+    return this.me.invoices!.edges!.map((edge: models.Maybe<models.InvoiceEdge>) => edge!.node!);
   }
 
   get paymentMethods(): models.PaymentMethod[] {
     if (this.me === null) {
       return [];
     }
-    return this.me.paymentMethods!;
+    return this.me.paymentMethods!
+      .edges!.map((edge: models.Maybe<models.PaymentMethodEdge>) => edge!.node!);
   }
 
   // lifecycle

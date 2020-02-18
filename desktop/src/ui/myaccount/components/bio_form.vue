@@ -68,7 +68,7 @@ export default class BioForm extends Vue {
     this.error = '';
     this.isLoading = true;
 
-    const input: models.UpdateUserProfileInput = {
+    const input: models.UserProfileInput = {
       bio: this.newBio,
     };
     try {

@@ -43,7 +43,7 @@
             </v-chip>
           </td>
           <td>
-            <span>{{ item.tier }}</span>
+            <span>{{ item.product }}</span>
           </td>
           <td>
             <span>{{ item.price / 100 }} €</span>
@@ -87,10 +87,10 @@
 
             <v-col cols="12">
               <v-select
-                :items="billingTiers"
-                label="Tier"
+                :items="billingProducts"
+                label="Product"
                 outlined
-                v-model="planToEdit.tier"
+                v-model="planToEdit.product"
               ></v-select>
             </v-col>
 
@@ -177,8 +177,8 @@ export default class PlansTable extends Vue {
     {
       align: 'left',
       sortable: true,
-      text: 'Tier',
-      value: 'tier',
+      text: 'Product',
+      value: 'product',
     },
     {
       align: 'left',
@@ -199,7 +199,7 @@ export default class PlansTable extends Vue {
       value: 'actions',
     },
   ];
-  billingTiers = ['FREE', 'BASIC', 'PRO', 'ULTRA'];
+  billingProducts = ['FREE', 'BASIC', 'PRO', 'ULTRA'];
 
   // computed
   get isLoading(): boolean {
@@ -222,7 +222,7 @@ export default class PlansTable extends Vue {
       name: '',
       description: '',
       isPublic: false,
-      tier: models.BillingPlanTier.Free,
+      product: models.BillingProduct.Free,
       storage: 0,
       stripeId: '',
     };

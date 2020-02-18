@@ -68,7 +68,7 @@ export default class DisplayNameForm extends Vue {
     this.error = '';
     this.isLoading = true;
 
-    const input: models.UpdateUserProfileInput = {
+    const input: models.UserProfileInput = {
       displayName: this.newDisplayName,
     };
     try {
