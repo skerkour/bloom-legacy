@@ -130,11 +130,25 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 }
 
 func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*InvoiceConnection, error) {
-	return nil, nil
+	var ret *InvoiceConnection
+
+	ret = &InvoiceConnection{
+		Edges:      []*InvoiceEdge{},
+		TotalCount: Int64(0),
+	}
+
+	return ret, nil
 }
 
 func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*PaymentMethodConnection, error) {
-	return nil, nil
+	var ret *PaymentMethodConnection
+
+	ret = &PaymentMethodConnection{
+		Edges:      []*PaymentMethodEdge{},
+		TotalCount: Int64(0),
+	}
+
+	return ret, nil
 }
 
 func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*SessionConnection, error) {
