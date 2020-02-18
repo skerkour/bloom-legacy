@@ -164,6 +164,15 @@ export default class Billing extends Vue {
 
   async updateSubscription(newPlan: models.BillingPlan) {
     console.log(newPlan);
+    if (this.paymentMethods.length === 0) {
+      await this.addPaymentMethod();
+    } else {
+      console.log('good');
+    }
+  }
+
+  async addPaymentMethod() {
+    console.log('add payment method');
   }
 }
 </script>
