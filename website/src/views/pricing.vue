@@ -8,7 +8,7 @@
     </v-row>
 
     <v-row justify="space-around" align="stretch">
-      <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
+      <v-col cols="12" sm="6" md="3" class="text-center mt-5" align-self="stretch"
         v-for="plan in plans" :key="plan.name">
         <v-hover v-slot:default="{ hover }">
           <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"

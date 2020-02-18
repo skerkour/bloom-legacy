@@ -92,13 +92,6 @@ export type CancelGroupInvitationInput = {
   id: Scalars['ID'],
 };
 
-/** if groupId and userId are null (reserved for admins), add to current user */
-export type ChangeBillingSubscriptionInput = {
-  planId: Scalars['ID'],
-  userId?: Maybe<Scalars['String']>,
-  groupId?: Maybe<Scalars['String']>,
-};
-
 /** set payment method with `id` as the default one */
 export type ChangeDefaultPaymentMethodInput = {
   id: Scalars['ID'],
@@ -267,7 +260,7 @@ export type Mutation = {
   createBillingPlan: BillingPlan,
   updateBillingPlan: BillingPlan,
   deleteBillingPlan: Scalars['Boolean'],
-  changeBillingSubscription: BillingSubscription,
+  updateBillingSubscription: BillingSubscription,
   addPaymentMethod?: Maybe<PaymentMethod>,
   removePaymentMethod: Scalars['Boolean'],
   changeDefaultPaymentMethod: PaymentMethod,
@@ -369,8 +362,8 @@ export type MutationDeleteBillingPlanArgs = {
 };
 
 
-export type MutationChangeBillingSubscriptionArgs = {
-  input: ChangeBillingSubscriptionInput
+export type MutationUpdateBillingSubscriptionArgs = {
+  input: UpdateBillingSubscriptionInput
 };
 
 
@@ -547,6 +540,13 @@ export type SignInInput = {
   device: SessionDeviceInput,
 };
 
+
+/** if groupId and userId are null (reserved for admins), add to current user */
+export type UpdateBillingSubscriptionInput = {
+  planId: Scalars['ID'],
+  userId?: Maybe<Scalars['String']>,
+  groupId?: Maybe<Scalars['String']>,
+};
 
 export type User = {
    __typename?: 'User',
