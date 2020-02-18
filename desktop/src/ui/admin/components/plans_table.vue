@@ -32,7 +32,7 @@
             <span>{{ item.name }}</span>
           </td>
           <td>
-            <span>{{ item.subscribers }}</span>
+            <span>{{ item.subscribers.totalCount }}</span>
           </td>
           <td>
             <v-chip color="success" outlined v-if="item.isPublic">

@@ -9,8 +9,8 @@
         <v-card outlined>
           <v-card-title>Bloom</v-card-title>
           <v-card-text>
-            Server: v{{ data.serverVersion.version }}
-            | {{ data.serverVersion.os }}-{{ data.serverVersion.arch }}
+            Server: v{{ data.metadata.version }}
+            | {{ data.metadata.os }}-{{ data.metadata.arch }}
           </v-card-text>
         </v-card>
       </v-col>
