@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 )
 
-func (r *Resolver) ChangeBillingSubscription(ctx context.Context, input model.ChangeBillingSubscriptionInput) (*model.BillingSubscription, error) {
+func (r *Resolver) UpdateBillingSubscription(ctx context.Context, input model.UpdateBillingSubscriptionInput) (*model.BillingSubscription, error) {
 	var ret *model.BillingSubscription
 	var err error
 	currentUser := apiutil.UserFromCtx(ctx)

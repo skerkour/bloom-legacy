@@ -63,13 +63,6 @@ type CancelGroupInvitationInput struct {
 	ID string `json:"id"`
 }
 
-// if groupId and userId are null (reserved for admins), add to current user
-type ChangeBillingSubscriptionInput struct {
-	PlanID  string  `json:"planId"`
-	UserID  *string `json:"userId"`
-	GroupID *string `json:"groupId"`
-}
-
 // set payment method with `id` as the default one
 type ChangeDefaultPaymentMethodInput struct {
 	ID string `json:"id"`
@@ -271,6 +264,13 @@ type SignInInput struct {
 type SignedIn struct {
 	Session *Session `json:"session"`
 	Me      *User    `json:"me"`
+}
+
+// if groupId and userId are null (reserved for admins), add to current user
+type UpdateBillingSubscriptionInput struct {
+	PlanID  string  `json:"planId"`
+	UserID  *string `json:"userId"`
+	GroupID *string `json:"groupId"`
 }
 
 type UserConnection struct {
