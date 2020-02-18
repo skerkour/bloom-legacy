@@ -18,14 +18,16 @@ func FetchPlans() (*[]model.BillingPlan, error) {
 	query {
 		billingPlans {
 			id
-			tier
+			product
 			price
 			name
 			description
 			storage
 			isPublic
 			stripeId
-			subscribers
+			subscribers {
+				totalCount
+			}
 		}
 	}
 	`)

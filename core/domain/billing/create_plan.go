@@ -18,14 +18,16 @@ func CreatePlan(input model.BillingPlanInput) (*model.BillingPlan, error) {
 		mutation ($input: BillingPlanInput!) {
 			createBillingPlan(input: $input) {
 				id
-				tier
+				product
 				price
 				name
 				description
 				storage
 				stripeId
-				subscribers
 				isPublic
+				subscribers {
+					totalCount
+				}
 			}
 		}
 	`)

@@ -22,7 +22,7 @@ func homeDir() (string, error) {
 		}
 		return filepath.Join("data", "data", string(bytes.Trim(data, "\x00"))), nil
 	} else {
-		home, err := kernel.GetHome()
+		home, err := kernel.GetHomeDirectory()
 		if err != nil {
 			return "", err
 		}

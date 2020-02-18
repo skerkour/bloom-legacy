@@ -15,12 +15,16 @@ func FetchMyProfile() (MyBillingProfile, error) {
 	query {
 		me {
 			id
-			billingPlan {
-				id
-				tier
-				price
-				name
-				storage
+			subscription {
+				updatedAt
+				usedStorage
+				plan {
+					id
+					product
+					price
+					name
+					storage
+				}
 			}
 			paymentMethods {
 				id
@@ -35,7 +39,7 @@ func FetchMyProfile() (MyBillingProfile, error) {
 		}
 		billingPlans {
 			id
-			tier
+			product
 			price
 			name
 			description

@@ -4,7 +4,7 @@ import (
 	"os/user"
 )
 
-func GetHome() (string, error) {
+func GetHomeDirectory() (string, error) {
 	user, err := user.Current()
 	if err != nil {
 		return "", err

@@ -20,5 +20,5 @@ type User struct {
 	Invoices         *InvoiceConnection         `json:"invoices"`
 	PaymentMethods   *PaymentMethodConnection   `json:"paymentMethods"`
 	GroupInvitations *GroupInvitationConnection `json:"groupInvitations"`
-	Groups           GroupConnection            `json:"groups"`
+	Groups           *GroupConnection           `json:"groups"`
 }
