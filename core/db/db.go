@@ -31,11 +31,8 @@ func homeDir() (string, error) {
 }
 
 func dbDir() (string, error) {
-	home, err := homeDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(home, "db"), nil
+	return homeDir()
+	//return filepath.Join(home, "db"), err
 }
 
 func dbPath() (string, error) {

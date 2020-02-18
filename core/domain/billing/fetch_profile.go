@@ -27,23 +27,35 @@ func FetchMyProfile() (MyBillingProfile, error) {
 				}
 			}
 			paymentMethods {
-				id
-				createdAt
-				cardLast4
-				cardExpirationMonth
-				cardExpirationYear
+				edges {
+					node {
+						id
+						createdAt
+						cardLast4
+						cardExpirationMonth
+						cardExpirationYear
+					}
+				}
 			}
 			invoices {
-				id
+				edges {
+					node {
+						id
+					}
+				}
 			}
 		}
 		billingPlans {
-			id
-			product
-			price
-			name
-			description
-			storage
+			edges {
+				node {
+					id
+					product
+					price
+					name
+					description
+					storage
+				}
+			}
 		}
 	}
 	`)
