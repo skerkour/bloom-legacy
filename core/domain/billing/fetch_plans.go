@@ -8,25 +8,29 @@ import (
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-func FetchPlans() (*[]model.BillingPlan, error) {
+func FetchPlans() (*model.BillingPlanConnection, error) {
 	client := api.Client()
 
 	var resp struct {
-		BillingPlans *[]model.BillingPlan `json:"billingPlans"`
+		BillingPlans *model.BillingPlanConnection `json:"billingPlans"`
 	}
 	req := graphql.NewRequest(`
 	query {
 		billingPlans {
-			id
-			product
-			price
-			name
-			description
-			storage
-			isPublic
-			stripeId
-			subscribers {
-				totalCount
+			edges {
+				node {
+					id
+					product
+					price
+					name
+					description
+					storage
+					isPublic
+					stripeId
+					subscribers {
+						totalCount
+					}
+				}
 			}
 		}
 	}
