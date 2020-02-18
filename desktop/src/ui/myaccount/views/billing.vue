@@ -31,7 +31,8 @@
             v-for="plan in plans" :key="plan.id">
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
-            :class="{ 'on-hover': hover, 'blm-billing-myplan': plan.tier === me.billingPlan.tier }">
+                :class="{ 'on-hover': hover, 'blm-billing-myplan': plan.product ===
+                me.billingPlan.product }">
                 <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
                 <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
                   <div class="d-inline-block">
