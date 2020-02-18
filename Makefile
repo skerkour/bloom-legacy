@@ -18,7 +18,7 @@ test:
 .PHONY: dev
 dev:
 	# go run main.go server
-	gowatch -exclude-dir=website -exclude-dir=mobile -exclude-dir=desktop -exclude-dir=.git \
+	gowatch -exclude-dir=website -exclude-dir=mobile -exclude-dir=desktop -exclude-dir=.git -exclude-dir=core \
 	-log-prefix=false -build="make build" -command="dist/$(NAME) server run"
 
 .PHONY: build
