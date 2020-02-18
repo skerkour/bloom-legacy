@@ -32,7 +32,7 @@
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
                 :class="{ 'on-hover': hover, 'blm-billing-myplan': plan.product ===
-                me.billingPlan.product }">
+                me.subscription.plan.product }">
                 <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
                 <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
                   <div class="d-inline-block">
@@ -143,7 +143,8 @@ export default class Billing extends Vue {
     try {
       const res = await core.call(Method.FetchMyProfile, core.Empty);
       this.me = res.me;
-      this.plans = res.billingPlans;
+      this.plans = res.billingPlans
+        .edges!.map((edge: models.Maybe<models.BillingPlanEdge>) => edge!.node!);
     } catch (err) {
       this.error = err.message;
     } finally {
