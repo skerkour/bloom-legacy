@@ -96,6 +96,8 @@
       </v-col>
     </v-row>
 
+    <blm-myaccount-add-payment-method-dialog :visible="showAddPaymentDialog"
+      @closed="addPaymentMethodDialogClosed" />
   </v-container>
 </template>
 
@@ -104,6 +106,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 import PaymentMethodsTable from '../components/payment_methods_table.vue';
 import InvoicesTable from '../components/invoices_table.vue';
+import AddPaymentMethodDialog from '../components/add_payment_method_dialog.vue';
 import * as models from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/billing';
@@ -113,6 +116,7 @@ import { Method } from '@/core/billing';
   components: {
     'blm-myaccount-table-payment-methods': PaymentMethodsTable,
     'blm-myaccount-table-invoices': InvoicesTable,
+    'blm-myaccount-add-payment-method-dialog': AddPaymentMethodDialog,
   },
 })
 export default class Billing extends Vue {
@@ -122,6 +126,9 @@ export default class Billing extends Vue {
   isLoading = false;
   plans: models.BillingPlan[] = [];
   me: models.User | null = null;
+  planAfterAddingPaymentMethod: models.BillingPlan | null = null;
+  showAddPaymentDialog = false;
+
 
   // computed
   get invoices(): models.Invoice[] {
@@ -163,16 +170,21 @@ export default class Billing extends Vue {
   }
 
   async updateSubscription(newPlan: models.BillingPlan) {
-    console.log(newPlan);
+    this.planAfterAddingPaymentMethod = null;
     if (this.paymentMethods.length === 0) {
-      await this.addPaymentMethod();
+      this.planAfterAddingPaymentMethod = newPlan;
+      await this.openAddPaymentMethodDialog();
     } else {
       console.log('good');
     }
   }
 
-  async addPaymentMethod() {
-    console.log('add payment method');
+  async openAddPaymentMethodDialog() {
+    this.showAddPaymentDialog = true;
+  }
+
+  addPaymentMethodDialogClosed() {
+    this.showAddPaymentDialog = false;
   }
 }
 </script>
