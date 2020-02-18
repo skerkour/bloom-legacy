@@ -44,7 +44,8 @@ export default class Plans extends Vue {
     this.isLoading = true;
 
     try {
-      this.plans = await core.call(BillingMethod.FetchPlans, core.Empty);
+      const res = await core.call(BillingMethod.FetchPlans, core.Empty);
+      this.plans = res.edges.map((edge: Maybe<models.BillingPlanEdge>) => edge!.node!);
     } catch (err) {
       this.error = err.message;
     } finally {
