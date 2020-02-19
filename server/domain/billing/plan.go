@@ -6,6 +6,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -108,6 +109,14 @@ func GetSubscribersCountForPlanIdTx(ctx context.Context, tx *sqlx.Tx, planId str
 	}
 
 	return ret, err
+}
+
+func FindPlans(ctx context.Context, user *users.User) ([]Plan, error) {
+	if user == nil || !user.IsAdmin {
+		return FindPlansForUser(ctx)
+	} else {
+		return FindPlansForAdmin(ctx)
+	}
 }
 
 func FindPlansForUser(ctx context.Context) ([]Plan, error) {

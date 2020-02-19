@@ -131,10 +131,35 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 
 func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*InvoiceConnection, error) {
 	var ret *InvoiceConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+		return ret, gqlerrors.AdminRoleRequired()
+	}
+
+	invoices, err := billing.FindInvoicesByUserId(ctx, *user.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
 
 	ret = &InvoiceConnection{
 		Edges:      []*InvoiceEdge{},
-		TotalCount: Int64(0),
+		TotalCount: Int64(len(invoices)),
+	}
+
+	for _, invoice := range invoices {
+		inv := &Invoice{
+			ID:              invoice.ID,
+			CreatedAt:       invoice.CreatedAt,
+			StripePdfURL:    invoice.StripePdfURL,
+			Paid:            invoice.Paid,
+			StripeHostedURL: invoice.StripeHostedURL,
+			Amount:          Int64(invoice.Amount),
+		}
+		edge := &InvoiceEdge{
+			Node: inv,
+		}
+		ret.Edges = append(ret.Edges, edge)
 	}
 
 	return ret, nil

@@ -69,7 +69,7 @@ func FindPaymentMethodsByUserId(ctx context.Context, userId string) ([]PaymentMe
 		WHERE billing_customers.user_id = $1`
 	err = db.DB.Select(&ret, queryFind, userId)
 	if err != nil {
-		logger.Error("billing.:FindPaymentMethodsByUserId finding payment method", rz.Err(err),
+		logger.Error("billing.FindPaymentMethodsByUserId finding payment method", rz.Err(err),
 			rz.String("users_id", userId))
 		return ret, NewError(ErrorPaymentMethodNotFound)
 	}

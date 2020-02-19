@@ -34,6 +34,7 @@ const (
 	ErrorCantDeletePlanWithSubscribers
 	ErrorStripeCustomerIDIsNUll
 	ErrorCreatingStripeSubscription
+	ErrorInvoiceNotFound
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -108,6 +109,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorStripeCustomerIDIsNUll:
 		code = errors.InvalidArgument
 		message = "Please add a payment method before chaging plan."
+	case ErrorInvoiceNotFound:
+		code = errors.NotFound
+		message = "Invoice not found."
 	}
 
 	return errors.New(code, message)
