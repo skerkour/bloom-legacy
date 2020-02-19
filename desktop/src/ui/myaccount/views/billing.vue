@@ -245,7 +245,18 @@ export default class Billing extends Vue {
     this.error = '';
     this.isLoading = true;
     this.planAfterAddingPaymentMethod = null;
-    console.log(newPlan);
+    const input: models.UpdateBillingSubscriptionInput = {
+      planId: newPlan.id,
+    };
+
+    try {
+      const res = await core.call(Method.UpdateSubscription, input);
+      this.me!.subscription = res;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>

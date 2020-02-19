@@ -8,6 +8,7 @@ enum Method {
   FetchMyProfile = 'billing.fetch_my_profile',
   AddPaymentMethod = 'billing.add_payment_method',
   RemovePaymentMethod = 'billing.remove_payment_method',
+  UpdateSubscription = 'billing.update_subscription',
 }
 
 export { Method };
