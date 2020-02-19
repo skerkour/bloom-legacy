@@ -57,6 +57,7 @@ func FetchMyProfile() (MyBillingProfile, error) {
 				}
 			}
 		}
+		stripePublicKey
 	}
 	`)
 

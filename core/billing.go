@@ -68,7 +68,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "add_payment_method":
-		var params model.AddPaymentMethodInput
+		var params billing.AddPaymentMethodParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

@@ -5,8 +5,15 @@ import (
 )
 
 type MyBillingProfile struct {
-	Me           *model.User                  `json:"me"`
-	BillingPlans *model.BillingPlanConnection `json:"billingPlans"`
+	Me              *model.User                  `json:"me"`
+	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
+	StripePublicKey string                       `json:"stripePublicKey"`
+}
+
+type AddPaymentMethodParams struct {
+	StripePublicKey *string       `json:"stripePublicKey"`
+	GroupID         *string       `json:"groupId"`
+	Card            NewStripeCard `json:"card"`
 }
 
 type UserBillingProfile struct {
