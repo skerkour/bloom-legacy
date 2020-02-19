@@ -396,6 +396,7 @@ export type PaymentMethod = {
   cardLast4: Scalars['String'],
   cardExpirationMonth: Scalars['Int'],
   cardExpirationYear: Scalars['Int'],
+  isDefault: Scalars['Boolean'],
 };
 
 export type PaymentMethodConnection = {

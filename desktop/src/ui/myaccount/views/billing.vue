@@ -49,7 +49,7 @@
                 </v-card-text>
                 <v-card-actions class="justify-center blm-pricing-card-actions text-center pb-3">
                   <v-btn color="primary" v-if="plan.product !== me.subscription.plan.product"
-                      @click="updateSubscription(plan)">
+                      @click="changePlan(plan)" :loading="isLoading">
                     <span v-if="plan.price > me.subscription.plan.price">Upgrade</span>
                     <span v-else>Downgrade</span>
                   </v-btn>
@@ -73,7 +73,19 @@
 
         <v-row>
           <v-col cols="12">
-            <blm-myaccount-table-payment-methods :loading="isLoading" :methods="paymentMethods"/>
+            <v-alert icon="mdi-alert-circle" type="error" :value="paymentMethodError !== ''">
+              {{ paymentMethodError }}
+            </v-alert>
+          </v-col>
+          <v-col cols="12">
+            <blm-myaccount-table-payment-methods :loading="isLoading"
+              :payment-methods="paymentMethods" @removed="removePaymentMethod" />
+          </v-col>
+          <v-col class="d-flex justify-space-around">
+            <v-btn color="primary" class="new-btn" @click="openAddPaymentMethodDialog"
+                :loading="isLoading">
+              Add <v-icon right>mdi-plus</v-icon>
+            </v-btn>
           </v-col>
         </v-row>
 
@@ -129,6 +141,7 @@ export default class Billing extends Vue {
   planAfterAddingPaymentMethod: models.BillingPlan | null = null;
   showAddPaymentDialog = false;
   stripePublicKey: string | null = null;
+  paymentMethodError = '';
 
   // computed
   get invoices(): models.Invoice[] {
@@ -170,13 +183,13 @@ export default class Billing extends Vue {
     }
   }
 
-  async updateSubscription(newPlan: models.BillingPlan) {
+  async changePlan(newPlan: models.BillingPlan) {
     this.planAfterAddingPaymentMethod = null;
     if (this.paymentMethods.length === 0) {
       this.planAfterAddingPaymentMethod = newPlan;
       await this.openAddPaymentMethodDialog();
     } else {
-      console.log('good');
+      this.updateSubscription(newPlan);
     }
   }
 
@@ -189,19 +202,50 @@ export default class Billing extends Vue {
   }
 
   async addPaymentMethod(card: NewStripeCard) {
+    this.paymentMethodError = '';
+    this.isLoading = true;
     const params = {
       stripePublicKey: this.stripePublicKey,
       card,
     };
+
     try {
       const res: models.Maybe<models.PaymentMethod> = await core
         .call(Method.AddPaymentMethod, params);
       this.me!.paymentMethods!.edges!.push({ node: res, cursor: '' });
+      if (this.planAfterAddingPaymentMethod) {
+        this.updateSubscription(this.planAfterAddingPaymentMethod);
+      }
     } catch (err) {
-      this.error = err.message;
+      this.paymentMethodError = err.message;
     } finally {
       this.isLoading = false;
     }
+  }
+
+  async removePaymentMethod(paymentMenthod: models.PaymentMethod) {
+    this.paymentMethodError = '';
+    this.isLoading = true;
+    const input: models.RemovePaymentMethodInput = {
+      id: paymentMenthod.id,
+    };
+
+    try {
+      await core.call(Method.RemovePaymentMethod, input);
+      this.me!.paymentMethods!.edges = this.me!.paymentMethods!.edges!
+        .filter((edge: models.Maybe<models.PaymentMethodEdge>) => edge!.node!.id !== paymentMenthod.id); // eslint-disable-line
+    } catch (err) {
+      this.paymentMethodError = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async updateSubscription(newPlan: models.BillingPlan) {
+    this.error = '';
+    this.isLoading = true;
+    this.planAfterAddingPaymentMethod = null;
+    console.log(newPlan);
   }
 }
 </script>
