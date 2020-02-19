@@ -8,8 +8,13 @@
     :fullscreen="$vuetify.breakpoint.smAndDown"
   >
     <v-card>
-      <v-card-title class="headline">
-        Add a payment method
+      <v-card-title>
+        <h2 class="headline">Add a payment method</h2>
+        <v-spacer />
+        <span class="body-1">
+          <v-icon color="success">mdi-lock</v-icon>
+          Secure payment with <a @click="openStripeWebsite">Stripe</a>
+        </span>
       </v-card-title>
       <v-card-text>
         <form>
@@ -54,6 +59,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { shell } from 'electron';
 import { mask } from 'vue-the-mask';
 import { NewStripeCard } from '@/core/billing';
 
@@ -111,6 +117,10 @@ export default class AddPaymentMethodDialog extends Vue {
     };
     this.$emit('added', card);
     this.close();
+  }
+
+  openStripeWebsite() {
+    shell.openExternal('https://stripe.com');
   }
 }
 </script>
