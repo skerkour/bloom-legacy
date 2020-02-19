@@ -27,7 +27,7 @@
         </v-row>
 
         <v-row justify="space-around" align="stretch">
-          <v-col cols="12" md="3" class="text-center mt-5" align-self="stretch"
+          <v-col cols="12" md="3" sm="6" class="text-center mt-5" align-self="stretch"
             v-for="plan in plans" :key="plan.id">
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
@@ -97,7 +97,7 @@
     </v-row>
 
     <blm-myaccount-add-payment-method-dialog :visible="showAddPaymentDialog"
-      @closed="addPaymentMethodDialogClosed" />
+      @closed="addPaymentMethodDialogClosed" @added="addPaymentMethod" />
   </v-container>
 </template>
 
@@ -109,7 +109,7 @@ import InvoicesTable from '../components/invoices_table.vue';
 import AddPaymentMethodDialog from '../components/add_payment_method_dialog.vue';
 import * as models from '@/api/models';
 import core from '@/core';
-import { Method } from '@/core/billing';
+import { Method, NewStripeCard } from '@/core/billing';
 
 
 @Component({
@@ -128,7 +128,7 @@ export default class Billing extends Vue {
   me: models.User | null = null;
   planAfterAddingPaymentMethod: models.BillingPlan | null = null;
   showAddPaymentDialog = false;
-
+  stripePublicKey: string | null = null;
 
   // computed
   get invoices(): models.Invoice[] {
@@ -162,6 +162,7 @@ export default class Billing extends Vue {
       this.me = res.me;
       this.plans = res.billingPlans
         .edges!.map((edge: models.Maybe<models.BillingPlanEdge>) => edge!.node!);
+      this.stripePublicKey = res.stripePublicKey;
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -185,6 +186,22 @@ export default class Billing extends Vue {
 
   addPaymentMethodDialogClosed() {
     this.showAddPaymentDialog = false;
+  }
+
+  async addPaymentMethod(card: NewStripeCard) {
+    const params = {
+      stripePublicKey: this.stripePublicKey,
+      card,
+    };
+    try {
+      const res: models.Maybe<models.PaymentMethod> = await core
+        .call(Method.AddPaymentMethod, params);
+      this.me!.paymentMethods!.edges!.push({ node: res, cursor: '' });
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>
