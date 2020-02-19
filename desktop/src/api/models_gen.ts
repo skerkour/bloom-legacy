@@ -209,6 +209,12 @@ export type InviteUsersInGroupInput = {
 export type Invoice = {
    __typename?: 'Invoice',
   id: Scalars['ID'],
+  createdAt: Scalars['Time'],
+  amount: Scalars['Int64'],
+  stripeId: Scalars['String'],
+  stripeHostedUrl: Scalars['String'],
+  stripePdfUrl: Scalars['String'],
+  paid: Scalars['Boolean'],
 };
 
 export type InvoiceConnection = {

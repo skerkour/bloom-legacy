@@ -158,6 +158,12 @@ type GroupInvitationEdge {
 
 type Invoice {
   id: ID!
+  createdAt: Time!
+  amount: Int64!
+  stripeId: String!
+  stripeHostedUrl: String!
+  stripePdfUrl: String!
+  paid: Boolean!
 }
 
 type InvoiceConnection {
