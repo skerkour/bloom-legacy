@@ -5,6 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
@@ -55,5 +56,23 @@ func FindPaymentMethodByCustomer(ctx context.Context, tx *sqlx.Tx, customer *Cus
 	}
 
 	ret = &paymentMethod
+	return ret, nil
+}
+
+func FindPaymentMethodsByUserId(ctx context.Context, userId string) ([]PaymentMethod, error) {
+	ret := []PaymentMethod{}
+	var err error
+	logger := rz.FromCtx(ctx)
+
+	queryFind := `SELECT billing_payment_methods.* FROM billing_payment_methods
+		INNER JOIN billing_customers ON billing_payment_methods.customer_id = billing_customers.id
+		WHERE billing_customers.user_id = $1`
+	err = db.DB.Select(&ret, queryFind, userId)
+	if err != nil {
+		logger.Error("billing.:FindPaymentMethodsByUserId finding payment method", rz.Err(err),
+			rz.String("users_id", userId))
+		return ret, NewError(ErrorPaymentMethodNotFound)
+	}
+
 	return ret, nil
 }

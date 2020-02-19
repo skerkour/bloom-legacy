@@ -54,10 +54,10 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 
 	invitations := []invit{}
 	err := db.DB.Select(&invitations, `SELECT invit.id AS invitation_id, invit.created_at AS invitation_created_at,
-	groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
-		users.username AS inviter_username, users.display_name AS inviter_display_name
-		FROM groups_invitations AS invit, groups, users
-		WHERE invit.group_id = groups.id AND invit.invitee_id = $1 AND users.id = invit.inviter_id`, user.ID)
+		groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
+			users.username AS inviter_username, users.display_name AS inviter_display_name
+			FROM groups_invitations AS invit, groups, users
+			WHERE invit.group_id = groups.id AND invit.invitee_id = $1 AND users.id = invit.inviter_id`, user.ID)
 	if err != nil {
 		logger.Error("groups.ListGroups: fetching invitations", rz.Err(err))
 		return ret, gqlerrors.Internal()
@@ -100,8 +100,8 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 
 	groups := []groups.Group{}
 	err := db.DB.Select(&groups, `SELECT * FROM groups
-	INNER JOIN groups_members ON groups.id = groups_members.group_id
-	WHERE groups_members.user_id = $1`, currentUser.ID)
+		INNER JOIN groups_members ON groups.id = groups_members.group_id
+		WHERE groups_members.user_id = $1`, currentUser.ID)
 	if err != nil {
 		logger.Error("User.groups: fetching groups", rz.Err(err))
 		return ret, gqlerrors.Internal()
@@ -142,10 +142,35 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 
 func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*PaymentMethodConnection, error) {
 	var ret *PaymentMethodConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+		return ret, gqlerrors.AdminRoleRequired()
+	}
+
+	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, *user.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
 
 	ret = &PaymentMethodConnection{
 		Edges:      []*PaymentMethodEdge{},
-		TotalCount: Int64(0),
+		TotalCount: Int64(len(paymentMethods)),
+	}
+
+	for _, paymentMethod := range paymentMethods {
+		method := &PaymentMethod{
+			ID:                  paymentMethod.ID,
+			CreatedAt:           paymentMethod.CreatedAt,
+			CardLast4:           paymentMethod.CardLast4,
+			CardExpirationMonth: int(paymentMethod.CardExpirationMonth),
+			CardExpirationYear:  int(paymentMethod.CardExpirationYear),
+			IsDefault:           paymentMethod.IsDefault,
+		}
+		edge := &PaymentMethodEdge{
+			Node: method,
+		}
+		ret.Edges = append(ret.Edges, edge)
 	}
 
 	return ret, nil

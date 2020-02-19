@@ -80,8 +80,8 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		stripeCustomerId = stripeCustomer.ID
 		customer.UpdatedAt = now
 		customer.StripeCustomerID = &stripeCustomerId
-		queryUpdate := `UPDATE billing_customers (updated_at, stripe_customer_id)
-			VALUES ($1, $2) WHERE id = $3`
+		queryUpdate := `UPDATE billing_customers SET updated_at = $1, stripe_customer_id = $2
+			WHERE id = $3`
 		_, err = tx.Exec(queryUpdate, customer.UpdatedAt, customer.StripeCustomerID, customer.ID)
 		if err != nil {
 			tx.Rollback()

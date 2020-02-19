@@ -86,6 +86,7 @@ type PaymentMethod {
   cardLast4: String!
   cardExpirationMonth: Int!
   cardExpirationYear: Int!
+  isDefault: Boolean!
 }
 
 type PaymentMethodConnection {

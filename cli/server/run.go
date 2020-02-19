@@ -38,7 +38,10 @@ var runCmd = &cobra.Command{
 		if config.Env == consts.ENV_DEVELOPMENT {
 			log.SetLogger(log.With(rz.Formatter(rz.FormatterConsole())))
 		} else {
-			log.SetLogger(log.With(rz.Formatter(nil)))
+			log.SetLogger(log.With(rz.Formatter(nil))) // JSON logging
+			stripe.DefaultLeveledLogger = &stripe.LeveledLogger{
+				Level: stripe.LevelInfo,
+			}
 		}
 
 		// init 3rd party services
