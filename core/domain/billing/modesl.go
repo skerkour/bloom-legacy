@@ -15,3 +15,12 @@ type NewStripeCard struct {
 type StripeCard struct {
 	ID string `json:"id"`
 }
+
+// see https://stripe.com/docs/api/errors?lang=curl
+type StripeResError struct {
+	Error StripeError `json:"error"`
+}
+
+type StripeError struct {
+	Message string `json:"message"`
+}
