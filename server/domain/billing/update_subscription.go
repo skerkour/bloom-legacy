@@ -48,7 +48,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			tx.Rollback()
 			return customer, retPlan, err
 		}
-	} else { // groupId != nil
+	} else if groupId != nil { // groupId != nil
 		if !actor.IsAdmin {
 			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID, *groupId); err != nil {
 				tx.Rollback()
@@ -56,6 +56,12 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			}
 		}
 		customer, err = FindCustomerByGroupId(ctx, tx, *groupId)
+		if err != nil {
+			tx.Rollback()
+			return customer, retPlan, err
+		}
+	} else {
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err

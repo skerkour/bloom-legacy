@@ -26,91 +26,81 @@ type Customer struct {
 }
 
 func FindCustomerByUserId(ctx context.Context, tx *sqlx.Tx, userId string) (*Customer, error) {
-	var ret *Customer
-	var customer Customer
+	ret := &Customer{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE user_id = $1"
-	err = tx.Get(&customer, queryFind, userId)
+	err = tx.Get(ret, queryFind, userId)
 	if err != nil {
 		logger.Error("billing.FindCustomerByUserId: finding customer", rz.Err(err),
 			rz.String("id", userId))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
-	ret = &customer
 	return ret, err
 }
 
 func FindCustomerByUserIdNoTx(ctx context.Context, userId string) (*Customer, error) {
-	var ret *Customer
-	var customer Customer
+	ret := &Customer{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE user_id = $1"
-	err = db.DB.Get(&customer, queryFind, userId)
+	err = db.DB.Get(ret, queryFind, userId)
 	if err != nil {
 		logger.Error("billing.FindCustomerByUserIdNoTx: finding customer", rz.Err(err),
 			rz.String("id", userId))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
-	ret = &customer
 	return ret, err
 }
 
 func FindCustomerByGroupId(ctx context.Context, tx *sqlx.Tx, groupId string) (*Customer, error) {
-	var ret *Customer
-	var customer Customer
+	ret := &Customer{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE group_id = $1"
-	err = tx.Get(&customer, queryFind, groupId)
+	err = tx.Get(ret, queryFind, groupId)
 	if err != nil {
 		logger.Error("billing.FindCustomerByGroupId: finding customer", rz.Err(err),
 			rz.String("id", groupId))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
-	ret = &customer
 	return ret, err
 }
 
 func FindCustomerByGroupIdNoTx(ctx context.Context, groupId string) (*Customer, error) {
-	var ret *Customer
-	var customer Customer
+	ret := &Customer{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE group_id = $1"
-	err = db.DB.Get(&customer, queryFind, groupId)
+	err = db.DB.Get(ret, queryFind, groupId)
 	if err != nil {
 		logger.Error("billing.FindCustomerByGroupIdNoTx: finding customer", rz.Err(err),
 			rz.String("id", groupId))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
-	ret = &customer
 	return ret, err
 }
 
 func FindCustomerByPaymentMethod(ctx context.Context, tx *sqlx.Tx, paymentMethod *PaymentMethod) (*Customer, error) {
-	var ret *Customer
-	var customer Customer
+	ret := &Customer{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE id = $1"
-	err = tx.Get(&customer, queryFind, paymentMethod.CustomerID)
+	err = tx.Get(&ret, queryFind, paymentMethod.CustomerID)
 	if err != nil {
 		logger.Error("billing.FindCustomerByPaymentMethod: finding customer", rz.Err(err),
 			rz.String("id", paymentMethod.CustomerID))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
-	ret = &customer
 	return ret, err
 }
