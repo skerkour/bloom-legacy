@@ -153,7 +153,13 @@ type InviteUsersInGroupInput struct {
 }
 
 type Invoice struct {
-	ID string `json:"id"`
+	ID              string    `json:"id"`
+	CreatedAt       time.Time `json:"createdAt"`
+	Amount          Int64     `json:"amount"`
+	StripeID        string    `json:"stripeId"`
+	StripeHostedURL string    `json:"stripeHostedUrl"`
+	StripePdfURL    string    `json:"stripePdfUrl"`
+	Paid            bool      `json:"paid"`
 }
 
 type InvoiceConnection struct {

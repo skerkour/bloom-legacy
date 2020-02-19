@@ -42,6 +42,12 @@ func FetchMyProfile() (MyBillingProfile, error) {
 				edges {
 					node {
 						id
+						createdAt
+						amount
+						stripeId
+						stripeHostedUrl
+						stripePdfUrl
+						paid
 					}
 				}
 			}
