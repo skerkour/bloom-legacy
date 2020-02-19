@@ -39,7 +39,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer />
-          <v-btn text @click="close()">
+          <v-btn text @click="cancel()">
             Cancel
           </v-btn>
           <v-btn color="primary" @click="add()">
@@ -91,11 +91,15 @@ export default class AddPaymentMethodDialog extends Vue {
   // watch
   // methods
   close() {
+    this.show = false;
+  }
+
+  cancel() {
     this.number = '';
     this.cvc = '';
     this.expMonth = '';
     this.expYear = '';
-    this.show = false;
+    this.close();
   }
 
   add() {
