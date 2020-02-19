@@ -48,8 +48,9 @@ type ServerConfig struct {
 }
 
 type StripeConfig struct {
-	SecretKey string `sane:"secret_key"`
-	PublicKey string `sane:"public_key"`
+	SecretKey     string `sane:"secret_key"`
+	PublicKey     string `sane:"public_key"`
+	WebhookSecret string `sane:"webhook_secret"`
 }
 
 type SentryConfig struct {

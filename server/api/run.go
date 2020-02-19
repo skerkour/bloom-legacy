@@ -11,6 +11,7 @@ import (
 	"github.com/go-chi/cors"
 	"gitlab.com/bloom42/bloom/common/consts"
 	graphqlapi "gitlab.com/bloom42/bloom/server/api/graphql"
+	"gitlab.com/bloom42/bloom/server/api/webhook"
 	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
@@ -64,11 +65,14 @@ func Run() error {
 
 	// routes
 	router.Get("/", IndexHandler)
-	router.Get("/api", HelloWorlHandler)
-	router.Mount("/api/graphql", graphqlHandler)
-	if config.Env == consts.ENV_DEVELOPMENT {
-		router.Mount("/api/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
-	}
+	router.Route("/api", func(apiRouter chi.Router) {
+		apiRouter.Get("/", HelloWorlHandler)
+		apiRouter.Mount("/graphql", graphqlHandler)
+		if config.Env == consts.ENV_DEVELOPMENT {
+			apiRouter.Mount("/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
+		}
+		apiRouter.HandleFunc("/webhooks/stripe", webhook.StripeHandler)
+	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
 	log.Info("starting server", rz.Uint16("port", config.Server.Port))

@@ -1,15 +1,13 @@
 package api
 
 import (
-	"encoding/json"
-	"gitlab.com/bloom42/libs/rz-go"
 	"net/http"
 )
 
 type Error struct {
-	Code    string            `json:"code"`
-	Message string            `json:"msg"`
-	Meta    map[string]string `json:"meta"`
+	Path       string            `json:"path"`
+	Message    string            `json:"message"`
+	Extensions map[string]string `json:"extension"`
 }
 
 func ResError(w http.ResponseWriter, r *http.Request, status int, erro Error) {
@@ -17,10 +15,6 @@ func ResError(w http.ResponseWriter, r *http.Request, status int, erro Error) {
 		erro.Message = "internal error, please try again later"
 	}
 
-	w.Header().Set("Content-Type", "application/json")
-	w.WriteHeader(status)
-	err := json.NewEncoder(w).Encode(erro)
-	if err != nil {
-		rz.FromCtx(r.Context()).Error("encoding error response to JSON", rz.Err(err))
-	}
+	apiRes := ApiRes{Errors: []Error{erro}}
+	ResJSON(w, r, status, apiRes)
 }

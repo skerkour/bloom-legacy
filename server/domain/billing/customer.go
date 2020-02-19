@@ -95,10 +95,10 @@ func FindCustomerByPaymentMethod(ctx context.Context, tx *sqlx.Tx, paymentMethod
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE id = $1"
-	err = tx.Get(&ret, queryFind, paymentMethod.CustomerID)
+	err = tx.Get(ret, queryFind, paymentMethod.CustomerID)
 	if err != nil {
 		logger.Error("billing.FindCustomerByPaymentMethod: finding customer", rz.Err(err),
-			rz.String("id", paymentMethod.CustomerID))
+			rz.String("customer_id", paymentMethod.CustomerID))
 		return ret, NewError(ErrorCustomerNotFound)
 	}
 
