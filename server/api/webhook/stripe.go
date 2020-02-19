@@ -2,10 +2,8 @@ package webhook
 
 import (
 	"encoding/json"
-	"fmt"
 	"io/ioutil"
 	"net/http"
-	"os"
 
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/webhook"
@@ -13,7 +11,6 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-// TODO: check signature
 func StripeHandler(w http.ResponseWriter, req *http.Request) {
 	logger := rz.FromCtx(req.Context())
 	const MaxBodyBytes = int64(65536)
@@ -25,41 +22,46 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 		return
 	}
 
-	event, err := webhook.ConstructEvent(payload, req.Header.Get("Stripe-Signature"), config.Stripe.WebhookSecret)
+	signature := req.Header.Get("Stripe-Signature")
+	event, err := webhook.ConstructEvent(payload, signature, config.Stripe.WebhookSecret)
 	if err != nil {
 		logger.Error("Failed to verify webhook secret", rz.Err(err))
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
-	fmt.Printf("STRIPE EVENT: %s\n", string(payload))
-
 	// Unmarshal the event data into an appropriate struct depending on its Type
 	switch event.Type {
-	case "payment_intent.succeeded":
-		var paymentIntent stripe.PaymentIntent
-		err := json.Unmarshal(event.Data.Raw, &paymentIntent)
+	case "invoice.created":
+		var invoice stripe.Invoice
+		err := json.Unmarshal(event.Data.Raw, &invoice)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing webhook JSON: %v\\n", err)
+			logger.Error("Error parsing webhook JSON", rz.Err(err))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		// Then define and call a func to handle the successful payment intent.
-		// handlePaymentIntentSucceeded(paymentIntent)
-	case "payment_method.attached":
-		var paymentMethod stripe.PaymentMethod
-		err := json.Unmarshal(event.Data.Raw, &paymentMethod)
+		// TODO: create invoice
+	case "invoice.payment_succeeded":
+		var invoice stripe.Invoice
+		err := json.Unmarshal(event.Data.Raw, &invoice)
 		if err != nil {
-			fmt.Fprintf(os.Stderr, "Error parsing webhook JSON: %v\\n", err)
+			logger.Error("Error parsing webhook JSON", rz.Err(err))
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		// Then define and call a func to handle the successful attachment of a PaymentMethod.
-		// handlePaymentMethodAttached(paymentMethod)
-	// ... handle other event types
+		// TODO: update invoice
+	case "invoice.payment_action_required":
+		var invoice stripe.Invoice
+		err := json.Unmarshal(event.Data.Raw, &invoice)
+		if err != nil {
+			logger.Error("Error parsing webhook JSON", rz.Err(err))
+			w.WriteHeader(http.StatusBadRequest)
+			return
+		}
+		// TODO: send email
 	default:
-		fmt.Fprintf(os.Stderr, "Unexpected event type: %s\\n", event.Type)
-		w.WriteHeader(http.StatusBadRequest)
+		logger.Info("No action for stripe event", rz.String("type", event.Type))
+		w.WriteHeader(http.StatusOK)
 		return
 	}
 

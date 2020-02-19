@@ -52,15 +52,3 @@ CREATE TABLE billing_payment_methods (
 
     PRIMARY KEY(id)
 );
-
-CREATE TABLE billing_invoices (
-    id UUID NOT NULL,
-    created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
-
-    stripe_id TEXT NOT NULL,
-
-    customer_id UUID NOT NULL REFERENCES billing_customers(id) ON DELETE CASCADE,
-
-    PRIMARY KEY(id)
-);

@@ -67,11 +67,15 @@ func Run() error {
 	router.Get("/", IndexHandler)
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Get("/", HelloWorlHandler)
+
 		apiRouter.Mount("/graphql", graphqlHandler)
 		if config.Env == consts.ENV_DEVELOPMENT {
 			apiRouter.Mount("/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 		}
-		apiRouter.HandleFunc("/webhooks/stripe", webhook.StripeHandler)
+
+		apiRouter.Route("/webhooks", func(webhooksRouter chi.Router) {
+			webhooksRouter.HandleFunc("/stripe", webhook.StripeHandler)
+		})
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
