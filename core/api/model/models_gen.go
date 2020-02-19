@@ -180,6 +180,7 @@ type PaymentMethod struct {
 	CardLast4           string    `json:"cardLast4"`
 	CardExpirationMonth int       `json:"cardExpirationMonth"`
 	CardExpirationYear  int       `json:"cardExpirationYear"`
+	IsDefault           bool      `json:"isDefault"`
 }
 
 type PaymentMethodConnection struct {

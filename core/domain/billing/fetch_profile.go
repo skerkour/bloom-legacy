@@ -34,6 +34,7 @@ func FetchMyProfile() (MyBillingProfile, error) {
 						cardLast4
 						cardExpirationMonth
 						cardExpirationYear
+						isDefault
 					}
 				}
 			}

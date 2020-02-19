@@ -74,6 +74,7 @@ func AddPaymentMethod(params AddPaymentMethodParams) (*model.PaymentMethod, erro
 				cardLast4
 				cardExpirationMonth
 				cardExpirationYear
+				isDefault
 			}
 		}
 	`)
