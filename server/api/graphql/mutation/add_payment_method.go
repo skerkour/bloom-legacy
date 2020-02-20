@@ -29,6 +29,7 @@ func (r *Resolver) AddPaymentMethod(ctx context.Context, input model.AddPaymentM
 		CardLast4:           paymentMethod.CardLast4,
 		CardExpirationMonth: int(paymentMethod.CardExpirationMonth),
 		CardExpirationYear:  int(paymentMethod.CardExpirationYear),
+		IsDefault:           paymentMethod.IsDefault,
 	}
 	return ret, nil
 }
