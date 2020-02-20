@@ -44,7 +44,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		_, err = billing.CreateInvoice(ctx, &invoice)
+		_, err = billing.CreateOrUpdateInvoice(ctx, &invoice)
 	case "invoice.payment_succeeded":
 		var invoice stripe.Invoice
 		err := json.Unmarshal(event.Data.Raw, &invoice)
@@ -53,7 +53,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		_, err = billing.UpdateInvoice(ctx, &invoice)
+		_, err = billing.CreateOrUpdateInvoice(ctx, &invoice)
 	case "invoice.payment_action_required":
 		var invoice stripe.Invoice
 		err := json.Unmarshal(event.Data.Raw, &invoice)

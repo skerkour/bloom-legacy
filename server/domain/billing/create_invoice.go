@@ -10,7 +10,7 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func CreateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (*Invoice, error) {
+func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (*Invoice, error) {
 	var ret *Invoice
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -29,34 +29,49 @@ func CreateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (*Invoice
 		return ret, NewError(ErrorCreatingInvoice)
 	}
 
-	customer, err = FindCustomerByStripeCustomerId(ctx, tx, stripeInvoice.Customer.ID)
-	if err != nil {
-		tx.Rollback()
-		return ret, NewError(ErrorCreatingInvoice)
-	}
+	// find invoice
+	ret, err = FindInvoiceByStripeId(ctx, tx, stripeInvoice.ID)
 
-	// create invoice
-	newUuid := uuid.New()
-	ret = &Invoice{
-		ID:              newUuid.String(),
-		CreatedAt:       now,
-		UpdatedAt:       now,
-		Paid:            stripeInvoice.Paid,
-		Amount:          stripeInvoice.AmountDue,
-		StripeID:        stripeInvoice.ID,
-		StripeHostedURL: stripeInvoice.HostedInvoiceURL,
-		StripePdfURL:    stripeInvoice.InvoicePDF,
-		CustomerID:      customer.ID,
-	}
-	queryCreate := `INSERT INTO billing_invoices
+	if err != nil {
+		customer, err = FindCustomerByStripeCustomerId(ctx, tx, stripeInvoice.Customer.ID)
+		if err != nil {
+			tx.Rollback()
+			return ret, NewError(ErrorCreatingInvoice)
+		}
+
+		// create invoice
+		newUuid := uuid.New()
+		ret = &Invoice{
+			ID:              newUuid.String(),
+			CreatedAt:       now,
+			UpdatedAt:       now,
+			Paid:            stripeInvoice.Paid,
+			Amount:          stripeInvoice.AmountDue,
+			StripeID:        stripeInvoice.ID,
+			StripeHostedURL: stripeInvoice.HostedInvoiceURL,
+			StripePdfURL:    stripeInvoice.InvoicePDF,
+			CustomerID:      customer.ID,
+		}
+		queryCreate := `INSERT INTO billing_invoices
 		(id, created_at, updated_at, paid, amount, stripe_id, stripe_hosted_url, stripe_pdf_url, customer_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
-	_, err = tx.Exec(queryCreate, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Paid, ret.Amount, ret.StripeID,
-		ret.StripeHostedURL, ret.StripePdfURL, ret.CustomerID)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("billing.CreateInvoice: inserting new invoice", rz.Err(err))
-		return ret, NewError(ErrorCreatingInvoice)
+		_, err = tx.Exec(queryCreate, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Paid, ret.Amount, ret.StripeID,
+			ret.StripeHostedURL, ret.StripePdfURL, ret.CustomerID)
+		if err != nil {
+			tx.Rollback()
+			logger.Error("billing.CreateInvoice: inserting new invoice", rz.Err(err))
+			return ret, NewError(ErrorCreatingInvoice)
+		}
+	} else {
+		ret.UpdatedAt = now
+		ret.Paid = stripeInvoice.Paid
+		queryUpdate := "UPDATE billing_invoices SET updated_at = $1, paid = $2 WHERE id = $3"
+		_, err = tx.Exec(queryUpdate, ret.UpdatedAt, ret.Paid, ret.ID)
+		if err != nil {
+			tx.Rollback()
+			logger.Error("billing.CreateInvoice: updating invoice", rz.Err(err))
+			return ret, NewError(ErrorUpdatingInvoice)
+		}
 	}
 
 	// commit db transaction
