@@ -214,7 +214,7 @@ export default class Billing extends Vue {
         .call(Method.AddPaymentMethod, params);
       this.me!.paymentMethods!.edges!.push({ node: res, cursor: '' });
       if (this.planAfterAddingPaymentMethod) {
-        this.updateSubscription(this.planAfterAddingPaymentMethod);
+        await this.updateSubscription(this.planAfterAddingPaymentMethod);
       }
     } catch (err) {
       this.paymentMethodError = err.message;

@@ -141,6 +141,8 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 					Plan: stripe.String(newPlan.StripeID),
 				},
 			},
+			BillingCycleAnchorUnchanged: stripe.Bool(true),
+			ProrationBehavior:           stripe.String(string(stripe.SubscriptionProrationBehaviorCreateProrations)),
 		}
 		stripeSubscription, err = sub.Update(stripeSubscription.ID, params)
 		if err != nil {

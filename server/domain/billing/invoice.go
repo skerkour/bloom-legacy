@@ -30,7 +30,7 @@ func FindInvoicesByUserId(ctx context.Context, userId string) ([]Invoice, error)
 
 	queryFind := `SELECT billing_invoices.* FROM billing_invoices
 		INNER JOIN billing_customers ON billing_invoices.customer_id = billing_customers.id
-		WHERE billing_customers.user_id = $1`
+		WHERE billing_customers.user_id = $1 ORDER BY created_at DESC`
 	err = db.DB.Select(&ret, queryFind, userId)
 	if err != nil {
 		logger.Error("billing.FindInvoicesByUserId: finding invoices", rz.Err(err),
