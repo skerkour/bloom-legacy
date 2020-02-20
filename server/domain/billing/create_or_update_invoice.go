@@ -2,7 +2,6 @@ package billing
 
 import (
 	"context"
-	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -32,11 +31,7 @@ func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (
 
 	// find invoice
 	ret, err = FindInvoiceByStripeId(ctx, tx, stripeInvoice.ID)
-	if err != nil && err != sql.ErrNoRows {
-		tx.Rollback()
-		return ret, NewError(ErrorCreatingInvoice)
-	}
-	if err == sql.ErrNoRows {
+	if err != nil {
 		customer, err = FindCustomerByStripeCustomerId(ctx, tx, stripeInvoice.Customer.ID)
 		if err != nil {
 			tx.Rollback()
@@ -69,8 +64,9 @@ func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (
 	} else {
 		ret.UpdatedAt = now
 		ret.Paid = stripeInvoice.Paid
-		queryUpdate := "UPDATE billing_invoices SET updated_at = $1, paid = $2 WHERE id = $3"
-		_, err = tx.Exec(queryUpdate, ret.UpdatedAt, ret.Paid, ret.ID)
+		ret.StripePdfURL = stripeInvoice.InvoicePDF
+		queryUpdate := "UPDATE billing_invoices SET updated_at = $1, paid = $2, stripe_pdf_url = $3 WHERE id = $4"
+		_, err = tx.Exec(queryUpdate, ret.UpdatedAt, ret.Paid, ret.StripePdfURL, ret.ID)
 		if err != nil {
 			tx.Rollback()
 			logger.Error("billing.CreateInvoice: updating invoice", rz.Err(err))
