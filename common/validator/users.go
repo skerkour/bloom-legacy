@@ -3,10 +3,11 @@ package validator
 import (
 	"errors"
 	"fmt"
-	"github.com/asaskevich/govalidator"
-	"gitlab.com/bloom42/bloom/common/consts"
 	"regexp"
 	"strings"
+
+	"github.com/asaskevich/govalidator"
+	"gitlab.com/bloom42/bloom/common/consts"
 )
 
 func UserFirstName(firstName string) error {
@@ -165,7 +166,9 @@ func UserUsername(username string) error {
 		return errors.New("username must contains only alphanumeric characters")
 	}
 
-	if strings.Contains(username, "admin") || stringSliceContains(consts.INVALID_USERNAMES, username) {
+	if strings.Contains(username, "admin") ||
+		strings.Contains(username, "bloom") ||
+		stringSliceContains(consts.INVALID_USERNAMES, username) {
 		return errors.New("username is not valid")
 	}
 

@@ -42,13 +42,12 @@ const USERNAME_MAX_LENGTH int = 16
 var INVALID_USERNAMES = []string{
 	"admin",
 	"sysy",
-	"asministrator",
+	"administrator",
 	"bloom",
 	"bloom42",
 	"support",
 	"help",
 	"settings",
-	"admin1",
 	"security",
 	"profile",
 	"42bloom",
@@ -56,6 +55,7 @@ var INVALID_USERNAMES = []string{
 	"sylvainkerkour",
 	"kerkour.sylvain",
 	"kerkoursylvain",
+	"hello",
 }
 
 const PASSWORD_MIN_LENGTH int = 8
