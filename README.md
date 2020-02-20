@@ -10,6 +10,9 @@ You are tired of being abused by Big Companies?
 
 **We too, so we built Bloom.**
 
+Bloom is an open source and encrypted productivity app. It features Drive, Contacts, Calendar and
+much more.
+
 [Try it for free](https://bloom.sh/download)
 
 --------
