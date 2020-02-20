@@ -22,7 +22,7 @@
             <span>{{ item.amount / 100 }}€</span>
           </td>
           <td>
-            <v-chip color="succss" outlined v-if="item.paid">Paid</v-chip>
+            <v-chip color="success" outlined v-if="item.paid">Paid</v-chip>
             <v-chip color="error" outlined v-else>Unpaid</v-chip>
           </td>
           <td>

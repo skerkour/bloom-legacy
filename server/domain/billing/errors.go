@@ -35,6 +35,9 @@ const (
 	ErrorStripeCustomerIDIsNUll
 	ErrorCreatingStripeSubscription
 	ErrorInvoiceNotFound
+	ErrorCreatingInvoice
+	ErrorUpdatingInvoice
+	ErrorInvoiceIsNull
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -112,6 +115,12 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorInvoiceNotFound:
 		code = errors.NotFound
 		message = "Invoice not found."
+	case ErrorCreatingInvoice:
+		message = "Error creating invoice. Please try again."
+	case ErrorUpdatingInvoice:
+		message = "Error updating invoice. Please try again."
+	case ErrorInvoiceIsNull:
+		message = "Invoice is null"
 	}
 
 	return errors.New(code, message)

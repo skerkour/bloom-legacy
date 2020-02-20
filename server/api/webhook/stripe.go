@@ -8,12 +8,16 @@ import (
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/webhook"
 	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
 func StripeHandler(w http.ResponseWriter, req *http.Request) {
-	logger := rz.FromCtx(req.Context())
-	const MaxBodyBytes = int64(65536)
+	ctx := req.Context()
+	logger := rz.FromCtx(ctx)
+	var err error
+	const MaxBodyBytes = int64(256000)
+
 	req.Body = http.MaxBytesReader(w, req.Body, MaxBodyBytes)
 	payload, err := ioutil.ReadAll(req.Body)
 	if err != nil {
@@ -40,7 +44,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		// TODO: create invoice
+		_, err = billing.CreateInvoice(ctx, &invoice)
 	case "invoice.payment_succeeded":
 		var invoice stripe.Invoice
 		err := json.Unmarshal(event.Data.Raw, &invoice)
@@ -49,7 +53,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		// TODO: update invoice
+		_, err = billing.UpdateInvoice(ctx, &invoice)
 	case "invoice.payment_action_required":
 		var invoice stripe.Invoice
 		err := json.Unmarshal(event.Data.Raw, &invoice)
@@ -62,6 +66,11 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 	default:
 		logger.Info("No action for stripe event", rz.String("type", event.Type))
 		w.WriteHeader(http.StatusOK)
+		return
+	}
+
+	if err != nil {
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

@@ -15,3 +15,5 @@ CREATE TABLE billing_invoices (
 );
 
 CREATE INDEX billing_invoices_customer_id_idx ON billing_invoices (customer_id);
+
+CREATE INDEX billing_customers_stripe_customer_id_idx ON billing_customers (stripe_customer_id);
