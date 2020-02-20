@@ -133,6 +133,9 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			tx.Rollback()
 			return customer, retPlan, NewError(ErrorCreatingStripeSubscription)
 		}
+		// currently we choose to create proration, in order to ease comptability, the alternative
+		// is to invocie at each changes
+		// stripe.String(string(stripe.SubscriptionProrationBehaviorAlwaysInvoice))
 		params := &stripe.SubscriptionParams{
 			CancelAtPeriodEnd: stripe.Bool(false),
 			Items: []*stripe.SubscriptionItemsParams{
