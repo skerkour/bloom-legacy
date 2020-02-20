@@ -54,7 +54,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			return
 		}
 		_, err = billing.CreateOrUpdateInvoice(ctx, &invoice)
-	case "invoice.payment_action_required":
+	case "invoice.payment_failed":
 		var invoice stripe.Invoice
 		err := json.Unmarshal(event.Data.Raw, &invoice)
 		if err != nil {
@@ -62,7 +62,7 @@ func StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		// TODO: send email
+		_ = billing.PaymentFailed(ctx, &invoice)
 	default:
 		logger.Info("No action for stripe event", rz.String("type", event.Type))
 		w.WriteHeader(http.StatusOK)

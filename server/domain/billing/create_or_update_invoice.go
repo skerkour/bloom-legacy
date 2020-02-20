@@ -2,6 +2,7 @@ package billing
 
 import (
 	"context"
+	"database/sql"
 	"time"
 
 	"github.com/google/uuid"
@@ -31,8 +32,11 @@ func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (
 
 	// find invoice
 	ret, err = FindInvoiceByStripeId(ctx, tx, stripeInvoice.ID)
-
-	if err != nil {
+	if err != nil && err != sql.ErrNoRows {
+		tx.Rollback()
+		return ret, NewError(ErrorCreatingInvoice)
+	}
+	if err == sql.ErrNoRows {
 		customer, err = FindCustomerByStripeCustomerId(ctx, tx, stripeInvoice.Customer.ID)
 		if err != nil {
 			tx.Rollback()
