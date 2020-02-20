@@ -76,8 +76,6 @@
             <v-alert icon="mdi-alert-circle" type="error" :value="paymentMethodError !== ''">
               {{ paymentMethodError }}
             </v-alert>
-          </v-col>
-          <v-col cols="12">
             <blm-myaccount-table-payment-methods :loading="isLoading"
               :payment-methods="paymentMethods" @removed="removePaymentMethod" />
           </v-col>
