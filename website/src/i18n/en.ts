@@ -31,6 +31,10 @@ export default {
       Go meeting up with Calendar, Notes, Drive and more.<br />
       Never stop having fun.`,
     },
+    feature3: {
+      title: 'Synchronized across all your devices',
+      description: 'TODO',
+    },
     product_hunt: '#1 Product of the Day',
     hacker_news: '#1 on',
   },

@@ -101,13 +101,26 @@
     <v-row class="align-center">
       <v-col cols="12" sm="6">
         <h3 class="display-1 font-weight-regular">
-          {{ $t('landing.feature2.title') }}
+          {{ $t('landing.feature3.title') }}
         </h3>
-        <p class="mt-5" v-html="$t('landing.feature2.description')"></p>
+        <p class="mt-5" v-html="$t('landing.feature3.description')"></p>
       </v-col>
 
       <v-col cols="12" sm="6" class="text-center mb-5 mt-5">
-        <img alt="groups" src="/static/imgs/landing/groups.svg" height="200" />
+        <img alt="groups" src="/static/imgs/landing/devices.svg" height="200" />
+      </v-col>
+    </v-row>
+
+    <v-row class="mb-5 blm-features align-center">
+      <v-col cols="12" sm="6" order="last" order-sm="first" class="text-center mb-5 mt-5">
+        <img alt="secure" src="/static/imgs/landing/groups.svg" height="200" />
+      </v-col>
+
+      <v-col cols="12" sm="6">
+        <h3 class="display-1 font-weight-regular">
+          {{ $t('landing.feature2.title') }}
+        </h3>
+        <p class="mt-5" v-html="$t('landing.feature2.description')"></p>
       </v-col>
     </v-row>
 
