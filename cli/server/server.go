@@ -7,7 +7,7 @@ import (
 var configFileFlag string
 
 func init() {
-	ServerCmd.PersistentFlags().StringVarP(&configFileFlag, "cofnig", "c", "bloom.sane", "Configuration file")
+	ServerCmd.PersistentFlags().StringVarP(&configFileFlag, "config", "c", "bloom.sane", "Configuration file")
 }
 
 var ServerCmd = &cobra.Command{
