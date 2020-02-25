@@ -34,7 +34,8 @@ export default {
     },
     feature3: {
       title: 'Synchronized across all your devices',
-      description: 'TODO',
+      description: `It's easy to edit your content from anywhere. Start on your laptop
+        then update on your phone. Bloom works on any device or platform.`,
     },
     product_hunt: '#1 Product of the Day',
     hacker_news: '#1 on',
