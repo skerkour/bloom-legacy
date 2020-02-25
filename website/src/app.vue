@@ -2,11 +2,6 @@
   <v-app>
     <blm-app-bar />
     <v-content>
-      <v-alert type="info" tile v-model="alert" dismissible prominent>
-        <v-row align="center">
-          <v-col class="grow" v-html="alertHtml"></v-col>
-        </v-row>
-      </v-alert>
       <router-view/>
     </v-content>
     <blm-footer />
@@ -26,10 +21,6 @@ import Footer from '@/components/footer.vue';
   },
 })
 export default class App extends Vue {
-  alert = true;
-  alertHtml = `
-    What's happening? <a href="https://fatalentropy.com/2019-december-update">Read the announcement &#9432;</a>
-  `;
 }
 </script>
 
