@@ -73,6 +73,8 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
 	}
 
+	// TODO: send login email
+
 	ret = &model.SignedIn{
 		Session: &model.Session{
 			ID:    newSession.ID,
