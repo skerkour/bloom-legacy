@@ -7,6 +7,7 @@ export default {
     pain2: 'Tired of being abused by Big Companies?',
     pain3: 'You no longer trust tech monopolies?',
     pain4: 'Privacy is not dead!',
+
   },
   appbar: {
     download: 'Download',
