@@ -185,7 +185,7 @@ export default class Pricing extends Vue {
           <li><b>All features from Pro</b></li>
           <li class="text-center bold"><b>+</b></li>
 
-          <li>1TB storage</li>
+          <li>1000GB storage</li>
           <li>4 parallel Bitflow downloads</li>
           <li>Priority Support</li>
         </ul>
