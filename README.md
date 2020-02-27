@@ -4,7 +4,7 @@
   <p align="center">A safe place for all your data (Android, IOS, Linux, MacOS, Windows, CLI)</p>
 </p>
 
-You no longer trust tech monopolies?<br/>
+You no longer trust tech monopolies with your data?<br/>
 You are done with your privacy invaded by advertisers? <br/>
 You are tired of being abused by Big Companies?
 
