@@ -1,6 +1,6 @@
 module gitlab.com/bloom42/bloom
 
-go 1.13
+go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.10.3-0.20200209020025-30e23757e9b5
