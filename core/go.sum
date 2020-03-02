@@ -10,6 +10,8 @@ gitlab.com/bloom42/bloom/common v0.0.0-20200208154903-c8d852f22b9e h1:iL52cJg4Rp
 gitlab.com/bloom42/bloom/common v0.0.0-20200208154903-c8d852f22b9e/go.mod h1:M3NdFzqmAMckusIM/SkcA8pKQHjtkOvtSC5aHV3DKDA=
 gitlab.com/bloom42/libs/graphql-go v0.0.0-20200208191728-7bd43a0d6cb0 h1:opp2gDzQvUvnCQO9MAxljNR/1fNu2AFEfk2239+PUtk=
 gitlab.com/bloom42/libs/graphql-go v0.0.0-20200208191728-7bd43a0d6cb0/go.mod h1:VRuT0E/i08ZM8JGLWTiA9IupBLWbl8D+93af/LoLCeo=
+gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
+gitlab.com/bloom42/libs/rz-go v1.3.0/go.mod h1:/G8JCs/z9FPn+XYJT9e52gj76clf4dk8tf2jbq1HCpQ=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200117160349-530e935923ad h1:Jh8cai0fqIK+f6nG0UgPW5wFk8wmiMhM3AyciDBdtQg=
 golang.org/x/crypto v0.0.0-20200117160349-530e935923ad/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
