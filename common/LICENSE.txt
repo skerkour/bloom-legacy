@@ -6,7 +6,7 @@ CC BY-SA 4.0 license: https://creativecommons.org/licenses/by-sa/4.0/
 
 All the source code is licensed under the GPL v3.0 license (see below).
 
-Copyright (C) 2018-2019 Sylvain kerkour
+Copyright (C) 2018-2020 Sylvain kerkour
 
 Contact: sylvain@kerkour.fr
 
