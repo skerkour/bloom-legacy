@@ -79,16 +79,17 @@
               <img
                 class="white--text align-end mb-5"
                 height="100px"
-                src="/static/imgs/download/windows.svg"
+                src="/static/imgs/download/linux.svg"
                 contain
               />
               <v-divider />
               <v-card-actions class="text-center justify-center">
-                <!-- <v-btn text>Windows</v-btn> -->
+                <!-- <v-btn text>Linux</v-btn> -->
                 <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
               </v-card-actions>
             </v-card>
           </v-col>
+
 
           <v-col cols="12" sm="6" md="3" class="text-center">
             <v-card
@@ -98,13 +99,13 @@
               <img
                 class="white--text align-end mb-5"
                 height="100px"
-                src="/static/imgs/download/linux.svg"
+                src="/static/imgs/download/windows.svg"
                 contain
               />
               <v-divider />
               <v-card-actions class="text-center justify-center">
-                <!-- <v-btn text>Linux</v-btn> -->
-                <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
+                <v-btn text @click="iWantWindows">Windows</v-btn>
+                <!-- <v-btn text>{{ $t('download.let_us_know') }}</v-btn> -->
               </v-card-actions>
             </v-card>
           </v-col>
@@ -125,7 +126,8 @@
                 />
                 <v-divider />
                 <v-card-actions class="text-center justify-center">
-                  <v-btn text color="primary">{{ $t('download.cli') }}</v-btn>
+                  <v-btn text disabled>{{ $t('download.coming_soon') }}</v-btn>
+                  <!-- <v-btn text color="primary">{{ $t('download.cli') }}</v-btn> -->
                 </v-card-actions>
               </v-card>
             </a>
@@ -238,6 +240,11 @@ export default class Download extends Vue {
   // methods
   openCliInstructions() {
 
+  }
+
+  iWantWindows() {
+    (window as any).$crisp.push(['do', 'chat:open']);
+    (window as any).$crisp.push(['do', 'message:send', ['text', 'Hi, I want to download the windows application!']]);
   }
 }
 </script>

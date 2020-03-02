@@ -116,6 +116,7 @@ export default {
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
     coming_soon: 'Coming soon',
+    let_us_know: 'Please let us know if you want this application',
     cli: 'See CLI instructions',
   },
   pricing: {
