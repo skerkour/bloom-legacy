@@ -3,9 +3,11 @@ package main
 import (
 	"encoding/json"
 	"log"
+	"net"
 	"net/http"
 
 	"gitlab.com/bloom42/bloom/core"
+	"gitlab.com/bloom42/libs/rz-go"
 )
 
 func handleElectronPost(w http.ResponseWriter, r *http.Request) {
@@ -48,5 +50,11 @@ func setupResponse(w *http.ResponseWriter, req *http.Request) {
 func main() {
 	http.HandleFunc("/electronCall", handleElectronPost)
 
-	log.Fatal(http.ListenAndServe("127.0.0.1:8042", nil))
+	unixListener, err := net.Listen("unix", "/tmp/bloom42.sock")
+	if err != nil {
+		log.Fatal("listening to unix socket", rz.Err(err))
+	}
+	defer unixListener.Close()
+
+	log.Fatal(http.Serve(unixListener, nil))
 }
