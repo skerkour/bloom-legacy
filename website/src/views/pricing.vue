@@ -169,7 +169,7 @@ export default class Pricing extends Vue {
       price: 14,
       description: `
       <ul>
-        <li><b>All features from Basic</b></li>
+        <li><b>All features from Lite</b></li>
         <li class="text-center bold"><b>+</b></li>
 
         <li>400GB storage</li>
