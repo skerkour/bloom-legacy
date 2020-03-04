@@ -149,7 +149,7 @@ export default class Pricing extends Vue {
       `,
     },
     {
-      name: 'Basic',
+      name: 'Lite',
       price: 7,
       description: `
       <ul>
