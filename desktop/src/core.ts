@@ -11,7 +11,7 @@ async function call(method: string, params: any): Promise<any> {
   });
   log.with({ msg: message }).debug('jsonMessage');
 
-  const res: any = await ipcRenderer.send('core:call', message);
+  const res: any = await ipcRenderer.invoke('core:call', message);
   log.with({ res: res.data }).debug('resMessage');
 
   const { data } = res;

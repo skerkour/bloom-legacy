@@ -68,6 +68,10 @@ function createWindow() {
   //   toggleWindow();
   // });
   // tray.setToolTip('Bloom');
+  let nodeIntegration = false;
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    nodeIntegration = true;
+  }
 
   // Create the browser window.
   mainWindow = new BrowserWindow({
@@ -76,9 +80,9 @@ function createWindow() {
     height: config.WINDOW_DEFAULT_HEIGHT,
     minWidth: config.WINDOW_MIN_WIDTH,
     minHeight: config.WINDOW_MIN_HEIGHT,
-    // webPreferences: {
-    //   nodeIntegration: true,
-    // },
+    webPreferences: {
+      nodeIntegration,
+    },
     icon: config.WINDOW_ICON,
   });
 
@@ -152,7 +156,9 @@ ipcMain.on('server:start', () => {
   return true;
 });
 
-ipcMain.on('core:call', async (event: any, message: any) => {
+ipcMain.on('server:stop', killChild);
+
+ipcMain.handle('core:call', async (event: any, message: any) => {
   const res = await axios({
     url: CALL_URL,
     method: 'post',
@@ -161,5 +167,3 @@ ipcMain.on('core:call', async (event: any, message: any) => {
   });
   return res;
 });
-
-ipcMain.on('server:stop', killChild);
