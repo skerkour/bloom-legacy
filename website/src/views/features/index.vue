@@ -93,12 +93,12 @@ export default class Features extends Vue {
         description: this.$t('features.drive_description'),
         learnMore: 'drive',
       },
-      {
-        name: 'Music',
-        icon: '/static/imgs/icons/music.svg',
-        description: this.$t('features.music_description'),
-        learnMore: 'music',
-      },
+      // {
+      //   name: 'Music',
+      //   icon: '/static/imgs/icons/music.svg',
+      //   description: this.$t('features.music_description'),
+      //   learnMore: 'music',
+      // },
       {
         name: 'Calendar',
         icon: '/static/imgs/icons/calendar.svg',
@@ -110,6 +110,12 @@ export default class Features extends Vue {
         icon: '/static/imgs/icons/notes.svg',
         description: this.$t('features.notes_description'),
         learnMore: 'notes',
+      },
+      {
+        name: 'Contacts',
+        icon: '/static/imgs/icons/contacts.svg',
+        description: this.$t('features.contacts_description'),
+        learnMore: 'contacts',
       },
       { name: 'dl_btn' },
       {
@@ -131,24 +137,19 @@ export default class Features extends Vue {
       // the single destination for all the books you love, and the ones you\'re about to. ',
       //   learnMore: 'books',
       // },
-      {
-        name: 'Contacts',
-        icon: '/static/imgs/icons/contacts.svg',
-        description: this.$t('features.contacts_description'),
-        learnMore: 'contacts',
-      },
-      { name: 'dl_btn' },
-      {
-        name: 'Gallery',
-        icon: '/static/imgs/icons/gallery.svg',
-        description: this.$t('features.gallery_description'),
-        learnMore: 'gallery',
-      },
+      // { name: 'dl_btn' },
+      // {
+      //   name: 'Gallery',
+      //   icon: '/static/imgs/icons/gallery.svg',
+      //   description: this.$t('features.gallery_description'),
+      //   learnMore: 'gallery',
+      // },
       {
         name: 'QR Codes',
         icon: '/static/imgs/icons/qrcode.svg',
         description: this.$t('features.qrcodes_description'),
       },
+      { name: 'dl_btn' },
     ];
   }
   // lifecycle

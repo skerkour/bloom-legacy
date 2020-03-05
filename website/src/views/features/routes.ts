@@ -7,8 +7,6 @@ const Calendar = () => import(/* webpackChunkName: "chunk-features" */ '@/views/
 // const Chat = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/chat.vue');
 const Contacts = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/contacts.vue');
 const Drive = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/drive.vue');
-const Gallery = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/gallery.vue');
-const Music = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/music.vue');
 const Notes = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/notes.vue');
 
 export default [
@@ -35,14 +33,6 @@ export default [
   {
     component: Drive,
     path: '/features/drive',
-  },
-  {
-    component: Gallery,
-    path: '/features/gallery',
-  },
-  {
-    component: Music,
-    path: '/features/music',
   },
   {
     component: Notes,
