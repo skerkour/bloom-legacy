@@ -34,9 +34,7 @@ import BlmNote from './Note.vue';
 import NoteDialog from './NoteDialog.vue';
 import core from '@/core';
 import { Note, Notes, Method } from '@/core/notes';
-
-
-const { log } = require('@bloom42/astro');
+import { log } from '@/libs/rz';
 
 @Component({
   components: {

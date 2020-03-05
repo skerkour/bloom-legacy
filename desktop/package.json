@@ -19,7 +19,6 @@
   },
   "main": "background.js",
   "dependencies": {
-    "@bloom42/astro": "git+https://gitlab.com/bloom42/libs/astro-js.git",
     "@mdi/font": "^4.8.95",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",

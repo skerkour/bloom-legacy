@@ -72,9 +72,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import core from '@/core';
 import { Contact, Contacts, Method } from '@/core/contacts';
 import ContactDialog from '../components/ContactDialog.vue';
+import { log } from '@/libs/rz';
 
-
-const { log } = require('@bloom42/astro');
 
 @Component({
   components: {

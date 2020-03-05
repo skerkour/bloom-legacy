@@ -9,12 +9,12 @@ module.exports = {
       // ? "require('./native')" : undefined,
     },
     module: {
-      rules: [
-        {
-          test: /\.node$/,
-          use: 'node-loader',
-        },
-      ],
+      // rules: [
+      //   {
+      //     test: /\.node$/,
+      //     use: 'node-loader',
+      //   },
+      // ],
     },
   },
   chainWebpack: (config) => {
@@ -69,7 +69,7 @@ module.exports = {
           icon: 'build/icons/mac/icon.icns',
         },
         linux: {
-          category: 'Utility,Network', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
+          category: 'Utility', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
           icon: 'build/icons/png',
         },
         win: {

@@ -130,9 +130,8 @@ import core from '@/core';
 import {
   DeleteEvent, CreateEvent, Event as EventModel, Method,
 } from '@/core/calendar';
+import { log } from '@/libs/rz';
 
-
-const { log } = require('@bloom42/astro');
 
 @Component
 export default class EventDialog extends Vue {

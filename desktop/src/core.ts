@@ -1,41 +1,25 @@
-// import axios from 'axios';
 import { ipcRenderer } from 'electron';
 import * as models from '@/api/models';
-
-// const { log } = require('@bloom42/astro');
-
-// const CALL_URL = 'unix:/tmp/com.bloom42.bloom.sock:/electronCall';
-// const UNIX_SOCKET_PATH = '/tmp/com.bloom42.bloom.sock';
+import { log } from '@/libs/rz';
 
 const Empty = {};
 
 async function call(method: string, params: any): Promise<any> {
-  return ipcRenderer.send('core:call', method, params);
-  // const message = JSON.stringify({
-  //   method,
-  //   params,
-  // });
-  // log.with({ msg: message }).debug('jsonMessage');
+  const message = JSON.stringify({
+    method,
+    params,
+  });
+  log.with({ msg: message }).debug('jsonMessage');
 
-  // // const coreClient = axios.create({
-  // //   url: CALL_URL,
-  // //   socketPath: UNIX_SOCKET_PATH,
-  // // });
+  const res: any = await ipcRenderer.send('core:call', message);
+  log.with({ res: res.data }).debug('resMessage');
 
-  // const res = await axios({
-  //   url: CALL_URL,
-  //   method: 'post',
-  //   data: message,
-  //   socketPath: UNIX_SOCKET_PATH,
-  // });
-  // log.with({ res: res.data }).debug('resMessage');
+  const { data } = res;
+  if (data.error !== null) {
+    throw data.error;
+  }
 
-  // const { data } = res;
-  // if (data.error !== null) {
-  //   throw data.error;
-  // }
-
-  // return data.data;
+  return data.data;
 }
 
 function toIsoDate(date: string | null): Date | null {
