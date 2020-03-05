@@ -19,7 +19,7 @@ require (
 	github.com/spf13/cobra v0.0.5
 	github.com/stripe/stripe-go v68.18.0+incompatible
 	github.com/vektah/gqlparser v1.3.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200213201726-248203be2584
+	gitlab.com/bloom42/bloom/common v0.0.0-20200305075841-d90036fd292f
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200118201250-b035ee487899
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0
