@@ -310,21 +310,21 @@ type BillingProduct string
 
 const (
 	BillingProductFree  BillingProduct = "FREE"
-	BillingProductBasic BillingProduct = "BASIC"
+	BillingProductLite  BillingProduct = "LITE"
 	BillingProductPro   BillingProduct = "PRO"
 	BillingProductUltra BillingProduct = "ULTRA"
 )
 
 var AllBillingProduct = []BillingProduct{
 	BillingProductFree,
-	BillingProductBasic,
+	BillingProductLite,
 	BillingProductPro,
 	BillingProductUltra,
 }
 
 func (e BillingProduct) IsValid() bool {
 	switch e {
-	case BillingProductFree, BillingProductBasic, BillingProductPro, BillingProductUltra:
+	case BillingProductFree, BillingProductLite, BillingProductPro, BillingProductUltra:
 		return true
 	}
 	return false

@@ -33,7 +33,7 @@ enum GroupMemberRole {
 
 enum BillingProduct {
   FREE
-  BASIC
+  LITE
   PRO
   ULTRA
 }

@@ -1592,7 +1592,7 @@ enum GroupMemberRole {
 
 enum BillingProduct {
   FREE
-  BASIC
+  LITE
   PRO
   ULTRA
 }
@@ -1986,7 +1986,7 @@ type Mutation {
   """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   """Sign in"""
-  signIn(input: SignInInput!):  SignedIn!
+  signIn(input: SignInInput!): SignedIn!
   """Revoke a session. Use it for sign out."""
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""

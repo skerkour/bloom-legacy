@@ -199,7 +199,7 @@ export default class PlansTable extends Vue {
       value: 'actions',
     },
   ];
-  billingProducts = ['FREE', 'BASIC', 'PRO', 'ULTRA'];
+  billingProducts = ['FREE', 'LITE', 'PRO', 'ULTRA'];
 
   // computed
   get isLoading(): boolean {

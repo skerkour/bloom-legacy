@@ -64,7 +64,7 @@ export type BillingPlanInput = {
 
 export enum BillingProduct {
   Free = 'FREE',
-  Basic = 'BASIC',
+  Lite = 'LITE',
   Pro = 'PRO',
   Ultra = 'ULTRA'
 }
