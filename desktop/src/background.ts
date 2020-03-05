@@ -4,8 +4,15 @@ import {
   BrowserWindow,
   ipcMain,
 } from 'electron';
+import axios from 'axios';
 import { execFile, ChildProcess } from 'child_process';
 import { createProtocol } from './create_protocol';
+
+
+const { log } = require('@bloom42/astro');
+
+const CALL_URL = '/electronCall';
+const UNIX_SOCKET_PATH = '/tmp/com.bloom42.bloom.sock';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -71,9 +78,9 @@ function createWindow() {
     height: config.WINDOW_DEFAULT_HEIGHT,
     minWidth: config.WINDOW_MIN_WIDTH,
     minHeight: config.WINDOW_MIN_HEIGHT,
-    webPreferences: {
-      nodeIntegration: true,
-    },
+    // webPreferences: {
+    //   nodeIntegration: true,
+    // },
     icon: config.WINDOW_ICON,
   });
 
@@ -145,6 +152,34 @@ ipcMain.on('server:start', () => {
     }
   });
   return true;
+});
+
+ipcMain.on('core:call', async (event: any, method: string, params: any) => {
+  const message = JSON.stringify({
+    method,
+    params,
+  });
+  log.with({ msg: message }).debug('jsonMessage');
+
+  // const coreClient = axios.create({
+  //   url: CALL_URL,
+  //   socketPath: UNIX_SOCKET_PATH,
+  // });
+
+  const res = await axios({
+    url: CALL_URL,
+    method: 'post',
+    data: message,
+    socketPath: UNIX_SOCKET_PATH,
+  });
+  log.with({ res: res.data }).debug('resMessage');
+
+  const { data } = res;
+  if (data.error !== null) {
+    throw data.error;
+  }
+
+  return data.data;
 });
 
 ipcMain.on('server:stop', killChild);
