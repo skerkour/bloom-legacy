@@ -57,8 +57,6 @@
                   <li><v-icon color="success">mdi-check</v-icon> Torrents</li>
                   <li><v-icon color="success">mdi-check</v-icon> Calendar</li>
                   <li><v-icon color="success">mdi-check</v-icon> Contacts</li>
-                  <li><v-icon color="success">mdi-check</v-icon> Gallery</li>
-                  <li><v-icon color="success">mdi-check</v-icon> Music</li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Open Source</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Private by design</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Ethical by design</b></li>

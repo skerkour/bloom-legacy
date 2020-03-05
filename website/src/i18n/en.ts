@@ -197,26 +197,26 @@ export default {
           your files or photos – they're in your Bloom Drive.`,
       },
     },
-    music_description: 'Never stop enjoying your music! Directly from your drive.',
-    music: {
-      description: 'A world of emotion. <br/> Available wherever you are.',
-      feature1: {
-        name: 'Play from any device',
-        description: `You can use Bloom Music to listen to your library on your computer,
-        smartphone, or other supported devices.`,
-      },
-      feature2: {
-        name: 'Stream your personal music library wherever you are',
-        description: `Whether you've got plenty of rare tunes ripped from vinyls, a bunch of albums
-        from indie artists on Bandcamp, or a carefully curated collection of lossless tracks,
-        Bloom Music allows you to steam them from wherever you are.`,
-      },
-      feature3: {
-        name: 'Directly from your drive',
-        description: `Thanks to the unified data model of Bloom, all your music files in your Bloom
-        Drive are directly available in Bloom Music. No need to reorganize everything everytime.`,
-      },
-    },
+    // music_description: 'Never stop enjoying your music! Directly from your drive.',
+    // music: {
+    //   description: 'A world of emotion. <br/> Available wherever you are.',
+    //   feature1: {
+    //     name: 'Play from any device',
+    //     description: `You can use Bloom Music to listen to your library on your computer,
+    //     smartphone, or other supported devices.`,
+    //   },
+    //   feature2: {
+    //     name: 'Stream your personal music library wherever you are',
+    //  description: `Whether you've got plenty of rare tunes ripped from vinyls, a bunch of albums
+    //     from indie artists on Bandcamp, or a carefully curated collection of lossless tracks,
+    //     Bloom Music allows you to steam them from wherever you are.`,
+    //   },
+    //   feature3: {
+    //     name: 'Directly from your drive',
+    //   description: `Thanks to the unified data model of Bloom, all your music files in your Bloom
+    //    Drive are directly available in Bloom Music. No need to reorganize everything everytime.`,
+    //   },
+    // },
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
     calendar: {
       description: 'Make the most of every day',
@@ -293,25 +293,26 @@ export default {
         and profiles.`,
       },
     },
-    gallery_description: 'Bloom Gallery is the home for all your photos and videos, organized and beautifully presented.',
-    gallery: {
-      description: 'All your media organized and easy to find',
-      feature1: {
-        name: 'Access from any device',
-        description: `You can access your galleries on your computer,
-        smartphone, or other supported devices.`,
-      },
-      feature2: {
-        name: 'Access your personal gallery wherever you are',
-        description: 'Your photos will be safe, secure, and always with you.',
-      },
-      feature3: {
-        name: 'Directly from your drive',
-        description: `Thanks to the unified data model of Bloom, all your photos and videos files
-        in your Bloom Drive are directly available in Bloom Gallery. No need to reorganize
-        everything everytime.`,
-      },
-    },
+    // gallery_description: `Bloom Gallery is the home for all your photos and videos, organized
+    // and beautifully presented.`,
+    // gallery: {
+    //   description: 'All your media organized and easy to find',
+    //   feature1: {
+    //     name: 'Access from any device',
+    //     description: `You can access your galleries on your computer,
+    //     smartphone, or other supported devices.`,
+    //   },
+    //   feature2: {
+    //     name: 'Access your personal gallery wherever you are',
+    //     description: 'Your photos will be safe, secure, and always with you.',
+    //   },
+    //   feature3: {
+    //     name: 'Directly from your drive',
+    //     description: `Thanks to the unified data model of Bloom, all your photos and videos files
+    //     in your Bloom Drive are directly available in Bloom Gallery. No need to reorganize
+    //     everything everytime.`,
+    //   },
+    // },
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
   security: {
