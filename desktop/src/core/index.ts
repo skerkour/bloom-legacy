@@ -5,8 +5,6 @@ import { log } from '@/libs/rz';
 const Empty = {};
 
 async function call(method: string, params: any): Promise<any> {
-  console.log(log);
-  console.log(log.with({ msg: params }));
   const message = JSON.stringify({
     method,
     params,
