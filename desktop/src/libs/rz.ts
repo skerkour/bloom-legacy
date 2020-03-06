@@ -48,8 +48,12 @@ export enum Level {
 }
 
 export type Options = {
-  level: Level,
+  level?: Level,
   fields?: Object,
+  timestampFieldName?: string,
+  messageFieldName?: string,
+  levelFieldName?: string,
+  hooks?: { (event: Object): void; }[],
 };
 
 export interface LoggerInterface {
@@ -89,6 +93,18 @@ export class Logger implements LoggerInterface {
     }
     if (options.level) {
       this.level = options.level;
+    }
+    if (options.timestampFieldName) {
+      this.timestampFieldName = options.timestampFieldName;
+    }
+    if (options.messageFieldName) {
+      this.messageFieldName = options.messageFieldName;
+    }
+    if (options.levelFieldName) {
+      this.levelFieldName = options.levelFieldName;
+    }
+    if (options.hooks) {
+      this.hooks = options.hooks;
     }
   }
 
