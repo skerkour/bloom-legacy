@@ -5,7 +5,7 @@ import router from '@/router';
 import store, { Mutations } from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
-import core from './core';
+import core from '@/core';
 import { log, Level } from '@/libs/rz';
 
 

@@ -58,13 +58,13 @@ export type Options = {
 
 export interface LoggerInterface {
   config(options: Options): void;
-  with(fields: any): LoggerInterface;
+  with(fields: Object): LoggerInterface;
   debug(message: string): void;
   info(message: string): void;
   warn(message: string): void;
   error(message: string): void;
   fatal(message: string): void; // log with the "fatal" level then exit(1)
-  track(fields: any): void;
+  track(fields: Object): void;
 }
 
 export class Logger implements LoggerInterface {
@@ -111,8 +111,8 @@ export class Logger implements LoggerInterface {
   /**
    * create a copy of the logger, add the given fields to it and return it
    */
-  with(fields: Object): Logger {
-    const newLogger = deepClone(this);
+  with(fields: Object): LoggerInterface {
+    const newLogger = Object.create(this);
     newLogger.fields = { ...this.fields, ...fields };
     return newLogger;
   }
@@ -158,7 +158,7 @@ export class Logger implements LoggerInterface {
    * @param {Object} [fields] - additional fields to add to the event (optional)
    */
   track(fields: Object): void {
-    const newLogger = this.with(fields);
+    const newLogger = <Logger> this.with(fields);
     newLogger.log(Level.NONE, null);
   }
 
@@ -213,6 +213,4 @@ export class Logger implements LoggerInterface {
   }
 }
 
-const log = new Logger();
-
-export { log };
+export const log = new Logger();
