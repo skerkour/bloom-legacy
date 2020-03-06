@@ -12,12 +12,10 @@
 
     <div class="blm-drawer-space"></div>
 
-    <blm-drawer-music v-if="app === 'music'" />
-    <blm-drawer-bitflow v-else-if="app === 'bitflow'" />
+    <blm-drawer-bitflow v-if="app === 'bitflow'" />
     <blm-drawer-notes v-else-if="app === 'notes'" />
     <blm-drawer-drive v-else-if="app === 'drive'" />
     <blm-drawer-phaser v-else-if="app === 'phaser'" />
-    <blm-drawer-gallery v-else-if="app === 'gallery'" />
     <blm-drawer-admin v-else-if="app === 'admin'" />
     <blm-drawer-preferences v-else-if="app === 'preferences'" />
     <blm-drawer-myaccount v-else-if="app === 'myaccount'" />
@@ -29,22 +27,18 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import MusicDrawer from '@/ui/music/components/drawer.vue';
 import BitflowDrawer from '@/ui/bitflow/components/drawer.vue';
 import NotesDrawer from '@/ui/notes/components/Drawer.vue';
 import DriveDrawer from '@/ui/drive/components/drawer.vue';
-import GalleryDrawer from '@/ui/gallery/components/drawer.vue';
 import AdminDrawer from '@/ui/admin/components/drawer.vue';
 import PreferencesDrawer from '@/ui/preferences/components/drawer.vue';
 import MyAccountDrawer from '@/ui/myaccount/components/drawer.vue';
 import BooksDrawer from '@/ui/books/components/drawer.vue';
 
 const APPS_WITH_DRAWER = [
-  'music',
   'bitflow',
   'notes',
   'drive',
-  'gallery',
   'admin',
   'preferences',
   'myaccount',
@@ -53,11 +47,9 @@ const APPS_WITH_DRAWER = [
 
 @Component({
   components: {
-    'blm-drawer-music': MusicDrawer,
     'blm-drawer-bitflow': BitflowDrawer,
     'blm-drawer-notes': NotesDrawer,
     'blm-drawer-drive': DriveDrawer,
-    'blm-drawer-gallery': GalleryDrawer,
     'blm-drawer-admin': AdminDrawer,
     'blm-drawer-preferences': PreferencesDrawer,
     'blm-drawer-myaccount': MyAccountDrawer,

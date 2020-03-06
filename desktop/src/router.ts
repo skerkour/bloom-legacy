@@ -3,14 +3,12 @@ import Router from 'vue-router';
 
 import AuthRouter from '@/ui/auth/router';
 import PreferencesRouter from '@/ui/preferences/router';
-import MusicRouter from '@/ui/music/router';
 import NotesRouter from '@/ui/notes/router';
 import ArcadeRouter from '@/ui/arcade/router';
 import CalendarRouter from '@/ui/calendar/router';
 import DriveRouter from '@/ui/drive/router';
 import BitflowRouter from '@/ui/bitflow/router';
 import ContactsRouter from '@/ui/contacts/router';
-import GalleryRouter from '@/ui/gallery/router';
 import CalculatorRouter from '@/ui/calculator/router';
 import AdminRouter from '@/ui/admin/router';
 import MyAccountRouter from '@/ui/myaccount/router';
@@ -26,14 +24,12 @@ const router = new Router({
   routes: [
     ...AuthRouter,
     ...PreferencesRouter,
-    ...MusicRouter,
     ...NotesRouter,
     ...CalendarRouter,
     ...ArcadeRouter,
     ...DriveRouter,
     ...BitflowRouter,
     ...ContactsRouter,
-    ...GalleryRouter,
     ...CalculatorRouter,
     ...AdminRouter,
     ...MyAccountRouter,

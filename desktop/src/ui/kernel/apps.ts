@@ -12,11 +12,11 @@ export default function getApps() {
       path: '/notes',
       icon: '/assets/imgs/icons/notes.svg',
     },
-    {
-      name: 'Music',
-      path: '/music',
-      icon: '/assets/imgs/icons/music.svg',
-    },
+    // {
+    //   name: 'Music',
+    //   path: '/music',
+    //   icon: '/assets/imgs/icons/music.svg',
+    // },
     {
       name: 'Calendar',
       path: '/calendar',
@@ -32,11 +32,11 @@ export default function getApps() {
       path: '/bitflow',
       icon: '/assets/imgs/icons/bitflow.svg',
     },
-    {
-      name: 'Gallery',
-      path: '/gallery',
-      icon: '/assets/imgs/icons/gallery.svg',
-    },
+    // {
+    //   name: 'Gallery',
+    //   path: '/gallery',
+    //   icon: '/assets/imgs/icons/gallery.svg',
+    // },
     {
       name: 'Arcade',
       path: '/arcade',
