@@ -223,7 +223,7 @@ class _DatePicker extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final TextStyle valueStyle = Theme.of(context).textTheme.subtitle;
+    final TextStyle valueStyle = Theme.of(context).textTheme.subtitle2;
     return _InputDropdown(
       labelText: labelText,
       valueText:
