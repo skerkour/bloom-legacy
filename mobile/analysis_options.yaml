@@ -38,6 +38,7 @@ analyzer:
     # see https://github.com/dart-lang/sdk/issues/28463
     - "lib/i18n/stock_messages_*.dart"
     - "lib/libs/date_range_picker.dart"
+    - "_old/**"
 
 linter:
   rules:

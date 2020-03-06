@@ -69,7 +69,7 @@ class ContactsBloc extends BlocBase {
     final PermissionStatus permission = await PermissionHandler()
         .checkPermissionStatus(PermissionGroup.contacts);
     if (permission != PermissionStatus.granted &&
-        permission != PermissionStatus.disabled) {
+        permission != PermissionStatus.neverAskAgain) {
       final Map<PermissionGroup, PermissionStatus> permissionStatus =
           await PermissionHandler()
               .requestPermissions(<PermissionGroup>[PermissionGroup.contacts]);
