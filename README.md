@@ -21,11 +21,12 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 
 1. [Download](#download)
 2. [Documentation](#documentation)
-3. [Development instructions](#development-instructions)
-4. [Contributing](#contributing)
-5. [Forum](#contributing)
-6. [Licensing](#licensing)
-7. [Security](#security)
+3. [Roadmap](#roadmap)
+4. [Development instructions](#development-instructions)
+5. [Contributing](#contributing)
+6. [Forum](#contributing)
+7. [Licensing](#licensing)
+8. [Security](#security)
 
 --------
 
@@ -44,6 +45,11 @@ Windows: Coming soon <br/>
 ## Documentation
 
 See [the wiki](https://gitlab.com/bloom42/bloom/-/wikis)
+
+
+## Roadmap
+
+See https://gitlab.com/bloom42/bloom
 
 
 ## Development instructions
