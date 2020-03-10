@@ -14,7 +14,7 @@ import (
 
 var DB *sql.DB
 
-func homeDir() (string, error) {
+func appDirectory() (string, error) {
 	if runtime.GOOS == "android" {
 		data, err := ioutil.ReadFile("/proc/self/cmdline")
 		if err != nil {
@@ -31,7 +31,7 @@ func homeDir() (string, error) {
 }
 
 func dbDir() (string, error) {
-	return homeDir()
+	return appDirectory()
 	//return filepath.Join(home, "db"), err
 }
 
