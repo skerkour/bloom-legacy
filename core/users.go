@@ -11,7 +11,7 @@ import (
 
 func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "start_registration":
+	case "startRegistration":
 		var params users.StartRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -22,7 +22,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "verify_registration":
+	case "verifyRegistration":
 		var params users.VerifyRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -33,7 +33,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "complete_registration":
+	case "completeRegistration":
 		var params users.CompleteRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -44,7 +44,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "sign_in":
+	case "signIn":
 		var params users.SignInParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -55,25 +55,25 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "sign_out":
+	case "signOut":
 		err := users.SignOut()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
-	case "fetch_my_profile":
+	case "fetchMyProfile":
 		res, err := users.FetchMyProfile()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetch_my_sessions":
+	case "fetchMySessions":
 		res, err := users.FetchMySessions()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "revoke_session":
+	case "revokeSession":
 		var params users.RevokeSessionParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -84,7 +84,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
-	case "update_profile":
+	case "updateProfile":
 		var input model.UserProfileInput
 		err := json.Unmarshal(jsonParams, &input)
 		if err != nil {

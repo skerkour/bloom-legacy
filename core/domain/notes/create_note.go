@@ -1,9 +1,10 @@
 package notes
 
 import (
+	"time"
+
 	"github.com/google/uuid"
 	"gitlab.com/bloom42/bloom/core/db"
-	"time"
 )
 
 func CreateNote(params CreateNoteParams) (Note, error) {

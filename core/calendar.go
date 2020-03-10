@@ -9,7 +9,7 @@ import (
 
 func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "list_events":
+	case "listEvents":
 		var params calendar.ListEventsParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -20,7 +20,7 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "create_event":
+	case "createEvent":
 		var params calendar.CreateEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -31,7 +31,7 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_event":
+	case "deleteEvent":
 		var params calendar.DeleteEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -42,7 +42,7 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_event":
+	case "updateEvent":
 		var params calendar.Event
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {

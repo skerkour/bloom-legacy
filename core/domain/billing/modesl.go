@@ -7,8 +7,8 @@ type NewStripePaymentMethod struct {
 
 type NewStripeCard struct {
 	Number   string `json:"number"`
-	ExpMonth string `json:"exp_month"`
-	ExpYear  string `json:"exp_year"`
+	ExpMonth string `json:"expMonth"`
+	ExpYear  string `json:"expYear"`
 	Cvc      string `jsjon:"cvc"`
 }
 

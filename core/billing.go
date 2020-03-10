@@ -11,19 +11,19 @@ import (
 
 func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "fetch_my_profile":
+	case "fetchMyProfile":
 		res, err := billing.FetchMyProfile()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetch_plans":
+	case "fetchPlans":
 		res, err := billing.FetchPlans()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_plan":
+	case "deletePlan":
 		var params model.DeleteBillingPlanInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -34,7 +34,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
-	case "create_plan":
+	case "createPlan":
 		var params model.BillingPlanInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -45,7 +45,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_plan":
+	case "updatePlan":
 		var params model.BillingPlanInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -56,7 +56,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_subscription":
+	case "updateSubscription":
 		var params model.UpdateBillingSubscriptionInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -67,7 +67,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "add_payment_method":
+	case "addPaymentMethod":
 		var params billing.AddPaymentMethodParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -78,7 +78,7 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "remove_payment_method":
+	case "removePaymentMethod":
 		var params model.RemovePaymentMethodInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {

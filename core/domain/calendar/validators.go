@@ -7,7 +7,7 @@ import (
 
 func valdiateEventDates(startAt, endAt time.Time) error {
 	if endAt.Before(startAt) {
-		return errors.New("end_at can't be before start_at")
+		return errors.New("endAt can't be before startAt")
 	}
 	return nil
 }

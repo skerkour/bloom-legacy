@@ -9,7 +9,7 @@ import (
 
 func handleAdminMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "fetch_dashboard_data":
+	case "fetchDashboardData":
 		res, err := admin.FetchDashboardData()
 		if err != nil {
 			return InternalError(err)

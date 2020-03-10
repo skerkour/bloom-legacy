@@ -9,19 +9,19 @@ import (
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "list_notes":
+	case "listNotes":
 		res, err := notes.ListNotes()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "list_archived":
+	case "listArchived":
 		res, err := notes.ListArchived()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "create_note":
+	case "createNote":
 		var params notes.CreateNoteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -32,7 +32,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "update_note":
+	case "updateNote":
 		var params notes.Note
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -43,7 +43,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_note":
+	case "deleteNote":
 		var params notes.DeleteNoteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {

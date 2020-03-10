@@ -9,11 +9,11 @@ import (
 
 type Contact struct {
 	ID            string        `json:"id"`
-	CreatedAt     time.Time     `json:"created_at"`
-	UpdatedAt     time.Time     `json:"updated_at"`
-	DeviceID      string        `json:"device_id"`
-	FirstName     string        `json:"first_name"`
-	LastName      string        `json:"last_name"`
+	CreatedAt     time.Time     `json:"createdAt"`
+	UpdatedAt     time.Time     `json:"updatedAt"`
+	DeviceID      string        `json:"deviceId"`
+	FirstName     string        `json:"firstName"`
+	LastName      string        `json:"lastName"`
 	Notes         string        `json:"notes"`
 	Birthday      *time.Time    `json:"birthday"`
 	Organizations Organizations `json:"organizations"`
@@ -51,9 +51,9 @@ type Address struct {
 	City           string `json:"city"`
 	Country        string `json:"country"`
 	Label          string `json:"label"`
-	PostalCode     string `json:"postal_code"`
-	StreetAddress  string `json:"street_address"`
-	StreetAddress2 string `json:"street_address2"`
+	PostalCode     string `json:"postalCode"`
+	StreetAddress  string `json:"streetAddress"`
+	StreetAddress2 string `json:"streetAddress2"`
 }
 
 type Addresses []Address

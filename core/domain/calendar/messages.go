@@ -5,8 +5,8 @@ import (
 )
 
 type ListEventsParams struct {
-	StartAt *time.Time `json:"start_at"`
-	EndAt   *time.Time `json:"end_at"`
+	StartAt *time.Time `json:"startAt"`
+	EndAt   *time.Time `json:"endAt"`
 }
 
 type Events struct {
@@ -16,8 +16,8 @@ type Events struct {
 type CreateEventParams struct {
 	Title       string    `json:"title"`
 	Description string    `json:"description"`
-	StartAt     time.Time `json:"start_at"`
-	EndAt       time.Time `json:"end_at"`
+	StartAt     time.Time `json:"startAt"`
+	EndAt       time.Time `json:"endAt"`
 }
 
 type DeleteEventParams struct {

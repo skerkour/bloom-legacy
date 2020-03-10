@@ -11,7 +11,7 @@ import "gitlab.com/bloom42/bloom/core/domain/kernel"
 
 func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "create_group":
+	case "createGroup":
 		var params model.CreateGroupInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
@@ -22,7 +22,7 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "delete_group":
+	case "deleteGroup":
 		var params model.DeleteGroupInput
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {

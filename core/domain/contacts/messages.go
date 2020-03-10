@@ -9,9 +9,9 @@ type Contacts struct {
 }
 
 type CreateContactParams struct {
-	DeviceID      string        `json:"device_id"`
-	FirstName     string        `json:"first_name"`
-	LastName      string        `json:"last_name"`
+	DeviceID      string        `json:"deviceId"`
+	FirstName     string        `json:"firstName"`
+	LastName      string        `json:"lastName"`
 	Notes         string        `json:"notes"`
 	Birthday      *time.Time    `json:"birthday"`
 	Organizations Organizations `json:"organizations"`
