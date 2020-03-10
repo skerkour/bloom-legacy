@@ -17,7 +17,14 @@ func CreateGroup(input model.CreateGroupInput) (model.Group, error) {
 	req := graphql.NewRequest(`
 	mutation ($input: CreateGroupInput!) {
 		createGroup(input: $input) {
-
+			id
+			createdAt
+			avatarUrl
+			name
+			description
+			members {
+				totalCount
+			}
 		}
 	}
 	`)
