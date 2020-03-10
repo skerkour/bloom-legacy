@@ -1,15 +1,15 @@
 import * as models from '@/api/models';
 
 export enum Method {
-  StartRegistration = 'users.start_registration',
-  VerifyRegistration = 'users.verify_registration',
-  CompleteRegistration = 'users.complete_registration',
-  SignIn = 'users.sign_in',
-  SignOut = 'users.sign_out',
-  FetchMyProfile = 'users.fetch_my_profile',
-  FetchMySessions = 'users.fetch_my_sessions',
-  RevokeSession = 'users.revoke_session',
-  UpdateProfile = 'users.update_profile',
+  StartRegistration = 'users.startRegistration',
+  VerifyRegistration = 'users.verifyRegistration',
+  CompleteRegistration = 'users.completeRegistration',
+  SignIn = 'users.signIn',
+  SignOut = 'users.signOut',
+  FetchMyProfile = 'users.fetchMyProfile',
+  FetchMySessions = 'users.fetchMySessions',
+  RevokeSession = 'users.revokeSession',
+  UpdateProfile = 'users.updateProfile',
 }
 
 export type StartRegistration = {

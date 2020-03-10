@@ -1,20 +1,19 @@
 export enum Method {
-  ListEvents = 'calendar.list_events',
-  CreateEvent = 'calendar.create_event',
-  UpdateEvent = 'calendar.update_event',
-  DeleteEvent = 'calendar.delete_event',
+  ListEvents = 'calendar.listEvents',
+  CreateEvent = 'calendar.createEvent',
+  UpdateEvent = 'calendar.updateEvent',
+  DeleteEvent = 'calendar.deleteEvent',
 }
 
-/* eslint-disable camelcase */
 
 export type Event = {
   id: string,
   title: string,
   description: string,
-  created_at: Date,
-  updated_at: Date,
-  start_at: Date,
-  end_at: Date,
+  createdAt: Date,
+  updatedAt: Date,
+  startAt: Date,
+  endAt: Date,
 }
 
 export type Events = {
@@ -22,15 +21,15 @@ export type Events = {
 }
 
 export type ListEvents = {
-  start_at: Date | undefined,
-  end_at: Date | undefined,
+  startAt: Date | undefined,
+  endAt: Date | undefined,
 }
 
 export type CreateEvent = {
   title: string,
   description: string,
-  start_at: Date,
-  end_at: Date,
+  startAt: Date,
+  endAt: Date,
 }
 
 export type DeleteEvent = {

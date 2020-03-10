@@ -112,8 +112,8 @@ export default class AddPaymentMethodDialog extends Vue {
     const card: NewStripeCard = {
       number: this.number,
       cvc: this.cvc,
-      exp_month: this.expMonth,
-      exp_year: this.expYear,
+      expMonth: this.expMonth,
+      expYear: this.expYear,
     };
     this.$emit('added', card);
     this.close();

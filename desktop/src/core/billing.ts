@@ -1,20 +1,20 @@
-/* eslint-disable import/prefer-default-export, camelcase */
+/* eslint-disable import/prefer-default-export */
 
 export enum Method {
-  FetchPlans = 'billing.fetch_plans',
-  DeletePlan = 'billing.delete_plan',
-  UpdatedPlan = 'billing.update_plan',
-  CreatePlan = 'billing.create_plan',
-  FetchMyProfile = 'billing.fetch_my_profile',
-  AddPaymentMethod = 'billing.add_payment_method',
-  RemovePaymentMethod = 'billing.remove_payment_method',
-  UpdateSubscription = 'billing.update_subscription',
+  FetchPlans = 'billing.fetchPlans',
+  DeletePlan = 'billing.deletePlan',
+  UpdatedPlan = 'billing.updatePlan',
+  CreatePlan = 'billing.createPlan',
+  FetchMyProfile = 'billing.fetchMyProfile',
+  AddPaymentMethod = 'billing.addPayment_method',
+  RemovePaymentMethod = 'billing.removePaymentMethod',
+  UpdateSubscription = 'billing.updateSubscription',
 }
 
 export type NewStripeCard = {
   number: string,
-  exp_month: string,
-  exp_year: string,
+  expMonth: string,
+  expYear: string,
   cvc: string,
 }
 

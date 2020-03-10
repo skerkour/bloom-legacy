@@ -59,7 +59,7 @@
 
           <v-col>
             <v-menu
-              ref="start_at_menu"
+              ref="startAt_menu"
               v-model="startAtMenu"
               :close-on-content-click="false"
               :nudge-right="40"
@@ -82,7 +82,7 @@
 
           <v-col>
             <v-menu
-              ref="end_at_menu"
+              ref="endAt_menu"
               v-model="endAtMenu"
               :close-on-content-click="false"
               :nudge-right="40"
@@ -168,8 +168,8 @@ export default class EventDialog extends Vue {
     if (event !== null) {
       this.title = event.title;
       this.description = event.description;
-      this.startAt = event.start_at;
-      this.endAt = event.end_at;
+      this.startAt = event.startAt;
+      this.endAt = event.endAt;
     } else {
       this.clearFields();
     }
@@ -225,8 +225,8 @@ export default class EventDialog extends Vue {
     const params: CreateEvent = {
       title: this.title,
       description: this.description,
-      start_at: core.toIsoDate(this.startAt)!,
-      end_at: core.toIsoDate(this.endAt)!,
+      startAt: core.toIsoDate(this.startAt)!,
+      endAt: core.toIsoDate(this.endAt)!,
     };
     try {
       const res = await core.call(Method.CreateEvent, params);
@@ -244,8 +244,8 @@ export default class EventDialog extends Vue {
     const event = { ...this.event } as EventModel;
     event.title = this.title;
     event.description = this.description;
-    event.start_at = core.toIsoDate(this.startAt)!;
-    event.end_at = core.toIsoDate(this.endAt)!;
+    event.startAt = core.toIsoDate(this.startAt)!;
+    event.endAt = core.toIsoDate(this.endAt)!;
     try {
       const res = await core.call(Method.UpdateEvent, event);
       this.$emit('updated', (res as Event));

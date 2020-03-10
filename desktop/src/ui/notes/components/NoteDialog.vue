@@ -33,7 +33,7 @@
 
         <v-tooltip
           bottom
-          v-if="note.is_pinned"
+          v-if="note.isPinned"
         >
           <template v-slot:activator="{ on }">
           <v-btn
@@ -180,7 +180,7 @@ export default class NoteDialog extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.is_pinned = true;
+    note.isPinned = true;
     try {
       const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));
@@ -195,7 +195,7 @@ export default class NoteDialog extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.is_pinned = false;
+    note.isPinned = false;
     try {
       const res = await core.call(Method.UpdateNote, note);
       this.$emit('updated', (res as Note));

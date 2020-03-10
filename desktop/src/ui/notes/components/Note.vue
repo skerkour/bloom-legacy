@@ -20,7 +20,7 @@
 
         <v-tooltip
           bottom
-          v-if="note.archived_at === null"
+          v-if="note.archivedAt === null"
         >
           <template v-slot:activator="{ on }">
           <v-btn
@@ -58,7 +58,7 @@
 
         <v-tooltip
           bottom
-          v-if="note.is_pinned"
+          v-if="note.isPinned"
         >
           <template v-slot:activator="{ on }">
           <v-btn
@@ -157,7 +157,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.archived_at = new Date().toISOString() as unknown as Date;
+    note.archivedAt = new Date().toISOString() as unknown as Date;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -173,7 +173,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.archived_at = null;
+    note.archivedAt = null;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -189,7 +189,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.is_pinned = true;
+    note.isPinned = true;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -205,7 +205,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as Note;
-    note.is_pinned = false;
+    note.isPinned = false;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
