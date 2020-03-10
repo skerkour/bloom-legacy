@@ -39,7 +39,7 @@ CLI: Coming soom <br/><!-- [See instructions](https://help.bloom.sh/en/article/h
 Linux: Coming soom <br/>
 Docker: Coming soon <br/>
 MacOS: Coming soon <br/>
-Windows: Coming soon <br/>
+<!-- Windows: Coming soon <br/> -->
 
 
 ## Documentation
