@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="3132px" height="2218px" viewBox="0 0 3132 2218" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>bg_1</title>
+    <desc>Created with Sketch.</desc>
+    <g id="illustrations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-933.000000, -532.000000)">
+            <g id="bg_1" transform="translate(933.000000, 532.000000)">
+                <rect id="Rectangle" fill="#5FCDFF" fill-rule="nonzero" x="16" y="0" width="3066" height="2049"></rect>
+                <path d="M1,1179 C80.185,1114.93 228.883,1238.4 289,1204 C1148.29,712.24 1056.66,1222.19 1295,1132 C1604.84,1014.751 1698.57,1335.75 2065,1211 C2319.89,1124.22 2806.48,857.8 3054,918 C3161.71,944.2 3054,2218 3054,2218 L52,2218 C52.765,2217.42 -7.021,1218.41 1,1179 Z" id="Color_Fill_1" fill="#FFFFFF" opacity="0.25"></path>
+                <path d="M52,871 C509.748,885.672 603.1,1149.46 872,1132 C1125.51,1115.54 1306.71,950.447 1561,967 C1889.14,988.36 1974.1,1039.01 2361,1051 C2958.49,1069.51 2960.28,989.041 3055,949 C3227.94,875.891 3055,2218 3055,2218 L49,2212 C49.766,2211.42 43.979,910.409 52,871 Z" id="Color_Fill_2" fill="#FFFFFF" opacity="0.2"></path>
+            </g>
+        </g>
+    </g>
+</svg>

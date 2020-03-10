@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="607px" height="435px" viewBox="0 0 607 435" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>corner_right_red</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <rect id="path-1" x="0" y="0" width="724" height="435" rx="10"></rect>
+    </defs>
+    <g id="illustrations" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Artboard" transform="translate(-912.000000, -1501.000000)">
+            <g id="corner_right_red" transform="translate(795.000000, 1501.000000)">
+                <mask id="mask-2" fill="white">
+                    <use xlink:href="#path-1"></use>
+                </mask>
+                <g id="rectangle"></g>
+                <path d="M119.490454,286.156722 L542.677226,-200.998454 C546.355782,-205.230148 552.768306,-205.678555 557,-202 L1329.56587,466.97803 C1333.79757,470.656586 1334.24597,477.06911 1330.56742,481.300804 L907.380645,968.45598 C903.70209,972.687674 897.289566,973.136081 893.057872,969.457526 L120.492,300.479495 C116.260306,296.80094 115.811899,290.388416 119.490454,286.156722 Z" id="Path" fill="#EA5B43" fill-rule="nonzero" mask="url(#mask-2)"></path>
+            </g>
+        </g>
+    </g>
+</svg>
