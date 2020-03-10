@@ -1,6 +1,6 @@
 import * as models from '@/api/models';
 
-enum Method {
+export enum Method {
   StartRegistration = 'users.start_registration',
   VerifyRegistration = 'users.verify_registration',
   CompleteRegistration = 'users.complete_registration',
@@ -11,9 +11,6 @@ enum Method {
   RevokeSession = 'users.revoke_session',
   UpdateProfile = 'users.update_profile',
 }
-
-export { Method };
-
 
 export type StartRegistration = {
   email: string,
