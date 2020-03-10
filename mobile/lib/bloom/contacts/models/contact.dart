@@ -1,6 +1,6 @@
 import 'package:bloom/bloom/contacts/core/messages.dart';
 import 'package:bloom/bloom/contacts/core/methods.dart';
-import 'package:bloom/core.dart';
+import 'package:bloom/core/core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/foundation.dart';
 import 'package:contacts_service/contacts_service.dart' as contacts_service;

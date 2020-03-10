@@ -1,6 +1,6 @@
 import 'package:bloom/bloom/calculator/core/messages.dart';
 import 'package:bloom/bloom/calculator/core/methods.dart';
-import 'package:bloom/core.dart';
+import 'package:bloom/core/core.dart';
 import 'package:flutter/material.dart';
 
 class CalculatorView extends StatefulWidget {

@@ -11,7 +11,7 @@ import 'package:bloom/bloom/home/views/home.dart';
 import 'package:bloom/bloom/myaccount/views/profile.dart';
 import 'package:bloom/bloom/notes/views/notes.dart';
 import 'package:bloom/bloom/preferences/views/theme.dart';
-import 'package:bloom/core.dart';
+import 'package:bloom/core/core.dart';
 import 'package:flutter/material.dart';
 
 import 'package:bloom/bloom/auth/views/auth.dart';

@@ -1,7 +1,7 @@
 import 'package:bloom/bloom/calendar/core/messages.dart';
 import 'package:bloom/bloom/calendar/core/methods.dart';
 import 'package:bloom/bloom/kernel/services/utils.dart';
-import 'package:bloom/core.dart';
+import 'package:bloom/core/core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
