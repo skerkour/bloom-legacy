@@ -74,8 +74,25 @@ export default {
     body: `Our philosophy is simple: either you contribute back to the commons by opening your work
     too, either you pay us for our work. <br /><br />
     Ou time is as valuable as yours and we don't work for free.<br /><br />
+
+    We use contaminating licenses to
+    avoid behaviors which will damage our vision of Open Source/Free Software and ensure
+    that those who benefits from our software contribute back to the community
+    by releasing the modified version and the tooling around, or by funding the project.<br /><br />
+
     You can find the license for each project in the <code>LICENSE.txt</code> file
-    at the root of the project, and sometimes in cubfolders if components have a different license.`,
+    at the root of the project, and sometimes in cubfolders if components have a different license.<br /><br />
+
+    <h2>GNU Affero General Public License v3.0 (AGPL-3.0)</h2>
+    <p>
+      Used for server side software.
+    </p>
+
+    <h2>GNU General Public License v3.0 (GPL-3.0)</h2>
+    <p>
+      Used for client side applications or libraries.
+    </p>
+    `,
   },
   about: {
     believe: `We believe that sharing and collaboration is the only way to build a
