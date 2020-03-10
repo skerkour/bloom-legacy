@@ -8,7 +8,7 @@
       </v-col>
 
        <v-col cols="12" sm="10" md="8" class="mb-5">
-        <p class="font-18 font-weight-regular text-left" v-html="$t('licensing.body')" />
+        <p class="font-weight-regular text-left" v-html="$t('licensing.body')" />
       </v-col>
 
     </v-row>
@@ -32,11 +32,4 @@ export default class Licensing extends Vue {
 </script>
 
 <style scoped lang="scss">
-a {
-  text-decoration: none;
-}
-
-.font-18 {
-  font-size: 18px;
-}
 </style>
