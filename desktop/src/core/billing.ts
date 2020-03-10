@@ -1,6 +1,6 @@
 /* eslint-disable import/prefer-default-export, camelcase */
 
-enum Method {
+export enum Method {
   FetchPlans = 'billing.fetch_plans',
   DeletePlan = 'billing.delete_plan',
   UpdatedPlan = 'billing.update_plan',
@@ -10,9 +10,6 @@ enum Method {
   RemovePaymentMethod = 'billing.remove_payment_method',
   UpdateSubscription = 'billing.update_subscription',
 }
-
-export { Method };
-
 
 export type NewStripeCard = {
   number: string,
