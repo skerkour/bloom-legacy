@@ -20,6 +20,11 @@ desktop:
 	go build -o dist/$(NAME)server server/*.go
 	cp dist/$(NAME)server ../desktop/$(NAME)server
 
+.PHONY: dev_desktop
+dev_desktop:
+	gowatch -build="make desktop"
+
+
 .PHONY: mobile
 mobile: android
 

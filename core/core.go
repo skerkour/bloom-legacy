@@ -70,6 +70,8 @@ func HandleMessage(messageIn MessageIn) ([]byte, error) {
 		messageOut = handleAdminMehtod(parts[1], messageIn.Params)
 	case "billing":
 		messageOut = handleBillingMehtod(parts[1], messageIn.Params)
+	case "groups":
+		messageOut = handleGroupsMethod(parts[1], messageIn.Params)
 	default:
 		messageOut = serviceNotFoundError(parts[0])
 	}
