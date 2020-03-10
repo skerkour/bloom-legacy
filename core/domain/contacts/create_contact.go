@@ -30,10 +30,10 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 	stmt, err := db.DB.Prepare(`
 	INSERT INTO contacts
 		(id,
-		created_at,
-		updated_at,
-		first_name,
-		last_name,
+		createdAt,
+		updatedAt,
+		firstName,
+		lastName,
 		notes,
 		addresses,
 		birthday,
@@ -41,7 +41,7 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		emails,
 		phones,
 		websites,
-		device_id)
+		deviceId)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
 	`)
 	if err != nil {

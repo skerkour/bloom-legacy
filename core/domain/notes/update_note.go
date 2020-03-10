@@ -13,12 +13,12 @@ func UpdateNote(note Note) (Note, error) {
 
 	stmt, err := db.DB.Prepare(`
 	UPDATE notes SET
-		updated_at = ?,
-		archived_at = ?,
+		updatedAt = ?,
+		archivedAt = ?,
 		title = ?,
 		body = ?,
 		color = ?,
-		is_pinned = ?
+		isPinned = ?
 	WHERE id = ?
 	`)
 	if err != nil {

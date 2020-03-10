@@ -68,13 +68,13 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS notes (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at DATETIME NOT NULL,
-		updated_at DATETIME NOT NULL,
-		archived_at DATETIME,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		archivedAt DATETIME,
 		title TEXT NOT NULL,
 		body TEXT NOT NULL,
 		color TEXT NOT NULL,
-		is_pinned INTEGER
+		isPinned INTEGER
 	)
 	`)
 	if err != nil {
@@ -84,12 +84,12 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS calendar_events (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at DATETIME NOT NULL,
-		updated_at DATETIME NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
 		title TEXT NOT NULL,
 		description TEXT NOT NULL,
-		start_at DATETIME NOT NULL,
-		end_at DATETIME NOT NULL
+		startAt DATETIME NOT NULL,
+		endAt DATETIME NOT NULL
 	)
 	`)
 	if err != nil {
@@ -99,10 +99,10 @@ func Init() error {
 	_, err = DB.Exec(`
 	CREATE TABLE IF NOT EXISTS contacts (
 		id TEXT PRIMARY KEY NOT NULL,
-		created_at DATETIME NOT NULL,
-		updated_at DATETIME NOT NULL,
-		first_name TEXT NOT NULL,
-		last_name TEXT NOT NULL,
+		createdAt DATETIME NOT NULL,
+		updatedAt DATETIME NOT NULL,
+		firstName TEXT NOT NULL,
+		lastName TEXT NOT NULL,
 		notes TEXT NOT NULL,
 		addresses TEXT NOT NULL,
 		birthday TEXT,
@@ -110,7 +110,7 @@ func Init() error {
 		emails TEXT NOT NULL,
 		phones TEXT NOT NULL,
 		websites TEXT NOT NULL,
-		device_id TEXT NOT NULL
+		deviceId TEXT NOT NULL
 	)
 	`)
 	if err != nil {

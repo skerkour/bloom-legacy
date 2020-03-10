@@ -8,7 +8,7 @@ import (
 func DeleteEvent(params DeleteEventParams) (kernel.Empty, error) {
 	ret := kernel.Empty{}
 
-	stmt, err := db.DB.Prepare("DELETE FROM calendar_events WHERE id = ?")
+	stmt, err := db.DB.Prepare("DELETE FROM calendarEvents WHERE id = ?")
 	if err != nil {
 		return ret, err
 	}

@@ -24,7 +24,7 @@ func CreateEvent(params CreateEventParams) (Event, error) {
 		EndAt:       params.EndAt,
 	}
 
-	_, err := db.DB.Exec(`INSERT INTO calendar_events (id, created_at, updated_at, title, description, start_at, end_at)
+	_, err := db.DB.Exec(`INSERT INTO calendarEvents (id, createdAt, updatedAt, title, description, startAt, endAt)
 		VALUES ($1, $2, $3, $4, $5, $6, $7)`, &event.ID, &event.CreatedAt, &event.UpdatedAt, &event.Title, &event.Description, &event.StartAt, &event.EndAt)
 
 	return event, err
