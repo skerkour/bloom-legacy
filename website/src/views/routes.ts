@@ -15,6 +15,8 @@ const Privacy = () => import(/* webpackChunkName: "chunk-organization" */ '@/vie
 const Terms = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/terms.vue');
 const About = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/about.vue');
 const FAQ = () => import(/* webpackChunkName: "chunk-faq" */ '@/views/faq.vue');
+const Licesing = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/licensing.vue');
+
 
 Vue.use(Router);
 
@@ -69,6 +71,11 @@ export default new Router({
     {
       path: '/blog**',
       component: Blog,
+    },
+
+    {
+      path: '/licensing',
+      component: Licesing,
     },
 
     ...FeaturesRoutes,
