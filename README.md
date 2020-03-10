@@ -44,12 +44,12 @@ MacOS: Coming soon <br/>
 
 ## Documentation
 
-See [the wiki](https://gitlab.com/bloom42/bloom/-/wikis)
+See the wiki: https://gitlab.com/bloom42/bloom/-/wikis/home
 
 
 ## Roadmap
 
-See https://gitlab.com/bloom42/bloom
+See https://gitlab.com/bloom42/bloom/-/milestones
 
 
 ## Development instructions
@@ -67,6 +67,7 @@ https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
 When you want to talk about something that does not necessarily fit issues, you can use the forum
 to connect with the community: https://gitlab.com/bloom42/forum
+
 
 ## Licensing
 
