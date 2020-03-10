@@ -1,0 +1,97 @@
+services:
+  - docker:dind
+
+stages:
+  - test
+  - build
+  - release
+
+include:
+  - template: Dependency-Scanning.gitlab-ci.yml
+  - template: SAST.gitlab-ci.yml
+  - template: Container-Scanning.gitlab-ci.yml
+
+
+variables:
+  GO_IMAGE: golang:latest
+
+####################################################################################################
+## Test
+####################################################################################################
+
+test:
+  stage: test
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - make fmt_check
+    - make lint
+    - make test
+
+
+# ####################################################################################################
+# ## Build
+# ####################################################################################################
+
+# build:
+#   stage: build
+#   image: $GO_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - make build
+#     # artifacts:
+#     #   paths:
+#     #   - dist
+
+
+#####################################################################################################
+### Build
+#####################################################################################################
+
+build:docker:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  script:
+    - apk update && apk add make
+    - make docker_build
+
+
+####################################################################################################
+## Release
+####################################################################################################
+
+# release:docker:nightly:
+#   only:
+#     - schedules
+#   stage: release
+#   dependencies:
+#     - build
+#   image: docker:stable
+#   tags:
+#     - docker
+#   cache: {}
+#   script:
+#     - apk update && apk add make
+#     - make docker_build
+#     - make docker_login
+#     - make docker_release_nightly
+
+release:docker:stable:
+  only:
+    - tags
+  stage: release
+  dependencies:
+    - build:docker
+  image: docker:stable
+  tags:
+    - docker
+  script:
+    - apk update && apk add make
+    - make docker_build
+    - make docker_login
+    - make docker_release

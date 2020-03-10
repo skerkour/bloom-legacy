@@ -1,0 +1,9 @@
+rust_env = "production"
+aws_secret_access_key = "${AWS_SECRET_ACCESS_KEY}"
+aws_access_key_id = "${AWS_ACCESS_KEY_ID}"
+aws_region = "${AWS_REGION}"
+aws_s3_bucket = "${AWS_S3_BUCKET}"
+sentry_url = "${SENTRY_URL}"
+bloom_api_secret = "${BLOOM_API_SECRET}"
+bloom_api_url = "${BLOOM_API_URL}"
+concurrency = 21

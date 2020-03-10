@@ -1,0 +1,37 @@
+[package]
+name = "bitflow"
+version = "0.5.8"
+authors = ["z0mbie42 <sylvain@kerkour.fr>"]
+edition = "2018"
+homepage = "https://bloom.sh/features/bitflow"
+repository = "https://gitlab.com/bloom42/bloom.git"
+description = "A simple piece of software that makes downloading ﬁles fast ⚡"
+keywords = ["bloom", "torrent", "download"]
+license = "AGPL-3.0"
+
+[dependencies]
+clap = "2.33"
+serde_json = "1.0"
+serde = { version = "1.0", features = ["derive"] }
+rusoto_core = "0.39"
+rusoto_s3 = "0.39"
+failure = "0.1"
+reqwest = "0.9"
+uuid = { version = "0.7", features = ["v4"] }
+chrono = "0.4"
+url = "1.7"
+slog = "2.4"
+slog-json = "2.3"
+log = "0.4"
+slog-scope = "4.1"
+sentry = "0.17"
+walkdir = "2"
+mimesniff = "0.3.0"
+futures-fs = "0.0.5"
+regex = "1"
+sane = "0.2.1"
+
+
+[profile.release]
+# for error tracking
+debug = true
