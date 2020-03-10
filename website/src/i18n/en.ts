@@ -52,6 +52,7 @@ export default {
       security: 'Security',
       terms: 'Terms',
       privacy: 'Privacy',
+      licensing: 'Licensing',
     },
     product: {
       title: 'Product',

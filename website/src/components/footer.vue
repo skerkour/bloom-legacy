@@ -12,6 +12,7 @@
             <li><router-link class="nav-link" to="/terms">{{ $t('footer.organization.terms') }}</router-link></li>
             <li><router-link class="nav-link" to="/privacy">{{ $t('footer.organization.privacy') }}</router-link></li>
             <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis">Wiki</a></li>
+            <li><router-link class="nav-link" to="/licensing">{{ $t('footer.organization.licensing') }}</router-link></li>
           </ul>
         </v-col>
 
