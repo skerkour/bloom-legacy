@@ -13,12 +13,12 @@
         <h3 class="headline mb-5 mt-5">
           {{ $t('download.subtitle2') }}
         </h3>
-        <div class="mt-5 mb-5"></div>
+        <div class="mt-5"></div>
         <blm-download-btn class="mt-5"/>
       </v-col>
     </v-row>
 
-    <v-row class="justify-center blm-all-downloads mb-5">
+    <v-row class="justify-center blm-all-downloads mb-5 mt-5">
       <v-col cols="12" sm="10" md="8" class="text-center">
         <h2 class="display-1">{{ $t('download.all') }}</h2>
       </v-col>
@@ -250,10 +250,6 @@ export default class Download extends Vue {
 </script>
 
 <style scoped land="scss">
-.blm-all-downloads {
-  margin-top: 100px;
-}
-
 .v-card {
   border-radius: 10px;
 }
