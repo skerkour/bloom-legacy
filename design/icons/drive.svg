@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>drive</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#FFE15F" offset="0%"></stop>
+            <stop stop-color="#FFE98A" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="drive" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group-2" transform="translate(216.000000, 278.000000)">
+            <path d="M239.6,0 L59.9,0 C26.955,0 0,26.55 0,59 L0,413 C0,445.45 26.955,472 59.9,472 L539.1,472 C572.045,472 599,445.45 599,413 L599,118 C599,85.55 572.045,59 539.1,59 L299.5,59 L239.6,0 L239.6,0 Z" id="Shape" fill="#FFFFFF"></path>
+            <rect id="Rectangle" fill="#FF5F7D" x="45" y="29" width="26" height="26" rx="2"></rect>
+            <rect id="Rectangle" fill="#FFE15F" x="91" y="29" width="26" height="26" rx="2"></rect>
+            <rect id="Rectangle" fill="#5FCDFF" x="136" y="29" width="26" height="26" rx="2"></rect>
+        </g>
+    </g>
+</svg>

@@ -1,0 +1,68 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1693px" height="765px" viewBox="0 0 1693 765" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>server_architecture</title>
+    <desc>Created with Sketch.</desc>
+    <g id="server_architecture" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="1693" height="765"></rect>
+        <g id="HTTP-API" transform="translate(127.000000, 354.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="73.0742188" y="55">HTTP API</tspan>
+            </text>
+        </g>
+        <g id="Controller" transform="translate(436.000000, 354.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="73.8203125" y="55">Controller</tspan>
+            </text>
+        </g>
+        <g id="Command-1" transform="translate(739.000000, 235.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="64.4257812" y="55">Command 1</tspan>
+            </text>
+        </g>
+        <g id="Command-3" transform="translate(739.000000, 354.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text id="Command-2" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="64.4257812" y="55">Command 2</tspan>
+            </text>
+        </g>
+        <path id="Line" d="M427.5,398.5 L436.5,403 L427.5,407.5 L427.5,403.5 L342.5,403.5 L342.5,402.5 L427.5,402.5 L427.5,398.5 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M730.5,398.5 L739.5,403 L730.5,407.5 L730.5,403.5 L651.5,403.5 L651.5,402.5 L730.5,402.5 L730.5,398.5 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M1033.5,279.5 L1042.5,284 L1033.5,288.5 L1033.5,284.5 L954.5,284.5 L954.5,283.5 L1033.5,283.5 L1033.5,279.5 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M1336.5,279.5 L1345.5,284 L1336.5,288.5 L1336.5,284.5 L1257.5,284.5 L1257.5,283.5 L1336.5,283.5 L1336.5,279.5 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M739.295093,283.596367 L737.616114,293.517608 L734.387,291.156 L652.403633,403.295093 L652.10854,403.698727 L651.301273,403.10854 L651.596367,402.704907 L733.58,290.566 L730.350713,288.205928 L739.295093,283.596367 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M652.10854,402.301273 L652.403633,402.704907 L734.387,514.843 L737.616114,512.482392 L739.295093,522.403633 L730.350713,517.794072 L733.58,515.433 L651.596367,403.295093 L651.301273,402.89146 L652.10854,402.301273 Z" fill="#000000" fill-rule="nonzero"></path>
+        <g id="Command-3" transform="translate(739.000000, 473.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="64.4257812" y="55">Command 3</tspan>
+            </text>
+        </g>
+        <g id="Event" transform="translate(1042.000000, 235.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="88.0429688" y="55">Event</tspan>
+            </text>
+        </g>
+        <g id="Update-aggregate" transform="translate(1345.000000, 235.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="82.703125" y="55">Update </tspan>
+                <tspan x="72.46875" y="74">aggregate</tspan>
+            </text>
+        </g>
+        <text id="Actix-web" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+            <tspan x="200.824219" y="479">Actix-web</tspan>
+        </text>
+        <text id="Actix" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+            <tspan x="527.164062" y="479">Actix</tspan>
+        </text>
+        <text id="Event-soucing" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+            <tspan x="827.042969" y="630">Event </tspan>
+            <tspan x="819.925781" y="649">soucing</tspan>
+        </text>
+    </g>
+</svg>

@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="997px" height="449px" viewBox="0 0 997 449" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>apps_architecture</title>
+    <desc>Created with Sketch.</desc>
+    <g id="apps_architecture" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="997" height="449"></rect>
+        <g id="Flutter" transform="translate(82.000000, 54.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="85.828125" y="55">Flutter</tspan>
+            </text>
+        </g>
+        <g id="Electron" transform="translate(82.000000, 253.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text id="Electron-(Vue,-Types" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="16.3945312" y="55">Electron (Vue, Typescript)</tspan>
+            </text>
+        </g>
+        <g id="neon_bindings" transform="translate(385.000000, 253.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text id="Neon-bindings" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="56.8515625" y="55">Neon bindings</tspan>
+            </text>
+        </g>
+        <g id="ffi" transform="translate(385.000000, 54.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text id="FFI" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="96.0039062" y="55">FFI</tspan>
+            </text>
+        </g>
+        <path id="Line" d="M601.168055,103.126085 L610.508301,106.869051 L607.517,109.524 L683.23,194.811 L686.22217,192.155938 L688.831945,201.873915 L679.491699,198.130949 L682.482,195.475 L606.769,110.188 L603.77783,112.844062 L601.168055,103.126085 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M689.326321,201.621167 L686.862032,211.377051 L683.831,208.766 L607.926,296.886 L610.95696,299.496734 L601.673679,303.378833 L604.137968,293.622949 L607.168,296.233 L683.073,208.113 L680.04304,205.503266 L689.326321,201.621167 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M377,298 L386,302.5 L377,307 L377,303 L306,303 L306,307 L297,302.5 L306,298 L306,302 L377,302 L377,298 Z" fill="#000000" fill-rule="nonzero"></path>
+        <path id="Line" d="M376,99 L385,103.5 L376,108 L376,104 L305,104 L305,108 L296,103.5 L305,99 L305,103 L376,103 L376,99 Z" fill="#000000" fill-rule="nonzero"></path>
+        <g id="core" transform="translate(688.000000, 152.000000)">
+            <rect id="Rectangle" stroke="#979797" fill="#FFFFFF" x="0.5" y="0.5" width="215" height="97" rx="8"></rect>
+            <text id="Core-(Rust)" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+                <tspan x="67.1601562" y="55">Core (Rust)</tspan>
+            </text>
+        </g>
+        <text id="Android,-IOS" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+            <tspan x="144.699219" y="179">Android, IOS</tspan>
+        </text>
+        <text id="Linux,-MacOS,-Window" font-family="Helvetica" font-size="16" font-weight="normal" fill="#000000">
+            <tspan x="103.859375" y="378">Linux, MacOS, Windows</tspan>
+        </text>
+    </g>
+</svg>

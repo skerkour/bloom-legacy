@@ -1,0 +1,44 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>calculator</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M0,377 L1024,377" id="path-1"></path>
+        <filter x="-0.9%" y="-650.0%" width="101.8%" height="1800.0%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="2" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="2" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feMorphology radius="2" operator="erode" in="SourceAlpha" result="shadowInner"></feMorphology>
+            <feOffset dx="0" dy="2" in="shadowInner" result="shadowInner"></feOffset>
+            <feComposite in="shadowOffsetOuter1" in2="shadowInner" operator="out" result="shadowOffsetOuter1"></feComposite>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="calculator" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="#37474F" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group" transform="translate(0.000000, 135.000000)">
+            <g id="Line" stroke-linecap="square">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use stroke="#979797" stroke-width="4" xlink:href="#path-1"></use>
+            </g>
+            <line x1="512" y1="377" x2="512" y2="889" id="Line-2" stroke="#979797" stroke-width="4" stroke-linecap="square"></line>
+            <rect id="Rectangle" stroke="#979797" fill="#62727B" x="0.5" y="377.5" width="511" height="511"></rect>
+            <rect id="Rectangle" stroke="#979797" fill="#00DE39" transform="translate(768.000000, 633.000000) scale(-1, 1) translate(-768.000000, -633.000000) " x="512.5" y="377.5" width="511" height="511"></rect>
+            <g id="signs" transform="translate(152.000000, 0.000000)" fill="#FFFFFF" font-family="PTMono-Bold, PT Mono" font-size="242" font-weight="bold">
+                <text id="+">
+                    <tspan x="137.4" y="227">+</tspan>
+                </text>
+                <text id="x">
+                    <tspan x="137.4" y="527">x</tspan>
+                </text>
+                <text id="=">
+                    <tspan x="437.4" y="548">=</tspan>
+                </text>
+                <text id="-">
+                    <tspan x="437.4" y="214">-</tspan>
+                </text>
+            </g>
+        </g>
+    </g>
+</svg>

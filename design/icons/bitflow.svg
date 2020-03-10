@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>bitflow</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#68D0FF" offset="0%"></stop>
+            <stop stop-color="#9BE0FF" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="bitflow" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="bacground" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group" transform="translate(128.000000, 284.000000)">
+            <path d="M155.2,468 C69.4854068,468 0,398.156421 0,312 C0,225.843579 69.4854068,156 155.2,156 L182.748,156 C208.356,65.91 291,0 388,0 C505.857566,0 601.4,96.0349212 601.4,214.5 L601.4,234 L659.6,234 C723.885945,234 776,286.382684 776,351 C776,415.617316 723.885945,468 659.6,468 L155.2,468 Z" id="Path" fill="#FFFFFF"></path>
+            <g id="arrow-down-bold" transform="translate(308.000000, 146.000000)">
+                <polygon id="Path" fill="#FFE15F" points="48.1530612 60 107.846939 60 107.846939 140.808081 156 140.808081 78 220 0 140.808081 48.1530612 140.808081"></polygon>
+                <rect id="Rectangle" fill="#FEE98F" x="88" y="40" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FEE98F" x="48" y="40" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FFE15F" x="48" y="60" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FCF4D2" x="48" y="0" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FFE15F" x="68" y="60" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FFF1B7" x="68" y="20" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FFF1B7" x="48" y="20" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FFE15F" x="88" y="60" width="20" height="20"></rect>
+                <rect id="Rectangle" fill="#FEE98F" x="68" y="40" width="20" height="20"></rect>
+            </g>
+        </g>
+    </g>
+</svg>

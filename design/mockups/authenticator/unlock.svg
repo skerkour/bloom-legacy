@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="375px" height="667px" viewBox="0 0 375 667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Unlock view</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <polygon id="path-1" points="0 0 375 0 375 69 0 69"></polygon>
+        <filter x="-4.0%" y="-30.4%" width="108.0%" height="143.5%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="0.5" operator="dilate" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="-6" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3.5" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.1 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <path d="M32,64 C49.673112,64 64,49.673112 64,32 C64,14.326888 49.673112,0 32,0 C14.326888,0 0,14.326888 0,32 C0,49.673112 14.326888,64 32,64 Z" id="path-3"></path>
+        <filter x="-18.0%" y="-10.2%" width="135.9%" height="135.9%" filterUnits="objectBoundingBox" id="filter-4">
+            <feOffset dx="0" dy="5" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.292261096 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="Unlock-view" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="375" height="667"></rect>
+        <g id="Group" transform="translate(0.000000, 59.000000)">
+            <g id="Rectangle">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#FFFFFF" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <path d="M355.658374,24 L340.298847,24 C339.582069,24 339.070085,24.35 338.660498,25.05 L333.131068,34.5 L338.660498,43.95 C339.070085,44.5333333 339.582069,45 340.298847,45 L355.658374,45 C356.784739,45 357.706311,43.95 357.706311,42.6666667 L357.706311,26.3333333 C357.706311,25.05 356.784739,24 355.658374,24 L355.658374,24 Z M352.586468,38.7 L351.152913,40.3333333 L347.466626,36.1333333 L343.78034,40.3333333 L342.346784,38.7 L346.03307,34.5 L342.346784,30.3 L343.78034,28.6666667 L347.466626,32.8666667 L351.152913,28.6666667 L352.586468,30.3 L348.900182,34.5 L352.586468,38.7 L352.586468,38.7 Z" id="Backspace" fill="#757575"></path>
+        </g>
+        <line x1="0.0115551995" y1="128" x2="374.514555" y2="128" id="Line" stroke="#E0E0E0" stroke-width="0.572222222" stroke-linecap="square"></line>
+        <g id="Keypad" transform="translate(55.000000, 193.000000)" fill="#2A56C6" font-family="Helvetica" font-size="41" font-weight="normal" line-spacing="41.2">
+            <text id="1">
+                <tspan x="3.73443983" y="40">1</tspan>
+            </text>
+            <text id="2">
+                <tspan x="119.975104" y="45.1533742">2</tspan>
+            </text>
+            <text id="3">
+                <tspan x="239.651452" y="45.1533742">3</tspan>
+            </text>
+            <text id="4">
+                <tspan x="0.871369295" y="118.445808">4</tspan>
+            </text>
+            <text id="5">
+                <tspan x="119.40249" y="118.445808">5</tspan>
+            </text>
+            <text id="6">
+                <tspan x="239.078838" y="118.445808">6</tspan>
+            </text>
+            <text id="7">
+                <tspan x="1.4439834" y="191.738241">7</tspan>
+            </text>
+            <text id="8">
+                <tspan x="119.975104" y="191.738241">8</tspan>
+            </text>
+            <text id="0">
+                <tspan x="120.547718" y="265.603272">0</tspan>
+            </text>
+            <text id="9">
+                <tspan x="239.651452" y="191.738241">9</tspan>
+            </text>
+        </g>
+        <g id="Fab" transform="translate(155.000000, 539.000000)">
+            <g id="Oval-4">
+                <use fill="black" fill-opacity="1" filter="url(#filter-4)" xlink:href="#path-3"></use>
+                <use fill="#DB4437" fill-rule="evenodd" xlink:href="#path-3"></use>
+            </g>
+        </g>
+    </g>
+</svg>

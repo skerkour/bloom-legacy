@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>calendar</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#4285F4" offset="0%"></stop>
+            <stop stop-color="#40B0FF" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="calendar" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <path d="M706.639175,732.675926 L322.360825,732.675926 L322.360825,430.574074 L706.639175,430.574074 L706.639175,732.675926 Z M624.944444,236 L624.944444,291.3 L404.055556,291.3 L404.055556,236 L348.833333,236 L348.833333,291.3 L321.222222,291.3 C290.573889,291.3 266,315.9085 266,346.6 L266,733.7 C266,764.241347 290.723831,789 321.222222,789 L707.777778,789 C738.276169,789 763,764.241347 763,733.7 L763,346.6 C763,315.9085 738.15,291.3 707.777778,291.3 L680.166667,291.3 L680.166667,236 L624.944444,236 Z M650.278351,538.101852 L511.938144,538.101852 L511.938144,676.351852 L650.278351,676.351852 L650.278351,538.101852 Z" id="Shape" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="375px" height="667px" viewBox="0 0 375 667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>List view</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M32,64 C49.673112,64 64,49.673112 64,32 C64,14.326888 49.673112,0 32,0 C14.326888,0 0,14.326888 0,32 C0,49.673112 14.326888,64 32,64 Z" id="path-1"></path>
+        <filter x="-18.0%" y="-10.2%" width="135.9%" height="135.9%" filterUnits="objectBoundingBox" id="filter-2">
+            <feOffset dx="0" dy="5" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="3" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.292261096 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <circle id="path-3" cx="22.7722222" cy="22.7555556" r="22.3166667"></circle>
+        <circle id="path-5" cx="22.7722222" cy="22.7555556" r="22.3166667"></circle>
+    </defs>
+    <g id="List-view" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="375" height="667"></rect>
+        <rect id="Rectangle" fill="#2A56C6" x="0" y="0" width="375" height="56"></rect>
+        <g id="Fab" transform="translate(280.000000, 561.000000)">
+            <g id="Oval-4">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#DB4437" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <path d="M33.0138889,22.8888889 L33.0138889,30.7638889 L40.8888889,30.7638889 L40.8888889,33.0138889 L33.0138889,33.0138889 L33.0138889,40.8888889 L30.7638889,40.8888889 L30.7638889,33.0128889 L22.8888889,33.0138889 L22.8888889,30.7638889 L30.7638889,30.7628889 L30.7638889,22.8888889 L33.0138889,22.8888889 Z" id="Rectangle-39" fill="#FFFFFF"></path>
+        </g>
+        <path d="M349.5,23.75 C350.875,23.75 352,22.68125 352,21.375 C352,20.06875 350.875,19 349.5,19 C348.125,19 347,20.06875 347,21.375 C347,22.68125 348.125,23.75 349.5,23.75 L349.5,23.75 Z M349.5,26.125 C348.125,26.125 347,27.19375 347,28.5 C347,29.80625 348.125,30.875 349.5,30.875 C350.875,30.875 352,29.80625 352,28.5 C352,27.19375 350.875,26.125 349.5,26.125 L349.5,26.125 Z M347,35.625 C347,36.93125 348.125,38 349.5,38 C350.875,38 352,36.93125 352,35.625 C352,34.31875 350.875,33.25 349.5,33.25 C348.125,33.25 347,34.31875 347,35.625 Z" id="Shape" fill="#FFFFFF"></path>
+        <path d="M305.714286,30.8285714 L304.708571,30.8285714 L304.331429,30.4514286 C305.588571,29.0685714 306.342857,27.1828571 306.342857,25.1714286 C306.342857,20.6457143 302.697143,17 298.171429,17 C293.645714,17 290,20.6457143 290,25.1714286 C290,29.6971429 293.645714,33.3428571 298.171429,33.3428571 C300.182857,33.3428571 302.068571,32.5885714 303.451429,31.3314286 L303.828571,31.7085714 L303.828571,32.7142857 L310.114286,39 L312,37.1142857 L305.714286,30.8285714 L305.714286,30.8285714 Z M298.171429,30.8285714 C295.028571,30.8285714 292.514286,28.3142857 292.514286,25.1714286 C292.514286,22.0285714 295.028571,19.5142857 298.171429,19.5142857 C301.314286,19.5142857 303.828571,22.0285714 303.828571,25.1714286 C303.828571,28.3142857 301.314286,30.8285714 298.171429,30.8285714 L298.171429,30.8285714 Z" id="Search" fill="#FFFFFF"></path>
+        <g id="Group" transform="translate(0.000000, 64.000000)">
+            <line x1="0.260055479" y1="68.2782258" x2="374.763055" y2="68.2782258" id="Line" stroke="#E0E0E0" stroke-width="0.572222222" stroke-linecap="square"></line>
+            <polygon id="Path-9-Copy-4" stroke="#757575" stroke-width="1.14444444" points="345.015316 37.2782258 347.772435 43.897703 355 44.5119231 349.56343 49.2270719 351.177314 56.2782258 344.994846 52.5834959 338.819057 56.2720011 340.447168 49.2725268 335 44.5527456 342.15977 43.8887278"></polygon>
+            <text id="Service-1" font-family="Helvetica" font-size="18" font-weight="normal" line-spacing="27.4666667" letter-spacing="0.225" fill="#DB4437">
+                <tspan x="82" y="18.2782258">Service 1</tspan>
+            </text>
+            <text id="User1@email.com" font-family="Helvetica" font-size="16" font-weight="normal" line-spacing="15.45" letter-spacing="0.05714286" fill="#767676">
+                <tspan x="82" y="45.2782258">User1@email.com</tspan>
+            </text>
+        </g>
+        <g id="Group" transform="translate(0.000000, 134.000000)">
+            <line x1="0.260055479" y1="68.2782258" x2="374.763055" y2="68.2782258" id="Line" stroke="#E0E0E0" stroke-width="0.572222222" stroke-linecap="square"></line>
+            <polygon id="Path-9-Copy-4" stroke="#757575" stroke-width="1.14444444" points="345.015316 37.2782258 347.772435 43.897703 355 44.5119231 349.56343 49.2270719 351.177314 56.2782258 344.994846 52.5834959 338.819057 56.2720011 340.447168 49.2725268 335 44.5527456 342.15977 43.8887278"></polygon>
+            <text id="Service-2" font-family="Helvetica" font-size="18" font-weight="normal" line-spacing="27.4666667" letter-spacing="0.225" fill="#DB4437">
+                <tspan x="82" y="18.2782258">Service 2</tspan>
+            </text>
+            <text id="User1@email.com" font-family="Helvetica" font-size="16" font-weight="normal" line-spacing="15.45" letter-spacing="0.05714286" fill="#767676">
+                <tspan x="82" y="45.2782258">User1@email.com</tspan>
+            </text>
+        </g>
+        <g id="Group-2" transform="translate(13.000000, 76.000000)">
+            <g id="ui/components/gmail/colors/red">
+                <mask id="mask-4" fill="white">
+                    <use xlink:href="#path-3"></use>
+                </mask>
+                <use id="Mask" fill="#5D56BA" xlink:href="#path-3"></use>
+                <g id="ui/app_screens/gmail/colors/red" mask="url(#mask-4)" fill="#EC5C52" fill-rule="nonzero">
+                    <g transform="translate(-18.000000, -13.000000)" id="Rectangle-21">
+                        <rect x="0" y="0" width="82" height="82"></rect>
+                    </g>
+                </g>
+            </g>
+            <text id="S" font-family="Helvetica" font-size="26.3222222" font-weight="normal" letter-spacing="0.197416666" fill="#FFFFFF">
+                <tspan x="14.5" y="33">S</tspan>
+            </text>
+        </g>
+        <g id="Group-2" transform="translate(13.000000, 146.000000)">
+            <g id="ui/components/gmail/colors/red">
+                <mask id="mask-6" fill="white">
+                    <use xlink:href="#path-5"></use>
+                </mask>
+                <use id="Mask" fill="#5D56BA" xlink:href="#path-5"></use>
+                <g id="ui/app_screens/gmail/colors/red" mask="url(#mask-6)" fill="#EC5C52" fill-rule="nonzero">
+                    <g transform="translate(-18.000000, -13.000000)" id="Rectangle-21">
+                        <rect x="0" y="0" width="82" height="82"></rect>
+                    </g>
+                </g>
+            </g>
+            <text id="S" font-family="Helvetica" font-size="26.3222222" font-weight="normal" letter-spacing="0.197416666" fill="#FFFFFF">
+                <tspan x="14.5" y="33">S</tspan>
+            </text>
+        </g>
+    </g>
+</svg>

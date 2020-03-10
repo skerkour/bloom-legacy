@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="375px" height="667px" viewBox="0 0 375 667" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>Service view</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <filter x="-15.0%" y="-14.3%" width="130.0%" height="128.6%" filterUnits="objectBoundingBox" id="filter-1">
+            <feOffset dx="0" dy="2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1" result="shadowMatrixOuter1"></feColorMatrix>
+            <feMerge>
+                <feMergeNode in="shadowMatrixOuter1"></feMergeNode>
+                <feMergeNode in="SourceGraphic"></feMergeNode>
+            </feMerge>
+        </filter>
+    </defs>
+    <g id="Service-view" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="375" height="667"></rect>
+        <rect id="Rectangle" fill="#2A56C6" x="0" y="0" width="375" height="56"></rect>
+        <g id="back" opacity="0.87" transform="translate(20.000000, 16.000000)">
+            <rect id="bounds" x="0" y="0" width="24" height="24"></rect>
+            <polygon id="Shape" fill="#FFFFFF" points="7.8 11 13.4 5.4 12 4 4 12 12 20 13.4 18.6 7.8 13 20 13 20 11"></polygon>
+        </g>
+        <g id="trash" transform="translate(332.000000, 16.000000)">
+            <rect id="bounds" x="1.42108547e-14" y="0" width="24" height="24"></rect>
+            <path d="M17.999,7 L5.999,7 L5.999,19 C5.999,20.104 6.895,21 8,21 L15.999,21 C17.105,21 17.999,20.104 17.999,19 L17.999,7 M14.499,2.999 L9.499,2.999 L8.5,4 L5.999,4 C5.448,4 5,4.448 5,4.999 L5,6 L19,6 L19,4.999 C19,4.448 18.552,4 17.999,4 L15.5,4 L14.499,2.999" id="Fill-3" fill="#FFFFFF"></path>
+        </g>
+        <text id="Service-2" font-family="Helvetica" font-size="25" font-weight="normal" line-spacing="27.4666667" letter-spacing="0.3125" fill="#DB4437">
+            <tspan x="113" y="137">Service 2</tspan>
+        </text>
+        <text id="000-000" font-family="Helvetica" font-size="42" font-weight="normal" line-spacing="27.4666667" letter-spacing="0.525" fill="#DB4437">
+            <tspan x="69.8241211" y="301.360221">000 000</tspan>
+        </text>
+        <text id="User1@email.com" font-family="Helvetica" font-size="16" font-weight="normal" line-spacing="15.45" letter-spacing="0.05714286" fill="#767676">
+            <tspan x="105.946429" y="184.504687">User1@email.com</tspan>
+        </text>
+        <g id="AndroidSpinnerDark" filter="url(#filter-1)" transform="translate(148.000000, 395.000000)" fill="#000000">
+            <path d="M31.9851044,-7.1572602e-05 L33.5449727,6.19912246 C17.9162348,10.1172833 6.33342927,24.3771649 6.33342927,41.3690494 C6.33342927,61.3821492 22.4013393,77.6053574 42.2228618,77.6053574 C56.280682,77.6053574 68.4504614,69.4451971 74.3392873,57.5602471 L80.0002472,60.4302707 C73.069577,74.4054027 58.7557316,84 42.2228618,84 C18.9042308,84 0,64.9130576 0,41.3690494 C0,21.3897057 13.6132131,4.61996038 31.9851044,-7.1572602e-05 Z" id="Spinner"></path>
+        </g>
+    </g>
+</svg>

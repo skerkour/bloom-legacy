@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1200px" height="630px" viewBox="0 0 1200 630" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>og_image</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <path d="M108.99994,13.0000231 L108.999,234 L89.6704238,222.581162 L70,210.960971 L70,35.72078 L89.6159248,24.1183214 C103.180295,16.0938656 107.424922,13.6093579 108.99994,13.0000231 Z" id="path-1"></path>
+        <filter x="-6.4%" y="-1.5%" width="125.6%" height="102.8%" filterUnits="objectBoundingBox" id="filter-2">
+            <feMorphology radius="1" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="3" dy="0" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="50%" y1="0%" x2="50%" y2="99.8152449%" id="linearGradient-3">
+            <stop stop-color="#FFC82E" offset="0%"></stop>
+            <stop stop-color="#FFE7A2" offset="100%"></stop>
+        </linearGradient>
+        <polygon id="path-4" points="126.432618 113.381782 167.832792 89.5764323 168.595668 176.413142 168.284539 176.589324 164.961642 178.47098 127.394887 200.170722"></polygon>
+        <filter x="-16.6%" y="-8.1%" width="133.2%" height="112.7%" filterUnits="objectBoundingBox" id="filter-5">
+            <feOffset dx="0" dy="-2" in="SourceAlpha" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="2" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+        <linearGradient x1="-62.3795815%" y1="0%" x2="113.873538%" y2="0%" id="linearGradient-6">
+            <stop stop-color="#4285F4" offset="0%"></stop>
+            <stop stop-color="#73A7FF" offset="100%"></stop>
+        </linearGradient>
+        <path d="M184.550573,56 L185,103.926768 L121.333935,140.918353 C117.068273,143.407306 113.424393,145.53005 110.402296,147.286586 C103.031828,151.570528 102.835149,151.656234 109.812259,147.543706 L69.4577992,171 L69,123.699821 L109.546,100.019 L109.546508,99.9648167 L184.550573,56 Z" id="path-7"></path>
+        <filter x="-6.9%" y="-4.2%" width="113.8%" height="110.1%" filterUnits="objectBoundingBox" id="filter-8">
+            <feMorphology radius="1.5" operator="erode" in="SourceAlpha" result="shadowSpreadOuter1"></feMorphology>
+            <feOffset dx="0" dy="1" in="shadowSpreadOuter1" result="shadowOffsetOuter1"></feOffset>
+            <feGaussianBlur stdDeviation="4" in="shadowOffsetOuter1" result="shadowBlurOuter1"></feGaussianBlur>
+            <feColorMatrix values="0 0 0 0 0   0 0 0 0 0   0 0 0 0 0  0 0 0 0.5 0" type="matrix" in="shadowBlurOuter1"></feColorMatrix>
+        </filter>
+    </defs>
+    <g id="og_image" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="1200" height="630"></rect>
+        <g id="Group" transform="translate(472.000000, 120.000000)">
+            <rect id="Rectangle" fill="#FFFFFF" x="0" y="0" width="256" height="256" rx="40"></rect>
+            <path d="M126.08848,26.4227818 L166.949647,2.16935064 L166.970365,3.56661582 L167.713225,89.3714119 C141.337567,105.323154 128.146441,113.249182 128.139846,113.149497 C128.082224,112.278539 127.398435,83.3696343 126.08848,26.4227818 Z" id="Rectangle" fill="#4285F4" transform="translate(146.900852, 57.660347) rotate(121.000000) translate(-146.900852, -57.660347) "></path>
+            <polygon id="Rectangle" fill="#EDB722" transform="translate(146.854999, 188.806436) rotate(59.000000) translate(-146.854999, -188.806436) " points="127.149699 133.081962 167.900182 157.594208 166.096679 244.530909 125.809816 220.32412"></polygon>
+            <g id="Combined-Shape">
+                <use fill="black" fill-opacity="1" filter="url(#filter-2)" xlink:href="#path-1"></use>
+                <use fill="#DB4437" fill-rule="evenodd" xlink:href="#path-1"></use>
+            </g>
+            <g id="Rectangle" transform="translate(147.514143, 144.873577) rotate(121.000000) translate(-147.514143, -144.873577) ">
+                <use fill="black" fill-opacity="1" filter="url(#filter-5)" xlink:href="#path-4"></use>
+                <use fill="url(#linearGradient-3)" fill-rule="evenodd" xlink:href="#path-4"></use>
+            </g>
+            <g id="Combined-Shape">
+                <use fill="black" fill-opacity="1" filter="url(#filter-8)" xlink:href="#path-7"></use>
+                <use fill="url(#linearGradient-6)" fill-rule="evenodd" xlink:href="#path-7"></use>
+            </g>
+            <polygon id="Path-7" fill="#FFFFFF" points="109 148.06952 110.973764 147 114.049401 148.85382 118.144647 151.194787 144 166.661347 109 187"></polygon>
+            <polygon id="Path-7" fill="#FFFFFF" points="109 59.1676262 118.144647 64.7909687 144 80 109 100.326135"></polygon>
+            <polygon id="Path-7" fill="#FFFFFF" transform="translate(168.248531, 123.500000) scale(-1, -1) translate(-168.248531, -123.500000) " points="151.497063 104 158.582749 108.076792 185 123.5 152.021925 143"></polygon>
+            <path d="M184,56.5649035 C188.308545,52.8282651 191.641879,50.9732973 194,51 C196.358121,51.0274771 199.691455,52.9590311 204,56.7946619 L204,111 C195.222525,112.604536 188.889191,113.005385 185,112.202549 C181.110809,111.399712 180.925725,109.653282 184.444748,106.963257 L184,56.5649035 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <path d="M184.498283,142.709623 C182.71786,134.376073 183.095241,130.223103 185.630424,130.250713 C188.165607,130.278692 194.955466,134.510239 206,142.945356 L206,198.56034 C196.375646,202.137825 189.887981,203.553253 186.537007,202.806623 C183.186032,202.059993 181.340363,198.787817 181,192.990096 L184.254985,191.102306 L184.498283,142.709623 Z" id="Rectangle" fill="#FFFFFF"></path>
+            <path d="M49,118.621383 C53.323898,114.846821 56.6691091,112.973222 59.0356333,113.000587 C61.4021575,113.027952 65.055567,114.90155 69.9958619,118.621383 L69.9958619,123.110681 L69.9958619,123.340875 L69.9958619,170.793203 C70.0056785,170.912788 69.9948085,171.520609 69.9958619,171.645773 C69.9974266,171.831675 69.9974266,172.100967 69.9958619,172.453652 L69.9958619,173.778586 L69.9958619,175 L49.4463329,169.53124 L49,118.621383 Z" id="Rectangle" fill="#FFFFFF"></path>
+        </g>
+        <text id="Bloom" font-family="Helvetica" font-size="100" font-weight="normal" fill="#000000">
+            <tspan x="458.276367" y="496">Bloom</tspan>
+        </text>
+    </g>
+</svg>

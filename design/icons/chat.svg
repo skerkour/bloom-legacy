@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>chat</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="100%" y1="0%" x2="0%" y2="100%" id="linearGradient-1">
+            <stop stop-color="#CBFFD9" offset="0%"></stop>
+            <stop stop-color="#00DE39" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="chat" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="Rectangle" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <path d="M511.5,267 C661.375,267 784,364.555 784,485 C784,605.445 661.375,703 511.5,703 C477.71,703 445.2825,698.095 415.3075,689.375 C335.7375,757.5 239,757.5 239,757.5 C302.4925,694.0075 312.575,651.225 313.9375,634.875 C267.6125,595.9075 239,543.0425 239,485 C239,364.555 361.625,267 511.5,267 L511.5,267 Z M647.75,512.25 L647.75,457.75 L593.25,457.75 L593.25,512.25 L647.75,512.25 L647.75,512.25 Z M538.75,512.25 L538.75,457.75 L484.25,457.75 L484.25,512.25 L538.75,512.25 L538.75,512.25 Z M429.75,512.25 L429.75,457.75 L375.25,457.75 L375.25,512.25 L429.75,512.25 Z" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>

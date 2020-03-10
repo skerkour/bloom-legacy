@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>notes</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#FFE15F" offset="0%"></stop>
+            <stop stop-color="#FFEFAB" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="notes" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group" transform="translate(256.000000, 323.000000)" stroke="#FFFFFF" stroke-linecap="square" stroke-width="21">
+            <line x1="0.28406569" y1="6.67554372" x2="511.602308" y2="6.67554372" id="Line"></line>
+            <line x1="0.28406569" y1="128.710164" x2="511.602308" y2="128.710164" id="Line"></line>
+            <line x1="0.28406569" y1="250.063027" x2="511.602308" y2="250.063027" id="Line"></line>
+            <line x1="0.965823347" y1="372.097648" x2="256.624945" y2="372.097648" id="Line"></line>
+        </g>
+    </g>
+</svg>

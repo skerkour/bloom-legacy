@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1455px" height="727px" viewBox="0 0 1455 727" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>bloom_auth_sign_in</title>
+    <desc>Created with Sketch.</desc>
+    <g id="bloom_auth_sign_in" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect fill="#FFFFFF" x="0" y="0" width="1455" height="727"></rect>
+        <path id="Line-5" d="M497,471 L497,475 L727,475 L727,476 L497,476 L497,480 L488,475.5 L497,471 Z" fill="#000000" fill-rule="nonzero"></path>
+        <g id="step3" transform="translate(409.000000, 88.000000)">
+            <path id="Line-2" d="M342.981401,87.5353081 L351.999996,91.9979253 L343.018745,96.5352307 L343.002,92.535 L231.002075,92.9999957 L230.502079,93.0020704 L230.49793,92.002079 L230.997925,92.0000043 L342.997,91.535 L342.981401,87.5353081 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path d="M0,0.5 C40.5848375,0.5 117.584838,0.5 231,0.5 L231,92.5" id="Path" stroke="#000000"></path>
+            <path d="M64,92 C93.3405535,92 149.00722,92 231,92 L231,184" id="Path" stroke="#000000" transform="translate(147.500000, 138.000000) scale(1, -1) translate(-147.500000, -138.000000) "></path>
+        </g>
+        <g id="step_3" transform="translate(599.000000, 165.000000)">
+            <text id="3" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                <tspan x="10.1746289" y="23">3</tspan>
+            </text>
+            <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+        </g>
+        <g id="step_8" transform="translate(608.000000, 434.000000)">
+            <text id="8" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                <tspan x="10.1746289" y="23">8</tspan>
+            </text>
+            <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+        </g>
+        <g id="client" transform="translate(16.000000, 30.000000)">
+            <rect id="Rectangle" stroke="#000000" x="0" y="0" width="521" height="675" rx="4"></rect>
+            <g id="username" transform="translate(291.000000, 44.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="102" height="37" rx="4"></rect>
+                <text id="Username" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="10.9248633" y="27">Username</tspan>
+                </text>
+            </g>
+            <g id="password" transform="translate(15.000000, 44.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="102" height="37" rx="4"></rect>
+                <text id="Password" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="12.924375" y="27">Password</tspan>
+                </text>
+            </g>
+            <g id="salt" transform="translate(134.000000, 44.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="122" height="37" rx="4"></rect>
+                <text id="Random-salt" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="11.9560742" y="27">Random salt</tspan>
+                </text>
+            </g>
+            <g id="argo2id" transform="translate(15.000000, 132.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="442" height="37" rx="4"></rect>
+                <text id="crypto42::kdf::argon" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="41.5018555" y="26">crypto42::kdf::argon2id::derive_from_password</tspan>
+                </text>
+            </g>
+            <g id="blake2b" transform="translate(15.000000, 220.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="442" height="37" rx="4"></rect>
+                <text id="crypto42::kdf::blake" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="68.4369922" y="26">crypto42::kdf::blake2b::derive_from_key</tspan>
+                </text>
+            </g>
+            <path id="Line" d="M66,80 L66,123 L70,123 L65.5,132 L61,123 L65,123 L65,80 L66,80 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path id="Line" d="M195,80 L195,123 L199,123 L194.5,132 L190,123 L194,123 L194,80 L195,80 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path id="Line" d="M210.5,168.5 L210.5,211.5 L214.5,211.5 L210,220.5 L205.5,211.5 L209.5,211.5 L209.5,168.5 L210.5,168.5 Z" fill="#000000" fill-rule="nonzero"></path>
+            <text id="Client" font-family="Helvetica" font-size="24" font-weight="normal" letter-spacing="-0.48" fill="#303030">
+                <tspan x="43.7603125" y="23">Client</tspan>
+            </text>
+            <g id="step_1" transform="translate(466.000000, 135.000000)">
+                <text id="1" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">1</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+            <g id="step_2" transform="translate(466.000000, 205.000000)">
+                <text id="2" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">2</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+        </g>
+        <g id="server" transform="translate(712.000000, 30.000000)">
+            <rect id="Rectangle" stroke="#000000" x="0" y="0" width="724" height="675" rx="4"></rect>
+            <text id="Server" font-family="Helvetica" font-size="24" font-weight="normal" letter-spacing="-0.48" fill="#303030">
+                <tspan x="67.59625" y="23">Server</tspan>
+            </text>
+            <g id="argo2id" transform="translate(68.000000, 134.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="446" height="37" rx="4"></rect>
+                <text id="crypto42::kdf::argon" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="69.1119372" y="26">crypto42::kdf::argon2id::verify_password</tspan>
+                </text>
+            </g>
+            <g id="argo2id" transform="translate(303.000000, 352.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="323" height="37" rx="4"></rect>
+                <text id="crypto42::kdf::argon" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="9.23769239" y="26">crypto42::kdf::argon2id::hash_password</tspan>
+                </text>
+            </g>
+            <g id="db" transform="translate(359.000000, 426.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="323" height="37" rx="4"></rect>
+                <text id="DB" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="149.851442" y="26">DB</tspan>
+                </text>
+            </g>
+            <g id="base64" transform="translate(15.000000, 426.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="313" height="37" rx="4"></rect>
+                <text id="base64(session_id+”:" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="8.88443285" y="26">base64(session_id+”:”+session_token)</tspan>
+                </text>
+            </g>
+            <path id="Line-3" d="M292,170 L292,263 L296,263 L291.5,272 L287,263 L291,263 L291,170 L292,170 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path id="Line-3" d="M465.5,314.5 L465.5,343.5 L469.5,343.5 L465,352.5 L460.5,343.5 L464.5,343.5 L464.5,314.5 L465.5,314.5 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path id="Line-3" d="M465.5,388.5 L465.5,417.5 L469.5,417.5 L465,426.5 L460.5,417.5 L464.5,417.5 L464.5,388.5 L465.5,388.5 Z" fill="#000000" fill-rule="nonzero"></path>
+            <g id="hash" transform="translate(64.000000, 46.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="456" height="37" rx="4"></rect>
+                <text id="Hash-+-salt-from-DB" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="151.339243" y="27">Hash + salt from DB</tspan>
+                </text>
+            </g>
+            <path id="Line" d="M292,82 L292,125 L296,125 L291.5,134 L287,125 L291,125 L291,82 L292,82 Z" fill="#000000" fill-rule="nonzero"></path>
+            <text id="If-OK" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                <tspan x="304.895117" y="221">If OK</tspan>
+            </text>
+            <g id="session_id" transform="translate(106.000000, 276.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="171" height="37" rx="4"></rect>
+                <text id="UUIDv4-session_id" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="55.5756055" y="26">UUIDv4 </tspan>
+                    <tspan x="45.2741211" y="48">session_id</tspan>
+                </text>
+            </g>
+            <g id="session_token" transform="translate(313.000000, 276.000000)">
+                <rect id="Rectangle" fill="#D8D8D8" x="0" y="0" width="316" height="37" rx="4"></rect>
+                <text id="512-bits-crypto-rand" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36" fill="#303030">
+                    <tspan x="13.3950391" y="26">512 bits crypto random session_token</tspan>
+                </text>
+            </g>
+            <path id="Line-3" d="M167.997812,312.997821 L167.999995,313.497817 L168.463,419.497 L172.46284,419.480431 L168.002183,428.499995 L163.462925,419.519732 L167.463,419.502 L167.000005,313.502183 L166.997821,313.002188 L167.997812,312.997821 Z" fill="#000000" fill-rule="nonzero"></path>
+            <path id="Line-3" d="M167.318081,312.816695 L167.750693,313.067388 L355.395,421.805 L357.401836,418.344712 L362.932612,426.750693 L352.889361,426.131725 L354.894,422.671 L167.249307,313.932612 L166.816695,313.681919 L167.318081,312.816695 Z" fill="#000000" fill-rule="nonzero"></path>
+            <line x1="464.5" y1="324.5" x2="234.5" y2="324.5" id="Line-4" stroke="#000000" stroke-linecap="square"></line>
+            <path id="Line-3" d="M233.876224,323.873779 L234.876221,323.876224 L234.874999,324.376222 L234.645,418.126 L238.645769,418.136028 L234.123778,427.124999 L229.645796,418.114023 L233.645,418.124 L233.875001,324.373778 L233.876224,323.873779 Z" fill="#000000" fill-rule="nonzero"></path>
+            <text id="+" font-family="Helvetica" font-size="24" font-weight="normal" letter-spacing="-0.48" fill="#303030">
+                <tspan x="288.232188" y="299">+</tspan>
+            </text>
+            <g id="step_4" transform="translate(531.000000, 135.000000)">
+                <text id="4" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">4</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+            <g id="step_5" transform="translate(646.000000, 276.000000)">
+                <text id="5" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">5</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+            <g id="step_6" transform="translate(646.000000, 356.000000)">
+                <text id="6" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">6</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+            <g id="step_7" transform="translate(690.000000, 430.000000)">
+                <text id="7" fill="#000000" font-family="Helvetica" font-size="18" font-weight="normal" letter-spacing="-0.36">
+                    <tspan x="10.1746289" y="23">7</tspan>
+                </text>
+                <circle id="Oval" stroke="#000000" cx="15" cy="15" r="15"></circle>
+            </g>
+        </g>
+    </g>
+</svg>

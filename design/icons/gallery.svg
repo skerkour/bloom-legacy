@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>gallery</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#1DADFF" offset="0%"></stop>
+            <stop stop-color="#ABDEFD" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="gallery" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group" transform="translate(118.000000, 123.000000)">
+            <path d="" id="Combined-Shape" fill="#CDFF5F"></path>
+            <path d="M698.716535,440 L905.999,655.843 L905.999,893.062 L905.996193,893.249179 C905.865173,897.531558 902.368639,900.966961 898.062216,900.999763 L256.001,900.999 L698.716535,440 Z" id="Combined-Shape" fill="#CDFF5F"></path>
+            <path d="M325,578 L649.999,900.999 L0.001,900.999 L325,578 Z" id="Combined-Shape" fill="#CDFF5F"></path>
+            <circle id="Oval" fill="#FFE15F" cx="604.5" cy="102.5" r="102.5"></circle>
+            <path d="M55.8,205 C37.1327755,205 22,189.777681 22,171 C22,152.222319 37.1327755,137 55.8,137 L61.7995,137 C67.3765,117.365 85.375,103 106.5,103 C132.167434,103 152.975,123.930688 152.975,149.75 L152.975,154 L165.65,154 C179.650418,154 191,165.416739 191,179.5 C191,193.583261 179.650418,205 165.65,205 L55.8,205 Z" id="Path" fill="#FFFFFF"></path>
+            <path d="M165,411 C142.90861,411 125,393.389867 125,371.666667 C125,349.943467 142.90861,332.333333 165,332.333333 L172.1,332.333333 C178.7,309.618333 200,293 225,293 C255.375661,293 280,317.213933 280,347.083333 L280,352 L295,352 C311.568542,352 325,365.2076 325,381.5 C325,397.7924 311.568542,411 295,411 L165,411 Z" id="Path" fill="#FFFFFF"></path>
+            <path d="M469.6,326 C457.670649,326 448,316.001026 448,303.666667 C448,291.332307 457.670649,281.333333 469.6,281.333333 L473.434,281.333333 C476.998,268.435833 488.5,259 502,259 C518.402857,259 531.7,272.748589 531.7,289.708333 L531.7,292.5 L539.8,292.5 C548.747013,292.5 556,299.99923 556,309.25 C556,318.50077 548.747013,326 539.8,326 L469.6,326 Z" id="Path" fill="#FFFFFF"></path>
+        </g>
+    </g>
+</svg>

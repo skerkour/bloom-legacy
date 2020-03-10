@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>volt</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="0%" y1="100%" x2="102.958548%" y2="-2.79763745%" id="linearGradient-1">
+            <stop stop-color="#FFFC01" offset="0%"></stop>
+            <stop stop-color="#FFFC01" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="volt" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="background" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <g id="Group" transform="translate(292.840000, 205.800000)" fill="#FFFFFF" stroke="#000000" stroke-width="16">
+            <path d="M423.860525,47.8743773 L290.527683,269.104927 L102.245368,210.987763 L19.7768378,568.789386 L149.975666,350.125021 L341.171593,406.63262 L423.860525,47.8743773 Z" id="Combined-Shape"></path>
+        </g>
+    </g>
+</svg>

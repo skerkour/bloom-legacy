@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>music</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="123.884536%" y1="-10.0947117%" x2="-41.1111032%" y2="143.277552%" id="linearGradient-1">
+            <stop stop-color="#BE95FD" offset="0%"></stop>
+            <stop stop-color="#FF006E" offset="99.4747677%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="music" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <rect id="bacground" fill="url(#linearGradient-1)" x="0" y="0" width="1024" height="1024"></rect>
+        <path d="M387.2,364.094589 L387.2,617.938939 C374.410496,608.709368 358.014592,603.155967 340.16,603.155967 C299.400064,603.155967 266.24,632.091126 266.24,667.657983 C266.24,703.22484 299.400064,732.16 340.16,732.16 C380.919936,732.16 414.08,703.22484 414.08,667.657983 L414.08,447.264824 L633.6,393.336689 L633.6,557.408467 C620.810496,548.178896 604.414592,542.625495 586.56,542.625495 C545.800064,542.625495 512.64,571.560655 512.64,607.127511 C512.64,642.694368 545.800064,671.629528 586.56,671.629528 C627.319936,671.629528 660.48,642.694368 660.48,607.127511 L660.48,296.96 L387.2,364.094589 Z" id="Path" fill="#FFFFFF" fill-rule="nonzero"></path>
+    </g>
+</svg>

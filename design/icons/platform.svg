@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="1024px" height="1024px" viewBox="0 0 1024 1024" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>platform</title>
+    <desc>Created with Sketch.</desc>
+    <defs>
+        <linearGradient x1="9.37856475%" y1="85.7146264%" x2="100%" y2="14.226405%" id="linearGradient-1">
+            <stop stop-color="#7D6EF3" offset="0%"></stop>
+            <stop stop-color="#AD79FF" offset="100%"></stop>
+            <stop stop-color="#34B4A2" offset="100%"></stop>
+        </linearGradient>
+    </defs>
+    <g id="platform" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="Group" transform="translate(16.000000, 25.000000)">
+            <path d="M171,8 C193.09139,8 211,25.90861 211,48 L211,162 C211,184.09139 193.09139,202 171,202 L51,202 C28.90861,202 11,184.09139 11,162 L11,48 C11,25.90861 28.90861,8 51,8 L171,8 Z M171,46 L51,46 L51,163 L171,163 L171,46 Z M77,85.0117516 L102,85.0117516 M77,97.5 L107,97.4882484 M77,111.011752 L108,111.011752 M112,85.4941242 L144,85.5058758 M117,95.5 L136.362206,95.5 M76,135.505876 L103,135.494124 M76,124.5 L113,124.5 M113,136.5 L117.72198,136.5 L149,136.5 M123,126.5 L140,126.5 M77,73.0117516 L119,73.0117516" id="Combined-Shape" fill="url(#linearGradient-1)"></path>
+            <g id="Group-2" transform="translate(63.000000, 56.000000)">
+                <rect id="Rectangle" fill="#363843" x="0" y="0" width="96" height="96" rx="11"></rect>
+                <line x1="14.9069767" y1="82.0117516" x2="53" y2="82.0117516" id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="14.8888889" y1="72.0117516" x2="37.1111111" y2="72.0117516" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="14.90625" y1="60.5" x2="42.09375" y2="60.4882484" id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="14.90625" y1="47.0117516" x2="43" y2="47.0117516" id="Line" stroke="#9D91FF" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="61" y1="82" x2="78" y2="82" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="47" y1="72" x2="77" y2="72" id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="51" y1="60.5" x2="68.425985" y2="60.5" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="14" y1="11.5" x2="42" y2="11.5" id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="14" y1="22.5058758" x2="38" y2="22.4941242" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="13" y1="33.5" x2="47" y2="33.5" id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square"></line>
+                <line x1="51" y1="11.5" x2="67.1052632" y2="11.5" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+                <polyline id="Line" stroke="#8BF692" stroke-width="4" stroke-linecap="square" points="47 22.5 51.1973156 22.5 79 22.5"></polyline>
+                <line x1="55.8947368" y1="33.5" x2="71.1052632" y2="33.5" id="Line" stroke="#F6C183" stroke-width="4" stroke-linecap="square"></line>
+            </g>
+        </g>
+    </g>
+</svg>

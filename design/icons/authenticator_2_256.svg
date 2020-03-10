@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg width="256px" height="256px" viewBox="0 0 256 256" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <!-- Generator: Sketch 63.1 (92452) - https://sketch.com -->
+    <title>authenticator_256</title>
+    <desc>Created with Sketch.</desc>
+    <g id="authenticator_256" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="padlock" transform="translate(-0.500000, 0.000000)">
+            <circle id="Oval" fill="#366796" cx="129" cy="128.5" r="128.5"></circle>
+            <path d="M258.5,128.428571 C258.5,126.262733 257.439316,124.061824 257.333355,121.922828 L167.181908,32 L99.395366,32 L64.5,204.767857 L128.548457,257 C199.76385,257 258.5,199.462808 258.5,128.428571 Z" id="Path" fill="#121149" fill-rule="nonzero"></path>
+            <path d="M178.5,64.0405186 L178.5,109 L168.267442,109 C168.267442,109 168.267442,86.0070232 168.267442,64.0405186 C168.267442,42.074014 150.513953,24.2647218 128.616279,24.2647218 L123.5,19.1323609 L128.616279,14 C156.121395,14 178.5,36.4489465 178.5,64.0405186 Z" id="Path" fill="#FEE187" fill-rule="nonzero"></path>
+            <path d="M168.5,63.9000606 C168.5,85.9351908 168.5,109 168.5,109 L158.214286,109 L158.214286,63.9000606 C158.214286,47.5796487 144.950857,34.2967898 128.642857,34.2967898 L123.5,29.1483949 L128.642857,24 C150.654286,24 168.5,41.8649303 168.5,63.9000606 Z" id="Path" fill="#FFC61B" fill-rule="nonzero"></path>
+            <path d="M129.5,24 L129.5,34.2967898 C113.133548,34.2967898 99.8225806,47.5796487 99.8225806,63.9000606 L99.8225806,109 L89.5,109 C89.5,109 89.5,85.9351908 89.5,63.9000606 C89.5,41.8649303 107.409677,24 129.5,24 Z" id="Path" fill="#FEE187" fill-rule="nonzero"></path>
+            <path d="M129.5,14 L129.5,24.2647218 C107.551282,24.2647218 89.7564103,42.074014 89.7564103,64.0405186 C89.7564103,86.0070232 89.7564103,109 89.7564103,109 L79.5,109 L79.5,64.0405186 C79.5,36.4489465 101.930769,14 129.5,14 Z" id="Path" fill="#FFEDB5" fill-rule="nonzero"></path>
+            <polygon id="Path" fill="#D48B07" fill-rule="nonzero" points="192.5 105.128205 192.5 194.871795 129.038344 200 117.5 150 129.038344 100"></polygon>
+            <polygon id="Path" fill="#FFC61B" fill-rule="nonzero" points="129.5 100 129.5 200 64.5 194.871795 64.5 105.128205"></polygon>
+            <polygon id="Path" fill="#FFC61B" fill-rule="nonzero" points="192.5 94 192.5 104 129.038344 104 117.5 99 129.038344 94"></polygon>
+            <rect id="Rectangle" fill="#FEE187" fill-rule="nonzero" x="64.5" y="94" width="65" height="10"></rect>
+            <path d="M144.5,137.473684 C144.5,142.053895 142.57,146.169895 139.5,149.001579 L139.5,171 L129.5,171 L124.5,146.5 L129.5,122 C137.785,122 144.5,128.927053 144.5,137.473684 Z" id="Path" fill="#121149" fill-rule="nonzero"></path>
+            <path d="M129.5,122 L129.5,171 L118.833333,171 L118.833333,149.001579 C115.558667,146.169895 113.5,142.053895 113.5,137.473684 C113.5,128.927053 120.662667,122 129.5,122 Z" id="Path" fill="#366796" fill-rule="nonzero"></path>
+            <polygon id="Path" fill="#FFC61B" fill-rule="nonzero" points="192.5 195 192.5 205 129.038344 205 117.5 200 129.038344 195"></polygon>
+            <rect id="Rectangle" fill="#FEE187" fill-rule="nonzero" x="64.5" y="195" width="65" height="10"></rect>
+        </g>
+    </g>
+</svg>
