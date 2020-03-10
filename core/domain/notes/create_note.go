@@ -21,8 +21,8 @@ func CreateNote(params CreateNoteParams) (Note, error) {
 		IsPinned:   false,
 	}
 
-	stmt, err := db.DB.Prepare(`INSERT INTO notes (id, createdAt, updatedAt, archivedAt,
-		title, body, color, isPinned)
+	stmt, err := db.DB.Prepare(`INSERT INTO notes (id, created_at, updated_at, archived_at, title,
+		body, color, is_pinned)
 		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
 	if err != nil {
 		return note, err

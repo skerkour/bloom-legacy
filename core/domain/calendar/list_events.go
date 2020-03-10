@@ -22,10 +22,10 @@ func ListEvents(params ListEventsParams) (Events, error) {
 	// bloom_validators::calendar::event_dates(start_at, end_at)?;
 
 	rows, err := db.DB.Query(`
-	SELECT id, createdAt, updated_at, title, description, startAt, endAt FROM calendarWvents
+	SELECT id, created_at, updated_at, title, description, start_at, end_at FROM calendar_events
 	WHERE
-		(startAt BETWEEN $1 AND $2)
-		OR (endAt BETWEEN $1 AND $2)`, params.StartAt, params.EndAt)
+		(start_at BETWEEN $1 AND $2)
+		OR (end_at BETWEEN $1 AND $2)`, params.StartAt, params.EndAt)
 	if err != nil {
 		return ret, err
 	}

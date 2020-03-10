@@ -7,8 +7,8 @@ import (
 func ListContacts() (Contacts, error) {
 	ret := Contacts{Contacts: []Contact{}}
 
-	rows, err := db.DB.Query(`SELECT id, createAat, updateAat, firstName, lastName, notes, addresses,
-		birthday, organizations, emails, phones, websites, deviceId
+	rows, err := db.DB.Query(`SELECT id, created_at, updated_at, first_name, last_name, notes, addresses,
+		birthday, organizations, emails, phones, websites, device_id
 		FROM contacts`)
 	if err != nil {
 		return ret, err

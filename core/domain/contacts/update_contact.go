@@ -14,9 +14,9 @@ func UpdateContact(contact Contact) (Contact, error) {
 
 	stmt, err := db.DB.Prepare(`
 		UPDATE contacts SET
-			updatedAt = $1,
-			firstName = $2,
-			lastName = $3,
+			updated_at = $1,
+			first_name = $2,
+			last_name = $3,
 			notes = $4,
 			addresses = $5,
 			birthday = $6,
@@ -24,7 +24,7 @@ func UpdateContact(contact Contact) (Contact, error) {
 			emails = $8,
 			phones = $9,
 			websites = $10,
-			deviceId = $11
+			device_id = $11
 		WHERE id = $12
 	`)
 	if err != nil {

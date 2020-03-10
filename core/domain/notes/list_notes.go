@@ -7,8 +7,8 @@ import (
 func ListNotes() (Notes, error) {
 	ret := Notes{Notes: []Note{}}
 
-	rows, err := db.DB.Query(`SELECT id, createdAt, updatedAt, archivedAt, title, body, color, isPinned
-		FROM notes WHERE archivedAt IS NULL ORDER BY isPinned DESC, createdAt ASC`)
+	rows, err := db.DB.Query(`SELECT id, created_at, updated_at, archived_at, title, body, color, is_pinned
+		FROM notes WHERE archived_at IS NULL ORDER BY is_pinned DESC, created_at ASC`)
 	if err != nil {
 		return ret, err
 	}

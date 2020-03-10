@@ -14,12 +14,12 @@ func UpdateEvent(event Event) (Event, error) {
 	event.UpdatedAt = time.Now().UTC()
 
 	stmt, err := db.DB.Prepare(`
-		UPDATE calendarEvents SET
-			updatedAt = ?,
+		UPDATE calendar_events SET
+			updated_at = ?,
 			title = ?,
 			description = ?,
-			startAt = ?,
-			endAt = ?
+			start_at = ?,
+			end_at = ?
 		WHERE id = ?
 	`)
 	if err != nil {
