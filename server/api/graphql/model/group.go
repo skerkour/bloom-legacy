@@ -40,7 +40,22 @@ func (r *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMember
 	}
 
 	ret = &GroupMemberConnection{
+		Edges:      []*GroupMemberEdge{},
 		TotalCount: Int64(len(members)),
+	}
+
+	for _, member := range members {
+		usr := &User{
+			Username:    member.Username,
+			DisplayName: member.DisplayName,
+		}
+		role := GroupMemberRole(member.Role)
+		edge := &GroupMemberEdge{
+			Node:     usr,
+			Role:     &role,
+			JoinedAt: &member.JoinedAt,
+		}
+		ret.Edges = append(ret.Edges, edge)
 	}
 	return ret, nil
 }

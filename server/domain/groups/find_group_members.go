@@ -5,16 +5,15 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func FindGroupMembers(ctx context.Context, tx *sqlx.Tx, groupId string) ([]users.User, error) {
-	ret := []users.User{}
+func FindGroupMembers(ctx context.Context, tx *sqlx.Tx, groupId string) ([]Member, error) {
+	ret := []Member{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	query := `SELECT users.* FROM groups, users
+	query := `SELECT DISTINCT users.id, users.*, groups_members.role, groups_members.joined_at FROM groups, users
 		INNER JOIN groups_members ON groups_members.user_id = users.id
 		WHERE groups_members.group_id = $1`
 	if tx == nil {
