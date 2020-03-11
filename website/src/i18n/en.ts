@@ -74,12 +74,13 @@ export default {
     title: 'Licensing',
     body: `Our philosophy is simple: either you contribute back to the commons by opening your work
     too, either you contribute by financing our work. <br /><br />
-    Our time is as valuable as yours and we don't work for free.<br /><br />
 
     We use contaminating licenses to
     avoid behaviors which will damage our vision of Open Source/Free Software and ensure
     that those who benefits from our work contribute back to the community
     by releasing the modified version and the tooling around, or by funding the project.<br /><br />
+
+    Our time is as valuable as yours and we don't work for free.<br /><br />
 
     You can find the license for each project in the <code>LICENSE.txt</code> file
     at the root of the project, and sometimes in cubfolders if components have a different license.<br /><br />
