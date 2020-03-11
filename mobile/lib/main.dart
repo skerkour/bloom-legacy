@@ -1,24 +1,25 @@
-import 'package:bloom/bloom/admin/views/dashboard.dart';
-import 'package:bloom/bloom/arcade/views/arcade.dart';
-import 'package:bloom/bloom/auth/views/registration_complete.dart';
-import 'package:bloom/bloom/auth/views/registration_verify.dart';
-import 'package:bloom/bloom/bitflow/views/downloads.dart';
-import 'package:bloom/bloom/calculator/views/calculator.dart';
-import 'package:bloom/bloom/calendar/views/calendar.dart';
-import 'package:bloom/bloom/contacts/views/contacts.dart';
-import 'package:bloom/bloom/drive/views/drive.dart';
-import 'package:bloom/bloom/home/views/home.dart';
-import 'package:bloom/bloom/myaccount/views/profile.dart';
-import 'package:bloom/bloom/notes/views/notes.dart';
-import 'package:bloom/bloom/preferences/views/theme.dart';
+import 'package:bloom/ui/admin/views/dashboard.dart';
+import 'package:bloom/ui/arcade/views/arcade.dart';
+import 'package:bloom/ui/auth/views/registration_complete.dart';
+import 'package:bloom/ui/auth/views/registration_verify.dart';
+import 'package:bloom/ui/bitflow/views/downloads.dart';
+import 'package:bloom/ui/calculator/views/calculator.dart';
+import 'package:bloom/ui/calendar/views/calendar.dart';
+import 'package:bloom/ui/contacts/views/contacts.dart';
+import 'package:bloom/ui/drive/views/drive.dart';
+import 'package:bloom/ui/home/views/home.dart';
+import 'package:bloom/ui/myaccount/views/profile.dart';
+import 'package:bloom/ui/notes/views/notes.dart';
+import 'package:bloom/ui/preferences/views/theme.dart';
 import 'package:bloom/core/core.dart';
+import 'package:bloom/ui/qrcodes/views/scan.dart';
 import 'package:flutter/material.dart';
 
-import 'package:bloom/bloom/auth/views/auth.dart';
-import 'package:bloom/bloom/kernel/widgets/route_observer.dart';
+import 'package:bloom/ui/auth/views/auth.dart';
+import 'package:bloom/ui/kernel/widgets/route_observer.dart';
 
-import 'bloom/const.dart';
-import 'bloom/qrcodes/views/qrcodes.dart';
+import 'ui/const.dart';
+import 'ui/qrcodes/views/scan.dart';
 
 Future<void> main() async {
   await coreInit();
@@ -53,7 +54,7 @@ class MyApp extends StatelessWidget {
         PATH_NOTES: (BuildContext context) => const NotesView(),
         PATH_PREFERENCES: (BuildContext context) =>
             const PreferencesThemeView(),
-        PATH_QRCODES: (BuildContext context) => const QrCodesView(),
+        PATH_QRCODES: (BuildContext context) => const QrCodeScanView(),
       },
       navigatorObservers: <NavigatorObserver>[BlmRouteObserver()],
     );
