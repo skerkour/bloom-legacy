@@ -13,6 +13,7 @@ import (
 )
 
 var DB *sql.DB
+var DBFilePath string
 
 func appDirectory() (string, error) {
 	if runtime.GOOS == "android" {
@@ -55,12 +56,12 @@ func Init() error {
 		return err
 	}
 
-	dbPath, err := dbPath()
+	DBFilePath, err = dbPath()
 	if err != nil {
 		return err
 	}
 
-	DB, err = sql.Open("sqlite3", dbPath)
+	DB, err = sql.Open("sqlite3", DBFilePath)
 	if err != nil {
 		return err
 	}

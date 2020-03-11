@@ -3,9 +3,11 @@ package users
 import (
 	"context"
 	"errors"
+	"os"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
@@ -36,6 +38,7 @@ func SignOut() error {
 	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
 		client.Deauthenticate()
+		os.Remove(db.DBFilePath)
 	}
 
 	return err
