@@ -1,10 +1,10 @@
 All the content (.md files, image files, video files, font files, texts...) is licensed under
 the CC BY-SA 4.0 license: https://creativecommons.org/licenses/by-sa/4.0/
 
-The Bloom and all associated services logos are owned by Sylvain Kerkour and distributed under the terms of the
+The Bloom and all associated services trademarks are owned by Sylvain Kerkour and distributed under the terms of the
 CC BY-SA 4.0 license: https://creativecommons.org/licenses/by-sa/4.0/
 
-All the source code for individual projects is licensed under the license at the root of the project
+All the source code for individual projects is licensed under the license at the root of the project's
 folder (LICENSE.txt, core/LICENSE.txt, desktop/LICENSE.txt, mobile/LICENSE.txt, bitflow/LICENSTE.txt,
 common/LICENSE.txt).
 
