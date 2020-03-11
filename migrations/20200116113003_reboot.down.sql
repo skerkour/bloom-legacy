@@ -1,6 +1,22 @@
--- This file should undo anything in `up.sql`
+-- ################################################################################################@
+-- Billing
+-- ################################################################################################@
+DROP TABLE billing_invoices;
+DROP TABLE billing_payment_methods;
+DROP TABLE billing_customers;
+DROP TABLE billing_plans;
 
+-- ################################################################################################@
+-- Groups
+-- ################################################################################################@
+DROP TABLE groups_invitations;
+DROP TABLE groups_members;
+DROP TABLE groups;
+
+-- ################################################################################################@
+-- Users
+-- ################################################################################################@
+DROP TABLE deleted_usernames;
+DROP TABLE pending_users;
 DROP TABLE sessions;
 DROP TABLE users;
-DROP TABLE pending_users;
-DROP TABLE deleted_usernames;
