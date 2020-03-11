@@ -9,10 +9,10 @@ export default [
   },
   {
     component: Members,
-    path: '/groups/:group_id/members',
+    path: '/groups/:groupId/members',
   },
   {
     component: Preferences,
-    path: '/groups/:group_id/preferences',
+    path: '/groups/:groupId/preferences',
   },
 ];

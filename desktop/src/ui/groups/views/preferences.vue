@@ -56,7 +56,7 @@ import core from '@/core';
 import { Method } from '@/core/groups';
 
 @Component
-export default class Groups extends Vue {
+export default class GroupsPreferencesView extends Vue {
   // props
   // data
   loading = false;
@@ -66,7 +66,7 @@ export default class Groups extends Vue {
 
   // computed
   created() {
-    this.groupId = this.$route.params.group_id;
+    this.groupId = this.$route.params.groupId;
   }
 
   // lifecycle
