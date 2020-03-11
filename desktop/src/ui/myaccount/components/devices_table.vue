@@ -23,13 +23,13 @@
       <template v-slot:item.actions="{ item }">
         <v-btn
           @click="signOut"
-          small
           color="error"
           v-if="item.id === current.id">
             Sign Out
           </v-btn>
           <v-btn
             v-else
+            outlined
             color="error"
             @click="revokeSession(item)"
             :loading="item.isLoading">
@@ -104,7 +104,7 @@ export default class DevicesTable extends Vue {
     try {
       await core.call(Method.SignOut, core.Empty);
       this.$store.commit(Mutations.SIGN_OUT.toString());
-      this.$router.push({ path: '/' });
+      window.location.reload();
     } catch (err) {
       this.error = err.message;
     }
