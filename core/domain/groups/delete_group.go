@@ -5,6 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
@@ -22,6 +23,9 @@ func DeleteGroup(input model.DeleteGroupInput) error {
 	req.Var("input", input)
 
 	err := client.Do(context.Background(), req, &resp)
+	if err == nil {
+		_, err = db.DB.Exec("DELETE FROM notes WHERE id = ?", input.ID)
+	}
 
 	return err
 }

@@ -128,5 +128,18 @@ func Init() error {
 		return err
 	}
 
+	_, err = DB.Exec(`
+	CREATE TABLE IF NOT EXISTS groups (
+		id TEXT PRIMARY KEY NOT NULL,
+		created_at DATETIME NOT NULL,
+		name TEXT NOT NULL,
+		description TEXT NOT NULL,
+		avatar_url TEXT
+	)
+	`)
+	if err != nil {
+		return err
+	}
+
 	return err
 }
