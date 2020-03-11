@@ -8,7 +8,7 @@
 
     <v-row>
       <v-toolbar flat dense>
-        <v-btn color="primary">
+        <v-btn color="primary" @click="openNewGroupDialog">
           <v-icon left>mdi-plus</v-icon>New
         </v-btn>
       </v-toolbar>
@@ -33,6 +33,8 @@
       </v-col>
     </v-row>
 
+  <blm-groups-new-group-dialog :visible="showNewGroupDialog"
+      @closed="newGroupDialogClosed" @created="groupCreated" />
 
   </v-container>
 </template>
@@ -43,14 +45,20 @@ import { Component, Vue } from 'vue-property-decorator';
 import { Group } from '@/api/models';
 import core from '@/core';
 import { Method, Groups } from '@/core/groups';
+import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
 
-@Component
+@Component({
+  components: {
+    BlmGroupsNewGroupDialog,
+  },
+})
 export default class GroupsView extends Vue {
   // props
   // data
   error = '';
   groups: Group[] = [];
   loading = false;
+  showNewGroupDialog = false;
 
   // computed
   // lifecycle
@@ -72,6 +80,18 @@ export default class GroupsView extends Vue {
     } finally {
       this.loading = false;
     }
+  }
+
+  openNewGroupDialog() {
+    this.showNewGroupDialog = true;
+  }
+
+  groupCreated(group: Group) {
+    this.groups.push(group);
+  }
+
+  newGroupDialogClosed() {
+    this.showNewGroupDialog = false;
   }
 }
 </script>

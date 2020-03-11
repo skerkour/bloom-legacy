@@ -80,7 +80,7 @@
 
             <v-col cols="12">
               <v-textarea
-                label="Decription"
+                label="Description"
                 v-model="planToEdit.description"
               ></v-textarea>
             </v-col>
