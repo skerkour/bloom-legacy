@@ -22,12 +22,11 @@
       </template>
       <template v-slot:item.actions="{ item }">
         <v-btn
-            outlined
-            small
-            color="success"
-            :ripple="false"
-            v-if="item.id === current.id">
-              Current
+          @click="signOut"
+          small
+          color="error"
+          v-if="item.id === current.id">
+            Sign Out
           </v-btn>
           <v-btn
             v-else
@@ -51,6 +50,7 @@ import { Component, Prop, Vue } from 'vue-property-decorator';
 import * as models from '@/api/models';
 import { RevokeSessionParams, Method } from '@/core/users';
 import core from '@/core';
+import { Mutations } from '@/store';
 
 @Component
 export default class DevicesTable extends Vue {
@@ -93,6 +93,18 @@ export default class DevicesTable extends Vue {
     try {
       await core.call(Method.RevokeSession, params);
       this.$emit('revoked', session);
+    } catch (err) {
+      this.error = err.message;
+    }
+  }
+
+  async signOut() {
+    this.error = '';
+
+    try {
+      await core.call(Method.SignOut, core.Empty);
+      this.$store.commit(Mutations.SIGN_OUT.toString());
+      this.$router.push({ path: '/' });
     } catch (err) {
       this.error = err.message;
     }

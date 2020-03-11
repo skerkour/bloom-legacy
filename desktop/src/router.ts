@@ -43,7 +43,7 @@ const router = new Router({
 
 
 router.beforeEach((to, _, next) => {
-  if (store.state.session === null) {
+  if (store.state.me === null) {
     if (to.path.startsWith('/auth')) {
       next();
     } else {
