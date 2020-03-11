@@ -13,6 +13,27 @@
         </v-btn>
       </v-toolbar>
     </v-row>
+
+    <v-row justify="center">
+      <v-col cols="12" sm="10" md="8" lg="6">
+        <v-list three-line>
+          <template v-for="group in groups">
+            <v-list-item :key="group.id" :to="`/groups/${group.id}/members`">
+              <v-list-item-avatar color="white">
+                <v-icon medium color="grey">mdi-account-group</v-icon>
+              </v-list-item-avatar>
+
+              <v-list-item-content>
+                <v-list-item-title>{{ group.name }}</v-list-item-title>
+                <v-list-item-subtitle>{{ group.description }}</v-list-item-subtitle>
+              </v-list-item-content>
+            </v-list-item>
+          </template>
+        </v-list>
+      </v-col>
+    </v-row>
+
+
   </v-container>
 </template>
 
