@@ -21,12 +21,34 @@
 
     <v-row>
       <v-col cols="12">
-        <v-btn color="error" @click="deleteGroup" :loading="loading">
+        <v-btn color="error" @click="openDeleteGroupDialog" :loading="loading">
           <v-icon left>mdi-delete</v-icon>
           Delete Group
         </v-btn>
       </v-col>
     </v-row>
+
+    <v-dialog v-model="deleteGroupDialog" max-width="300">
+      <v-card class="text-left">
+        <v-card-title class="headline">Delete Group?</v-card-title>
+
+        <v-card-text>
+          Are you sure you want to delete group?
+        </v-card-text>
+
+        <v-card-actions>
+          <v-spacer></v-spacer>
+
+          <v-btn text @click="closeDeleteGroupDialog">
+            Cancel
+          </v-btn>
+
+          <v-btn color="error" @click="deleteGroup">
+            <v-icon left>mdi-delete</v-icon> Delete
+          </v-btn>
+        </v-card-actions>
+      </v-card>
+    </v-dialog>
   </v-container>
 </template>
 
@@ -44,13 +66,12 @@ export default class Groups extends Vue {
   loading = false;
   error = '';
   groupId = '';
+  deleteGroupDialog = false;
 
   // computed
   created() {
     this.groupId = this.$route.params.group_id;
   }
-
-  // TODO: DELETE GROUP ALERT
 
   // lifecycle
   // watch
@@ -70,6 +91,14 @@ export default class Groups extends Vue {
     } finally {
       this.loading = false;
     }
+  }
+
+  openDeleteGroupDialog() {
+    this.deleteGroupDialog = true;
+  }
+
+  closeDeleteGroupDialog() {
+    this.deleteGroupDialog = false;
   }
 }
 </script>
