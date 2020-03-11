@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/google/uuid v1.1.1
+	github.com/jmoiron/sqlx v1.2.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	gitlab.com/bloom42/bloom/common v0.0.0-20200309140008-9ba51c024c2e
 	gitlab.com/bloom42/libs/graphql-go v0.0.0-20200302110054-1cc05f095d21

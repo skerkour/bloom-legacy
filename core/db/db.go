@@ -2,17 +2,17 @@ package db
 
 import (
 	"bytes"
-	"database/sql"
 	"io/ioutil"
 	"os"
 	"path/filepath"
 	"runtime"
 
+	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
-var DB *sql.DB
+var DB *sqlx.DB
 var DBFilePath string
 
 func appDirectory() (string, error) {
@@ -61,7 +61,7 @@ func Init() error {
 		return err
 	}
 
-	DB, err = sql.Open("sqlite3", DBFilePath)
+	DB, err = sqlx.Open("sqlite3", DBFilePath)
 	if err != nil {
 		return err
 	}
