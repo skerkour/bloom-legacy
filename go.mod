@@ -13,13 +13,13 @@ require (
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.3.0
-	github.com/mattn/go-sqlite3 v2.0.2+incompatible // indirect
+	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v70.2.0+incompatible
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200306202517-c61939d3495d
+	gitlab.com/bloom42/bloom/common v0.0.0-20200309140008-9ba51c024c2e
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41
 	gitlab.com/bloom42/libs/rz-go v1.3.0
 	gitlab.com/bloom42/libs/sane-go v0.10.0

@@ -38,17 +38,17 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 		VALUES ($1, $2, $3, $4, $5)`
 	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description)
 	if err != nil {
-		logger.Error("groups.CreateGroup: inserting new group", rz.Err(err))
+		logger.Error("inserting new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)
 	}
 
 	// admin creator to group
 	queryAddAdminToGroup := `INSERT INTO groups_members
-	(user_id, group_id, role)
-	VALUES ($1, $2, $3)`
-	_, err = tx.Exec(queryAddAdminToGroup, admin.ID, ret.ID, RoleAdministrator)
+	(user_id, group_id, role, joined_at)
+	VALUES ($1, $2, $3, $4)`
+	_, err = tx.Exec(queryAddAdminToGroup, admin.ID, ret.ID, RoleAdministrator, now)
 	if err != nil {
-		logger.Error("groups.CreateGroup: inserting aadmin in new group", rz.Err(err))
+		logger.Error("inserting admin in new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)
 	}
 

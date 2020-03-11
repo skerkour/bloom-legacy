@@ -32,6 +32,7 @@ var runCmd = &cobra.Command{
 		log.SetLogger(log.With(
 			rz.Fields(
 				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
+				rz.Caller(true),
 			),
 		))
 

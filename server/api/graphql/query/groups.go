@@ -43,5 +43,4 @@ func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 	}
 
 	return ret, nil
-	return ret, nil
 }

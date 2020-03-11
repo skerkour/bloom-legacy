@@ -20,8 +20,29 @@ type Group struct {
 
 type GroupResolver struct{}
 
-func (r *GroupResolver) Members(ctx context.Context, obj *Group) (*GroupMemberConnection, error) {
-	panic("not implemented")
+func (r *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMemberConnection, error) {
+	var ret *GroupMemberConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+	var err error
+
+	if group.ID == nil {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, *group.ID)
+	if err != nil && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	members, err := groups.FindGroupMembers(ctx, nil, *group.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+
+	ret = &GroupMemberConnection{
+		TotalCount: Int64(len(members)),
+	}
+	return ret, nil
 }
 
 func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvitationConnection, error) {

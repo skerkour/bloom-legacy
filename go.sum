@@ -297,8 +297,8 @@ github.com/mattn/go-isatty v0.0.12/go.mod h1:cbi8OIDigv2wuxKPP5vlRcQ1OAZbq2CE4Ky
 github.com/mattn/go-sqlite3 v1.9.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/mattn/go-sqlite3 v1.10.0 h1:jbhqpg7tQe4SupckyijYiy0mJJ/pRyHvXf7JdWK860o=
 github.com/mattn/go-sqlite3 v1.10.0/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
-github.com/mattn/go-sqlite3 v2.0.2+incompatible h1:qzw9c2GNT8UFrgWNDhCTqRqYUSmu/Dav/9Z58LGpk7U=
-github.com/mattn/go-sqlite3 v2.0.2+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
+github.com/mattn/go-sqlite3 v2.0.3+incompatible h1:gXHsfypPkaMZrKbD5209QV9jbUTJKjyR5WD3HYQSd+U=
+github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW3U88zkxoIYsOqkbpncsNc=
 github.com/mattn/goveralls v0.0.2/go.mod h1:8d1ZMHsd7fW6IRPKQh46F2WRpyib5/X4FOpevwGNQEw=
 github.com/matttproud/golang_protobuf_extensions v1.0.1/go.mod h1:D8He9yQNgCq6Z5Ld7szi9bcBfOoFv/3dc6xSMkL2PC0=
 github.com/mediocregopher/mediocre-go-lib v0.0.0-20181029021733-cb65787f37ed/go.mod h1:dSsfyI2zABAdhcbvkXqgxOxrCsbYeHCPgrZkku60dSg=
@@ -441,8 +441,8 @@ github.com/yalp/jsonpath v0.0.0-20180802001716-5cc68e5049a0/go.mod h1:/LWChgwKmv
 github.com/yudai/gojsondiff v1.0.0/go.mod h1:AY32+k2cwILAkW1fbgxQ5mUmMiZFgLIV+FBNExI05xg=
 github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDfVJdfcVVdX+jpBxNmX4rDAzaS45IcYoM=
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
-gitlab.com/bloom42/bloom/common v0.0.0-20200306202517-c61939d3495d h1:dNHWfs3t8tLpzo24nsaFDrYE1UCObnqXa7V9gooco8A=
-gitlab.com/bloom42/bloom/common v0.0.0-20200306202517-c61939d3495d/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
+gitlab.com/bloom42/bloom/common v0.0.0-20200309140008-9ba51c024c2e h1:h0bu0KXuhkNINt+eEMNqN41Zu3+94H7yn930lbv+q/Y=
+gitlab.com/bloom42/bloom/common v0.0.0-20200309140008-9ba51c024c2e/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41 h1:4FLgg1h06N6wp1VJjE6GzMvUyu9hjFhqJMma7S/uX40=
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
