@@ -17,6 +17,9 @@ class _QrCodeScanState extends State<QrCodeScanView> {
   @override
   void initState() {
     _scan().then((String barcode) {
+        if (barcode == null) {
+          Navigator.of(context).pop();
+        }
         setState(() {
           _barcode = barcode;
         });
@@ -27,6 +30,19 @@ class _QrCodeScanState extends State<QrCodeScanView> {
 
   @override
   Widget build(BuildContext context) {
+    final List<Widget> children = <Widget>[];
+    if (_barcode != null) {
+      children.add(Center(
+        child: InkWell(
+          child: SelectableText(
+            _barcode,
+            style: TextStyle(color: _textColor, fontSize: 21),
+          ),
+          onTap: _launchQrCodeScan,
+        ),
+      ));
+    }
+
     return Scaffold(
       appBar: AppBar(
         title: const Text('Scanned Barcode'),
@@ -36,17 +52,7 @@ class _QrCodeScanState extends State<QrCodeScanView> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.center,
           mainAxisAlignment: MainAxisAlignment.center,
-          children: <Widget>[
-            Center(
-              child: InkWell(
-                child: SelectableText(
-                  _barcode,
-                  style: TextStyle(color: _textColor, fontSize: 21),
-                ),
-                onTap: _launchQrCodeScan,
-              ),
-            ),
-          ],
+          children: children,
         ),
       ),
     );

@@ -1,4 +1,4 @@
-package com.bloom42.bloom
+package com.bloom42.bloomx
 
 import android.os.Bundle
 
