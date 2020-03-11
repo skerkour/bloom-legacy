@@ -66,6 +66,7 @@
         <v-list-item-avatar
           color="white"
           class="blm-pointer"
+          @click="goto('/groups')"
         >
           <v-icon
             medium

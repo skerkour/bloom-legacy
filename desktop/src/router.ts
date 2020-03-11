@@ -12,7 +12,8 @@ import ContactsRouter from '@/ui/contacts/router';
 import CalculatorRouter from '@/ui/calculator/router';
 import AdminRouter from '@/ui/admin/router';
 import MyAccountRouter from '@/ui/myaccount/router';
-import BooksRouter from '@/ui/books/router';
+import GroupsRouter from '@/ui/groups/router';
+
 
 import store from '@/store';
 
@@ -33,7 +34,7 @@ const router = new Router({
     ...CalculatorRouter,
     ...AdminRouter,
     ...MyAccountRouter,
-    ...BooksRouter,
+    ...GroupsRouter,
     {
       path: '**',
       redirect: '/notes',
