@@ -5,9 +5,10 @@ import (
 )
 
 type Group struct {
-	ID          *string    `json:"id"`
-	CreatedAt   *time.Time `json:"createdAt"`
-	Name        string     `json:"name"`
-	Description string     `json:"description"`
-	AvatarURL   *string    `json:"avatarUrl"`
+	ID          *string                `json:"id"`
+	CreatedAt   *time.Time             `json:"createdAt"`
+	Name        string                 `json:"name"`
+	Description string                 `json:"description"`
+	AvatarURL   *string                `json:"avatarUrl"`
+	Members     *GroupMemberConnection `json:"members"`
 }
