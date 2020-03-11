@@ -8,13 +8,8 @@ import (
 func DeleteEvent(params DeleteEventParams) (kernel.Empty, error) {
 	ret := kernel.Empty{}
 
-	stmt, err := db.DB.Prepare("DELETE FROM calendar_events WHERE id = ?")
-	if err != nil {
-		return ret, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&params.ID)
+	query := "DELETE FROM calendar_events WHERE id = ?"
+	_, err := db.DB.Exec(query, params.ID)
 
 	return ret, err
 }

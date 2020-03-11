@@ -7,13 +7,15 @@ import (
 )
 
 func UpdateEvent(event Event) (Event, error) {
-	if err := validateUpdateEvent(event); err != nil {
+	var err error
+
+	if err = validateUpdateEvent(event); err != nil {
 		return event, err
 	}
 
 	event.UpdatedAt = time.Now().UTC()
 
-	stmt, err := db.DB.Prepare(`
+	query := `
 		UPDATE calendar_events SET
 			updated_at = ?,
 			title = ?,
@@ -21,13 +23,9 @@ func UpdateEvent(event Event) (Event, error) {
 			start_at = ?,
 			end_at = ?
 		WHERE id = ?
-	`)
-	if err != nil {
-		return event, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&event.UpdatedAt, &event.Title, &event.Description, &event.StartAt, &event.EndAt, &event.ID)
+	`
+	_, err = db.DB.Exec(query, &event.UpdatedAt, &event.Title, &event.Description, &event.StartAt,
+		&event.EndAt, &event.ID)
 
 	return event, err
 }

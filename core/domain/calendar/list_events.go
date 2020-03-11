@@ -7,6 +7,7 @@ import (
 )
 
 func ListEvents(params ListEventsParams) (Events, error) {
+	var err error
 	ret := Events{Events: []Event{}}
 	now := time.Now().UTC()
 	startOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.Local)
@@ -21,24 +22,12 @@ func ListEvents(params ListEventsParams) (Events, error) {
 
 	// bloom_validators::calendar::event_dates(start_at, end_at)?;
 
-	rows, err := db.DB.Query(`
+	query := `
 	SELECT id, created_at, updated_at, title, description, start_at, end_at FROM calendar_events
 	WHERE
 		(start_at BETWEEN $1 AND $2)
-		OR (end_at BETWEEN $1 AND $2)`, params.StartAt, params.EndAt)
-	if err != nil {
-		return ret, err
-	}
-	defer rows.Close()
+		OR (end_at BETWEEN $1 AND $2)`
+	err = db.DB.Select(&ret.Events, query, params.StartAt, params.EndAt)
 
-	for rows.Next() {
-		var event Event
-		err := rows.Scan(&event.ID, &event.CreatedAt, &event.UpdatedAt, &event.Title, &event.Description, &event.StartAt, &event.EndAt)
-		if err != nil {
-			return ret, err
-		}
-		ret.Events = append(ret.Events, event)
-	}
-
-	return ret, nil
+	return ret, err
 }
