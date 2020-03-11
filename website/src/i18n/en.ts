@@ -83,7 +83,7 @@ export default {
     Our time is as valuable as yours and we don't work for free.<br /><br />
 
     You can find the license for each project in the <code>LICENSE.txt</code> file
-    at the root of the project, and sometimes in cubfolders if components have a different license.<br /><br />
+    at the root of the project, and sometimes in subfolders if components have a different license.<br /><br />
 
     <h2 class="headline">GNU Affero General Public License v3.0 (AGPL-3.0)</h2>
     <p>
