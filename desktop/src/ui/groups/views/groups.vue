@@ -19,16 +19,39 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import { Group } from '@/api/models';
+import core from '@/core';
+import { Method, Groups } from '@/core/groups';
 
 @Component
-export default class Groups extends Vue {
+export default class GroupsView extends Vue {
   // props
   // data
   error = '';
+  groups: Group[] = [];
+  loading = false;
+
   // computed
   // lifecycle
+  created() {
+    this.fetchData();
+  }
+
   // watch
   // methods
+  async fetchData() {
+    this.error = '';
+    this.loading = true;
+
+    try {
+      const res: Groups = await core.call(Method.FindGroups, core.Empty);
+      this.groups = res.groups;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
 }
 </script>
 
