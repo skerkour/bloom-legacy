@@ -10,7 +10,7 @@
     v-if="showDrawer"
   >
 
-    <div class="blm-drawer-space"></div>
+    <!-- <div class="blm-drawer-space"></div> -->
 
     <blm-drawer-bitflow v-if="app === 'bitflow'" />
     <blm-drawer-notes v-else-if="app === 'notes'" />
@@ -42,7 +42,7 @@ const APPS_WITH_DRAWER = [
   'admin',
   'preferences',
   'myaccount',
-  'groups/',
+  'groups',
 ];
 
 @Component({
@@ -63,7 +63,15 @@ export default class NavigationDrawer extends Vue {
 
   // data
   // computed
-  get showDrawer() {
+  get showDrawer(): boolean {
+    console.log(this.$route.path);
+    if (this.app === 'groups') {
+      if (this.$route.params.group_id) {
+        return true;
+      }
+      return false;
+    }
+
     return APPS_WITH_DRAWER.includes(this.app);
   }
 
