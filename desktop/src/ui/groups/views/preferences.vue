@@ -1,10 +1,6 @@
 <template>
   <v-container fluid class="text-left">
     <v-row>
-      <h1>Preferences</h1>
-    </v-row>
-
-    <v-row>
       <v-col cols="12" v-if="error">
         <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
           {{ error }}
