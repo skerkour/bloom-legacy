@@ -19,7 +19,7 @@
     <blm-drawer-admin v-else-if="app === 'admin'" />
     <blm-drawer-preferences v-else-if="app === 'preferences'" />
     <blm-drawer-myaccount v-else-if="app === 'myaccount'" />
-    <blm-drawer-books v-else-if="app === 'books'" />
+    <blm-drawer-groups v-else-if="app === 'groups'" />
 
   </v-navigation-drawer>
 </template>
@@ -33,7 +33,7 @@ import DriveDrawer from '@/ui/drive/components/drawer.vue';
 import AdminDrawer from '@/ui/admin/components/drawer.vue';
 import PreferencesDrawer from '@/ui/preferences/components/drawer.vue';
 import MyAccountDrawer from '@/ui/myaccount/components/drawer.vue';
-import BooksDrawer from '@/ui/books/components/drawer.vue';
+import GroupsDrawer from '@/ui/groups/components/drawer.vue';
 
 const APPS_WITH_DRAWER = [
   'bitflow',
@@ -42,7 +42,7 @@ const APPS_WITH_DRAWER = [
   'admin',
   'preferences',
   'myaccount',
-  'books',
+  'groups/',
 ];
 
 @Component({
@@ -53,7 +53,7 @@ const APPS_WITH_DRAWER = [
     'blm-drawer-admin': AdminDrawer,
     'blm-drawer-preferences': PreferencesDrawer,
     'blm-drawer-myaccount': MyAccountDrawer,
-    'blm-drawer-books': BooksDrawer,
+    'blm-drawer-groups': GroupsDrawer,
   },
 })
 export default class NavigationDrawer extends Vue {

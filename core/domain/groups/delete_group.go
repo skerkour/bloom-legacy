@@ -24,7 +24,7 @@ func DeleteGroup(input model.DeleteGroupInput) error {
 
 	err := client.Do(context.Background(), req, &resp)
 	if err == nil {
-		_, err = db.DB.Exec("DELETE FROM notes WHERE id = ?", input.ID)
+		_, err = db.DB.Exec("DELETE FROM groups WHERE id = ?", input.ID)
 	}
 
 	return err

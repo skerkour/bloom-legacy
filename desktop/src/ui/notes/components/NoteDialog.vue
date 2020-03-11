@@ -23,7 +23,6 @@
           v-model="body"
           placeholder="Take a note..."
           auto-grow
-          color="white"
           autofocus
         ></v-textarea>
       </v-card-text>
@@ -133,7 +132,7 @@ export default class NoteDialog extends Vue {
   async createNote() {
     this.error = '';
     this.isLoading = true;
-    if (this.body.length === 0 || this.title.length === 0) {
+    if (this.body.length === 0 && this.title.length === 0) {
       return;
     }
     const params: CreateNote = {

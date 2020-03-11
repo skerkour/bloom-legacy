@@ -1,17 +1,7 @@
 <template>
   <v-container fluid class="text-left">
     <v-row>
-      <v-alert type="error" :value="error !== ''">
-        {{ error }}
-      </v-alert>
-    </v-row>
-
-    <v-row>
-      <v-toolbar flat dense>
-        <v-btn color="primary">
-          <v-icon left>mdi-plus</v-icon>New
-        </v-btn>
-      </v-toolbar>
+      <h1>Members</h1>
     </v-row>
   </v-container>
 </template>
@@ -24,7 +14,6 @@ import { Component, Vue } from 'vue-property-decorator';
 export default class Groups extends Vue {
   // props
   // data
-  error = '';
   // computed
   // lifecycle
   // watch
