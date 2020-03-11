@@ -7,8 +7,8 @@ class CalendarListEvents {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'start_at': startAt.toUtc().toIso8601String(),
-      'end_at': endAt.toUtc().toIso8601String(),
+      'startAt': startAt.toUtc().toIso8601String(),
+      'endAt': endAt.toUtc().toIso8601String(),
     };
     return data;
   }
@@ -39,8 +39,8 @@ class CalendarCreateEvent {
     final Map<String, dynamic> data = <String, dynamic>{
       'title': title,
       'description': description,
-      'start_at': startAt.toUtc().toIso8601String(),
-      'end_at': endAt.toUtc().toIso8601String(),
+      'startAt': startAt.toUtc().toIso8601String(),
+      'endAt': endAt.toUtc().toIso8601String(),
     };
     return data;
   }

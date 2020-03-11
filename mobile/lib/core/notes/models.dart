@@ -28,18 +28,18 @@ class Note {
   bool isPinned;
 
   static Note fromJson(Map<String, dynamic> json) {
-    final String archivedAt = json['archived_at'];
+    final String archivedAt = json['archivedAt'];
 
     return Note(
       id: json['id'],
       title: json['title'],
       body: json['body'],
-      createdAt: Utils.fromGoTime(json['created_at']).toUtc(),
-      updatedAt: Utils.fromGoTime(json['updated_at']).toUtc(),
+      createdAt: Utils.fromGoTime(json['createdAt']).toUtc(),
+      updatedAt: Utils.fromGoTime(json['updatedAt']).toUtc(),
       color: HexColor.fromHex(json['color']),
       archivedAt:
           archivedAt == null ? null : Utils.fromGoTime(archivedAt).toUtc(),
-      isPinned: json['is_pinned'],
+      isPinned: json['isPinned'],
     );
   }
 
@@ -48,12 +48,12 @@ class Note {
       'id': id,
       'title': title,
       'body': body,
-      'created_at': createdAt.toUtc().toIso8601String(),
-      'updated_at': updatedAt.toUtc().toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
+      'updatedAt': updatedAt.toUtc().toIso8601String(),
       'color': HexColor.toHex(color),
-      'archived_at':
+      'archivedAt':
           archivedAt == null ? null : archivedAt.toUtc().toIso8601String(),
-      'is_pinned': isPinned,
+      'isPinned': isPinned,
     };
     return data;
   }

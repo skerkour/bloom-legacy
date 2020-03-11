@@ -38,11 +38,11 @@ class Contact {
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
       'id': id,
-      'device_id': deviceId,
-      'created_at': createdAt.toUtc().toIso8601String(),
-      'updated_at': updatedAt.toUtc().toIso8601String(),
-      'first_name': firstName,
-      'last_name': lastName,
+      'deviceId': deviceId,
+      'createdAt': createdAt.toUtc().toIso8601String(),
+      'updatedAt': updatedAt.toUtc().toIso8601String(),
+      'firstName': firstName,
+      'lastName': lastName,
       'notes': notes,
       'birthday': birthday == null ? null : birthday.toUtc().toIso8601String(),
       'addresses': <String>[],
@@ -62,11 +62,11 @@ class Contact {
     final List<dynamic> organizations = data['organizations'];
     return Contact(
       id: data['id'],
-      firstName: data['first_name'],
-      deviceId: data['device_id'],
-      createdAt: DateTime.parse(data['created_at']).toUtc(),
-      updatedAt: DateTime.parse(data['updated_at']).toUtc(),
-      lastName: data['last_name'],
+      firstName: data['firstName'],
+      deviceId: data['deviceId'],
+      createdAt: DateTime.parse(data['createdAt']).toUtc(),
+      updatedAt: DateTime.parse(data['updatedAt']).toUtc(),
+      lastName: data['lastName'],
       notes: data['notes'],
       birthday: birthday != null ? DateTime.parse(birthday).toUtc() : null,
       emails: emails.map((dynamic i) => Email.fromJson(i)).toList(),

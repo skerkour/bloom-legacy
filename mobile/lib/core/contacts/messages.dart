@@ -32,10 +32,10 @@ class ContactsCreateContact {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'first_name': firstName,
-      'last_name': lastName,
+      'firstName': firstName,
+      'lastName': lastName,
       'notes': notes,
-      'device_id': deviceId,
+      'deviceId': deviceId,
       'addresses': <String>[],
       'birthday': birthday == null ? null : birthday.toUtc().toIso8601String(),
       'organizations': <String>[],

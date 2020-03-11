@@ -11,7 +11,7 @@ class AuthStartRegistration {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'display_name': displayName,
+      'displayName': displayName,
       'email': email,
     };
     return data;
@@ -92,7 +92,7 @@ class AuthSignOut {
 
   Map<String, dynamic> toJson() {
     final Map<String, dynamic> data = <String, dynamic>{
-      'type': 'auth.sign_out',
+      'type': 'auth.signOut',
       'data': <String, dynamic>{},
     };
     return data;

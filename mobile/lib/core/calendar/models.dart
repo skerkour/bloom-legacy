@@ -34,10 +34,10 @@ class Event {
       id: json['id'],
       title: json['title'],
       description: json['description'],
-      createdAt: Utils.fromGoTime(json['created_at']).toUtc(),
-      updatedAt: Utils.fromGoTime(json['updated_at']).toUtc(),
-      startAt: Utils.fromGoTime(json['start_at']).toUtc(),
-      endAt: Utils.fromGoTime(json['end_at']).toUtc(),
+      createdAt: Utils.fromGoTime(json['createdAt']).toUtc(),
+      updatedAt: Utils.fromGoTime(json['updatedAt']).toUtc(),
+      startAt: Utils.fromGoTime(json['startAt']).toUtc(),
+      endAt: Utils.fromGoTime(json['endAt']).toUtc(),
     );
   }
 
@@ -46,10 +46,10 @@ class Event {
       'id': id,
       'title': title,
       'description': description,
-      'created_at': createdAt.toUtc().toIso8601String(),
-      'updated_at': updatedAt.toUtc().toIso8601String(),
-      'start_at': startAt.toUtc().toIso8601String(),
-      'end_at': endAt.toUtc().toIso8601String(),
+      'createdAt': createdAt.toUtc().toIso8601String(),
+      'updatedAt': updatedAt.toUtc().toIso8601String(),
+      'startAt': startAt.toUtc().toIso8601String(),
+      'endAt': endAt.toUtc().toIso8601String(),
     };
     return data;
   }
