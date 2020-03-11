@@ -11,6 +11,7 @@ import (
 
 func DeleteGroup(input model.DeleteGroupInput) error {
 	client := api.Client()
+	var err error
 
 	var resp struct {
 		DeleteGroup bool `json:"deleteGroup"`
@@ -22,7 +23,7 @@ func DeleteGroup(input model.DeleteGroupInput) error {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
 		_, err = db.DB.Exec("DELETE FROM groups WHERE id = ?", input.ID)
 	}

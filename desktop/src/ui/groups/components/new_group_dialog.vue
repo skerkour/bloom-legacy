@@ -53,7 +53,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { CreateGroupInput, Maybe, Group } from '../../../api/models';
+import { CreateGroupInput, Maybe, Group } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
 
