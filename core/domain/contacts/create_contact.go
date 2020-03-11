@@ -9,6 +9,7 @@ import (
 
 func CreateContact(params CreateContactParams) (Contact, error) {
 	// TODO(z0mbie42): validators
+	var err error
 	now := time.Now().UTC()
 	uuid := uuid.New()
 	contact := Contact{
@@ -27,7 +28,7 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		Websites:      params.Websites,
 	}
 
-	stmt, err := db.DB.Prepare(`
+	query := `
 	INSERT INTO contacts
 		(id,
 		created_at,
@@ -43,13 +44,9 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		websites,
 		device_id)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
-	`)
-	if err != nil {
-		return contact, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&contact.ID,
+	`
+	_, err = db.DB.Exec(query,
+		&contact.ID,
 		&contact.CreatedAt,
 		&contact.UpdatedAt,
 		&contact.FirstName,

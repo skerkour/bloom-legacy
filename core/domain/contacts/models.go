@@ -8,19 +8,19 @@ import (
 )
 
 type Contact struct {
-	ID            string        `json:"id"`
-	CreatedAt     time.Time     `json:"createdAt"`
-	UpdatedAt     time.Time     `json:"updatedAt"`
-	DeviceID      string        `json:"deviceId"`
-	FirstName     string        `json:"firstName"`
-	LastName      string        `json:"lastName"`
-	Notes         string        `json:"notes"`
-	Birthday      *time.Time    `json:"birthday"`
-	Organizations Organizations `json:"organizations"`
-	Addresses     Addresses     `json:"addresses"`
-	Emails        Emails        `json:"emails"`
-	Phones        Phones        `json:"phones"`
-	Websites      Websites      `json:"websites"`
+	ID            string        `json:"id" db:"id"`
+	CreatedAt     time.Time     `json:"createdAt" db:"created_at"`
+	UpdatedAt     time.Time     `json:"updatedAt" db:"updated_at"`
+	DeviceID      string        `json:"deviceId" db:"device_id"`
+	FirstName     string        `json:"firstName" db:"first_name"`
+	LastName      string        `json:"lastName" db:"last_name"`
+	Notes         string        `json:"notes" db:"notes"`
+	Birthday      *time.Time    `json:"birthday" db:"birthday"`
+	Organizations Organizations `json:"organizations" db:"organizations"`
+	Addresses     Addresses     `json:"addresses" db:"addresses"`
+	Emails        Emails        `json:"emails" db:"emails"`
+	Phones        Phones        `json:"phones" db:"phones"`
+	Websites      Websites      `json:"websites" db:"websites"`
 }
 
 type Organization struct {

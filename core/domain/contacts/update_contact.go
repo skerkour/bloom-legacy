@@ -7,12 +7,13 @@ import (
 )
 
 func UpdateContact(contact Contact) (Contact, error) {
-	// validators
+	// TODO: validators
+	var err error
 	now := time.Now().UTC()
 
 	contact.UpdatedAt = now
 
-	stmt, err := db.DB.Prepare(`
+	query := `
 		UPDATE contacts SET
 			updated_at = $1,
 			first_name = $2,
@@ -26,13 +27,9 @@ func UpdateContact(contact Contact) (Contact, error) {
 			websites = $10,
 			device_id = $11
 		WHERE id = $12
-	`)
-	if err != nil {
-		return contact, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&contact.UpdatedAt,
+	`
+	_, err = db.DB.Exec(query,
+		&contact.UpdatedAt,
 		&contact.FirstName,
 		&contact.LastName,
 		&contact.Notes,
