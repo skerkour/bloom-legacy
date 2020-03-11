@@ -8,6 +8,7 @@ import (
 )
 
 func CreateNote(params CreateNoteParams) (Note, error) {
+	var err error
 	now := time.Now().UTC()
 	uuid := uuid.New()
 	note := Note{
@@ -21,15 +22,10 @@ func CreateNote(params CreateNoteParams) (Note, error) {
 		IsPinned:   false,
 	}
 
-	stmt, err := db.DB.Prepare(`INSERT INTO notes (id, created_at, updated_at, archived_at, title,
+	query := `INSERT INTO notes (id, created_at, updated_at, archived_at, title,
 		body, color, is_pinned)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`)
-	if err != nil {
-		return note, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&note.ID, &note.CreatedAt, &note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned)
+		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
+	_, err = db.DB.Exec(query, &note.ID, &note.CreatedAt, &note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned)
 
 	return note, err
 }

@@ -8,10 +8,11 @@ import (
 
 func UpdateNote(note Note) (Note, error) {
 	now := time.Now().UTC()
+	var err error
 
 	note.UpdatedAt = now
 
-	stmt, err := db.DB.Prepare(`
+	query := `
 	UPDATE notes SET
 		updated_at = ?,
 		archived_at = ?,
@@ -20,13 +21,8 @@ func UpdateNote(note Note) (Note, error) {
 		color = ?,
 		is_pinned = ?
 	WHERE id = ?
-	`)
-	if err != nil {
-		return note, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned, &note.ID)
+	`
+	_, err = db.DB.Exec(query, &note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned, &note.ID)
 
 	return note, err
 }
