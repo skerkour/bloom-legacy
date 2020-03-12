@@ -17,11 +17,6 @@
           <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
             {{ error }}
           </v-alert>
-          <v-progress-circular
-            indeterminate
-            color="primary"
-            size="50"
-          />
         </v-col>
 
         <v-col cols="12">
@@ -102,6 +97,8 @@ export default class Groups extends Vue {
 
   cancel() {
     this.usersToInvite = [];
+    this.error = '';
+    this.loading = false;
     this.close();
   }
 

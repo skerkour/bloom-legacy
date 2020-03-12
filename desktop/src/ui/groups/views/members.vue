@@ -10,6 +10,14 @@
 
     <v-row>
       <v-col cols="12">
+        <div class="headline">
+          Members
+        </div>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
         <v-btn color="primary" @click="openInviteDialog">
           <v-icon left>mdi-plus</v-icon> Invite
         </v-btn>
@@ -34,8 +42,7 @@
                 <v-avatar color="white" v-else>
                   <v-icon medium color="grey">mdi-account</v-icon>
                 </v-avatar>
-              </td>
-              <td>
+                &nbsp;
                 <span>{{ item.node.displayName }} @{{ item.node.username }}</span>
               </td>
               <td>
@@ -47,6 +54,14 @@
             </tr>
           </template>
         </v-data-table>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-col cols="12">
+        <div class="headline">
+          Pending invitations
+        </div>
       </v-col>
     </v-row>
 
@@ -104,12 +119,6 @@ export default class GroupsMembersView extends Vue {
   showInviteDialog = false;
   group: Group | null = null;
   membersHeaders = [
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Avatar',
-      value: 'node.avatarUrl',
-    },
     {
       align: 'left',
       sortable: true,
