@@ -5,6 +5,7 @@ export enum Method {
   DeleteGroup = 'groups.deleteGroup',
   FindGroups = 'groups.findGroups',
   FetchGroupMembers = 'groups.fetchGroupMembers',
+  InviteUsers = 'groups.inviteUsers',
 }
 
 export type Groups = {

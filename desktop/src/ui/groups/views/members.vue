@@ -6,13 +6,6 @@
           {{ error }}
         </v-alert>
       </v-col>
-      <v-col cols="12" v-if="loading">
-        <v-progress-circular
-          indeterminate
-          color="primary"
-          size="50"
-        />
-      </v-col>
     </v-row>
 
     <v-row>
@@ -23,35 +16,67 @@
       </v-col>
     </v-row>
 
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
-        <v-list three-line>
-          <template v-for="member in members">
-            <v-list-item :key="member.node.id">
-              <v-list-item-avatar color="white" v-if="member.node.avatarUrl">
-                <v-img :src="member.node.avatarUrl"></v-img>
-              </v-list-item-avatar>
-              <v-list-item-avatar color="white" v-else>
-                <v-icon medium color="grey">mdi-account</v-icon>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>{{ member.node.displayName }}</v-list-item-title>
-                <v-list-item-subtitle>@{{ member.node.username }}</v-list-item-subtitle>
-              </v-list-item-content>
-
-              <v-list-item-action>
-                <v-list-item-action-text>
-                  {{ member.role }}
-                </v-list-item-action-text>
-              </v-list-item-action>
-            </v-list-item>
+    <v-row>
+      <v-col cols="12" sm="10" lg="8">
+        <v-data-table
+          :headers="membersHeaders"
+          :items="members"
+          item-key="node.username"
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          hide-default-footer>
+          <template v-slot:item="{ item }">
+            <tr>
+              <td>
+                <v-avatar color="white" v-if="item.node.avatarUrl">
+                  <v-img :src="item.node.avatarUrl"></v-img>
+                </v-avatar>
+                <v-avatar color="white" v-else>
+                  <v-icon medium color="grey">mdi-account</v-icon>
+                </v-avatar>
+              </td>
+              <td>
+                <span>{{ item.node.displayName }} @{{ item.node.username }}</span>
+              </td>
+              <td>
+                <span>{{ item.role }}</span>
+              </td>
+              <td>
+                Actions
+              </td>
+            </tr>
           </template>
-        </v-list>
+        </v-data-table>
       </v-col>
     </v-row>
 
-    <blm-groups-invite-dialog :visible="showInviteDialog"
+    <v-row>
+      <v-col cols="12" sm="10" lg="8">
+        <v-data-table
+          :headers="invitationsHeaders"
+          :items="invitations"
+          item-key="invitee.username"
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          hide-default-footer>
+          <template v-slot:item="{ item }">
+            <tr>
+              <td>
+                <span>{{ item.invitee.displayName }} @{{ item.invitee.username }}</span>
+              </td>
+              <td>
+                <span>{{ item.inviter.displayName }} @{{ item.inviter.username }}</span>
+              </td>
+              <td>
+                Actions
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
+
+    <blm-groups-invite-dialog :visible="showInviteDialog" :group-id="group.id" v-if="group"
       @closed="inviteDialogClosed" />
   </v-container>
 </template>
@@ -60,7 +85,9 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BlmGroupsInviteDialog from '../components/invite_dialog.vue';
-import { Group, GroupMemberEdge, Maybe } from '@/api/models';
+import {
+  Group, GroupMemberEdge, Maybe, GroupInvitationConnection, GroupInvitationEdge, GroupInvitation,
+} from '@/api/models';
 import core from '@/core';
 import { Method, FetchGroupMembersParams } from '@/core/groups';
 
@@ -76,11 +103,64 @@ export default class GroupsMembersView extends Vue {
   error = '';
   showInviteDialog = false;
   group: Group | null = null;
+  membersHeaders = [
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Avatar',
+      value: 'node.avatarUrl',
+    },
+    {
+      align: 'left',
+      sortable: true,
+      text: 'User',
+      value: 'node.displayName',
+    },
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Role',
+      value: 'role',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Actions',
+      value: 'actions',
+    },
+  ];
+  invitationsHeaders = [
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Invitee',
+      value: 'node.invitee.displayName',
+    },
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Inviter',
+      value: 'node.inviter.displayName',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Actions',
+      value: 'actions',
+    },
+  ];
 
   // computed
   get members(): GroupMemberEdge[] {
     if (this.group) {
       return this.group.members!.edges!.map((edge: Maybe<GroupMemberEdge>) => edge!);
+    }
+    return [];
+  }
+
+  get invitations(): GroupInvitation[] {
+    if (this.group) {
+      return this.group.invitations!.edges!.map((edge: Maybe<GroupInvitationEdge>) => edge!.node!);
     }
     return [];
   }
@@ -114,6 +194,12 @@ export default class GroupsMembersView extends Vue {
 
   inviteDialogClosed() {
     this.showInviteDialog = false;
+  }
+
+  usersInvited(invitations: GroupInvitationConnection) {
+    if (this.group) {
+      this.group.invitations = invitations;
+    }
   }
 }
 </script>

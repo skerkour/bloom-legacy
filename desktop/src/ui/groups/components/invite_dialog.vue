@@ -24,6 +24,16 @@
           />
         </v-col>
 
+        <v-col cols="12">
+          <v-combobox
+            v-model="usersToInvite"
+            label="Usernames"
+            multiple
+            chips
+            :loading="loading"
+        ></v-combobox>
+        </v-col>
+
       </v-card-text>
       <v-card-actions>
         <v-spacer />
@@ -41,15 +51,20 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
+import { InviteUsersInGroupInput } from '../../../api/models';
+import core from '@/core';
+import { Method } from '@/core/groups';
 
 @Component
 export default class Groups extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
+  @Prop({ type: String, default: false }) groupId!: string;
 
   // data
   error = '';
   loading = false;
+  usersToInvite = [];
 
   // computed
   get show() {
@@ -67,11 +82,26 @@ export default class Groups extends Vue {
   // watch
   // methods
   async invite() {
-    console.log('invited');
-    this.close();
+    this.loading = true;
+    this.error = '';
+    const params: InviteUsersInGroupInput = {
+      id: this.groupId,
+      users: this.usersToInvite,
+    };
+
+    try {
+      await core.call(Method.InviteUsers, params);
+      this.cancel();
+      this.$router.push({ path: '/groups' });
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
   }
 
   cancel() {
+    this.usersToInvite = [];
     this.close();
   }
 
