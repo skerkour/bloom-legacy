@@ -29,6 +29,8 @@ func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Gro
 		return err
 	}
 
+	// TODO: create invitations
+
 	return nil
 }
 
