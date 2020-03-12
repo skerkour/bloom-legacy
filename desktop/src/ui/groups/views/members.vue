@@ -36,10 +36,10 @@
           <template v-slot:item="{ item }">
             <tr>
               <td>
-                <v-avatar color="white" v-if="item.node.avatarUrl">
+                <v-avatar color="white" v-if="item.node.avatarUrl" size="42">
                   <v-img :src="item.node.avatarUrl"></v-img>
                 </v-avatar>
-                <v-avatar color="white" v-else>
+                <v-avatar color="white" v-else size="42">
                   <v-icon medium color="grey">mdi-account</v-icon>
                 </v-avatar>
                 &nbsp;

@@ -14,22 +14,33 @@
       </v-toolbar>
     </v-row>
 
-    <v-row justify="center">
-      <v-col cols="12" sm="10" md="8" lg="6">
-        <v-list three-line>
-          <template v-for="group in groups">
-            <v-list-item :key="group.id" :to="`/groups/${group.id}/members`">
-              <v-list-item-avatar color="white">
-                <v-icon medium color="grey">mdi-account-group</v-icon>
-              </v-list-item-avatar>
-
-              <v-list-item-content>
-                <v-list-item-title>{{ group.name }}</v-list-item-title>
-                <v-list-item-subtitle>{{ group.description }}</v-list-item-subtitle>
-              </v-list-item-content>
-            </v-list-item>
+    <v-row>
+      <v-col cols="12" sm="10" lg="8">
+        <v-data-table
+          :headers="groupsHeaders"
+          :items="groups"
+          item-key="id"
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          hide-default-footer>
+          <template v-slot:item="{ item }">
+            <tr>
+              <td>
+               <v-avatar color="white" v-if="item.avatarUrl" size="42">
+                  <v-img :src="item.avatarUrl"></v-img>
+                </v-avatar>
+                <v-avatar color="white" v-else size="42">
+                  <v-icon medium color="grey">mdi-account-people</v-icon>
+                </v-avatar>
+                &nbsp;
+                <span>{{ item.name }}</span>
+              </td>
+              <td>
+                <span>{{ item.description }}</span>
+              </td>
+            </tr>
           </template>
-        </v-list>
+        </v-data-table>
       </v-col>
     </v-row>
 
@@ -59,6 +70,20 @@ export default class GroupsView extends Vue {
   groups: Group[] = [];
   loading = false;
   showNewGroupDialog = false;
+  groupsHeaders = [
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Group',
+      value: 'name',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Description',
+      value: 'description',
+    },
+  ]
 
   // computed
   // lifecycle
