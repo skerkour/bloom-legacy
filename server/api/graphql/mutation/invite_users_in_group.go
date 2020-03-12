@@ -22,7 +22,7 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("mutation.InviteUsersInGroup: Starting transaction", rz.Err(err))
+		logger.Error("Starting transaction", rz.Err(err))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitingUsers))
 	}
 
@@ -32,7 +32,7 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 	err = tx.Get(&group, queryGetGroup, input.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("mutation.InviteUsersInGroup: fetching group", rz.Err(err),
+		logger.Error("fetching group", rz.Err(err),
 			rz.String("id", input.ID))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
@@ -46,7 +46,7 @@ func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUse
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
-		logger.Error("mutation.InviteUsersInGroup: Committing transaction", rz.Err(err))
+		logger.Error("Committing transaction", rz.Err(err))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitingUsers))
 	}
 

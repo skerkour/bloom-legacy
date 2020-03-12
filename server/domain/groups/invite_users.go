@@ -13,10 +13,12 @@ func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Gro
 	inviteesIds := []string{}
 	var err error
 
-	queryInviteesIds := "SELECT id FROM users WHERE username IN ($1)"
-	err = tx.Get(&inviteesIds, queryInviteesIds, usernames)
+	queryStr := "SELECT id FROM users WHERE username IN ($1)"
+	query, args, err := sqlx.In(queryStr, usernames)
+	query = tx.Rebind(query)
+	err = tx.Select(&inviteesIds, query, args...)
 	if err != nil {
-		logger.Error("groups.InviteUsers: error fetching invitees ids", rz.Err(err))
+		logger.Error("error fetching invitees ids", rz.Err(err))
 		return NewError(ErrorInvitingUsers)
 	}
 	if len(inviteesIds) != len(usernames) {
@@ -41,11 +43,14 @@ func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, g
 	}
 
 	//  check that user is not already in group or awaiting invitations
-	queryAlreadyInGroupOrInvitations := `SELECT COUNT(*)
+	queryStr := `SELECT COUNT(*)
 		FROM groups_members, groups_invitations
 		WHERE (groups_members.group_id = $1 AND groups_members.user_id IN ($2))
 			OR (groups_invitations.invitee_id IN ($2))`
-	err = tx.Get(&alreadyInUsers, queryAlreadyInGroupOrInvitations, group.ID, inviteesIds)
+
+	query, args, err := sqlx.In(queryStr, group.ID, inviteesIds)
+	query = tx.Rebind(query)
+	err = tx.Get(&alreadyInUsers, query, args...)
 	if err != nil {
 		logger.Error("groups.InviteUsers: error fetching users already in group or invitations", rz.Err(err))
 		return NewError(ErrorInvitingUsers)

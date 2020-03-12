@@ -92,7 +92,7 @@
     </v-row>
 
     <blm-groups-invite-dialog :visible="showInviteDialog" :group-id="group.id" v-if="group"
-      @closed="inviteDialogClosed" />
+      @closed="inviteDialogClosed" @inviter="usersInvited"/>
   </v-container>
 </template>
 

@@ -46,7 +46,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { InviteUsersInGroupInput } from '../../../api/models';
+import { InviteUsersInGroupInput, Group } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
 
@@ -85,9 +85,9 @@ export default class Groups extends Vue {
     };
 
     try {
-      await core.call(Method.InviteUsers, params);
+      const res: Group = await core.call(Method.InviteUsers, params);
       this.cancel();
-      this.$router.push({ path: '/groups' });
+      this.$emit('invited', res.invitations);
     } catch (err) {
       this.error = err.message;
     } finally {
