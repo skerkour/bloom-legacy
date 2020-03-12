@@ -8,29 +8,15 @@ import (
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
-func FetchGroupMembers(params FetchGroupMembersParams) (*model.Group, error) {
+func InviteUsers(input model.InviteUsersInGroupInput) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
-		Group *model.Group `json:"group"`
+		Group *model.Group `json:"inviteUsersInGroup"`
 	}
 	req := graphql.NewRequest(`
-	query($input: ID!) {
-		group(id: $input) {
-			id
-			name
-			members {
-				edges {
-					role
-					joinedAt
-					node {
-						avatarUrl
-						username
-						displayName
-					}
-				}
-				totalCount
-			}
+	mutation($input: InviteUsersInGroupInput!) {
+		inviteUsersInGroup(input: $input) {
 			invitations {
 				edges {
 					node {
@@ -49,7 +35,7 @@ func FetchGroupMembers(params FetchGroupMembersParams) (*model.Group, error) {
 		}
 	}
 	`)
-	req.Var("input", params.ID)
+	req.Var("input", input)
 
 	err := client.Do(context.Background(), req, &resp)
 
