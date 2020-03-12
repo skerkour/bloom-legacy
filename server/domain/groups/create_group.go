@@ -44,8 +44,8 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 
 	// admin creator to group
 	queryAddAdminToGroup := `INSERT INTO groups_members
-	(user_id, group_id, role, joined_at)
-	VALUES ($1, $2, $3, $4)`
+	(user_id, group_id, role, joined_at, inviter_id)
+	VALUES ($1, $2, $3, $4, $1)`
 	_, err = tx.Exec(queryAddAdminToGroup, admin.ID, ret.ID, RoleAdministrator, now)
 	if err != nil {
 		logger.Error("inserting admin in new group", rz.Err(err))

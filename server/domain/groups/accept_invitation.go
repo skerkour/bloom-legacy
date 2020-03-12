@@ -20,17 +20,18 @@ func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	}
 
 	membership := Membership{
-		JoinedAt: time.Now().UTC(),
-		GroupID:  invitation.GroupID,
-		UserID:   user.ID,
-		Role:     RoleMember,
+		JoinedAt:  time.Now().UTC(),
+		GroupID:   invitation.GroupID,
+		UserID:    user.ID,
+		Role:      RoleMember,
+		InviterID: invitation.InviterID,
 	}
 
 	// create membership
 	queryCreateMembership := `INSERT INTO groups_members
-		(joined_at, group_id, user_id, role)
-		VALUES ($1, $2, $3, $4)`
-	_, err = tx.Exec(queryCreateMembership, membership.JoinedAt, membership.GroupID,
+		(joined_at, inviter_id, group_id, user_id, role)
+		VALUES ($1, $2, $3, $4, $5)`
+	_, err = tx.Exec(queryCreateMembership, membership.JoinedAt, membership.InviterID, membership.GroupID,
 		membership.UserID, membership.Role)
 	if err != nil {
 		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))

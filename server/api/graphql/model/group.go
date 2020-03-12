@@ -60,51 +60,49 @@ func (r *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMember
 	return ret, nil
 }
 
-func (r *GroupResolver) Invitations(ctx context.Context, obj *Group) (*GroupInvitationConnection, error) {
-	panic("not implemented")
-	// logger := rz.FromCtx(ctx)
-	// apiCtx, ok := ctx.Value(apictx.Key).(*apictx.Context)
-	// if !ok {
-	// 	return ret, twirp.InternalError("internal error")
-	// }
-	// if apiCtx.AuthenticatedUser == nil {
-	// 	twerr := twirp.NewError(twirp.Unauthenticated, "authentication required")
-	// 	return ret, twerr
-	// }
+func (r *GroupResolver) Invitations(ctx context.Context, group *Group) (*GroupInvitationConnection, error) {
+	var ret *GroupInvitationConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+	var err error
 
-	// tx, err := db.DB.Beginx()
-	// if err != nil {
-	// 	logger.Error("groups.ListGroupInvitations: Starting transaction", rz.Err(err))
-	// 	return ret, twirp.InternalError("internal error")
-	// }
+	if group.ID == nil {
+		return ret, PermissionDeniedToAccessField()
+	}
 
-	// if twerr := groups.CheckUserIsGroupAdmin(ctx, tx, apiCtx.AuthenticatedUser.ID, params.GroupId); twerr != nil {
-	// 	tx.Rollback()
-	// 	return ret, twerr
-	// }
+	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, *group.ID)
+	if err != nil && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
 
-	// invitations := []invit{}
-	// err = tx.Select(&invitations, `SELECT invit.id AS invitation_id, invit.created_at AS invitation_created_at,
-	// groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
-	// 	users.username AS inviter_username, users.display_name AS inviter_display_name
-	// 	FROM groups_invitations AS invit, groups, users
-	// 	WHERE invit.group_id = $1 AND users.id = invit.inviter_id`, params.GroupId)
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	logger.Error("groups.ListGroupInvitations: fetching invitations", rz.Err(err))
-	// 	return ret, twirp.InternalError(groups.ErrorListingInvitationsMsg)
-	// }
+	invitations, err := groups.FindGroupInvitations(ctx, nil, *group.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
 
-	// err = tx.Commit()
-	// if err != nil {
-	// 	tx.Rollback()
-	// 	logger.Error("groups.ListGroupInvitations: Committing transaction", rz.Err(err))
-	// 	return ret, twirp.InternalError(groups.ErrorListingInvitationsMsg)
-	// }
+	ret = &GroupInvitationConnection{
+		Edges:      []*GroupInvitationEdge{},
+		TotalCount: Int64(len(invitations)),
+	}
 
-	// for _, invitation := range invitations {
-	// 	ret.Invitations = append(ret.Invitations, invitToRpcInvitation(invitation))
-	// }
+	for _, invitation := range invitations {
+		invit := &GroupInvitation{
+			Inviter: &User{
+				Username:    invitation.InviterUsername,
+				DisplayName: invitation.InviterUsername,
+				AvatarURL:   nil,
+			},
+			Invitee: &User{
+				Username:    invitation.InviteeUsername,
+				DisplayName: invitation.InviteeUsername,
+				AvatarURL:   nil,
+			},
+		}
+		edge := &GroupInvitationEdge{
+			Node: invit,
+		}
+		ret.Edges = append(ret.Edges, edge)
+	}
+	return ret, nil
 }
 
 func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (*BillingSubscription, error) {

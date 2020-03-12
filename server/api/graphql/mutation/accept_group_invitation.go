@@ -22,7 +22,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
-		logger.Error("mutation.AcceptGroupInvitation: Starting transaction", rz.Err(err))
+		logger.Error("Starting transaction", rz.Err(err))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorAcceptingInvitation))
 	}
 
@@ -32,7 +32,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 	err = tx.Get(&invitation, queryGetInvitation, input.ID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("mutation.AcceptGroupInvitation: fetching invitation", rz.Err(err),
+		logger.Error("fetching invitation", rz.Err(err),
 			rz.String("invitation_id", input.ID))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorAcceptingInvitation))
 	}
