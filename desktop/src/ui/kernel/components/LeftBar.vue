@@ -16,11 +16,9 @@
           :nudge-width="200"
         >
           <template v-slot:activator="{ on }">
-            <v-list-item-avatar
-              v-on="on"
-              class="blm-pointer"
-            >
-              <v-img :src="avatarUrl" />
+            <v-list-item-avatar color="white" class="blm-pointer" v-on="on">
+              <v-img :src="$store.state.me.avatarUrl" v-if="$store.state.me.avatarUrl"/>
+              <v-icon medium color="grey" v-else>mdi-account</v-icon>
             </v-list-item-avatar>
 
             <!-- <v-list-item-title>John Leider</v-list-item-title> -->

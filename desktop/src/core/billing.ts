@@ -6,7 +6,7 @@ export enum Method {
   UpdatedPlan = 'billing.updatePlan',
   CreatePlan = 'billing.createPlan',
   FetchMyProfile = 'billing.fetchMyProfile',
-  AddPaymentMethod = 'billing.addPayment_method',
+  AddPaymentMethod = 'billing.addPaymentMethod',
   RemovePaymentMethod = 'billing.removePaymentMethod',
   UpdateSubscription = 'billing.updateSubscription',
 }
