@@ -7,6 +7,7 @@ import 'package:bloom/ui/calculator/views/calculator.dart';
 import 'package:bloom/ui/calendar/views/calendar.dart';
 import 'package:bloom/ui/contacts/views/contacts.dart';
 import 'package:bloom/ui/drive/views/drive.dart';
+import 'package:bloom/ui/groups/views/groups.dart';
 import 'package:bloom/ui/home/views/home.dart';
 import 'package:bloom/ui/myaccount/views/profile.dart';
 import 'package:bloom/ui/notes/views/notes.dart';
@@ -50,6 +51,7 @@ class MyApp extends StatelessWidget {
         PATH_CALENDAR: (BuildContext context) => const CalendarView(),
         PATH_CONTACTS: (BuildContext context) => ContactsView(),
         PATH_DRIVE: (BuildContext context) => const DriveView(),
+        PATH_GROUPS: (BuildContext context) => const GroupsView(),
         PATH_MYACCOUNT: (BuildContext context) => const MyAccountProfileView(),
         PATH_NOTES: (BuildContext context) => const NotesView(),
         PATH_PREFERENCES: (BuildContext context) =>
