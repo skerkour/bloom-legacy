@@ -2,7 +2,7 @@
   <v-container fluid class="text-left">
     <v-row>
       <v-col cols="12" v-if="error">
-        <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
+        <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
           {{ error }}
         </v-alert>
       </v-col>

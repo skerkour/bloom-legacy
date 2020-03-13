@@ -19,12 +19,14 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 	}
 
 	// delete memberships
-	queryDeleteMemberships := `DELETE FROM groups_members
+	queryStr := `DELETE FROM groups_members
 		INNER JOIN users ON users.id = groups_members.user_id
 		WHERE users.username IN ($1)`
-	_, err = tx.Exec(queryDeleteMemberships, usernames)
+	query, args, err := sqlx.In(queryStr, usernames)
+	query = tx.Rebind(query)
+	_, err = tx.Exec(query, args...)
 	if err != nil {
-		logger.Error("groups.RemoveMembers: removing members", rz.Err(err))
+		logger.Error("removing members", rz.Err(err))
 		return NewError(ErrorRemovingMembersFromGroup)
 	}
 
@@ -32,7 +34,7 @@ func RemoveMembers(ctx context.Context, tx *sqlx.Tx, user users.User, group Grou
 		WHERE group_id = $1 AND role = $2`
 	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
 	if err != nil {
-		logger.Error("users.RemoveMembers: error fetching remaining admins", rz.Err(err))
+		logger.Error("error fetching remaining admins", rz.Err(err))
 		return NewError(ErrorRemovingMembersFromGroup)
 	}
 	if remainingAdmins != 0 {
