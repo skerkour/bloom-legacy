@@ -24,7 +24,7 @@ Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free
 3. [Roadmap](#roadmap)
 4. [Development instructions](#development-instructions)
 5. [Contributing](#contributing)
-6. [Forum](#contributing)
+6. [Community](#Community)
 7. [Licensing](#licensing)
 8. [Security](#security)
 
@@ -57,16 +57,18 @@ See https://gitlab.com/bloom42/bloom/-/milestones
 See https://gitlab.com/bloom42/bloom/-/wikis/development
 
 
+## Community
+
+You can follow us on [Twitter @42bloom](https://twitter.com/@42bloom) or on [Mastdon @42bloom@mastodon.social](https://mastodon.social/@42bloom) to never miss an update.
+
+When you want to talk about something that does not necessarily fit issues, you can use the forum
+to connect with the community: https://gitlab.com/bloom42/forum
+
+
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
 https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
-
-
-## Forum
-
-When you want to talk about something that does not necessarily fit issues, you can use the forum
-to connect with the community: https://gitlab.com/bloom42/forum
 
 
 ## Licensing
