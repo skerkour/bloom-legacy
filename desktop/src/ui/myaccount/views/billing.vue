@@ -5,7 +5,7 @@
       {{ error }}
     </v-alert>
 
-    <v-row v-if="isLoading" class="justify-center text-center">
+    <v-row v-if="loading" class="justify-center text-center">
       <v-col cols="12">
         <v-progress-circular
           indeterminate
@@ -49,7 +49,7 @@
                 </v-card-text>
                 <v-card-actions class="justify-center blm-pricing-card-actions text-center pb-3">
                   <v-btn color="primary" v-if="plan.product !== me.subscription.plan.product"
-                      @click="changePlan(plan)" :loading="isLoading">
+                      @click="changePlan(plan)" :loading="loading">
                     <span v-if="plan.price > me.subscription.plan.price">Upgrade</span>
                     <span v-else>Downgrade</span>
                   </v-btn>
@@ -76,12 +76,13 @@
             <v-alert icon="mdi-alert-circle" type="error" :value="paymentMethodError !== ''">
               {{ paymentMethodError }}
             </v-alert>
-            <blm-myaccount-table-payment-methods :loading="isLoading"
-              :payment-methods="paymentMethods" @removed="removePaymentMethod" />
+            <blm-myaccount-table-payment-methods :loading="loading"
+              :payment-methods="paymentMethods" @removed="removePaymentMethod"
+              @changed="changeDefaultPaymentMethod" />
           </v-col>
           <v-col class="d-flex justify-space-around">
             <v-btn color="primary" class="new-btn" @click="openAddPaymentMethodDialog"
-                :loading="isLoading">
+                :loading="loading">
               Add <v-icon right>mdi-plus</v-icon>
             </v-btn>
           </v-col>
@@ -98,7 +99,7 @@
 
         <v-row>
           <v-col cols="12">
-            <blm-myaccount-table-invoices :loading="isLoading" :invoices="invoices" />
+            <blm-myaccount-table-invoices :loading="loading" :invoices="invoices" />
           </v-col>
         </v-row>
 
@@ -133,7 +134,7 @@ export default class Billing extends Vue {
   // props
   // data
   error = '';
-  isLoading = false;
+  loading = false;
   plans: models.BillingPlan[] = [];
   me: models.User | null = null;
   planAfterAddingPaymentMethod: models.BillingPlan | null = null;
@@ -166,7 +167,7 @@ export default class Billing extends Vue {
   // methods
   async fetchData() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
 
     try {
       const res = await core.call(Method.FetchMyProfile, core.Empty);
@@ -177,7 +178,7 @@ export default class Billing extends Vue {
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
@@ -201,7 +202,7 @@ export default class Billing extends Vue {
 
   async addPaymentMethod(card: NewStripeCard) {
     this.paymentMethodError = '';
-    this.isLoading = true;
+    this.loading = true;
     const params = {
       stripePublicKey: this.stripePublicKey,
       card,
@@ -217,13 +218,13 @@ export default class Billing extends Vue {
     } catch (err) {
       this.paymentMethodError = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async removePaymentMethod(paymentMenthod: models.PaymentMethod) {
     this.paymentMethodError = '';
-    this.isLoading = true;
+    this.loading = true;
     const input: models.RemovePaymentMethodInput = {
       id: paymentMenthod.id,
     };
@@ -235,16 +236,16 @@ export default class Billing extends Vue {
     } catch (err) {
       this.paymentMethodError = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async updateSubscription(newPlan: models.BillingPlan) {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     this.planAfterAddingPaymentMethod = null;
-    const input: models.UpdateBillingSubscriptionInput = {
-      planId: newPlan.id,
+    const input: models.ChangeDefaultPaymentMethodInput = {
+      id: newPlan.id,
     };
 
     try {
@@ -253,7 +254,38 @@ export default class Billing extends Vue {
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
+    }
+  }
+
+  async changeDefaultPaymentMethod(newDefaultPaymentMethod: models.PaymentMethod) {
+    this.error = '';
+    this.loading = true;
+    const input: models.ChangeDefaultPaymentMethodInput = {
+      id: newDefaultPaymentMethod.id,
+    };
+
+    try {
+      await core.call(Method.ChangeDefaultPaymentMethod, input);
+      const paymentMehtods = this.me!.paymentMethods!
+        .edges!.map((edge: models.Maybe<models.PaymentMethodEdge>, index: number) => {
+          if (edge!.node!.isDefault) {
+            const newEdge = edge;
+            newEdge!.node!.isDefault = false;
+            this.$set(this.me!.paymentMethods!.edges!, index, newEdge);
+          }
+          if (edge!.node!.id === newDefaultPaymentMethod.id) {
+            const newEdge = edge;
+            newEdge!.node!.isDefault = true;
+            this.$set(this.me!.paymentMethods!.edges!, index, newEdge);
+          }
+          return edge;
+        });
+      this.me!.paymentMethods!.edges = paymentMehtods;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
     }
   }
 }

@@ -44,7 +44,7 @@
                   </v-list-item-icon>
                   <v-list-item-title>Remove</v-list-item-title>
                 </v-list-item>
-                <v-list-item>
+                <v-list-item @click="changeDefaultPaymentMethod(item)">
                   <v-list-item-icon>
                     <v-icon>mdi-star</v-icon>
                   </v-list-item-icon>
@@ -62,13 +62,13 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import * as models from '@/api/models';
+import { PaymentMethod } from '@/api/models';
 
 @Component
 export default class Security extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) loading!: boolean;
-  @Prop({ type: Array }) paymentMethods!: models.PaymentMethod[];
+  @Prop({ type: Array }) paymentMethods!: PaymentMethod[];
 
   // data
   headers = [
@@ -108,8 +108,12 @@ export default class Security extends Vue {
   // lifecycle
   // watch
   // methods
-  onRemove(paymentMethod: any) {
+  onRemove(paymentMethod: PaymentMethod) {
     this.$emit('removed', paymentMethod);
+  }
+
+  changeDefaultPaymentMethod(paymentMethod: PaymentMethod) {
+    this.$emit('changed', paymentMethod);
   }
 }
 </script>

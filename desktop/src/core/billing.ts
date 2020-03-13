@@ -9,6 +9,7 @@ export enum Method {
   AddPaymentMethod = 'billing.addPaymentMethod',
   RemovePaymentMethod = 'billing.removePaymentMethod',
   UpdateSubscription = 'billing.updateSubscription',
+  ChangeDefaultPaymentMethod = 'billing.changeDefaultPaymentMethod',
 }
 
 export type NewStripeCard = {
