@@ -17,14 +17,14 @@ class _QrCodeScanState extends State<QrCodeScanView> {
   @override
   void initState() {
     _scan().then((String barcode) {
-        if (barcode == null) {
-          Navigator.of(context).pop();
-        }
-        setState(() {
-          _barcode = barcode;
-        });
-        _checkCanLaunch();
+      if (barcode == null) {
+        Navigator.of(context).pop();
+      }
+      setState(() {
+        _barcode = barcode;
       });
+      _checkCanLaunch();
+    });
     super.initState();
   }
 
