@@ -1,13 +1,14 @@
+import 'package:bloom/ui/groups/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
-class BillingGoToDesktopView extends StatefulWidget {
-  const BillingGoToDesktopView();
+class GroupsPreferencesView extends StatefulWidget {
+  const GroupsPreferencesView();
 
   @override
-  _BillingGoToDesktopState createState() => _BillingGoToDesktopState();
+  _GroupsPreferencesState createState() => _GroupsPreferencesState();
 }
 
-class _BillingGoToDesktopState extends State<BillingGoToDesktopView> {
+class _GroupsPreferencesState extends State<GroupsPreferencesView> {
   @override
   void initState() {
     super.initState();
@@ -16,6 +17,7 @@ class _BillingGoToDesktopState extends State<BillingGoToDesktopView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const GroupsDrawer(),
       appBar: AppBar(
         title: const Text('Billing'),
       ),
@@ -26,7 +28,7 @@ class _BillingGoToDesktopState extends State<BillingGoToDesktopView> {
   Container _buildBody() {
     return Container(
       child: const Center(
-        child: Text('Billing is not available on mobile yet.'),
+        child: Text('Groups billing'),
       ),
     );
   }

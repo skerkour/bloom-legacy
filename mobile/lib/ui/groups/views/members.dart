@@ -1,3 +1,4 @@
+import 'package:bloom/ui/groups/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class GroupsMembersView extends StatefulWidget {
@@ -17,6 +18,7 @@ class _GroupsMembersViewState extends State<GroupsMembersView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      endDrawer: const GroupsDrawer(),
       appBar: AppBar(
         title: const Text('Groups'),
       ),

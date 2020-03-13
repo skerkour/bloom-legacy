@@ -1,5 +1,7 @@
 import 'package:bloom/ui/const.dart';
-import 'package:bloom/ui/notes/views/notes.dart';
+import 'package:bloom/ui/groups/views/billing.dart';
+import 'package:bloom/ui/groups/views/members.dart';
+import 'package:bloom/ui/groups/views/preferences.dart';
 import 'package:flutter/material.dart';
 
 class GroupsDrawer extends StatefulWidget {
@@ -20,9 +22,11 @@ class _GroupsDrawerState extends State<GroupsDrawer> {
             title: const Text('Members'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
+              Navigator.pushAndRemoveUntil<dynamic>(
                 context,
-                PATH_GROUPS + '/members',
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => const GroupsMembersView(),
+                ),
                 (Route<dynamic> route) => route.settings.name == PATH_GROUPS,
               );
             },
@@ -32,11 +36,12 @@ class _GroupsDrawerState extends State<GroupsDrawer> {
             title: const Text('Billing'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
+              Navigator.pushAndRemoveUntil<dynamic>(
                 context,
-                PATH_GROUPS + '/billing',
-                (Route<dynamic> route) =>
-                    route.settings.name == PATH_GROUPS + '/members',
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) => const GroupsBillingView(),
+                ),
+                (Route<dynamic> route) => route.settings.name == PATH_GROUPS,
               );
             },
           ),
@@ -45,11 +50,13 @@ class _GroupsDrawerState extends State<GroupsDrawer> {
             title: const Text('Preferences'),
             onTap: () {
               Navigator.pop(context);
-              Navigator.pushNamedAndRemoveUntil(
+              Navigator.pushAndRemoveUntil<dynamic>(
                 context,
-                PATH_GROUPS + '/preferences',
-                (Route<dynamic> route) =>
-                    route.settings.name == PATH_GROUPS + '/members',
+                MaterialPageRoute<dynamic>(
+                  builder: (BuildContext context) =>
+                      const GroupsPreferencesView(),
+                ),
+                (Route<dynamic> route) => route.settings.name == PATH_GROUPS,
               );
             },
           ),
