@@ -89,6 +89,17 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
+	case "changeDefaultPaymentMethod":
+		var params model.ChangeDefaultPaymentMethodInput
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := billing.ChangeDefaultPaymentMethod(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	default:
 		return methodNotFoundError(method, "billing")
 	}
