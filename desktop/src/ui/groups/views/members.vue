@@ -49,7 +49,22 @@
                 <span>{{ item.role }}</span>
               </td>
               <td>
-                Actions
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" v-if="!item.isDefault">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item @click="removeGroupMember(item)">
+                      <v-list-item-icon>
+                        <v-icon>mdi-delete</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Remove</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </td>
             </tr>
           </template>
@@ -101,7 +116,13 @@
 import { Component, Vue } from 'vue-property-decorator';
 import BlmGroupsInviteDialog from '../components/invite_dialog.vue';
 import {
-  Group, GroupMemberEdge, Maybe, GroupInvitationConnection, GroupInvitationEdge, GroupInvitation,
+  Group,
+  GroupMemberEdge,
+  Maybe,
+  GroupInvitationConnection,
+  GroupInvitationEdge,
+  GroupInvitation,
+  RemoveGroupMembersInput,
 } from '@/api/models';
 import core from '@/core';
 import { Method, FetchGroupMembersParams } from '@/core/groups';
@@ -208,6 +229,24 @@ export default class GroupsMembersView extends Vue {
   usersInvited(invitations: GroupInvitationConnection) {
     if (this.group) {
       this.group.invitations = invitations;
+    }
+  }
+
+  async removeGroupMember(member: GroupMemberEdge) {
+    this.loading = true;
+    this.error = '';
+    const params: RemoveGroupMembersInput = {
+      id: this.group!.id!,
+      members: [member!.node!.username],
+    };
+
+    try {
+      const res: Group = await core.call(Method.RemoveMembers, params);
+      this.group!.members = res.members;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
     }
   }
 }

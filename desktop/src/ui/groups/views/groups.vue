@@ -23,14 +23,14 @@
           :loading="loading"
           loading-text="Loading... Please wait"
           hide-default-footer>
-          <template v-slot:item="{ item }">
-            <tr>
+          <template v-slot:item="{ item }" >
+            <tr @click="goto(`/groups/${item.id}/members`)" class="blm-pointer">
               <td>
                <v-avatar color="white" v-if="item.avatarUrl" size="42">
                   <v-img :src="item.avatarUrl"></v-img>
                 </v-avatar>
                 <v-avatar color="white" v-else size="42">
-                  <v-icon medium color="grey">mdi-account-people</v-icon>
+                  <v-icon medium color="grey">mdi-account-group</v-icon>
                 </v-avatar>
                 &nbsp;
                 <span>{{ item.name }}</span>
@@ -117,6 +117,10 @@ export default class GroupsView extends Vue {
 
   newGroupDialogClosed() {
     this.showNewGroupDialog = false;
+  }
+
+  goto(path: string) {
+    this.$router.push({ path });
   }
 }
 </script>
