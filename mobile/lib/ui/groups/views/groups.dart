@@ -85,7 +85,6 @@
 //     const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: '/arcade'),
 //   ];
 // }
-import 'package:bloom/ui/notes/widgets/drawer.dart';
 import 'package:flutter/material.dart';
 
 class GroupsView extends StatefulWidget {
@@ -109,26 +108,26 @@ class _GroupsViewState extends State<GroupsView> {
         title: const Text('Groups'),
       ),
       body: ListView.builder(
-      itemCount: _groups.length,
-      itemBuilder: (BuildContext context, int index) {
-        final _Group group = _groups[index];
-        return ListTile(
-          leading: CircleAvatar(child: Text(group.name[0].toUpperCase())),
-          title: Text(group.name),
-          subtitle: Text(group.description),
-          isThreeLine: false,
-          // onTap: () {
-          //   Navigator.push<dynamic>(
-          //     context,
-          //     MaterialPageRoute<dynamic>(
-          //       builder: (BuildContext context) =>
-          //           GroupHomeView(name: group.name),
-          //     ),
-          //   );
-          // },
-        );
-      },
-    ),
+        itemCount: _groups.length,
+        itemBuilder: (BuildContext context, int index) {
+          final _Group group = _groups[index];
+          return ListTile(
+            leading: CircleAvatar(child: Text(group.name[0].toUpperCase())),
+            title: Text(group.name),
+            subtitle: Text(group.description),
+            isThreeLine: false,
+            // onTap: () {
+            //   Navigator.push<dynamic>(
+            //     context,
+            //     MaterialPageRoute<dynamic>(
+            //       builder: (BuildContext context) =>
+            //           GroupHomeView(name: group.name),
+            //     ),
+            //   );
+            // },
+          );
+        },
+      ),
     );
   }
 }

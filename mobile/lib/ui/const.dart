@@ -12,7 +12,6 @@ const String ICON_BITFLOW_256 = 'assets/icons/bitflow_256.jpg';
 const String ICON_QRCODES_256 = 'assets/icons/qrcode_256.jpg';
 const String ICON_GROUPS_256 = 'assets/icons/groups_256.jpg';
 
-
 const String PATH_BOOKS = '/books';
 const String PATH_DRIVE = '/drive';
 const String PATH_GALLERY = '/gallery';

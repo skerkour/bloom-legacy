@@ -35,7 +35,8 @@ class _GroupsDrawerState extends State<GroupsDrawer> {
               Navigator.pushNamedAndRemoveUntil(
                 context,
                 PATH_GROUPS + '/preferences',
-                (Route<dynamic> route) => route.settings.name == PATH_GROUPS + '/members',
+                (Route<dynamic> route) =>
+                    route.settings.name == PATH_GROUPS + '/members',
               );
             },
           ),
