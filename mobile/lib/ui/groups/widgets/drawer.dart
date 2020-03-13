@@ -28,6 +28,19 @@ class _GroupsDrawerState extends State<GroupsDrawer> {
             },
           ),
           ListTile(
+            leading: const Icon(Icons.credit_card),
+            title: const Text('Billing'),
+            onTap: () {
+              Navigator.pop(context);
+              Navigator.pushNamedAndRemoveUntil(
+                context,
+                PATH_GROUPS + '/billing',
+                (Route<dynamic> route) =>
+                    route.settings.name == PATH_GROUPS + '/members',
+              );
+            },
+          ),
+          ListTile(
             leading: const Icon(Icons.settings),
             title: const Text('Preferences'),
             onTap: () {
