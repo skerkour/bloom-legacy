@@ -3,12 +3,12 @@ package kernel
 import (
 	"bytes"
 	"io/ioutil"
-	"os/user"
+	"os"
 	"path/filepath"
 	"runtime"
 )
 
-func AppDirectory() (string, error) {
+func AppDir() (string, error) {
 	if runtime.GOOS == "android" {
 		data, err := ioutil.ReadFile("/proc/self/cmdline")
 		if err != nil {
@@ -16,18 +16,10 @@ func AppDirectory() (string, error) {
 		}
 		return filepath.Join("data", "data", string(bytes.Trim(data, "\x00"))), nil
 	} else {
-		home, err := homeDirectory()
+		home, err := os.UserHomeDir()
 		if err != nil {
 			return "", err
 		}
 		return filepath.Join(home, ".bloom"), nil
 	}
-}
-
-func homeDirectory() (string, error) {
-	user, err := user.Current()
-	if err != nil {
-		return "", err
-	}
-	return user.HomeDir, nil
 }
