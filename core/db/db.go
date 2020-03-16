@@ -1,11 +1,8 @@
 package db
 
 import (
-	"bytes"
-	"io/ioutil"
 	"os"
 	"path/filepath"
-	"runtime"
 
 	"github.com/jmoiron/sqlx"
 	_ "github.com/mattn/go-sqlite3"
@@ -15,38 +12,13 @@ import (
 var DB *sqlx.DB
 var DBFilePath string
 
-func appDirectory() (string, error) {
-	if runtime.GOOS == "android" {
-		data, err := ioutil.ReadFile("/proc/self/cmdline")
-		if err != nil {
-			return "", err
-		}
-		return filepath.Join("data", "data", string(bytes.Trim(data, "\x00"))), nil
-	} else {
-		home, err := kernel.GetHomeDirectory()
-		if err != nil {
-			return "", err
-		}
-		return filepath.Join(home, ".bloom"), nil
-	}
-}
-
-func dbDir() (string, error) {
-	return appDirectory()
-	//return filepath.Join(home, "db"), err
-}
-
-func dbPath() (string, error) {
-	dbDir, err := dbDir()
-	if err != nil {
-		return "", err
-	}
-	return filepath.Join(dbDir, "bloom.db"), nil
+func dbPath(directory string) (string, error) {
+	return filepath.Join(directory, "bloom.db"), nil
 
 }
 
 func Init() error {
-	dbDir, err := dbDir()
+	dbDir, err := kernel.AppDirectory()
 	if err != nil {
 		return err
 	}
@@ -56,7 +28,7 @@ func Init() error {
 		return err
 	}
 
-	DBFilePath, err = dbPath()
+	DBFilePath, err = dbPath(dbDir)
 	if err != nil {
 		return err
 	}
