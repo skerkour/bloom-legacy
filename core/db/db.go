@@ -22,7 +22,7 @@ func dbPath(directory string) (string, error) {
 
 // Init initializes the DB singleton and make migrations if necessary
 func Init() error {
-	dbDir, err := kernel.AppDir()
+	dbDir, err := kernel.UserDataDir()
 	if err != nil {
 		return err
 	}
