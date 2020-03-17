@@ -1,8 +1,12 @@
 package api
 
 import (
+	"context"
 	"fmt"
 	"net/http"
+	"os"
+	"os/signal"
+	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
 	"github.com/99designs/gqlgen/graphql/playground"
@@ -79,6 +83,35 @@ func Run() error {
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	log.Info("starting server", rz.Uint16("port", config.Server.Port))
-	return http.ListenAndServe(fmt.Sprintf(":%d", config.Server.Port), router)
+	server := http.Server{
+		Addr:         fmt.Sprintf(":%d", config.Server.Port),
+		Handler:      router,
+		ReadTimeout:  SERVER_READ_TIMEOUT,
+		WriteTimeout: SERVER_WRITE_TIMEOUT,
+		IdleTimeout:  SERVER_IDLE_TIMEOUT,
+	}
+
+	go func() {
+		err := server.ListenAndServe()
+		if err != nil {
+			log.Fatal("listening", rz.Err(err))
+		}
+	}()
+	log.Info("Server started", rz.Uint16("port", config.Server.Port))
+
+	quit := make(chan os.Signal, 1)
+
+	signal.Notify(quit, os.Interrupt)
+	sig := <-quit
+	log.Info("Server is shutting down", rz.String("reason", sig.String()))
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	server.SetKeepAlivesEnabled(false)
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal("Could not gracefuly shutdown the server", rz.Err(err))
+	}
+	log.Info("Server stopped")
+	return nil
 }
