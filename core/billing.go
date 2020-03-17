@@ -17,6 +17,17 @@ func handleBillingMehtod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "fetchGroupProfile":
+		var params billing.FetchGroupProfileParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := billing.FetchGroupProfile(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	case "fetchPlans":
 		res, err := billing.FetchPlans()
 		if err != nil {

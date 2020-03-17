@@ -22,6 +22,11 @@ type UserBillingProfile struct {
 }
 
 type GroupBillingProfile struct {
-	Group        *model.Group                 `json:"group"`
-	BillingPlans *model.BillingPlanConnection `json:"billingPlans"`
+	Group           *model.Group                 `json:"group"`
+	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
+	StripePublicKey string                       `json:"stripePublicKey"`
+}
+
+type FetchGroupProfileParams struct {
+	ID string `json:"id"`
 }
