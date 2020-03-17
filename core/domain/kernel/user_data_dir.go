@@ -8,13 +8,13 @@ import (
 	"runtime"
 )
 
-// userDataDir is used to cache UserDataDir
-var userDataDir string
+// appDataDir is used to cache AppDataDir
+var appDataDir string
 
-// UserDataDir returns the directory which should be used to store user data
-func UserDataDir() (string, error) {
-	if userDataDir != "" {
-		return userDataDir, nil
+// AppDataDir returns the directory which should be used to store user data
+func AppDataDir() (string, error) {
+	if appDataDir != "" {
+		return appDataDir, nil
 	}
 
 	goos := runtime.GOOS
@@ -24,14 +24,14 @@ func UserDataDir() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		userDataDir = filepath.Join("data", "data", string(bytes.Trim(data, "\x00")))
-		return userDataDir, nil
+		appDataDir = filepath.Join("data", "data", string(bytes.Trim(data, "\x00")))
+		return appDataDir, nil
 	} else {
 		configDir, err := os.UserConfigDir()
 		if err != nil {
 			return "", err
 		}
-		userDataDir = filepath.Join(configDir, AppID())
-		return userDataDir, nil
+		appDataDir = filepath.Join(configDir, AppID())
+		return appDataDir, nil
 	}
 }
