@@ -26,10 +26,12 @@ let mainWindow: BrowserWindow | null = null;
 let child: ChildProcess | null = null;
 const gotTheLock = app.requestSingleInstanceLock();
 
-const appDataDir = app.getPath('appData');
-const userDataDir = path.join(appDataDir, config.APP_ID);
-fs.mkdirSync(userDataDir, { recursive: true });
-app.setPath('userData', userDataDir);
+let appDataDir = app.getPath('appData');
+if (!appDataDir.includes(config.APP_ID)) {
+  appDataDir = path.join(appDataDir, config.APP_ID);
+}
+fs.mkdirSync(appDataDir, { recursive: true });
+app.setPath('userData', appDataDir);
 
 
 // Scheme must be registered before the app is ready

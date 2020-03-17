@@ -6,6 +6,7 @@ import (
 	"os"
 	"path/filepath"
 	"runtime"
+	"strings"
 )
 
 // appDataDir is used to cache AppDataDir
@@ -31,7 +32,12 @@ func AppDataDir() (string, error) {
 		if err != nil {
 			return "", err
 		}
-		appDataDir = filepath.Join(configDir, AppID())
+		appId := AppID()
+		if strings.Contains(configDir, appId) {
+			appDataDir = configDir
+		} else {
+			appDataDir = filepath.Join(configDir, appId)
+		}
 		return appDataDir, nil
 	}
 }
