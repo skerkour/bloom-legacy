@@ -10,6 +10,7 @@ export enum Method {
   RemovePaymentMethod = 'billing.removePaymentMethod',
   UpdateSubscription = 'billing.updateSubscription',
   ChangeDefaultPaymentMethod = 'billing.changeDefaultPaymentMethod',
+  FetchGroupProfile = 'billing.fetchGroupProfile',
 }
 
 export type NewStripeCard = {
@@ -23,4 +24,8 @@ export type AppPaymentMethodParams= {
   stripePublicKey: string | null,
   groupId: string | null,
   card: NewStripeCard,
+}
+
+export type FetchGroupProfileParams = {
+  id: string,
 }

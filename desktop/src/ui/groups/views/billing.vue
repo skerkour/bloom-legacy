@@ -32,7 +32,7 @@
             <v-hover v-slot:default="{ hover }">
               <v-card class="mx-auto blm-pricing-card" outlined :elevation="hover ? 4 : 0"
                 :class="{ 'on-hover': hover, 'blm-billing-myplan': plan.product ===
-                me.subscription.plan.product }">
+                group.subscription.plan.product }">
                 <v-card-title class="display-1 justify-center">{{ plan.name }}</v-card-title>
                 <div class="v-card--plan__price pa-5 col col-12" v-if="plan.price === 0">
                   <div class="d-inline-block">
@@ -48,9 +48,9 @@
                 <v-card-text class="blm-pricing-card-text" v-html="plan.description">
                 </v-card-text>
                 <v-card-actions class="justify-center blm-pricing-card-actions text-center pb-3">
-                  <v-btn color="primary" v-if="plan.product !== me.subscription.plan.product"
+                  <v-btn color="primary" v-if="plan.product !== group.subscription.plan.product"
                       @click="changePlan(plan)" :loading="loading">
-                    <span v-if="plan.price > me.subscription.plan.price">Upgrade</span>
+                    <span v-if="plan.price > group.subscription.plan.price">Upgrade</span>
                     <span v-else>Downgrade</span>
                   </v-btn>
                   <v-btn outlined color="success" v-else>
@@ -119,8 +119,12 @@ import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.v
 import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
 import AddPaymentMethodDialog from '@/ui/billing/components/add_payment_method_dialog.vue';
 import core from '@/core';
-import { Method, NewStripeCard } from '@/core/billing';
-import { Group, BillingPlan, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge, BillingPlanEdge, ChangeDefaultPaymentMethodInput, RemovePaymentMethodInput, UpdateBillingSubscriptionInput } from '@/api/models';
+import { Method, NewStripeCard, FetchGroupProfileParams } from '@/core/billing';
+import {
+  Group, BillingPlan, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge,
+  BillingPlanEdge, ChangeDefaultPaymentMethodInput, RemovePaymentMethodInput,
+  UpdateBillingSubscriptionInput,
+} from '@/api/models';
 
 
 @Component({
@@ -170,9 +174,12 @@ export default class Billing extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
+    const params: FetchGroupProfileParams = {
+      id: this.groupId,
+    };
 
     try {
-      const res = await core.call(Method.FetchMyProfile, core.Empty);
+      const res = await core.call(Method.FetchGroupProfile, params);
       this.group = res.group;
       this.plans = res.billingPlans
         .edges!.map((edge: Maybe<BillingPlanEdge>) => edge!.node!);
