@@ -27,6 +27,7 @@ let child: ChildProcess | null = null;
 const gotTheLock = app.requestSingleInstanceLock();
 
 let appDataDir = app.getPath('appData');
+// because sometimes, like with flatpak, UserConfigDir can already be app scoped
 if (!appDataDir.includes(config.APP_ID)) {
   appDataDir = path.join(appDataDir, config.APP_ID);
 }

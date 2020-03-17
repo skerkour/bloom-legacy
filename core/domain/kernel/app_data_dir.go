@@ -33,6 +33,7 @@ func AppDataDir() (string, error) {
 			return "", err
 		}
 		appId := AppID()
+		// because sometimes, like with flatpak, UserConfigDir can already be app scoped
 		if strings.Contains(configDir, appId) {
 			appDataDir = configDir
 		} else {
