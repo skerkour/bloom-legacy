@@ -1,12 +1,14 @@
 package main
 
 import (
+	"context"
 	"encoding/json"
 	"net"
 	"net/http"
 	"os"
 	"os/signal"
 	"syscall"
+	"time"
 
 	"gitlab.com/bloom42/bloom/core"
 	"gitlab.com/bloom42/libs/rz-go"
@@ -52,22 +54,6 @@ func main() {
 	// remove Unix socket if exists
 	os.Remove(UNIX_SOCKET)
 
-	// handle SIGKILL
-	signalCatcher := make(chan os.Signal, 2)
-	signal.Notify(signalCatcher, os.Interrupt,
-		syscall.SIGHUP,
-		syscall.SIGINT,
-		syscall.SIGTERM,
-		syscall.SIGQUIT)
-	go func() {
-		<-signalCatcher
-		err := os.Remove(UNIX_SOCKET)
-		if err != nil {
-			log.Fatal("error removing unix socket", rz.Err(err))
-		}
-		os.Exit(0)
-	}()
-
 	http.HandleFunc("/electronCall", handleElectronPost)
 
 	unixListener, err := net.Listen("unix", UNIX_SOCKET)
@@ -76,8 +62,36 @@ func main() {
 	}
 	defer unixListener.Close()
 
-	err = http.Serve(unixListener, nil)
+	server := http.Server{}
+
+	go func() {
+		err = server.Serve(unixListener)
+		if err != nil {
+			log.Fatal("error running BloomCoreServer", rz.Err(err))
+		}
+	}()
+	log.Info("BloomCoreServer started", rz.String("socket", UNIX_SOCKET))
+
+	signalCatcher := make(chan os.Signal, 2)
+
+	signal.Notify(signalCatcher, os.Interrupt,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+	sig := <-signalCatcher
+	log.Info("BloomCoreServer is shutting down", rz.String("reason", sig.String()))
+	err = os.Remove(UNIX_SOCKET)
 	if err != nil {
-		log.Fatal("error running server", rz.Err(err))
+		log.Fatal("error removing unix socket", rz.Err(err))
 	}
+
+	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
+	defer cancel()
+
+	server.SetKeepAlivesEnabled(false)
+	if err := server.Shutdown(ctx); err != nil {
+		log.Fatal("Could not gracefuly shutdown BloomCoreServer", rz.Err(err))
+	}
+	log.Info("BloomCoreServer stopped")
 }
