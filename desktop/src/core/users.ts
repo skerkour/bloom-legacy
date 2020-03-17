@@ -12,6 +12,7 @@ export enum Method {
   UpdateProfile = 'users.updateProfile',
   FetchUsers = 'users.fetchUsers',
   FetchUser = 'users.fetchUser',
+  FetchUserDetails = 'users.fetchUserDetails',
 }
 
 export type StartRegistration = {

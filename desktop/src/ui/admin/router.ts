@@ -15,7 +15,7 @@ export default [
   },
   {
     component: User,
-    path: '/admin/users/:userId',
+    path: '/admin/users/:username',
   },
   {
     component: Groups,

@@ -37,23 +37,25 @@
           </template>
 
           <template v-slot:item="{ item }">
-            <td>
-              <span>{{ item.username }}</span>
-            </td>
-            <td>
-              <v-chip color="error" outlined v-if="item.disabled_at">Disabled</v-chip>
-              <v-chip color="success" outlined v-else>Active</v-chip>
-            </td>
-            <td>
-              <v-tooltip bottom>
-                <template v-slot:activator="{ on }">
-                  <v-btn icon v-on="on" :to="`/admin/users/${item.id}`">
-                    <v-icon>mdi-magnify</v-icon>
-                  </v-btn>
-                </template>
-                <span>Inspect user</span>
-              </v-tooltip>
-            </td>
+            <tr>
+              <td>
+                <span>{{ item.username }}</span>
+              </td>
+              <td>
+                <v-chip color="error" outlined v-if="item.disabled_at">Disabled</v-chip>
+                <v-chip color="success" outlined v-else>Active</v-chip>
+              </td>
+              <td>
+                <v-tooltip bottom>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" :to="`/admin/users/${item.username}`">
+                      <v-icon>mdi-magnify</v-icon>
+                    </v-btn>
+                  </template>
+                  <span>Inspect user</span>
+                </v-tooltip>
+              </td>
+            </tr>
           </template>
         </v-data-table>
       </v-col>
