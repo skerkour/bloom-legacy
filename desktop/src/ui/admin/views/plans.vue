@@ -24,7 +24,7 @@ import { Method as BillingMethod } from '@/core/billing';
     BlmAdminTablePlans,
   },
 })
-export default class Plans extends Vue {
+export default class AdminBillingPlansView extends Vue {
   // props
   // data
   error = '';

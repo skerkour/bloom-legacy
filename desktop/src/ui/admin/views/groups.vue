@@ -14,7 +14,7 @@
 import { Component, Vue } from 'vue-property-decorator';
 
 @Component
-export default class Groups extends Vue {
+export default class AdminGroupsView extends Vue {
   // props
   // data
   error = '';

@@ -37,7 +37,7 @@ import core from '@/core';
 import { Method as AdminMethod, DashboardData } from '@/core/admin';
 
 @Component
-export default class Dashboard extends Vue {
+export default class AdminDashboardView extends Vue {
   // props
   // data
   data: DashboardData | null = null;

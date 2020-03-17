@@ -71,7 +71,7 @@ import { Method, FetchUserParams } from '@/core/users';
 import core from '@/core';
 
 @Component
-export default class Accounts extends Vue {
+export default class AdminUsersView extends Vue {
   // props
   // data
   error = '';
