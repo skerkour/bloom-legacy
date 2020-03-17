@@ -93,9 +93,6 @@ export default class Auth extends Vue {
   // watch
   // methods
   openHelp() {
-    console.log('opening help');
-    console.log(shell);
-    console.log(config);
     shell.openExternal(config.HELP_URL);
   }
 
