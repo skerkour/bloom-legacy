@@ -135,6 +135,8 @@ export type Group = {
   members?: Maybe<GroupMemberConnection>,
   invitations?: Maybe<GroupInvitationConnection>,
   subscription?: Maybe<BillingSubscription>,
+  paymentMethods?: Maybe<PaymentMethodConnection>,
+  invoices?: Maybe<InvoiceConnection>,
 };
 
 export type GroupConnection = {
@@ -256,7 +258,7 @@ export type Mutation = {
   /** Invite users in a group */
   inviteUsersInGroup: Group,
   /** Accept a group invitaiton and join it */
-  acceptGroupInvitation: Scalars['Boolean'],
+  acceptGroupInvitation: Group,
   /** Decline a group invitation */
   declineGroupInvitation: Scalars['Boolean'],
   /** Cancel a group invitation */
