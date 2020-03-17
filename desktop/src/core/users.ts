@@ -10,6 +10,8 @@ export enum Method {
   FetchMySessions = 'users.fetchMySessions',
   RevokeSession = 'users.revokeSession',
   UpdateProfile = 'users.updateProfile',
+  FetchUsers = 'users.fetchUsers',
+  FetchUser = 'users.fetchUser',
 }
 
 export type StartRegistration = {
@@ -35,6 +37,10 @@ export type SignIn = {
 
 export type RevokeSessionParams = {
   id: string,
+};
+
+export type FetchUserParams = {
+  username: string,
 };
 
 export type Message = SignIn
