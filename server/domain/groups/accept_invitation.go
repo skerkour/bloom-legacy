@@ -10,13 +10,14 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
+func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) (*Group, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
+	var ret *Group
 
 	// validate action
 	if user.ID != invitation.InviteeID {
-		return NewError(ErrorInvitationNotFound)
+		return ret, NewError(ErrorInvitationNotFound)
 	}
 
 	membership := Membership{
@@ -34,16 +35,18 @@ func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	_, err = tx.Exec(queryCreateMembership, membership.JoinedAt, membership.InviterID, membership.GroupID,
 		membership.UserID, membership.Role)
 	if err != nil {
-		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))
-		return NewError(ErrorAcceptingInvitation)
+		logger.Error("creating membership", rz.Err(err))
+		return ret, NewError(ErrorAcceptingInvitation)
 	}
 
 	// delete invitation
 	queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
-		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))
-		return NewError(ErrorInvitationNotFound)
+		logger.Error("creating membership", rz.Err(err))
+		return ret, NewError(ErrorInvitationNotFound)
 	}
-	return nil
+
+	ret, err = FindGroupById(ctx, tx, membership.GroupID)
+	return ret, err
 }

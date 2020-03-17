@@ -11,8 +11,8 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 )
 
-func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error) {
-	ret := false
+func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (*model.Group, error) {
+	var ret *model.Group
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -37,7 +37,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorAcceptingInvitation))
 	}
 
-	err = groups.AcceptInvitation(ctx, tx, *currentUser, invitation)
+	group, err := groups.AcceptInvitation(ctx, tx, *currentUser, invitation)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -50,5 +50,12 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorAcceptingInvitation))
 	}
 
+	ret = &model.Group{
+		ID:          &group.ID,
+		CreatedAt:   &group.CreatedAt,
+		Name:        group.Name,
+		Description: group.Description,
+		AvatarURL:   nil,
+	}
 	return ret, nil
 }

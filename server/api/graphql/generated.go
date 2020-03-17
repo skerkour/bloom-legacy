@@ -307,7 +307,7 @@ type MutationResolver interface {
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
 	RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error)
 	InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (*model.Group, error)
-	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (bool, error)
+	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (*model.Group, error)
 	DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (bool, error)
 	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
 	QuitGroup(ctx context.Context, input model.QuitGroupInput) (bool, error)
@@ -2004,7 +2004,7 @@ type Mutation {
   """Invite users in a group"""
   inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
   """Accept a group invitaiton and join it"""
-  acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
+  acceptGroupInvitation(input: AcceptGroupInvitationInput!): Group!
   """Decline a group invitation"""
   declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
   """Cancel a group invitation"""
@@ -5067,9 +5067,9 @@ func (ec *executionContext) _Mutation_acceptGroupInvitation(ctx context.Context,
 		}
 		return graphql.Null
 	}
-	res := resTmp.(bool)
+	res := resTmp.(*model.Group)
 	fc.Result = res
-	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+	return ec.marshalNGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_declineGroupInvitation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {

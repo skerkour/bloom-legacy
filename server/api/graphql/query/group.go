@@ -23,7 +23,7 @@ func (r *Resolver) Group(ctx context.Context, id string) (*model.Group, error) {
 		return ret, gqlerrors.New(err)
 	}
 
-	group, err := groups.FindGroupById(ctx, id)
+	group, err := groups.FindGroupById(ctx, nil, id)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

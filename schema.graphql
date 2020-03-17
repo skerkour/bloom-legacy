@@ -445,7 +445,7 @@ type Mutation {
   """Invite users in a group"""
   inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
   """Accept a group invitaiton and join it"""
-  acceptGroupInvitation(input: AcceptGroupInvitationInput!): Boolean!
+  acceptGroupInvitation(input: AcceptGroupInvitationInput!): Group!
   """Decline a group invitation"""
   declineGroupInvitation(input: DeclineGroupInvitationInput!): Boolean!
   """Cancel a group invitation"""
