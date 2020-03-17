@@ -19,6 +19,9 @@ func FetchDashboardData() (DashboardData, error) {
 			version
 			gitCommit
 		}
+		users {
+			totalCount
+		}
 	}
 	`)
 

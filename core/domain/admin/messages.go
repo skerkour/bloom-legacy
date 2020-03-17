@@ -5,5 +5,6 @@ import (
 )
 
 type DashboardData struct {
-	Metadata *model.BloomMetadata `json:"metadata"`
+	Metadata *model.BloomMetadata  `json:"metadata"`
+	Users    *model.UserConnection `json:"users"`
 }
