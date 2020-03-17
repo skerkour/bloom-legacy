@@ -76,7 +76,7 @@
             <v-alert icon="mdi-alert-circle" type="error" :value="paymentMethodError !== ''">
               {{ paymentMethodError }}
             </v-alert>
-            <blm-myaccount-table-payment-methods :loading="loading"
+            <blm-billing-table-payment-methods :loading="loading"
               :payment-methods="paymentMethods" @removed="removePaymentMethod"
               @changed="changeDefaultPaymentMethod" />
           </v-col>
@@ -99,7 +99,7 @@
 
         <v-row>
           <v-col cols="12">
-            <blm-myaccount-table-invoices :loading="loading" :invoices="invoices" />
+            <blm-billing-table-invoices :loading="loading" :invoices="invoices" />
           </v-col>
         </v-row>
 
@@ -107,7 +107,7 @@
       </v-col>
     </v-row>
 
-    <blm-myaccount-add-payment-method-dialog :visible="showAddPaymentDialog"
+    <blm-billing-add-payment-method-dialog :visible="showAddPaymentDialog"
       @closed="addPaymentMethodDialogClosed" @added="addPaymentMethod" />
   </v-container>
 </template>
@@ -115,9 +115,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import PaymentMethodsTable from '../components/payment_methods_table.vue';
-import InvoicesTable from '../components/invoices_table.vue';
-import AddPaymentMethodDialog from '../components/add_payment_method_dialog.vue';
+import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
+import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
+import AddPaymentMethodDialog from '@/ui/billing/components/add_payment_method_dialog.vue';
 import * as models from '@/api/models';
 import core from '@/core';
 import { Method, NewStripeCard } from '@/core/billing';
@@ -125,9 +125,9 @@ import { Method, NewStripeCard } from '@/core/billing';
 
 @Component({
   components: {
-    'blm-myaccount-table-payment-methods': PaymentMethodsTable,
-    'blm-myaccount-table-invoices': InvoicesTable,
-    'blm-myaccount-add-payment-method-dialog': AddPaymentMethodDialog,
+    'blm-billing-table-payment-methods': PaymentMethodsTable,
+    'blm-billing-table-invoices': InvoicesTable,
+    'blm-billing-add-payment-method-dialog': AddPaymentMethodDialog,
   },
 })
 export default class Billing extends Vue {
@@ -244,8 +244,8 @@ export default class Billing extends Vue {
     this.error = '';
     this.loading = true;
     this.planAfterAddingPaymentMethod = null;
-    const input: models.ChangeDefaultPaymentMethodInput = {
-      id: newPlan.id,
+    const input: models.UpdateBillingSubscriptionInput = {
+      planId: newPlan.id,
     };
 
     try {
