@@ -72,6 +72,12 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "fetchGroups":
+		res, err := groups.FetchGroups()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	default:
 		return methodNotFoundError(method, "groups")
 	}
