@@ -7,3 +7,7 @@ type Groups struct {
 type FetchGroupMembersParams struct {
 	ID string `json:"id"`
 }
+
+type FetchGroupDetailsParams struct {
+	ID string `json:"id"`
+}
