@@ -137,7 +137,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	invoices, err := billing.FindInvoicesByUserId(ctx, *user.ID)
+	invoices, err := billing.FindInvoicesByUserId(ctx, nil, *user.ID)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -173,7 +173,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, *user.ID)
+	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, *user.ID)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

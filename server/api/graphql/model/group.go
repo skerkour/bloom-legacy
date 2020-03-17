@@ -155,3 +155,87 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 	}
 	return ret, nil
 }
+
+func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*InvoiceConnection, error) {
+	var ret *InvoiceConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+	var err error
+
+	if group.ID == nil {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	if err != nil && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	invoices, err := billing.FindInvoicesByGroupId(ctx, nil, *group.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+
+	ret = &InvoiceConnection{
+		Edges:      []*InvoiceEdge{},
+		TotalCount: Int64(len(invoices)),
+	}
+
+	for _, invoice := range invoices {
+		inv := &Invoice{
+			ID:              invoice.ID,
+			CreatedAt:       invoice.CreatedAt,
+			StripePdfURL:    invoice.StripePdfURL,
+			Paid:            invoice.Paid,
+			StripeHostedURL: invoice.StripeHostedURL,
+			Amount:          Int64(invoice.Amount),
+		}
+		edge := &InvoiceEdge{
+			Node: inv,
+		}
+		ret.Edges = append(ret.Edges, edge)
+	}
+
+	return ret, nil
+}
+
+func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group) (*PaymentMethodConnection, error) {
+	var ret *PaymentMethodConnection
+	currentUser := apiutil.UserFromCtx(ctx)
+	var err error
+
+	if group.ID == nil {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	if err != nil && !currentUser.IsAdmin {
+		return ret, PermissionDeniedToAccessField()
+	}
+
+	paymentMethods, err := billing.FindPaymentMethodsByGroupId(ctx, nil, *group.ID)
+	if err != nil {
+		return ret, gqlerrors.New(err)
+	}
+
+	ret = &PaymentMethodConnection{
+		Edges:      []*PaymentMethodEdge{},
+		TotalCount: Int64(len(paymentMethods)),
+	}
+
+	for _, paymentMethod := range paymentMethods {
+		method := &PaymentMethod{
+			ID:                  paymentMethod.ID,
+			CreatedAt:           paymentMethod.CreatedAt,
+			CardLast4:           paymentMethod.CardLast4,
+			CardExpirationMonth: int(paymentMethod.CardExpirationMonth),
+			CardExpirationYear:  int(paymentMethod.CardExpirationYear),
+			IsDefault:           paymentMethod.IsDefault,
+		}
+		edge := &PaymentMethodEdge{
+			Node: method,
+		}
+		ret.Edges = append(ret.Edges, edge)
+	}
+
+	return ret, nil
+}

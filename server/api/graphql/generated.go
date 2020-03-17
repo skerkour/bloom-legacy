@@ -86,14 +86,16 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
-		AvatarURL    func(childComplexity int) int
-		CreatedAt    func(childComplexity int) int
-		Description  func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Invitations  func(childComplexity int) int
-		Members      func(childComplexity int) int
-		Name         func(childComplexity int) int
-		Subscription func(childComplexity int) int
+		AvatarURL      func(childComplexity int) int
+		CreatedAt      func(childComplexity int) int
+		Description    func(childComplexity int) int
+		ID             func(childComplexity int) int
+		Invitations    func(childComplexity int) int
+		Invoices       func(childComplexity int) int
+		Members        func(childComplexity int) int
+		Name           func(childComplexity int) int
+		PaymentMethods func(childComplexity int) int
+		Subscription   func(childComplexity int) int
 	}
 
 	GroupConnection struct {
@@ -293,6 +295,8 @@ type GroupResolver interface {
 	Members(ctx context.Context, obj *model.Group) (*model.GroupMemberConnection, error)
 	Invitations(ctx context.Context, obj *model.Group) (*model.GroupInvitationConnection, error)
 	Subscription(ctx context.Context, obj *model.Group) (*model.BillingSubscription, error)
+	PaymentMethods(ctx context.Context, obj *model.Group) (*model.PaymentMethodConnection, error)
+	Invoices(ctx context.Context, obj *model.Group) (*model.InvoiceConnection, error)
 }
 type MutationResolver interface {
 	Register(ctx context.Context, input model.RegisterInput) (*model.RegistrationStarted, error)
@@ -549,6 +553,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.Invitations(childComplexity), true
 
+	case "Group.invoices":
+		if e.complexity.Group.Invoices == nil {
+			break
+		}
+
+		return e.complexity.Group.Invoices(childComplexity), true
+
 	case "Group.members":
 		if e.complexity.Group.Members == nil {
 			break
@@ -562,6 +573,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.Name(childComplexity), true
+
+	case "Group.paymentMethods":
+		if e.complexity.Group.PaymentMethods == nil {
+			break
+		}
+
+		return e.complexity.Group.PaymentMethods(childComplexity), true
 
 	case "Group.subscription":
 		if e.complexity.Group.Subscription == nil {
@@ -1669,6 +1687,8 @@ type Group {
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
+  paymentMethods: PaymentMethodConnection
+  invoices: InvoiceConnection
 }
 
 type GroupConnection {
@@ -3445,6 +3465,68 @@ func (ec *executionContext) _Group_subscription(ctx context.Context, field graph
 	res := resTmp.(*model.BillingSubscription)
 	fc.Result = res
 	return ec.marshalOBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_paymentMethods(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Group().PaymentMethods(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.PaymentMethodConnection)
+	fc.Result = res
+	return ec.marshalOPaymentMethodConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethodConnection(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_invoices(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Group().Invoices(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.InvoiceConnection)
+	fc.Result = res
+	return ec.marshalOInvoiceConnection2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoiceConnection(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.GroupConnection) (ret graphql.Marshaler) {
@@ -9366,6 +9448,28 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 					}
 				}()
 				res = ec._Group_subscription(ctx, field, obj)
+				return res
+			})
+		case "paymentMethods":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Group_paymentMethods(ctx, field, obj)
+				return res
+			})
+		case "invoices":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Group_invoices(ctx, field, obj)
 				return res
 			})
 		default:

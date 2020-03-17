@@ -110,6 +110,8 @@ type Group {
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
+  paymentMethods: PaymentMethodConnection
+  invoices: InvoiceConnection
 }
 
 type GroupConnection {
