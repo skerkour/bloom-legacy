@@ -2,6 +2,7 @@ const Dashboard = () => import(/* webpackChunkName: "chunk-admin" */ './views/da
 const Users = () => import(/* webpackChunkName: "chunk-admin" */ './views/users.vue');
 const Plans = () => import(/* webpackChunkName: "chunk-admin" */ './views/plans.vue');
 const Groups = () => import(/* webpackChunkName: "chunk-admin" */ './views/groups.vue');
+const User = () => import(/* webpackChunkName: "chunk-admin" */ './views/user.vue');
 
 export default [
   {
@@ -11,6 +12,10 @@ export default [
   {
     component: Users,
     path: '/admin/users',
+  },
+  {
+    component: User,
+    path: '/admin/users/:userId',
   },
   {
     component: Groups,
