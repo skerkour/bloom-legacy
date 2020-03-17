@@ -6,6 +6,7 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
+	"syscall"
 	"time"
 
 	"github.com/99designs/gqlgen/graphql/handler"
@@ -99,10 +100,14 @@ func Run() error {
 	}()
 	log.Info("Server started", rz.Uint16("port", config.Server.Port))
 
-	quit := make(chan os.Signal, 1)
+	signalCatcher := make(chan os.Signal, 1)
 
-	signal.Notify(quit, os.Interrupt)
-	sig := <-quit
+	signal.Notify(signalCatcher, os.Interrupt,
+		syscall.SIGHUP,
+		syscall.SIGINT,
+		syscall.SIGTERM,
+		syscall.SIGQUIT)
+	sig := <-signalCatcher
 	log.Info("Server is shutting down", rz.String("reason", sig.String()))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
