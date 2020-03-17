@@ -3,6 +3,7 @@ const Users = () => import(/* webpackChunkName: "chunk-admin" */ './views/users.
 const Plans = () => import(/* webpackChunkName: "chunk-admin" */ './views/plans.vue');
 const Groups = () => import(/* webpackChunkName: "chunk-admin" */ './views/groups.vue');
 const User = () => import(/* webpackChunkName: "chunk-admin" */ './views/user.vue');
+const Group = () => import(/* webpackChunkName: "chunk-admin" */ './views/group.vue');
 
 export default [
   {
@@ -20,6 +21,10 @@ export default [
   {
     component: Groups,
     path: '/admin/groups',
+  },
+  {
+    component: Group,
+    path: '/admin/groups/:groupId',
   },
   {
     component: Plans,

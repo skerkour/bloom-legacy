@@ -8,6 +8,7 @@ export enum Method {
   InviteUsers = 'groups.inviteUsers',
   RemoveMembers = 'groups.removeMembers',
   FetchGroups = 'groups.fetchGroups',
+  FetchGroupDetails = 'groups.fetchGroupDetails',
 }
 
 export type Groups = {
@@ -15,5 +16,9 @@ export type Groups = {
 }
 
 export type FetchGroupMembersParams = {
+  id: string,
+}
+
+export type FetchGroupDetailsParams = {
   id: string,
 }

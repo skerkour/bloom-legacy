@@ -9,25 +9,10 @@
     </v-row>
 
 
-    <v-row class="text-left" v-if="user">
+    <v-row class="text-left" v-if="group">
       <v-col cols="12">
-        <h1>@{{ user.username }}</h1>
-        <v-subheader>{{ user.id }}</v-subheader>
-      </v-col>
-
-      <v-col cols="12">
-        <h1>Info</h1>
-        <!-- TODO -->
-      </v-col>
-
-      <v-col cols="12">
-        <h1>Billing</h1>
-        <!-- TODO -->
-      </v-col>
-
-      <v-col cols="12">
-        <h1>Groups</h1>
-        <!-- TODO: table -->
+        <h1>{{ group.name }}</h1>
+        <v-subheader>{{ group.id }}</v-subheader>
       </v-col>
     </v-row>
   </v-container>
@@ -36,23 +21,23 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { User } from '../../../api/models';
-import { FetchUserParams, Method } from '@/core/users';
+import { Group } from '@/api/models';
+import { FetchGroupDetailsParams, Method } from '@/core/groups';
 import core from '@/core';
 
 @Component
-export default class AdminUserView extends Vue {
+export default class AdminGroupView extends Vue {
   // props
   // data
   error = '';
-  user: User | null = null;
+  group: Group | null = null;
   loading = false;
-  username = '';
+  groupId = '';
 
   // computed
   // lifecycle
   created() {
-    this.username = this.$route.params.username;
+    this.groupId = this.$route.params.groupId;
     this.fetchData();
   }
 
@@ -61,12 +46,12 @@ export default class AdminUserView extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
-    const params: FetchUserParams = {
-      username: this.username,
+    const params: FetchGroupDetailsParams = {
+      id: this.groupId,
     };
 
     try {
-      this.user = await core.call(Method.FetchUserDetails, params);
+      this.group = await core.call(Method.FetchGroupDetails, params);
     } catch (err) {
       this.error = err.message;
     } finally {
