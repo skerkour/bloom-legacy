@@ -12,7 +12,7 @@ func FetchGroupDetails(params FetchGroupDetailsParams) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
-		Group *model.Group `json:"groups"`
+		Group *model.Group `json:"group"`
 	}
 	req := graphql.NewRequest(`
 	query($groupId: ID!) {
