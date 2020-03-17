@@ -5,7 +5,7 @@
     @click:outside="close()"
     scrollable
     width="50%"
-    :fullscreen="$vuetify.breakpoint.smAndDown"
+    :fullscreen="$vuetify.breakpoint.xsOnly"
   >
     <v-card>
       <v-card-title>
