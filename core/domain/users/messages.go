@@ -28,3 +28,7 @@ type RegistrationSendNewCodeParams struct {
 type RevokeSessionParams struct {
 	ID string `json:"id"`
 }
+
+type FetchUserParams struct {
+	Username string `json:"username"`
+}
