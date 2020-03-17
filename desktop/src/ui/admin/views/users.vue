@@ -3,7 +3,7 @@
     <v-row justify="center">
       <v-col cols="12" sm="9" md="8" class="pb-0">
         <v-text-field
-          placeholder="Search by email or username"
+          placeholder="Search by username"
           outlined
           append-icon="mdi-magnify"
           @click:append="search"
