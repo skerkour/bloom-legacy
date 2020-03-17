@@ -6,7 +6,10 @@ import {
 } from 'electron';
 import axios from 'axios';
 import { execFile, ChildProcess } from 'child_process';
+import fs from 'fs';
+import path from 'path';
 import { createProtocol } from './create_protocol';
+import config from './config';
 
 
 const CALL_URL = '/electronCall';
@@ -14,7 +17,6 @@ const UNIX_SOCKET_PATH = '/tmp/com.bloom42.bloom.sock';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
-const config = require('./config');
 
 // Keep a global reference of the window object, if you don't, the window will
 // be closed automatically when the JavaScript object is garbage collected.
@@ -22,6 +24,12 @@ let mainWindow: BrowserWindow | null = null;
 // let tray: Tray | null = null;
 // child is used to control the server
 let child: ChildProcess | null = null;
+const gotTheLock = app.requestSingleInstanceLock();
+
+const appDataDir = app.getPath('appData');
+const userDataDir = path.join(appDataDir, config.APP_ID);
+fs.mkdirSync(userDataDir, { recursive: true });
+app.setPath('userData', userDataDir);
 
 
 // Scheme must be registered before the app is ready
@@ -82,6 +90,7 @@ function createWindow() {
     minHeight: config.WINDOW_MIN_HEIGHT,
     webPreferences: {
       nodeIntegration,
+      sandbox: !nodeIntegration,
     },
     icon: config.WINDOW_ICON,
   });
@@ -125,7 +134,23 @@ app.on('activate', () => {
 // This method will be called when Electron has finished
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
-app.on('ready', createWindow);
+// app.on('ready', createWindow);
+if (!gotTheLock) {
+  app.quit();
+} else {
+  app.on('second-instance', () => {
+    // Someone tried to run a second instance, we should focus our window.
+    if (mainWindow) {
+      if (mainWindow.isMinimized()) {
+        mainWindow.restore();
+      }
+      mainWindow.focus();
+    }
+  });
+
+  // Create window
+  app.on('ready', createWindow);
+}
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {

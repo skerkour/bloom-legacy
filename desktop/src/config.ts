@@ -7,6 +7,7 @@ const WEBSITE_DOMAIN = 'bloom.sh';
 
 // eslint disables are due to __static being marked as not declared
 export default {
+  APP_ID: 'com.bloom42.bloom',
   TRAY_ICON: path.join(__static, 'assets', 'icons', 'tray.png'), // eslint-disable-line
   WINDOW_TITLE: 'Bloom',
   WINDOW_ICON: path.join(__static, 'bloom_1024.png'), // eslint-disable-line
