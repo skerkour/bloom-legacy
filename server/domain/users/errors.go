@@ -28,6 +28,7 @@ const (
 	ErrorAdminRoleRequired
 	ErrorInternal
 	ErrorUserNotDisabled
+	ErrorCantDisableYourself
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -87,6 +88,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorUserNotDisabled:
 		code = errors.InvalidArgument
 		message = "User is not disabled."
+	case ErrorCantDisableYourself:
+		code = errors.InvalidArgument
+		message = "You can't disable yourself."
 	}
 
 	return errors.New(code, message)

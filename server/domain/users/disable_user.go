@@ -15,6 +15,10 @@ func DisableUser(ctx context.Context, actor *User, userId string) error {
 		return NewError(ErrorAdminRoleRequired)
 	}
 
+	if actor.ID == userId {
+		return NewError(ErrorCantDisableYourself)
+	}
+
 	// start DB transaction
 	tx, err := db.DB.Beginx()
 	if err != nil {
@@ -40,7 +44,13 @@ func DisableUser(ctx context.Context, actor *User, userId string) error {
 	_, err = tx.Exec("UPDATE users SET updated_at = $1, disabled_at = $2 WHERE id = $3",
 		user.UpdatedAt, user.DisabledAt, user.ID)
 	if err != nil {
-		logger.Error("enabling user", rz.Err(err), rz.String("user.id", user.ID))
+		logger.Error("disabling user", rz.Err(err), rz.String("user.id", user.ID))
+		return NewError(ErrorInternal)
+	}
+
+	_, err = tx.Exec("DELETE FROM sessions WHERE user_id = $3", user.ID)
+	if err != nil {
+		logger.Error("deleting user sessions", rz.Err(err), rz.String("user.id", user.ID))
 		return NewError(ErrorInternal)
 	}
 
