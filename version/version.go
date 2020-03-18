@@ -5,7 +5,6 @@ import (
 )
 
 // const set at build time
-
 var GitCommit string
 var UTCBuildTime string
 var GoVersion string
