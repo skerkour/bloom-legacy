@@ -70,7 +70,7 @@
 
       <v-col cols="12">
         <h1>Groups</h1>
-        <blm-groups-simple-table :loading="loading" :groups="groups" inpsect-url="/admin/groups" />
+        <blm-groups-simple-table :loading="loading" :groups="groups" inspect-url="/admin/groups" />
       </v-col>
 
 
