@@ -60,6 +60,7 @@ type User {
   displayName: String!
   bio: String!
   isAdmin: Boolean!
+  disabledAt: Time
   groups: GroupConnection
   paymentMethods: PaymentMethodConnection
   invoices: InvoiceConnection

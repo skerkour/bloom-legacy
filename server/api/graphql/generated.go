@@ -263,6 +263,7 @@ type ComplexityRoot struct {
 		AvatarURL        func(childComplexity int) int
 		Bio              func(childComplexity int) int
 		CreatedAt        func(childComplexity int) int
+		DisabledAt       func(childComplexity int) int
 		DisplayName      func(childComplexity int) int
 		Email            func(childComplexity int) int
 		FirstName        func(childComplexity int) int
@@ -1413,6 +1414,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.CreatedAt(childComplexity), true
 
+	case "User.disabledAt":
+		if e.complexity.User.DisabledAt == nil {
+			break
+		}
+
+		return e.complexity.User.DisabledAt(childComplexity), true
+
 	case "User.displayName":
 		if e.complexity.User.DisplayName == nil {
 			break
@@ -1665,6 +1673,7 @@ type User {
   displayName: String!
   bio: String!
   isAdmin: Boolean!
+  disabledAt: Time
   groups: GroupConnection
   paymentMethods: PaymentMethodConnection
   invoices: InvoiceConnection
@@ -7325,6 +7334,37 @@ func (ec *executionContext) _User_isAdmin(ctx context.Context, field graphql.Col
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _User_disabledAt(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.DisabledAt, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*time.Time)
+	fc.Result = res
+	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _User_groups(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10637,6 +10677,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
+		case "disabledAt":
+			out.Values[i] = ec._User_disabledAt(ctx, field, obj)
 		case "groups":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {

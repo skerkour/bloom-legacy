@@ -20,6 +20,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 	var createdAt *time.Time
 	var id *string
 	isAdmin := false
+	var disabledAt *time.Time
 
 	if currentUser == nil {
 		return ret, gqlerrors.AuthenticationRequired()
@@ -41,6 +42,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 		lastName = &user.LastName
 		isAdmin = user.IsAdmin
 		email = &user.Email
+		disabledAt = user.DisabledAt
 	}
 
 	ret = &model.User{
@@ -54,6 +56,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 		IsAdmin:     isAdmin,
 		Bio:         user.Bio,
 		Email:       email,
+		DisabledAt:  disabledAt,
 	}
 
 	return ret, nil

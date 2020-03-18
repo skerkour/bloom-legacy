@@ -21,6 +21,7 @@ type User struct {
 	FirstName   *string    `json:"firstName"`
 	LastName    *string    `json:"lastName"`
 	DisplayName string     `json:"displayName"`
+	DisabledAt  *time.Time `json:"disabledAt"`
 	IsAdmin     bool       `json:"isAdmin"`
 	Bio         string     `json:"bio"`
 	Email       *string    `json:"email"`
