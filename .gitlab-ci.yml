@@ -238,13 +238,22 @@ build:mobile:
 #     paths:
 #     - server/dist
 
-build:server:
+build:cli:
   stage: build
   image: $GO_IMAGE
   tags:
     - docker
   script:
     - make build
+
+build:cli:docker:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  script:
+    - apk update && apk add make
+    - make docker
 
 
 build:website:
