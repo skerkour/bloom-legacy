@@ -49,12 +49,12 @@ func (o *Organizations) Scan(src interface{}) error {
 }
 
 type Address struct {
-	City           string `json:"city"`
-	Country        string `json:"country"`
-	Label          string `json:"label"`
-	PostalCode     string `json:"postalCode"`
-	StreetAddress  string `json:"streetAddress"`
-	StreetAddress2 string `json:"streetAddress2"`
+	Street     string `json:"street"`
+	City       string `json:"city"`
+	State      string `json:"state"`
+	PostalCode string `json:"postalCode"`
+	Country    string `json:"country"`
+	Label      string `json:"label"`
 }
 
 type Addresses []Address

@@ -1,7 +1,6 @@
 package contacts
 
 import (
-	"strings"
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/db"
@@ -9,23 +8,7 @@ import (
 
 func UpdateContact(contact Contact) (Contact, error) {
 	// TODO: validators
-	if len(contact.Emails) == 1 && contact.Emails[0].Email == "" &&
-		(contact.Emails[0].Label == "" || strings.ToLower(contact.Emails[0].Label) == "other") {
-		contact.Emails = Emails{}
-	}
-	if len(contact.Websites) == 1 && contact.Websites[0].Website == "" &&
-		(contact.Websites[0].Label == "" || strings.ToLower(contact.Websites[0].Label) == "other") {
-		contact.Websites = Websites{}
-	}
-	if len(contact.Phones) == 1 && contact.Phones[0].Phone == "" &&
-		(contact.Phones[0].Label == "" || strings.ToLower(contact.Phones[0].Label) == "other") {
-		contact.Phones = Phones{}
-	}
-	if len(contact.Organizations) == 1 && contact.Organizations[0].Name == "" &&
-		(contact.Organizations[0].Title == "" || strings.ToLower(contact.Organizations[0].Title) == "other") {
-		contact.Organizations = Organizations{}
-	}
-
+	cleanContactCollections(&contact)
 	var err error
 	now := time.Now().UTC()
 
