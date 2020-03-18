@@ -1,4 +1,4 @@
 target/
 Dockerfile
-server/target/
+dist/
 downloads/

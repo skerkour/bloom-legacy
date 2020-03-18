@@ -1,9 +1,12 @@
 DIST_DIR = dist
 NAME := bitflow
 VERSION := $(shell cat version/version.go| grep "\sVersion =" | cut -d '"' -f2)
-DOCKER_IMAGE = registry.gitlab.com/bloom42/$(NAME)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
+GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
+DOCKER_IMAGE = registry.$(GO_PKG)
+DEFAULT_CONFIG_FILE = bitflow.default.sane
+DIST_CONFIG_FILE = bitflow.sane
 
 .PHONY: all
 all: build
@@ -11,13 +14,19 @@ all: build
 .PHONY: build
 build:
 	mkdir -p $(DIST_DIR)
-	go build -mod=vendor -o $(NAME)
+	go build -o $(NAME)
 	cp $(NAME) $(DIST_DIR)/$(NAME)
-	cp bitflow.default.sane $(DIST_DIR)/bitflow.sane
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
+
+.PHONY: build_static
+build_static:
+	CGO_ENABLED=0 go build -o dist/$(NAME) -a -ldflags "-extldflags "-static" -w -s"
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
+
 
 .PHONY: dev
 dev:
-	gowatch -build="go build -mod=vendor" -command="./bitflow"
+	gowatch -build="go build" -command="./bitflow"
 
 .PHONY: clean
 clean:
@@ -28,18 +37,29 @@ re: clean build
 
 .PHONY: test
 test:
-	go vet -all -mod=vendor ./...
-	go test -v -race -covermode=atomic -mod=vendor ./...
+	go vet -all ./...
+	go test -v -race -covermode=atomic ./...
 
 
-.PHONY: install
-install:
-	go install -mod=vendor
+.PHONY: mod_install
+mod_install:
+	go mod install
+
+
+.PHONY: mod_verify
+mod_verify:
+	go mod verify
+
+
+.PHONY: tidy
+tidy:
+	go mod tidy
 
 
 .PHONY: fmt
 fmt:
-	go fmt
+	go fmt ./...
+
 
 .PHONY: fmt_check
 fmt_check:
@@ -59,16 +79,9 @@ release:
 	git checkout master
 
 
-# dev_docker_build:
-# 	docker build -t $(DOCKER_IMAGE)_dev:latest -f dev.Dockerfile .
-
-# dev_docker_run:
-# 	docker run -ti -v `pwd`:/bitflow $(DOCKER_IMAGE)_dev:latest
-
-.PHONY: docker_build
-docker_build:
+.PHONY: docker
+docker:
 	docker build -t $(DOCKER_IMAGE):latest .
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 
 .PHONY: docker_login
 docker_login:
@@ -76,9 +89,4 @@ docker_login:
 
 .PHONY: docker_release
 docker_release:
-	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
-
-# docker_release_nightly:
-# 	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
-# 	docker push $(DOCKER_IMAGE):nightly-$(DATE)

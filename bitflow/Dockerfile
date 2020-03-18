@@ -1,29 +1,55 @@
 ####################################################################################################
-## Builder
+## Build cli
 ####################################################################################################
+# see https://medium.com/@chemidy/create-the-smallest-and-secured-golang-docker-image-based-on-scratch-4752223b7324
+FROM golang:1.14-alpine AS builder_go
 
-FROM golang:latest AS builder
+# Install git + SSL ca certificates.
+# Git is required for fetching the dependencies.
+# Ca-certificates is required to call HTTPS endpoints.
+RUN apk update && apk add --no-cache git ca-certificates make gcc libc-dev
+RUN update-ca-certificates
 
-RUN apt update && apt install -y make git ca-certificates
+# Create appuser
+ENV USER=bloom
+ENV UID=10001
 
-WORKDIR /build
+# See https://stackoverflow.com/a/55757473/12429735RUN
+RUN adduser \
+    --disabled-password \
+    --gecos "" \
+    --home "/nonexistent" \
+    --shell "/sbin/nologin" \
+    --no-create-home \
+    --uid "${UID}" \
+    "${USER}"
+
+
+WORKDIR /bloom
 COPY . ./
-RUN make build
+
+# Using go mod with go >= 1.11
+RUN make mod_download
+RUN make mod_verify
+
+RUN make build_static
 
 ####################################################################################################
-## Image
+## Final image
 ####################################################################################################
+FROM scratch
 
-FROM alpine:latest
+# Import from builder.
+COPY --from=builder_go /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/
+COPY --from=builder_go /etc/passwd /etc/passwd
+COPY --from=builder_go /etc/group /etc/group
 
-RUN apk update && apk upgrade && apk add ca-certificates
+WORKDIR /bloom
 
-RUN adduser -D -g '' bloom
-RUN mkdir /bitflow && chown -R bloom:bloom /bitflow && chmod 700 /bitflow
+# Copy our builds
+COPY --from=builder_go /bloom/dist/ ./
 
-COPY --from=builder /build/dist/bitflow /bitflow/bitflow
+# Use an unprivileged user.
+USER bloom:bloom
 
-USER bloom
-WORKDIR /bitflow
-
-CMD ["./bitflow", "worker"]
+CMD ["/bloom/bitflow", "worker"]
