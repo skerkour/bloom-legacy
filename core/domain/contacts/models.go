@@ -14,6 +14,7 @@ type Contact struct {
 	DeviceID      string        `json:"deviceId" db:"device_id"`
 	FirstName     string        `json:"firstName" db:"first_name"`
 	LastName      string        `json:"lastName" db:"last_name"`
+	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
 	Notes         string        `json:"notes" db:"notes"`
 	Birthday      *time.Time    `json:"birthday" db:"birthday"`
 	Organizations Organizations `json:"organizations" db:"organizations"`

@@ -63,7 +63,8 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		emails TEXT NOT NULL,
 		phones TEXT NOT NULL,
 		websites TEXT NOT NULL,
-		device_id TEXT NOT NULL
+		device_id TEXT NOT NULL,
+		bloom_username TEXT NOT NULL
 	)
 	`)
 	if err != nil {

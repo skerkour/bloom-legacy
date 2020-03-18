@@ -8,9 +8,7 @@ func ListContacts() (Contacts, error) {
 	var err error
 	ret := Contacts{Contacts: []Contact{}}
 
-	query := `SELECT id, created_at, updated_at, first_name, last_name, notes, addresses,
-		birthday, organizations, emails, phones, websites, device_id
-		FROM contacts`
+	query := `SELECT * FROM contacts`
 	err = db.DB.Select(&ret.Contacts, query)
 
 	return ret, err

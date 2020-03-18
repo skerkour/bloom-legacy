@@ -63,8 +63,9 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		emails,
 		phones,
 		websites,
-		device_id)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13)
+		device_id,
+		bloom_username)
+	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
 	`
 	_, err = db.DB.Exec(query,
 		&contact.ID,
@@ -80,6 +81,7 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		&contact.Phones,
 		&contact.Websites,
 		&contact.DeviceID,
+		contact.BloomUsername,
 	)
 
 	return contact, err
