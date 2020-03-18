@@ -381,6 +381,108 @@
             </v-col>
           </v-row>
 
+          <!-- addresses -->
+          <v-row>
+            <v-col cols="12">
+              <v-list class="pt-0 pb-0">
+                <v-list-item v-for="(address, index) in addresses" :key="index">
+                  <v-row align="center">
+                    <v-col cols="1" class="pl-0 pr-0">
+                      <v-icon v-if="index === 0">mdi-home</v-icon>
+                    </v-col>
+                    <v-col cols="9">
+                      <v-expansion-panels flat>
+                        <v-expansion-panel>
+                          <v-expansion-panel-header>Address</v-expansion-panel-header>
+                          <v-expansion-panel-content>
+                            <v-row>
+                              <v-col cols="12">
+                                <v-text-field
+                                  label="Street"
+                                  v-model="address.street"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-text-field
+                                  label="City"
+                                  v-model="address.city"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-text-field
+                                  label="Postal code"
+                                  v-model="address.postalCode"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-text-field
+                                  label="State"
+                                  v-model="address.state"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="6">
+                                <v-text-field
+                                  label="Country"
+                                  v-model="address.country"
+                                ></v-text-field>
+                              </v-col>
+                              <v-col cols="12">
+                                <v-autocomplete
+                                  :items="addressLabels"
+                                  v-model="address.label"
+                                  label="Label"
+                                  single-line
+                                >
+                                </v-autocomplete>
+                              </v-col>
+                            </v-row>
+                          </v-expansion-panel-content>
+                        </v-expansion-panel>
+                      </v-expansion-panels>
+                    </v-col>
+                    <v-col cols="1" class="pr-0 pl-0">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            text
+                            icon
+                            small
+                            v-on="on"
+                            color="grey"
+                            class="action-button"
+                            @click="removeAddress(index)"
+                          >
+                            <v-icon>mdi-close</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Remove</span>
+                      </v-tooltip>
+                    </v-col>
+                    <v-col cols="1" class="pl-0 pr-0" v-if="index === addresses.length - 1">
+                      <v-tooltip bottom>
+                        <template v-slot:activator="{ on }">
+                          <v-btn
+                            text
+                            icon
+                            small
+                            v-on="on"
+                            color="blue darken-2"
+                            class="ml-0"
+                            @click="addAddress"
+                          >
+                            <v-icon>mdi-plus-circle</v-icon>
+                          </v-btn>
+                        </template>
+                        <span>Add</span>
+                      </v-tooltip>
+                    </v-col>
+                  </v-row>
+                </v-list-item>
+              </v-list>
+            </v-col>
+          </v-row>
+          <!-- addresses -->
+
           <!-- notes -->
           <v-row>
             <v-col cols="12">
@@ -417,13 +519,22 @@ import {
   CreateContactParams,
   DeleteContact,
   Method,
+  Address,
 } from '@/core/contacts';
 
 
-const DEFAULT_EMAIL = { email: '', label: 'Other' };
-const DEFAULT_WEBSITE = { website: '', label: 'Other' };
-const DEFAULT_PHONE = { phone: '', label: 'Other' };
+const DEFAULT_EMAIL = { email: '', label: 'Personal' };
+const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
+const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
 const DEFAULT_ORGANIZATION = { name: '', title: '' };
+const DEFAULT_ADDRESS = {
+  city: '',
+  country: '',
+  label: 'Home',
+  postalCode: '',
+  street: '',
+  state: '',
+};
 
 @Component
 export default class ContactDialog extends Vue {
@@ -445,6 +556,7 @@ export default class ContactDialog extends Vue {
   phones: Phone[] = [{ ...DEFAULT_PHONE }];
   emails: Email[] = [{ ...DEFAULT_EMAIL }];
   websites: Website[] = [{ ...DEFAULT_WEBSITE }];
+  addresses: Address[] = [{ ...DEFAULT_ADDRESS }];
   phoneLabels = [
     'Home',
     'Work',
@@ -455,8 +567,8 @@ export default class ContactDialog extends Vue {
     'Work fax',
   ];
   addressLabels = ['Home', 'Work', 'Other'];
-  websiteLabels = ['Profile', 'Blog', 'Home page', 'Work', 'Other'];
-  emailLabels = ['Home', 'Work', 'Other'];
+  websiteLabels = ['Personal', 'Blog', 'Home page', 'Work', 'Other'];
+  emailLabels = ['Personal', 'Work', 'Other'];
 
   // computed
   get show() {
@@ -507,6 +619,9 @@ export default class ContactDialog extends Vue {
       this.organizations = contact.organizations.length > 0
         ? contact.organizations
         : [{ ...DEFAULT_ORGANIZATION }];
+      this.addresses = contact.addresses.length > 0
+        ? contact.addresses
+        : [{ ...DEFAULT_ADDRESS }];
     } else {
       this.emptyFields();
     }
@@ -535,7 +650,7 @@ export default class ContactDialog extends Vue {
       phones: this.phones,
       websites: this.websites,
       organizations: this.organizations,
-      addresses: [],
+      addresses: this.addresses,
       deviceId: '',
       bloomUsername: this.bloomUsername,
     };
@@ -562,7 +677,7 @@ export default class ContactDialog extends Vue {
     contact.phones = this.phones;
     contact.websites = this.websites;
     contact.organizations = this.organizations;
-    contact.addresses = [];
+    contact.addresses = this.addresses;
     contact.bloomUsername = this.bloomUsername;
     try {
       const res = await core.call(Method.UpdateContact, contact);
@@ -606,7 +721,6 @@ export default class ContactDialog extends Vue {
   addEmail() {
     this.emails.push({ ...DEFAULT_EMAIL });
   }
-
   removeEmail(index: number) {
     this.emails.splice(index, 1);
     if (this.emails.length === 0) {
@@ -621,6 +735,16 @@ export default class ContactDialog extends Vue {
     this.websites.splice(index, 1);
     if (this.websites.length === 0) {
       this.addWebsite();
+    }
+  }
+
+  addAddress() {
+    this.addresses.push({ ...DEFAULT_ADDRESS });
+  }
+  removeAddress(index: number) {
+    this.addresses.splice(index, 1);
+    if (this.addresses.length === 0) {
+      this.addAddress();
     }
   }
 
@@ -655,6 +779,7 @@ export default class ContactDialog extends Vue {
     this.websites = [{ ...DEFAULT_WEBSITE }];
     this.phones = [{ ...DEFAULT_PHONE }];
     this.organizations = [{ ...DEFAULT_ORGANIZATION }];
+    this.addresses = [{ ...DEFAULT_ADDRESS }];
     this.error = '';
     this.bloomUsername = '';
   }

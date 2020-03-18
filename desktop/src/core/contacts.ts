@@ -48,9 +48,9 @@ export type Address = {
   city: string,
   country: string,
   label: string,
-  postal_code: string,
-  street_address: string,
-  street_address2: string,
+  postalCode: string,
+  street: string,
+  state: string,
 }
 
 export type Contacts = {
