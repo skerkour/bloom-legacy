@@ -14,19 +14,19 @@ all: build
 .PHONY: build
 build:
 	mkdir -p $(DIST_DIR)
-	go build -o $(NAME)
-	cp $(NAME) $(DIST_DIR)/$(NAME)
+	go build -o $(DIST_DIR)/$(NAME)
 	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 .PHONY: build_static
 build_static:
-	CGO_ENABLED=0 go build -o dist/$(NAME) -a -ldflags "-extldflags "-static" -w -s"
+	CGO_ENABLED=0 go build -o  $(DIST_DIR)/$(NAME) -a -ldflags "-extldflags "-static" -w -s"
 	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 
 .PHONY: dev
 dev:
-	gowatch -build="go build" -command="./bitflow"
+	gowatch -log-prefix=false -build="make build" -command="$(DIST_DIR)/$(NAME) worker"
+
 
 .PHONY: clean
 clean:
