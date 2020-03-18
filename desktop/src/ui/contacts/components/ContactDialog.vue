@@ -17,7 +17,7 @@
         <v-btn text @click="cancel">
           Cancel
         </v-btn>
-        <v-btn outlined color="primary" @click="createContact">
+        <v-btn color="primary" @click="createContact">
           Create
         </v-btn>
       </v-card-title>
@@ -29,7 +29,7 @@
         <v-btn text @click="cancel">
           Cancel
         </v-btn>
-        <v-btn outlined color="primary" @click="updateContact">
+        <v-btn color="primary" @click="updateContact">
           Save
         </v-btn>
         <v-menu bottom left>
