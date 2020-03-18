@@ -99,7 +99,7 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 	logger := rz.FromCtx(ctx)
 
 	groups := []groups.Group{}
-	err := db.DB.Select(&groups, `SELECT * FROM groups
+	err := db.DB.Select(&groups, `SELECT groups.* FROM groups
 		INNER JOIN groups_members ON groups.id = groups_members.group_id
 		WHERE groups_members.user_id = $1`, currentUser.ID)
 	if err != nil {
