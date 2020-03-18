@@ -3,6 +3,10 @@ VERSION := $(shell cat version/version.go| grep "\sVersion\s=" | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
+DOCKER_IMAGE = registry.$(GO_PKG)
+DEFAULT_CONFIG_FILE = bloom.default.sane
+DIST_CONFIG_FILE = bloom.sane
+
 
 .PHONY: all
 all: build
@@ -30,6 +34,15 @@ build:
 	cp -r migrations dist/
 	cp bloom.default.sane dist/bloom.sane
 
+.PHONY: build_static
+build_static:
+	CGO_ENABLED=0 go build -o dist/$(NAME) -a -ldflags "-extldflags "-static" -w -s \
+		-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
+		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
+		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
+	cp -r migrations dist/
+	cp bloom.default.sane dist/bloom.sane
+
 
 .PHONY: clean
 clean:
@@ -45,3 +58,16 @@ gqlgen:
 .PHONY: tidy
 tidy:
 	go mod tidy
+
+
+.PHONY: docker
+docker:
+	docker build -t $(DOCKER_IMAGE):latest .
+
+.PHONY: docker_login
+docker_login:
+	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
+
+.PHONY: docker_release
+docker_release:
+	docker push $(DOCKER_IMAGE):latest

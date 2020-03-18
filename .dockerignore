@@ -1,0 +1,13 @@
+/dist/
+/desktop/
+/mobile/
+/bitflow/
+/_old/
+/core/
+/common/
+/design/
+/help/
+/status_page/
+/website/dist/
+/website/node_modules/
+/Dockerfile
