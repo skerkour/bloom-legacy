@@ -17,7 +17,7 @@
       >
         <template v-slot:no-data>
           <p class="text-center">
-            No Contacts.
+            No Contact.
           </p>
         </template>
        <template v-slot:item="{ item }">

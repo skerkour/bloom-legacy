@@ -1,10 +1,10 @@
 /* eslint-disable camelcase */
 
 export enum Method {
-  ListContacts = 'contacts.list_contacts',
-  CreateContact = 'contacts.create_contact',
-  UpdateContact = 'contacts.update_contact',
-  DeleteContact = 'contacts.delete_contact',
+  ListContacts = 'contacts.listContacts',
+  CreateContact = 'contacts.createContact',
+  UpdateContact = 'contacts.updateContact',
+  DeleteContact = 'contacts.deleteContact',
 }
 
 export type Contact = {

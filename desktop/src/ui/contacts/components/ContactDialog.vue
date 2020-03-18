@@ -1,8 +1,8 @@
 <template>
   <v-dialog
     v-model="show"
-    @keydown.esc="close()"
-    @click:outside="close()"
+    @keydown.esc="close"
+    @click:outside="close"
     scrollable
     width="50%"
     :fullscreen="$vuetify.breakpoint.smAndDown"
@@ -14,43 +14,40 @@
       >
         <h3 class="headline mb-0">Create new contact</h3>
         <v-spacer />
-        <v-tooltip bottom>
-          <template v-slot:activator="{ tooltip }">
-            <v-btn
-              slot="activator"
-              text
-              v-on="tooltip"
-              @click="close(true)"
-            >
-              Cancel
-            </v-btn>
-          </template>
-          <span>Delete contact</span>
-        </v-tooltip>
+        <v-btn text @click="cancel">
+          Cancel
+        </v-btn>
+        <v-btn outlined color="primary" @click="save">
+          Create
+        </v-btn>
       </v-card-title>
-      <v-card-title
-        dark
-        class="headline"
-        v-else
-      >
+      <v-card-title dark class="headline" v-else>
         <h3 class="headline mb-0">
-          <h3 class="headline mb-0">{{ contact.first_name }} {{ contact.last_name }}</h3>
+          <h3 class="headline mb-0">Update Contact</h3>
         </h3>
         <v-spacer />
-        <v-tooltip bottom>
-          <template v-slot:activator="{ tooltip }">
-            <v-btn
-              slot="activator"
-              text
-              icon
-              v-on="tooltip"
-              @click="deleteContact"
-            >
-              <v-icon>mdi-delete</v-icon>
+        <v-btn text @click="cancel">
+          Cancel
+        </v-btn>
+        <v-btn outlined color="primary" @click="save">
+          Save
+        </v-btn>
+        <v-menu bottom left>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
           </template>
-          <span>Delete contact</span>
-        </v-tooltip>
+
+          <v-list>
+            <v-list-item @click="deleteContact">
+              <v-list-item-icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Delete contact</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-card-title>
 
       <v-divider />
@@ -519,28 +516,32 @@ export default class ContactDialog extends Vue {
 
 
   // methods
-  async close(cancel: boolean = false) {
-    if (!cancel) {
-      await this.save();
+  cancel() {
+    this.close();
+    if (!this.contact) {
+      this.clearFields();
     }
-    this.show = false;
-    this.clearFields();
   }
 
-  save() {
+  close() {
+    this.show = false;
     if (this.contact) {
-      this.updateContact();
-    } else {
-      this.createContact();
+      this.clearFields();
     }
+  }
+
+  async save() {
+    if (this.contact) {
+      await this.updateContact();
+    } else {
+      await this.createContact();
+    }
+    this.close();
   }
 
   async createContact() {
     this.error = '';
     this.isLoading = true;
-    if (this.isEmpty()) {
-      return;
-    }
     const params: CreateContactParams = {
       birthday: core.toIsoDate(this.birthday),
       first_name: this.firstName,
@@ -655,19 +656,6 @@ export default class ContactDialog extends Vue {
 
     const [year, month, day] = date.split('/');
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
-  }
-
-  isEmpty(): boolean {
-    if (this.firstName.trim().length === 0 && this.lastName.trim().length === 0
-      && this.notes.trim().length === 0 && this.birthday === null
-      && this.emails.length === 1 && this.emails[0].email.trim() === ''
-      && this.websites.length === 1 && this.websites[0].website.trim() === ''
-      && this.phones.length === 1 && this.phones[0].phone.trim() === ''
-      && this.organizations.length === 1
-        && this.organizations[0].name.trim() === '' && this.organizations[0].title.trim() === '') {
-      return true;
-    }
-    return false;
   }
 
   clearFields() {
