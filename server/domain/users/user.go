@@ -25,38 +25,6 @@ type User struct {
 	DisabledAt  *time.Time `json:"disabled_at" db:"disabled_at"`
 }
 
-func FindUserById(ctx context.Context, tx *sqlx.Tx, id string) (*User, error) {
-	ret := &User{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM users WHERE id = $1"
-	err = tx.Get(ret, queryFind, id)
-	if err != nil {
-		logger.Error("users.FindUserById: finding user", rz.Err(err),
-			rz.String("id", id))
-		return ret, NewError(ErrorUserNotFound)
-	}
-
-	return ret, err
-}
-
-func FindUserByIdNoTx(ctx context.Context, id string) (*User, error) {
-	ret := &User{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM users WHERE id = $1"
-	err = db.DB.Get(ret, queryFind, id)
-	if err != nil {
-		logger.Error("users.FindUserById: finding user", rz.Err(err),
-			rz.String("id", id))
-		return ret, NewError(ErrorUserNotFound)
-	}
-
-	return ret, err
-}
-
 func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {
 	ret := &User{}
 	var err error

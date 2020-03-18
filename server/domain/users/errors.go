@@ -25,6 +25,9 @@ const (
 	ErrorUpdatingProfile
 	ErrorUserIsNull
 	ErrorAllFieldsAreEmpty
+	ErrorAdminRoleRequired
+	ErrorInternal
+	ErrorUserNotDisabled
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -78,6 +81,12 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorAllFieldsAreEmpty:
 		code = errors.InvalidArgument
 		message = "All fields are empty. Please fix and try again."
+	case ErrorAdminRoleRequired:
+		code = errors.PermissionDenied
+		message = "Admin role required."
+	case ErrorUserNotDisabled:
+		code = errors.InvalidArgument
+		message = "User is not disabled."
 	}
 
 	return errors.New(code, message)

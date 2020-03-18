@@ -174,7 +174,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid3")
 					return
 				}
-				currentUser, err = users.FindUserByIdNoTx(reqCtx, currentSession.UserID)
+				currentUser, err = users.FindUserById(reqCtx, nil, currentSession.UserID)
 				if err != nil {
 					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid4")
 					return
