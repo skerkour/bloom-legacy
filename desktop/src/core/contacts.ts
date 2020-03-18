@@ -21,6 +21,7 @@ export type Contact = {
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
+  bloomUsername: string,
 }
 
 export type Email = {
@@ -67,6 +68,7 @@ export type CreateContactParams = {
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
+  bloomUsername: string,
 }
 
 export type DeleteContact = {

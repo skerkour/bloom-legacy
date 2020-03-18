@@ -80,6 +80,13 @@
                 v-model="lastName"
               ></v-text-field>
             </v-col>
+            <v-col cols="12">
+              <v-text-field
+                label="Bloom username"
+                v-model="bloomUsername"
+                prefix="@"
+              ></v-text-field>
+            </v-col>
           </v-row>
           <!-- /name -->
 
@@ -433,6 +440,7 @@ export default class ContactDialog extends Vue {
   birthdayFormatted: string | null = null;
   birthdayMenu = false;
   notes: string = '';
+  bloomUsername: string = '';
   organizations: Organization[] = [{ ...DEFAULT_ORGANIZATION }];
   phones: Phone[] = [{ ...DEFAULT_PHONE }];
   emails: Email[] = [{ ...DEFAULT_EMAIL }];
@@ -483,6 +491,7 @@ export default class ContactDialog extends Vue {
       this.firstName = contact.firstName;
       this.lastName = contact.lastName;
       this.notes = contact.notes;
+      this.bloomUsername = contact.bloomUsername;
       this.birthday = contact.birthday
         ? new Date(contact.birthday!).toISOString().substr(0, 10) : null;
       this.birthdayFormatted = this.formatDate(this.birthday);
@@ -528,6 +537,7 @@ export default class ContactDialog extends Vue {
       organizations: this.organizations,
       addresses: [],
       deviceId: '',
+      bloomUsername: this.bloomUsername,
     };
     try {
       const res = await core.call(Method.CreateContact, params);
@@ -553,6 +563,7 @@ export default class ContactDialog extends Vue {
     contact.websites = this.websites;
     contact.organizations = this.organizations;
     contact.addresses = [];
+    contact.bloomUsername = this.bloomUsername;
     try {
       const res = await core.call(Method.UpdateContact, contact);
       this.$emit('updated', (res as Contact));
@@ -645,6 +656,7 @@ export default class ContactDialog extends Vue {
     this.phones = [{ ...DEFAULT_PHONE }];
     this.organizations = [{ ...DEFAULT_ORGANIZATION }];
     this.error = '';
+    this.bloomUsername = '';
   }
 
   birthdayCleared() {

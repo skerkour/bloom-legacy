@@ -27,6 +27,9 @@
               <span>{{ item.firstName }} {{ item.lastName}}</span>
             </td>
             <td class="text-left">
+              <span>{{ item.bloomUsername }}</span>
+            </td>
+            <td class="text-left">
               <span v-if="item.emails.length >= 1">
                 {{ item.emails[0].email }}
               </span>
@@ -89,6 +92,11 @@ export default class Index extends Vue {
       align: 'left',
       sortable: false,
       text: 'Name',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Username',
     },
     {
       align: 'left',
