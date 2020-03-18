@@ -17,7 +17,7 @@
         <v-btn text @click="cancel">
           Cancel
         </v-btn>
-        <v-btn outlined color="primary" @click="save">
+        <v-btn outlined color="primary" @click="createContact">
           Create
         </v-btn>
       </v-card-title>
@@ -29,7 +29,7 @@
         <v-btn text @click="cancel">
           Cancel
         </v-btn>
-        <v-btn outlined color="primary" @click="save">
+        <v-btn outlined color="primary" @click="updateContact">
           Save
         </v-btn>
         <v-menu bottom left>
@@ -148,10 +148,7 @@
                   class="contacts-add-row"
                 >
                   <v-row align="center">
-                    <v-col
-                      cols="1"
-                      class="pl-0 pr-0"
-                    >
+                    <v-col cols="1" class="pl-0 pr-0">
                       <v-icon v-if="index === 0">mdi-phone</v-icon>
                     </v-col>
                     <v-col cols="5">
@@ -169,10 +166,7 @@
                       >
                       </v-autocomplete>
                     </v-col>
-                    <v-col
-                      cols="1"
-                      class="pr-0 pl-0"
-                    >
+                    <v-col cols="1" class="pr-0 pl-0">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -190,11 +184,7 @@
                         <span>Remove</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col
-                      cols="1"
-                      class="pl-0 pr-0"
-                      v-if="index === phones.length - 1"
-                    >
+                    <v-col cols="1" class="pl-0 pr-0" v-if="index === phones.length - 1">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -436,7 +426,7 @@ export default class ContactDialog extends Vue {
 
   // data
   error = '';
-  isLoading = false;
+  loading = false;
   firstName: string = '';
   lastName: string = '';
   birthday: string | null = null;
@@ -467,7 +457,6 @@ export default class ContactDialog extends Vue {
 
   set show(value) {
     if (!value) {
-      // this.save();
       this.$emit('closed');
     }
   }
@@ -491,8 +480,8 @@ export default class ContactDialog extends Vue {
   @Watch('contact')
   onContactChanged(contact: Contact) {
     if (contact !== null) {
-      this.firstName = contact.first_name;
-      this.lastName = contact.last_name;
+      this.firstName = contact.firstName;
+      this.lastName = contact.lastName;
       this.notes = contact.notes;
       this.birthday = contact.birthday
         ? new Date(contact.birthday!).toISOString().substr(0, 10) : null;
@@ -530,47 +519,39 @@ export default class ContactDialog extends Vue {
     }
   }
 
-  async save() {
-    if (this.contact) {
-      await this.updateContact();
-    } else {
-      await this.createContact();
-    }
-    this.close();
-  }
-
   async createContact() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const params: CreateContactParams = {
       birthday: core.toIsoDate(this.birthday),
-      first_name: this.firstName,
-      last_name: this.lastName,
+      firstName: this.firstName,
+      lastName: this.lastName,
       notes: this.notes,
       emails: this.emails,
       phones: this.phones,
       websites: this.websites,
       organizations: this.organizations,
       addresses: [],
-      device_id: '',
+      deviceId: '',
     };
     try {
       const res = await core.call(Method.CreateContact, params);
       this.$emit('created', (res as Contact));
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async updateContact() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const contact = { ...this.contact } as Contact;
     contact.birthday = core.toIsoDate(this.birthday);
-    contact.first_name = this.firstName;
-    contact.last_name = this.lastName;
+    contact.firstName = this.firstName;
+    contact.lastName = this.lastName;
     contact.notes = this.notes;
     contact.emails = this.emails;
     contact.phones = this.phones;
@@ -580,28 +561,29 @@ export default class ContactDialog extends Vue {
     try {
       const res = await core.call(Method.UpdateContact, contact);
       this.$emit('updated', (res as Contact));
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async deleteContact() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const params: DeleteContact = {
       id: this.contact!.id,
     };
     try {
       await core.call(Method.DeleteContact, params);
       this.$emit('deleted', this.contact);
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
-    this.close();
   }
 
   addPhone() {

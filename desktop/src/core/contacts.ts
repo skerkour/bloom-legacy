@@ -9,18 +9,18 @@ export enum Method {
 
 export type Contact = {
   id: string,
-  created_at: Date,
-  updated_at: Date,
+  createdAt: Date,
+  updatedAt: Date,
   birthday: Date | null,
-  first_name: string,
-  last_name: string,
+  firstName: string,
+  lastName: string,
   notes: string,
   emails: Email[],
   phones: Phone[],
   websites: Website[],
   organizations: Organization[],
   addresses: Address[],
-  device_id: string,
+  deviceId: string,
 }
 
 export type Email = {
@@ -58,15 +58,15 @@ export type Contacts = {
 
 export type CreateContactParams = {
   birthday: Date | null,
-  first_name: string,
-  last_name: string,
+  firstName: string,
+  lastName: string,
   notes: string,
   emails: Email[],
   phones: Phone[],
   websites: Website[],
   organizations: Organization[],
   addresses: Address[],
-  device_id: string,
+  deviceId: string,
 }
 
 export type DeleteContact = {

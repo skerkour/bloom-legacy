@@ -27,7 +27,7 @@
           >
 
             <td class="text-left">
-              <span>{{ item.first_name }} {{ item.last_name}}</span>
+              <span>{{ item.firstName }} {{ item.lastName}}</span>
             </td>
             <td class="text-left">
               <span v-if="item.emails.length >= 1">
