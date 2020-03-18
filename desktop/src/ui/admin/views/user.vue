@@ -9,25 +9,68 @@
     </v-row>
 
 
-    <v-row class="text-left" v-if="user">
+    <v-row class="text-center" v-if="user">
+
+
       <v-col cols="12">
-        <h1>@{{ user.username }}</h1>
-        <v-subheader>{{ user.id }}</v-subheader>
+        <v-avatar color="white" size="128">
+          <v-img :src="user.avatarUrl" v-if="user.avatarUrl"/>
+          <v-icon medium color="grey" v-else>mdi-account</v-icon>
+        </v-avatar>
       </v-col>
 
       <v-col cols="12">
+        <h2 class="headline">@{{ user.username }}</h2>
+        <span class="subheader">{{ user.id }}</span>
+      </v-col>
+    </v-row>
+
+    <v-row class="text-left" v-if="user">
+
+      <v-col cols="12">
         <h1>Info</h1>
-        <!-- TODO -->
+      </v-col>
+
+      <v-col cols="6">
+        <v-text-field label="Display name" disabled :value="user.displayName" />
+      </v-col>
+
+      <v-col cols="6">
+        <v-text-field label="Email" disabled :value="user.email" />
+      </v-col>
+
+      <v-col cols="6">
+        <v-text-field label="First name" disabled :value="user.firstName" />
+      </v-col>
+      <v-col cols="6">
+        <v-text-field label="Last name" disabled :value="user.lastName" />
+      </v-col>
+
+      <v-col cols="12">
+        <v-textarea disabled label="Bio" :vlaue="user.bio" />
       </v-col>
 
       <v-col cols="12">
         <h1>Billing</h1>
-        <!-- TODO -->
+      </v-col>
+
+      <v-col cols="12">
+        <h2 class="headline">Invoices</h2>
+      </v-col>
+      <v-col cols="12">
+        <blm-billing-table-invoices :loading="loading" :invoices="invoices" />
+      </v-col>
+
+      <v-col cols="12">
+        <h2 class="headline">Payment methods</h2>
+      </v-col>
+      <v-col cols="12">
+        <blm-billing-table-payment-methods :loading="loading" :payment-methods="paymentMethods" />
       </v-col>
 
       <v-col cols="12">
         <h1>Groups</h1>
-        <!-- TODO: table -->
+        <blm-groups-simple-table :loading="loading" :groups="groups" inpsect-url="/admin/groups" />
       </v-col>
     </v-row>
   </v-container>
@@ -36,11 +79,23 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { User } from '../../../api/models';
+import {
+  User, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge, Group, GroupEdge,
+} from '@/api/models';
 import { FetchUserParams, Method } from '@/core/users';
 import core from '@/core';
+import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
+import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
+import BlmGroupsSimpleTable from '@/ui/groups/components/simple_table.vue';
 
-@Component
+
+@Component({
+  components: {
+    'blm-billing-table-payment-methods': PaymentMethodsTable,
+    'blm-billing-table-invoices': InvoicesTable,
+    BlmGroupsSimpleTable,
+  },
+})
 export default class AdminUserView extends Vue {
   // props
   // data
@@ -50,6 +105,29 @@ export default class AdminUserView extends Vue {
   username = '';
 
   // computed
+  get invoices(): Invoice[] {
+    if (this.user === null) {
+      return [];
+    }
+    return this.user.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+  }
+
+  get paymentMethods(): PaymentMethod[] {
+    if (this.user === null) {
+      return [];
+    }
+    return this.user.paymentMethods!
+      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+  }
+
+  get groups(): Group[] {
+    if (this.user === null) {
+      return [];
+    }
+    return this.user.groups!
+      .edges!.map((edge: Maybe<GroupEdge>) => edge!.node!);
+  }
+
   // lifecycle
   created() {
     this.username = this.$route.params.username;
