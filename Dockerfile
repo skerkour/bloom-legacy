@@ -45,7 +45,7 @@ RUN update-ca-certificates
 WORKDIR /bloom
 COPY . ./
 WORKDIR /bloom/website
-RUN make assets && make install && make build
+RUN make install && make build
 
 ####################################################################################################
 ## Final image
