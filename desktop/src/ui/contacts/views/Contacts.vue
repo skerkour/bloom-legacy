@@ -13,7 +13,7 @@
         :items="contacts"
         item-key="id"
         hide-default-footer
-        :loading="isLoading"
+        :loading="loading"
       >
         <template v-slot:no-data>
           <p class="text-center">
@@ -21,10 +21,7 @@
           </p>
         </template>
        <template v-slot:item="{ item }">
-          <tr
-            class="blm-pointer"
-            @click="currentContact = item; openContactDialog()"
-          >
+          <tr class="blm-pointer" @click="currentContact = item; openContactDialog()">
 
             <td class="text-left">
               <span>{{ item.firstName }} {{ item.lastName}}</span>
@@ -41,10 +38,10 @@
             </td>
             <td class="text-left">
               <span v-if="item.organizations.length >= 1">
-                <span v-if="item.organizations[0].title !== ''">
+                <span>
                   {{ item.organizations[0].title }},
                 </span>
-                <span v-if="item.organizations[0].name !== ''">
+                <span>
                   {{ item.organizations[0].name }}
                 </span>
               </span>
@@ -84,7 +81,7 @@ export default class Index extends Vue {
   // props
   // data
   error = '';
-  isLoading = false;
+  loading = false;
   contacts: Contact[] = [];
   showContactDialog = false;
   headers = [
@@ -121,14 +118,14 @@ export default class Index extends Vue {
   // methods
   async findContacts() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     try {
       const res = await core.call(Method.ListContacts, core.Empty);
       this.contacts = (res as Contacts).contacts;
     } catch (err) {
       log.error(err);
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
@@ -138,6 +135,7 @@ export default class Index extends Vue {
 
   contactDialogClosed() {
     this.showContactDialog = false;
+    this.currentContact = null;
   }
 
   contactCreated(contact: Contact) {

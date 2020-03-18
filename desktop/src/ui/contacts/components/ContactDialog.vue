@@ -499,7 +499,7 @@ export default class ContactDialog extends Vue {
         ? contact.organizations
         : [{ ...DEFAULT_ORGANIZATION }];
     } else {
-      this.clearFields();
+      this.emptyFields();
     }
   }
 
@@ -507,16 +507,11 @@ export default class ContactDialog extends Vue {
   // methods
   cancel() {
     this.close();
-    if (!this.contact) {
-      this.clearFields();
-    }
+    this.emptyFields();
   }
 
   close() {
     this.show = false;
-    if (this.contact) {
-      this.clearFields();
-    }
   }
 
   async createContact() {
@@ -640,7 +635,7 @@ export default class ContactDialog extends Vue {
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
-  clearFields() {
+  emptyFields() {
     this.firstName = '';
     this.lastName = '';
     this.notes = '';
