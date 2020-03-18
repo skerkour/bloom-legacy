@@ -26,6 +26,57 @@ func FetchUserDetails(params FetchUserParams) (*model.User, error) {
 			firstName
 			lastName
 			username
+			id
+			subscription {
+				updatedAt
+				usedStorage
+				plan {
+					id
+					product
+					price
+					name
+					storage
+				}
+			}
+			paymentMethods {
+				edges {
+					node {
+						id
+						createdAt
+						cardLast4
+						cardExpirationMonth
+						cardExpirationYear
+						isDefault
+					}
+				}
+			}
+			invoices {
+				edges {
+					node {
+						id
+						createdAt
+						amount
+						stripeId
+						stripeHostedUrl
+						stripePdfUrl
+						paid
+					}
+				}
+			}
+			groups {
+				edges {
+					node {
+						id
+						createdAt
+						avatarUrl
+						name
+						description
+						members {
+							totalCount
+						}
+					}
+				}
+			}
 		}
 	}
 	`)
