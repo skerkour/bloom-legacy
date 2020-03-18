@@ -172,6 +172,8 @@ type ComplexityRoot struct {
 		DeclineGroupInvitation     func(childComplexity int, input model.DeclineGroupInvitationInput) int
 		DeleteBillingPlan          func(childComplexity int, input model.DeleteBillingPlanInput) int
 		DeleteGroup                func(childComplexity int, input model.DeleteGroupInput) int
+		DisableUser                func(childComplexity int, id string) int
+		EnableUser                 func(childComplexity int, id string) int
 		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
 		QuitGroup                  func(childComplexity int, input model.QuitGroupInput) int
 		Register                   func(childComplexity int, input model.RegisterInput) int
@@ -306,6 +308,8 @@ type MutationResolver interface {
 	SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error)
 	RevokeSession(ctx context.Context, input model.RevokeSessionInput) (bool, error)
 	UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error)
+	DisableUser(ctx context.Context, id string) (bool, error)
+	EnableUser(ctx context.Context, id string) (bool, error)
 	CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error)
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
@@ -938,6 +942,30 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteGroup(childComplexity, args["input"].(model.DeleteGroupInput)), true
+
+	case "Mutation.disableUser":
+		if e.complexity.Mutation.DisableUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_disableUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DisableUser(childComplexity, args["id"].(string)), true
+
+	case "Mutation.enableUser":
+		if e.complexity.Mutation.EnableUser == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_enableUser_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.EnableUser(childComplexity, args["id"].(string)), true
 
 	case "Mutation.inviteUsersInGroup":
 		if e.complexity.Mutation.InviteUsersInGroup == nil {
@@ -2011,6 +2039,8 @@ type Mutation {
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
   updateUserProfile(input: UserProfileInput!): User!
+  disableUser(id: ID!): Boolean!
+  enableUser(id: ID!): Boolean!
 
   # groups
   """Create a group"""
@@ -2186,6 +2216,34 @@ func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context,
 		}
 	}
 	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_disableUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_enableUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 string
+	if tmp, ok := rawArgs["id"]; ok {
+		arg0, err = ec.unmarshalNID2string(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["id"] = arg0
 	return args, nil
 }
 
@@ -4906,6 +4964,88 @@ func (ec *executionContext) _Mutation_updateUserProfile(ctx context.Context, fie
 	res := resTmp.(*model.User)
 	fc.Result = res
 	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_disableUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_disableUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DisableUser(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_enableUser(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_enableUser_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().EnableUser(rctx, args["id"].(string))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -9885,6 +10025,16 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			}
 		case "updateUserProfile":
 			out.Values[i] = ec._Mutation_updateUserProfile(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "disableUser":
+			out.Values[i] = ec._Mutation_disableUser(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "enableUser":
+			out.Values[i] = ec._Mutation_enableUser(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

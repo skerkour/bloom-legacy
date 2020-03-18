@@ -72,6 +72,11 @@
         <h1>Groups</h1>
         <blm-groups-simple-table :loading="loading" :groups="groups" inpsect-url="/admin/groups" />
       </v-col>
+
+
+      <v-col cols="12">
+        <h1>Actions</h1>
+      </v-col>
     </v-row>
   </v-container>
 </template>
