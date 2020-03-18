@@ -1,6 +1,8 @@
 package contacts
 
 import (
+	"fmt"
+	"strings"
 	"time"
 
 	"github.com/google/uuid"
@@ -9,6 +11,23 @@ import (
 
 func CreateContact(params CreateContactParams) (Contact, error) {
 	// TODO(z0mbie42): validators
+	if len(params.Emails) == 1 && params.Emails[0].Email == "" &&
+		(params.Emails[0].Label == "" || strings.ToLower(params.Emails[0].Label) == "other") {
+		params.Emails = Emails{}
+	}
+	if len(params.Websites) == 1 && params.Websites[0].Website == "" &&
+		(params.Websites[0].Label == "" || strings.ToLower(params.Websites[0].Label) == "other") {
+		params.Websites = Websites{}
+	}
+	if len(params.Phones) == 1 && params.Phones[0].Phone == "" &&
+		(params.Phones[0].Label == "" || strings.ToLower(params.Phones[0].Label) == "other") {
+		params.Phones = Phones{}
+	}
+	if len(params.Organizations) == 1 && params.Organizations[0].Name == "" &&
+		(params.Organizations[0].Title == "" || strings.ToLower(params.Organizations[0].Title) == "other") {
+		params.Organizations = Organizations{}
+	}
+
 	var err error
 	now := time.Now().UTC()
 	uuid := uuid.New()
@@ -27,6 +46,8 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 		Phones:        params.Phones,
 		Websites:      params.Websites,
 	}
+
+	fmt.Printf("Contact: %#v\n", contact)
 
 	query := `
 	INSERT INTO contacts
