@@ -41,9 +41,9 @@ test:
 	go test -v -race -covermode=atomic ./...
 
 
-.PHONY: mod_install
-mod_install:
-	go mod install
+.PHONY: mod_download
+mod_download:
+	go mod download
 
 
 .PHONY: mod_verify

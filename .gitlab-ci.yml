@@ -133,7 +133,7 @@ test:mobile:
 #   services:
 #     - postgres:$POSTGRES_VERSION
 
-test:server:
+test:cli:
   stage: test
   image: $GO_IMAGE
   tags:
@@ -143,6 +143,18 @@ test:server:
     - make test
   services:
     - postgres:$POSTGRES_VERSION
+
+
+test:bitflow:
+  stage: test
+  image: $GO_IMAGE
+  tags:
+    - docker
+  script:
+    - cd bitflow/
+    - cp bitflow.default.sane bitflow.sane
+    - make test
+
 
 test:website:
   stage: test
@@ -253,6 +265,17 @@ build:cli:docker:
     - docker
   script:
     - apk update && apk add make
+    - make docker
+
+
+build:bitflow:docker:
+  stage: build
+  image: docker:stable
+  tags:
+    - docker
+  script:
+    - apk update && apk add make
+    - cd bitflow/
     - make docker
 
 
