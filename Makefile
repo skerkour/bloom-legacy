@@ -4,6 +4,7 @@ COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
 DOCKER_IMAGE = registry.$(GO_PKG)
+DIST_DIR = dist
 DEFAULT_CONFIG_FILE = bloom.default.sane
 DIST_CONFIG_FILE = bloom.sane
 
@@ -32,7 +33,7 @@ build:
 		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
 		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
 	cp -r migrations dist/
-	cp bloom.default.sane dist/bloom.sane
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 .PHONY: build_static
 build_static:
@@ -41,7 +42,7 @@ build_static:
 		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
 		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
 	cp -r migrations dist/
-	cp bloom.default.sane dist/bloom.sane
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 
 .PHONY: clean
