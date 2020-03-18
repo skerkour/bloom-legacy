@@ -32,3 +32,11 @@ type RevokeSessionParams struct {
 type FetchUserParams struct {
 	Username string `json:"username"`
 }
+
+type EnableUserParams struct {
+	ID string `json:"id"`
+}
+
+type DisableUserParams struct {
+	ID string `json:"id"`
+}

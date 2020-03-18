@@ -123,6 +123,28 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "disableUser":
+		var params users.DisableUserParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = users.DisableUser(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: kernel.Empty{}}
+	case "enableUser":
+		var params users.EnableUserParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = users.EnableUser(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: kernel.Empty{}}
 	default:
 		return methodNotFoundError(method, "users")
 	}

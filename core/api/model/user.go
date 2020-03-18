@@ -13,6 +13,7 @@ type User struct {
 	LastName         *string                    `json:"lastName"`
 	DisplayName      string                     `json:"displayName"`
 	IsAdmin          bool                       `json:"isAdmin"`
+	DisabledAt       *time.Time                 `json:"disabledAt"`
 	Bio              string                     `json:"bio"`
 	Email            *string                    `json:"email"`
 	Sessions         *SessionConnection         `json:"sessions"`

@@ -27,6 +27,7 @@ func FetchUserDetails(params FetchUserParams) (*model.User, error) {
 			lastName
 			username
 			id
+			disabledAt
 			subscription {
 				updatedAt
 				usedStorage
