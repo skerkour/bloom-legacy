@@ -55,6 +55,11 @@
       </v-col>
 
       <v-col cols="12">
+         <h2 class="headline">Plan</h2>
+         <p>{{ user.subscription.plan.product }}</p>
+      </v-col>
+
+      <v-col cols="12">
         <h2 class="headline">Invoices</h2>
       </v-col>
       <v-col cols="12">

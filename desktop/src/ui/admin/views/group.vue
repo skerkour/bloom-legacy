@@ -14,6 +14,42 @@
         <h1>{{ group.name }}</h1>
         <v-subheader>{{ group.id }}</v-subheader>
       </v-col>
+
+      <v-col cols="12">
+        <h1>Info</h1>
+      </v-col>
+
+      <v-col cols="6">
+        <v-text-field label="Name" disabled :value="group.name" />
+      </v-col>
+
+      <v-col cols="12">
+        <v-textarea disabled label="Description" :vlaue="group.description" />
+      </v-col>
+
+
+      <v-col cols="12">
+        <h1>Billing</h1>
+      </v-col>
+
+      <v-col cols="12">
+         <h2 class="headline">Plan</h2>
+         <p>{{ group.subscription.plan.product }}</p>
+      </v-col>
+
+      <v-col cols="12">
+        <h2 class="headline">Invoices</h2>
+      </v-col>
+      <v-col cols="12">
+        <blm-billing-table-invoices :loading="loading" :invoices="invoices" />
+      </v-col>
+
+      <v-col cols="12">
+        <h2 class="headline">Payment methods</h2>
+      </v-col>
+      <v-col cols="12">
+        <blm-billing-table-payment-methods :loading="loading" :payment-methods="paymentMethods" />
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -21,11 +57,21 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Group } from '@/api/models';
+import {
+  Group, Invoice, Maybe, InvoiceEdge, PaymentMethod, PaymentMethodEdge,
+} from '@/api/models';
 import { FetchGroupDetailsParams, Method } from '@/core/groups';
 import core from '@/core';
+import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
+import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
 
-@Component
+
+@Component({
+  components: {
+    'blm-billing-table-payment-methods': PaymentMethodsTable,
+    'blm-billing-table-invoices': InvoicesTable,
+  },
+})
 export default class AdminGroupView extends Vue {
   // props
   // data
@@ -35,6 +81,21 @@ export default class AdminGroupView extends Vue {
   groupId = '';
 
   // computed
+  get invoices(): Invoice[] {
+    if (this.group === null) {
+      return [];
+    }
+    return this.group.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+  }
+
+  get paymentMethods(): PaymentMethod[] {
+    if (this.group === null) {
+      return [];
+    }
+    return this.group.paymentMethods!
+      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+  }
+
   // lifecycle
   created() {
     this.groupId = this.$route.params.groupId;
