@@ -77,6 +77,11 @@
       <v-col cols="12">
         <h1>Actions</h1>
       </v-col>
+
+      <v-col cols="12">
+        <v-btn color="success" @click="enableUser" v-if="user.disabledAt">Enable User</v-btn>
+        <v-btn color="error" @click="disableUser" v-else>Disable User</v-btn>
+      </v-col>
     </v-row>
   </v-container>
 </template>
@@ -87,7 +92,9 @@ import { Component, Vue } from 'vue-property-decorator';
 import {
   User, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge, Group, GroupEdge,
 } from '@/api/models';
-import { FetchUserParams, Method } from '@/core/users';
+import {
+  FetchUserParams, Method, EnableUserParams, DisableUserParams,
+} from '@/core/users';
 import core from '@/core';
 import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
 import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
@@ -150,6 +157,40 @@ export default class AdminUserView extends Vue {
 
     try {
       this.user = await core.call(Method.FetchUserDetails, params);
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async enableUser() {
+    this.error = '';
+    this.loading = true;
+    const params: EnableUserParams = {
+      id: this.user!.id!,
+    };
+
+    try {
+      this.user = await core.call(Method.EnableUser, params);
+      this.user!.disabledAt = null;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async disableUser() {
+    this.error = '';
+    this.loading = true;
+    const params: DisableUserParams = {
+      id: this.user!.id!,
+    };
+
+    try {
+      this.user = await core.call(Method.DisableUser, params);
+      this.user!.disabledAt = new Date();
     } catch (err) {
       this.error = err.message;
     } finally {

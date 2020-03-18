@@ -249,6 +249,8 @@ export type Mutation = {
   revokeSession: Scalars['Boolean'],
   /** Update an user profile, both private and public information */
   updateUserProfile: User,
+  disableUser: Scalars['Boolean'],
+  enableUser: Scalars['Boolean'],
   /** Create a group */
   createGroup: Group,
   /** Delete a group */
@@ -309,6 +311,16 @@ export type MutationRevokeSessionArgs = {
 
 export type MutationUpdateUserProfileArgs = {
   input: UserProfileInput
+};
+
+
+export type MutationDisableUserArgs = {
+  id: Scalars['ID']
+};
+
+
+export type MutationEnableUserArgs = {
+  id: Scalars['ID']
 };
 
 
@@ -571,6 +583,7 @@ export type User = {
   displayName: Scalars['String'],
   bio: Scalars['String'],
   isAdmin: Scalars['Boolean'],
+  disabledAt?: Maybe<Scalars['Time']>,
   groups?: Maybe<GroupConnection>,
   paymentMethods?: Maybe<PaymentMethodConnection>,
   invoices?: Maybe<InvoiceConnection>,
