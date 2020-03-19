@@ -220,11 +220,6 @@ export default class Download extends Vue {
   openCliInstructions() {
 
   }
-
-  iWantWindows() {
-    (window as any).$crisp.push(['do', 'chat:open']);
-    (window as any).$crisp.push(['do', 'message:send', ['text', 'Hi, I want to download the windows application!']]);
-  }
 }
 </script>
 

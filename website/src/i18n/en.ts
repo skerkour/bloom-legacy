@@ -138,7 +138,7 @@ export default {
     subtitle2: 'Start getting the respect you deserve with our privacy-first apps.',
     all: 'All Downloads',
     computers_title: 'Computers',
-    computers_description: `Windows, macOS or Linux. Desktop or laptop.
+    computers_description: `Linux or macOS. Desktop or laptop.
       Enjoy Bloom on any computer!`,
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
