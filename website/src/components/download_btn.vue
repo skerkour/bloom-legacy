@@ -35,10 +35,6 @@ export default class AppBar extends Vue {
         this.message = this.$t('download_btn.download_for', { platform: 'macOS' }).toString();
         this.icon = 'mdi-apple';
         break;
-      case 'windows':
-        this.message = this.$t('download_btn.download_for', { platform: 'Windows' }).toString();
-        this.icon = 'mdi-windows';
-        break;
       case 'android':
         this.message = this.$t('download_btn.download_for', { platform: 'Android' }).toString();
         this.icon = 'mdi-android';

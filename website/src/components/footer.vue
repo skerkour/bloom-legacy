@@ -4,7 +4,7 @@
     <v-container>
       <v-row class="text-center text-sm-left">
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">{{ $t('footer.organization.title') }}</h5>
+          <h5 class="title pb-3"><b>{{ $t('footer.organization.title') }}</b></h5>
           <ul>
             <li><router-link class="nav-link" to="/about">{{ $t('footer.organization.about') }}</router-link></li>
             <li><router-link class="nav-link" to="/contact">{{ $t('footer.organization.contact') }}</router-link></li>
@@ -17,7 +17,7 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">{{ $t('footer.product.title') }}</h5>
+          <h5 class="title pb-3"><b>{{ $t('footer.product.title') }}</b></h5>
           <ul>
             <li><router-link class="nav-link" to="/download">{{ $t('footer.product.download') }}</router-link></li>
             <li><router-link to="/faq">{{ $t('footer.product.faq') }}</router-link></li>
@@ -29,7 +29,7 @@
         </v-col>
 
         <v-col cols="12" sm="4" class="pa-4">
-          <h5 class="title pb-3">{{ $t('footer.community.title') }}</h5>
+          <h5 class="title pb-3"><b>{{ $t('footer.community.title') }}</b></h5>
           <ul>
             <li><a class="nav-link" href="https://fatalentropy.com" target="_blank" rel="noopener">Blog</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42/forum" target="_blank" rel="noopener">Forum</a></li>

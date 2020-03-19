@@ -17,7 +17,7 @@ test:
 
 .PHONY: desktop
 desktop:
-	go build -o dist/desktop/bloomd bloomd/*.go
+	go build -a -ldflags "-w -s" -o dist/desktop/bloomd bloomd/*.go
 	cp dist/desktop/bloomd ../desktop/bloomd
 
 .PHONY: dev_desktop
