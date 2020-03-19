@@ -1,10 +1,12 @@
 package users
 
 import (
+	"context"
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/preferences"
 )
 
 func PersistSession(signin *model.SignedIn) error {
@@ -23,13 +25,13 @@ func PersistSession(signin *model.SignedIn) error {
 		return err
 	}
 
-	_, err = tx.Exec("INSERT INTO preferences (key, value) VALUES (?, ?)", "me", string(meData))
+	err = preferences.Persist(context.Background(), tx, "me", string(meData))
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	_, err = tx.Exec("INSERT INTO preferences (key, value) VALUES (?, ?)", "session", string(sessionData))
+	err = preferences.Persist(context.Background(), tx, "session", string(sessionData))
 	if err != nil {
 		tx.Rollback()
 		return err

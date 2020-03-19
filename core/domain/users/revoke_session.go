@@ -2,9 +2,11 @@ package users
 
 import (
 	"context"
+	"os"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
@@ -27,6 +29,7 @@ func RevokeSession(params RevokeSessionParams) error {
 	err := client.Do(context.Background(), req, &resp)
 	if err == nil && client.SessionID != nil && params.ID == *client.SessionID {
 		client.Deauthenticate()
+		os.Remove(db.DBFilePath)
 	}
 
 	return err
