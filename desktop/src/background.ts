@@ -14,6 +14,7 @@ import config from './config';
 
 const CALL_URL = '/electronCall';
 const UNIX_SOCKET_PATH = '/tmp/com.bloom42.bloom.sock';
+const DAEMON_NAME = 'bloomd';
 
 const isDevelopment = process.env.NODE_ENV !== 'production';
 
@@ -174,7 +175,7 @@ if (isDevelopment) {
 
 ipcMain.on('server:start', () => {
   console.log('mainProcess: starting server');
-  child = execFile('./bloomcoreserver', (err, data) => {
+  child = execFile(`./${DAEMON_NAME}`, (err, data) => {
     if (data) {
       console.log(data.toString());
     }

@@ -12,3 +12,4 @@ build
 libblmcore.so
 blmcoreserver
 bloomcoreserver
+bloomd

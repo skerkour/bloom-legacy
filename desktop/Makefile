@@ -4,7 +4,7 @@ build:
 
 .PHONY: clean
 clean:
-	rm -rf dist dist_electron
+	rm -rf dist dist_electron bloomd
 
 .PHONY: re
 re: clean build
