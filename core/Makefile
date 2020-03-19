@@ -17,8 +17,8 @@ test:
 
 .PHONY: desktop
 desktop:
-	go build -o dist/$(NAME)server server/*.go
-	cp dist/$(NAME)server ../desktop/$(NAME)server
+	go build -o dist/desktop/bloomd bloomd/*.go
+	cp dist/desktop/bloomd ../desktop/bloomd
 
 .PHONY: dev_desktop
 dev_desktop:
