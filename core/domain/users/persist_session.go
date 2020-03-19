@@ -20,7 +20,7 @@ func PersistSession(signin *model.SignedIn) error {
 		return err
 	}
 
-	tx, err := db.DB.Begin()
+	tx, err := db.DB.Beginx()
 	if err != nil {
 		return err
 	}
