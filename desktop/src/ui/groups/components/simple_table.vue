@@ -56,6 +56,7 @@ export default class GroupsSimpleTable extends Vue {
     },
     { text: 'Actions', sortable: false },
   ];
+
   // computed
   // lifecycle
   // watch
