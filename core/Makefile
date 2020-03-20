@@ -20,9 +20,15 @@ desktop:
 	go build -a -ldflags "-w -s" -o dist/desktop/bloomd bloomd/*.go
 	cp dist/desktop/bloomd ../desktop/bloomd
 
+.PHONY: desktop_build_dev
+desktop_build_dev:
+	go build -o dist/desktop/bloomd bloomd/*.go
+	cp dist/desktop/bloomd ../desktop/bloomd
+
+
 .PHONY: dev_desktop
 dev_desktop:
-	gowatch -build="make desktop"
+	gowatch -build="make desktop_build_dev"
 
 
 .PHONY: mobile

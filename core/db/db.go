@@ -14,11 +14,19 @@ import (
 // DB is a pointer to the singleton DB instance
 var DB *sqlx.DB
 
-// DBFilePath is the path of the app's database
-var DBFilePath string
+// FilePath is the path of the app's database
+var FilePath string
 
 func dbPath(directory string) (string, error) {
 	return filepath.Join(directory, "bloom.db"), nil
+}
+
+func CloseAndRemove() error {
+	if DB != nil {
+		DB.Close()
+	}
+	os.Remove(FilePath)
+	return nil
 }
 
 // Init initializes the DB singleton and make migrations if necessary
@@ -35,12 +43,12 @@ func Init() error {
 		return err
 	}
 
-	DBFilePath, err = dbPath(dbDir)
+	FilePath, err = dbPath(dbDir)
 	if err != nil {
 		return err
 	}
 
-	DB, err = sqlx.Open("sqlite3", DBFilePath)
+	DB, err = sqlx.Open("sqlite3", FilePath)
 	if err != nil {
 		return err
 	}

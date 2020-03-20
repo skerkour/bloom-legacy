@@ -2,16 +2,18 @@ package users
 
 import (
 	"context"
-	"os"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
 func RevokeSession(params RevokeSessionParams) error {
 	client := api.Client()
+
+	if params.ID == *client.SessionID {
+		return SignOut()
+	}
 
 	var resp struct {
 		RevokeSession bool `json:"revokeSession"`
@@ -27,10 +29,6 @@ func RevokeSession(params RevokeSessionParams) error {
 	req.Var("input", input)
 
 	err := client.Do(context.Background(), req, &resp)
-	if err == nil && client.SessionID != nil && params.ID == *client.SessionID {
-		client.Deauthenticate()
-		os.Remove(db.DBFilePath)
-	}
 
 	return err
 }

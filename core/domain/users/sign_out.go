@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 	"errors"
-	"os"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
@@ -14,7 +13,7 @@ import (
 func SignOut() error {
 	client := api.Client()
 	if !client.IsAuthenticated() || client.SessionID == nil {
-		return errors.New("You are not authenticated. Aborting sign out operation.")
+		return errors.New("You are not authenticated. Aborting sign out operation")
 	}
 
 	err := DeletePersistedSession()
@@ -38,7 +37,7 @@ func SignOut() error {
 	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
 		client.Deauthenticate()
-		os.Remove(db.DBFilePath)
+		db.CloseAndRemove()
 	}
 
 	return err
