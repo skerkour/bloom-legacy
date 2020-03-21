@@ -46,4 +46,5 @@ firebase-debug.log
 .*.magnet
 downloads/
 bitflow.sane
+bitflow.json
 /bitflow

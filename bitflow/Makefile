@@ -5,8 +5,8 @@ COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
 DOCKER_IMAGE = registry.$(GO_PKG)
-DEFAULT_CONFIG_FILE = bitflow.default.sane
-DIST_CONFIG_FILE = bitflow.sane
+DEFAULT_CONFIG_FILE = bitflow.default.json
+DIST_CONFIG_FILE = bitflow.json
 
 .PHONY: all
 all: build
