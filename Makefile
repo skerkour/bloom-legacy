@@ -5,8 +5,8 @@ DATE := $(shell date +"%Y-%m-%d")
 GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
 DOCKER_IMAGE = registry.$(GO_PKG)
 DIST_DIR = dist
-DEFAULT_CONFIG_FILE = bloom.default.sane
-DIST_CONFIG_FILE = bloom.sane
+DEFAULT_CONFIG_FILE = bloom.default.json
+DIST_CONFIG_FILE = bloom.json
 
 
 .PHONY: all

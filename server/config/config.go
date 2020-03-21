@@ -1,12 +1,11 @@
 package config
 
 import (
+	"encoding/json"
 	"io/ioutil"
 	"os"
 	"regexp"
 	"strings"
-
-	"gitlab.com/bloom42/libs/sane-go"
 )
 
 var DisposableEmailDomains map[string]bool
@@ -20,45 +19,45 @@ var WebsiteUrl string
 var Bitflow BitflowConfig
 
 type configuration struct {
-	Env        string         `sane:"env"`
-	Server     ServerConfig   `sane:"server"`
-	Database   DatabaseConfig `sane:"database"`
-	SMTP       SMTPConfig     `sane:"smtp"`
-	Stripe     StripeConfig   `sane:"stripe"`
-	Sentry     SentryConfig   `sane:"sentry"`
-	WebsiteUrl string         `sane:"website_url"`
-	Bitflow    BitflowConfig  `sane:"bitflow"`
+	Env        string         `json:"env"`
+	Server     ServerConfig   `json:"server"`
+	Database   DatabaseConfig `json:"database"`
+	SMTP       SMTPConfig     `json:"smtp"`
+	Stripe     StripeConfig   `json:"stripe"`
+	Sentry     SentryConfig   `json:"sentry"`
+	WebsiteUrl string         `json:"website_url"`
+	Bitflow    BitflowConfig  `json:"bitflow"`
 }
 
 type DatabaseConfig struct {
-	URL      string `sane:"url"`
-	PoolSize int    `sane:"pool_size"`
+	URL      string `json:"url"`
+	PoolSize int    `json:"pool_size"`
 }
 
 type SMTPConfig struct {
-	Port     uint16 `sane:"port"`
-	Host     string `sane:"host"`
-	Username string `sane:"username"`
-	Password string `sane:"password"`
+	Port     uint16 `json:"port"`
+	Host     string `json:"host"`
+	Username string `json:"username"`
+	Password string `json:"password"`
 }
 
 type ServerConfig struct {
-	Port    uint16    `sane:"port"`
-	Domains *[]string `sane:"domains"`
+	Port    uint16    `json:"port"`
+	Domains *[]string `json:"domains"`
 }
 
 type StripeConfig struct {
-	SecretKey     string `sane:"secret_key"`
-	PublicKey     string `sane:"public_key"`
-	WebhookSecret string `sane:"webhook_secret"`
+	SecretKey     string `json:"secret_key"`
+	PublicKey     string `json:"public_key"`
+	WebhookSecret string `json:"webhook_secret"`
 }
 
 type SentryConfig struct {
-	Dsn string `sane:"dsn"`
+	Dsn string `json:"dsn"`
 }
 
 type BitflowConfig struct {
-	Secret string `sane:"secret"`
+	Secret string `json:"secret"`
 }
 
 func Init(configFile string) error {
@@ -70,8 +69,9 @@ func Init(configFile string) error {
 	}
 
 	configFileDataStr := replaceEnvVars(string(data))
+	configFileDataStr = stripeComments(configFileDataStr)
 
-	err = sane.Unmarshal([]byte(configFileDataStr), &parsedConfig)
+	err = json.Unmarshal([]byte(configFileDataStr), &parsedConfig)
 	if err != nil {
 		return err
 	}
@@ -98,4 +98,9 @@ func replaceEnvVars(configFileData string) string {
 		configFileData = strings.Replace(configFileData, v[0], envVar, 1)
 	}
 	return configFileData
+}
+
+func stripeComments(jsonWithComment string) string {
+	re := regexp.MustCompile(`(?m)(\/\/[^"\n]+$)|(^\s+\/\/.*$)`)
+	return re.ReplaceAllString(jsonWithComment, "")
 }

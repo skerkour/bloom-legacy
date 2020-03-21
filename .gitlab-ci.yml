@@ -139,7 +139,7 @@ test:cli:
   tags:
     - docker
   script:
-    - cp bloom.default.sane bloom.sane
+    - cp bloom.default.json bloom.json
     - make test
   services:
     - postgres:$POSTGRES_VERSION
@@ -152,7 +152,7 @@ test:bitflow:
     - docker
   script:
     - cd bitflow/
-    - cp bitflow.default.sane bitflow.sane
+    - cp bitflow.default.json bitflow.json
     - make test
 
 

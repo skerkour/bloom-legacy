@@ -447,8 +447,6 @@ gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41 h1:4FLgg1
 gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41/go.mod h1:jeFZQ/wvWvR2pHmCtxLqVWv16mRljrQ9iQSYpFy+Xok=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
 gitlab.com/bloom42/libs/rz-go v1.3.0/go.mod h1:/G8JCs/z9FPn+XYJT9e52gj76clf4dk8tf2jbq1HCpQ=
-gitlab.com/bloom42/libs/sane-go v0.10.0 h1:ddubZDaZSXxA9JP7FEAojOV7pkG3sEvd8bMeX9juLTU=
-gitlab.com/bloom42/libs/sane-go v0.10.0/go.mod h1:lJd/9hbVz5M5XCt7FQjLdPgbQ0c/q8DRFD8eLJG9lqs=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=
 go.etcd.io/bbolt v1.3.2/go.mod h1:IbVyRI1SCnLcuJnV2u8VeU0CEYM7e686BmAb1XKL+uU=
 go.mongodb.org/mongo-driver v1.1.0/go.mod h1:u7ryQJ+DOzQmeO7zB6MHyr8jkEQvC8vH7qLUO4lqsUM=

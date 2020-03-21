@@ -59,4 +59,5 @@ node_modules/
 /dist/
 /.tmp/
 /bloom.sane
+/bloom.json
 /assets/**/GeoLite2-City.mmdb
