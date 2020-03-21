@@ -5,6 +5,7 @@ import (
 	"fmt"
 
 	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/core"
 	"gitlab.com/bloom42/libs/graphql-go"
 )
 
@@ -44,6 +45,7 @@ func (c *ApiClient) IsAuthenticated() bool {
 }
 
 func (c *ApiClient) Do(ctx context.Context, req *graphql.Request, resp interface{}) error {
+	req.Header.Set("User-Agent", fmt.Sprintf("com.bloom42.bloom.core/%s", core.Version))
 	if c.Token != nil {
 		req.Header.Add("authorization", fmt.Sprintf("Basic %s", *c.Token))
 	}
