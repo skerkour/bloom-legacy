@@ -6,7 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/libs/graphql-go"
+	"gitlab.com/bloom42/lily/graphql"
 )
 
 // See https://bloom.sh/the-guide/projects/bloom/cryptography#registration for the spec

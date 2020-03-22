@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/core/api"
-	"gitlab.com/bloom42/libs/graphql-go"
+	"gitlab.com/bloom42/lily/graphql"
 )
 
 func FetchGroupProfile(params FetchGroupProfileParams) (GroupBillingProfile, error) {

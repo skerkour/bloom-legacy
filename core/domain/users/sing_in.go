@@ -7,7 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/coreutil"
-	"gitlab.com/bloom42/libs/graphql-go"
+	"gitlab.com/bloom42/lily/graphql"
 )
 
 func SignIn(params SignInParams) (model.SignedIn, error) {
