@@ -53,14 +53,14 @@
                   icon
                   small
                   color="grey darken-1"
-                  to="/drive"
+                  to="/files"
                   v-on="on"
                   :disabled="item.status !== DownloadStatus.Success"
                 >
                   <v-icon small>mdi-folder</v-icon>
                 </v-btn>
               </template>
-              <span>Open in Drive</span>
+              <span>Open in Files</span>
             </v-tooltip>
           </td>
         </tr>

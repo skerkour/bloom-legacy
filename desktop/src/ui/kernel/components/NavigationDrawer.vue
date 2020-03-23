@@ -14,7 +14,7 @@
 
     <blm-drawer-bitflow v-if="app === 'bitflow'" />
     <blm-drawer-notes v-else-if="app === 'notes'" />
-    <blm-drawer-drive v-else-if="app === 'drive'" />
+    <blm-drawer-files v-else-if="app === 'files'" />
     <blm-drawer-phaser v-else-if="app === 'phaser'" />
     <blm-drawer-admin v-else-if="app === 'admin'" />
     <blm-drawer-preferences v-else-if="app === 'preferences'" />
@@ -29,7 +29,7 @@
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import BitflowDrawer from '@/ui/bitflow/components/drawer.vue';
 import NotesDrawer from '@/ui/notes/components/Drawer.vue';
-import DriveDrawer from '@/ui/drive/components/drawer.vue';
+import FilesDrawer from '@/ui/files/components/drawer.vue';
 import AdminDrawer from '@/ui/admin/components/drawer.vue';
 import PreferencesDrawer from '@/ui/preferences/components/drawer.vue';
 import MyAccountDrawer from '@/ui/myaccount/components/drawer.vue';
@@ -38,7 +38,7 @@ import GroupsDrawer from '@/ui/groups/components/drawer.vue';
 const APPS_WITH_DRAWER = [
   'bitflow',
   'notes',
-  'drive',
+  'files',
   'admin',
   'preferences',
   'myaccount',
@@ -49,7 +49,7 @@ const APPS_WITH_DRAWER = [
   components: {
     'blm-drawer-bitflow': BitflowDrawer,
     'blm-drawer-notes': NotesDrawer,
-    'blm-drawer-drive': DriveDrawer,
+    'blm-drawer-files': FilesDrawer,
     'blm-drawer-admin': AdminDrawer,
     'blm-drawer-preferences': PreferencesDrawer,
     'blm-drawer-myaccount': MyAccountDrawer,

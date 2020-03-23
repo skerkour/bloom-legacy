@@ -1,16 +1,16 @@
 <template>
   <v-list nav dense class="text-left">
 
-    <v-list-item exact to="/drive">
+    <v-list-item exact to="/files">
       <v-list-item-icon>
         <v-icon>mdi-desktop-tower</v-icon>
       </v-list-item-icon>
       <v-list-item-content>
-        <v-list-item-title>My Drive</v-list-item-title>
+        <v-list-item-title>My Files</v-list-item-title>
       </v-list-item-content>
     </v-list-item>
 
-    <v-list-item exact to="/drive/trash">
+    <v-list-item exact to="/files/trash">
       <v-list-item-icon>
         <v-icon>mdi-delete</v-icon>
       </v-list-item-icon>

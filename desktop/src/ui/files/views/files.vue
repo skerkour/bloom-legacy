@@ -57,7 +57,7 @@
       </v-tooltip>
     </v-toolbar>
 
-    <blm-drive-table-files :files="files" />
+    <blm-files-table-files :files="files" />
 
   </v-container>
 </template>
@@ -69,10 +69,10 @@ import FilesTable from '../components/files_table.vue';
 
 @Component({
   components: {
-    'blm-drive-table-files': FilesTable,
+    'blm-files-table-files': FilesTable,
   },
 })
-export default class Index extends Vue {
+export default class FilesView extends Vue {
   // props
   // data
   error = '';

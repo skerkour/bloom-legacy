@@ -6,7 +6,7 @@ import PreferencesRouter from '@/ui/preferences/router';
 import NotesRouter from '@/ui/notes/router';
 import ArcadeRouter from '@/ui/arcade/router';
 import CalendarRouter from '@/ui/calendar/router';
-import DriveRouter from '@/ui/drive/router';
+import FilesRouter from '@/ui/files/router';
 import BitflowRouter from '@/ui/bitflow/router';
 import ContactsRouter from '@/ui/contacts/router';
 import CalculatorRouter from '@/ui/calculator/router';
@@ -28,7 +28,7 @@ const router = new Router({
     ...NotesRouter,
     ...CalendarRouter,
     ...ArcadeRouter,
-    ...DriveRouter,
+    ...FilesRouter,
     ...BitflowRouter,
     ...ContactsRouter,
     ...CalculatorRouter,

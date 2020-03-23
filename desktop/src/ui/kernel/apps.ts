@@ -23,9 +23,9 @@ export default function getApps() {
       icon: '/assets/imgs/icons/calendar.svg',
     },
     {
-      name: 'Drive',
-      path: '/drive',
-      icon: '/assets/imgs/icons/drive.svg',
+      name: 'Files',
+      path: '/files',
+      icon: '/assets/imgs/icons/files.svg',
     },
     {
       name: 'Bitflow',
