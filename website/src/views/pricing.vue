@@ -51,7 +51,7 @@
             <v-row class="justify-center">
               <v-col cols="12" sm="10" md="8">
                 <ul>
-                  <li><v-icon color="success">mdi-check</v-icon> Drive</li>
+                  <li><v-icon color="success">mdi-check</v-icon> Files</li>
                   <li><v-icon color="success">mdi-check</v-icon> Notes</li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Encryption</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> Torrents</li>

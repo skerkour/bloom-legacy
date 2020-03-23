@@ -88,10 +88,10 @@ export default class Features extends Vue {
       //   learnMore: 'chat',
       // },
       {
-        name: 'Drive',
-        icon: '/static/imgs/icons/drive.svg',
-        description: this.$t('features.drive_description'),
-        learnMore: 'drive',
+        name: 'Files',
+        icon: '/static/imgs/icons/files.svg',
+        description: this.$t('features.files_description'),
+        learnMore: 'files',
       },
       // {
       //   name: 'Music',

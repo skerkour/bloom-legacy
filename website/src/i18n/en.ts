@@ -29,7 +29,7 @@ export default {
       title: 'Bring your team together',
       description: `Whether it's your friends or your colleagues, Bloom is made for collaboration.
       Organize your files and ideas, organize your life.
-      Go meeting up with Calendar, Notes, Drive and more.<br />
+      Go meeting up with Calendar, Notes, Files and more.<br />
       Never stop having fun.`,
     },
     feature3: {
@@ -204,9 +204,9 @@ export default {
   features: {
     title: 'A safe place for all your data',
     solution: 'That\'s why we built Bloom',
-    drive_description: `A safe place for all your files. Bloom Drive is end to end encrypted.<br />
+    files_description: `A safe place for all your files. Bloom Files is end to end encrypted.<br />
     <b>1GB free.</b>`,
-    drive: {
+    files: {
       description: 'A safe place for all your files',
       feature1: {
         name: 'Store any file',
@@ -215,16 +215,16 @@ export default {
       },
       feature2: {
         name: 'See your stuff anywhere',
-        description: `Your files in Drive can be reached from any smartphone, tablet, or computer.
+        description: `Your files in Files can be reached from any smartphone, tablet, or computer.
         So wherever you go, your files follow.`,
       },
       feature3: {
         name: 'Keep your files safe',
         description: `If something happens to your device, you don't have to worry about losing
-          your files or photos – they're in your Bloom Drive.`,
+          your files or photos – they're in your Bloom Files.`,
       },
     },
-    // music_description: 'Never stop enjoying your music! Directly from your drive.',
+    // music_description: 'Never stop enjoying your music! Directly from your Bloom files.',
     // music: {
     //   description: 'A world of emotion. <br/> Available wherever you are.',
     //   feature1: {
@@ -239,9 +239,9 @@ export default {
     //     Bloom Music allows you to steam them from wherever you are.`,
     //   },
     //   feature3: {
-    //     name: 'Directly from your drive',
+    //     name: 'Directly from your Bloom files',
     //   description: `Thanks to the unified data model of Bloom, all your music files in your Bloom
-    //    Drive are directly available in Bloom Music. No need to reorganize everything everytime.`,
+    //   files are directly available in Bloom Music. No need to reorganize everything everytime.`,
     //   },
     // },
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
@@ -274,12 +274,12 @@ export default {
       },
     },
     bitflow_description: `Your cloud-based download manager.
-    Download any file and torrent directly to your Drive.`,
+    Download any file and torrent directly to your Bloom files.`,
     bitflow: {
       description: 'Download torrents to a secure cloud. Fast. Online.',
       feature1: {
         name: 'Download anywhere, anytime',
-        description: `Your files are downloaded directly to your Drive and can can be accessed from
+        description: `Your files are downloaded directly to your Bloom files and can can be accessed from
         any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
       },
       feature2: {
@@ -334,9 +334,9 @@ export default {
     //     description: 'Your photos will be safe, secure, and always with you.',
     //   },
     //   feature3: {
-    //     name: 'Directly from your drive',
+    //     name: 'Directly from your Bloom files',
     //     description: `Thanks to the unified data model of Bloom, all your photos and videos files
-    //     in your Bloom Drive are directly available in Bloom Gallery. No need to reorganize
+    //     in your Bloom Files are directly available in Bloom Gallery. No need to reorganize
     //     everything everytime.`,
     //   },
     // },

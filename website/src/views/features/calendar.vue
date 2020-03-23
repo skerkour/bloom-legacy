@@ -17,7 +17,7 @@ import FeaturePage from '@/components/feature_page.vue';
     'blm-feature-page': FeaturePage,
   },
 })
-export default class Drive extends Vue {
+export default class CalendarView extends Vue {
   // props
   // data
   // computed

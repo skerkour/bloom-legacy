@@ -6,7 +6,7 @@ const Bitflow = () => import(/* webpackChunkName: "chunk-features" */ '@/views/f
 const Calendar = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/calendar.vue');
 // const Chat = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/chat.vue');
 const Contacts = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/contacts.vue');
-const Drive = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/drive.vue');
+const Files = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/files.vue');
 const Notes = () => import(/* webpackChunkName: "chunk-features" */ '@/views/features/notes.vue');
 
 export default [
@@ -31,8 +31,8 @@ export default [
     path: '/features/contacts',
   },
   {
-    component: Drive,
-    path: '/features/drive',
+    component: Files,
+    path: '/features/files',
   },
   {
     component: Notes,
