@@ -51,68 +51,118 @@
 
       <v-card-text>
         <v-container fluid grid-list-lg>
-          <v-alert icon="mdi-alert-circle" :value="error !== ''" type="error" dismissible>
-            {{ error }}
-          </v-alert>
+          <v-row>
+            <v-col cols="12">
+              <v-alert icon="mdi-alert-circle" :value="error !== ''" type="error" dismissible>
+                {{ error }}
+              </v-alert>
+            </v-col>
 
-          <v-col>
-            <v-text-field label="Title" v-model="title" outlined/>
-          </v-col>
+            <v-col cols="12">
+              <v-text-field label="Title" v-model="title" outlined/>
+            </v-col>
 
-          <v-col>
-            <v-menu
-              ref="startAt_menu"
-              v-model="startAtMenu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="startAt"
-                  label="Start at"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker v-model="startAt" @input="startAtMenu = false"></v-date-picker>
-            </v-menu>
-          </v-col>
+            <v-col cols="6">
+              <v-menu
+                ref="startAtMenu"
+                v-model="startAtMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="startAt"
+                    label="Start at"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker v-model="startAt" @input="startAtMenu = false"></v-date-picker>
+              </v-menu>
+            </v-col>
 
-          <v-col>
-            <v-menu
-              ref="endAt_menu"
-              v-model="endAtMenu"
-              :close-on-content-click="false"
-              :nudge-right="40"
-              transition="scale-transition"
-              offset-y
-              min-width="290px"
-            >
-              <template v-slot:activator="{ on }">
-                <v-text-field
-                  v-model="endAt"
-                  label="End at"
-                  prepend-icon="mdi-calendar"
-                  readonly
-                  v-on="on"
-                />
-              </template>
-              <v-date-picker v-model="endAt" @input="endAtMenu = false"></v-date-picker>
-            </v-menu>
-          </v-col>
+            <v-col cols="6">
+              <v-menu
+                ref="startAtMenu"
+                v-model="startAtMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="startAt"
+                    label="Start at"
+                    prepend-icon="mdi-clock-outline"
+                    readonly
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker v-model="startAt" @input="startAtMenu = false"></v-date-picker>
+              </v-menu>
+            </v-col>
 
-          <v-col>
-            <v-textarea
-              label="Description"
-              v-model="description"
-              outlined
-            />
-          </v-col>
+            <v-col cols="6">
+              <v-menu
+                ref="endAtMenu"
+                v-model="endAtMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="endAt"
+                    label="End at"
+                    prepend-icon="mdi-calendar"
+                    readonly
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker v-model="endAt" @input="endAtMenu = false"></v-date-picker>
+              </v-menu>
+            </v-col>
 
+            <v-col cols="6">
+              <v-menu
+                ref="endAtMenu"
+                v-model="endAtMenu"
+                :close-on-content-click="false"
+                :nudge-right="40"
+                transition="scale-transition"
+                offset-y
+                min-width="290px"
+              >
+                <template v-slot:activator="{ on }">
+                  <v-text-field
+                    v-model="endAt"
+                    label="End at"
+                    prepend-icon="mdi-clock-outline"
+                    readonly
+                    v-on="on"
+                  />
+                </template>
+                <v-date-picker v-model="endAt" @input="endAtMenu = false"></v-date-picker>
+              </v-menu>
+            </v-col>
+
+            <v-col cols="12">
+              <v-textarea
+                label="Description"
+                v-model="description"
+                outlined
+              />
+            </v-col>
+
+          </v-row>
         </v-container>
       </v-card-text>
     </v-card>
