@@ -81,7 +81,7 @@
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="startAt" @input="startAtDateMenu = false"></v-date-picker>
+                <v-date-picker v-model="vuetifyStartAt" @input="startAtDateMenu = false" />
               </v-menu>
             </v-col>
 
@@ -131,7 +131,7 @@
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="endAt" @input="endAtDateMenu = false"></v-date-picker>
+                <v-date-picker v-model="vuetifyEndAt" @input="endAtDateMenu = false" />
               </v-menu>
             </v-col>
 
@@ -233,6 +233,22 @@ export default class EventDialog extends Vue {
     return this.endAt ? moment(this.endAt).format('dddd, MMMM Do YYYY') : '';
   }
 
+  get vuetifyStartAt(): string {
+    return this.startAt.toISOString().substr(0, 10);
+  }
+
+  set vuetifyStartAt(value: string) {
+    this.startAt = new Date(value);
+  }
+
+  get vuetifyEndAt(): string {
+    return this.endAt.toISOString().substr(0, 10);
+  }
+
+  set vuetifyEndAt(value: string) {
+    this.endAt = new Date(value);
+  }
+
   // lifecycle
   // watch
   @Watch('event')
@@ -258,6 +274,18 @@ export default class EventDialog extends Vue {
     const endAtTime = this.endAt.getTime();
     if (endAtTime < startAtTime) {
       this.endAt = newStartAt;
+    }
+  }
+
+  @Watch('startAtTime')
+  onStartAtTimeChanged(newStartTime: string) {
+    if (!newStartTime) {
+      return;
+    }
+    const startAtTime = this.timeToDate(this.startAt, newStartTime).getTime();
+    const endAtTime = this.timeToDate(this.endAt, this.endAtTime).getTime();
+    if (endAtTime < startAtTime) {
+      this.endAtTime = newStartTime;
     }
   }
 

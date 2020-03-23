@@ -48,9 +48,7 @@
           @change="calendarChanged"
           @click:event="editEvent"
           :events="vuetifyEvents"
-        >
-
-        </v-calendar>
+        />
       </v-col>
 
     </v-row>
@@ -111,8 +109,8 @@ export default class Index extends Vue {
     return this.events.map((event: any) => { // eslint-disable-line
       event.startAt = new Date(event.startAt); // eslint-disable-line
       event.endAt = new Date(event.endAt); // eslint-disable-line
-      event.start = this.formatDate(event.startAt); // eslint-disable-line
-      event.end = this.formatDate(event.endAt); // eslint-disable-line
+      event.start = this.formatDateForVuetify(event.startAt); // eslint-disable-line
+      event.end = this.formatDateForVuetify(event.endAt); // eslint-disable-line
       event.name = event.title || '(No title)'; // eslint-disable-line
       return event;
     });
@@ -189,7 +187,7 @@ export default class Index extends Vue {
     );
   }
 
-  formatDate(date: Date) {
+  formatDateForVuetify(date: Date) {
     return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   }
 }
