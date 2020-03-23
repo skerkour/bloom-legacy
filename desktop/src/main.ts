@@ -31,9 +31,17 @@ function sleep(ms: number) {
 async function main() {
   await ipcRenderer.send('server:start');
   await sleep(1000);
-  const signedIn = await core.init();
-  if (signedIn !== null) {
-    store.commit(Mutations.SIGN_IN.toString(), signedIn);
+  const res = await core.init(['theme']);
+  if (res.preferences.me !== null) {
+    const params = {
+      me: res.preferences.me,
+      session: res.preferences.session,
+    };
+    store.commit(Mutations.SIGN_IN.toString(), params);
+  }
+  if (res.preferences.theme === 'dark') {
+    store.commit(Mutations.SWITCH_DARK_MODE.toString());
+    // vuetify.theme.dark = this.$store.state.darkMode;
   }
 
   Vue.use(filters);

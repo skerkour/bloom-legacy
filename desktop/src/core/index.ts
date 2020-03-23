@@ -4,6 +4,11 @@ import { log } from '@/libs/rz';
 
 const Empty = {};
 
+export type InitRes = {
+  signedIn: models.SignedIn | null,
+  preferences: any,
+}
+
 async function call(method: string, params: any): Promise<any> {
   const message = JSON.stringify({
     method,
@@ -29,8 +34,8 @@ function toIsoDate(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-async function init(): Promise<models.SignedIn | null> {
-  return call('core.init', Empty);
+async function init(preferences: string[]): Promise<InitRes> {
+  return call('core.init', { preferences });
 }
 
 export default {

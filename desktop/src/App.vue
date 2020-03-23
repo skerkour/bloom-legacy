@@ -29,6 +29,9 @@ export default class App extends Vue {
   }
 
   // lifecycle
+  created() {
+    this.$vuetify.theme.dark = this.$store.state.darkMode;
+  }
   // watch
   // methods
 }
