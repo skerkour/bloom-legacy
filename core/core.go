@@ -1,18 +1,21 @@
 package core
 
 import (
+	"context"
 	"encoding/json"
 	"errors"
 	"strings"
 
 	"gitlab.com/bloom42/bloom/core/api"
-	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 )
 
-func Init() (*model.SignedIn, error) {
-	var ret *model.SignedIn
+func Init(params InitParams) (InitRes, error) {
+	ret := InitRes{
+		Preferences: map[string]interface{}{},
+	}
 	client := api.Client()
 
 	err := db.Init()
@@ -20,21 +23,36 @@ func Init() (*model.SignedIn, error) {
 		return ret, err
 	}
 
-	ret, err = users.FindPersistedSession()
+	signedIn, err := users.FindPersistedSession()
 	if err != nil {
 		return ret, nil
 	}
-	if ret != nil {
-		client.Authenticate(ret.Session.ID, *ret.Session.Token)
+	if signedIn != nil {
+		client.Authenticate(signedIn.Session.ID, *signedIn.Session.Token)
+		ret.Preferences["me"] = signedIn.Me
+		ret.Preferences["session"] = signedIn.Session
+	}
+
+	ctx := context.Background()
+	for _, key := range params.Preferences {
+		value, err := preferences.Get(ctx, nil, key)
+		if err == nil {
+			ret.Preferences[key] = value
+		}
 	}
 
 	return ret, err
 }
 
-func handleCoreMethod(method string, _ json.RawMessage) MessageOut {
+func handleCoreMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "init":
-		res, err := Init()
+		var params InitParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := Init(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

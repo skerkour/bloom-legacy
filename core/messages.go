@@ -18,6 +18,10 @@ type ErrorData struct {
 	Meta    interface{} `json:"meta"`
 }
 
+type InitParams struct {
+	Preferences []string `json:"preferences"`
+}
+
 type InitRes struct {
-	Success bool `json:"success"`
+	Preferences map[string]interface{} `json:"preferences"`
 }
