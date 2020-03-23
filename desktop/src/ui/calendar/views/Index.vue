@@ -46,17 +46,17 @@
           :now="now"
           color="error"
           @change="calendarChanged"
+          @click:event="editEvent"
         >
 
         <template v-slot:day="{ date }">
-        <template v-for="event in eventsMap[date]">
-          <div v-ripple
-            class="blm-event"
-            :key="`${event.id}${event.date}`"
-            @click="editEvent(event)"
-            >{{ event.title || '(No title)' }}</div>
-
-        </template>
+          <div v-for="event in eventsMap[date]" :key="event.id">
+            <div v-ripple
+              class="blm-event"
+              :key="`${event.id}${event.date}`"
+              @click="editEvent(event)"
+              >{{ event.title || '(No title)' }}</div>
+          </div>
       </template>
 
 
@@ -181,6 +181,7 @@ export default class Index extends Vue {
 
   closeEventDialog() {
     this.showEventDialog = false;
+    this.currentEvent = null;
   }
 
   eventCreated(event: EventModel) {

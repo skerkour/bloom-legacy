@@ -56,11 +56,7 @@
           </v-alert>
 
           <v-col>
-            <v-text-field
-              label="Title"
-              v-model="title"
-              outlined
-            />
+            <v-text-field label="Title" v-model="title" outlined/>
           </v-col>
 
           <v-col>
