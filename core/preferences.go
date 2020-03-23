@@ -1,54 +1,49 @@
 package core
 
 import (
+	"context"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/domain/contacts"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/preferences"
 )
 
-func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut {
+func handlePreferencesMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "listContacts":
-		res, err := contacts.ListContacts()
-		if err != nil {
-			return InternalError(err) // TODO(z0mbie42): return error
-		}
-		return MessageOut{Data: res}
-	case "createContact":
-		var params contacts.CreateContactParams
+	case "get":
+		var params preferences.GetParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := contacts.CreateContact(params)
+		res, err := preferences.Get(context.Background(), nil, params.Key)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "deleteContact":
-		var params contacts.DeleteContactParams
+	case "set":
+		var params preferences.SetParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		err = contacts.DeleteContact(params)
+		err = preferences.Set(context.Background(), nil, params.Key, params.Value)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: kernel.Empty{}}
-	case "updateContact":
-		var params contacts.Contact
+	case "delete":
+		var params preferences.DeleteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := contacts.UpdateContact(params)
+		err = preferences.Delete(context.Background(), nil, params.Key)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: res}
+		return MessageOut{Data: kernel.Empty{}}
 	default:
-		return methodNotFoundError(method, "contacts")
+		return methodNotFoundError(method, "preferences")
 	}
 }

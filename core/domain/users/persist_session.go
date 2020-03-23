@@ -25,13 +25,13 @@ func PersistSession(signin *model.SignedIn) error {
 		return err
 	}
 
-	err = preferences.Persist(context.Background(), tx, "me", string(meData))
+	err = preferences.Set(context.Background(), tx, "me", string(meData))
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = preferences.Persist(context.Background(), tx, "session", string(sessionData))
+	err = preferences.Set(context.Background(), tx, "session", string(sessionData))
 	if err != nil {
 		tx.Rollback()
 		return err

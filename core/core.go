@@ -72,6 +72,8 @@ func HandleMessage(messageIn MessageIn) ([]byte, error) {
 		messageOut = handleBillingMehtod(parts[1], messageIn.Params)
 	case "groups":
 		messageOut = handleGroupsMethod(parts[1], messageIn.Params)
+	case "preferences":
+		messageOut = handlePreferencesMehtod(parts[1], messageIn.Params)
 	default:
 		messageOut = serviceNotFoundError(parts[0])
 	}
