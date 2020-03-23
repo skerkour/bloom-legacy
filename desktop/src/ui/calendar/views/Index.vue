@@ -35,7 +35,7 @@
         </v-row>
       </v-col>
 
-      <v-col sm="9" class="col-no-padding">
+      <v-col sm="9" class="col-no-padding pl-2">
 
         <v-calendar
           ref="calendar"
