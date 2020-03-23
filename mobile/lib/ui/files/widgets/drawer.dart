@@ -1,15 +1,15 @@
 import 'package:bloom/ui/const.dart';
-import 'package:bloom/ui/drive/views/trash.dart';
+import 'package:bloom/ui/files/views/trash.dart';
 import 'package:flutter/material.dart';
 
-class DriveDrawer extends StatefulWidget {
-  const DriveDrawer({Key key}) : super(key: key);
+class FilesDrawer extends StatefulWidget {
+  const FilesDrawer({Key key}) : super(key: key);
 
   @override
-  _DriveDrawerState createState() => _DriveDrawerState();
+  _FilesDrawerState createState() => _FilesDrawerState();
 }
 
-class _DriveDrawerState extends State<DriveDrawer> {
+class _FilesDrawerState extends State<FilesDrawer> {
   @override
   Widget build(BuildContext context) {
     return Drawer(
@@ -26,12 +26,12 @@ class _DriveDrawerState extends State<DriveDrawer> {
           const Divider(),
           ListTile(
             leading: const Icon(Icons.cloud),
-            title: const Text('Drive'),
+            title: const Text('Files'),
             onTap: () {
               Navigator.pop(context);
               Navigator.pushNamedAndRemoveUntil(
                 context,
-                PATH_DRIVE,
+                PATH_FILES,
                 (Route<dynamic> route) => route.settings.name == '/',
               );
             },
@@ -44,9 +44,9 @@ class _DriveDrawerState extends State<DriveDrawer> {
               Navigator.pushAndRemoveUntil<dynamic>(
                 context,
                 MaterialPageRoute<dynamic>(
-                  builder: (BuildContext context) => const DriveTrashView(),
+                  builder: (BuildContext context) => const FilesTrashView(),
                 ),
-                (Route<dynamic> route) => route.settings.name == PATH_DRIVE,
+                (Route<dynamic> route) => route.settings.name == PATH_FILES,
               );
             },
           ),

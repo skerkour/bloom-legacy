@@ -29,5 +29,5 @@ enum Apps {
   NOTES,
   CONTACTS,
   CALENDAR,
-  DRIVE,
+  FILES,
 }

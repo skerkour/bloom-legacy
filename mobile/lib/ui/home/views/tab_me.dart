@@ -104,7 +104,7 @@ List<_BlmApp> getApps() {
     const _BlmApp(icon: ICON_NOTES_256, name: 'Notes', route: PATH_NOTES),
     const _BlmApp(
         icon: ICON_CALENDAR_256, name: 'Calendar', route: PATH_CALENDAR),
-    const _BlmApp(icon: ICON_DRIVE_256, name: 'Drive', route: PATH_DRIVE),
+    const _BlmApp(icon: ICON_FILES_256, name: 'Files', route: PATH_FILES),
     const _BlmApp(
         icon: ICON_CONTACTS_256, name: 'Contacts', route: PATH_CONTACTS),
     const _BlmApp(icon: ICON_ARCADE_256, name: 'Arcade', route: PATH_ARCADE),

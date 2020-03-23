@@ -207,7 +207,7 @@ class Media {
       Media(file: ICON_BOOKS_256),
       Media(file: ICON_CALENDAR_256),
       Media(file: ICON_CONTACTS_256),
-      Media(file: ICON_DRIVE_256),
+      Media(file: ICON_FILES_256),
       Media(file: ICON_GALLERY_256),
       Media(file: ICON_MUSIC_256),
       Media(file: ICON_NOTES_256),

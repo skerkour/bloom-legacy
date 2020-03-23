@@ -55,10 +55,10 @@ class BlmRouteObserver extends RouteObserver<PageRoute<dynamic>> {
         _currentApp = Apps.CALENDAR;
         appBloc.setCurrentApp(_currentApp);
       }
-    } else if (routeStr.startsWith('/drive')) {
-      debugPrint('(RouteObserver) Drive');
-      if (_currentApp != Apps.DRIVE) {
-        _currentApp = Apps.DRIVE;
+    } else if (routeStr.startsWith('/files')) {
+      debugPrint('(RouteObserver) Files');
+      if (_currentApp != Apps.FILES) {
+        _currentApp = Apps.FILES;
         appBloc.setCurrentApp(_currentApp);
       }
     } else {
