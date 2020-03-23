@@ -8,10 +8,7 @@
     :fullscreen="$vuetify.breakpoint.smAndDown"
   >
     <v-card>
-      <v-card-title
-        class="headline"
-        v-if="contact === null"
-      >
+      <v-card-title class="headline" v-if="contact === null">
         <h3 class="headline mb-0">Create new contact</h3>
         <v-spacer />
         <v-btn text @click="cancel">

@@ -1,46 +1,52 @@
 <template>
   <v-dialog
     v-model="show"
-    @keydown.esc="close(false)"
-    @click:outside="close(false)"
+    @keydown.esc="close"
+    @click:outside="close"
     persistent
     scrollable
     width="50%"
-    :fullscreen="$vuetify.breakpoint.smAndDown"
+    :fullscreen="$vuetify.breakpoint.xsOnly"
   >
     <v-card>
 
       <v-card-title class="headline" v-if="event === null">
          <h3 class="headline mb-0">Create new event</h3>
+         <v-spacer />
+        <v-btn text @click="cancel">
+          Cancel
+        </v-btn>
+        <v-btn color="primary" @click="createEvent">
+          Create
+        </v-btn>
       </v-card-title>
       <v-card-title dark class="headline" v-else>
         <h3 class="headline mb-0">
           <h3 class="headline mb-0">{{ event.title }}</h3>
         </h3>
         <v-spacer />
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-            <v-menu slot="activator">
-              <template v-slot:activator="{ on: menu }">
-              <v-btn
-                slot="activator"
-                text
-                icon
-                v-on="{ ...tooltip, ...menu }"
-              >
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-              </template>
-
-              <v-list>
-                <v-list-item @click="deleteEvent">
-                  <v-list-item-title>Delete Event</v-list-item-title>
-                </v-list-item>
-              </v-list>
-            </v-menu>
+        <v-btn text @click="cancel">
+          Cancel
+        </v-btn>
+        <v-btn color="primary" @click="updateEvent">
+          Save
+        </v-btn>
+        <v-menu bottom left>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon>mdi-dots-vertical</v-icon>
+            </v-btn>
           </template>
-          <span>More actions</span>
-        </v-tooltip>
+
+          <v-list>
+            <v-list-item @click="deleteEvent">
+              <v-list-item-icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Delete event</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
       </v-card-title>
 
       <v-card-text>
@@ -93,7 +99,7 @@
               <template v-slot:activator="{ on }">
                 <v-text-field
                   v-model="endAt"
-                  label="Start at"
+                  label="End at"
                   prepend-icon="mdi-calendar"
                   readonly
                   v-on="on"
@@ -130,7 +136,6 @@ import core from '@/core';
 import {
   DeleteEvent, CreateEvent, Event as EventModel, Method,
 } from '@/core/calendar';
-import { log } from '@/libs/rz';
 
 
 @Component
@@ -148,7 +153,7 @@ export default class EventDialog extends Vue {
   endAt = new Date().toISOString().substr(0, 10);
   endAtMenu = false;
   error = '';
-  isLoading = false;
+  loading = false;
 
   // computed
   get show() {
@@ -171,7 +176,7 @@ export default class EventDialog extends Vue {
       this.startAt = event.startAt;
       this.endAt = event.endAt;
     } else {
-      this.clearFields();
+      this.emptyFields();
     }
   }
 
@@ -185,31 +190,20 @@ export default class EventDialog extends Vue {
   }
 
   // methods
-  async close(deleted: boolean) {
-    if (!deleted) {
-      await this.save();
-    }
-    if (this.error !== '') {
-      log.debug('error not empty');
-      return;
-    }
+  cancel() {
+    this.close();
+    this.emptyFields();
+  }
+
+  async close() {
     this.show = false;
     this.startAtMenu = false;
     this.endAtMenu = false;
     this.error = '';
-    this.isLoading = false;
-    this.clearFields();
+    this.loading = false;
   }
 
-  async save() {
-    if (this.event) {
-      await this.updateEvent();
-    } else {
-      await this.createEvent();
-    }
-  }
-
-  clearFields() {
+  emptyFields() {
     this.title = '';
     this.description = '';
     this.startAt = this.now;
@@ -221,26 +215,28 @@ export default class EventDialog extends Vue {
       return;
     }
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const params: CreateEvent = {
       title: this.title,
       description: this.description,
       startAt: core.toIsoDate(this.startAt)!,
       endAt: core.toIsoDate(this.endAt)!,
     };
+
     try {
       const res = await core.call(Method.CreateEvent, params);
       this.$emit('created', (res as Event));
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async updateEvent() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const event = { ...this.event } as EventModel;
     event.title = this.title;
     event.description = this.description;
@@ -249,27 +245,28 @@ export default class EventDialog extends Vue {
     try {
       const res = await core.call(Method.UpdateEvent, event);
       this.$emit('updated', (res as Event));
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 
   async deleteEvent() {
     this.error = '';
-    this.isLoading = true;
+    this.loading = true;
     const params: DeleteEvent = {
       id: this.event!.id,
     };
     try {
       await core.call(Method.DeleteEvent, params);
       this.$emit('deleted', this.event);
-      this.close(true);
+      this.close();
     } catch (err) {
       this.error = err.message;
     } finally {
-      this.isLoading = false;
+      this.loading = false;
     }
   }
 

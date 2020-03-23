@@ -1,61 +1,41 @@
 <template>
   <div class="fill-height">
     <v-row class="fill-height">
+      <v-col cols="3">
+        <v-row>
+          <v-col cols="3">
+            <v-btn fab outlined small color="primary" @click="$refs.calendar.prev()">
+              <v-icon dark>mdi-chevron-left</v-icon>
+            </v-btn>
+          </v-col>
 
-      <v-col sm="3" class="mb-4 pl-5 controls">
+          <v-col sm="6" class="controls">
+            <p class="mb-4 blm-pointer" @click="centerToday">
+              {{ today }}
+            </p>
+          </v-col>
 
-        <p class="mb-4 blm-pointer" @click="centerToday">
-          {{ today }}
-        </p>
+          <v-col cols="3">
+            <v-btn fab outlined small color="primary" @click="$refs.calendar.next()">
+              <v-icon dark>mdi-chevron-right</v-icon>
+            </v-btn>
+          </v-col>
 
-        <!-- <v-row justify="center"> -->
-        <v-btn
-          color="primary"
-          class="mb-4"
-          @click="createEvent"
-        >
-          <v-icon left>mdi-plus</v-icon> New Event
-        </v-btn>
-        <!-- </v-row> -->
+          <v-col cols="12">
+            <v-btn color="primary" @click="createEvent">
+              <v-icon left>mdi-plus</v-icon> New Event
+            </v-btn>
+          </v-col>
 
-        <v-btn
-          fab
-          outlined
-          small
-          absolute
-          left
-          color="primary"
-          @click="$refs.calendar.prev()"
-        >
-          <v-icon dark>mdi-chevron-left</v-icon>
-        </v-btn>
-
-        <v-btn
-          fab
-          outlined
-          small
-          absolute
-          right
-          color="primary"
-          @click="$refs.calendar.next()"
-        >
-          <v-icon dark>mdi-chevron-right</v-icon>
-        </v-btn>
-
-        <!-- <br /><br />
-
-        <v-select
+        <!-- <v-select
           outlined
           v-model="type"
           :items="typeOptions"
         /> -->
-
+        </v-row>
       </v-col>
 
-      <v-col
-        sm="9"
-        class="col-no-padding"
-      >
+      <v-col sm="9" class="col-no-padding">
 
         <v-calendar
           ref="calendar"
@@ -64,13 +44,13 @@
           :start="start"
           :end="end"
           :now="now"
+          color="error"
           @change="calendarChanged"
         >
 
         <template v-slot:day="{ date }">
         <template v-for="event in eventsMap[date]">
-          <div
-            v-ripple
+          <div v-ripple
             class="blm-event"
             :key="`${event.id}${event.date}`"
             @click="editEvent(event)"
