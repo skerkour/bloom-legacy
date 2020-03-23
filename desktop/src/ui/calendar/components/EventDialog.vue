@@ -64,8 +64,8 @@
 
             <v-col cols="6">
               <v-menu
-                ref="startAtMenu"
-                v-model="startAtMenu"
+                ref="startAtDateMenu"
+                v-model="startAtDateMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -74,21 +74,21 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="startAt"
+                    :value="formattedStartAt"
                     label="Start at"
                     prepend-icon="mdi-calendar"
                     readonly
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="startAt" @input="startAtMenu = false"></v-date-picker>
+                <v-date-picker v-model="startAt" @input="startAtDateMenu = false"></v-date-picker>
               </v-menu>
             </v-col>
 
             <v-col cols="6">
               <v-menu
-                ref="startAtMenu"
-                v-model="startAtMenu"
+                ref="startAtTimeMenu"
+                v-model="startAtTimeMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -97,21 +97,25 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="startAt"
+                    :value="startAtTime"
                     label="Start at"
                     prepend-icon="mdi-clock-outline"
                     readonly
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="startAt" @input="startAtMenu = false"></v-date-picker>
+                <v-time-picker
+                  v-model="startAtTime"
+                  format="24hr"
+                  @click:minute="startAtTimeMenu = false"
+                ></v-time-picker>
               </v-menu>
             </v-col>
 
             <v-col cols="6">
               <v-menu
-                ref="endAtMenu"
-                v-model="endAtMenu"
+                ref="endAtDateMenu"
+                v-model="endAtDateMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -120,21 +124,21 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="endAt"
+                    :value="formattedEndAt"
                     label="End at"
                     prepend-icon="mdi-calendar"
                     readonly
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="endAt" @input="endAtMenu = false"></v-date-picker>
+                <v-date-picker v-model="endAt" @input="endAtDateMenu = false"></v-date-picker>
               </v-menu>
             </v-col>
 
             <v-col cols="6">
               <v-menu
-                ref="endAtMenu"
-                v-model="endAtMenu"
+                ref="endAtTimeMenu"
+                v-model="endAtTimeMenu"
                 :close-on-content-click="false"
                 :nudge-right="40"
                 transition="scale-transition"
@@ -143,14 +147,18 @@
               >
                 <template v-slot:activator="{ on }">
                   <v-text-field
-                    v-model="endAt"
+                    v-model="endAtTime"
                     label="End at"
                     prepend-icon="mdi-clock-outline"
                     readonly
                     v-on="on"
                   />
                 </template>
-                <v-date-picker v-model="endAt" @input="endAtMenu = false"></v-date-picker>
+                <v-time-picker
+                  v-model="endAtTime"
+                  format="24hr"
+                  @click:minute="endAtTimeMenu = false"
+                ></v-time-picker>
               </v-menu>
             </v-col>
 
@@ -178,6 +186,7 @@ import {
   Vue,
   Watch,
 } from 'vue-property-decorator';
+import moment from 'moment';
 import core from '@/core';
 import {
   DeleteEvent, CreateEvent, Event as EventModel, Method,
@@ -193,11 +202,15 @@ export default class EventDialog extends Vue {
   // data
   title = '';
   description = '';
-  now = new Date().toISOString().substr(0, 10);
-  startAt = new Date().toISOString().substr(0, 10);
-  startAtMenu = false;
-  endAt = new Date().toISOString().substr(0, 10);
-  endAtMenu = false;
+  now = new Date();
+  startAt = new Date();
+  startAtTime = '08:00';
+  startAtDateMenu = false;
+  startAtTimeMenu = false;
+  endAt = new Date();
+  endAtTime = '09:00';
+  endAtDateMenu = false;
+  endAtTimeMenu = false;
   error = '';
   loading = false;
 
@@ -212,6 +225,14 @@ export default class EventDialog extends Vue {
     }
   }
 
+  get formattedStartAt(): string {
+    return this.startAt ? moment(this.startAt).format('dddd, MMMM Do YYYY') : '';
+  }
+
+  get formattedEndAt(): string {
+    return this.endAt ? moment(this.endAt).format('dddd, MMMM Do YYYY') : '';
+  }
+
   // lifecycle
   // watch
   @Watch('event')
@@ -220,16 +241,21 @@ export default class EventDialog extends Vue {
       this.title = event.title;
       this.description = event.description;
       this.startAt = event.startAt;
+      this.startAtTime = this.dateToTimeSring(event.startAt);
       this.endAt = event.endAt;
+      this.endAtTime = this.dateToTimeSring(event.endAt);
     } else {
       this.emptyFields();
     }
   }
 
   @Watch('startAt')
-  onStartAtChanged(newStartAt: string) {
-    const startAtTime = new Date(newStartAt).getTime();
-    const endAtTime = new Date(this.endAt).getTime();
+  onStartAtChanged(newStartAt: Date) {
+    if (!newStartAt) {
+      return;
+    }
+    const startAtTime = newStartAt.getTime();
+    const endAtTime = this.endAt.getTime();
     if (endAtTime < startAtTime) {
       this.endAt = newStartAt;
     }
@@ -243,8 +269,10 @@ export default class EventDialog extends Vue {
 
   async close() {
     this.show = false;
-    this.startAtMenu = false;
-    this.endAtMenu = false;
+    this.startAtDateMenu = false;
+    this.startAtTimeMenu = false;
+    this.endAtDateMenu = false;
+    this.endAtTimeMenu = false;
     this.error = '';
     this.loading = false;
   }
@@ -257,16 +285,15 @@ export default class EventDialog extends Vue {
   }
 
   async createEvent() {
-    if (this.isEmpty()) {
-      return;
-    }
     this.error = '';
     this.loading = true;
+    const startAt = this.timeToDate(this.startAt, this.startAtTime);
+    const endAt = this.timeToDate(this.endAt, this.endAtTime);
     const params: CreateEvent = {
       title: this.title,
       description: this.description,
-      startAt: core.toIsoDate(this.startAt)!,
-      endAt: core.toIsoDate(this.endAt)!,
+      startAt,
+      endAt,
     };
 
     try {
@@ -286,8 +313,8 @@ export default class EventDialog extends Vue {
     const event = { ...this.event } as EventModel;
     event.title = this.title;
     event.description = this.description;
-    event.startAt = core.toIsoDate(this.startAt)!;
-    event.endAt = core.toIsoDate(this.endAt)!;
+    event.startAt = this.timeToDate(this.startAt, this.startAtTime);
+    event.endAt = this.timeToDate(this.endAt, this.endAtTime);
     try {
       const res = await core.call(Method.UpdateEvent, event);
       this.$emit('updated', (res as Event));
@@ -335,12 +362,17 @@ export default class EventDialog extends Vue {
     return `${year}-${month.padStart(2, '0')}-${day.padStart(2, '0')}`;
   }
 
-  isEmpty(): boolean {
-    if (this.title.trim().length !== 0 || this.description.trim().length !== 0
-      || this.startAt !== this.now || this.endAt !== this.now) {
-      return false;
-    }
-    return true;
+  timeToDate(date: Date, time: string): Date {
+    const ret = date;
+    ret.setHours(parseInt(time[0] + time[1], 10));
+    ret.setMinutes(parseInt(time[3] + time[4], 10));
+    return ret;
+  }
+
+  dateToTimeSring(date: Date): string {
+    const hours = date.getHours().toString();
+    const minutes = date.getMinutes().toString();
+    return `${hours.padStart(2, '0')}:${minutes.padStart(2, '0')}`;
   }
 }
 </script>

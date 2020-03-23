@@ -639,7 +639,7 @@ export default class ContactDialog extends Vue {
     this.error = '';
     this.loading = true;
     const params: CreateContactParams = {
-      birthday: core.toIsoDate(this.birthday),
+      birthday: core.toDateIsoString(this.birthday),
       firstName: this.firstName,
       lastName: this.lastName,
       notes: this.notes,
@@ -666,7 +666,7 @@ export default class ContactDialog extends Vue {
     this.error = '';
     this.loading = true;
     const contact = { ...this.contact } as Contact;
-    contact.birthday = core.toIsoDate(this.birthday);
+    contact.birthday = core.toDateIsoString(this.birthday);
     contact.firstName = this.firstName;
     contact.lastName = this.lastName;
     contact.notes = this.notes;

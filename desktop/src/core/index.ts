@@ -27,7 +27,7 @@ async function call(method: string, params: any): Promise<any> {
   return data.data;
 }
 
-function toIsoDate(date: string | null): Date | null {
+function toDateIsoString(date: string | null): Date | null {
   if (date === null) {
     return null;
   }
@@ -40,7 +40,7 @@ async function init(preferences: string[]): Promise<InitRes> {
 
 export default {
   call,
-  toIsoDate,
+  toDateIsoString,
   Empty,
   init,
 };

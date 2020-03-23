@@ -47,18 +47,8 @@
           color="error"
           @change="calendarChanged"
           @click:event="editEvent"
+          :events="vuetifyEvents"
         >
-
-        <template v-slot:day="{ date }">
-          <div v-for="event in eventsMap[date]" :key="event.id">
-            <div v-ripple
-              class="blm-event"
-              :key="`${event.id}${event.date}`"
-              @click="editEvent(event)"
-              >{{ event.title || '(No title)' }}</div>
-          </div>
-      </template>
-
 
         </v-calendar>
       </v-col>
@@ -117,24 +107,15 @@ export default class Index extends Vue {
   currentEvent: EventModel | null = null;
 
   // computed
-  get eventsMap() {
-    const map: any = {};
-    this.events.forEach((e: any) => {
-      e.startAt = new Date(e.startAt).toISOString().substr(0, 10);
-      e.endAt = new Date(e.endAt).toISOString().substr(0, 10);
-      e.date = new Date(e.startAt).toISOString().substr(0, 10);
-      (map[e.date] = map[e.date] || []).push(e);
-
-      // because vuetify does not support multi day events
-      const diff = moment(e.endAt).diff(e.startAt, 'days');
-      for (let i = 1; i <= diff; i += 1) {
-        const e2 = { ...e };
-        e2.date = new Date(new Date(e2.startAt).setDate(new Date(e2.startAt).getDate() + i))
-          .toISOString().substr(0, 10);
-        (map[e2.date] = map[e2.date] || []).push(e);
-      }
+  get vuetifyEvents(): any[] {
+    return this.events.map((event: any) => { // eslint-disable-line
+      event.startAt = new Date(event.startAt); // eslint-disable-line
+      event.endAt = new Date(event.endAt); // eslint-disable-line
+      event.start = this.formatDate(event.startAt); // eslint-disable-line
+      event.end = this.formatDate(event.endAt); // eslint-disable-line
+      event.name = event.title || '(No title)'; // eslint-disable-line
+      return event;
     });
-    return map;
   }
 
   // lifecycle
@@ -170,8 +151,8 @@ export default class Index extends Vue {
     this.focus = this.now;
   }
 
-  editEvent(event: EventModel) {
-    this.currentEvent = event;
+  editEvent(event: any) {
+    this.currentEvent = event.event;
     this.openEventDialog();
   }
 
@@ -206,6 +187,10 @@ export default class Index extends Vue {
       new Date(to.start.date).toISOString() as unknown as Date,
       new Date(to.end.date).toISOString() as unknown as Date,
     );
+  }
+
+  formatDate(date: Date) {
+    return `${date.getFullYear()}-${date.getMonth() + 1}-${date.getDate()} ${date.getHours()}:${date.getMinutes()}`;
   }
 }
 </script>
