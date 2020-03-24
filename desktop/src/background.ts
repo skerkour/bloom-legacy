@@ -169,7 +169,11 @@ if (isDevelopment) {
 
 ipcMain.on('server:start', () => {
   console.log('mainProcess: starting server');
-  child = execFile(path.join(process.resourcesPath, 'public', DAEMON_NAME), (err, data) => {
+  let bloomdPath = path.join(process.resourcesPath, DAEMON_NAME);
+  if (process.env.WEBPACK_DEV_SERVER_URL) {
+    bloomdPath = `./${DAEMON_NAME}`;
+  }
+  child = execFile(bloomdPath, (err, data) => {
     if (data) {
       console.log(data.toString());
     }
