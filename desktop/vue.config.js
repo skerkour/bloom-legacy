@@ -45,10 +45,11 @@ module.exports = {
         productName: 'Bloom',
         appId: 'com.bloom42.bloom',
         extraResources: ['bloomd'],
-        publish: [{
-          provider: 'generic',
-          url: 'https://gitlab.com',
-        },
+        publish: [
+          {
+            provider: 'generic',
+            url: 'https://bloom42-updates.s3.fr-par.scw.cloud/desktop',
+          },
         ],
         mac: {
           category: 'public.app-category.productivity', // see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/uid/TP40009250-SW8
