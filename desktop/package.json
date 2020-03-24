@@ -10,7 +10,7 @@
   "scripts": {
     "build": "NODE_ENV=production vue-cli-service build --modern",
     "lint": "vue-cli-service lint",
-    "build:electron": "vue-cli-service electron:build",
+    "build:electron": "NODE_ENV=production vue-cli-service electron:build",
     "dev:electron": "vue-cli-service electron:serve",
     "postinstall": "electron-builder install-app-deps",
     "postuninstall": "electron-builder install-app-deps",

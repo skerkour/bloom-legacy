@@ -93,7 +93,7 @@ function createWindow() {
     minWidth: config.WINDOW_MIN_WIDTH,
     minHeight: config.WINDOW_MIN_HEIGHT,
     webPreferences: {
-      nodeIntegration,
+      // nodeIntegration,
       sandbox: !nodeIntegration,
     },
     icon: config.WINDOW_ICON,

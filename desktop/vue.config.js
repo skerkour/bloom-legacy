@@ -1,22 +1,4 @@
 module.exports = {
-  configureWebpack: {
-    externals: {
-      // Tricky: Whenever we see `require("bloom_native")`, use the following
-      // JavaScript to implement a stub module.  We can't use `node-loader` for
-      // this because it bakes in hard-coded paths and breaks the ability to
-      // move compiled Electron apps between systems.
-      // bloom_native: process.env.NODE_ENV === 'development'
-      // ? "require('./native')" : undefined,
-    },
-    module: {
-      // rules: [
-      //   {
-      //     test: /\.node$/,
-      //     use: 'node-loader',
-      //   },
-      // ],
-    },
-  },
   chainWebpack: (config) => {
     config.plugin('define').tap((args) => {
       const v = JSON.stringify(require('./package.json').version); // eslint-disable-line global-require
@@ -67,13 +49,12 @@ module.exports = {
           darkModeSupport: true,
           hardenedRuntime: true,
           icon: 'build/icons/mac/icon.icns',
+          target: 'dmg',
+          extraDistFiles: ['bloomd'],
         },
         linux: {
           category: 'Utility', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
           icon: 'build/icons/png',
-        },
-        win: {
-          icon: 'build/icons/win/icon.ico',
         },
       },
     },
