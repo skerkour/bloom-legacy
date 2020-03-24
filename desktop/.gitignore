@@ -13,3 +13,4 @@ libblmcore.so
 blmcoreserver
 bloomcoreserver
 bloomd
+public/bloomd

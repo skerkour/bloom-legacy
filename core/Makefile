@@ -18,12 +18,12 @@ test:
 .PHONY: desktop
 desktop:
 	go build -a -ldflags "-w -s" -o dist/desktop/bloomd bloomd/*.go
-	cp dist/desktop/bloomd ../desktop/bloomd
+	cp dist/desktop/bloomd ../desktop/public/bloomd
 
 .PHONY: desktop_build_dev
 desktop_build_dev:
 	go build -o dist/desktop/bloomd bloomd/*.go
-	cp dist/desktop/bloomd ../desktop/bloomd
+	cp dist/desktop/bloomd ../desktop/public/bloomd
 
 
 .PHONY: dev_desktop

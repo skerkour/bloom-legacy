@@ -160,24 +160,16 @@ if (!gotTheLock) {
 
 // Exit cleanly on request from parent process in development mode.
 if (isDevelopment) {
-  // if (process.platform === 'win32') {
-  //   process.on('message', (data) => {
-  //     if (data === 'graceful-exit') {
-  //       app.quit();
-  //     }
-  //   });
-  // } else {
   process.on('SIGTERM', () => {
     killChild();
     app.quit();
   });
-  // }
 }
 
 
 ipcMain.on('server:start', () => {
   console.log('mainProcess: starting server');
-  child = execFile(`./${DAEMON_NAME}`, (err, data) => {
+  child = execFile(path.join(process.resourcesPath, 'public', DAEMON_NAME), (err, data) => {
     if (data) {
       console.log(data.toString());
     }

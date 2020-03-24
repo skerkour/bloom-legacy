@@ -44,13 +44,13 @@ module.exports = {
       builderOptions: {
         productName: 'Bloom',
         appId: 'com.bloom42.bloom',
+        extraResources: ['public/bloomd'],
         mac: {
           category: 'public.app-category.productivity', // see https://developer.apple.com/library/archive/documentation/General/Reference/InfoPlistKeyReference/Articles/LaunchServicesKeys.html#//apple_ref/doc/uid/TP40009250-SW8
           darkModeSupport: true,
           hardenedRuntime: true,
           icon: 'build/icons/mac/icon.icns',
           target: 'dmg',
-          extraDistFiles: ['bloomd'],
         },
         linux: {
           category: 'Utility', // https://specifications.freedesktop.org/menu-spec/latest/apa.html
