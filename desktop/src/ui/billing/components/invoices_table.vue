@@ -39,8 +39,9 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import { shell } from 'electron';
 import * as models from '@/api/models';
+
+const { shell } = window as any;
 
 @Component
 export default class InvoicesTable extends Vue {

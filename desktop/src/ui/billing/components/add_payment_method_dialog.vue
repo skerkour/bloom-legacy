@@ -59,9 +59,10 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { shell } from 'electron';
 import { mask } from 'vue-the-mask';
 import { NewStripeCard } from '@/core/billing';
+
+const { shell } = window as any;
 
 @Component({
   directives: {

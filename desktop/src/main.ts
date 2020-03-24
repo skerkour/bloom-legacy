@@ -1,5 +1,4 @@
 import Vue from 'vue';
-import { ipcRenderer } from 'electron';
 import App from '@/App.vue';
 import router from '@/router';
 import store, { Mutations } from '@/store';
@@ -8,6 +7,7 @@ import filters from '@/filters';
 import core from '@/core';
 import { log, Level } from '@/libs/rz';
 
+const { ipcRenderer } = window as any;
 
 if (process.env.NODE_ENV === 'development') {
   Vue.config.productionTip = true;

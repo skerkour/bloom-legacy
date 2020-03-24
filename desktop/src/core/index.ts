@@ -1,6 +1,7 @@
-import { ipcRenderer } from 'electron';
 import * as models from '@/api/models';
 import { log } from '@/libs/rz';
+
+const { ipcRenderer } = window as any;
 
 const Empty = {};
 

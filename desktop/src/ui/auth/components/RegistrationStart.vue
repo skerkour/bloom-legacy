@@ -49,7 +49,6 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { shell } from 'electron';
 import core from '@/core';
 import { StartRegistration, Method } from '@/core/users';
 import { RegistrationStarted } from '@/api/models';
@@ -57,6 +56,7 @@ import { StorePendingAccount } from '../models';
 import { Mutations } from '@/store';
 import config from '@/config';
 
+const { shell } = window as any;
 
 @Component
 export default class RegistrationStart extends Vue {

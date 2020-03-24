@@ -66,9 +66,10 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { shell } from 'electron';
 import SettingsDialog from '@/ui/auth/components/SettingsDialog.vue';
 import config from '@/config';
+
+const { shell } = window as any;
 
 @Component({
   components: {

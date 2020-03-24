@@ -11,6 +11,7 @@ import path from 'path';
 import { createProtocol } from './create_protocol';
 import config from './config';
 
+declare const __static: string; // eslint-disable-line
 
 const CALL_URL = '/electronCall';
 const UNIX_SOCKET_PATH = '/tmp/com.bloom42.bloom.sock';
@@ -93,10 +94,11 @@ function createWindow() {
     minWidth: config.WINDOW_MIN_WIDTH,
     minHeight: config.WINDOW_MIN_HEIGHT,
     webPreferences: {
-      // nodeIntegration,
+      nodeIntegration,
       sandbox: !nodeIntegration,
+      preload: path.join(__static, 'preload.js'),
     },
-    icon: config.WINDOW_ICON,
+    icon: path.join(__static, config.WINDOW_ICON),
   });
 
   if (process.env.WEBPACK_DEV_SERVER_URL) {
