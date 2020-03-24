@@ -113,7 +113,9 @@ function createWindow() {
     createProtocol('app');
     // Load the index.html when not in development
     mainWindow.loadURL('app://./index.html');
-    autoUpdater.checkForUpdatesAndNotify();
+    if (process.platform === 'darwin') {
+      autoUpdater.checkForUpdatesAndNotify();
+    }
   }
 
   mainWindow.on('closed', () => {
