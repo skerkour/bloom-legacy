@@ -22,6 +22,7 @@
     "@mdi/font": "^4.8.95",
     "axios": "^0.19.2",
     "core-js": "^3.6.4",
+    "electron-updater": "^4.2.5",
     "moment": "^2.24.0",
     "rxjs": "^6.5.4",
     "uuid": "^3.4.0",

@@ -8,8 +8,10 @@ import axios from 'axios';
 import { execFile, ChildProcess } from 'child_process';
 import fs from 'fs';
 import path from 'path';
+import { autoUpdater } from 'electron-updater';
 import { createProtocol } from './create_protocol';
 import config from './config';
+
 
 declare const __static: string; // eslint-disable-line
 
@@ -111,6 +113,7 @@ function createWindow() {
     createProtocol('app');
     // Load the index.html when not in development
     mainWindow.loadURL('app://./index.html');
+    autoUpdater.checkForUpdatesAndNotify();
   }
 
   mainWindow.on('closed', () => {
