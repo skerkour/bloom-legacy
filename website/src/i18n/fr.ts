@@ -267,17 +267,17 @@ export default {
         résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
       },
     },
-    arcade_description: 'Never stop having fun!',
+    arcade_description: 'N\'arrêtez jamais le fun!',
     arcade: {
-      description: 'The best place to play',
+      description: 'La meilleure place pour jouer',
       feature1: {
-        name: 'Play from any device',
-        description: `Gaming should not be frustrating because the lack of a specific device. Bloom
-        Arcade's games can run on any platform with a web browser`,
+        name: 'Jouez depuis n\'importe quel appareil',
+        description: `Jouer ne doit plus jamais être frustrant. Les jeux de Bloom Arcade peuvent fonctionner
+        sur n'importe quel appareil.`,
       },
       feature2: {
-        name: 'Committed to your privacy',
-        description: 'None of our games contains ad.',
+        name: 'Engagés pour votre vie privée',
+        description: 'Aucun de nos jeux ne contient de pub.',
       },
     },
     contacts_description: 'Keep your contacts organized and up to date.',
