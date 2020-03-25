@@ -112,7 +112,12 @@ func Run() error {
 	go func() {
 		var err error
 		if config.Server.HTTPS {
-			go http.ListenAndServe(":http", certManager.HTTPHandler(nil))
+			go func() {
+				err := http.ListenAndServe(":http", certManager.HTTPHandler(nil))
+				if err != nil {
+					log.Fatal("listening HTTP", rz.Err(err))
+				}
+			}()
 			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
 		} else {
 			err = server.ListenAndServe()
