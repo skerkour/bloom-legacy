@@ -217,11 +217,11 @@ export default {
         fichiers ou vos photos - ils sont dans Bloom File.`,
       },
     },
-    calendar_description: 'Get organized on the go with the Bloom Calendar!',
+    calendar_description: 'Restez organisé depuis n\'importe où avec Bloom Calendar!',
     calendar: {
-      description: 'Make the most of every day',
+      description: 'Soyez productif tous les jours',
       feature1: {
-        name: 'Easy to use',
+        name: 'Facile à utiliser',
         description: `Make the most of every day with a simple to use interface, designed to adapt to
         everyone's needs.`,
       },
@@ -296,13 +296,13 @@ export default {
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
   security: {
-    title: 'Security',
-    description: `Keeping our customer data safe and secure is our top priority. We take threats very
-    seriously and work hard to protect our customers and their data. Your input and feedback
-      on our security is greatly appreciated.`,
-    issues_title: 'Reporting Issues',
-    issues_description: `Send reports directly to <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
-      and we will get back to you faster than the light.`,
-    hall_title: 'Hall of fame',
+    title: 'Sécurité',
+    description: `Sécuriser les données de nos clients est notre première priorité. Nous prenons les menaces
+    très au seérieux et travaillons dur pour protéger nos clients et leurs données. Vos retours sur notre
+    sécurité sont appréciés.`,
+    issues_title: 'Rapporter un problème',
+    issues_description: `Envoyez vos rapports directement à <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+    et nous reviendrons vers vous plus vite que la vitesse de la lumière.`,
+    hall_title: 'Merci à',
   },
 };
