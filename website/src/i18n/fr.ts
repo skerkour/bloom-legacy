@@ -195,26 +195,26 @@ export default {
     this feature.`,
   },
   features: {
-    title: 'A safe place for all your data',
-    solution: 'That\'s why we built Bloom',
-    files_description: `A safe place for all your files. Bloom Files is end to end encrypted.<br />
-    <b>1GB free.</b>`,
+    title: 'Un endroit sûr pour vos données',
+    solution: 'C\'est pour cette raison que nous avons construit Bloom',
+    files_description: `Un endroit sûr pour tous vos fichiers. Bloom Files est chiffré de bout-en-bout.<br />
+        <b>1GO gratuit.</b>`,
     files: {
-      description: 'A safe place for all your files',
+      description: 'Un endroit sûr pour tous vos fichiers',
       feature1: {
-        name: 'Store any file',
-        description: `Keep photos, stories, designs, drawings, recordings, videos, and more.
-        Your first <b>1GB</b> of storage are free.`,
+        name: 'Sotckez n\'importe quel fichier',
+        description: `Gardez vos photos, documents, designs, dessins, enregistrements, videos et plus.
+        Votre premier <b>1GO</b> de stockage est gratuit.`,
       },
       feature2: {
-        name: 'See your stuff anywhere',
-        description: `Your files in Files can be reached from any smartphone, tablet, or computer.
-        So wherever you go, your files follow.`,
+        name: 'Accédez à vos fichiers depuis n\'importe où',
+        description: `Vos fichiers peuvent ètre accédés depuis n'importe quel smartphone, tablette ou
+        ordinateur. Qu'importe où vous allez, vos fichiers suivront.`,
       },
       feature3: {
-        name: 'Keep your files safe',
-        description: `If something happens to your device, you don't have to worry about losing
-          your files or photos – they're in your Bloom Files.`,
+        name: 'Garder vos fichiers en sécurité',
+        description: `Si quelque chose arrive à votre appareil, vous n'avez pas à vous inqiéter de perdre vos
+        fichiers ou vos photos - ils sont dans Bloom File.`,
       },
     },
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
