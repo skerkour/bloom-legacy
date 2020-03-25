@@ -46,6 +46,7 @@ type ServerConfig struct {
 	Domains        []string `json:"domains"`
 	HTTPS          bool     `json:"https"`
 	CertsDirectory string   `json:"certs_directory"`
+	CertsEmail     string   `json:"certs_email"`
 }
 
 type StripeConfig struct {
