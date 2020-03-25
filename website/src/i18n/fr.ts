@@ -293,7 +293,8 @@ export default {
         and profiles.`,
       },
     },
-    qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
+    qrcodes_description: `Bloom inclut un outils pour scanner vos QR codes n'importe quand
+    et n'importe où.`,
   },
   security: {
     title: 'Sécurité',
