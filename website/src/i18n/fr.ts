@@ -222,13 +222,13 @@ export default {
       description: 'Soyez productif tous les jours',
       feature1: {
         name: 'Facile à utiliser',
-        description: `Make the most of every day with a simple to use interface, designed to adapt to
-        everyone's needs.`,
+        description: `Bloom calendar a été pensé pour s'adapter à tous les besoins grâce à une interface simple
+          et intuitive.`,
       },
       feature2: {
-        name: 'All your calendars in one place',
-        description: `Share calendars with friends and coworkers and access them all from the same
-        unified interface`,
+        name: 'Tous vos calendriers à un seul endroit',
+        description: `Partagez des calendriers avec vos amis et vos collègues à travers une interface
+        unifiée`,
       },
     },
     notes_description: `Quickly capture what’s on your mind and get a reminder later
