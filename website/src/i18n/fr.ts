@@ -280,18 +280,18 @@ export default {
         description: 'Aucun de nos jeux ne contient de pub.',
       },
     },
-    contacts_description: 'Keep your contacts organized and up to date.',
+    contacts_description: 'Gardez vos conatcts organisés et à jour.',
     contacts: {
-      description: 'Keep your contacts organized and up to date',
+      description: 'Gardez vos conatcts organisés et à jour',
       feature1: {
-        name: 'Back up your contacts and sync them across all your devices',
-        description: `Safely back up your contacts to the cloud
-        to access from any device.`,
+        name: 'Sauvegardez vos conatcts et gardez les synchronisés à travers tous vos appareils',
+        description: `Gardez vos contacts synchronisés et accédez les depuis n'importe quel appareil
+        en toute sécurité grâce à Bloom.`,
       },
       feature2: {
-        name: 'Keep your contacts organized and up to date',
-        description: `Easily add contacts and edit information like phone numbers, emails,
-        and profiles.`,
+        name: 'Gardez vos conatcts organisés et à jour',
+        description: `Ajoutez et éditez facilement les détails de vos contacts tels que numéros de
+        téléphone, emails et profiles.`,
       },
     },
     qrcodes_description: `Bloom inclut un outils pour scanner vos QR codes n'importe quand
