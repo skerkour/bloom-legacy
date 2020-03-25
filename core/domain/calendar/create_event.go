@@ -3,7 +3,7 @@ package calendar
 import (
 	"time"
 
-	"github.com/google/uuid"
+	"gitlab.com/bloom42/lily/uuid"
 	"gitlab.com/bloom42/bloom/core/db"
 )
 

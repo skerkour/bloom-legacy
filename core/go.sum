@@ -5,8 +5,6 @@ github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG
 github.com/godbus/dbus v4.1.0+incompatible h1:WqqLRTsQic3apZUK9qC5sGNfXthmPXzUZ7nQPrNITa4=
 github.com/godbus/dbus v4.1.0+incompatible/go.mod h1:/YcGZj5zSblfDWMMoOzV4fas9FZnQYTkDnsGvmh2Grw=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
-github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
-github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/jmoiron/sqlx v1.2.0 h1:41Ip0zITnmWNR/vHV+S4m+VoUivnWY5E4OJfLZjCJMA=
 github.com/jmoiron/sqlx v1.2.0/go.mod h1:1FEQNm3xlJgrMD+FBdI9+xvCksHtbpVBBw5dYhBSsks=
 github.com/lib/pq v1.0.0 h1:X5PMW56eZitiTeO7tKzZxFCSpbFZJtkMMooicw2us9A=
@@ -19,8 +17,8 @@ github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2 h1:r4erX1ryX+hcXSOichl6AJELBtFwnNMGD/e7QHa260c=
 gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
-gitlab.com/bloom42/lily v0.0.0-20200325095122-a7c7e649dfdd h1:b82+VhlqfXgfCwgIpuAgsbfqAIaQEoIPk8Bjc1FRjIM=
-gitlab.com/bloom42/lily v0.0.0-20200325095122-a7c7e649dfdd/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
+gitlab.com/bloom42/lily v0.0.0-20200325134955-a6b455af715f h1:Lm5WQfTvHKIkbZc9ANnKPdBMtZ4H9FTDqqxrs5nPO3E=
+gitlab.com/bloom42/lily v0.0.0-20200325134955-a6b455af715f/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 h1:xMPOj6Pz6UipU1wXLkrtqpHbR0AVFnyPEQq/wRWz9lM=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
