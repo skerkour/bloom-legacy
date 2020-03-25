@@ -23,8 +23,6 @@
             <li><router-link to="/faq">{{ $t('footer.product.faq') }}</router-link></li>
             <li><a class="nav-link" href="https://help.bloom.sh" target="_blank" rel="noopener">{{ $t('footer.product.help') }}</a></li>
             <li><router-link to="/pricing">{{ $t('footer.product.pricing') }}</router-link></li>
-            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing">{{ $t('footer.product.contribute') }}</a></li>
-            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/bloom/-/wikis">{{ $t('footer.product.documentation') }}</a></li>
           </ul>
         </v-col>
 
@@ -35,6 +33,7 @@
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
             <li><a class="nav-link" href="https://mastodon.social/@42bloom" target="_blank" rel="me noopener">Mastodon</a></li>
+            <li><a class="nav-link" target="_blank" rel="noopener" href="https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing">{{ $t('footer.product.contribute') }}</a></li>
           </ul>
         </v-col>
 
