@@ -42,4 +42,26 @@ export default {
     not_found: 'Page non trouvée',
     back_home: 'Retour à l\'accueil',
   },
+  footer: {
+    organization: {
+      title: 'Organisation',
+      about: 'À propos',
+      contact: 'Contact',
+      security: 'Sécurité',
+      terms: 'CGU',
+      privacy: 'Privacy',
+      licensing: 'Licences',
+    },
+    product: {
+      title: 'Produit',
+      faq: 'FAQ',
+      pricing: 'Tarifs',
+      download: 'Télécharger les Apps',
+      help: 'Aide & Support',
+      contribute: 'Contribuer',
+    },
+    community: {
+      title: 'Communauté',
+    },
+  },
 };
