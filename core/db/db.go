@@ -30,7 +30,7 @@ func CloseAndRemove() error {
 }
 
 // Init initializes the DB singleton and make migrations if necessary
-func Init() error {
+func Init(key string) error {
 	var userVersion int
 
 	dbDir, err := kernel.AppDataDir()

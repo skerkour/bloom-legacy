@@ -2,6 +2,8 @@ github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496 h1:zV3ejI06
 github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496/go.mod h1:oGkLhpf+kjZl6xBf758TQhh5XrAeiJv/7FRz/2spLIg=
 github.com/go-sql-driver/mysql v1.4.0 h1:7LxgVwFb2hIQtMm87NdgAVfXjnt4OePseqT1tKx+opk=
 github.com/go-sql-driver/mysql v1.4.0/go.mod h1:zAC/RDZ24gD3HViQzih4MyKcchzm+sOG5ZlKdlhCg5w=
+github.com/godbus/dbus v4.1.0+incompatible h1:WqqLRTsQic3apZUK9qC5sGNfXthmPXzUZ7nQPrNITa4=
+github.com/godbus/dbus v4.1.0+incompatible/go.mod h1:/YcGZj5zSblfDWMMoOzV4fas9FZnQYTkDnsGvmh2Grw=
 github.com/golang/protobuf v1.3.1/go.mod h1:6lQm79b+lXiMfvg/cZm0SGofjICqVBUtrP5yJMmIC1U=
 github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
 github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
@@ -19,8 +21,8 @@ gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2 h1:r4erX1ryX+
 gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
 gitlab.com/bloom42/libs/rz-go v1.3.0 h1:ex51jAhN1/tecDMAmyTrmDcjQxb2NKiVFnHpJSCw/GY=
 gitlab.com/bloom42/libs/rz-go v1.3.0/go.mod h1:/G8JCs/z9FPn+XYJT9e52gj76clf4dk8tf2jbq1HCpQ=
-gitlab.com/bloom42/lily v0.0.0-20200322180922-f17cee67db1f h1:fiH07R911H6KSJfidwFDtTAh3fXnjF2Y7MqUFVTR4+4=
-gitlab.com/bloom42/lily v0.0.0-20200322180922-f17cee67db1f/go.mod h1:eBU7JwDNwmU+EVtvdtkl+zZ/q+LukEkPdT3a6cMtstg=
+gitlab.com/bloom42/lily v0.0.0-20200325095122-a7c7e649dfdd h1:b82+VhlqfXgfCwgIpuAgsbfqAIaQEoIPk8Bjc1FRjIM=
+gitlab.com/bloom42/lily v0.0.0-20200325095122-a7c7e649dfdd/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 h1:xMPOj6Pz6UipU1wXLkrtqpHbR0AVFnyPEQq/wRWz9lM=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
