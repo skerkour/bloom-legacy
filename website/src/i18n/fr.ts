@@ -231,39 +231,40 @@ export default {
         unifiée`,
       },
     },
-    notes_description: `Quickly capture what’s on your mind and get a reminder later
-    at the right place or time.`,
+    notes_description: 'Capturez vos idées en un instant et retrouvez les plus tard',
     notes: {
-      description: 'Quickly capture what’s on your mind.',
+      description: 'Capturez vos idées en un instant.',
       feature1: {
-        name: 'Feel organized without the effort',
-        description: `Bloom Notes helps you capture and prioritize ideas, projects,
-        so nothing falls through the cracks.`,
+        name: 'Soyez organisé sans efforts',
+        description: `Bloom notes vous and a capturer and prioriser vos idées et projets afin de ne
+        rien oublier.`,
       },
       feature2: {
-        name: 'Access from anywhere',
-        description: `Take notes. It's easy to pull up your content from anywhere. Start on your
-        laptop then update notes on your phone. Bloom Notes works on any device or platform.`,
+        name: 'Accédez à vos notes depuis n\'importe où',
+        description: `Prenez vos notes. C'est aussi simple que cela. Il est ensuite facile d'y accéder
+        et de les modifier depuis vos autres appareils. Commencez sur votre ordinateur, puis poursuivez sur votre
+        téléphone. Bloom Notes fonctionnes sur n'importe quel appareil.`,
       },
     },
-    bitflow_description: `Your cloud-based download manager.
-    Download any file and torrent directly to your Bloom files.`,
+    bitflow_description: `Un gestionnaire de téléchargement dans le Cloud.
+    Télécharger n'importe quel fichier ou torrent directement dans votre cloud Bloom.`,
     bitflow: {
-      description: 'Download torrents to a secure cloud. Fast. Online.',
+      description: 'Téléchargez vos torrents dans un cloud sécurisé. Simple. Rapide.',
       feature1: {
-        name: 'Download anywhere, anytime',
-        description: `Your files are downloaded directly to your Bloom files and can can be accessed from
-        any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
+        name: 'Téléchargez n\'importe où, n\'importe quand',
+        description: `Vos fichiers sont téléchargés directement dans votre cloud Bloom et peuvent
+        être accédés depuis n'importe quel téléphone, tablette ou ordinateur. Qu'importe où vous allez,
+        vos téléchargements suivront.`,
       },
       feature2: {
-        name: 'No need to install a torrent client',
-        description: `With Bitflow you don’t need to download any program, all you need is a
-        browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
+        name: 'Plus besoin d\'installer un logiciels de torrents',
+        description: `Avec Bitflow, vous n'avez pas besoin de télécharger d'autres programmes. Bitflow supporte
+        aujourd'hui les protocoles HTTP(S) et torrent.`,
       },
       feature3: {
-        name: 'Download big files faster',
-        description: `It takes a long time to download large files with a residential bandwidth.
-        Not with Bitflow! We'll download your files in the blink of an eye!`,
+        name: 'Téléchargez vos gros fichiers plus rapidement',
+        description: `Il peut prendre beaucoup de temps pour télécharger des gros fichiers sur une ligne
+        résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
       },
     },
     arcade_description: 'Never stop having fun!',
