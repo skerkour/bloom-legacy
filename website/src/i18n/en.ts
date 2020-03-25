@@ -7,7 +7,6 @@ export default {
     pain2: 'Tired of being abused by Big Companies?',
     pain3: 'You no longer trust tech monopolies?',
     pain4: 'Privacy is not dead!',
-
   },
   appbar: {
     download: 'Download',
@@ -75,7 +74,7 @@ export default {
     too, either you contribute by financing our work. <br /><br />
 
     We use contaminating licenses to
-    avoid behaviors which will damage our vision of Open Source/Free Software and ensure
+    avoid behaviors which will damage our vision of Open Source / Free Software and ensure
     that those who benefits from our work contribute back to the community
     by releasing the modified version and the tooling around, or by funding the project.<br /><br />
 
@@ -130,7 +129,8 @@ export default {
     twitter: 'By saying <i>Hi</i> on Twitter:',
     mastodon: 'On the fediverse:',
     gitlab: 'Opening an issue on',
-    chatbox: 'Using the chatbox at the bottom right of this website',
+    chatbox: `Using the <a href="javascript:window.$crisp.push(['do', 'chat:open']);">chatbox</a>
+      at the bottom right of this website`,
   },
   download: {
     subtitle: 'Take back control!',

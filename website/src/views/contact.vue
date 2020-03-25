@@ -12,11 +12,11 @@
           {{ $t('contact.intro') }}
           <ul>
             <li>
-              <span v-html="$t('contact.chatbox')"></span>&nbsp;
-            </li>
-            <li>
               <span v-html="$t('contact.email')"></span>&nbsp;
               <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
+            </li>
+            <li>
+              <span v-html="$t('contact.chatbox')"></span>&nbsp;
             </li>
             <li>
               <span v-html="$t('contact.gitlab')"></span>&nbsp;
@@ -49,9 +49,6 @@ export default class Index extends Vue {
   // data
   // computed
   // lifecycle
-  created() {
-    (window as any).$crisp.push(['do', 'chat:open']);
-  }
   // watch
   // methods
 }
