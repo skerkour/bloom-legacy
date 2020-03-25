@@ -91,7 +91,7 @@ func Run() error {
 	if config.Server.HTTPS {
 		certManager = &autocert.Manager{
 			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(config.Server.Domain),
+			HostPolicy: autocert.HostWhitelist(config.Server.Domains...),
 			Cache:      autocert.DirCache(config.Server.CertsDirectory),
 		}
 		tlsConfig = &tls.Config{

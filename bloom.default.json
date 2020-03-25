@@ -5,7 +5,7 @@
 
   "server": {
     "port": 443,
-    "domain": "bloom.bloom42.com",
+    "domains": ["bloom.bloom42.com"],
     "https": true,
     "certs_directory": "/certs"
   },
