@@ -18,7 +18,8 @@ export default {
     subtitle2: '<b>Take back control with <span class="blm-rounded-elegance"><b>Bloom</b></span></b>',
     explore_features: 'Explore Features',
     feature1: {
-      title: 'Fast, Simple, Secure',
+      // title: 'Fast, Simple, Secure',
+      title: 'A safe place for all your data',
       description: `As an Open Source project anyone can inspect how Bloom works.
       We use state of the art cryptography to keep your data secure.
       There are no ads, no affiliate marketing, no creepy tracking. <br />
@@ -118,8 +119,8 @@ export default {
     },
     learn_more: {
       title: 'Want to learn more?',
-      blog: `We share strong opinions and crazy ideas about Tech, Design and Business on our
-      <a href="https://fatalentropy.com" target="_blank" rel="noopener noreferer">Fatal Entropy</a> blog.`,
+      blog: `We share our strong opinions and crazy ideas about Tech, Design and Humanity on the blog
+      <a href="https://fatalentropy.com" target="_blank" rel="noopener noreferer">Fatal Entropy</a>.`,
     },
     sylvain_title: 'Product design',
   },
@@ -181,6 +182,9 @@ export default {
       you don't need, or even influence elections. <br />
       On the other side, with Bloom, we work for the people who value respect and privacy: You.
       Not investors, not advertisers.`,
+    // On the other side, with Bloom, your data are encrypted and are not at the mercy of a
+    // tyranic government,
+    // a rogue employee, or an over jealous conjoint.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
     a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
       The people we value are our customers paying us, not the advertisers.`,
@@ -220,6 +224,26 @@ export default {
           your files or photos – they're in your Bloom Files.`,
       },
     },
+    // music_description: 'Never stop enjoying your music! Directly from your Bloom files.',
+    // music: {
+    //   description: 'A world of emotion. <br/> Available wherever you are.',
+    //   feature1: {
+    //     name: 'Play from any device',
+    //     description: `You can use Bloom Music to listen to your library on your computer,
+    //     smartphone, or other supported devices.`,
+    //   },
+    //   feature2: {
+    //     name: 'Stream your personal music library wherever you are',
+    //  description: `Whether you've got plenty of rare tunes ripped from vinyls, a bunch of albums
+    //     from indie artists on Bandcamp, or a carefully curated collection of lossless tracks,
+    //     Bloom Music allows you to steam them from wherever you are.`,
+    //   },
+    //   feature3: {
+    //     name: 'Directly from your Bloom files',
+    //   description: `Thanks to the unified data model of Bloom, all your music files in your Bloom
+    //   files are directly available in Bloom Music. No need to reorganize everything everytime.`,
+    //   },
+    // },
     calendar_description: 'Get organized on the go with the Bloom Calendar!',
     calendar: {
       description: 'Make the most of every day',
@@ -296,6 +320,26 @@ export default {
         and profiles.`,
       },
     },
+    // gallery_description: `Bloom Gallery is the home for all your photos and videos, organized
+    // and beautifully presented.`,
+    // gallery: {
+    //   description: 'All your media organized and easy to find',
+    //   feature1: {
+    //     name: 'Access from any device',
+    //     description: `You can access your galleries on your computer,
+    //     smartphone, or other supported devices.`,
+    //   },
+    //   feature2: {
+    //     name: 'Access your personal gallery wherever you are',
+    //     description: 'Your photos will be safe, secure, and always with you.',
+    //   },
+    //   feature3: {
+    //     name: 'Directly from your Bloom files',
+    //     description: `Thanks to the unified data model of Bloom, all your photos and videos files
+    //     in your Bloom Files are directly available in Bloom Gallery. No need to reorganize
+    //     everything everytime.`,
+    //   },
+    // },
     qrcodes_description: 'Bloom apps are the perfect tool to scan your QR codes anytime and anywhere.',
   },
   security: {

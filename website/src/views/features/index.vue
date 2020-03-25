@@ -31,7 +31,7 @@
 
       <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
         order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
-        <router-link :to="`/features/${feature.learnMore}`">
+        <router-link :to="feature.learnMore ? `/features/${feature.learnMore}` : {}">
           <v-avatar size="128px" v-if="feature.icon">
             <img :src="feature.icon" contain />
           </v-avatar>
@@ -40,7 +40,7 @@
       </v-col>
 
       <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
-        <router-link :to="`/features/${feature.learnMore}`">
+        <router-link :to="feature.learnMore ? `/features/${feature.learnMore}` : {}">
         <h3 class="display-1 font-weight-regular">
           {{ feature.name }}
         </h3>
@@ -79,26 +79,12 @@ export default class Features extends Vue {
 
   get features(): any[] {
     return [
-      // {
-      //   name: 'Chat',
-      //   icon: '/static/imgs/icons/chat.svg',
-      //   description: `Bloom messages and calls are always end-to-end encrypted and
-      //   engineered to keep your communication safe. We can't read your messages or see your calls
-      //   and no one else can either.`,
-      //   learnMore: 'chat',
-      // },
       {
         name: 'Files',
         icon: '/static/imgs/icons/files.svg',
         description: this.$t('features.files_description'),
         learnMore: 'files',
       },
-      // {
-      //   name: 'Music',
-      //   icon: '/static/imgs/icons/music.svg',
-      //   description: this.$t('features.music_description'),
-      //   learnMore: 'music',
-      // },
       {
         name: 'Calendar',
         icon: '/static/imgs/icons/calendar.svg',
@@ -130,20 +116,6 @@ export default class Features extends Vue {
         description: this.$t('features.arcade_description'),
         learnMore: 'arcade',
       },
-      // {
-      //   name: 'Books',
-      //   icon: '/static/imgs/icons/books.svg',
-      //   description: 'Bloom Books is
-      // the single destination for all the books you love, and the ones you\'re about to. ',
-      //   learnMore: 'books',
-      // },
-      // { name: 'dl_btn' },
-      // {
-      //   name: 'Gallery',
-      //   icon: '/static/imgs/icons/gallery.svg',
-      //   description: this.$t('features.gallery_description'),
-      //   learnMore: 'gallery',
-      // },
       {
         name: 'QR Codes',
         icon: '/static/imgs/icons/qrcode.svg',
@@ -152,6 +124,7 @@ export default class Features extends Vue {
       { name: 'dl_btn' },
     ];
   }
+
   // lifecycle
   // watch
   // methods
