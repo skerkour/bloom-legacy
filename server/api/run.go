@@ -108,6 +108,7 @@ func Run() error {
 		TLSConfig:    tlsConfig,
 	}
 
+	log.Info("Starting server", rz.Uint16("port", config.Server.Port))
 	go func() {
 		var err error
 		if config.Server.HTTPS {
@@ -120,7 +121,6 @@ func Run() error {
 			log.Fatal("listening", rz.Err(err))
 		}
 	}()
-	log.Info("Server started", rz.Uint16("port", config.Server.Port))
 
 	signalCatcher := make(chan os.Signal, 1)
 
