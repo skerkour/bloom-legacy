@@ -22,7 +22,7 @@ require (
 	gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2
 	gitlab.com/bloom42/libs/crypto42-go v0.0.0-20200302110011-301af310ee41
 	gitlab.com/bloom42/libs/rz-go v1.3.0
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 // indirect
+	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect

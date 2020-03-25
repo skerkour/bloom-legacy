@@ -66,5 +66,5 @@ COPY --from=builder_node /bloom/website/dist/ ./website/
 # Use an unprivileged user.
 USER bloom:bloom
 
-EXPOSE 8000
+EXPOSE 80 443
 CMD ["/bloom/bloom", "server", "run"]

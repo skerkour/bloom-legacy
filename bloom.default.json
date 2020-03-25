@@ -4,8 +4,10 @@
   "website_url": "https://bloom.sh",
 
   "server": {
-    // host: "localhost",
-    "port": 8000
+    "port": 443,
+    "domain": "bloom.bloom42.com",
+    "https": true,
+    "certs_directory": "/certs"
   },
 
   "database": {

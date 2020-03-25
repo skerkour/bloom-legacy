@@ -42,8 +42,10 @@ type SMTPConfig struct {
 }
 
 type ServerConfig struct {
-	Port    uint16    `json:"port"`
-	Domains *[]string `json:"domains"`
+	Port           uint16 `json:"port"`
+	Domain         string `json:"domain"`
+	HTTPS          bool   `json:"https"`
+	CertsDirectory string `json:"certs_directory"`
 }
 
 type StripeConfig struct {

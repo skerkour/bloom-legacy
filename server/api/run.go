@@ -2,6 +2,7 @@ package api
 
 import (
 	"context"
+	"crypto/tls"
 	"fmt"
 	"net/http"
 	"os"
@@ -21,11 +22,14 @@ import (
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 	"gitlab.com/bloom42/libs/rz-go/rzhttp"
+	"golang.org/x/crypto/acme/autocert"
 )
 
 func Run() error {
 	var allowedOrigins []string
 	router := chi.NewRouter()
+	var certManager *autocert.Manager
+	var tlsConfig *tls.Config
 
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
@@ -84,16 +88,34 @@ func Run() error {
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
+	if config.Server.HTTPS {
+		certManager = &autocert.Manager{
+			Prompt:     autocert.AcceptTOS,
+			HostPolicy: autocert.HostWhitelist(config.Server.Domain),
+			Cache:      autocert.DirCache(config.Server.CertsDirectory),
+		}
+		tlsConfig = &tls.Config{
+			GetCertificate: certManager.GetCertificate,
+		}
+	}
+
 	server := http.Server{
 		Addr:         fmt.Sprintf(":%d", config.Server.Port),
 		Handler:      router,
 		ReadTimeout:  SERVER_READ_TIMEOUT,
 		WriteTimeout: SERVER_WRITE_TIMEOUT,
 		IdleTimeout:  SERVER_IDLE_TIMEOUT,
+		TLSConfig:    tlsConfig,
 	}
 
 	go func() {
-		err := server.ListenAndServe()
+		var err error
+		if config.Server.HTTPS {
+			go http.ListenAndServe(":http", certManager.HTTPHandler(nil))
+			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
+		} else {
+			err = server.ListenAndServe()
+		}
 		if err != nil {
 			log.Fatal("listening", rz.Err(err))
 		}
