@@ -142,4 +142,12 @@ export default {
     coming_soon: 'Bientôt disponible',
     cli: 'Instructions pour la CLI',
   },
+  pricing: {
+    title: 'Tarifs',
+    title2: 'Économisez énormément avec Bloom',
+    title3: 'Des questions?',
+    explore_faq: 'Explorez la FAQ',
+    month: 'mois',
+    others: 'Autres',
+  },
 };
