@@ -11,8 +11,8 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/core"
-	"gitlab.com/bloom42/libs/rz-go"
-	"gitlab.com/bloom42/libs/rz-go/log"
+	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/rz/log"
 )
 
 const UNIX_SOCKET = "/tmp/com.bloom42.bloom.sock"

@@ -10,6 +10,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/lily/rz/log"
 	"gitlab.com/bloom42/lily/keyring"
 )
 
@@ -23,6 +24,7 @@ func Init(params InitParams) (InitRes, error) {
 
 	if params.DBKey == nil {
 		// desktop
+		log.Info("Fetching db_key from system's secret store")
 		// fetch key, if not found, generate it
 		dBKey, err = keyring.Get("com.bloom42.bloom", "db_key")
 		if err != nil {
