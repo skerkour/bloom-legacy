@@ -59,7 +59,6 @@ export default {
       download: 'Download Apps',
       help: 'Help & Support',
       contribute: 'Contribute',
-      documentation: 'Documentation',
     },
     community: {
       title: 'Community',
@@ -111,10 +110,6 @@ export default {
     team: {
       title: 'The Crew',
     },
-    sponsors: {
-      title: 'Sponsors',
-      want: 'Want to sponsor Bloom?',
-    },
     learn_more: {
       title: 'Want to learn more?',
       blog: `We share strong opinions and crazy ideas about Tech, Design and Business on our
@@ -142,7 +137,6 @@ export default {
     mobile_title: 'Mobile devices',
     mobile_description: 'On smartphones or tablets. Take Bloom everywhere with you.',
     coming_soon: 'Coming soon',
-    let_us_know: 'Please let us know if you want this application',
     cli: 'See CLI instructions',
   },
   pricing: {

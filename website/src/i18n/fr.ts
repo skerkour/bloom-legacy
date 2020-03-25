@@ -64,4 +64,82 @@ export default {
       title: 'Communauté',
     },
   },
+  download_btn: {
+    download_for: 'Télécharger pour {platform}',
+  },
+  licensing: {
+    title: 'Licenses',
+    body: `Note philosophie est simple: soit vous contribuez en retour a la communauté en ouvrant aussi votre travail,
+    soit vous contribuez en finançant notre travail. <br /><br />
+
+
+    Nous utilisons des licences contaminantes afin d'éviter les comportements qui vont à l'encontre
+    de notre vision de l'Open Source et des logiciels libres et s'assurer que ceux qui bénéficient
+    de notre travail contribuent en retour pour la communauté en ouvrant leur version modifiée
+    et les outils autour, ou en finançant le projet. <br /><br />
+
+    Notre temps est aussi prévieux que le votre, et nous ne travaillons pas gratuitement.<br /><br />
+
+    Vous pouvez trouver la licence de chaque projet dans le fichier <code>LICENSE.txt</code> se trouvant
+    à la racine des repos, ainsi que dans certains sous-dossier si les composants ont des
+    licences différentes.<br /><br />
+
+    <h2 class="headline">GNU Affero General Public License v3.0 (AGPL-3.0)</h2>
+    <p>
+      Utilisée pour les logiciels côté serveur.
+    </p>
+
+    <h2 class="headline">GNU General Public License v3.0 (GPL-3.0)</h2>
+    <p>
+      Utilisée pour les applications côté client, ou les bibliothèques.
+    </p>
+    `,
+  },
+  about: {
+    believe: `Nous croyons au partage et en la coopération afin de construire un avenir durable
+      dans notre monde fini.
+      Nous créeons l'infrastructure ouverte afin de changer les comportements et encourager tout le monde
+      à contribuer aux communs. Quand tout un chacun peut contribuer, nous améliorons la qualité de vie
+      à une échelle globale.`,
+    mission: {
+      title: 'Mission',
+      description: "Donner plus de pouvoir et d'autonomie a tout le monde.",
+    },
+    values: {
+      title: 'Valeurs',
+      description: 'Cooperation, Acuity, Transparency, Sustainability (<b>CATS</b> 🐱).',
+    },
+    team: {
+      title: 'L\'équipage',
+    },
+    learn_more: {
+      title: 'Envie d\'en apprendre plus?',
+      blog: `Nous parategeons nos opinions radicales et nos idées folles à propos de
+      la Tech, du Design et de l'entrepreneuriat sur notre blog
+      <a href="https://fatalentropy.com" target="_blank" rel="noopener noreferer">Fatal Entropy</a>.`,
+    },
+    sylvain_title: 'Design produit',
+  },
+  contact: {
+    title: 'Contact',
+    intro: 'Vous pouvez contacter l\'équipe de Bloom de l\'une des façons suivantes :',
+    email: 'Par email :',
+    twitter: 'En nous faisant <i>coucou</i> sur Twitter :',
+    mastodon: 'Sur le fediverse:',
+    gitlab: 'En ouvrant un ticket sur',
+    chatbox: `En utilisant la <a href="javascript:window.$crisp.push(['do', 'chat:open']);">chatbox</a>
+      dans le coin inférieur gauche de ce site.`,
+  },
+  download: {
+    subtitle: 'Reprenez le contrôle!',
+    subtitle2: 'Ayez enfin le respect que vous méritez avec nos applicatins.',
+    all: 'Tous les téléchargements',
+    computers_title: 'Ordinateurs',
+    computers_description: `Linux ou macOS. PC ou laptop.
+      Profitez de Bloom sur n'importe quel ordinateur!`,
+    mobile_title: 'Apareils mobiles',
+    mobile_description: 'Sure smartphones ou tablettes. Emmenez Bloom partout avec vous.',
+    coming_soon: 'Bientôt disponible',
+    cli: 'Instructions pour la CLI',
+  },
 };
