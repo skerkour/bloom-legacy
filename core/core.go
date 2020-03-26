@@ -10,31 +10,16 @@ import (
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
-	"gitlab.com/bloom42/lily/rz/log"
-	"gitlab.com/bloom42/lily/keyring"
 )
 
 func Init(params InitParams) (InitRes, error) {
-	var dBKey string
 	var err error
 	ret := InitRes{
 		Preferences: map[string]interface{}{},
 	}
 	client := api.Client()
 
-	if params.DBKey == nil {
-		// desktop
-		log.Info("Fetching db_key from system's secret store")
-		// fetch key, if not found, generate it
-		dBKey, err = keyring.Get("com.bloom42.bloom", "db_key")
-		if err != nil {
-			dBKey = "TODO"
-		}
-	} else {
-		dBKey = *params.DBKey
-	}
-
-	err = db.Init(dBKey)
+	err = db.Init(params.DBKey)
 	if err != nil {
 		return ret, err
 	}

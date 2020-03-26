@@ -5,6 +5,9 @@ import (
 	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/lily/keyring"
+	"gitlab.com/bloom42/lily/rz/log"
+
 	// import sqlite drivers
 	_ "github.com/mattn/go-sqlite3"
 	"gitlab.com/bloom42/bloom/core/db/migration"
@@ -30,8 +33,19 @@ func CloseAndRemove() error {
 }
 
 // Init initializes the DB singleton and make migrations if necessary
-func Init(key string) error {
+func Init(key *string) error {
 	var userVersion int
+
+	if key == nil {
+		// desktop
+		log.Info("Fetching db_key from system's secret store")
+		// fetch key, if not found, generate it
+		dbKey, err := keyring.Get("com.bloom42.bloom", "db_key")
+		if err != nil {
+			dbKey = "TODO"
+		}
+		key = &dbKey
+	}
 
 	dbDir, err := kernel.AppDataDir()
 	if err != nil {
