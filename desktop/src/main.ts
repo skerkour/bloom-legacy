@@ -9,13 +9,10 @@ import { log, Level } from '@/libs/rz';
 
 const { ipcRenderer } = window as any;
 
-if (process.env.NODE_ENV === 'development') {
-  Vue.config.productionTip = true;
-} else {
+
+if (process.env.NODE_ENV === 'production') {
   Vue.config.productionTip = false;
-  if (process.env.NODE_ENV === 'production') {
-    log.config({ level: Level.INFO });
-  }
+  log.config({ level: Level.INFO });
 }
 
 
