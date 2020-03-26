@@ -56,8 +56,4 @@ node_modules/
 # project files
 /db
 /dist/
-/.tmp/
-/bloom.sane
-/bloom.json
 /assets/**/GeoLite2-City.mmdb
-/certs
