@@ -10,8 +10,8 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/crypto42-go/rand"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func (r *Resolver) CompleteRegistration(ctx context.Context, input model.CompleteRegistrationInput) (*model.SignedIn, error) {

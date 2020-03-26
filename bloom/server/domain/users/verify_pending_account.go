@@ -5,8 +5,8 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser, code string) error {

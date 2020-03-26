@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func DeletePendingUser(ctx context.Context, tx *sqlx.Tx, pendingUserId string) error {

@@ -8,7 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, description string) (Group, error) {

@@ -6,7 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"gitlab.com/bloom42/bloom/bloom/server/db"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 // checkUserIsGroupAdmin Checks that user is member of group and he has administrator role

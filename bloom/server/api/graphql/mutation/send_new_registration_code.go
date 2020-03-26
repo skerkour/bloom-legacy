@@ -10,8 +10,8 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/bloom/server/errors"
-	"gitlab.com/bloom42/libs/crypto42-go/rand"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func (resolver *Resolver) SendNewRegistrationCode(ctx context.Context, input model.SendNewRegistrationCodeInput) (bool, error) {

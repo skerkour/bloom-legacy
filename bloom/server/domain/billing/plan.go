@@ -7,7 +7,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 type Plan struct {

@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, usernames []string) error {

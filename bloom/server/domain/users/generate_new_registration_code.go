@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
-	"gitlab.com/bloom42/libs/crypto42-go/rand"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) (string, error) {

@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/groups"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error) {

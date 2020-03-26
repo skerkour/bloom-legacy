@@ -9,9 +9,9 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
-	"gitlab.com/bloom42/libs/crypto42-go/rand"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error) {

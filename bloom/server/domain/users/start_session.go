@@ -9,9 +9,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/consts"
-	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
-	"gitlab.com/bloom42/libs/crypto42-go/rand"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device SessionDevice) (Session, string, error) {

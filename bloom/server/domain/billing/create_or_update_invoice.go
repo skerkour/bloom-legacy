@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stripe/stripe-go"
 	"gitlab.com/bloom42/bloom/bloom/server/db"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (*Invoice, error) {

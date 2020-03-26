@@ -5,8 +5,8 @@ import (
 	"os"
 
 	"gitlab.com/bloom42/bloom/bloom/cli"
-	"gitlab.com/bloom42/libs/rz-go"
-	"gitlab.com/bloom42/libs/rz-go/log"
+	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/rz/log"
 )
 
 func main() {

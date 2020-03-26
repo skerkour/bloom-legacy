@@ -19,9 +19,9 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/api/webhook"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
 	"gitlab.com/bloom42/bloom/common/consts"
-	"gitlab.com/bloom42/libs/rz-go"
-	"gitlab.com/bloom42/libs/rz-go/log"
-	"gitlab.com/bloom42/libs/rz-go/rzhttp"
+	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/rz/log"
+	"gitlab.com/bloom42/lily/rz/rzhttp"
 	"golang.org/x/crypto/acme/autocert"
 )
 

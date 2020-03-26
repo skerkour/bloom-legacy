@@ -5,7 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func UserFromCtx(ctx context.Context) *users.User {

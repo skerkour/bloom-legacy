@@ -7,8 +7,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, username string, authKey []byte) (User, error) {

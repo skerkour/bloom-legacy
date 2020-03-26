@@ -5,7 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func DeletePlan(ctx context.Context, user *users.User, planId string) error {

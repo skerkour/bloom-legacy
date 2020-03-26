@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/bloom/server/db"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func FindAllUsers(ctx context.Context) ([]User, error) {

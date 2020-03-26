@@ -6,8 +6,8 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/spf13/cobra"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
-	"gitlab.com/bloom42/libs/rz-go"
-	"gitlab.com/bloom42/libs/rz-go/log"
+	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/rz/log"
 )
 
 var runSingleMigrationFlag bool

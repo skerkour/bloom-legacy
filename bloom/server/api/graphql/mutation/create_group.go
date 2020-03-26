@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/groups"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error) {

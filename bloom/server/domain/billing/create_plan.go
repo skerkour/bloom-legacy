@@ -10,7 +10,7 @@ import (
 	"github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, product string, storage int64, isPublic bool) (*Plan, error) {

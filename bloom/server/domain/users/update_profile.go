@@ -8,7 +8,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/libs/rz-go"
+	"gitlab.com/bloom42/lily/rz"
 )
 
 func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*User, error) {
