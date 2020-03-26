@@ -89,6 +89,7 @@ func Run() error {
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
 	if config.Server.HTTPS {
+		log.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
 			Email:      config.Server.CertsEmail,
 			Prompt:     autocert.AcceptTOS,
