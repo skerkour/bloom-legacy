@@ -14,6 +14,7 @@ var appDataDir string
 
 // AppDataDir returns the directory which should be used to store user data
 func AppDataDir() (string, error) {
+	var err error
 	if appDataDir != "" {
 		return appDataDir, nil
 	}
@@ -30,5 +31,6 @@ func AppDataDir() (string, error) {
 	}
 
 	dirs := appdir.New(AppID())
-	return dirs.UserData()
+	appDataDir, err = dirs.UserData()
+	return appDataDir, err
 }
