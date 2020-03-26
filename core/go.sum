@@ -25,6 +25,8 @@ gitlab.com/bloom42/lily v0.0.0-20200326134419-085da7070dd1 h1:5njFOOjZ4YHdU+XYfm
 gitlab.com/bloom42/lily v0.0.0-20200326134419-085da7070dd1/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
 gitlab.com/bloom42/lily v0.0.0-20200326171450-0b43a87f6617 h1:QiQm5nr7xuwzUnXJLVqXvcIoDYBZiVlFYkcOoyvHLvo=
 gitlab.com/bloom42/lily v0.0.0-20200326171450-0b43a87f6617/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
+gitlab.com/bloom42/lily v0.0.0-20200326172452-61cd4f70abe0 h1:va3lY7q1Jya9j71MG7X5VQlzgi+UfB85QKIngsotK3A=
+gitlab.com/bloom42/lily v0.0.0-20200326172452-61cd4f70abe0/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 h1:xMPOj6Pz6UipU1wXLkrtqpHbR0AVFnyPEQq/wRWz9lM=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
