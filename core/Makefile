@@ -26,9 +26,19 @@ desktop_build_dev:
 	cp dist/desktop/bloomd ../desktop/bloomd
 
 
+.PHONY: android_x86_build_dev
+android_x86_build_dev:
+	GOOS=android GOARCH=386 CGO_ENABLED=1 CC=i686-linux-android18-clang go build --tags "android dev" -o dist/android/x86/lib$(NAME).so -buildmode=c-shared ffi/*.go
+	cp dist/android/x86/lib$(NAME).so ../mobile/android/app/src/main/jniLibs/x86/lib$(NAME).so
+
+
 .PHONY: dev_desktop
 dev_desktop:
 	gowatch -build="make desktop_build_dev"
+
+.PHONY: dev_android
+dev_android:
+	gowatch -build="make android_x86_build_dev"
 
 
 .PHONY: mobile
