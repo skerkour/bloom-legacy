@@ -5,5 +5,5 @@ As of today the only way to install the `bloom` command line is by using the `go
 Then, in a new shell, simply run
 
 ```
-$ go get -u gitlab.com/bloom42/bloom
+$ go get -u gitlab.com/bloom42/bloom/bloom
 ```
