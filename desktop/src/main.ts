@@ -41,7 +41,6 @@ async function main() {
   }
   if (res.preferences.theme === 'dark') {
     store.commit(Mutations.SWITCH_DARK_MODE.toString());
-    // vuetify.theme.dark = this.$store.state.darkMode;
   }
 
   Vue.use(filters);
