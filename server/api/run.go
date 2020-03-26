@@ -46,6 +46,7 @@ func Run() error {
 
 	// here the order matters, otherwise loggingMiddleware won't see the request ID
 	// router.Use(middleware.RealIP) commented because we will not use a reverse proxy
+	router.Use(middleware.DefaultCompress)
 	router.Use(SetRequestIDMiddleware)
 	router.Use(loggingMiddleware)
 	router.Use(SetLoggerMiddleware(log.Logger()))
