@@ -55,7 +55,6 @@ node_modules/
 
 # project files
 /db
-/bloom
 /dist/
 /.tmp/
 /bloom.sane
