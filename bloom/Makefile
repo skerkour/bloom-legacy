@@ -22,7 +22,6 @@ test:
 
 .PHONY: dev
 dev:
-	# go run main.go server
 	gowatch -log-prefix=false -build="make build" -command="dist/$(NAME) server run"
 
 .PHONY: build
