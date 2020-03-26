@@ -43,7 +43,7 @@ RUN apk update && apk add --no-cache git ca-certificates make gcc libc-dev
 RUN update-ca-certificates
 
 WORKDIR /bloom
-COPY ../website ./
+COPY . ./
 WORKDIR /bloom/website
 RUN make install && make build
 

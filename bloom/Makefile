@@ -60,6 +60,7 @@ tidy:
 
 .PHONY: docker
 docker:
+	cp -r ../website .
 	docker build -t $(DOCKER_IMAGE):latest .
 
 .PHONY: docker_login
