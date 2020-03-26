@@ -22,7 +22,7 @@ desktop:
 
 .PHONY: desktop_build_dev
 desktop_build_dev:
-	go build -o dist/desktop/bloomd bloomd/*.go
+	go build -tags dev -o dist/desktop/bloomd bloomd/*.go
 	cp dist/desktop/bloomd ../desktop/bloomd
 
 

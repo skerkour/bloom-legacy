@@ -4,7 +4,6 @@ import (
 	"context"
 	"fmt"
 
-	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/core/version"
 	"gitlab.com/bloom42/lily/graphql"
 )
@@ -20,7 +19,7 @@ var client *ApiClient
 func Client() *ApiClient {
 	if client == nil {
 		client = &ApiClient{
-			graphql: graphql.NewClient(consts.API_BASE_URL + "/graphql"),
+			graphql: graphql.NewClient(API_BASE_URL + "/graphql"),
 		}
 	}
 	return client
