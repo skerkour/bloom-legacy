@@ -9,7 +9,6 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/google/uuid"
 	"gitlab.com/bloom42/bloom/bloom/server/api/apictx"
 	"gitlab.com/bloom42/bloom/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
@@ -17,6 +16,7 @@ import (
 	"gitlab.com/bloom42/lily/crypto/password/argon2id"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/rz/rzhttp"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {

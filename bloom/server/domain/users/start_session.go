@@ -6,12 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/crypto/password/argon2id"
 	"gitlab.com/bloom42/lily/crypto/rand"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device SessionDevice) (Session, string, error) {

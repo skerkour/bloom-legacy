@@ -5,12 +5,12 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, product string, storage int64, isPublic bool) (*Plan, error) {

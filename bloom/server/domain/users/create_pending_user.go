@@ -5,13 +5,13 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/crypto/password/argon2id"
 	"gitlab.com/bloom42/lily/crypto/rand"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {

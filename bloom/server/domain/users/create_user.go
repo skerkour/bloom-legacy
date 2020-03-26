@@ -4,11 +4,11 @@ import (
 	"context"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/crypto/password/argon2id"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func CreateUser(ctx context.Context, tx *sqlx.Tx, pendingUser PendingUser, username string, authKey []byte) (User, error) {

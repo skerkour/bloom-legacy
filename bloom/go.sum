@@ -188,8 +188,6 @@ github.com/google/pprof v0.0.0-20190515194954-54271f7e092f/go.mod h1:zfwlbNMJ+OI
 github.com/google/pprof v0.0.0-20191218002539-d4f498aebedc/go.mod h1:ZgVRPoUq/hfqzAqh7sHMqb3I9Rq5C59dIz2SbBwJ4eM=
 github.com/google/pprof v0.0.0-20200212024743-f11f1df84d12/go.mod h1:ZgVRPoUq/hfqzAqh7sHMqb3I9Rq5C59dIz2SbBwJ4eM=
 github.com/google/renameio v0.1.0/go.mod h1:KWCgfxg9yswjAJkECMjeO8J8rahYeXnNhOm40UhjYkI=
-github.com/google/uuid v1.1.1 h1:Gkbcsh/GbpXz7lPftLA3P6TYMwjCLYm83jiFQZF/3gY=
-github.com/google/uuid v1.1.1/go.mod h1:TIyPZe4MgqvfeYDBFedMoGGpEw/LqOeaOT+nhxU+yHo=
 github.com/googleapis/gax-go/v2 v2.0.4/go.mod h1:0Wqv26UfaUD9n4G6kQubkQ+KchISgw+vpHVxEJEs9eg=
 github.com/googleapis/gax-go/v2 v2.0.5/go.mod h1:DWXyrwAJ9X0FpwwEdw+IPEYBICEFu5mhpdKc/us6bOk=
 github.com/gopherjs/gopherjs v0.0.0-20181017120253-0766667cb4d1/go.mod h1:wJfORRmW1u3UXTncJ5qlYoELFm8eSnnEO6hX4iZ3EWY=
@@ -413,8 +411,6 @@ github.com/yalp/jsonpath v0.0.0-20180802001716-5cc68e5049a0/go.mod h1:/LWChgwKmv
 github.com/yudai/gojsondiff v1.0.0/go.mod h1:AY32+k2cwILAkW1fbgxQ5mUmMiZFgLIV+FBNExI05xg=
 github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDfVJdfcVVdX+jpBxNmX4rDAzaS45IcYoM=
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
-gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2 h1:r4erX1ryX+hcXSOichl6AJELBtFwnNMGD/e7QHa260c=
-gitlab.com/bloom42/bloom/common v0.0.0-20200316201022-5439e3dc72a2/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
 gitlab.com/bloom42/bloom/common v0.0.0-20200326084131-fee81ec0e28c h1:dVf+yyIrXwGA4avcaHt7LF8i/I4xHP26OuRjcg1EkSI=
 gitlab.com/bloom42/bloom/common v0.0.0-20200326084131-fee81ec0e28c/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
 gitlab.com/bloom42/lily v0.0.0-20200325134955-a6b455af715f h1:Lm5WQfTvHKIkbZc9ANnKPdBMtZ4H9FTDqqxrs5nPO3E=

@@ -5,7 +5,6 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"github.com/stripe/stripe-go"
 	stripecustomer "github.com/stripe/stripe-go/customer"
 	"github.com/stripe/stripe-go/paymentmethod"
@@ -13,6 +12,7 @@ import (
 	"gitlab.com/bloom42/bloom/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, groupId *string) (*PaymentMethod, error) {
