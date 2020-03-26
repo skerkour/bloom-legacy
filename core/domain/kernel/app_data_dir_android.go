@@ -1,7 +1,9 @@
 package kernel
 
 import (
-	"gitlab.com/bloom42/lily/appdir"
+	"bytes"
+	"io/ioutil"
+	"path/filepath"
 )
 
 // appDataDir is used to cache AppDataDir
@@ -14,7 +16,11 @@ func AppDataDir() (string, error) {
 		return appDataDir, nil
 	}
 
-	dirs := appdir.New(AppID)
-	appDataDir, err = dirs.UserData()
-	return appDataDir, err
+	data, err := ioutil.ReadFile("/proc/self/cmdline")
+	if err != nil {
+		return "", err
+	}
+	appDataDir = filepath.Join("data", "data", string(bytes.Trim(data, "\x00")))
+	return appDataDir, nil
+
 }
