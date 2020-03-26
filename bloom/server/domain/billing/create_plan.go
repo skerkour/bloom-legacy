@@ -8,8 +8,8 @@ import (
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
 	"github.com/stripe/stripe-go/plan"
-	"gitlab.com/bloom42/bloom/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/libs/rz-go"
 )
 

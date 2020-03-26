@@ -4,11 +4,11 @@ import (
 	"github.com/getsentry/sentry-go"
 	"github.com/spf13/cobra"
 	"github.com/stripe/stripe-go"
-	"gitlab.com/bloom42/bloom/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/bloom/server/api"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
 	"gitlab.com/bloom42/bloom/bloom/server/db"
 	"gitlab.com/bloom42/bloom/bloom/server/services/notification"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/libs/rz-go"
 	"gitlab.com/bloom42/libs/rz-go/log"
 )

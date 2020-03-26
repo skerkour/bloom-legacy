@@ -7,8 +7,8 @@ import (
 
 	"github.com/google/uuid"
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/libs/crypto42-go/password/argon2id"
 	"gitlab.com/bloom42/libs/crypto42-go/rand"
 	"gitlab.com/bloom42/libs/rz-go"

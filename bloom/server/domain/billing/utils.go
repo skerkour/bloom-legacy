@@ -1,7 +1,7 @@
 package billing
 
 import (
-	"gitlab.com/bloom42/bloom/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/common/consts"
 )
 
 func GetAllowedStorageFromPlanProduct(product string) int64 {

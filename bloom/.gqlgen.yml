@@ -17,4 +17,4 @@ resolver:
   type: Resolver
 
 autobind:
-  - gitlab.com/bloom42/bloom/server/api/graphql/model
+  - gitlab.com/bloom42/bloom/bloom/server/api/graphql/model
