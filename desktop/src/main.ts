@@ -32,7 +32,7 @@ async function main() {
   await ipcRenderer.send('server:start');
   await sleep(1000);
   const res = await core.init(['theme']);
-  if (res.preferences.me !== null) {
+  if (res.preferences.me) {
     const params = {
       me: res.preferences.me,
       session: res.preferences.session,
