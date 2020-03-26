@@ -3,10 +3,10 @@ package kernel
 import (
 	"bytes"
 	"io/ioutil"
-	"os"
 	"path/filepath"
 	"runtime"
-	"strings"
+
+	"gitlab.com/bloom42/lily/appdir"
 )
 
 // appDataDir is used to cache AppDataDir
@@ -27,18 +27,8 @@ func AppDataDir() (string, error) {
 		}
 		appDataDir = filepath.Join("data", "data", string(bytes.Trim(data, "\x00")))
 		return appDataDir, nil
-	} else {
-		configDir, err := os.UserConfigDir()
-		if err != nil {
-			return "", err
-		}
-		appId := AppID()
-		// because sometimes, like with flatpak, UserConfigDir can already be app scoped
-		if strings.Contains(configDir, appId) {
-			appDataDir = configDir
-		} else {
-			appDataDir = filepath.Join(configDir, appId)
-		}
-		return appDataDir, nil
 	}
+
+	dirs := appdir.New(AppID())
+	return dirs.UserData()
 }
