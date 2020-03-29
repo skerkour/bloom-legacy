@@ -25,7 +25,7 @@
             </li>
             <li>
               <span v-html="$t('contact.mastodon')"></span>&nbsp;
-              <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">@42bloom@mastodon.social</a>
+              <a href="https://mastodon.social/@42bloom" target="_blank" rel="noopener">42bloom@mastodon.social</a>
             </li>
           </ul>
         </p>
