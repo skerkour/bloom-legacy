@@ -127,8 +127,6 @@ export default {
     twitter: 'En nous faisant <i>coucou</i> sur Twitter :',
     mastodon: 'Sur le fediverse:',
     gitlab: 'En ouvrant un ticket sur',
-    chatbox: `En utilisant la <a href="javascript:window.$crisp.push(['do', 'chat:open']);">chatbox</a>
-      dans le coin inférieur gauche de ce site.`,
   },
   download: {
     subtitle: 'Reprenez le contrôle!',
