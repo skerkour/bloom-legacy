@@ -146,7 +146,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Lite',
-      price: 7,
+      price: 8,
       description: `
       <ul>
         <li><b>All features from Free</b></li>
@@ -162,7 +162,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Pro',
-      price: 14,
+      price: 16,
       description: `
       <ul>
         <li><b>All features from Lite</b></li>
@@ -175,7 +175,7 @@ export default class Pricing extends Vue {
     },
     {
       name: 'Ultra',
-      price: 28,
+      price: 32,
       description: `
         <ul>
           <li><b>All features from Pro</b></li>
