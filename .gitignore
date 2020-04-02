@@ -57,3 +57,4 @@ node_modules/
 /db
 /dist/
 /assets/**/GeoLite2-City.mmdb
+/wiki
