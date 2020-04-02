@@ -116,7 +116,7 @@ export default {
       title: 'Envie d\'en apprendre plus?',
       blog: `Nous parategeons nos opinions radicales et nos idées folles à propos de
       la Tech, du Design et de l'entrepreneuriat sur notre blog
-      <a href="https://fatalentropy.com" target="_blank" rel="noopener noreferer">Fatal Entropy</a>.`,
+      <a href="https://fatalentropy.com" target="_blank" rel="noopener">Fatal Entropy</a>.`,
     },
     sylvain_title: 'Design produit',
   },
@@ -153,17 +153,17 @@ export default {
     q1: 'How secure are my data?',
     a1: `Some of your most personal moments are shared on WhatsApp, which is why we built end-to-end encryption.
       We use state of the art cryptography
-      (<a href="https://tools.ietf.org/html/draft-irtf-cfrg-xchacha-03" target="_blank" rel="noopener noreferer">XChaCha20Poly1305</a>,
-      <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank" rel="noopener noreferer">Argon2id</a>,
-      <a href="https://en.wikipedia.org/wiki/BLAKE_(hash_function)" target="_blank" rel="noopener noreferer">Blake2b</a>)
+      (<a href="https://tools.ietf.org/html/draft-irtf-cfrg-xchacha-03" target="_blank" rel="noopener">XChaCha20Poly1305</a>,
+      <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank" rel="noopener">Argon2id</a>,
+      <a href="https://en.wikipedia.org/wiki/BLAKE_(hash_function)" target="_blank" rel="noopener">Blake2b</a>)
       to securely store your all your data.
       Your data are encrypted on your own devices and (even if we wanted) we can't read them.
       You can learn more about our cryptographic architecture on
-      <a href="https://gitlab.com/bloom42/bloom/-/wikis/cryptography" target="_blank" rel="noopener noreferer">the wiki</a>.<br />
-      Also, we do not store financial data ourselves, we use  <a href="https://stripe.com" target="_blank" rel="noopener noreferer">Stripe</a>.`,
+      <a href="https://gitlab.com/bloom42/bloom/-/wikis/security" target="_blank" rel="noopener">the wiki</a>.<br />
+      Also, we do not store financial data ourselves, we use  <a href="https://stripe.com" target="_blank" rel="noopener">Stripe</a>.`,
     q2: 'Where the encrypted data are stored?',
-    a2: `The <a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="noopener noreferer">end-to-end</a>
-      encrypted data are stored in a  <a href="scaleway.com" target="_blank" rel="noopener noreferer">Scaleway</a>
+    a2: `The <a href="https://en.wikipedia.org/wiki/End-to-end_encryption" target="_blank" rel="noopener">end-to-end</a>
+      encrypted data are stored in a  <a href="scaleway.com" target="_blank" rel="noopener">Scaleway</a>
       datacenter in a privacy friendly country: France.`,
     q3: 'Why Bloom is more ethical than other service providers?',
     a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
