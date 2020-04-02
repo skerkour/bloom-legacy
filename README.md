@@ -77,5 +77,7 @@ See `LICENSE.txt` and https://bloom.sh/licensing
 
 ## Security
 
+You can read the details of our security architecture here: https://gitlab.com/bloom42/bloom/-/wikis/security.
+
 If you found a security issue affecting this project, please do not open a public issue and refer to our
 [dedicated security page](https://bloom.sh/security) instead. Thank you!
