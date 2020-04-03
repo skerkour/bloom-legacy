@@ -44,7 +44,7 @@ type SMTPConfig struct {
 type ServerConfig struct {
 	Port           uint16   `json:"port"`
 	Domains        []string `json:"domains"`
-	HTTPS          bool     `json:"https"`
+	HTTPPort       *uint16  `json:"http_port"`
 	CertsDirectory string   `json:"certs_directory"`
 	CertsEmail     string   `json:"certs_email"`
 }

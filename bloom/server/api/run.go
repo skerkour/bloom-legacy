@@ -88,7 +88,7 @@ func Run() error {
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	if config.Server.HTTPS {
+	if config.Server.HTTPPort != nil {
 		log.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
 			Email:      config.Server.CertsEmail,
@@ -113,9 +113,9 @@ func Run() error {
 	log.Info("Starting server", rz.Uint16("port", config.Server.Port))
 	go func() {
 		var err error
-		if config.Server.HTTPS {
+		if config.Server.HTTPPort != nil {
 			go func() {
-				err := http.ListenAndServe(":http", certManager.HTTPHandler(nil))
+				err := http.ListenAndServe(fmt.Sprintf(":%d", *config.Server.HTTPPort), certManager.HTTPHandler(nil))
 				if err != nil {
 					log.Fatal("listening HTTP", rz.Err(err))
 				}
