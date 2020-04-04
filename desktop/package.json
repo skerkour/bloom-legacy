@@ -24,7 +24,7 @@
     "core-js": "^3.6.4",
     "electron-updater": "^4.3.0",
     "moment": "^2.24.0",
-    "rxjs": "^6.5.4",
+    "rxjs": "^6.5.5",
     "uuid": "^3.4.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
