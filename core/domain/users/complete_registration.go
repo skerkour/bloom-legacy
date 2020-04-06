@@ -16,11 +16,26 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 
 	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
 	if authKey == nil {
-		return ret, errors.New("Error deriving auth key")
+		return ret, errors.New("Internal error. Please try again")
 	}
 
-	publicKey := make([]byte, 12)
-	encryptedPrivateKey := make([]byte, 12)
+	passKey := derivePassKey([]byte(params.Username), []byte(params.Password))
+	if authKey == nil {
+		return ret, errors.New("Internal error. Please try again")
+	}
+
+	publicKey, privateKey, err := genKeyPair()
+	if err != nil {
+		return ret, err
+	}
+
+	// TODO: persisr keypair
+
+	encryptedPrivateKey, err := encryptWithPassKey(passKey, privateKey)
+	if err != nil {
+		return ret, err
+	}
+
 	input := model.CompleteRegistrationInput{
 		ID:       params.ID,
 		Username: params.Username,
@@ -54,7 +69,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err = client.Do(context.Background(), req, &resp)
 	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
 			client.Authenticate(resp.CompleteRegistration.Session.ID, *resp.CompleteRegistration.Session.Token)

@@ -1,10 +1,5 @@
 package users
 
-import (
-	"golang.org/x/crypto/argon2"
-	"golang.org/x/crypto/blake2b"
-)
-
 // padOrTrimBytes returns (size) bytes from input (data)
 // Short data gets zeros prefixed, Long data gets right bits trimmed
 func padOrTrimBytes(data []byte, size int) []byte {
@@ -19,23 +14,6 @@ func padOrTrimBytes(data []byte, size int) []byte {
 	tmp := make([]byte, size)
 	copy(tmp[:DataLen], data)
 	return tmp
-}
-
-// TODO: good values (key derivation with blake2b)
-// return nil if encounter an error
-func deriveAuthKey(username, password []byte) []byte {
-	clientSalt := padOrTrimBytes(username, 64)
-
-	key := argon2.Key(password, clientSalt, 3, 32*1024, 4, 32)
-	keyID := []byte("blm_auth")
-	key = append(key, keyID...)
-
-	blake2bHash, err := blake2b.New512(nil)
-	if err != nil {
-		return nil
-	}
-
-	return blake2bHash.Sum(key)
 }
 
 /*
