@@ -11,6 +11,14 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+type UpdateProfileInput struct {
+	ID          *string `json:"id"`
+	DisplayName *string `json:"displayName"`
+	Bio         *string `json:"bio"`
+	FirstName   *string `json:"firstName"`
+	LastName    *string `json:"lastName"`
+}
+
 func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*User, error) {
 	var err error
 	logger := rz.FromCtx(ctx)

@@ -59,7 +59,14 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	}
 
 	// create user
-	newUser, err := users.CreateUser(ctx, tx, pendingUser, input.Username, input.AuthKey)
+	createUserParams := users.CreateUserParams{
+		PendingUser:         pendingUser,
+		Username:            input.Username,
+		AuthKey:             input.AuthKey,
+		PublicKey:           input.PublicKey,
+		EncryptedPrivateKey: input.EncryptedPrivateKey,
+	}
+	newUser, err := users.CreateUser(ctx, tx, createUserParams)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

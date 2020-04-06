@@ -16,6 +16,8 @@ CREATE TABLE users (
     disabled_at TIMESTAMP WITH TIME ZONE,
     auth_key_hash TEXT NOT NULL,
     bio TEXT NOT NULL,
+    public_key BYTEA NOT NULL,
+    encrypted_private_key BYTEA NOT NULL,
     -- password_reset_id TEXT,
     -- password_reset_token_hash TEXT,
 
@@ -52,7 +54,7 @@ CREATE TABLE pending_users (
 
     verification_code_hash TEXT NOT NULL,
     failed_verifications BIGINT NOT NULL,
-    verified BOOLEAN NOT NULL,
+    verified_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     PRIMARY KEY(id)
 );
@@ -190,7 +192,7 @@ CREATE TABLE billing_invoices (
     stripe_id TEXT NOT NULL UNIQUE,
     stripe_hosted_url TEXT NOT NULL,
     stripe_pdf_url TEXT NOT NULL,
-    paid BOOLEAN NOT NULL,
+    paid_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     customer_id UUID NOT NULL REFERENCES billing_customers(id),
 

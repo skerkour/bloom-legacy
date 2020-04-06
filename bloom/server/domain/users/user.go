@@ -10,19 +10,21 @@ import (
 )
 
 type User struct {
-	ID          string     `json:"id" db:"id"`
-	CreatedAt   time.Time  `json:"created_at" db:"created_at"`
-	UpdatedAt   time.Time  `json:"updated_at" db:"updated_at"`
-	AvatardID   *string    `json:"avatar_id" db:"avatar_id"`
-	Email       string     `json:"email" db:"email"`
-	DisplayName string     `json:"display_name" db:"display_name"`
-	Username    string     `json:"username" db:"username"`
-	AuthKeyHash string     `json:"-" db:"auth_key_hash"`
-	Bio         string     `json:"bio" db:"bio"`
-	FirstName   string     `json:"first_name" db:"first_name"`
-	LastName    string     `json:"last_name" db:"last_name"`
-	IsAdmin     bool       `json:"is_admin" db:"is_admin"`
-	DisabledAt  *time.Time `json:"disabled_at" db:"disabled_at"`
+	ID                  string     `db:"id"`
+	CreatedAt           time.Time  `db:"created_at"`
+	UpdatedAt           time.Time  `db:"updated_at"`
+	AvatardID           *string    `db:"avatar_id"`
+	Email               string     `db:"email"`
+	DisplayName         string     `db:"display_name"`
+	Username            string     `db:"username"`
+	AuthKeyHash         string     `db:"auth_key_hash"`
+	Bio                 string     `db:"bio"`
+	FirstName           string     `db:"first_name"`
+	LastName            string     `db:"last_name"`
+	IsAdmin             bool       `db:"is_admin"`
+	DisabledAt          *time.Time `db:"disabled_at"`
+	PublicKey           []byte     `db:"public_key"`
+	EncryptedPrivateKey []byte     `db:"encrypted_private_key"`
 }
 
 func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {
