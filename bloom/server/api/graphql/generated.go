@@ -260,23 +260,25 @@ type ComplexityRoot struct {
 	}
 
 	User struct {
-		AvatarURL        func(childComplexity int) int
-		Bio              func(childComplexity int) int
-		CreatedAt        func(childComplexity int) int
-		DisabledAt       func(childComplexity int) int
-		DisplayName      func(childComplexity int) int
-		Email            func(childComplexity int) int
-		FirstName        func(childComplexity int) int
-		GroupInvitations func(childComplexity int) int
-		Groups           func(childComplexity int) int
-		ID               func(childComplexity int) int
-		Invoices         func(childComplexity int) int
-		IsAdmin          func(childComplexity int) int
-		LastName         func(childComplexity int) int
-		PaymentMethods   func(childComplexity int) int
-		Sessions         func(childComplexity int) int
-		Subscription     func(childComplexity int) int
-		Username         func(childComplexity int) int
+		AvatarURL           func(childComplexity int) int
+		Bio                 func(childComplexity int) int
+		CreatedAt           func(childComplexity int) int
+		DisabledAt          func(childComplexity int) int
+		DisplayName         func(childComplexity int) int
+		Email               func(childComplexity int) int
+		EncryptedPrivateKey func(childComplexity int) int
+		FirstName           func(childComplexity int) int
+		GroupInvitations    func(childComplexity int) int
+		Groups              func(childComplexity int) int
+		ID                  func(childComplexity int) int
+		Invoices            func(childComplexity int) int
+		IsAdmin             func(childComplexity int) int
+		LastName            func(childComplexity int) int
+		PaymentMethods      func(childComplexity int) int
+		PublicKey           func(childComplexity int) int
+		Sessions            func(childComplexity int) int
+		Subscription        func(childComplexity int) int
+		Username            func(childComplexity int) int
 	}
 
 	UserConnection struct {
@@ -1435,6 +1437,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Email(childComplexity), true
 
+	case "User.encryptedPrivateKey":
+		if e.complexity.User.EncryptedPrivateKey == nil {
+			break
+		}
+
+		return e.complexity.User.EncryptedPrivateKey(childComplexity), true
+
 	case "User.firstName":
 		if e.complexity.User.FirstName == nil {
 			break
@@ -1490,6 +1499,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.User.PaymentMethods(childComplexity), true
+
+	case "User.publicKey":
+		if e.complexity.User.PublicKey == nil {
+			break
+		}
+
+		return e.complexity.User.PublicKey(childComplexity), true
 
 	case "User.sessions":
 		if e.complexity.User.Sessions == nil {
@@ -1680,6 +1696,8 @@ type User {
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
   subscription: BillingSubscription
+  publicKey: Bytes!
+  encryptedPrivateKey: Bytes
 }
 
 type UserConnection {
@@ -7554,6 +7572,71 @@ func (ec *executionContext) _User_subscription(ctx context.Context, field graphq
 	return ec.marshalOBillingSubscription2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBillingSubscription(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _User_publicKey(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.PublicKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(model.Bytes)
+	fc.Result = res
+	return ec.marshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _User_encryptedPrivateKey(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EncryptedPrivateKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.Bytes)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _UserConnection_edges(ctx context.Context, field graphql.CollectedField, obj *model.UserConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10760,6 +10843,13 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 				res = ec._User_subscription(ctx, field, obj)
 				return res
 			})
+		case "publicKey":
+			out.Values[i] = ec._User_publicKey(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				atomic.AddUint32(&invalids, 1)
+			}
+		case "encryptedPrivateKey":
+			out.Values[i] = ec._User_encryptedPrivateKey(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11805,6 +11895,30 @@ func (ec *executionContext) marshalOBoolean2ᚖbool(ctx context.Context, sel ast
 		return graphql.Null
 	}
 	return ec.marshalOBoolean2bool(ctx, sel, *v)
+}
+
+func (ec *executionContext) unmarshalOBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, v interface{}) (model.Bytes, error) {
+	var res model.Bytes
+	return res, res.UnmarshalGQL(v)
+}
+
+func (ec *executionContext) marshalOBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, sel ast.SelectionSet, v model.Bytes) graphql.Marshaler {
+	return v
+}
+
+func (ec *executionContext) unmarshalOBytes2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, v interface{}) (*model.Bytes, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOBytes2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx context.Context, sel ast.SelectionSet, v *model.Bytes) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return v
 }
 
 func (ec *executionContext) marshalOGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {

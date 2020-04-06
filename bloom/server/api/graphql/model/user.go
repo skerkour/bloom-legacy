@@ -14,17 +14,19 @@ import (
 )
 
 type User struct {
-	ID          *string    `json:"id"`
-	AvatarURL   *string    `json:"avatarUrl"`
-	CreatedAt   *time.Time `json:"createdAt"`
-	Username    string     `json:"username"`
-	FirstName   *string    `json:"firstName"`
-	LastName    *string    `json:"lastName"`
-	DisplayName string     `json:"displayName"`
-	DisabledAt  *time.Time `json:"disabledAt"`
-	IsAdmin     bool       `json:"isAdmin"`
-	Bio         string     `json:"bio"`
-	Email       *string    `json:"email"`
+	ID                  *string    `json:"id"`
+	AvatarURL           *string    `json:"avatarUrl"`
+	CreatedAt           *time.Time `json:"createdAt"`
+	Username            string     `json:"username"`
+	FirstName           *string    `json:"firstName"`
+	LastName            *string    `json:"lastName"`
+	DisplayName         string     `json:"displayName"`
+	DisabledAt          *time.Time `json:"disabledAt"`
+	IsAdmin             bool       `json:"isAdmin"`
+	Bio                 string     `json:"bio"`
+	Email               *string    `json:"email"`
+	PublicKey           Bytes      `json:"publicKey"`
+	EncryptedPrivateKey *Bytes     `json:"encryptedPrivateKey"`
 }
 
 type UserResolver struct{}

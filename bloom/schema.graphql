@@ -67,6 +67,8 @@ type User {
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
   subscription: BillingSubscription
+  publicKey: Bytes!
+  encryptedPrivateKey: Bytes
 }
 
 type UserConnection {

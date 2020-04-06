@@ -40,6 +40,7 @@ func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, err
 			IsAdmin:     user.IsAdmin,
 			Bio:         user.Bio,
 			Email:       &user.Email,
+			PublicKey:   model.Bytes(user.PublicKey),
 		}
 		edge := &model.UserEdge{
 			Node: modeluser,

@@ -17,17 +17,20 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
+	encryptedPrivateKey := model.Bytes(currentUser.EncryptedPrivateKey)
 	ret = &model.User{
-		ID:          &currentUser.ID,
-		AvatarURL:   nil,
-		CreatedAt:   &currentUser.CreatedAt,
-		Username:    currentUser.Username,
-		FirstName:   &currentUser.FirstName,
-		LastName:    &currentUser.LastName,
-		DisplayName: currentUser.DisplayName,
-		IsAdmin:     currentUser.IsAdmin,
-		Bio:         currentUser.Bio,
-		Email:       &currentUser.Email,
+		ID:                  &currentUser.ID,
+		AvatarURL:           nil,
+		CreatedAt:           &currentUser.CreatedAt,
+		Username:            currentUser.Username,
+		FirstName:           &currentUser.FirstName,
+		LastName:            &currentUser.LastName,
+		DisplayName:         currentUser.DisplayName,
+		IsAdmin:             currentUser.IsAdmin,
+		Bio:                 currentUser.Bio,
+		Email:               &currentUser.Email,
+		EncryptedPrivateKey: &encryptedPrivateKey,
+		PublicKey:           model.Bytes(currentUser.PublicKey),
 	}
 
 	return ret, nil
