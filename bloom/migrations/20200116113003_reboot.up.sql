@@ -200,3 +200,25 @@ CREATE TABLE billing_invoices (
     PRIMARY KEY(id)
 );
 CREATE INDEX index_billing_invoices_on_customer_id ON billing_invoices (customer_id);
+
+
+-- ################################################################################################@
+-- Objects
+-- ################################################################################################@
+CREATE TABLE objects (
+    id UUID NOT NULL,
+
+    updated_at_state BIGINT NOT NULL,
+    cipher TEXT,
+    nonce BYTEA,
+    encrypted_key BYTEA,
+    encrypted_data BYTEA,
+
+    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
+    group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
+
+    PRIMARY KEY(id)
+);
+CREATE INDEX index_objects_on_user_id ON objects (user_id);
+CREATE INDEX index_objects_on_group_id ON objects (group_id);
+CREATE INDEX index_objects_on_updated_at_state ON objects (updated_at_state);
