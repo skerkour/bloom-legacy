@@ -60,6 +60,7 @@
                   <li><v-icon color="success">mdi-check</v-icon> <b>Open Source</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Private by design</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Ethical by design</b></li>
+                  <li><v-icon color="success">mdi-check</v-icon> <b>Only 1 account</b></li>
                   <li>... <router-link to="/features">And much more</router-link></li>
                 </ul>
               </v-col>
@@ -87,6 +88,7 @@
                   <li><b>29.18€ / mo</b></li>
                   <li><v-icon color="error">mdi-close</v-icon> Privacy</li>
                   <li><v-icon color="error">mdi-close</v-icon> Ethical technology</li>
+                  <li><v-icon color="error">mdi-close</v-icon> Multiple accounts</li>
                 </ul>
               </v-col>
             </v-row>
