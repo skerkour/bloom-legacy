@@ -19,6 +19,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		return ret, errors.New("Error deriving auth key")
 	}
 
+	publicKey := make([]byte, 12)
+	encryptedPrivateKey := make([]byte, 12)
 	input := model.CompleteRegistrationInput{
 		ID:       params.ID,
 		Username: params.Username,
@@ -27,6 +29,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 			Os:   model.SessionDeviceOs(coreutil.GetDeviceOS()),
 			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
 		},
+		PublicKey:           publicKey,
+		EncryptedPrivateKey: encryptedPrivateKey,
 	}
 	var resp struct {
 		CompleteRegistration *model.SignedIn `json:"completeRegistration"`
