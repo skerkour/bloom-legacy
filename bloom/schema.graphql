@@ -299,6 +299,9 @@ input CompleteRegistrationInput {
   username: String!
   authKey: Bytes!
   device: SessionDeviceInput!
+
+  publicKey: Bytes!
+  encryptedPrivateKey: Bytes!
 }
 
 input SessionDeviceInput {

@@ -70,10 +70,12 @@ type ChangeDefaultPaymentMethodInput struct {
 
 type CompleteRegistrationInput struct {
 	// pending user id
-	ID       string              `json:"id"`
-	Username string              `json:"username"`
-	AuthKey  Bytes               `json:"authKey"`
-	Device   *SessionDeviceInput `json:"device"`
+	ID                  string              `json:"id"`
+	Username            string              `json:"username"`
+	AuthKey             Bytes               `json:"authKey"`
+	Device              *SessionDeviceInput `json:"device"`
+	PublicKey           Bytes               `json:"publicKey"`
+	EncryptedPrivateKey Bytes               `json:"encryptedPrivateKey"`
 }
 
 type CreateGroupInput struct {

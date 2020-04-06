@@ -1912,6 +1912,9 @@ input CompleteRegistrationInput {
   username: String!
   authKey: Bytes!
   device: SessionDeviceInput!
+
+  publicKey: Bytes!
+  encryptedPrivateKey: Bytes!
 }
 
 input SessionDeviceInput {
@@ -8929,6 +8932,18 @@ func (ec *executionContext) unmarshalInputCompleteRegistrationInput(ctx context.
 		case "device":
 			var err error
 			it.Device, err = ec.unmarshalNSessionDeviceInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSessionDeviceInput(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "publicKey":
+			var err error
+			it.PublicKey, err = ec.unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "encryptedPrivateKey":
+			var err error
+			it.EncryptedPrivateKey, err = ec.unmarshalNBytes2gitlabᚗcomᚋbloom42ᚋbloomᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐBytes(ctx, v)
 			if err != nil {
 				return it, err
 			}
