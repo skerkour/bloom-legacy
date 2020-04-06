@@ -25,6 +25,7 @@ type User struct {
 	DisabledAt          *time.Time `db:"disabled_at"`
 	PublicKey           []byte     `db:"public_key"`
 	EncryptedPrivateKey []byte     `db:"encrypted_private_key"`
+	State               int64      `db:"state"`
 }
 
 func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {
