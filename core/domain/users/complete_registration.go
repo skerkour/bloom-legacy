@@ -2,6 +2,7 @@ package users
 
 import (
 	"context"
+	"crypto/rand"
 	"errors"
 
 	"gitlab.com/bloom42/bloom/core/api"
@@ -24,14 +25,14 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		return ret, errors.New("Internal error. Please try again")
 	}
 
-	publicKey, privateKey, err := genKeyPair()
+	publicKey, privateKey, err := generateKeyPair(rand.Reader)
 	if err != nil {
 		return ret, err
 	}
 
 	// TODO: persisr keypair
 
-	encryptedPrivateKey, err := encryptWithPassKey(passKey, privateKey)
+	encryptedPrivateKey, err := encryptWithPassKey(passKey, privateKey[:])
 	if err != nil {
 		return ret, err
 	}
@@ -44,7 +45,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 			Os:   model.SessionDeviceOs(coreutil.GetDeviceOS()),
 			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
 		},
-		PublicKey:           publicKey,
+		PublicKey:           publicKey[:],
 		EncryptedPrivateKey: encryptedPrivateKey,
 	}
 	var resp struct {
