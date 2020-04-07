@@ -304,6 +304,7 @@ input CompleteRegistrationInput {
 
   publicKey: Bytes!
   encryptedPrivateKey: Bytes!
+  privateKeyNonce: Bytes!
 }
 
 input SessionDeviceInput {

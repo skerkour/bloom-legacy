@@ -26,6 +26,7 @@ type User struct {
 	PublicKey           []byte     `db:"public_key"`
 	EncryptedPrivateKey []byte     `db:"encrypted_private_key"`
 	State               int64      `db:"state"`
+	PrivateKeyNonce     []byte     `db:"private_key_nonce"`
 }
 
 func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {

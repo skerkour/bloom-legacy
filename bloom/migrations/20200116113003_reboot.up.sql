@@ -18,6 +18,7 @@ CREATE TABLE users (
     bio TEXT NOT NULL,
     public_key BYTEA NOT NULL,
     encrypted_private_key BYTEA NOT NULL,
+    private_key_nonce BYTEA NOT NULL,
     state BIGINT NOT NULL,
     -- password_reset_id TEXT,
     -- password_reset_token_hash TEXT,

@@ -17,6 +17,7 @@ type CreateUserParams struct {
 	AuthKey             []byte
 	PublicKey           []byte
 	EncryptedPrivateKey []byte
+	PrivateKeyNonce     []byte
 }
 
 func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User, error) {
@@ -86,15 +87,16 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
 		State:               0,
+		PrivateKeyNonce:     params.PrivateKeyNonce,
 	}
 
 	queryCreateUser := `INSERT INTO users
 		(id, created_at, updated_at, username, display_name, bio, email, first_name, last_name,
-			is_admin, auth_key_hash, public_key, encrypted_private_key, state)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)`
+			is_admin, auth_key_hash, public_key, encrypted_private_key, state, private_key_nonce)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`
 	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username,
 		ret.DisplayName, "", ret.Email, "", "", false, ret.AuthKeyHash, ret.PublicKey,
-		ret.EncryptedPrivateKey, ret.State)
+		ret.EncryptedPrivateKey, ret.State, ret.PrivateKeyNonce)
 	if err != nil {
 		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
 		return ret, NewError(ErrorCompletingRegistration)

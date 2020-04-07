@@ -76,6 +76,7 @@ type CompleteRegistrationInput struct {
 	Device              *SessionDeviceInput `json:"device"`
 	PublicKey           Bytes               `json:"publicKey"`
 	EncryptedPrivateKey Bytes               `json:"encryptedPrivateKey"`
+	PrivateKeyNonce     Bytes               `json:"privateKeyNonce"`
 }
 
 type CreateGroupInput struct {

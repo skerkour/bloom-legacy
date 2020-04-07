@@ -65,6 +65,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		AuthKey:             input.AuthKey,
 		PublicKey:           input.PublicKey,
 		EncryptedPrivateKey: input.EncryptedPrivateKey,
+		PrivateKeyNonce:     input.PrivateKeyNonce,
 	}
 	newUser, err := users.CreateUser(ctx, tx, createUserParams)
 	if err != nil {
