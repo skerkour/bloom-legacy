@@ -26,15 +26,14 @@ func deriveAuthKey(username, password []byte) []byte {
 // padOrTrimBytes returns (size) bytes from input (data)
 // Short data gets zeros prefixed, Long data gets right bits trimmed
 func padOrTrimBytes(data []byte, size int) []byte {
-	DataLen := len(data)
-	if DataLen == size {
+	dataLen := len(data)
+	if dataLen == size {
 		return data
-	}
-	if DataLen > size {
+	} else if dataLen > size {
 		return data[:size]
 	}
 
 	tmp := make([]byte, size)
-	copy(tmp[:DataLen], data)
+	copy(tmp[:dataLen], data)
 	return tmp
 }
