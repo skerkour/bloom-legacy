@@ -21,7 +21,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 
 	passKey := derivePassKey([]byte(params.Username), []byte(params.Password))
-	if authKey == nil {
+	if passKey == nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
 
