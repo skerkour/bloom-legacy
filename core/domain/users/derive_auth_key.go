@@ -13,10 +13,9 @@ func deriveAuthKey(username, password []byte) []byte {
 	if err != nil {
 		return nil
 	}
-	keyID := []byte("com.bloom42.bloom.auth_key")
-	key = append(key, keyID...)
 
-	authKey, err := kdf.DeriveFromKey(key, kdf.KeySize256)
+	context := []byte("com.bloom42.bloom/auth_key")
+	authKey, err := kdf.DeriveFromKey(key, context, kdf.KeySize256)
 	if err != nil {
 		return nil
 	}
