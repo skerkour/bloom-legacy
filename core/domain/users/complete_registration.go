@@ -2,12 +2,12 @@ package users
 
 import (
 	"context"
-	"crypto/rand"
 	"errors"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/coreutil"
+	"gitlab.com/bloom42/lily/crypto/rand"
 	"gitlab.com/bloom42/lily/graphql"
 )
 
@@ -25,14 +25,13 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		return ret, errors.New("Internal error. Please try again")
 	}
 
-	publicKey, privateKey, err := generateKeyPair(rand.Reader)
+	publicKey, privateKey, err := generateKeyPair(rand.Reader())
 	if err != nil {
 		return ret, err
 	}
 
-	// TODO: persisr keypair
-
-	encryptedPrivateKey, err := encryptWithPassKey(passKey, privateKey[:])
+	// TODO: persist keypair
+	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(passKey, privateKey[:])
 	if err != nil {
 		return ret, err
 	}
@@ -47,6 +46,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		},
 		PublicKey:           publicKey[:],
 		EncryptedPrivateKey: encryptedPrivateKey,
+		PrivateKeyNonce:     privateKeyNonce,
 	}
 	var resp struct {
 		CompleteRegistration *model.SignedIn `json:"completeRegistration"`

@@ -1,21 +1,5 @@
 package users
 
-// padOrTrimBytes returns (size) bytes from input (data)
-// Short data gets zeros prefixed, Long data gets right bits trimmed
-func padOrTrimBytes(data []byte, size int) []byte {
-	DataLen := len(data)
-	if DataLen == size {
-		return data
-	}
-	if DataLen > size {
-		return data[:size]
-	}
-
-	tmp := make([]byte, size)
-	copy(tmp[:DataLen], data)
-	return tmp
-}
-
 /*
 fn username_to_salt(username: &str) -> argon2id::Salt {
     let padded_username = pad_or_cut_str(username, argon2id::SALTBYTES);
