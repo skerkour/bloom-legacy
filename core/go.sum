@@ -17,12 +17,8 @@ github.com/mattn/go-sqlite3 v2.0.3+incompatible/go.mod h1:FPy6KqzDD04eiIsT53CuJW
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
 gitlab.com/bloom42/bloom/common v0.0.0-20200326091303-6fbc5568dab4 h1:YJyq9XvcIiXxX58dvwmh1j4JGUc0RsDGCZ2P8OkP/5c=
 gitlab.com/bloom42/bloom/common v0.0.0-20200326091303-6fbc5568dab4/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
-gitlab.com/bloom42/lily v0.0.0-20200407142130-85f8f87b5485 h1:drSAIRxbwcoUhEoe0ziaSGitZn0tzQnRLKKKtxrnhQg=
-gitlab.com/bloom42/lily v0.0.0-20200407142130-85f8f87b5485/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
-gitlab.com/bloom42/lily v0.0.0-20200407144100-8f537bcb8424 h1:vqKCLadkLVjb2Anhvx2aQiO8H9/hwrPS7Urulh9QMP8=
-gitlab.com/bloom42/lily v0.0.0-20200407144100-8f537bcb8424/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
-gitlab.com/bloom42/lily v0.0.0-20200407144256-c4da45b6e6c3 h1:RQjCc/Dsx/zEot2OwM4VpjRg2HDzEYaUj5DPBXtAWFY=
-gitlab.com/bloom42/lily v0.0.0-20200407144256-c4da45b6e6c3/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
+gitlab.com/bloom42/lily v0.0.0-20200407201829-34cbf7fbf30c h1:SZFNFZFEh02Cz7h6z2Wain4iyM3xYcZGyf3NOQgBtS4=
+gitlab.com/bloom42/lily v0.0.0-20200407201829-34cbf7fbf30c/go.mod h1:1TgJjZ4sCdN9SdhFSvr29t6gEJ/XWiK2JCKebpNf+WU=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073 h1:xMPOj6Pz6UipU1wXLkrtqpHbR0AVFnyPEQq/wRWz9lM=
 golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
