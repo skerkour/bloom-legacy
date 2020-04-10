@@ -5,7 +5,7 @@ import (
 	"fmt"
 
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/bloom/bloom/version"
+	"gitlab.com/bloom42/bloom/cmd/bloom/version"
 	"gitlab.com/bloom42/lily/rz/log"
 )
 

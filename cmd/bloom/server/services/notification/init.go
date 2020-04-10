@@ -2,7 +2,7 @@ package notification
 
 import (
 	"fmt"
-	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"net/smtp"
 )
 

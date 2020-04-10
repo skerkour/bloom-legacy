@@ -5,7 +5,7 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/rz/log"
 )

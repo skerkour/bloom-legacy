@@ -6,7 +6,7 @@ import (
 	"strings"
 	"time"
 
-	"gitlab.com/bloom42/bloom/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 )

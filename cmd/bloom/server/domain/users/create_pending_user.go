@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/crypto/password/argon2id"
 	"gitlab.com/bloom42/lily/crypto/rand"

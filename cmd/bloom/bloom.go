@@ -4,7 +4,7 @@ import (
 	stdlog "log"
 	"os"
 
-	"gitlab.com/bloom42/bloom/bloom/cli"
+	"gitlab.com/bloom42/bloom/cmd/bloom/cli"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/rz/log"
 )

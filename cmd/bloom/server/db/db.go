@@ -3,7 +3,7 @@ package db
 import (
 	"github.com/jmoiron/sqlx"
 	_ "github.com/lib/pq"
-	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 )
 
 var DB *sqlx.DB

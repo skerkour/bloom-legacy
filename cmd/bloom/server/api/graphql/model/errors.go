@@ -1,8 +1,8 @@
 package model
 
 import (
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
 )
 
 func PermissionDeniedToAccessField() error {

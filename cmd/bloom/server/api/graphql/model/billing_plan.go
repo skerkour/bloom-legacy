@@ -3,9 +3,9 @@ package model
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
 type BillingPlanResolver struct{}

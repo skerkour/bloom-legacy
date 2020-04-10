@@ -2,8 +2,8 @@ package cli
 
 import (
 	"github.com/spf13/cobra"
-	"gitlab.com/bloom42/bloom/bloom/cli/server"
-	"gitlab.com/bloom42/bloom/bloom/cli/version"
+	"gitlab.com/bloom42/bloom/cmd/bloom/cli/server"
+	"gitlab.com/bloom42/bloom/cmd/bloom/cli/version"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/rz/log"
 )

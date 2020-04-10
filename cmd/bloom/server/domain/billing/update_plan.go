@@ -7,7 +7,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	stripeplan "github.com/stripe/stripe-go/plan"
-	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
 )
 

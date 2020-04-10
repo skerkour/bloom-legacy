@@ -3,9 +3,9 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 )
 
 // Me returns the current user

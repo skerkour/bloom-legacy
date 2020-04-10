@@ -3,7 +3,7 @@ package api
 import (
 	"net/http"
 
-	"gitlab.com/bloom42/bloom/bloom/server/config"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 )
 
 func IndexHandler(w http.ResponseWriter, r *http.Request) {

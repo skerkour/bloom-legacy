@@ -1,7 +1,7 @@
 package apictx
 
 import (
-	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 )
 
 type Context struct {

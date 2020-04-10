@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"text/template"
 
-	"gitlab.com/bloom42/bloom/bloom/server/services/notification"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
 )
 
 const paymentFailedEmailTemplate = `

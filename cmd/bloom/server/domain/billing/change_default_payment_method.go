@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/bloom/server/db"
-	"gitlab.com/bloom42/bloom/bloom/server/domain/groups"
-	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
 )
 

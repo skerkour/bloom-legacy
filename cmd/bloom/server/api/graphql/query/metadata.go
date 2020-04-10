@@ -3,10 +3,10 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/bloom/version"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/cmd/bloom/version"
 )
 
 // Metadata returns infrmation about the Bloom server

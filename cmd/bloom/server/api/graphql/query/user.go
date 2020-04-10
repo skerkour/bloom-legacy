@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 )
 
 // User finds an user

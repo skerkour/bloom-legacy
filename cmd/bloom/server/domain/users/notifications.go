@@ -3,7 +3,7 @@ package users
 import (
 	"bytes"
 	"fmt"
-	"gitlab.com/bloom42/bloom/bloom/server/services/notification"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
 	"text/template"
 )
 

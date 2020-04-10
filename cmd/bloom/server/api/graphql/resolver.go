@@ -1,9 +1,9 @@
 package graphql
 
 import (
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/mutation"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/query"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/mutation"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/query"
 )
 
 func New() Config {

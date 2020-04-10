@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/stripe/stripe-go"
-	"gitlab.com/bloom42/bloom/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )

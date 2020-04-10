@@ -15,7 +15,7 @@ import (
 	"github.com/99designs/gqlgen/graphql/introspection"
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
-	"gitlab.com/bloom42/bloom/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 )
 
 // region    ************************** generated!.gotpl **************************
