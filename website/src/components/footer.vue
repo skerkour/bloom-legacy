@@ -29,6 +29,7 @@
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3"><b>{{ $t('footer.community.title') }}</b></h5>
           <ul>
+             <li><a class="nav-link" href="https://www.reddit.com/r/bloom42" target="_blank" rel="noopener">Reddit</a></li>
             <li><a class="nav-link" href="https://fatalentropy.com" target="_blank" rel="noopener">Blog</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
