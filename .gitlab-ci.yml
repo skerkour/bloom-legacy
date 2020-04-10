@@ -139,7 +139,7 @@ test:cli:
   tags:
     - docker
   script:
-    - cd bloom
+    - cd cmd/bloom
     - cp bloom.default.json bloom.json
     - make test
   services:
@@ -257,7 +257,7 @@ build:cli:
   tags:
     - docker
   script:
-    - cd bloom
+    - cd cmd/bloom
     - make build
 
 build:cli:docker:
@@ -267,7 +267,7 @@ build:cli:docker:
     - docker
   script:
     - apk update && apk add make
-    - cd bloom
+    - cd cmd/bloom
     - make docker
 
 
