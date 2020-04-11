@@ -3,8 +3,10 @@ package users
 import (
 	"bytes"
 	"fmt"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
+	"net/mail"
 	"text/template"
+
+	"gitlab.com/bloom42/lily/email"
 )
 
 const userVerificationEmailTemplate = `
@@ -35,6 +37,11 @@ func SendUserVerificationCode(toAddr, displayName, code string) error {
 		return err
 	}
 
-	err = notification.SendHTMLEmail("hello@bloom.sh", "Bloom", toAddr, displayName, subject, content.String())
-	return err
+	message := email.Email{
+		From:    &mail.Address{Name: "Bloom", Address: "hello@bloom.sh"},
+		To:      []*mail.Address{&mail.Address{Name: displayName, Address: toAddr}},
+		Subject: subject,
+		HTML:    content.Bytes(),
+	}
+	return email.Send(message)
 }

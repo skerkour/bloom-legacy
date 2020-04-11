@@ -1,45 +1,35 @@
 package notification
 
 import (
-	"fmt"
-	"net/smtp"
+	"bytes"
+	"net/mail"
+	"text/template"
+
+	"gitlab.com/bloom42/lily/email"
 )
 
-var emailer mailer
-
-type mailer struct {
-	address string
-	auth    smtp.Auth
+type DefaultTemplateParams struct {
+	Title           string
+	OnlineLink      string
+	Content         string
+	UnsubscribeLink string
 }
 
-func SendHTMLEmail(fromAddr, fromName, toAddr, toName, subject, content string) error {
-	toList := []string{toAddr}
+func SendHTMLEmailWithDefaultTemplate(from *mail.Address, to *mail.Address, subject string, markdown []byte, params DefaultTemplateParams) error {
+	var content bytes.Buffer
+	tmpl := template.Must(template.New("DefaultEmailTemplate").Parse(DefaultEmailTemplate))
 
-	data := fmt.Sprintf(`From: %s <%s>
-To: %s <%s>
-Subject: %s
-MIME-version: 1.0;
-Content-Type: text/html; charset="utf-8";
+	err := tmpl.Execute(&content, params)
+	if err != nil {
+		return err
+	}
 
-%s
-`, fromName, fromAddr, toName, toAddr, subject, content)
-
-	err := smtp.SendMail(emailer.address, emailer.auth, fromAddr, toList, []byte(data))
-	return err
-}
-
-func SendTextEmail(fromAddr, fromName, toAddr, toName, subject, content string) error {
-	toList := []string{toAddr}
-
-	data := fmt.Sprintf(`From: %s <%s>
-To: %s <%s>
-Subject: %s
-MIME-version: 1.0;
-Content-Type: text/plain; charset="utf-8";
-
-%s
-`, fromName, fromAddr, toName, toAddr, subject, content)
-
-	err := smtp.SendMail(emailer.address, emailer.auth, fromAddr, toList, []byte(data))
-	return err
+	message := email.Email{
+		From:    from,
+		To:      []*mail.Address{to},
+		Subject: subject,
+		HTML:    content.Bytes(),
+		Text:    markdown,
+	}
+	return email.Send(message)
 }

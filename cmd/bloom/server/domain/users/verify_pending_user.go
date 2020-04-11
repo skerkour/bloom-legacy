@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
@@ -16,7 +16,7 @@ func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUse
 		return NewError(ErrorMaximumVerificationTrialsReached)
 	}
 
-	if !argon2id.VerifyPassword([]byte(code), pendingUser.VerificationCodeHash) {
+	if !crypto.VerifyPasswordHash([]byte(code), pendingUser.VerificationCodeHash) {
 		return NewError(ErrorRegistrationCodeIsNotValid)
 	}
 

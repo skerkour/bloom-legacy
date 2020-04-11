@@ -8,8 +8,7 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -44,14 +43,14 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 
 	now := time.Now().UTC()
 	newUuid := uuid.New()
-	verificationCode, err := rand.StringAlph(userVerificationCodeAlphabet, 8)
+	verificationCode, err := crypto.RandAlphabet([]byte(userVerificationCodeAlphabet), 8)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error generating verification code", rz.Err(err))
 		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
 	}
 
 	// TODO: update params
-	codeHash, err := argon2id.HashPassword([]byte(verificationCode), argon2id.DefaultHashPasswordParams)
+	codeHash, err := crypto.HashPassword(verificationCode, crypto.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: hashing verification code", rz.Err(err))
 		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
@@ -76,5 +75,5 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 		logger.Error("error creating new user", rz.Err(err))
 		return ret, "", NewError(ErrorCreatingPendingUser)
 	}
-	return ret, verificationCode, nil
+	return ret, string(verificationCode), nil
 }

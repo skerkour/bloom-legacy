@@ -7,9 +7,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/common/consts"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -19,14 +17,14 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device Sessio
 	ret := Session{}
 	var token string
 
-	tokenSecret, err := rand.Bytes(uint64(consts.SESSION_TOKEN_BYTES))
+	tokenSecret, err := crypto.RandBytes(crypto.KeySize512)
 	if err != nil {
 		logger.Error("users.StartSession: generating sessions token", rz.Err(err))
 		return ret, token, NewError(ErrorSingingIn)
 	}
 
 	// TODO: update params
-	tokenHash, err := argon2id.HashPassword(tokenSecret, argon2id.DefaultHashPasswordParams)
+	tokenHash, err := crypto.HashPassword(tokenSecret, crypto.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.StartSession: hashing auth key", rz.Err(err))
 		return ret, token, NewError(ErrorSingingIn)

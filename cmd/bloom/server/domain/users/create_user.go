@@ -6,7 +6,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/common/validator"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -70,7 +70,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User
 	now := time.Now().UTC()
 	newUuid := uuid.New()
 	// TODO: update params
-	authKeyHash, err := argon2id.HashPassword(params.AuthKey, argon2id.DefaultHashPasswordParams)
+	authKeyHash, err := crypto.HashPassword(params.AuthKey, crypto.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
 		return ret, NewError(ErrorCompletingRegistration)

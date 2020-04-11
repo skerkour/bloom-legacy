@@ -13,7 +13,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/rz/rzhttp"
 	"gitlab.com/bloom42/lily/uuid"
@@ -179,7 +179,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid4")
 					return
 				}
-				if !argon2id.VerifyPassword(sessionToken, currentSession.TokenHash) {
+				if !crypto.VerifyPasswordHash(sessionToken, currentSession.TokenHash) {
 					// given sessionToken does not match with the actual hashed sesisonToken
 					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid5")
 					return

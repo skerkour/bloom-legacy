@@ -10,7 +10,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
@@ -24,7 +24,7 @@ func (resolver *Resolver) SendNewRegistrationCode(ctx context.Context, input mod
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := rand.Int64(500, 800)
+	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
 		logger.Error("mutaiton.SendNewRegistrationCode: generating random int", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorSendingNewRegistrationCode))

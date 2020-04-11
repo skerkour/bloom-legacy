@@ -49,12 +49,11 @@ var runCmd = &cobra.Command{
 		err = sentry.Init(sentry.ClientOptions{
 			Dsn: config.Sentry.Dsn,
 		})
-		err = notification.Init()
 		if err != nil {
 			log.Fatal("Initializing Sentry", rz.Err(err))
 		}
 
-		err = notification.Init()
+		err = notification.Init(config.SMTP)
 		if err != nil {
 			log.Fatal("Initializing noitification", rz.Err(err))
 		}

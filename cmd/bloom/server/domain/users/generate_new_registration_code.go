@@ -6,8 +6,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
@@ -16,14 +15,14 @@ func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *
 	var err error
 
 	now := time.Now().UTC()
-	verificationCode, err := rand.StringAlph(userVerificationCodeAlphabet, 8)
+	verificationCode, err := crypto.RandAlphabet([]byte(userVerificationCodeAlphabet), 8)
 	if err != nil {
 		logger.Error("users.GenerateNewRegistrationCode: error generating verification code", rz.Err(err))
 		return "", NewError(ErrorSendingNewRegistrationCode)
 	}
 
 	// TODO: update params
-	codeHash, err := argon2id.HashPassword([]byte(verificationCode), argon2id.DefaultHashPasswordParams)
+	codeHash, err := crypto.HashPassword(verificationCode, crypto.DefaultHashPasswordParams)
 	if err != nil {
 		logger.Error("users.GenerateNewRegistrationCode: hashing verification code", rz.Err(err))
 		return "", NewError(ErrorSendingNewRegistrationCode)
@@ -38,5 +37,5 @@ func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *
 		logger.Error("users.GenerateNewRegistrationCode: updateing pending user", rz.Err(err), rz.String("pending_user_id", pendingUser.ID))
 		return "", NewError(ErrorSendingNewRegistrationCode)
 	}
-	return verificationCode, nil
+	return string(verificationCode), nil
 }

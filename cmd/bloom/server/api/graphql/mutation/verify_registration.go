@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
@@ -23,7 +23,7 @@ func (resolver *Resolver) VerifyRegistration(ctx context.Context, input model.Ve
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := rand.Int64(500, 800)
+	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
 		logger.Error("mutation.VerifyRegistration: generating random int", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))

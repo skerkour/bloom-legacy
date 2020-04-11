@@ -9,8 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto/password/argon2id"
-	"gitlab.com/bloom42/lily/crypto/rand"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
@@ -29,7 +28,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := rand.Int64(500, 800)
+	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
 		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
 		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
@@ -50,7 +49,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	}
 
 	// verify password
-	if !argon2id.VerifyPassword(input.AuthKey, user.AuthKeyHash) {
+	if !crypto.VerifyPasswordHash(input.AuthKey, user.AuthKeyHash) {
 		tx.Rollback()
 		return ret, gqlerrors.New(users.NewError(users.ErrorInvalidUsernamePasswordCombination))
 	}

@@ -2,9 +2,10 @@ package billing
 
 import (
 	"bytes"
+	"net/mail"
 	"text/template"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
+	"gitlab.com/bloom42/lily/email"
 )
 
 const paymentFailedEmailTemplate = `
@@ -33,6 +34,11 @@ func SendPaymentFailedEmail(toAddr string, amount int64) error {
 		return err
 	}
 
-	err = notification.SendHTMLEmail("hello@bloom.sh", "Bloom", toAddr, "", subject, content.String())
-	return err
+	message := email.Email{
+		From:    &mail.Address{Name: "Bloom", Address: "hello@bloom.sh"},
+		To:      []*mail.Address{&mail.Address{Name: "", Address: toAddr}},
+		Subject: subject,
+		HTML:    content.Bytes(),
+	}
+	return email.Send(message)
 }
