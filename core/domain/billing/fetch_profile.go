@@ -47,7 +47,7 @@ func FetchMyProfile() (MyBillingProfile, error) {
 						stripeId
 						stripeHostedUrl
 						stripePdfUrl
-						paid
+						paidAt
 					}
 				}
 			}

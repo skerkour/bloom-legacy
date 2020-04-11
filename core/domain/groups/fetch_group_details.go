@@ -67,7 +67,7 @@ func FetchGroupDetails(params FetchGroupDetailsParams) (*model.Group, error) {
 						stripeId
 						stripeHostedUrl
 						stripePdfUrl
-						paid
+						paidAt
 					}
 				}
 			}

@@ -47,7 +47,7 @@ func FetchGroupProfile(params FetchGroupProfileParams) (GroupBillingProfile, err
 						stripeId
 						stripeHostedUrl
 						stripePdfUrl
-						paid
+						paidAt
 					}
 				}
 			}

@@ -60,7 +60,7 @@ func FetchUserDetails(params FetchUserParams) (*model.User, error) {
 						stripeId
 						stripeHostedUrl
 						stripePdfUrl
-						paid
+						paidAt
 					}
 				}
 			}
