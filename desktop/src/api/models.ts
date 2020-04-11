@@ -103,6 +103,9 @@ export type CompleteRegistrationInput = {
   username: Scalars['String'],
   authKey: Scalars['Bytes'],
   device: SessionDeviceInput,
+  publicKey: Scalars['Bytes'],
+  encryptedPrivateKey: Scalars['Bytes'],
+  privateKeyNonce: Scalars['Bytes'],
 };
 
 export type CreateGroupInput = {
@@ -216,7 +219,7 @@ export type Invoice = {
   stripeId: Scalars['String'],
   stripeHostedUrl: Scalars['String'],
   stripePdfUrl: Scalars['String'],
-  paid: Scalars['Boolean'],
+  paidAt?: Maybe<Scalars['Time']>,
 };
 
 export type InvoiceConnection = {
@@ -588,6 +591,8 @@ export type User = {
   sessions?: Maybe<SessionConnection>,
   groupInvitations?: Maybe<GroupInvitationConnection>,
   subscription?: Maybe<BillingSubscription>,
+  publicKey: Scalars['Bytes'],
+  encryptedPrivateKey?: Maybe<Scalars['Bytes']>,
 };
 
 export type UserConnection = {
