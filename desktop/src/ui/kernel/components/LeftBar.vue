@@ -54,6 +54,19 @@
         </v-list-item-avatar>
       </v-list-item>
 
+
+      <v-list-item>
+        <v-list-item-avatar color="white" class="blm-pointer" @click="openHelp">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+               <v-icon medium color="grey" v-on="on">mdi-help</v-icon>
+            </template>
+            <span>Help</span>
+          </v-tooltip>
+        </v-list-item-avatar>
+      </v-list-item>
+
+
       <v-list-item
         v-for="(app, index) in apps"
         :key="index"
@@ -89,6 +102,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 import AllAppsDialog from './AllAppsDialog.vue';
 import getApps from '@/ui/kernel/apps';
+import config from '@/config';
+
+const { shell } = window as any;
 
 @Component({
   components: {
@@ -120,6 +136,10 @@ export default class LeftBar extends Vue {
 
   goto(path: string) {
     this.$router.push({ path }).catch(() => {});
+  }
+
+  openHelp() {
+    shell.openExternal(config.HELP_URL);
   }
 }
 </script>

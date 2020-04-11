@@ -2,7 +2,7 @@
   <div class="blm-content">
     <blm-left-bar />
     <div class="blm-content">
-      <blm-app-bar />
+      <!-- <blm-app-bar /> -->
 
       <blm-navigation-drawer :app="app" />
 
@@ -22,14 +22,12 @@ import {
   Watch,
 } from 'vue-property-decorator';
 import { Route } from 'vue-router';
-import BlmAppBar from '@/ui/kernel/components/AppBar.vue';
 import LeftBar from '@/ui/kernel/components/LeftBar.vue';
 import NavigationDrawer from '@/ui/kernel/components/NavigationDrawer.vue';
 
 
 @Component({
   components: {
-    'blm-app-bar': BlmAppBar,
     'blm-left-bar': LeftBar,
     'blm-navigation-drawer': NavigationDrawer,
   },
