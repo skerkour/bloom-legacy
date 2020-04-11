@@ -9,17 +9,17 @@ import (
 )
 
 type Invoice struct {
-	ID        string    `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID        string    `db:"id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 
-	Amount          int64  `json:"amount" db:"amount"`
-	StripeID        string `json:"stripe_id" db:"stripe_id"`
-	StripeHostedURL string `json:"stripe_hosted_url" db:"stripe_hosted_url"`
-	StripePdfURL    string `json:"stripe_pdf_url" db:"stripe_pdf_url"`
-	Paid            bool   `json:"paid" db:"paid"`
+	Amount          int64      `db:"amount"`
+	StripeID        string     `db:"stripe_id"`
+	StripeHostedURL string     `db:"stripe_hosted_url"`
+	StripePdfURL    string     `db:"stripe_pdf_url"`
+	PaidAt          *time.Time `db:"paid_at"`
 
-	CustomerID string `json:"customer_id" db:"customer_id"`
+	CustomerID string `db:"customer_id"`
 }
 
 func FindInvoiceByStripeId(ctx context.Context, tx *sqlx.Tx, stripeId string) (*Invoice, error) {

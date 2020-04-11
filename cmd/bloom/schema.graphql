@@ -168,7 +168,7 @@ type Invoice {
   stripeId: String!
   stripeHostedUrl: String!
   stripePdfUrl: String!
-  paid: Boolean!
+  paidAt: Time
 }
 
 type InvoiceConnection {

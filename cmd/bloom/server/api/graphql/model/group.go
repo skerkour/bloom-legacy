@@ -185,7 +185,7 @@ func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*Inv
 			ID:              invoice.ID,
 			CreatedAt:       invoice.CreatedAt,
 			StripePdfURL:    invoice.StripePdfURL,
-			Paid:            invoice.Paid,
+			PaidAt:          invoice.PaidAt,
 			StripeHostedURL: invoice.StripeHostedURL,
 			Amount:          Int64(invoice.Amount),
 		}
