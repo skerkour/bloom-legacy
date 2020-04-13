@@ -31,7 +31,8 @@ func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUse
 	_, err := tx.Exec("UPDATE pending_users SET verified_at = $1, updated_at = $1 WHERE id = $2",
 		now, pendingUser.ID)
 	if err != nil {
-		logger.Error("VerifyPendingUser: error verifying pending user", rz.Err(err), rz.String("pending_user_id", pendingUser.ID))
+		logger.Error("users.VerifyPendingUser: error verifying pending user", rz.Err(err),
+			rz.String("pending_user.id", pendingUser.ID))
 		return NewError(ErrorVerifyingPendingUser)
 	}
 	return nil
