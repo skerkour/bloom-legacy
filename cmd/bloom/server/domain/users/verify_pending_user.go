@@ -26,6 +26,7 @@ func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUse
 		return NewError(ErrorRegistrationCodeExpired)
 	}
 	pendingUser.VerifiedAt = &now
+	pendingUser.UpdatedAt = now
 
 	_, err := tx.Exec("UPDATE pending_users SET verified_at = $1, updated_at = $1 WHERE id = $2",
 		now, pendingUser.ID)
