@@ -7,7 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/coreutil"
-	"gitlab.com/bloom42/lily/crypto/curve25519"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
 )
 
@@ -25,13 +25,13 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		return ret, errors.New("Internal error. Please try again")
 	}
 
-	publicKey, privateKey, err := curve25519.NewKeyPair()
+	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
 		return ret, err
 	}
 
 	// TODO: persist keypair
-	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(passKey, privateKey[:])
+	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(passKey, []byte(privateKey))
 	if err != nil {
 		return ret, err
 	}
@@ -44,7 +44,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 			Os:   model.SessionDeviceOs(coreutil.GetDeviceOS()),
 			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
 		},
-		PublicKey:           publicKey[:],
+		PublicKey:           []byte(publicKey),
 		EncryptedPrivateKey: encryptedPrivateKey,
 		PrivateKeyNonce:     privateKeyNonce,
 	}

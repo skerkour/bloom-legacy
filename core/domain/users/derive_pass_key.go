@@ -1,7 +1,7 @@
 package users
 
 import (
-	"gitlab.com/bloom42/lily/crypto/kdf"
+	"gitlab.com/bloom42/lily/crypto"
 )
 
 // TODO
@@ -9,13 +9,13 @@ func derivePassKey(username, password []byte) []byte {
 	authKeySalt := padOrTrimBytes(username, 64)
 	authKeySalt = append(authKeySalt, []byte("@bloom42.com")...)
 
-	key, err := kdf.DeriveFromPassword(password, authKeySalt, kdf.KeySize512)
+	key, err := crypto.DeriveKeyFromPassword(password, authKeySalt, crypto.KeySize512)
 	if err != nil {
 		return nil
 	}
 
 	context := []byte("com.bloom42.bloom/pass_key")
-	authKey, err := kdf.DeriveFromKey(key, context, kdf.KeySize256)
+	authKey, err := crypto.DeriveKeyFromKey(key, context, crypto.KeySize256)
 	if err != nil {
 		return nil
 	}
