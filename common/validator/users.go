@@ -63,8 +63,8 @@ func UserDisplayName(displayName string) error {
 func UserPassword(password string, basicPassword map[string]bool) error {
 	passwordLength := len(password)
 
-	if passwordLength < consts.PASSWORD_MAX_LENGTH {
-		return fmt.Errorf("Password must be longer than %d characters", consts.PASSWORD_MAX_LENGTH-1)
+	if passwordLength < consts.PASSWORD_MIN_LENGTH {
+		return fmt.Errorf("Password must be longer than %d characters", consts.PASSWORD_MIN_LENGTH-1)
 	}
 
 	if passwordLength > consts.PASSWORD_MAX_LENGTH {
