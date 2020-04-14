@@ -87,7 +87,7 @@
                   <v-divider class="mt-5 mb-5" />
                   <li><b>29.18€ / mo</b></li>
                   <li><v-icon color="error">mdi-close</v-icon> Privacy</li>
-                  <li><v-icon color="error">mdi-close</v-icon> Ethical technology</li>
+                  <li><v-icon color="error">mdi-close</v-icon> Open Source</li>
                   <li><v-icon color="error">mdi-close</v-icon> Multiple accounts</li>
                 </ul>
               </v-col>
