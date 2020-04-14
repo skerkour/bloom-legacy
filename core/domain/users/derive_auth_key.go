@@ -7,6 +7,7 @@ import (
 // TODO: good values (key derivation with blake2b)
 // return nil if encounter an error
 func deriveAuthKey(username, password []byte) []byte {
+	username = append(username, []byte("@bloom")...)
 	authKeySalt := padOrTrimBytes(username, 64)
 
 	key, err := kdf.DeriveFromPassword(password, authKeySalt, kdf.KeySize512)
