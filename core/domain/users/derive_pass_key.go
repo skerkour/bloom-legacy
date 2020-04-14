@@ -7,7 +7,7 @@ import (
 // TODO
 func derivePassKey(username, password []byte) []byte {
 	authKeySalt := padOrTrimBytes(username, 64)
-	authKeySalt = append(authKeySalt, []byte("@bloom")...)
+	authKeySalt = append(authKeySalt, []byte("@bloom42.com")...)
 
 	key, err := kdf.DeriveFromPassword(password, authKeySalt, kdf.KeySize512)
 	if err != nil {
