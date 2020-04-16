@@ -126,7 +126,7 @@ func decodeSession(token string) (string, []byte, error) {
 	var sessionID string
 	sessionToken := []byte{}
 
-	data, err = base64.StdEncoding.DecodeString(token)
+	data, err = base64.RawURLEncoding.DecodeString(token)
 	if err != nil {
 		return sessionID, sessionToken, err
 	}

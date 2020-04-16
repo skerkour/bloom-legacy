@@ -53,6 +53,6 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID string, device Sessio
 		return ret, token, NewError(ErrorSingingIn)
 	}
 
-	token = base64.StdEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", ret.ID, tokenSecret)))
+	token = base64.RawURLEncoding.EncodeToString([]byte(fmt.Sprintf("%s:%s", ret.ID, tokenSecret)))
 	return ret, token, nil
 }

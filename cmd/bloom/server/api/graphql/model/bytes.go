@@ -9,7 +9,7 @@ import (
 type Bytes []byte
 
 func (b Bytes) MarshalGQL(w io.Writer) {
-	encoder := base64.NewEncoder(base64.StdEncoding, w)
+	encoder := base64.NewEncoder(base64.RawURLEncoding, w)
 	encoder.Write(b)
 	encoder.Close()
 }
@@ -19,9 +19,9 @@ func (b *Bytes) UnmarshalGQL(v interface{}) error {
 
 	switch v := v.(type) {
 	case string:
-		*b, err = base64.StdEncoding.DecodeString(v)
+		*b, err = base64.RawURLEncoding.DecodeString(v)
 	case *string:
-		*b, err = base64.StdEncoding.DecodeString(*v)
+		*b, err = base64.RawURLEncoding.DecodeString(*v)
 	case []byte:
 		*b = v
 	default:
