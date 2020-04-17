@@ -4,7 +4,6 @@ go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.11.3
-	github.com/chainswatch/bclib v0.0.0-20190927165345-a0af8740739f // indirect
 	github.com/getsentry/sentry-go v0.5.1
 	github.com/go-chi/chi v4.0.4+incompatible
 	github.com/go-chi/cors v1.0.0
@@ -12,16 +11,13 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/joho/godotenv v1.3.0 // indirect
 	github.com/lib/pq v1.3.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
-	github.com/pebbe/zmq4 v1.2.0 // indirect
 	github.com/sirupsen/logrus v1.5.0 // indirect
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v70.2.0+incompatible
-	github.com/syndtr/goleveldb v1.0.0 // indirect
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
 	gitlab.com/bloom42/bloom/common v0.0.0-20200404093800-6ac65aba5cc6
