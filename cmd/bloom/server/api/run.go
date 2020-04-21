@@ -88,7 +88,7 @@ func Run() error {
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	if config.Server.HTTPPort != nil {
+	if !config.Server.HTTP {
 		log.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
 			Email:      config.Server.CertsEmail,
@@ -105,6 +105,7 @@ func Run() error {
 			CipherSuites: []uint16{
 				tls.TLS_ECDHE_ECDSA_WITH_AES_256_GCM_SHA384,
 				tls.TLS_ECDHE_ECDSA_WITH_CHACHA20_POLY1305,
+				tls.TLS_ECDHE_ECDSA_WITH_AES_128_GCM_SHA256,
 			},
 			MinVersion:               tls.VersionTLS13,
 			PreferServerCipherSuites: true,
@@ -123,16 +124,10 @@ func Run() error {
 	log.Info("Starting server", rz.Uint16("port", config.Server.Port))
 	go func() {
 		var err error
-		if config.Server.HTTPPort != nil {
-			go func() {
-				err := http.ListenAndServe(fmt.Sprintf(":%d", *config.Server.HTTPPort), certManager.HTTPHandler(nil))
-				if err != nil {
-					log.Fatal("listening HTTP", rz.Err(err))
-				}
-			}()
-			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
-		} else {
+		if config.Server.HTTP {
 			err = server.ListenAndServe()
+		} else {
+			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
 		}
 		if err != nil {
 			log.Fatal("listening", rz.Err(err))

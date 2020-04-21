@@ -6,7 +6,6 @@
   "server": {
     "port": 8443,
     "domains": ["bloom.bloom42.com"],
-    "http_port": 8080,
     "certs_directory": "/certs",
     "certs_email": ""
   },
