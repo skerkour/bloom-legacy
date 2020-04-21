@@ -16,7 +16,7 @@ func deriveAuthKey(username, password []byte) []byte {
 	}
 
 	// username is used as a salt
-	info := append([]byte("com.bloom42.bloom/auth_key"), username...)
+	info := append([]byte("com.bloom42.bloom.auth_key"), username...)
 	authKey, err := crypto.DeriveKeyFromKey(key, info, crypto.KeySize256)
 	if err != nil {
 		return nil
