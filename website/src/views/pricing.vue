@@ -138,7 +138,7 @@ export default class Pricing extends Vue {
       price: 0,
       description: `
       <ul>
-        <li>1GB storage</li>
+        <li>100MB storage</li>
         <li>Notes</li>
         <li>QR Codes</li>
         <li>1 Bitflow download / day</li>
