@@ -299,7 +299,9 @@ export default {
     title: 'Sécurité',
     description: `Sécuriser les données de nos clients est notre première priorité. Nous prenons les menaces
     très au seérieux et travaillons dur pour protéger nos clients et leurs données. Vos retours sur notre
-    sécurité sont appréciés.`,
+    sécurité sont appréciés. <br />
+    Vous pouvez trouver la description détaillée de nos mesure de sécurité et de chiffrement
+      <a href="https://gitlab.com/bloom42/bloom/-/wikis/security">dans notre wiki</a>.`,
     issues_title: 'Rapporter un problème',
     issues_description: `Envoyez vos rapports directement à <a href="mailto:hello@bloom.sh">hello@bloom.sh</a>
     et nous reviendrons vers vous plus vite que la vitesse de la lumière.`,

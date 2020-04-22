@@ -4,9 +4,7 @@
       <v-col cols="12" sm="10" md="8" class="text-center">
 
         <h1 class="mt-5 mb-3 display-1 font-weight-medium">{{ $t('security.title') }}</h1>
-        <p class="body-1 mb-5 font-weight-regular mb-5">
-          {{ $t('security.description') }}
-        </p>
+        <p class="body-1 mb-5 font-weight-regular mb-5" v-html=" $t('security.description')" />
 
         <h2 class="mt-5 mb-3 display-1 font-weight-medium">{{ $t('security.issues_title') }}</h2>
 
