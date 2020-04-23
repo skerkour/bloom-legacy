@@ -12,9 +12,13 @@ if (process.env.ENV === 'development') {
 }
 
 
-new Vue({
+const vue = new Vue({
   router,
   vuetify,
   i18n,
   render: (h) => h(App),
 }).$mount('#app');
+
+if (vue.$route.query.lang) {
+  vue.$i18n.locale = vue.$route.query.lang! as string;
+}
