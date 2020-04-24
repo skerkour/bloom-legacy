@@ -4,14 +4,15 @@ go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.11.3
-	github.com/getsentry/sentry-go v0.5.1
-	github.com/go-chi/chi v4.0.4+incompatible
-	github.com/go-chi/cors v1.0.0
-	github.com/golang-migrate/migrate/v4 v4.9.1
+	github.com/getsentry/sentry-go v0.6.0
+	github.com/go-chi/chi v4.1.1+incompatible
+	github.com/go-chi/cors v1.1.1
+	github.com/golang-migrate/migrate/v4 v4.10.0
 	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/hashicorp/go-multierror v1.1.0 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/lib/pq v1.3.0
+	github.com/lib/pq v1.4.0
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/sirupsen/logrus v1.5.0 // indirect
