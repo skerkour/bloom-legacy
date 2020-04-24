@@ -16,15 +16,17 @@ func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUse
 		return NewError(ErrorMaximumVerificationTrialsReached)
 	}
 
-	if !crypto.VerifyPasswordHash([]byte(code), pendingUser.VerificationCodeHash) {
-		return NewError(ErrorRegistrationCodeIsNotValid)
-	}
-
 	now := time.Now().UTC()
 	since := now.Sub(pendingUser.UpdatedAt)
 	if since >= 30*time.Minute {
 		return NewError(ErrorRegistrationCodeExpired)
 	}
+
+	if !crypto.VerifyPasswordHash([]byte(code), pendingUser.VerificationCodeHash) {
+		return NewError(ErrorRegistrationCodeIsNotValid)
+	}
+
+	now = time.Now().UTC()
 	pendingUser.VerifiedAt = &now
 	pendingUser.UpdatedAt = now
 
