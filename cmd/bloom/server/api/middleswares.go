@@ -2,9 +2,7 @@ package api
 
 import (
 	"context"
-	"encoding/base64"
 	"encoding/json"
-	"errors"
 	"net"
 	"net/http"
 	"strings"
@@ -114,32 +112,6 @@ func InvalidSession(w http.ResponseWriter, r *http.Request, code string, message
 	}
 	w.WriteHeader(200)
 	w.Write(b)
-}
-
-const uuidStrLen = 36
-
-// decodeSession returns the sesssionID, sessionToken, err
-func decodeSession(token string) (uuid.UUID, []byte, error) {
-	var err error
-	var data []byte
-	var sessionID uuid.UUID
-	sessionToken := []byte{}
-
-	data, err = base64.StdEncoding.DecodeString(token)
-	if err != nil {
-		return sessionID, sessionToken, err
-	}
-
-	if len(data) < uuidStrLen+4 {
-		return sessionID, sessionToken, errors.New("Token is not valid (too short)")
-	}
-
-	sessionIdBytes := data[:uuidStrLen]
-	sessionToken = data[uuidStrLen+1:]
-
-	sessionID, err = uuid.FromBytes(sessionIdBytes)
-
-	return sessionID, sessionToken, err
 }
 
 func AuthMiddleware(next http.Handler) http.Handler {

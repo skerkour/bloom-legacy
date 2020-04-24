@@ -16,6 +16,7 @@ import (
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -172,8 +173,8 @@ type ComplexityRoot struct {
 		DeclineGroupInvitation     func(childComplexity int, input model.DeclineGroupInvitationInput) int
 		DeleteBillingPlan          func(childComplexity int, input model.DeleteBillingPlanInput) int
 		DeleteGroup                func(childComplexity int, input model.DeleteGroupInput) int
-		DisableUser                func(childComplexity int, id model.ID) int
-		EnableUser                 func(childComplexity int, id model.ID) int
+		DisableUser                func(childComplexity int, id uuid.UUID) int
+		EnableUser                 func(childComplexity int, id uuid.UUID) int
 		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
 		QuitGroup                  func(childComplexity int, input model.QuitGroupInput) int
 		Register                   func(childComplexity int, input model.RegisterInput) int
@@ -218,7 +219,7 @@ type ComplexityRoot struct {
 
 	Query struct {
 		BillingPlans    func(childComplexity int) int
-		Group           func(childComplexity int, id model.ID) int
+		Group           func(childComplexity int, id uuid.UUID) int
 		Groups          func(childComplexity int) int
 		Me              func(childComplexity int) int
 		Metadata        func(childComplexity int) int
@@ -311,8 +312,8 @@ type MutationResolver interface {
 	SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error)
 	RevokeSession(ctx context.Context, input model.RevokeSessionInput) (bool, error)
 	UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error)
-	DisableUser(ctx context.Context, id model.ID) (bool, error)
-	EnableUser(ctx context.Context, id model.ID) (bool, error)
+	DisableUser(ctx context.Context, id uuid.UUID) (bool, error)
+	EnableUser(ctx context.Context, id uuid.UUID) (bool, error)
 	CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error)
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
@@ -334,7 +335,7 @@ type QueryResolver interface {
 	Me(ctx context.Context) (*model.User, error)
 	User(ctx context.Context, username *string) (*model.User, error)
 	Users(ctx context.Context) (*model.UserConnection, error)
-	Group(ctx context.Context, id model.ID) (*model.Group, error)
+	Group(ctx context.Context, id uuid.UUID) (*model.Group, error)
 	Groups(ctx context.Context) (*model.GroupConnection, error)
 	BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error)
 	Metadata(ctx context.Context) (*model.BloomMetadata, error)
@@ -956,7 +957,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.DisableUser(childComplexity, args["id"].(model.ID)), true
+		return e.complexity.Mutation.DisableUser(childComplexity, args["id"].(uuid.UUID)), true
 
 	case "Mutation.enableUser":
 		if e.complexity.Mutation.EnableUser == nil {
@@ -968,7 +969,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Mutation.EnableUser(childComplexity, args["id"].(model.ID)), true
+		return e.complexity.Mutation.EnableUser(childComplexity, args["id"].(uuid.UUID)), true
 
 	case "Mutation.inviteUsersInGroup":
 		if e.complexity.Mutation.InviteUsersInGroup == nil {
@@ -1248,7 +1249,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 			return 0, false
 		}
 
-		return e.complexity.Query.Group(childComplexity, args["id"].(model.ID)), true
+		return e.complexity.Query.Group(childComplexity, args["id"].(uuid.UUID)), true
 
 	case "Query.groups":
 		if e.complexity.Query.Groups == nil {
@@ -2253,9 +2254,9 @@ func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_disableUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.ID
+	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2267,9 +2268,9 @@ func (ec *executionContext) field_Mutation_disableUser_args(ctx context.Context,
 func (ec *executionContext) field_Mutation_enableUser_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.ID
+	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2477,9 +2478,9 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 func (ec *executionContext) field_Query_group_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.ID
+	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2567,9 +2568,9 @@ func (ec *executionContext) _BillingPlan_id(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_price(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -2601,9 +2602,9 @@ func (ec *executionContext) _BillingPlan_price(ctx context.Context, field graphq
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_name(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -2771,9 +2772,9 @@ func (ec *executionContext) _BillingPlan_storage(ctx context.Context, field grap
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_stripeId(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -2932,9 +2933,9 @@ func (ec *executionContext) _BillingPlanConnection_totalCount(ctx context.Contex
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlanEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlanEdge) (ret graphql.Marshaler) {
@@ -3065,9 +3066,9 @@ func (ec *executionContext) _BillingSubscription_usedStorage(ctx context.Context
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingSubscription_stripeCustomerId(ctx context.Context, field graphql.CollectedField, obj *model.BillingSubscription) (ret graphql.Marshaler) {
@@ -3328,9 +3329,9 @@ func (ec *executionContext) _Group_id(ctx context.Context, field graphql.Collect
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.ID)
+	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -3712,9 +3713,9 @@ func (ec *executionContext) _GroupConnection_totalCount(ctx context.Context, fie
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.GroupEdge) (ret graphql.Marshaler) {
@@ -3811,9 +3812,9 @@ func (ec *executionContext) _GroupInvitation_id(ctx context.Context, field graph
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupInvitation_group(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
@@ -4012,9 +4013,9 @@ func (ec *executionContext) _GroupInvitationConnection_totalCount(ctx context.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupInvitationEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitationEdge) (ret graphql.Marshaler) {
@@ -4176,9 +4177,9 @@ func (ec *executionContext) _GroupMemberConnection_totalCount(ctx context.Contex
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupMemberEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.GroupMemberEdge) (ret graphql.Marshaler) {
@@ -4337,9 +4338,9 @@ func (ec *executionContext) _Invoice_id(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invoice_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Invoice) (ret graphql.Marshaler) {
@@ -4405,9 +4406,9 @@ func (ec *executionContext) _Invoice_amount(ctx context.Context, field graphql.C
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invoice_stripeId(ctx context.Context, field graphql.CollectedField, obj *model.Invoice) (ret graphql.Marshaler) {
@@ -4637,9 +4638,9 @@ func (ec *executionContext) _InvoiceConnection_totalCount(ctx context.Context, f
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _InvoiceEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.InvoiceEdge) (ret graphql.Marshaler) {
@@ -5018,7 +5019,7 @@ func (ec *executionContext) _Mutation_disableUser(ctx context.Context, field gra
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().DisableUser(rctx, args["id"].(model.ID))
+		return ec.resolvers.Mutation().DisableUser(rctx, args["id"].(uuid.UUID))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5059,7 +5060,7 @@ func (ec *executionContext) _Mutation_enableUser(ctx context.Context, field grap
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().EnableUser(rctx, args["id"].(model.ID))
+		return ec.resolvers.Mutation().EnableUser(rctx, args["id"].(uuid.UUID))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -5888,9 +5889,9 @@ func (ec *executionContext) _PaymentMethod_id(ctx context.Context, field graphql
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaymentMethod_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
@@ -6157,9 +6158,9 @@ func (ec *executionContext) _PaymentMethodConnection_totalCount(ctx context.Cont
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaymentMethodEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethodEdge) (ret graphql.Marshaler) {
@@ -6354,7 +6355,7 @@ func (ec *executionContext) _Query_group(ctx context.Context, field graphql.Coll
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Group(rctx, args["id"].(model.ID))
+		return ec.resolvers.Query().Group(rctx, args["id"].(uuid.UUID))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6593,9 +6594,9 @@ func (ec *executionContext) _RegistrationStarted_id(ctx context.Context, field g
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_id(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -6627,9 +6628,9 @@ func (ec *executionContext) _Session_id(ctx context.Context, field graphql.Colle
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.ID)
+	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -6825,9 +6826,9 @@ func (ec *executionContext) _SessionConnection_totalCount(ctx context.Context, f
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _SessionDevice_os(ctx context.Context, field graphql.CollectedField, obj *model.SessionDevice) (ret graphql.Marshaler) {
@@ -7057,9 +7058,9 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*model.ID)
+	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -7729,9 +7730,9 @@ func (ec *executionContext) _UserConnection_totalCount(ctx context.Context, fiel
 		}
 		return graphql.Null
 	}
-	res := resTmp.(model.Int64)
+	res := resTmp.(int64)
 	fc.Result = res
-	return ec.marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, field.Selections, res)
+	return ec.marshalNInt642int64(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _UserEdge_cursor(ctx context.Context, field graphql.CollectedField, obj *model.UserEdge) (ret graphql.Marshaler) {
@@ -8862,7 +8863,7 @@ func (ec *executionContext) unmarshalInputAcceptGroupInvitationInput(ctx context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8886,7 +8887,7 @@ func (ec *executionContext) unmarshalInputAddPaymentMethodInput(ctx context.Cont
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8904,7 +8905,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8940,7 +8941,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 			}
 		case "storage":
 			var err error
-			it.Storage, err = ec.unmarshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx, v)
+			it.Storage, err = ec.unmarshalNInt642int64(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8958,7 +8959,7 @@ func (ec *executionContext) unmarshalInputCancelGroupInvitationInput(ctx context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8976,7 +8977,7 @@ func (ec *executionContext) unmarshalInputChangeDefaultPaymentMethodInput(ctx co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -8994,7 +8995,7 @@ func (ec *executionContext) unmarshalInputCompleteRegistrationInput(ctx context.
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9078,7 +9079,7 @@ func (ec *executionContext) unmarshalInputDeclineGroupInvitationInput(ctx contex
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9096,7 +9097,7 @@ func (ec *executionContext) unmarshalInputDeleteBillingPlanInput(ctx context.Con
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9114,7 +9115,7 @@ func (ec *executionContext) unmarshalInputDeleteGroupInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9132,7 +9133,7 @@ func (ec *executionContext) unmarshalInputGroupInput(ctx context.Context, obj in
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9162,7 +9163,7 @@ func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9186,7 +9187,7 @@ func (ec *executionContext) unmarshalInputQuitGroupInput(ctx context.Context, ob
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9228,7 +9229,7 @@ func (ec *executionContext) unmarshalInputRemoveGroupMembersInput(ctx context.Co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9252,7 +9253,7 @@ func (ec *executionContext) unmarshalInputRemovePaymentMethodInput(ctx context.C
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9270,7 +9271,7 @@ func (ec *executionContext) unmarshalInputRevokeSessionInput(ctx context.Context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9288,7 +9289,7 @@ func (ec *executionContext) unmarshalInputSendNewRegistrationCodeInput(ctx conte
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9360,19 +9361,19 @@ func (ec *executionContext) unmarshalInputUpdateBillingSubscriptionInput(ctx con
 		switch k {
 		case "planId":
 			var err error
-			it.PlanID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.PlanID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "userId":
 			var err error
-			it.UserID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.UserID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9390,7 +9391,7 @@ func (ec *executionContext) unmarshalInputUserProfileInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -9432,7 +9433,7 @@ func (ec *executionContext) unmarshalInputVerifyRegistrationInput(ctx context.Co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11288,13 +11289,18 @@ func (ec *executionContext) unmarshalNGroupInput2gitlabᚗcomᚋbloom42ᚋbloom�
 	return ec.unmarshalInputGroupInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, v interface{}) (model.ID, error) {
-	var res model.ID
-	return res, res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
+	return model.UnmarshalID(v)
 }
 
-func (ec *executionContext) marshalNID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, sel ast.SelectionSet, v model.ID) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+	res := model.MarshalID(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
@@ -11311,13 +11317,18 @@ func (ec *executionContext) marshalNInt2int(ctx context.Context, sel ast.Selecti
 	return res
 }
 
-func (ec *executionContext) unmarshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, v interface{}) (model.Int64, error) {
-	var res model.Int64
-	return res, res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalNInt642int64(ctx context.Context, v interface{}) (int64, error) {
+	return model.UnmarshalInt64(v)
 }
 
-func (ec *executionContext) marshalNInt642gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInt64(ctx context.Context, sel ast.SelectionSet, v model.Int64) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalNInt642int64(ctx context.Context, sel ast.SelectionSet, v int64) graphql.Marshaler {
+	res := model.MarshalInt64(v)
+	if res == graphql.Null {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+	}
+	return res
 }
 
 func (ec *executionContext) unmarshalNInviteUsersInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUsersInGroupInput(ctx context.Context, v interface{}) (model.InviteUsersInGroupInput, error) {
@@ -12149,28 +12160,27 @@ func (ec *executionContext) marshalOGroupMemberRole2ᚖgitlabᚗcomᚋbloom42ᚋ
 	return v
 }
 
-func (ec *executionContext) unmarshalOID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, v interface{}) (model.ID, error) {
-	var res model.ID
-	return res, res.UnmarshalGQL(v)
+func (ec *executionContext) unmarshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
+	return model.UnmarshalID(v)
 }
 
-func (ec *executionContext) marshalOID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, sel ast.SelectionSet, v model.ID) graphql.Marshaler {
-	return v
+func (ec *executionContext) marshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+	return model.MarshalID(v)
 }
 
-func (ec *executionContext) unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, v interface{}) (*model.ID, error) {
+func (ec *executionContext) unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (*uuid.UUID, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOID2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx, v)
+	res, err := ec.unmarshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐID(ctx context.Context, sel ast.SelectionSet, v *model.ID) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v *uuid.UUID) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return v
+	return ec.marshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOInvoice2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v model.Invoice) graphql.Marshaler {

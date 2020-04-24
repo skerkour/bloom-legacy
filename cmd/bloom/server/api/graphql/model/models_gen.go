@@ -7,23 +7,25 @@ import (
 	"io"
 	"strconv"
 	"time"
+
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type AcceptGroupInvitationInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type AddPaymentMethodInput struct {
 	StripeID string `json:"stripeId"`
 	// if groupId is null, add to current user
-	GroupID *ID `json:"groupId"`
+	GroupID *uuid.UUID `json:"groupId"`
 }
 
 type BillingPlanConnection struct {
 	Edges      []*BillingPlanEdge `json:"edges"`
 	PageInfo   *PageInfo          `json:"pageInfo"`
-	TotalCount Int64              `json:"totalCount"`
+	TotalCount int64              `json:"totalCount"`
 }
 
 type BillingPlanEdge struct {
@@ -32,7 +34,7 @@ type BillingPlanEdge struct {
 }
 
 type BillingPlanInput struct {
-	ID      *ID            `json:"id"`
+	ID      *uuid.UUID     `json:"id"`
 	Name    string         `json:"name"`
 	Product BillingProduct `json:"product"`
 	// the strip id of the stripe plan. starting with 'plan_'
@@ -40,12 +42,12 @@ type BillingPlanInput struct {
 	// HTML description
 	Description string `json:"description"`
 	IsPublic    bool   `json:"isPublic"`
-	Storage     Int64  `json:"storage"`
+	Storage     int64  `json:"storage"`
 }
 
 type BillingSubscription struct {
 	UpdatedAt            time.Time    `json:"updatedAt"`
-	UsedStorage          Int64        `json:"usedStorage"`
+	UsedStorage          int64        `json:"usedStorage"`
 	StripeCustomerID     *string      `json:"stripeCustomerId"`
 	StripeSubscriptionID *string      `json:"stripeSubscriptionId"`
 	Plan                 *BillingPlan `json:"plan"`
@@ -60,17 +62,17 @@ type BloomMetadata struct {
 
 type CancelGroupInvitationInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 // set payment method with `id` as the default one
 type ChangeDefaultPaymentMethodInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type CompleteRegistrationInput struct {
 	// pending user id
-	ID                  ID                  `json:"id"`
+	ID                  uuid.UUID           `json:"id"`
 	Username            string              `json:"username"`
 	AuthKey             Bytes               `json:"authKey"`
 	Device              *SessionDeviceInput `json:"device"`
@@ -88,21 +90,21 @@ type CreateGroupInput struct {
 
 type DeclineGroupInvitationInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type DeleteBillingPlanInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type DeleteGroupInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type GroupConnection struct {
 	Edges      []*GroupEdge `json:"edges"`
 	PageInfo   *PageInfo    `json:"pageInfo"`
-	TotalCount Int64        `json:"totalCount"`
+	TotalCount int64        `json:"totalCount"`
 }
 
 type GroupEdge struct {
@@ -112,22 +114,22 @@ type GroupEdge struct {
 
 type GroupInput struct {
 	// group id
-	ID          ID      `json:"id"`
-	Name        *string `json:"name"`
-	Description *string `json:"description"`
+	ID          uuid.UUID `json:"id"`
+	Name        *string   `json:"name"`
+	Description *string   `json:"description"`
 }
 
 type GroupInvitation struct {
-	ID      ID     `json:"id"`
-	Group   *Group `json:"group"`
-	Inviter *User  `json:"inviter"`
-	Invitee *User  `json:"invitee"`
+	ID      uuid.UUID `json:"id"`
+	Group   *Group    `json:"group"`
+	Inviter *User     `json:"inviter"`
+	Invitee *User     `json:"invitee"`
 }
 
 type GroupInvitationConnection struct {
 	Edges      []*GroupInvitationEdge `json:"edges"`
 	PageInfo   *PageInfo              `json:"pageInfo"`
-	TotalCount Int64                  `json:"totalCount"`
+	TotalCount int64                  `json:"totalCount"`
 }
 
 type GroupInvitationEdge struct {
@@ -138,7 +140,7 @@ type GroupInvitationEdge struct {
 type GroupMemberConnection struct {
 	Edges      []*GroupMemberEdge `json:"edges"`
 	PageInfo   *PageInfo          `json:"pageInfo"`
-	TotalCount Int64              `json:"totalCount"`
+	TotalCount int64              `json:"totalCount"`
 }
 
 type GroupMemberEdge struct {
@@ -150,15 +152,15 @@ type GroupMemberEdge struct {
 
 type InviteUsersInGroupInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 	// users to invite, by username
 	Users []string `json:"users"`
 }
 
 type Invoice struct {
-	ID              ID         `json:"id"`
+	ID              uuid.UUID  `json:"id"`
 	CreatedAt       time.Time  `json:"createdAt"`
-	Amount          Int64      `json:"amount"`
+	Amount          int64      `json:"amount"`
 	StripeID        string     `json:"stripeId"`
 	StripeHostedURL string     `json:"stripeHostedUrl"`
 	StripePdfURL    string     `json:"stripePdfUrl"`
@@ -168,7 +170,7 @@ type Invoice struct {
 type InvoiceConnection struct {
 	Edges      []*InvoiceEdge `json:"edges"`
 	PageInfo   *PageInfo      `json:"pageInfo"`
-	TotalCount Int64          `json:"totalCount"`
+	TotalCount int64          `json:"totalCount"`
 }
 
 type InvoiceEdge struct {
@@ -184,7 +186,7 @@ type PageInfo struct {
 }
 
 type PaymentMethod struct {
-	ID                  ID        `json:"id"`
+	ID                  uuid.UUID `json:"id"`
 	CreatedAt           time.Time `json:"createdAt"`
 	CardLast4           string    `json:"cardLast4"`
 	CardExpirationMonth int       `json:"cardExpirationMonth"`
@@ -195,7 +197,7 @@ type PaymentMethod struct {
 type PaymentMethodConnection struct {
 	Edges      []*PaymentMethodEdge `json:"edges"`
 	PageInfo   *PageInfo            `json:"pageInfo"`
-	TotalCount Int64                `json:"totalCount"`
+	TotalCount int64                `json:"totalCount"`
 }
 
 type PaymentMethodEdge struct {
@@ -205,7 +207,7 @@ type PaymentMethodEdge struct {
 
 type QuitGroupInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type RegisterInput struct {
@@ -214,31 +216,31 @@ type RegisterInput struct {
 }
 
 type RegistrationStarted struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type RemoveGroupMembersInput struct {
 	// group id
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 	// members to remvove, by username
 	Members []string `json:"members"`
 }
 
 // remove payment method with `id`
 type RemovePaymentMethodInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type RevokeSessionInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type SendNewRegistrationCodeInput struct {
-	ID ID `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type Session struct {
-	ID        ID             `json:"id"`
+	ID        uuid.UUID      `json:"id"`
 	CreatedAt time.Time      `json:"createdAt"`
 	Token     *string        `json:"token"`
 	Device    *SessionDevice `json:"device"`
@@ -247,7 +249,7 @@ type Session struct {
 type SessionConnection struct {
 	Edges      []*SessionEdge `json:"edges"`
 	PageInfo   *PageInfo      `json:"pageInfo"`
-	TotalCount Int64          `json:"totalCount"`
+	TotalCount int64          `json:"totalCount"`
 }
 
 type SessionDevice struct {
@@ -278,15 +280,15 @@ type SignedIn struct {
 
 // if groupId and userId are null (reserved for admins), add to current user
 type UpdateBillingSubscriptionInput struct {
-	PlanID  ID  `json:"planId"`
-	UserID  *ID `json:"userId"`
-	GroupID *ID `json:"groupId"`
+	PlanID  uuid.UUID  `json:"planId"`
+	UserID  *uuid.UUID `json:"userId"`
+	GroupID *uuid.UUID `json:"groupId"`
 }
 
 type UserConnection struct {
 	Edges      []*UserEdge `json:"edges"`
 	PageInfo   *PageInfo   `json:"pageInfo"`
-	TotalCount Int64       `json:"totalCount"`
+	TotalCount int64       `json:"totalCount"`
 }
 
 type UserEdge struct {
@@ -296,17 +298,17 @@ type UserEdge struct {
 
 type UserProfileInput struct {
 	// id is reserved for admins
-	ID          *ID     `json:"id"`
-	DisplayName *string `json:"displayName"`
-	Bio         *string `json:"bio"`
-	FirstName   *string `json:"firstName"`
-	LastName    *string `json:"lastName"`
+	ID          *uuid.UUID `json:"id"`
+	DisplayName *string    `json:"displayName"`
+	Bio         *string    `json:"bio"`
+	FirstName   *string    `json:"firstName"`
+	LastName    *string    `json:"lastName"`
 }
 
 type VerifyRegistrationInput struct {
 	// pending user id
-	ID   ID     `json:"id"`
-	Code string `json:"code"`
+	ID   uuid.UUID `json:"id"`
+	Code string    `json:"code"`
 }
 
 type BillingProduct string

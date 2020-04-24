@@ -15,7 +15,7 @@ import (
 )
 
 type User struct {
-	ID                  *ID        `json:"id"`
+	ID                  *uuid.UUID `json:"id"`
 	AvatarURL           *string    `json:"avatarUrl"`
 	CreatedAt           *time.Time `json:"createdAt"`
 	Username            string     `json:"username"`
@@ -33,9 +33,9 @@ type User struct {
 type UserResolver struct{}
 
 type invit struct {
-	ID                 ID        `db:"invitation_id"`
+	ID                 uuid.UUID `db:"invitation_id"`
 	CreatedAt          time.Time `db:"invitation_created_at"`
-	GroupID            ID        `db:"group_id"`
+	GroupID            uuid.UUID `db:"group_id"`
 	GroupCreatedAt     time.Time `db:"group_created_at"`
 	GroupName          string    `db:"group_name"`
 	GroupDescription   string    `db:"group_description"`
@@ -69,7 +69,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 
 	ret = &GroupInvitationConnection{
 		Edges:      []*GroupInvitationEdge{},
-		TotalCount: Int64(len(invitations)),
+		TotalCount: int64(len(invitations)),
 	}
 
 	for _, invitation := range invitations {
@@ -113,11 +113,11 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 
 	ret = &GroupConnection{
 		Edges:      []*GroupEdge{},
-		TotalCount: Int64(len(groups)),
+		TotalCount: int64(len(groups)),
 	}
 
 	for _, group := range groups {
-		groupID := ID(group.ID)
+		groupID := group.ID
 		grp := &Group{
 			ID:          &groupID,
 			CreatedAt:   &group.CreatedAt,
@@ -149,17 +149,17 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 
 	ret = &InvoiceConnection{
 		Edges:      []*InvoiceEdge{},
-		TotalCount: Int64(len(invoices)),
+		TotalCount: int64(len(invoices)),
 	}
 
 	for _, invoice := range invoices {
 		inv := &Invoice{
-			ID:              ID(invoice.ID),
+			ID:              invoice.ID,
 			CreatedAt:       invoice.CreatedAt,
 			StripePdfURL:    invoice.StripePdfURL,
 			PaidAt:          invoice.PaidAt,
 			StripeHostedURL: invoice.StripeHostedURL,
-			Amount:          Int64(invoice.Amount),
+			Amount:          invoice.Amount,
 		}
 		edge := &InvoiceEdge{
 			Node: inv,
@@ -185,12 +185,12 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 
 	ret = &PaymentMethodConnection{
 		Edges:      []*PaymentMethodEdge{},
-		TotalCount: Int64(len(paymentMethods)),
+		TotalCount: int64(len(paymentMethods)),
 	}
 
 	for _, paymentMethod := range paymentMethods {
 		method := &PaymentMethod{
-			ID:                  ID(paymentMethod.ID),
+			ID:                  paymentMethod.ID,
 			CreatedAt:           paymentMethod.CreatedAt,
 			CardLast4:           paymentMethod.CardLast4,
 			CardExpirationMonth: int(paymentMethod.CardExpirationMonth),
@@ -221,12 +221,12 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 
 	ret = &SessionConnection{
 		Edges:      []*SessionEdge{},
-		TotalCount: Int64(len(sessions)),
+		TotalCount: int64(len(sessions)),
 	}
 
 	for _, session := range sessions {
 		sess := &Session{
-			ID:        ID(session.ID),
+			ID:        session.ID,
 			CreatedAt: session.CreatedAt,
 			Token:     nil,
 			Device: &SessionDevice{
@@ -254,7 +254,7 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	customer, err := billing.FindCustomerByUserIdNoTx(ctx, uuid.UUID(*user.ID).String())
+	customer, err := billing.FindCustomerByUserIdNoTx(ctx, uuid.UUID(*user.ID))
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -271,16 +271,16 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 
 	ret = &BillingSubscription{
 		UpdatedAt:   customer.SubscriptionUpdatedAt,
-		UsedStorage: Int64(customer.UsedStorage),
+		UsedStorage: customer.UsedStorage,
 		Plan: &BillingPlan{
-			ID:          ID(plan.ID),
-			Price:       Int64(plan.Price),
+			ID:          plan.ID,
+			Price:       plan.Price,
 			Name:        plan.Name,
 			Description: plan.Description,
 			IsPublic:    plan.IsPublic,
 			StripeID:    stripePlanId,
 			Product:     BillingProduct(plan.Product),
-			Storage:     Int64(plan.Storage),
+			Storage:     plan.Storage,
 		},
 		StripeCustomerID:     stripeCustomerId,
 		StripeSubscriptionID: stripeSubscriptionId,

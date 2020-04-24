@@ -33,7 +33,7 @@ func (r *Resolver) DeleteGroup(ctx context.Context, input model.DeleteGroupInput
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.DeleteGroup: fetching group", rz.Err(err),
-			rz.String("id", input.ID))
+			rz.String("group.id", input.ID.String()))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 

@@ -6,9 +6,10 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func FindGroupMembers(ctx context.Context, tx *sqlx.Tx, groupId string) ([]Member, error) {
+func FindGroupMembers(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID) ([]Member, error) {
 	ret := []Member{}
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -23,7 +24,7 @@ func FindGroupMembers(ctx context.Context, tx *sqlx.Tx, groupId string) ([]Membe
 	}
 	if err != nil {
 		logger.Error("finding group members", rz.Err(err),
-			rz.String("group.id", groupId))
+			rz.String("group.id", groupId.String()))
 		return ret, NewError(ErrorGroupNotFound)
 	}
 

@@ -5,9 +5,35 @@ import (
 	"io"
 	"strconv"
 
+	"github.com/99designs/gqlgen/graphql"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+func MarshalID(id uuid.UUID) graphql.Marshaler {
+	return graphql.WriterFunc(func(w io.Writer) {
+		io.WriteString(w, strconv.Quote(id.String()))
+	})
+}
+
+func UnmarshalID(v interface{}) (uuid.UUID, error) {
+	var err error
+	var ret uuid.UUID
+
+	switch v := v.(type) {
+	case string:
+		ret, err = uuid.Parse(v)
+	case *string:
+		ret, err = uuid.Parse(*v)
+	case []byte:
+		ret, err = uuid.ParseBytes(v)
+	default:
+		err = fmt.Errorf("%T is not []byte", v)
+	}
+
+	return ret, err
+}
+
+/*
 type ID uuid.UUID
 
 func (id ID) MarshalGQL(w io.Writer) {
@@ -34,3 +60,4 @@ func (id *ID) UnmarshalGQL(v interface{}) error {
 
 	return err
 }
+*/

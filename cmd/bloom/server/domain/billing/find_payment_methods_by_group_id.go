@@ -6,9 +6,10 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func FindPaymentMethodsByGroupId(ctx context.Context, tx *sqlx.Tx, groupId string) ([]PaymentMethod, error) {
+func FindPaymentMethodsByGroupId(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID) ([]PaymentMethod, error) {
 	ret := []PaymentMethod{}
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -23,7 +24,7 @@ func FindPaymentMethodsByGroupId(ctx context.Context, tx *sqlx.Tx, groupId strin
 	}
 	if err != nil {
 		logger.Error("finding payment methods", rz.Err(err),
-			rz.String("group.id", groupId))
+			rz.String("group.id", groupId.String()))
 		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 

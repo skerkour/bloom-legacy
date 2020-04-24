@@ -10,10 +10,11 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 // ChangeSubscription Updates plan for customer
-func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId *string, planId string) (*Customer, *Plan, error) {
+func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId *uuid.UUID, planId uuid.UUID) (*Customer, *Plan, error) {
 	logger := rz.FromCtx(ctx)
 	var customer *Customer
 	var err error
@@ -39,7 +40,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 	}
 
 	if userId != nil {
-		if *userId != actor.ID.String() && !actor.IsAdmin {
+		if *userId != actor.ID && !actor.IsAdmin {
 			tx.Rollback()
 			return customer, retPlan, NewError(ErrorAdminRoleRequired)
 		}
@@ -50,7 +51,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 		}
 	} else if groupId != nil { // groupId != nil
 		if !actor.IsAdmin {
-			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID.String(), *groupId); err != nil {
+			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID, *groupId); err != nil {
 				tx.Rollback()
 				return customer, retPlan, err
 			}
@@ -61,7 +62,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			return customer, retPlan, err
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID.String())
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err
@@ -78,7 +79,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 	newPlan, err := FindPlanById(ctx, tx, planId)
 	if err != nil {
 		tx.Rollback()
-		logger.Warn("billing.ChangeSubscription:f inding newPlan", rz.Err(err), rz.String("id", planId))
+		logger.Warn("billing.ChangeSubscription: finding newPlan", rz.Err(err), rz.String("plan.id", planId.String()))
 		return customer, retPlan, err
 	}
 
@@ -90,7 +91,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 	oldPlan, err := FindPlanById(ctx, tx, customer.PlanID)
 	if err != nil {
 		tx.Rollback()
-		logger.Warn("billing.ChangeSubscription: finding old plan", rz.Err(err), rz.String("id", customer.PlanID))
+		logger.Warn("billing.ChangeSubscription: finding old plan", rz.Err(err), rz.String("plan.id", customer.PlanID.String()))
 		return customer, retPlan, err
 	}
 

@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group, name, description *string) error {
@@ -28,7 +29,7 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 		newDescription = *description
 	}
 
-	if err = validateUpdateGroup(ctx, tx, user.ID.String(), group.ID, newName, newDescription); err != nil {
+	if err = validateUpdateGroup(ctx, tx, user.ID, group.ID, newName, newDescription); err != nil {
 		return err
 	}
 
@@ -48,7 +49,7 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 }
 
 // validateUpdateGroup Checks that user is member of group and he has administrator role
-func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, userID, groupID, name, description string) error {
+func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, userID, groupID uuid.UUID, name, description string) error {
 	var err error
 
 	if err = CheckUserIsGroupAdmin(ctx, tx, userID, groupID); err != nil {

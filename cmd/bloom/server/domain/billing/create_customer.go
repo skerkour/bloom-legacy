@@ -11,7 +11,7 @@ import (
 )
 
 // creates a customer only for us
-func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, groupID *string) (*Customer, error) {
+func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, groupID *uuid.UUID) (*Customer, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
 	var ret *Customer
@@ -33,7 +33,7 @@ func CreateCustomer(ctx context.Context, tx *sqlx.Tx, user *users.User, userID, 
 	now := time.Now().UTC()
 	newUuid := uuid.New()
 	ret = &Customer{
-		ID:                    newUuid.String(),
+		ID:                    newUuid,
 		CreatedAt:             now,
 		UpdatedAt:             now,
 		PlanID:                defaultPlan.ID,

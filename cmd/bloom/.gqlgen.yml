@@ -12,6 +12,13 @@ exec:
 model:
   filename: server/api/graphql/model/models_gen.go
 
+models:
+  ID:
+    model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.ID
+  Int64:
+    model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Int64
+
+
 resolver:
   filename: server/api/graphql/resolver.go
   type: Resolver

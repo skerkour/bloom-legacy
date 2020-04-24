@@ -33,7 +33,7 @@ func (r *Resolver) RemoveGroupMembers(ctx context.Context, input model.RemoveGro
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.DeleteGroup: fetching group", rz.Err(err),
-			rz.String("id", input.ID))
+			rz.String("group.id", input.ID.String()))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorGroupNotFound))
 	}
 

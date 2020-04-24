@@ -74,8 +74,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	}
 
 	// create customer profile
-	newUserIdStr := newUser.ID.String()
-	_, err = billing.CreateCustomer(ctx, tx, &newUser, &newUserIdStr, nil)
+	_, err = billing.CreateCustomer(ctx, tx, &newUser, &newUser.ID, nil)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -102,7 +101,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 
 	ret = &model.SignedIn{
 		Session: &model.Session{
-			ID:    newSession.ID.String(),
+			ID:    newSession.ID,
 			Token: &token,
 			Device: &model.SessionDevice{
 				Os:   model.SessionDeviceOs(device.OS),

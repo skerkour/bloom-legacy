@@ -46,7 +46,7 @@ func CreateOrUpdateInvoice(ctx context.Context, stripeInvoice *stripe.Invoice) (
 			paidAt = &stripePaidAt
 		}
 		ret = &Invoice{
-			ID:              newUuid.String(),
+			ID:              newUuid,
 			CreatedAt:       now,
 			UpdatedAt:       now,
 			PaidAt:          paidAt,

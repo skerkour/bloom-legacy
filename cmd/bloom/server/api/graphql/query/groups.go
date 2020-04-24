@@ -25,7 +25,7 @@ func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 
 	ret = &model.GroupConnection{
 		Edges:      []*model.GroupEdge{},
-		TotalCount: model.Int64(len(groups)),
+		TotalCount: int64(len(groups)),
 	}
 
 	for _, group := range groups {

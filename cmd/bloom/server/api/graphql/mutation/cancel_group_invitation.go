@@ -33,7 +33,7 @@ func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.Cancel
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.CancelGroupInvitation: fetching invitation", rz.Err(err),
-			rz.String("invitation_id", input.ID))
+			rz.String("invitation.id", input.ID.String()))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
 	}
 

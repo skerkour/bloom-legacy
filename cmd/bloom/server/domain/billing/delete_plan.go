@@ -6,9 +6,10 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func DeletePlan(ctx context.Context, user *users.User, planId string) error {
+func DeletePlan(ctx context.Context, user *users.User, planId uuid.UUID) error {
 	var err error
 	logger := rz.FromCtx(ctx)
 

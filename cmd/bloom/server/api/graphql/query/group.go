@@ -7,10 +7,11 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 // Group find a group
-func (r *Resolver) Group(ctx context.Context, id string) (*model.Group, error) {
+func (r *Resolver) Group(ctx context.Context, id uuid.UUID) (*model.Group, error) {
 	var ret *model.Group
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -18,7 +19,7 @@ func (r *Resolver) Group(ctx context.Context, id string) (*model.Group, error) {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	err := groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID.String(), id)
+	err := groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, id)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, gqlerrors.New(err)
 	}

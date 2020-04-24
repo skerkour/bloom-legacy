@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func (r *Resolver) DisableUser(ctx context.Context, idStr string) (bool, error) {
+func (r *Resolver) DisableUser(ctx context.Context, id uuid.UUID) (bool, error) {
 	ret := false
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -17,7 +17,6 @@ func (r *Resolver) DisableUser(ctx context.Context, idStr string) (bool, error) 
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	id := uuid.MustParse(idStr)
 	err := users.DisableUser(ctx, currentUser, id)
 	if err != nil {
 		return ret, gqlerrors.New(err)

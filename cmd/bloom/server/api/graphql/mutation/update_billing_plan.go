@@ -60,9 +60,9 @@ func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPla
 		Name:        plan.Name,
 		Description: plan.Description,
 		Product:     model.BillingProduct(plan.Product),
-		Price:       model.Int64(plan.Price),
+		Price:       plan.Price,
 		IsPublic:    plan.IsPublic,
-		Storage:     model.Int64(plan.Storage),
+		Storage:     plan.Storage,
 		StripeID:    stripeId,
 	}
 	return ret, nil

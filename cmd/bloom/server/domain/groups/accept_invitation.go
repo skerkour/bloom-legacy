@@ -16,14 +16,14 @@ func AcceptInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	var ret *Group
 
 	// validate action
-	if user.ID.String() != invitation.InviteeID {
+	if user.ID != invitation.InviteeID {
 		return ret, NewError(ErrorInvitationNotFound)
 	}
 
 	membership := Membership{
 		JoinedAt:  time.Now().UTC(),
 		GroupID:   invitation.GroupID,
-		UserID:    user.ID.String(),
+		UserID:    user.ID,
 		Role:      RoleMember,
 		InviterID: invitation.InviterID,
 	}

@@ -21,7 +21,7 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 
 	ret = &model.BillingPlanConnection{
 		Edges:      []*model.BillingPlanEdge{},
-		TotalCount: model.Int64(len(plans)),
+		TotalCount: int64(len(plans)),
 	}
 
 	for _, plan := range plans {
@@ -33,10 +33,10 @@ func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnecti
 			ID:          plan.ID,
 			Name:        plan.Name,
 			Description: plan.Description,
-			Price:       model.Int64(plan.Price),
+			Price:       plan.Price,
 			IsPublic:    plan.IsPublic,
 			Product:     model.BillingProduct(plan.Product),
-			Storage:     model.Int64(plan.Storage),
+			Storage:     plan.Storage,
 			StripeID:    stripeID,
 		}
 		edge := &model.BillingPlanEdge{

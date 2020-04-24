@@ -7,24 +7,19 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/uuid"
 )
 
 func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error) {
 	var ret *model.User
 	var err error
 	currentUser := apiutil.UserFromCtx(ctx)
-	var userId uuid.UUID
 
 	if currentUser == nil {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	if input.ID != nil {
-		userId = uuid.MustParse(*input.ID)
-	}
 	params := users.UpdateProfileInput{
-		ID:          &userId,
+		ID:          input.ID,
 		DisplayName: input.DisplayName,
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,

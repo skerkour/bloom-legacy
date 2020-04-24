@@ -4,9 +4,9 @@ import (
 	"context"
 	"time"
 
-	"github.com/docker/distribution/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type PaymentMethod struct {
@@ -23,7 +23,7 @@ type PaymentMethod struct {
 	CustomerID uuid.UUID `json:"customer_id" db:"customer_id"`
 }
 
-func FindPaymentMethodById(ctx context.Context, tx *sqlx.Tx, id string) (*PaymentMethod, error) {
+func FindPaymentMethodById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID) (*PaymentMethod, error) {
 	var ret *PaymentMethod
 	var paymentMethod PaymentMethod
 	var err error
@@ -33,7 +33,7 @@ func FindPaymentMethodById(ctx context.Context, tx *sqlx.Tx, id string) (*Paymen
 	err = tx.Get(&paymentMethod, queryFind, id)
 	if err != nil {
 		logger.Error("billing.FindPaymentMethodById: finding payment method", rz.Err(err),
-			rz.String("id", id))
+			rz.String("payment_method.id", id.String()))
 		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 
@@ -51,7 +51,7 @@ func FindPaymentMethodByCustomer(ctx context.Context, tx *sqlx.Tx, customer *Cus
 	err = tx.Get(&paymentMethod, queryFind, customer.ID, isDefault)
 	if err != nil {
 		logger.Error("billing.FindPaymentMethodByCustomer: finding payment method", rz.Err(err),
-			rz.String("customer_id", customer.ID))
+			rz.String("customer.id", customer.ID.String()))
 		return ret, NewError(ErrorPaymentMethodNotFound)
 	}
 

@@ -29,12 +29,12 @@ func (r *Resolver) UpdateBillingSubscription(ctx context.Context, input model.Up
 			Name:        newPlan.Name,
 			Description: newPlan.Description,
 			Product:     model.BillingProduct(newPlan.Product),
-			Price:       model.Int64(newPlan.Price),
+			Price:       newPlan.Price,
 			IsPublic:    newPlan.IsPublic,
-			Storage:     model.Int64(newPlan.Storage),
+			Storage:     newPlan.Storage,
 		},
 		UpdatedAt:   customer.SubscriptionUpdatedAt,
-		UsedStorage: model.Int64(customer.UsedStorage),
+		UsedStorage: customer.UsedStorage,
 	}
 	return ret, nil
 }

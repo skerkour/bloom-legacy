@@ -25,7 +25,7 @@ func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, err
 
 	ret = &model.UserConnection{
 		Edges:      []*model.UserEdge{},
-		TotalCount: model.Int64(len(users)),
+		TotalCount: int64(len(users)),
 	}
 
 	for _, user := range users {

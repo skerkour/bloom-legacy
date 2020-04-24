@@ -6,9 +6,10 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func FindGroupInvitations(ctx context.Context, tx *sqlx.Tx, groupId string) ([]InvitationPopulated, error) {
+func FindGroupInvitations(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID) ([]InvitationPopulated, error) {
 	ret := []InvitationPopulated{}
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -39,7 +40,7 @@ func FindGroupInvitations(ctx context.Context, tx *sqlx.Tx, groupId string) ([]I
 	}
 	if err != nil {
 		logger.Error("finding group invitations", rz.Err(err),
-			rz.String("group.id", groupId))
+			rz.String("group.id", groupId.String()))
 		return ret, NewError(ErrorGroupNotFound)
 	}
 

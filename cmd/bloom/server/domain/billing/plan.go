@@ -44,7 +44,7 @@ func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
 	return ret, err
 }
 
-func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error) {
+func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (*Plan, error) {
 	var ret *Plan
 	var plan Plan
 	var err error
@@ -54,7 +54,7 @@ func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan,
 	err = tx.Get(&plan, queryFindPlan, planId)
 	if err != nil {
 		logger.Error("billing.FindPublicPlanById: finding plan by id", rz.Err(err),
-			rz.String("id", planId))
+			rz.String("plan.id", planId.String()))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 
@@ -62,7 +62,7 @@ func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan,
 	return ret, err
 }
 
-func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error) {
+func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (*Plan, error) {
 	var ret *Plan
 	var plan Plan
 	var err error
@@ -72,7 +72,7 @@ func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error
 	err = tx.Get(&plan, queryFindPlan, planId)
 	if err != nil {
 		logger.Error("billing.FindPlanById: finding plan by id", rz.Err(err),
-			rz.String("id", planId))
+			rz.String("plan.id", planId.String()))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 
@@ -80,7 +80,7 @@ func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId string) (*Plan, error
 	return ret, err
 }
 
-func GetSubscribersCountForPlanId(ctx context.Context, planId string) (int64, error) {
+func GetSubscribersCountForPlanId(ctx context.Context, planId uuid.UUID) (int64, error) {
 	var ret int64
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -89,14 +89,14 @@ func GetSubscribersCountForPlanId(ctx context.Context, planId string) (int64, er
 	err = db.DB.Get(&ret, queryFindPlan, planId)
 	if err != nil {
 		logger.Error("billing.GetSubscribersCountForPlanId: finding plan by id", rz.Err(err),
-			rz.String("id", planId))
+			rz.String("plan.id", planId.String()))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 
 	return ret, err
 }
 
-func GetSubscribersCountForPlanIdTx(ctx context.Context, tx *sqlx.Tx, planId string) (int64, error) {
+func GetSubscribersCountForPlanIdTx(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (int64, error) {
 	var ret int64
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -105,7 +105,7 @@ func GetSubscribersCountForPlanIdTx(ctx context.Context, tx *sqlx.Tx, planId str
 	err = tx.Get(&ret, queryFindPlan, planId)
 	if err != nil {
 		logger.Error("billing.GetSubscribersCountForPlanIdTx: finding plan by id", rz.Err(err),
-			rz.String("id", planId))
+			rz.String("plan.id", planId.String()))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 

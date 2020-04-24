@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (*model.Group, error) {
@@ -33,7 +34,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 	if err != nil {
 		tx.Rollback()
 		logger.Error("fetching invitation", rz.Err(err),
-			rz.String("invitation_id", input.ID))
+			rz.String("invitation.id", uuid.UUID(input.ID).String()))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorAcceptingInvitation))
 	}
 

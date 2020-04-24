@@ -49,6 +49,8 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 	// remove secret from memory
 	crypto.Zeroize(secret)
 
+	GlobalSessionsCache.Set(&ret)
+
 	return
 }
 

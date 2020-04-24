@@ -7,10 +7,11 @@ import (
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 // checkUserIsGroupAdmin Checks that user is member of group and he has administrator role
-func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID string) error {
+func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID uuid.UUID) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -19,7 +20,7 @@ func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID str
 	err = tx.Get(&memberhsip, queryGetMembership, groupID, userID)
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
-			rz.String("group_id", groupID), rz.String("user_id", userID))
+			rz.String("group.id", groupID.String()), rz.String("user.id", userID.String()))
 		return NewError(ErrorGroupNotFound)
 	}
 
@@ -31,7 +32,7 @@ func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID str
 }
 
 // checkUserIsGroupAdmin Checks that user is member of group and he has administrator role
-func CheckUserIsGroupAdminNoTx(ctx context.Context, userID, groupID string) error {
+func CheckUserIsGroupAdminNoTx(ctx context.Context, userID, groupID uuid.UUID) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -40,7 +41,7 @@ func CheckUserIsGroupAdminNoTx(ctx context.Context, userID, groupID string) erro
 	err = db.DB.Get(&memberhsip, queryGetMembership, groupID, userID)
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
-			rz.String("group_id", groupID), rz.String("user_id", userID))
+			rz.String("group.id", groupID.String()), rz.String("user.id", userID.String()))
 		return NewError(ErrorGroupNotFound)
 	}
 
@@ -52,7 +53,7 @@ func CheckUserIsGroupAdminNoTx(ctx context.Context, userID, groupID string) erro
 }
 
 // CheckUserIsGroupMember Checks that user is member of group
-func CheckUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID string) error {
+func CheckUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID uuid.UUID) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -61,7 +62,7 @@ func CheckUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID st
 	err = tx.Get(&memberhsip, queryGetMembership, groupID, userID)
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
-			rz.String("group_id", groupID), rz.String("user_id", userID))
+			rz.String("group.id", groupID.String()), rz.String("user.id", userID.String()))
 		return NewError(ErrorGroupNotFound)
 	}
 
@@ -69,7 +70,7 @@ func CheckUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID st
 }
 
 // CheckUserIsGroupMemberNoTx Checks that user is member of group
-func CheckUserIsGroupMemberNoTx(ctx context.Context, userID, groupID string) error {
+func CheckUserIsGroupMemberNoTx(ctx context.Context, userID, groupID uuid.UUID) error {
 	var memberhsip Membership
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -78,7 +79,7 @@ func CheckUserIsGroupMemberNoTx(ctx context.Context, userID, groupID string) err
 	err = db.DB.Get(&memberhsip, queryGetMembership, groupID, userID)
 	if err != nil {
 		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
-			rz.String("group_id", groupID), rz.String("user_id", userID))
+			rz.String("group.id", groupID.String()), rz.String("user.id", userID.String()))
 		return NewError(ErrorGroupNotFound)
 	}
 

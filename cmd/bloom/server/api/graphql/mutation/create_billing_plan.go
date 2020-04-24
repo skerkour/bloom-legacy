@@ -49,9 +49,9 @@ func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPla
 		Name:        newPlan.Name,
 		Description: newPlan.Description,
 		Product:     model.BillingProduct(newPlan.Product),
-		Price:       model.Int64(newPlan.Price),
+		Price:       newPlan.Price,
 		IsPublic:    newPlan.IsPublic,
-		Storage:     model.Int64(newPlan.Storage),
+		Storage:     newPlan.Storage,
 		StripeID:    stripeId,
 	}
 	return ret, nil

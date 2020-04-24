@@ -15,7 +15,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, groupId *string) (*PaymentMethod, error) {
+func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, groupId *uuid.UUID) (*PaymentMethod, error) {
 	var ret *PaymentMethod
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -44,7 +44,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	// fetch customer id
 	if groupId != nil {
 		// check that user is admin of group
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID.String(), *groupId); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *groupId); err != nil {
 			tx.Rollback()
 			return ret, err
 		}
@@ -54,7 +54,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, user.ID.String())
+		customer, err = FindCustomerByUserId(ctx, tx, user.ID)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)
@@ -103,7 +103,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	// create payment method
 	newUuid := uuid.New()
 	ret = &PaymentMethod{
-		ID:                  newUuid.String(),
+		ID:                  newUuid,
 		CreatedAt:           now,
 		UpdatedAt:           now,
 		IsDefault:           isDefault,

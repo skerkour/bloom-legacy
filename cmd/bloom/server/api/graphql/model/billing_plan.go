@@ -12,13 +12,13 @@ import (
 type BillingPlanResolver struct{}
 
 type BillingPlan struct {
-	ID          ID             `json:"id"`
-	Price       Int64          `json:"price"`
+	ID          uuid.UUID      `json:"id"`
+	Price       int64          `json:"price"`
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
 	IsPublic    bool           `json:"isPublic"`
 	Product     BillingProduct `json:"product"`
-	Storage     Int64          `json:"storage"`
+	Storage     int64          `json:"storage"`
 	StripeID    *string        `json:"stripeId"`
 }
 
@@ -30,13 +30,13 @@ func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *Bill
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	count, err := billing.GetSubscribersCountForPlanId(ctx, uuid.UUID(plan.ID).String())
+	count, err := billing.GetSubscribersCountForPlanId(ctx, uuid.UUID(plan.ID))
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
 
 	ret = &UserConnection{
-		TotalCount: Int64(count),
+		TotalCount: count,
 	}
 	return ret, nil
 }

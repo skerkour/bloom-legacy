@@ -8,9 +8,10 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string) (*PaymentMethod, error) {
+func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id uuid.UUID) (*PaymentMethod, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
 	var ret *PaymentMethod
@@ -50,12 +51,12 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	}
 
 	if customer.GroupID != nil {
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID.String(), *customer.GroupID); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *customer.GroupID); err != nil {
 			tx.Rollback()
 			return ret, err
 		}
 	} else {
-		if user.ID.String() != *customer.UserID {
+		if user.ID != *customer.UserID {
 			tx.Rollback()
 			return ret, NewError(ErrorPaymentMethodNotFound)
 		}

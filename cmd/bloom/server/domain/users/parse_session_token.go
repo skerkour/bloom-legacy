@@ -25,7 +25,7 @@ func ParseSessionToken(token string) (id uuid.UUID, secret []byte, err error) {
 	}
 
 	sessionIDBytes := tokenBytes[:uuidStrLen]
-	secret = tokenBytes[uuidStrLen+1:]
+	secret = tokenBytes[uuidStrLen:]
 
 	id, err = uuid.FromBytes(sessionIDBytes)
 

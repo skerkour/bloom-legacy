@@ -44,7 +44,7 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	newUuid := uuid.New()
 
 	ret = &Plan{
-		ID:          newUuid.String(),
+		ID:          newUuid,
 		CreatedAt:   now,
 		UpdatedAt:   now,
 		Name:        name,

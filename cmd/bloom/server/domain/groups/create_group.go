@@ -25,7 +25,7 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 	newUuid := uuid.New()
 
 	ret = Group{
-		ID:          newUuid.String(),
+		ID:          newUuid,
 		CreatedAt:   now,
 		UpdatedAt:   now,
 		Name:        name,

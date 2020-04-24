@@ -33,7 +33,7 @@ func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.Decli
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.DeclineGroupInvitation: fetching invitation", rz.Err(err),
-			rz.String("invitation_id", input.ID))
+			rz.String("invitation.id", input.ID.String()))
 		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
 	}
 
