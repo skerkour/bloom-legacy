@@ -21,7 +21,7 @@ require (
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
 	gitlab.com/bloom42/bloom/common v0.0.0-20200404093800-6ac65aba5cc6
-	gitlab.com/bloom42/lily v0.0.0-20200424100010-a6248f3b85f9
+	gitlab.com/bloom42/lily v0.0.0-20200424153811-fdc77eb57cae
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
 	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect

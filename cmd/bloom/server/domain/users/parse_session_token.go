@@ -8,8 +8,6 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-const uuidStrLen = 36
-
 // ParseSessionToken parse the given token and returns the session id and secret
 func ParseSessionToken(token string) (id uuid.UUID, secret []byte, err error) {
 	var tokenBytes []byte
@@ -19,13 +17,13 @@ func ParseSessionToken(token string) (id uuid.UUID, secret []byte, err error) {
 		return
 	}
 
-	if len(tokenBytes) != uuidStrLen+crypto.KeySize512 {
+	if len(tokenBytes) != uuid.Size+crypto.KeySize512 {
 		err = errors.New("Session is not valid")
 		return
 	}
 
-	sessionIDBytes := tokenBytes[:uuidStrLen]
-	secret = tokenBytes[uuidStrLen:]
+	sessionIDBytes := tokenBytes[:uuid.Size]
+	secret = tokenBytes[uuid.Size:]
 
 	id, err = uuid.FromBytes(sessionIDBytes)
 

@@ -40,7 +40,7 @@ func verifySessionHash(session *Session, secret []byte) error {
 }
 
 func hashSession(id uuid.UUID, salt, secret []byte) (hash []byte, err error) {
-	message := append([]byte(id.String()), salt...)
+	message := append(id.Bytes(), salt...)
 	hash, err = crypto.DeriveKeyFromKey(secret, message, crypto.KeySize512)
 	return
 }
