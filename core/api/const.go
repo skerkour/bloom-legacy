@@ -3,5 +3,5 @@
 package api
 
 const (
-	API_BASE_URL = "http://bloom.bloom42.com/api"
+	SERVER_URL = "https://bloom.bloom42.com"
 )

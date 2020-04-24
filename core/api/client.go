@@ -19,7 +19,7 @@ var client *ApiClient
 func Client() *ApiClient {
 	if client == nil {
 		client = &ApiClient{
-			graphql: graphql.NewClient(API_BASE_URL + "/graphql"),
+			graphql: graphql.NewClient(SERVER_URL + "/api/graphql"),
 		}
 	}
 	return client
