@@ -67,6 +67,8 @@ func Init(key *string) error {
 		return err
 	}
 
+	_ = os.Chmod(FilePath, 0600)
+
 	err = DB.Get(&userVersion, "PRAGMA user_version;")
 	if err != nil {
 		return err
