@@ -6,11 +6,12 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/version"
 	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type ApiClient struct {
 	graphql   *graphql.Client
-	SessionID *string
+	SessionID *uuid.UUID
 	Token     *string
 }
 
@@ -25,7 +26,7 @@ func Client() *ApiClient {
 	return client
 }
 
-func (c *ApiClient) Authenticate(sessionID, token string) {
+func (c *ApiClient) Authenticate(sessionID uuid.UUID, token string) {
 	c.SessionID = &sessionID
 	c.Token = &token
 }

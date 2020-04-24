@@ -2,10 +2,12 @@ package model
 
 import (
 	"time"
+
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type User struct {
-	ID               *string                    `json:"id"`
+	ID               *uuid.UUID                 `json:"id"`
 	AvatarURL        *string                    `json:"avatarUrl"`
 	CreatedAt        *time.Time                 `json:"createdAt"`
 	Username         string                     `json:"username"`

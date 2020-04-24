@@ -2,10 +2,12 @@ package model
 
 import (
 	"time"
+
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type Group struct {
-	ID             *string                    `json:"id"`
+	ID             *uuid.UUID                 `json:"id"`
 	CreatedAt      *time.Time                 `json:"createdAt"`
 	Name           string                     `json:"name"`
 	Description    string                     `json:"description"`

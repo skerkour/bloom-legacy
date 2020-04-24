@@ -2,6 +2,7 @@ package billing
 
 import (
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type MyBillingProfile struct {
@@ -12,7 +13,7 @@ type MyBillingProfile struct {
 
 type AddPaymentMethodParams struct {
 	StripePublicKey *string       `json:"stripePublicKey"`
-	GroupID         *string       `json:"groupId"`
+	GroupID         *uuid.UUID    `json:"groupId"`
 	Card            NewStripeCard `json:"card"`
 }
 
@@ -28,5 +29,5 @@ type GroupBillingProfile struct {
 }
 
 type FetchGroupProfileParams struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }

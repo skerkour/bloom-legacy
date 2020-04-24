@@ -1,5 +1,7 @@
 package users
 
+import "gitlab.com/bloom42/lily/uuid"
+
 type SignInParams struct {
 	Username string `json:"username"`
 	Password string `json:"password"`
@@ -11,22 +13,22 @@ type StartRegistrationParams struct {
 }
 
 type VerifyRegistrationParams struct {
-	ID   string `json:"id"`
-	Code string `json:"code"`
+	ID   uuid.UUID `json:"id"`
+	Code string    `json:"code"`
 }
 
 type CompleteRegistrationParams struct {
-	ID       string `json:"id"`
-	Username string `json:"username"`
-	Password string `json:"password"`
+	ID       uuid.UUID `json:"id"`
+	Username string    `json:"username"`
+	Password string    `json:"password"`
 }
 
 type RegistrationSendNewCodeParams struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type RevokeSessionParams struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type FetchUserParams struct {
@@ -34,9 +36,9 @@ type FetchUserParams struct {
 }
 
 type EnableUserParams struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
 
 type DisableUserParams struct {
-	ID string `json:"id"`
+	ID uuid.UUID `json:"id"`
 }
