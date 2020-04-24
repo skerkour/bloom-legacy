@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// VerifySession verifies that secret matches with sessionID and return the session in case of success
 func VerifySession(sessionID uuid.UUID, secret []byte) (currentSession *Session, err error) {
 	// find session with ID and associated user
 	currentSession = GlobalSessionsCache.Get(sessionID)
@@ -17,6 +18,7 @@ func VerifySession(sessionID uuid.UUID, secret []byte) (currentSession *Session,
 
 	err = verifySessionHash(currentSession, secret)
 	if err != nil {
+		currentSession = nil
 		err = errors.New("Session is not valid")
 		return
 	}
@@ -25,8 +27,7 @@ func VerifySession(sessionID uuid.UUID, secret []byte) (currentSession *Session,
 }
 
 func verifySessionHash(session *Session, secret []byte) error {
-	message := append([]byte(session.ID.String()), session.Salt...)
-	hash, err := crypto.DeriveKeyFromKey(secret, message, crypto.KeySize512)
+	hash, err := hashSession(session.ID, session.Salt, secret)
 	if err != nil {
 		return err
 	}
@@ -36,4 +37,10 @@ func verifySessionHash(session *Session, secret []byte) error {
 	}
 
 	return nil
+}
+
+func hashSession(id uuid.UUID, salt, secret []byte) (hash []byte, err error) {
+	message := append([]byte(id.String()), salt...)
+	hash, err = crypto.DeriveKeyFromKey(secret, message, crypto.KeySize512)
+	return
 }

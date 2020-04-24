@@ -6,12 +6,13 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type BillingPlanResolver struct{}
 
 type BillingPlan struct {
-	ID          string         `json:"id"`
+	ID          ID             `json:"id"`
 	Price       Int64          `json:"price"`
 	Name        string         `json:"name"`
 	Description string         `json:"description"`
@@ -29,7 +30,7 @@ func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *Bill
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	count, err := billing.GetSubscribersCountForPlanId(ctx, plan.ID)
+	count, err := billing.GetSubscribersCountForPlanId(ctx, uuid.UUID(plan.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

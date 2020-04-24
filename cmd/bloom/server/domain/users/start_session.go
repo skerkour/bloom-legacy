@@ -46,6 +46,7 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 
 	tokenByte := append([]byte(ret.ID.String()), secret...)
 	token = base64.StdEncoding.EncodeToString(tokenByte)
+	// remove secret from memory
 	crypto.Zeroize(secret)
 
 	return
@@ -64,7 +65,6 @@ func newSession() (id uuid.UUID, secret, hash, salt []byte, err error) {
 		return
 	}
 
-	message := append([]byte(id.String()), salt...)
-	hash, err = crypto.DeriveKeyFromKey(secret, message, crypto.KeySize512)
+	hash, err = hashSession(id, salt, secret)
 	return
 }

@@ -397,14 +397,14 @@ input DeleteBillingPlanInput {
 """if groupId and userId are null (reserved for admins), add to current user"""
 input UpdateBillingSubscriptionInput {
   planId: ID!
-  userId: String
-  groupId: String
+  userId: ID
+  groupId: ID
 }
 
 input AddPaymentMethodInput {
   stripeId: String!
   """if groupId is null, add to current user"""
-  groupId: String
+  groupId: ID
 }
 
 """remove payment method with `id`"""

@@ -4,12 +4,13 @@ import (
 	"context"
 	"time"
 
+	"github.com/docker/distribution/uuid"
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/lily/rz"
 )
 
 type PaymentMethod struct {
-	ID        string    `json:"id" db:"id"`
+	ID        uuid.UUID `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
@@ -19,7 +20,7 @@ type PaymentMethod struct {
 	CardExpirationMonth int64  `json:"card_expiration_month" db:"card_expiration_month"`
 	CardExpirationYear  int64  `json:"card_expiration_year" db:"card_expiration_year"`
 
-	CustomerID string `json:"customer_id" db:"customer_id"`
+	CustomerID uuid.UUID `json:"customer_id" db:"customer_id"`
 }
 
 func FindPaymentMethodById(ctx context.Context, tx *sqlx.Tx, id string) (*PaymentMethod, error) {

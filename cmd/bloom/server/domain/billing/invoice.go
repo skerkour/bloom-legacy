@@ -6,10 +6,11 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type Invoice struct {
-	ID        string    `db:"id"`
+	ID        uuid.UUID `db:"id"`
 	CreatedAt time.Time `db:"created_at"`
 	UpdatedAt time.Time `db:"updated_at"`
 
@@ -19,7 +20,7 @@ type Invoice struct {
 	StripePdfURL    string     `db:"stripe_pdf_url"`
 	PaidAt          *time.Time `db:"paid_at"`
 
-	CustomerID string `db:"customer_id"`
+	CustomerID uuid.UUID `db:"customer_id"`
 }
 
 func FindInvoiceByStripeId(ctx context.Context, tx *sqlx.Tx, stripeId string) (*Invoice, error) {

@@ -7,10 +7,11 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type Customer struct {
-	ID        string    `json:"id" db:"id"`
+	ID        uuid.UUID `json:"id" db:"id"`
 	CreatedAt time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
 
@@ -20,9 +21,9 @@ type Customer struct {
 	UsedStorage           int64     `json:"used_storage" db:"used_storage"`
 	SubscriptionUpdatedAt time.Time `json:"subscription_updated_at" db:"subscription_updated_at"`
 
-	PlanID  string  `json:"plan_id" db:"plan_id"`
-	UserID  *string `json:"user_id" db:"user_id"`
-	GroupID *string `json:"group_id" db:"group_id"`
+	PlanID  uuid.UUID  `json:"plan_id" db:"plan_id"`
+	UserID  *uuid.UUID `json:"user_id" db:"user_id"`
+	GroupID *uuid.UUID `json:"group_id" db:"group_id"`
 }
 
 func FindCustomerByUserId(ctx context.Context, tx *sqlx.Tx, userId string) (*Customer, error) {

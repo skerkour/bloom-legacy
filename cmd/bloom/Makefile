@@ -50,7 +50,7 @@ clean:
 .PHONY: gqlgen
 gqlgen:
 	go run github.com/99designs/gqlgen
-	cp server/api/graphql/model/{models_gen.go,int64.go,bytes.go} ../../core/api/model
+	cp server/api/graphql/model/{models_gen.go,int64.go,bytes.go,id.go} ../../core/api/model
 
 
 .PHONY: tidy

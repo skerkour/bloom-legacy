@@ -15,7 +15,7 @@ import (
 )
 
 type User struct {
-	ID                  *uuid.UUID `json:"id"`
+	ID                  *ID        `json:"id"`
 	AvatarURL           *string    `json:"avatarUrl"`
 	CreatedAt           *time.Time `json:"createdAt"`
 	Username            string     `json:"username"`
@@ -33,9 +33,9 @@ type User struct {
 type UserResolver struct{}
 
 type invit struct {
-	ID                 string    `db:"invitation_id"`
+	ID                 ID        `db:"invitation_id"`
 	CreatedAt          time.Time `db:"invitation_created_at"`
-	GroupID            string    `db:"group_id"`
+	GroupID            ID        `db:"group_id"`
 	GroupCreatedAt     time.Time `db:"group_created_at"`
 	GroupName          string    `db:"group_name"`
 	GroupDescription   string    `db:"group_description"`
@@ -52,7 +52,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
 
@@ -96,7 +96,7 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
 
@@ -117,8 +117,9 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 	}
 
 	for _, group := range groups {
+		groupID := ID(group.ID)
 		grp := &Group{
-			ID:          &group.ID,
+			ID:          &groupID,
 			CreatedAt:   &group.CreatedAt,
 			Name:        group.Name,
 			Description: group.Description,
@@ -137,11 +138,11 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 	var ret *InvoiceConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	invoices, err := billing.FindInvoicesByUserId(ctx, nil, (*user.ID).String())
+	invoices, err := billing.FindInvoicesByUserId(ctx, nil, uuid.UUID(*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -153,7 +154,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 
 	for _, invoice := range invoices {
 		inv := &Invoice{
-			ID:              invoice.ID,
+			ID:              ID(invoice.ID),
 			CreatedAt:       invoice.CreatedAt,
 			StripePdfURL:    invoice.StripePdfURL,
 			PaidAt:          invoice.PaidAt,
@@ -173,11 +174,11 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 	var ret *PaymentMethodConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, (*user.ID).String())
+	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, uuid.UUID(*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -189,7 +190,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 
 	for _, paymentMethod := range paymentMethods {
 		method := &PaymentMethod{
-			ID:                  paymentMethod.ID,
+			ID:                  ID(paymentMethod.ID),
 			CreatedAt:           paymentMethod.CreatedAt,
 			CardLast4:           paymentMethod.CardLast4,
 			CardExpirationMonth: int(paymentMethod.CardExpirationMonth),
@@ -209,11 +210,11 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 	var ret *SessionConnection
 	currentUser := apiutil.UserFromCtx(ctx)
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	sessions, err := users.FindAllSessionsByUserId(ctx, *user.ID)
+	sessions, err := users.FindAllSessionsByUserId(ctx, uuid.UUID(*user.ID))
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -225,7 +226,7 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 
 	for _, session := range sessions {
 		sess := &Session{
-			ID:        session.ID.String(),
+			ID:        ID(session.ID),
 			CreatedAt: session.CreatedAt,
 			Token:     nil,
 			Device: &SessionDevice{
@@ -249,11 +250,11 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 	var stripeCustomerId *string
 	var stripeSubscriptionId *string
 
-	if currentUser.ID != *user.ID && !currentUser.IsAdmin {
+	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	customer, err := billing.FindCustomerByUserIdNoTx(ctx, (*user.ID).String())
+	customer, err := billing.FindCustomerByUserIdNoTx(ctx, uuid.UUID(*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -272,7 +273,7 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		UpdatedAt:   customer.SubscriptionUpdatedAt,
 		UsedStorage: Int64(customer.UsedStorage),
 		Plan: &BillingPlan{
-			ID:          plan.ID,
+			ID:          ID(plan.ID),
 			Price:       Int64(plan.Price),
 			Name:        plan.Name,
 			Description: plan.Description,
