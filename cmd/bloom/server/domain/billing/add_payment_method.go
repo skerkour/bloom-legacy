@@ -44,7 +44,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	// fetch customer id
 	if groupId != nil {
 		// check that user is admin of group
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *groupId); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID.String(), *groupId); err != nil {
 			tx.Rollback()
 			return ret, err
 		}
@@ -54,7 +54,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, user.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, user.ID.String())
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)

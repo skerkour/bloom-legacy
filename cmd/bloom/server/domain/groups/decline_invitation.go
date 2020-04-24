@@ -14,7 +14,7 @@ func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invita
 	var err error
 
 	// validate action
-	if user.ID != invitation.InviteeID {
+	if user.ID.String() != invitation.InviteeID {
 		return NewError(ErrorInvitationNotFound)
 	}
 

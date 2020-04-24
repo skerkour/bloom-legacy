@@ -35,7 +35,8 @@ CREATE TABLE sessions (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-    token_hash TEXT NOT NULL,
+    hash BYTEA NOT NULL,
+    salt BYTEA NOT NULL,
     device_os TEXT NOT NULL,
     device_type TEXT NOT NULL,
 

@@ -7,10 +7,11 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type User struct {
-	ID                  string     `db:"id"`
+	ID                  uuid.UUID  `db:"id"`
 	CreatedAt           time.Time  `db:"created_at"`
 	UpdatedAt           time.Time  `db:"updated_at"`
 	AvatardID           *string    `db:"avatar_id"`

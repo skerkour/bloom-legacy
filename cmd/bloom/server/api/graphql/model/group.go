@@ -29,7 +29,7 @@ func (r *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMember
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, *group.ID)
+	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID.String(), *group.ID)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
@@ -69,7 +69,7 @@ func (r *GroupResolver) Invitations(ctx context.Context, group *Group) (*GroupIn
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, *group.ID)
+	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID.String(), *group.ID)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
@@ -117,7 +117,7 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID.String(), *group.ID)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
@@ -165,7 +165,7 @@ func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*Inv
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID.String(), *group.ID)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}
@@ -207,7 +207,7 @@ func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group)
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID, *group.ID)
+	err = groups.CheckUserIsGroupAdminNoTx(ctx, currentUser.ID.String(), *group.ID)
 	if err != nil && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
 	}

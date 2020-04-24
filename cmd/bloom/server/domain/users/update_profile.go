@@ -9,14 +9,15 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type UpdateProfileInput struct {
-	ID          *string `json:"id"`
-	DisplayName *string `json:"displayName"`
-	Bio         *string `json:"bio"`
-	FirstName   *string `json:"firstName"`
-	LastName    *string `json:"lastName"`
+	ID          *uuid.UUID `json:"id"`
+	DisplayName *string    `json:"displayName"`
+	Bio         *string    `json:"bio"`
+	FirstName   *string    `json:"firstName"`
+	LastName    *string    `json:"lastName"`
 }
 
 func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*User, error) {

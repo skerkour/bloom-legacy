@@ -39,7 +39,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 	}
 
 	if userId != nil {
-		if *userId != actor.ID && !actor.IsAdmin {
+		if *userId != actor.ID.String() && !actor.IsAdmin {
 			tx.Rollback()
 			return customer, retPlan, NewError(ErrorAdminRoleRequired)
 		}
@@ -50,7 +50,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 		}
 	} else if groupId != nil { // groupId != nil
 		if !actor.IsAdmin {
-			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID, *groupId); err != nil {
+			if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID.String(), *groupId); err != nil {
 				tx.Rollback()
 				return customer, retPlan, err
 			}
@@ -61,7 +61,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			return customer, retPlan, err
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID.String())
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err

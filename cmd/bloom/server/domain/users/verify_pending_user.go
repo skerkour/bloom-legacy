@@ -32,7 +32,7 @@ func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUse
 		now, pendingUser.ID)
 	if err != nil {
 		logger.Error("users.VerifyPendingUser: error verifying pending user", rz.Err(err),
-			rz.String("pending_user.id", pendingUser.ID))
+			rz.String("pending_user.id", pendingUser.ID.String()))
 		return NewError(ErrorVerifyingPendingUser)
 	}
 	return nil

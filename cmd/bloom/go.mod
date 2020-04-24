@@ -8,6 +8,7 @@ require (
 	github.com/go-chi/chi v4.0.4+incompatible
 	github.com/go-chi/cors v1.0.0
 	github.com/golang-migrate/migrate/v4 v4.9.1
+	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jmoiron/sqlx v1.2.0
@@ -21,7 +22,7 @@ require (
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
 	gitlab.com/bloom42/bloom/common v0.0.0-20200404093800-6ac65aba5cc6
-	gitlab.com/bloom42/lily v0.0.0-20200417132007-6a628ff190e6
+	gitlab.com/bloom42/lily v0.0.0-20200424100010-a6248f3b85f9
 	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
 	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect

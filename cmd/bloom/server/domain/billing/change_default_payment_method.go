@@ -50,12 +50,12 @@ func ChangeDefaultPaymentMethod(ctx context.Context, user *users.User, id string
 	}
 
 	if customer.GroupID != nil {
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *customer.GroupID); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID.String(), *customer.GroupID); err != nil {
 			tx.Rollback()
 			return ret, err
 		}
 	} else {
-		if user.ID != *customer.UserID {
+		if user.ID.String() != *customer.UserID {
 			tx.Rollback()
 			return ret, NewError(ErrorPaymentMethodNotFound)
 		}

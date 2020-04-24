@@ -28,7 +28,7 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 		newDescription = *description
 	}
 
-	if err = validateUpdateGroup(ctx, tx, user.ID, group.ID, newName, newDescription); err != nil {
+	if err = validateUpdateGroup(ctx, tx, user.ID.String(), group.ID, newName, newDescription); err != nil {
 		return err
 	}
 

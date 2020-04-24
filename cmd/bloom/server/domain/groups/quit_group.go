@@ -14,7 +14,7 @@ func QuitGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group Group) e
 	var remainingAdmins int
 	var err error
 
-	if err = CheckUserIsGroupMember(ctx, tx, user.ID, group.ID); err != nil {
+	if err = CheckUserIsGroupMember(ctx, tx, user.ID.String(), group.ID); err != nil {
 		return err
 	}
 

@@ -26,7 +26,7 @@ func (r *Resolver) RevokeSession(ctx context.Context, input model.RevokeSessionI
 		return ret, gqlerrors.New(users.NewError(users.ErrorDeletingSession))
 	}
 
-	err = users.DeleteSession(ctx, tx, input.ID, currentUser.ID)
+	err = users.DeleteSession(ctx, tx, input.ID, currentUser.ID.String())
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)

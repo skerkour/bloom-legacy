@@ -7,16 +7,18 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type Session struct {
-	ID         string    `json:"id" db:"id"`
+	ID         uuid.UUID `json:"id" db:"id"`
 	CreatedAt  time.Time `json:"created_at" db:"created_at"`
 	UpdatedAt  time.Time `json:"updated_at" db:"updated_at"`
-	TokenHash  string    `json:"token_hash" db:"token_hash"`
+	Hash       []byte    `json:"hash" db:"hash"`
+	Salt       []byte    `json:"salt" db:"salt"`
 	DeviceOS   string    `json:"device_os" db:"device_os"`
 	DeviceType string    `json:"device_type" db:"device_type"`
-	UserID     string    `json:"user_id" db:"user_id"`
+	UserID     uuid.UUID `json:"user_id" db:"user_id"`
 }
 
 type SessionDevice struct {
@@ -24,39 +26,27 @@ type SessionDevice struct {
 	Type string
 }
 
-func FindSessionById(ctx context.Context, tx *sqlx.Tx, id string) (*Session, error) {
+func FindSessionById(ctx context.Context, tx *sqlx.Tx, sessionId uuid.UUID) (*Session, error) {
 	ret := &Session{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	queryFind := "SELECT * FROM sessions WHERE id = $1"
-	err = tx.Get(ret, queryFind, id)
+	query := "SELECT * FROM sessions WHERE id = $1"
+	if tx == nil {
+		err = db.DB.Get(&ret, query, sessionId)
+	} else {
+		err = tx.Get(&ret, query, sessionId)
+	}
 	if err != nil {
 		logger.Error("users.FindSessionById: finding session", rz.Err(err),
-			rz.String("id", id))
+			rz.String("session.id", sessionId.String()))
 		return ret, NewError(ErrorSessionNotFound)
 	}
 
 	return ret, err
 }
 
-func FindSessionByIdNoTx(ctx context.Context, id string) (*Session, error) {
-	ret := &Session{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM sessions WHERE id = $1"
-	err = db.DB.Get(ret, queryFind, id)
-	if err != nil {
-		logger.Error("users.FindSessionById: finding session", rz.Err(err),
-			rz.String("id", id))
-		return ret, NewError(ErrorSessionNotFound)
-	}
-
-	return ret, err
-}
-
-func FindAllSessionsByUserId(ctx context.Context, userId string) ([]Session, error) {
+func FindAllSessionsByUserId(ctx context.Context, userId uuid.UUID) ([]Session, error) {
 	ret := []Session{}
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -66,7 +56,7 @@ func FindAllSessionsByUserId(ctx context.Context, userId string) ([]Session, err
 
 	if err != nil {
 		logger.Error("users.FindAllSessionsByUserId: finding sessions", rz.Err(err),
-			rz.String("id", userId))
+			rz.String("user.id", userId.String()))
 		return ret, NewError(-1)
 	}
 

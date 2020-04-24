@@ -76,7 +76,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 
 	ret = &model.SignedIn{
 		Session: &model.Session{
-			ID:    newSession.ID,
+			ID:    newSession.ID.String(),
 			Token: &token,
 			Device: &model.SessionDevice{
 				Os:   model.SessionDeviceOs(device.OS),

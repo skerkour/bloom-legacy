@@ -77,7 +77,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User
 	}
 
 	ret = User{
-		ID:                  newUuid.String(),
+		ID:                  newUuid,
 		Username:            params.Username,
 		Email:               params.PendingUser.Email,
 		CreatedAt:           now,

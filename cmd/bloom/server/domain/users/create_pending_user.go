@@ -56,7 +56,7 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
 	}
 	ret := PendingUser{
-		ID:                   newUuid.String(),
+		ID:                   newUuid,
 		CreatedAt:            now,
 		UpdatedAt:            now,
 		Email:                email,

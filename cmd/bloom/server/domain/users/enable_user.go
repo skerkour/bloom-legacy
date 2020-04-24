@@ -6,9 +6,10 @@ import (
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func EnableUser(ctx context.Context, actor *User, userId string) error {
+func EnableUser(ctx context.Context, actor *User, userId uuid.UUID) error {
 	logger := rz.FromCtx(ctx)
 
 	if actor == nil || !actor.IsAdmin {
@@ -40,7 +41,7 @@ func EnableUser(ctx context.Context, actor *User, userId string) error {
 	_, err = tx.Exec("UPDATE users SET updated_at = $1, disabled_at = $2 WHERE id = $3",
 		user.UpdatedAt, user.DisabledAt, user.ID)
 	if err != nil {
-		logger.Error("enabling user", rz.Err(err), rz.String("user.id", user.ID))
+		logger.Error("enabling user", rz.Err(err), rz.String("user.id", user.ID.String()))
 		return NewError(ErrorInternal)
 	}
 

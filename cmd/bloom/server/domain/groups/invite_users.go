@@ -40,7 +40,7 @@ func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, g
 	var err error
 
 	// check that inviter inviting is admin
-	if err = CheckUserIsGroupAdmin(ctx, tx, inviter.ID, group.ID); err != nil {
+	if err = CheckUserIsGroupAdmin(ctx, tx, inviter.ID.String(), group.ID); err != nil {
 		return err
 	}
 

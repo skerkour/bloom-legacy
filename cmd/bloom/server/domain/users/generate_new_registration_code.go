@@ -34,7 +34,7 @@ func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *
 	queryUpdatePendingUser := "UPDATE pending_users SET verification_code_hash = $1, updated_at = $2 WHERE id = $3"
 	_, err = tx.Exec(queryUpdatePendingUser, pendingUser.VerificationCodeHash, pendingUser.UpdatedAt, pendingUser.ID)
 	if err != nil {
-		logger.Error("users.GenerateNewRegistrationCode: updateing pending user", rz.Err(err), rz.String("pending_user_id", pendingUser.ID))
+		logger.Error("users.GenerateNewRegistrationCode: updateing pending user", rz.Err(err), rz.String("pending_user.id", pendingUser.ID.String()))
 		return "", NewError(ErrorSendingNewRegistrationCode)
 	}
 	return string(verificationCode), nil

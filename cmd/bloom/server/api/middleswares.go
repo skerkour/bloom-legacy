@@ -31,12 +31,11 @@ func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {
 func SetRequestIDMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
-		uuidv4, _ := uuid.NewRandom()
-		requestID := uuidv4.String()
+		requestID := uuid.New()
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, rzhttp.RequestIDCtxKey, requestID)
-		w.Header().Set(HeaderKeyBloomRequestID, requestID)
+		w.Header().Set(HeaderKeyBloomRequestID, requestID.String())
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
@@ -48,7 +47,7 @@ func SetContextMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		apiCtx := apictx.Context{}
-		apiCtx.RequestID = ctx.Value(rzhttp.RequestIDCtxKey).(string)
+		apiCtx.RequestID = ctx.Value(rzhttp.RequestIDCtxKey).(uuid.UUID)
 
 		remote := r.RemoteAddr
 		host, _, err := net.SplitHostPort(remote)
@@ -120,13 +119,13 @@ func InvalidSession(w http.ResponseWriter, r *http.Request, code string, message
 const uuidStrLen = 36
 
 // decodeSession returns the sesssionID, sessionToken, err
-func decodeSession(token string) (string, []byte, error) {
+func decodeSession(token string) (uuid.UUID, []byte, error) {
 	var err error
 	var data []byte
-	var sessionID string
+	var sessionID uuid.UUID
 	sessionToken := []byte{}
 
-	data, err = base64.RawURLEncoding.DecodeString(token)
+	data, err = base64.StdEncoding.DecodeString(token)
 	if err != nil {
 		return sessionID, sessionToken, err
 	}
@@ -138,13 +137,14 @@ func decodeSession(token string) (string, []byte, error) {
 	sessionIdBytes := data[:uuidStrLen]
 	sessionToken = data[uuidStrLen+1:]
 
-	return string(sessionIdBytes), sessionToken, nil
+	sessionID, err = uuid.FromBytes(sessionIdBytes)
+
+	return sessionID, sessionToken, err
 }
 
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		currentUser := &users.User{}
-		currentSession := &users.Session{}
 
 		reqCtx := r.Context()
 
@@ -161,27 +161,22 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 			if parts[0] == "Basic" {
 
-				sessionID, sessionToken, err := decodeSession(parts[1])
+				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
 				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid2")
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
+					return
+				}
+				currentSession, err := users.VerifySession(sessionID, sessionSecret)
+				// remove sessionSecret from memory
+				crypto.Zeroize(sessionSecret)
+				if err != nil {
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
 					return
 				}
 
-				currentSession.ID = sessionID
-				// find session with ID and associated user
-				currentSession, err = users.FindSessionByIdNoTx(reqCtx, sessionID)
-				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid3")
-					return
-				}
 				currentUser, err = users.FindUserById(reqCtx, nil, currentSession.UserID)
 				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid4")
-					return
-				}
-				if !crypto.VerifyPasswordHash(sessionToken, currentSession.TokenHash) {
-					// given sessionToken does not match with the actual hashed sesisonToken
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid5")
+					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
 					return
 				}
 				apiCtx.AuthenticatedUser = currentUser

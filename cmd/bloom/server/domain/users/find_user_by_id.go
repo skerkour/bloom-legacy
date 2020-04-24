@@ -6,9 +6,10 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func FindUserById(ctx context.Context, tx *sqlx.Tx, id string) (*User, error) {
+func FindUserById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID) (*User, error) {
 	ret := &User{}
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -21,7 +22,7 @@ func FindUserById(ctx context.Context, tx *sqlx.Tx, id string) (*User, error) {
 	}
 	if err != nil {
 		logger.Error("finding user", rz.Err(err),
-			rz.String("user.id", id))
+			rz.String("user.id", id.String()))
 		return ret, NewError(ErrorUserNotFound)
 	}
 

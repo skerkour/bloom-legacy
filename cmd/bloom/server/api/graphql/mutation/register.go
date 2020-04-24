@@ -58,7 +58,7 @@ func (resolver *Resolver) Register(ctx context.Context, input model.RegisterInpu
 	}
 
 	ret = &model.RegistrationStarted{
-		ID: newPendingUser.ID,
+		ID: newPendingUser.ID.String(),
 	}
 
 	return ret, nil

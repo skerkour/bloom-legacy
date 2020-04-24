@@ -52,7 +52,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	}
 
 	// delete pending user
-	err = users.DeletePendingUser(ctx, tx, pendingUser.ID)
+	err = users.DeletePendingUser(ctx, tx, pendingUser.ID.String())
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -74,7 +74,8 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 	}
 
 	// create customer profile
-	_, err = billing.CreateCustomer(ctx, tx, &newUser, &newUser.ID, nil)
+	newUserIdStr := newUser.ID.String()
+	_, err = billing.CreateCustomer(ctx, tx, &newUser, &newUserIdStr, nil)
 	if err != nil {
 		tx.Rollback()
 		return ret, gqlerrors.New(err)
@@ -101,7 +102,7 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 
 	ret = &model.SignedIn{
 		Session: &model.Session{
-			ID:    newSession.ID,
+			ID:    newSession.ID.String(),
 			Token: &token,
 			Device: &model.SessionDevice{
 				Os:   model.SessionDeviceOs(device.OS),

@@ -43,12 +43,12 @@ func RemovePaymentMethod(ctx context.Context, user *users.User, id string) error
 	}
 
 	if customer.GroupID != nil {
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *customer.GroupID); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID.String(), *customer.GroupID); err != nil {
 			tx.Rollback()
 			return err
 		}
 	} else {
-		if user.ID != *customer.UserID {
+		if user.ID.String() != *customer.UserID {
 			tx.Rollback()
 			return NewError(ErrorPaymentMethodNotFound)
 		}

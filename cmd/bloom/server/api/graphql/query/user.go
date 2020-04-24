@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 // User finds an user
@@ -18,7 +19,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 	var lastName *string
 	var email *string
 	var createdAt *time.Time
-	var id *string
+	var id *uuid.UUID
 	isAdmin := false
 	var disabledAt *time.Time
 

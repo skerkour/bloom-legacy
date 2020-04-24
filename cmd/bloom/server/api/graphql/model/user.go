@@ -11,10 +11,11 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 type User struct {
-	ID                  *string    `json:"id"`
+	ID                  *uuid.UUID `json:"id"`
 	AvatarURL           *string    `json:"avatarUrl"`
 	CreatedAt           *time.Time `json:"createdAt"`
 	Username            string     `json:"username"`
@@ -140,7 +141,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	invoices, err := billing.FindInvoicesByUserId(ctx, nil, *user.ID)
+	invoices, err := billing.FindInvoicesByUserId(ctx, nil, (*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -176,7 +177,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, *user.ID)
+	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, (*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -224,7 +225,7 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 
 	for _, session := range sessions {
 		sess := &Session{
-			ID:        session.ID,
+			ID:        session.ID.String(),
 			CreatedAt: session.CreatedAt,
 			Token:     nil,
 			Device: &SessionDevice{
@@ -252,7 +253,7 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	customer, err := billing.FindCustomerByUserIdNoTx(ctx, *user.ID)
+	customer, err := billing.FindCustomerByUserIdNoTx(ctx, (*user.ID).String())
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
