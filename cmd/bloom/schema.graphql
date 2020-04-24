@@ -38,6 +38,10 @@ enum BillingProduct {
   ULTRA
 }
 
+enum TwoFAMethod {
+  TOTP
+}
+
 ####################################################################################################
 ## Queries & Types
 ####################################################################################################
@@ -249,6 +253,7 @@ type RegistrationStarted {
 
 
 type SignedIn {
+  twoFA: TwoFAMethod
   session: Session!
   me: User!
 }
@@ -305,6 +310,8 @@ input CompleteRegistrationInput {
   publicKey: Bytes!
   encryptedPrivateKey: Bytes!
   privateKeyNonce: Bytes!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input SessionDeviceInput {

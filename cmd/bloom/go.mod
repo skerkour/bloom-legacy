@@ -17,14 +17,13 @@ require (
 	github.com/sirupsen/logrus v1.5.0 // indirect
 	github.com/spf13/cobra v0.0.6
 	github.com/spf13/pflag v1.0.5 // indirect
-	github.com/stripe/stripe-go v70.2.0+incompatible
+	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200404093800-6ac65aba5cc6
-	gitlab.com/bloom42/lily v0.0.0-20200424153811-fdc77eb57cae
-	golang.org/x/crypto v0.0.0-20200302210943-78000ba7a073
+	gitlab.com/bloom42/bloom/common v0.0.0-20200424154453-5cd32e8f790e
+	gitlab.com/bloom42/lily v0.0.0-20200424191245-394ec04e88ee
+	golang.org/x/crypto v0.0.0-20200423211502-4bdfaf469ed5
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
-	golang.org/x/sys v0.0.0-20200302150141-5c8b2ff67527 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
 	gopkg.in/yaml.v2 v2.2.8 // indirect
 )
