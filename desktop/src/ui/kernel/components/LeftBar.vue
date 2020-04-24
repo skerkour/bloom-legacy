@@ -25,7 +25,7 @@
         <v-list-item-avatar color="white" class="blm-pointer" @click="goto('/preferences')">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-               <v-icon medium color="grey" v-on="on">mdi-settings</v-icon>
+               <v-icon medium color="grey" v-on="on">mdi-cog</v-icon>
             </template>
             <span>Preferences</span>
           </v-tooltip>
