@@ -44,24 +44,23 @@
       </v-list-item>
 
       <v-list-item>
-        <v-list-item-avatar color="white" class="blm-pointer" @click="openAllAppsDialog">
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-               <v-icon medium color="grey" v-on="on">mdi-apps</v-icon>
-            </template>
-            <span>All apps</span>
-          </v-tooltip>
-        </v-list-item-avatar>
-      </v-list-item>
-
-
-      <v-list-item>
         <v-list-item-avatar color="white" class="blm-pointer" @click="openHelp">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
                <v-icon medium color="grey" v-on="on">mdi-help</v-icon>
             </template>
             <span>Help</span>
+          </v-tooltip>
+        </v-list-item-avatar>
+      </v-list-item>
+
+      <v-list-item>
+        <v-list-item-avatar color="white" class="blm-pointer" @click="openAllAppsDialog">
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+               <v-icon medium color="grey" v-on="on">mdi-apps</v-icon>
+            </template>
+            <span>All apps</span>
           </v-tooltip>
         </v-list-item-avatar>
       </v-list-item>
