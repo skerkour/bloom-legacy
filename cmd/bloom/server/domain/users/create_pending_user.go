@@ -62,15 +62,15 @@ func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 		Email:                email,
 		DisplayName:          displayName,
 		VerificationCodeHash: codeHash,
-		FailedVerifications:  0,
+		FailedAttempts:       0,
 		VerifiedAt:           nil,
 	}
 
 	queryCreatePendingUser := `INSERT INTO pending_users
-		(id, created_at, updated_at, email, display_name, verification_code_hash, failed_verifications, verified_at)
+		(id, created_at, updated_at, email, display_name, verification_code_hash, failed_attempts, verified_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
 	_, err = tx.Exec(queryCreatePendingUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Email,
-		ret.DisplayName, ret.VerificationCodeHash, ret.FailedVerifications, ret.VerifiedAt)
+		ret.DisplayName, ret.VerificationCodeHash, ret.FailedAttempts, ret.VerifiedAt)
 	if err != nil {
 		logger.Error("error creating new user", rz.Err(err))
 		return ret, "", NewError(ErrorCreatingPendingUser)

@@ -50,7 +50,7 @@ func (resolver *Resolver) VerifyRegistration(ctx context.Context, input model.Ve
 		tx.Rollback()
 		tx, _ := db.DB.Beginx()
 		if tx != nil {
-			err2 := users.FailPendingUserVerification(ctx, tx, pendingUser)
+			err2 := users.FailPendingUserVerification(ctx, tx, &pendingUser)
 			if err2 != nil {
 				tx.Rollback()
 				return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))

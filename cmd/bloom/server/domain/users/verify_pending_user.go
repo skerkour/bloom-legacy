@@ -12,7 +12,7 @@ import (
 func VerifyPendingUser(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser, code string) error {
 	logger := rz.FromCtx(ctx)
 
-	if pendingUser.FailedVerifications+1 >= 5 {
+	if pendingUser.FailedAttempts+1 >= 5 {
 		return NewError(ErrorMaximumVerificationTrialsReached)
 	}
 

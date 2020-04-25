@@ -13,6 +13,6 @@ type PendingUser struct {
 	Email                string     `db:"email"`
 	DisplayName          string     `db:"display_name"`
 	VerificationCodeHash string     `db:"verification_code_hash"`
-	FailedVerifications  int64      `db:"failed_verifications"`
+	FailedAttempts       int64      `db:"failed_attempts"`
 	VerifiedAt           *time.Time `db:"verified_at"`
 }

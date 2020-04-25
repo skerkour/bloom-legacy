@@ -56,7 +56,7 @@ CREATE TABLE pending_users (
     display_name TEXT NOT NULL,
 
     verification_code_hash TEXT NOT NULL,
-    failed_verifications BIGINT NOT NULL,
+    failed_attempts BIGINT NOT NULL,
     verified_at TIMESTAMP WITH TIME ZONE,
 
     PRIMARY KEY(id)
