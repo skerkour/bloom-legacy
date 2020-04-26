@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
 	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/rz"
@@ -31,7 +32,7 @@ var runCmd = &cobra.Command{
 		// init internal services
 		log.SetLogger(log.With(
 			rz.Fields(
-				rz.String("service", "api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
+				rz.String("service", "bloom_api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
 			),
 		))
 
@@ -63,6 +64,12 @@ var runCmd = &cobra.Command{
 			log.Fatal("Connecting to database", rz.Err(err))
 		}
 		log.Info("Successfully connected to database")
+
+		err = users.InitGlobalSessionsCache(log.Logger())
+		if err != nil {
+			log.Fatal("Initalizing sessions cache", rz.Err(err))
+		}
+		log.Info("sessions cache Successfully initialized")
 
 		err = api.Run()
 		if err != nil {
