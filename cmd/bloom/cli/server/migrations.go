@@ -10,11 +10,9 @@ import (
 	"gitlab.com/bloom42/lily/rz/log"
 )
 
-var runSingleMigrationFlag bool
 var revertAllMigrationsFlag bool
 
 func init() {
-	migrationsRunCmd.PersistentFlags().BoolVarP(&runSingleMigrationFlag, "single", "s", false, "Run only one migration")
 	migrationsRevertCmd.PersistentFlags().BoolVarP(&revertAllMigrationsFlag, "all", "a", false, "Revert all migrations")
 	migrationsCmd.AddCommand(migrationsRunCmd)
 	migrationsCmd.AddCommand(migrationsRevertCmd)
@@ -46,11 +44,7 @@ var migrationsRunCmd = &cobra.Command{
 			log.Fatal("Initializing DB connection", rz.Err(err))
 		}
 
-		if runSingleMigrationFlag {
-			err = migrate.Steps(1)
-		} else {
-			err = migrate.Up()
-		}
+		err = migrate.Up()
 
 		if err != nil {
 			log.Fatal("Running migrations", rz.Err(err))
