@@ -61,7 +61,7 @@
                   <li><v-icon color="success">mdi-check</v-icon> <b>Private by design</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>Ethical by design</b></li>
                   <li><v-icon color="success">mdi-check</v-icon> <b>All in 1 account</b></li>
-                  <li>... <router-link to="/features">And much more</router-link></li>
+                  <li>... <router-link to="/#features">And much more</router-link></li>
                 </ul>
               </v-col>
             </v-row>

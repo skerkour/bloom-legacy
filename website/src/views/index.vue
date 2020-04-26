@@ -133,9 +133,39 @@
         <div class="d-none d-sm-inline-block">
           <blm-download-btn class="mr-5"/>
         </div>
-        <v-btn to="/features" outlined x-large color="primary" class="ml-sm-5">
+        <v-btn to="/#features" outlined x-large exact color="primary" class="ml-sm-5">
           {{ $t('landing.explore_features') }}
         </v-btn>
+      </v-col>
+    </v-row>
+
+    <v-row class="blm-features pb-5">
+      <v-col cols="12">
+        <h2 id="features" class="display-3">{{ $t('appbar.features') }}</h2>
+      </v-col>
+    </v-row>
+
+    <v-row class="justify-center mb-5 mt-5 align-center blm-feature"
+      v-for="(feature, index) in features" :key="index">
+      <v-col cols="12" v-if="feature.name === 'dl_btn'">
+        <div style="height: 100px;">
+          <blm-download-btn outlined />
+        </div>
+      </v-col>
+
+      <v-col cols="12" sm="6" class="pt-2 pb-2" v-if="feature.name !== 'dl_btn'"
+        order="first" :order-sm="index % 2 === 0 ? 'first' : 'last'">
+        <v-avatar size="128px" v-if="feature.icon">
+          <img :src="feature.icon" contain />
+        </v-avatar>
+        <img v-else-if="feature.img" :src="feature.img" contain height="200px"/>
+      </v-col>
+
+      <v-col cols="12" sm="6" v-if="feature.name !== 'dl_btn'">
+        <h3 class="display-1 font-weight-regular">
+          {{ feature.name }}
+        </h3>
+        <p class="mt-5" v-html="feature.description"></p>
       </v-col>
     </v-row>
 
@@ -163,6 +193,54 @@ export default class Index extends Vue {
     const pains = [this.$t('labels.pain1'), this.$t('labels.pain2'), this.$t('labels.pain3'),
       this.$t('labels.pain4')];
     return pains[Math.floor(Math.random() * pains.length)];
+  }
+
+  get features(): any[] {
+    return [
+      {
+        name: 'Files',
+        icon: '/static/imgs/icons/files.svg',
+        description: this.$t('features.files_description'),
+        learnMore: 'files',
+      },
+      {
+        name: 'Calendar',
+        icon: '/static/imgs/icons/calendar.svg',
+        description: this.$t('features.calendar_description'),
+        learnMore: 'calendar',
+      },
+      {
+        name: 'Notes',
+        icon: '/static/imgs/icons/notes.svg',
+        description: this.$t('features.notes_description'),
+        learnMore: 'notes',
+      },
+      {
+        name: 'Contacts',
+        icon: '/static/imgs/icons/contacts.svg',
+        description: this.$t('features.contacts_description'),
+        learnMore: 'contacts',
+      },
+      { name: 'dl_btn' },
+      {
+        name: 'Bitflow',
+        icon: '/static/imgs/icons/bitflow.svg',
+        description: this.$t('features.bitflow_description'),
+        learnMore: 'bitflow',
+      },
+      {
+        name: 'Arcade',
+        icon: '/static/imgs/icons/arcade.svg',
+        description: this.$t('features.arcade_description'),
+        learnMore: 'arcade',
+      },
+      {
+        name: 'QR Codes',
+        icon: '/static/imgs/icons/qrcode.svg',
+        description: this.$t('features.qrcodes_description'),
+      },
+      { name: 'dl_btn' },
+    ];
   }
 
   // lifecycle
@@ -212,6 +290,19 @@ span.caret {
 
 <style scoped lang="scss">
 .blm-features {
-  margin-top: 42px;
+  margin-top: 70px;
 }
+
+.blm-feature {
+  margin-top: 42px;
+  a, a * {
+    text-decoration: none !important;
+    color: inherit !important;
+  }
+
+  .v-btn--router {
+    color: white !important;
+  }
+}
+
 </style>

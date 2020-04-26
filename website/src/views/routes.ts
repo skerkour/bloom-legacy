@@ -8,8 +8,6 @@ import P404 from '@/views/404.vue';
 import Blog from '@/views/blog.vue';
 import Pricing from '@/views/pricing.vue';
 
-import FeaturesRoutes from './features/routes';
-
 const Security = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/security.vue');
 const Privacy = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/privacy.vue');
 const Terms = () => import(/* webpackChunkName: "chunk-organization" */ '@/views/terms.vue');
@@ -24,6 +22,12 @@ export default new Router({
   mode: 'history',
   base: process.env.BASE_URL,
   scrollBehavior(to, from, savedPosition) {
+    if (to.hash) {
+      return {
+        selector: to.hash,
+        offset: { x: -70, y: 0 },
+      };
+    }
     return { x: 0, y: 0 };
   },
   routes: [
@@ -77,8 +81,6 @@ export default new Router({
       path: '/licensing',
       component: Licesing,
     },
-
-    ...FeaturesRoutes,
 
     {
       component: P404,

@@ -14,7 +14,8 @@
 
         <p class="body-1 font-weight-regular">
           <ul>
-            <lil><a href="https://www.facebook.com/profile.php?id=100004793059302" rel="noopener noreferrer">Hassan Ahmed Hacker (Xen Lee)</a></lil>
+            <li><a href="https://twitter.com/thejonmccoy" rel="noopener noreferrer">Jon McCoy</a></li>
+            <li><a href="https://www.facebook.com/profile.php?id=100004793059302" rel="noopener noreferrer">Hassan Ahmed Hacker (Xen Lee)</a></li>
           </ul>
         </p>
 

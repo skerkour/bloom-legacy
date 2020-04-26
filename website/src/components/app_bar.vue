@@ -15,7 +15,7 @@
       >{{ $t('appbar.download') }}</v-btn>
       <v-btn class="subtitle-1 font-weight-medium"
         text
-        to="/features"
+        to="/#features"
         exact
       >{{ $t('appbar.features') }}</v-btn>
       <v-btn class="subtitle-1 font-weight-medium d-none d-sm-flex"

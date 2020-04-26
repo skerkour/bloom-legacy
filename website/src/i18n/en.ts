@@ -193,7 +193,8 @@ export default {
     title: 'A safe place for all your data',
     solution: 'That\'s why we built Bloom',
     files_description: `A safe place for all your files. Bloom Files is end to end encrypted.<br />
-    <b>1GB free.</b>`,
+    Keep photos, stories, designs, drawings, recordings, videos, and more. <br />
+    <b>100MB free.</b>`,
     files: {
       description: 'A safe place for all your files',
       feature1: {
@@ -212,7 +213,9 @@ export default {
           your files or photos – they're in your Bloom Files.`,
       },
     },
-    calendar_description: 'Get organized on the go with the Bloom Calendar!',
+    calendar_description: `Get organized on the go with the Bloom Calendar! <br />
+    Make the most of every day with a simple to use interface, designed to adapt to
+        everyone's needs.`,
     calendar: {
       description: 'Make the most of every day',
       feature1: {
@@ -227,7 +230,9 @@ export default {
       },
     },
     notes_description: `Quickly capture what’s on your mind and get a reminder later
-    at the right place or time.`,
+    at the right place or time. <br />
+    Bloom Notes helps you capture and prioritize ideas, projects,
+        so nothing falls through the cracks.`,
     notes: {
       description: 'Quickly capture what’s on your mind.',
       feature1: {
@@ -242,7 +247,7 @@ export default {
       },
     },
     bitflow_description: `Your cloud-based download manager.
-    Download any file and torrent directly to your Bloom files.`,
+    Download any file and torrent directly to a secure cloud. Fast. Online.`,
     bitflow: {
       description: 'Download torrents to a secure cloud. Fast. Online.',
       feature1: {
@@ -261,7 +266,8 @@ export default {
         Not with Bitflow! We'll download your files in the blink of an eye!`,
       },
     },
-    arcade_description: 'Never stop having fun!',
+    arcade_description: `The best place to play! <br />
+    None of our games contain ad.`,
     arcade: {
       description: 'The best place to play',
       feature1: {
@@ -274,7 +280,9 @@ export default {
         description: 'None of our games contains ad.',
       },
     },
-    contacts_description: 'Keep your contacts organized and up to date.',
+    contacts_description: `Keep your contacts organized and up to date. <br />
+    Back up your contacts and sync them across all your devices
+    `,
     contacts: {
       description: 'Keep your contacts organized and up to date',
       feature1: {

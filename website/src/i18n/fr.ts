@@ -202,7 +202,7 @@ export default {
       feature1: {
         name: 'Sotckez n\'importe quel fichier',
         description: `Gardez vos photos, documents, designs, dessins, enregistrements, videos et plus.
-        Votre premier <b>1GO</b> de stockage est gratuit.`,
+        Votre premier <b>100MO</b> de stockage est gratuit.`,
       },
       feature2: {
         name: 'Accédez à vos fichiers depuis n\'importe où',
