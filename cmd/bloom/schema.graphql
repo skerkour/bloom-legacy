@@ -82,14 +82,9 @@ type User {
 }
 
 type UserConnection {
-  edges: [UserEdge]
+  nodes: [User]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type UserEdge {
-  cursor: String!
-  node: User
 }
 
 
@@ -103,14 +98,9 @@ type PaymentMethod {
 }
 
 type PaymentMethodConnection {
-  edges: [PaymentMethodEdge]
+  nodes: [PaymentMethod]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type PaymentMethodEdge {
-  cursor: String!
-  node: PaymentMethod
 }
 
 
@@ -128,15 +118,11 @@ type Group {
 }
 
 type GroupConnection {
-  edges: [GroupEdge]
+  nodes: [Group]
   pageInfo: PageInfo!
   totalCount: Int64!
 }
 
-type GroupEdge {
-  cursor: String!
-  node: Group
-}
 
 type GroupMemberConnection {
   edges: [GroupMemberEdge]
@@ -145,7 +131,6 @@ type GroupMemberConnection {
 }
 
 type GroupMemberEdge {
-  cursor: String!
   node: User
   role: GroupMemberRole
   joinedAt: Time
@@ -160,14 +145,9 @@ type GroupInvitation {
 }
 
 type GroupInvitationConnection {
-  edges: [GroupInvitationEdge]
+  nodes: [GroupInvitation]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type GroupInvitationEdge {
-  cursor: String!
-  node: GroupInvitation
 }
 
 
@@ -182,14 +162,9 @@ type Invoice {
 }
 
 type InvoiceConnection {
-  edges: [InvoiceEdge]
+  nodes: [Invoice]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type InvoiceEdge {
-  cursor: String!
-  node: Invoice
 }
 
 
@@ -208,14 +183,9 @@ type BillingPlan {
 }
 
 type BillingPlanConnection {
-  edges: [BillingPlanEdge]
+  nodes: [BillingPlan]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type BillingPlanEdge {
-  cursor: String!
-  node: BillingPlan
 }
 
 
@@ -236,14 +206,9 @@ type Session {
 }
 
 type SessionConnection {
-  edges: [SessionEdge]
+  nodes: [Session]
   pageInfo: PageInfo!
   totalCount: Int64!
-}
-
-type SessionEdge {
-  cursor: String!
-  node: Session
 }
 
 
