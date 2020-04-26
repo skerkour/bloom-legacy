@@ -65,14 +65,20 @@ type User {
   bio: String!
   isAdmin: Boolean!
   disabledAt: Time
+
+  publicKey: Bytes!
+  encryptedPrivateKey: Bytes
+  privateKeyNonce: Bytes
+  encryptedMasterKey: Bytes
+  masterKeyNonce: Bytes
+
+
   groups: GroupConnection
   paymentMethods: PaymentMethodConnection
   invoices: InvoiceConnection
   sessions: SessionConnection
   groupInvitations: GroupInvitationConnection
   subscription: BillingSubscription
-  publicKey: Bytes!
-  encryptedPrivateKey: Bytes
 }
 
 type UserConnection {
@@ -325,6 +331,12 @@ input SignInInput {
   device: SessionDeviceInput!
 }
 
+input CompleteSignInInput {
+  """pending_session id"""
+  id: ID!
+  twoFACode: String!
+}
+
 input RevokeSessionInput {
   id: ID!
 }
@@ -444,6 +456,7 @@ type Mutation {
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   """Sign in"""
   signIn(input: SignInInput!): SignedIn!
+  completeSignIn(input: CompleteSignInInput!): SignedIn!
   """Revoke a session. Use it for sign out."""
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
