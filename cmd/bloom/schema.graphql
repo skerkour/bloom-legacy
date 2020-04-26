@@ -259,9 +259,16 @@ type RegistrationStarted {
 
 
 type SignedIn {
-  twoFA: TwoFAMethod
+  twoFA: twoFA
   session: Session!
   me: User!
+}
+
+type twoFA {
+  """pending session id"""
+  id: ID!
+  token: String!
+  method: TwoFAMethod!
 }
 
 
@@ -281,7 +288,7 @@ type Query {
   users: UserConnection
   """Find a group"""
   group(id: ID!): Group
-  """Find all users"""
+  """Find all groups"""
   groups: GroupConnection
   """Find all billing plans visible to the current user"""
   billingPlans: BillingPlanConnection
@@ -289,13 +296,15 @@ type Query {
   metadata: BloomMetadata
   """The stripe public key to be used"""
   stripePublicKey: String!
+  """Fetch changes since a given state"""
+  changes(sinceState: String): Changes!
 }
 
 ####################################################################################################
 ## Mutations & Inputs
 ####################################################################################################
 
-input RegisterInput {
+input StartRegistrationInput {
   displayName: String!
   email: String!
 }
@@ -334,6 +343,7 @@ input SignInInput {
 input CompleteSignInInput {
   """pending_session id"""
   id: ID!
+  token: String!
   twoFACode: String!
 }
 
@@ -447,22 +457,25 @@ input UserProfileInput {
 
 type Mutation {
   # users
-  """Start registration"""
-  register(input: RegisterInput!): RegistrationStarted!
+  startRegistration(input: StartRegistrationInput!): RegistrationStarted!
   """Verify pending account"""
   verifyRegistration(input: VerifyRegistrationInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
   """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
   """Sign in"""
-  signIn(input: SignInInput!): SignedIn!
-  completeSignIn(input: CompleteSignInInput!): SignedIn!
+  signIn(input: SignInInput!): SignedIn
+  completeSignIn(input: CompleteSignInInput!): SignedIn
   """Revoke a session. Use it for sign out."""
   revokeSession(input: RevokeSessionInput!): Boolean!
   """Update an user profile, both private and public information"""
   updateUserProfile(input: UserProfileInput!): User!
   disableUser(id: ID!): Boolean!
   enableUser(id: ID!): Boolean!
+  """Update password"""
+  startPasswordUpdate
+  verifypasswordUpdate
+  completePasswordUpdate
 
   # groups
   """Create a group"""
@@ -492,4 +505,7 @@ type Mutation {
   addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
+
+  # objects
+  sync
 }
