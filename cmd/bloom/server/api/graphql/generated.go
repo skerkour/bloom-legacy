@@ -153,11 +153,13 @@ type ComplexityRoot struct {
 		CompletePasswordUpdate     func(childComplexity int, input model.CompletePasswordUpdateInput) int
 		CompleteRegistration       func(childComplexity int, input model.CompleteRegistrationInput) int
 		CompleteSignIn             func(childComplexity int, input model.CompleteSignInInput) int
+		CompleteTwoFAActivation    func(childComplexity int, input model.CompleteTwoFAActivationInput) int
 		CreateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
 		CreateGroup                func(childComplexity int, input model.CreateGroupInput) int
 		DeclineGroupInvitation     func(childComplexity int, input model.DeclineGroupInvitationInput) int
 		DeleteBillingPlan          func(childComplexity int, input model.DeleteBillingPlanInput) int
 		DeleteGroup                func(childComplexity int, input model.DeleteGroupInput) int
+		DisableTwoFa               func(childComplexity int, input model.DisableTwoFAInput) int
 		DisableUser                func(childComplexity int, id uuid.UUID) int
 		EnableUser                 func(childComplexity int, id uuid.UUID) int
 		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
@@ -169,6 +171,7 @@ type ComplexityRoot struct {
 		SignIn                     func(childComplexity int, input model.SignInInput) int
 		StartPasswordUpdate        func(childComplexity int) int
 		StartRegistration          func(childComplexity int, input model.StartRegistrationInput) int
+		StartTwoFAActivation       func(childComplexity int) int
 		Sync                       func(childComplexity int, input model.SyncInput) int
 		UpdateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
 		UpdateBillingSubscription  func(childComplexity int, input model.UpdateBillingSubscriptionInput) int
@@ -259,6 +262,10 @@ type ComplexityRoot struct {
 		Method func(childComplexity int) int
 	}
 
+	TwoFAActivationStarted struct {
+		QrCode func(childComplexity int) int
+	}
+
 	User struct {
 		AvatarURL           func(childComplexity int) int
 		Bio                 func(childComplexity int) int
@@ -315,6 +322,9 @@ type MutationResolver interface {
 	StartPasswordUpdate(ctx context.Context) (*model.PasswordUpdateStarted, error)
 	VerifyPasswordUpdate(ctx context.Context, input model.VerifyPasswordUpdateInput) (bool, error)
 	CompletePasswordUpdate(ctx context.Context, input model.CompletePasswordUpdateInput) (*model.SignedIn, error)
+	StartTwoFAActivation(ctx context.Context) (*model.TwoFAActivationStarted, error)
+	CompleteTwoFAActivation(ctx context.Context, input model.CompleteTwoFAActivationInput) (bool, error)
+	DisableTwoFa(ctx context.Context, input model.DisableTwoFAInput) (bool, error)
 	CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error)
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
@@ -858,6 +868,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.CompleteSignIn(childComplexity, args["input"].(model.CompleteSignInInput)), true
 
+	case "Mutation.completeTwoFAActivation":
+		if e.complexity.Mutation.CompleteTwoFAActivation == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_completeTwoFAActivation_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.CompleteTwoFAActivation(childComplexity, args["input"].(model.CompleteTwoFAActivationInput)), true
+
 	case "Mutation.createBillingPlan":
 		if e.complexity.Mutation.CreateBillingPlan == nil {
 			break
@@ -917,6 +939,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.DeleteGroup(childComplexity, args["input"].(model.DeleteGroupInput)), true
+
+	case "Mutation.disableTwoFA":
+		if e.complexity.Mutation.DisableTwoFa == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_disableTwoFA_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.DisableTwoFa(childComplexity, args["input"].(model.DisableTwoFAInput)), true
 
 	case "Mutation.disableUser":
 		if e.complexity.Mutation.DisableUser == nil {
@@ -1044,6 +1078,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.StartRegistration(childComplexity, args["input"].(model.StartRegistrationInput)), true
+
+	case "Mutation.startTwoFAActivation":
+		if e.complexity.Mutation.StartTwoFAActivation == nil {
+			break
+		}
+
+		return e.complexity.Mutation.StartTwoFAActivation(childComplexity), true
 
 	case "Mutation.sync":
 		if e.complexity.Mutation.Sync == nil {
@@ -1437,6 +1478,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.TwoFa.Method(childComplexity), true
+
+	case "TwoFAActivationStarted.qrCode":
+		if e.complexity.TwoFAActivationStarted.QrCode == nil {
+			break
+		}
+
+		return e.complexity.TwoFAActivationStarted.QrCode(childComplexity), true
 
 	case "User.avatarUrl":
 		if e.complexity.User.AvatarURL == nil {
@@ -1931,6 +1979,10 @@ type Changes {
   todo: String
 }
 
+type TwoFAActivationStarted {
+  qrCode: Bytes!
+}
+
 
 type BloomMetadata {
   os: String!
@@ -2134,6 +2186,14 @@ input SyncInput {
   currentState: String!
 }
 
+input DisableTwoFAInput {
+  code: String!
+}
+
+input CompleteTwoFAActivationInput {
+  code: String!
+}
+
 type Mutation {
   # users
   startRegistration(input: StartRegistrationInput!): RegistrationStarted!
@@ -2155,6 +2215,10 @@ type Mutation {
   startPasswordUpdate: PasswordUpdateStarted!
   verifyPasswordUpdate(input: VerifyPasswordUpdateInput!): Boolean!
   completePasswordUpdate(input: CompletePasswordUpdateInput!): SignedIn!
+  """2fa"""
+  startTwoFAActivation: TwoFAActivationStarted
+  completeTwoFAActivation(input: CompleteTwoFAActivationInput!): Boolean!
+  disableTwoFA(input: DisableTwoFAInput!): Boolean!
 
   # groups
   """Create a group"""
@@ -2294,6 +2358,20 @@ func (ec *executionContext) field_Mutation_completeSignIn_args(ctx context.Conte
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_completeTwoFAActivation_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.CompleteTwoFAActivationInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNCompleteTwoFAActivationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCompleteTwoFAActivationInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_createBillingPlan_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2356,6 +2434,20 @@ func (ec *executionContext) field_Mutation_deleteGroup_args(ctx context.Context,
 	var arg0 model.DeleteGroupInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalNDeleteGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeleteGroupInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Mutation_disableTwoFA_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.DisableTwoFAInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNDisableTwoFAInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDisableTwoFAInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -5120,6 +5212,119 @@ func (ec *executionContext) _Mutation_completePasswordUpdate(ctx context.Context
 	return ec.marshalNSignedIn2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSignedIn(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Mutation_startTwoFAActivation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().StartTwoFAActivation(rctx)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*model.TwoFAActivationStarted)
+	fc.Result = res
+	return ec.marshalOTwoFAActivationStarted2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFAActivationStarted(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_completeTwoFAActivation(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_completeTwoFAActivation_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().CompleteTwoFAActivation(rctx, args["input"].(model.CompleteTwoFAActivationInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Mutation_disableTwoFA(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Mutation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	rawArgs := field.ArgumentMap(ec.Variables)
+	args, err := ec.field_Mutation_disableTwoFA_args(ctx, rawArgs)
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	fc.Args = args
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Mutation().DisableTwoFa(rctx, args["input"].(model.DisableTwoFAInput))
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(bool)
+	fc.Result = res
+	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Mutation_createGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -7287,6 +7492,40 @@ func (ec *executionContext) _TwoFA_method(ctx context.Context, field graphql.Col
 	return ec.marshalNTwoFAMethod2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFAMethod(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _TwoFAActivationStarted_qrCode(ctx context.Context, field graphql.CollectedField, obj *model.TwoFAActivationStarted) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "TwoFAActivationStarted",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.QrCode, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.([]byte)
+	fc.Result = res
+	return ec.marshalNBytes2ᚕbyte(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _User_id(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -9408,6 +9647,24 @@ func (ec *executionContext) unmarshalInputCompleteSignInInput(ctx context.Contex
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputCompleteTwoFAActivationInput(ctx context.Context, obj interface{}) (model.CompleteTwoFAActivationInput, error) {
+	var it model.CompleteTwoFAActivationInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "code":
+			var err error
+			it.Code, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputCreateGroupInput(ctx context.Context, obj interface{}) (model.CreateGroupInput, error) {
 	var it model.CreateGroupInput
 	var asMap = obj.(map[string]interface{})
@@ -9483,6 +9740,24 @@ func (ec *executionContext) unmarshalInputDeleteGroupInput(ctx context.Context, 
 		case "id":
 			var err error
 			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputDisableTwoFAInput(ctx context.Context, obj interface{}) (model.DisableTwoFAInput, error) {
+	var it model.DisableTwoFAInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "code":
+			var err error
+			it.Code, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10510,6 +10785,18 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "startTwoFAActivation":
+			out.Values[i] = ec._Mutation_startTwoFAActivation(ctx, field)
+		case "completeTwoFAActivation":
+			out.Values[i] = ec._Mutation_completeTwoFAActivation(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		case "disableTwoFA":
+			out.Values[i] = ec._Mutation_disableTwoFA(ctx, field)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "createGroup":
 			out.Values[i] = ec._Mutation_createGroup(ctx, field)
 			if out.Values[i] == graphql.Null {
@@ -11143,6 +11430,33 @@ func (ec *executionContext) _TwoFA(ctx context.Context, sel ast.SelectionSet, ob
 	return out
 }
 
+var twoFAActivationStartedImplementors = []string{"TwoFAActivationStarted"}
+
+func (ec *executionContext) _TwoFAActivationStarted(ctx context.Context, sel ast.SelectionSet, obj *model.TwoFAActivationStarted) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, twoFAActivationStartedImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("TwoFAActivationStarted")
+		case "qrCode":
+			out.Values[i] = ec._TwoFAActivationStarted_qrCode(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var userImplementors = []string{"User"}
 
 func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj *model.User) graphql.Marshaler {
@@ -11668,6 +11982,10 @@ func (ec *executionContext) unmarshalNCompleteSignInInput2gitlabᚗcomᚋbloom42
 	return ec.unmarshalInputCompleteSignInInput(ctx, v)
 }
 
+func (ec *executionContext) unmarshalNCompleteTwoFAActivationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCompleteTwoFAActivationInput(ctx context.Context, v interface{}) (model.CompleteTwoFAActivationInput, error) {
+	return ec.unmarshalInputCompleteTwoFAActivationInput(ctx, v)
+}
+
 func (ec *executionContext) unmarshalNCreateGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCreateGroupInput(ctx context.Context, v interface{}) (model.CreateGroupInput, error) {
 	return ec.unmarshalInputCreateGroupInput(ctx, v)
 }
@@ -11682,6 +12000,10 @@ func (ec *executionContext) unmarshalNDeleteBillingPlanInput2gitlabᚗcomᚋbloo
 
 func (ec *executionContext) unmarshalNDeleteGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDeleteGroupInput(ctx context.Context, v interface{}) (model.DeleteGroupInput, error) {
 	return ec.unmarshalInputDeleteGroupInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNDisableTwoFAInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐDisableTwoFAInput(ctx context.Context, v interface{}) (model.DisableTwoFAInput, error) {
+	return ec.unmarshalInputDisableTwoFAInput(ctx, v)
 }
 
 func (ec *executionContext) marshalNGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {
@@ -12870,6 +13192,17 @@ func (ec *executionContext) marshalOTwoFA2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcm
 		return graphql.Null
 	}
 	return ec._TwoFA(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalOTwoFAActivationStarted2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFAActivationStarted(ctx context.Context, sel ast.SelectionSet, v model.TwoFAActivationStarted) graphql.Marshaler {
+	return ec._TwoFAActivationStarted(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalOTwoFAActivationStarted2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFAActivationStarted(ctx context.Context, sel ast.SelectionSet, v *model.TwoFAActivationStarted) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec._TwoFAActivationStarted(ctx, sel, v)
 }
 
 func (ec *executionContext) marshalOUser2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx context.Context, sel ast.SelectionSet, v model.User) graphql.Marshaler {

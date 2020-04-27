@@ -252,6 +252,10 @@ type Changes {
   todo: String
 }
 
+type TwoFAActivationStarted {
+  qrCode: Bytes!
+}
+
 
 type BloomMetadata {
   os: String!
@@ -455,6 +459,14 @@ input SyncInput {
   currentState: String!
 }
 
+input DisableTwoFAInput {
+  code: String!
+}
+
+input CompleteTwoFAActivationInput {
+  code: String!
+}
+
 type Mutation {
   # users
   startRegistration(input: StartRegistrationInput!): RegistrationStarted!
@@ -476,6 +488,10 @@ type Mutation {
   startPasswordUpdate: PasswordUpdateStarted!
   verifyPasswordUpdate(input: VerifyPasswordUpdateInput!): Boolean!
   completePasswordUpdate(input: CompletePasswordUpdateInput!): SignedIn!
+  """2fa"""
+  startTwoFAActivation: TwoFAActivationStarted
+  completeTwoFAActivation(input: CompleteTwoFAActivationInput!): Boolean!
+  disableTwoFA(input: DisableTwoFAInput!): Boolean!
 
   # groups
   """Create a group"""
