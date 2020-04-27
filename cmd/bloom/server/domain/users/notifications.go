@@ -22,7 +22,7 @@ type userVerificationEmailData struct {
 	FormattedCode string
 }
 
-func SendUserVerificationCode(toAddr, displayName, code string) error {
+func sendUserVerificationCode(toAddr, displayName, code string) error {
 	var content bytes.Buffer
 	tmpl := template.Must(template.New("userVerificationEmailTemplate").Parse(userVerificationEmailTemplate))
 	formattedCode := code[:4] + "-" + code[4:]

@@ -10,7 +10,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func GenerateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) (string, error) {
+func generateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) (string, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
 
