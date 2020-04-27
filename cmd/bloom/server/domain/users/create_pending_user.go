@@ -13,7 +13,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreatePendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {
+func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {
 	logger := rz.FromCtx(ctx)
 	var existingUser int
 	var err error

@@ -7,15 +7,13 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (resolver *Resolver) StartRegistration(ctx context.Context, input model.StartRegistrationInput) (*model.RegistrationStarted, error) {
+func (resolver *Resolver) StartRegistration(ctx context.Context, input model.StartRegistrationInput) (ret *model.RegistrationStarted, err error) {
 	logger := rz.FromCtx(ctx)
-	var ret *model.RegistrationStarted
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser != nil {
@@ -25,41 +23,24 @@ func (resolver *Resolver) StartRegistration(ctx context.Context, input model.Sta
 	// sleep to prevent spam and bruteforce
 	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
-		logger.Error("mutation.Register: generating random int", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+		logger.Error("mutation.StartRegistration: generating random int", rz.Err(err))
+		err = gqlerrors.Internal()
+		return
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	// create pending user
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		logger.Error("mutation.Register: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+	params := users.StartRegistrationParams{
+		DisplayName: input.DisplayName,
+		Email:       input.Email,
 	}
-
-	newPendingUser, verificationCode, err := users.CreatePendingUser(ctx, tx, input.DisplayName, input.Email)
+	newPendingUserID, err := users.StartRegistration(ctx, params)
 	if err != nil {
-		tx.Rollback()
-		return ret, gqlerrors.New(err)
-	}
-
-	err = users.SendUserVerificationCode(input.Email, input.DisplayName, verificationCode)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.Register: Sending confirmation email", rz.Err(err))
-		return ret, gqlerrors.New(err)
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.Register: Committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorCreatingPendingUser))
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = &model.RegistrationStarted{
-		ID: newPendingUser.ID,
+		ID: newPendingUserID,
 	}
-
-	return ret, nil
+	return
 }
