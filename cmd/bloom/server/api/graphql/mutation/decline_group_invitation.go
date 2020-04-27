@@ -6,13 +6,11 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (bool, error) {
-	ret := false
+func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (ret bool, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -20,35 +18,12 @@ func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.Decli
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	tx, err := db.DB.Beginx()
+	err = groups.DeclineInvitation(ctx, currentUser, input.ID)
 	if err != nil {
-		logger.Error("mutation.DeclineGroupInvitation: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorDecliningInvitation))
+		err = gqlerrors.New(err)
+		return
 	}
 
-	var invitation groups.Invitation
-
-	queryGetInvitation := "SELECT * FROM groups_invitations WHERE id = $1 FOR UPDATE"
-	err = tx.Get(&invitation, queryGetInvitation, input.ID)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.DeclineGroupInvitation: fetching invitation", rz.Err(err),
-			rz.String("invitation.id", input.ID.String()))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
-	}
-
-	err = groups.DeclineInvitation(ctx, tx, *currentUser, invitation)
-	if err != nil {
-		tx.Rollback()
-		return ret, gqlerrors.New(err)
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.DeclineGroupInvitation: Committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorInvitationNotFound))
-	}
-
-	return ret, nil
+	ret = true
+	return
 }

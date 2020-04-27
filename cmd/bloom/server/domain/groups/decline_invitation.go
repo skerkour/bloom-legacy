@@ -3,18 +3,36 @@ package groups
 import (
 	"context"
 
-	"github.com/jmoiron/sqlx"
-
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
+func DeclineInvitation(ctx context.Context, actor *users.User, invitationID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
-	var err error
+	var invitation Invitation
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("groups.DeclineInvitation: Starting transaction", rz.Err(err))
+		err = NewError(ErrorDecliningInvitation)
+		return
+	}
+
+	queryGetInvitation := "SELECT * FROM groups_invitations WHERE id = $1 FOR UPDATE"
+	err = tx.Get(&invitation, queryGetInvitation, invitationID)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.DeclineInvitation: fetching invitation", rz.Err(err),
+			rz.String("invitation.id", invitationID.String()))
+		err = NewError(ErrorInvitationNotFound)
+		return
+	}
 
 	// validate action
-	if user.ID != invitation.InviteeID {
+	if actor.ID != invitation.InviteeID {
+		tx.Rollback()
 		return NewError(ErrorInvitationNotFound)
 	}
 
@@ -22,8 +40,19 @@ func DeclineInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invita
 	queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
+		tx.Rollback()
 		logger.Error("groups.DeclineInvitation: deleting invitation", rz.Err(err))
-		return NewError(ErrorDecliningInvitation)
+		err = NewError(ErrorDecliningInvitation)
+		return
 	}
-	return nil
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("mutation.DeclineGroupInvitation: Committing transaction", rz.Err(err))
+		err = NewError(ErrorDecliningInvitation)
+		return
+	}
+
+	return
 }
