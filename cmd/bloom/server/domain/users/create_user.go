@@ -11,7 +11,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-type CreateUserParams struct {
+type createUserParams struct {
 	PendingUser         PendingUser
 	Username            string
 	AuthKey             []byte
@@ -20,10 +20,10 @@ type CreateUserParams struct {
 	PrivateKeyNonce     []byte
 }
 
-func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User, error) {
+func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*User, error) {
 	logger := rz.FromCtx(ctx)
 	var err error
-	var ret User
+	var ret *User
 	var existingUser int
 
 	// validate params
@@ -76,7 +76,7 @@ func CreateUser(ctx context.Context, tx *sqlx.Tx, params CreateUserParams) (User
 		return ret, NewError(ErrorCompletingRegistration)
 	}
 
-	ret = User{
+	ret = &User{
 		ID:                  newUuid,
 		Username:            params.Username,
 		Email:               params.PendingUser.Email,

@@ -11,7 +11,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func StartSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device SessionDevice) (ret Session, token string, err error) {
+func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device SessionDevice) (ret *Session, token string, err error) {
 	logger := rz.FromCtx(ctx)
 
 	newSessionId, secret, hash, salt, err := newSession()
@@ -22,7 +22,7 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 	}
 
 	now := time.Now().UTC()
-	ret = Session{
+	ret = &Session{
 		ID:         newSessionId,
 		CreatedAt:  now,
 		UpdatedAt:  now,
@@ -48,8 +48,6 @@ func StartSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 	token = base64.StdEncoding.EncodeToString(tokenByte)
 	// remove secret from memory
 	crypto.Zeroize(secret)
-
-	GlobalSessionsCache.Set(&ret)
 
 	return
 }
