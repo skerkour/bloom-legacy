@@ -27,4 +27,5 @@ type User struct {
 	EncryptedMasterKey  []byte     `db:"encrypted_master_key"`
 	MasterKeyNonce      []byte     `db:"master_key_nonce"`
 	State               int64      `db:"state"`
+	TwoFASecret         *[]byte    `db:"two_fa_secret"`
 }

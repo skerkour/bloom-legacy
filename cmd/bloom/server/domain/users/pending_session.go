@@ -8,9 +8,12 @@ import (
 
 // PendingSession are created when 2fa is actived
 type PendingSession struct {
-	ID         uuid.UUID `db:"id"`
-	CreatedAt  time.Time `db:"created_at"`
-	VerifiedAt time.Time `db:"verified_at"`
-	TokenHash  []byte    `db:"token_hash"`
-	Salt       []byte    `db:"salt"`
+	ID             uuid.UUID `db:"id"`
+	CreatedAt      time.Time `db:"created_at"`
+	VerifiedAt     time.Time `db:"verified_at"`
+	TokenHash      []byte    `db:"token_hash"`
+	Salt           []byte    `db:"salt"`
+	FailedAttempts int64     `db:"failed_attempts"`
+
+	UserID uuid.UUID `db:"user_id"`
 }

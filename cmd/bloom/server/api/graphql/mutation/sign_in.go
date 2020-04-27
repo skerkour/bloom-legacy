@@ -50,7 +50,6 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 		return
 	}
 
-	// TODO: send login email
 	ret = &model.SignedIn{
 		Session: &model.Session{
 			ID:    newSession.ID,
@@ -71,6 +70,5 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 			IsAdmin:     user.IsAdmin,
 		},
 	}
-
 	return
 }

@@ -22,8 +22,9 @@ CREATE TABLE users (
     encrypted_master_key BYTEA NOT NULL,
     master_key_nonce BYTEA NOT NULL,
     state BIGINT NOT NULL,
-    -- password_reset_id TEXT,
-    -- password_reset_token_hash TEXT,
+    two_fa_secret BYTEA,
+    -- password_update_request_at TIMESTAMP WITH TIME ZONE,
+    -- password_update_code_hash TEXT,
 
     PRIMARY KEY(id)
 );
@@ -51,9 +52,11 @@ CREATE INDEX index_sessions_on_user_id ON sessions (user_id);
 CREATE TABLE pending_sessions (
   id UUID NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
-  verified_at TIMESTAMP WITH TIME ZONE,
+
   token_hash BYTEA NOT NULL,
+  failed_attempts BIGINT NOT NULL,
   salt BYTEA NOT NULL,
+  user_id NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
   PRIMARY KEY(id)
 );
@@ -65,7 +68,6 @@ CREATE TABLE pending_users (
 
     email TEXT NOT NULL,
     display_name TEXT NOT NULL,
-
     verification_code_hash TEXT NOT NULL,
     failed_attempts BIGINT NOT NULL,
     verified_at TIMESTAMP WITH TIME ZONE,
