@@ -5,46 +5,80 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jmoiron/sqlx"
 	stripeplan "github.com/stripe/stripe-go/plan"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func UpdatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, plan *Plan, name, stripeId, description, product string, isPublic bool, storage int64) (*Plan, error) {
-	var err error
+type UpdatePlanParams struct {
+	ID       *uuid.UUID
+	Name     string
+	Product  string
+	StripeID string
+	// HTML description
+	Description string
+	IsPublic    bool
+	Storage     int64
+}
+
+func UpdatePlan(ctx context.Context, actor *users.User, params UpdatePlanParams) (ret *Plan, err error) {
 	logger := rz.FromCtx(ctx)
 
 	// clean and validate params
-	if user == nil {
+	if actor == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
-		return plan, NewError(ErrorUpdatingPlan)
+		err = NewError(ErrorUpdatingPlan)
+		return
 	}
-	if !user.IsAdmin {
-		return plan, NewError(ErrorAdminRoleRequired)
-	}
-
-	name = strings.TrimSpace(name)
-	stripeId = strings.TrimSpace(stripeId)
-	description = strings.TrimSpace(description)
-	product = strings.TrimSpace(product)
-	if err = validateCreatePlan(name, description, product, stripeId, storage); err != nil {
-		return plan, err
+	if !actor.IsAdmin {
+		err = NewError(ErrorAdminRoleRequired)
+		return
 	}
 
-	stripePlan, err := stripeplan.Get(stripeId, nil)
+	params.Name = strings.TrimSpace(params.Name)
+	params.StripeID = strings.TrimSpace(params.StripeID)
+	params.Description = strings.TrimSpace(params.Description)
+	params.Product = strings.TrimSpace(params.Product)
+	err = validateCreatePlan(params.Name, params.Description, params.Product, params.StripeID, params.Storage)
 	if err != nil {
-		return plan, NewError(ErrorPlanNotFound)
+		return
+	}
+
+	stripePlan, err := stripeplan.Get(params.StripeID, nil)
+	if err != nil {
+		err = NewError(ErrorPlanNotFound)
+		return
+	}
+
+	if params.ID == nil {
+		err = errors.New(errors.InvalidArgument, "plan.id should not be null")
+		return
+	}
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("mutation.UpdateBillingPlan: Starting transaction", rz.Err(err))
+		err = NewError(ErrorUpdatingPlan)
+		return
+	}
+
+	plan, err := FindPlanById(ctx, tx, *params.ID)
+	if err != nil {
+		tx.Rollback()
+		return
 	}
 
 	plan.UpdatedAt = time.Now().UTC()
-	plan.Name = name
-	plan.Description = description
-	plan.Product = product
+	plan.Name = params.Name
+	plan.Description = params.Description
+	plan.Product = params.Product
 	plan.Price = stripePlan.Amount
-	plan.IsPublic = isPublic
-	plan.StripeID = stripeId
-	plan.Storage = storage
+	plan.IsPublic = params.IsPublic
+	plan.StripeID = params.StripeID
+	plan.Storage = params.Storage
 
 	// create group
 	queryUpdatePlan := `UPDATE billing_plans SET updated_at = $1, name = $2, description = $3,
@@ -55,6 +89,14 @@ func UpdatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, plan *Plan, 
 	if err != nil {
 		logger.Error("billing.CreatePlan: inserting new plan", rz.Err(err))
 		return plan, NewError(ErrorUpdatingPlan)
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("mutation.UpdateBillingPlan: Committing transaction", rz.Err(err))
+		err = NewError(ErrorCreatingPlan)
+		return
 	}
 
 	return plan, err
