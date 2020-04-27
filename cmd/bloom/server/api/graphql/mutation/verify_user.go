@@ -7,14 +7,12 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUserInput) (bool, error) {
-	ret := false
+func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUserInput) (ret bool, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -25,48 +23,22 @@ func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUser
 	// sleep to prevent spam and bruteforce
 	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
-		logger.Error("mutation.VerifyRegistration: generating random int", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
+		logger.Error("mutation.VerifyUser: generating random int", rz.Err(err))
+		err = gqlerrors.Internal()
+		return
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	// verify pending user
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		logger.Error("mutation.VerifyRegistration: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
+	params := users.VerifyPendingUserParams{
+		PendingUserID: input.ID,
+		Code:          input.Code,
 	}
-
-	var pendingUser users.PendingUser
-	err = tx.Get(&pendingUser, "SELECT * FROM pending_users WHERE id = $1 FOR UPDATE", input.ID)
+	err = users.VerifyPendingUser(ctx, params)
 	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.VerifyRegistration: getting pending user", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
-	}
-
-	err = users.VerifyPendingUser(ctx, tx, &pendingUser, input.Code)
-	if err != nil {
-		tx.Rollback()
-		tx, _ := db.DB.Beginx()
-		if tx != nil {
-			err2 := users.FailPendingUserVerification(ctx, tx, &pendingUser)
-			if err2 != nil {
-				tx.Rollback()
-				return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
-			}
-			tx.Commit()
-		}
-		return ret, gqlerrors.New(err)
-	}
-
-	err = tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.VerifyRegistration: Committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorVerifyingPendingUser))
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = true
-	return ret, nil
+	return
 }
