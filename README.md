@@ -19,10 +19,10 @@ much more.
 Android: Coming soon <!--[Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) --> <br/>
 iOS: Coming soon
 
-CLI: Coming soom <br/><!-- [See instructions](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br /> -->
 Linux: Coming soom <br/>
-Docker: Coming soon <br/>
 MacOS: Coming soon <br/>
+Docker: Coming soon <br/>
+CLI: Coming soom <br/><!-- [See instructions](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br /> -->
 <!-- Windows: Coming soon <br/> -->
 
 
