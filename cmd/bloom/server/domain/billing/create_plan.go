@@ -5,39 +5,54 @@ import (
 	"strings"
 	"time"
 
-	"github.com/jmoiron/sqlx"
 	"github.com/stripe/stripe-go/plan"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripeId, description, product string, storage int64, isPublic bool) (*Plan, error) {
-	var ret *Plan
-	var err error
+type CreatePlanParams struct {
+	Name        string
+	StripeID    string
+	Description string
+	Product     string
+	Storage     int64
+	IsPublic    bool
+}
+
+func CreatePlan(ctx context.Context, actor *users.User, params CreatePlanParams) (ret *Plan, err error) {
 	logger := rz.FromCtx(ctx)
 
 	// clean and validate params
-	if user == nil {
+	if actor == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
 		return ret, NewError(ErrorCreatingPlan)
 	}
-	if !user.IsAdmin {
+	if !actor.IsAdmin {
 		return ret, NewError(ErrorAdminRoleRequired)
 	}
 
-	name = strings.TrimSpace(name)
-	stripeId = strings.TrimSpace(stripeId)
-	description = strings.TrimSpace(description)
-	product = strings.TrimSpace(product)
-	if err = validateCreatePlan(name, description, product, stripeId, storage); err != nil {
-		return ret, err
+	params.Name = strings.TrimSpace(params.Name)
+	params.StripeID = strings.TrimSpace(params.StripeID)
+	params.Description = strings.TrimSpace(params.Description)
+	params.Product = strings.TrimSpace(params.Product)
+	err = validateCreatePlan(params.Name, params.Description, params.Product, params.StripeID, params.Storage)
+	if err != nil {
+		return
 	}
 
-	stripePlan, err := plan.Get(stripeId, nil)
+	stripePlan, err := plan.Get(params.StripeID, nil)
 	if err != nil {
 		return ret, NewError(ErrorPlanNotFound)
+	}
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("billing.CreatePlan: Starting transaction", rz.Err(err))
+		err = NewError(ErrorCreatingPlan)
+		return
 	}
 
 	now := time.Now().UTC()
@@ -47,13 +62,13 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 		ID:          newUuid,
 		CreatedAt:   now,
 		UpdatedAt:   now,
-		Name:        name,
-		Description: description,
-		StripeID:    stripeId,
+		Name:        params.Name,
+		Description: params.Description,
+		StripeID:    params.StripeID,
 		Price:       stripePlan.Amount,
-		IsPublic:    isPublic,
-		Product:     product,
-		Storage:     storage,
+		IsPublic:    params.IsPublic,
+		Product:     params.Product,
+		Storage:     params.Storage,
 	}
 
 	// create plan
@@ -63,8 +78,18 @@ func CreatePlan(ctx context.Context, tx *sqlx.Tx, user *users.User, name, stripe
 	_, err = tx.Exec(queryCreatePlan, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description,
 		ret.StripeID, ret.Price, ret.IsPublic, ret.Product, ret.Storage)
 	if err != nil {
+		tx.Rollback()
 		logger.Error("billing.CreatePlan: inserting new plan", rz.Err(err))
-		return ret, NewError(ErrorCreatingPlan)
+		err = NewError(ErrorCreatingPlan)
+		return
+	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("billing.CreatePlan: Committing transaction", rz.Err(err))
+		err = NewError(ErrorCreatingPlan)
+		return
 	}
 
 	return ret, err
