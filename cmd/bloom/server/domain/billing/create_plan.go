@@ -8,7 +8,6 @@ import (
 	"github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -95,23 +94,28 @@ func CreatePlan(ctx context.Context, actor *users.User, params CreatePlanParams)
 	return ret, err
 }
 
-func validateCreatePlan(name, description, product, stripeId string, storage int64) error {
-	var err error
+func validateCreatePlan(name, description, product, stripeID string, storage int64) (err error) {
 
-	if err = validator.BillingPlanName(name); err != nil {
-		return NewErrorMessage(ErrorInvalidArgument, err.Error())
+	err = ValidatePlanName(name)
+	if err != nil {
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
 	}
 
-	if err = validator.BillingProduct(product); err != nil {
-		return NewErrorMessage(ErrorInvalidArgument, err.Error())
+	err = ValidateProduct(product)
+	if err != nil {
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
 	}
 
 	// if err = validator.BillingPlanPrice(price); err != nil {
 	// 	return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	// }
 
-	if err = validator.BillingPlanStripeId(stripeId); err != nil {
-		return NewErrorMessage(ErrorInvalidArgument, err.Error())
+	err = ValidatePlanStripeID(stripeID)
+	if err != nil {
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
 	}
 
 	if storage < 0 {

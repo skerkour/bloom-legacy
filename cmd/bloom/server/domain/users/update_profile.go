@@ -7,7 +7,6 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -42,11 +41,18 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 
 	if input.Bio != nil {
 		*input.Bio = strings.TrimSpace(*input.Bio)
+		err = ValidateBio(*input.Bio)
+		if err != nil {
+			err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+			return ret, err
+		}
 	}
 	if input.DisplayName != nil {
 		*input.DisplayName = strings.TrimSpace(*input.DisplayName)
-		if err = validator.UserDisplayName(*input.DisplayName); err != nil {
-			return ret, NewErrorMessage(ErrorInvalidArgument, err.Error())
+		err = ValidateDisplayName(*input.DisplayName)
+		if err != nil {
+			err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+			return ret, err
 		}
 	}
 	if input.FirstName != nil {

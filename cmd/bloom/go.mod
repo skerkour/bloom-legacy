@@ -4,6 +4,7 @@ go 1.14
 
 require (
 	github.com/99designs/gqlgen v0.11.3
+	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
 	github.com/getsentry/sentry-go v0.6.0
 	github.com/go-chi/chi v4.1.1+incompatible
 	github.com/go-chi/cors v1.1.1

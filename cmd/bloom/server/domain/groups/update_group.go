@@ -7,17 +7,18 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// UpdateGroupParams are the parameters for UpdateGroup
 type UpdateGroupParams struct {
 	ID          uuid.UUID
 	Name        *string
 	Description *string
 }
 
+// UpdateGroup update the basic info of a Group
 func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParams) (ret *Group, err error) {
 	logger := rz.FromCtx(ctx)
 	var newName string
@@ -88,11 +89,13 @@ func validateUpdateGroup(ctx context.Context, tx *sqlx.Tx, userID, groupID uuid.
 		return err
 	}
 
-	if err = validator.GroupName(name); err != nil {
+	err = ValidateGroupName(name)
+	if err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if err = validator.GroupDescription(description); err != nil {
+	err = ValidateGroupDescription(description)
+	if err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 

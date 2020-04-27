@@ -2,10 +2,10 @@ package users
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
@@ -20,15 +20,16 @@ type createUserParams struct {
 	PrivateKeyNonce     []byte
 }
 
-func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*User, error) {
+func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret *User, err error) {
 	logger := rz.FromCtx(ctx)
-	var err error
-	var ret *User
 	var existingUser int
 
 	// validate params
-	if err = validator.UserUsername(params.Username); err != nil {
-		return ret, NewErrorMessage(ErrorInvalidArgument, err.Error()) //twirp.InvalidArgumentError("username", err.Error())
+	params.Username = strings.TrimSpace(params.Username)
+	err = ValidateUsername(params.Username)
+	if err != nil {
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
 	}
 
 	// check if email does not already exist
@@ -36,10 +37,12 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*Use
 	err = tx.Get(&existingUser, queryCountExistingEmails, params.PendingUser.Email)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing emails counts", rz.Err(err))
-		return ret, NewError(ErrorEmailAlreadyExists)
+		err = NewError(ErrorEmailAlreadyExists)
+		return
 	}
 	if existingUser != 0 {
-		return ret, NewError(ErrorEmailAlreadyExists)
+		err = NewError(ErrorEmailAlreadyExists)
+		return
 		// twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", pendingUser.Email))
 	}
 
@@ -49,10 +52,12 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*Use
 	err = tx.Get(&existingUser, queryCountExistingUsername, params.Username)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing username counts", rz.Err(err))
-		return ret, NewError(ErrorUsernameAlreadyExists)
+		err = NewError(ErrorUsernameAlreadyExists)
+		return
 	}
 	if existingUser != 0 {
-		return ret, NewError(ErrorUsernameAlreadyExists)
+		err = NewError(ErrorUsernameAlreadyExists)
+		return
 	}
 
 	// verify that username was not used by a deleted user
@@ -61,23 +66,25 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*Use
 	err = tx.Get(&existingUser, queryCountDeletedUsername, params.Username)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching deleted username counts", rz.Err(err))
-		return ret, NewError(ErrorUsernameAlreadyExists)
+		err = NewError(ErrorUsernameAlreadyExists)
+		return
 	}
 	if existingUser != 0 {
-		return ret, NewError(ErrorUsernameAlreadyExists)
+		err = NewError(ErrorUsernameAlreadyExists)
+		return
 	}
 
 	now := time.Now().UTC()
-	newUuid := uuid.New()
 	// TODO: update params
 	authKeyHash, err := crypto.HashPassword(params.AuthKey, AUTH_KEY_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
-		return ret, NewError(ErrorCompletingRegistration)
+		err = NewError(ErrorCompletingRegistration)
+		return
 	}
 
 	ret = &User{
-		ID:                  newUuid,
+		ID:                  uuid.New(),
 		Username:            params.Username,
 		Email:               params.PendingUser.Email,
 		CreatedAt:           now,
@@ -95,11 +102,12 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*Use
 			is_admin, auth_key_hash, public_key, encrypted_private_key, state, private_key_nonce)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`
 	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username,
-		ret.DisplayName, "", ret.Email, "", "", false, ret.AuthKeyHash, ret.PublicKey,
+		ret.DisplayName, ret.Bio, ret.Email, ret.FirstName, ret.LastName, false, ret.AuthKeyHash, ret.PublicKey,
 		ret.EncryptedPrivateKey, ret.State, ret.PrivateKeyNonce)
 	if err != nil {
 		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
-		return ret, NewError(ErrorCompletingRegistration)
+		err = NewError(ErrorCompletingRegistration)
+		return
 	}
 
 	return ret, nil

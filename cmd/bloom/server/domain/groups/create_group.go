@@ -7,7 +7,6 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -66,11 +65,11 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params Cre
 func validateCreateGroup(name, description string) error {
 	var err error
 
-	if err = validator.GroupName(name); err != nil {
+	if err = ValidateGroupName(name); err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
-	if err = validator.GroupDescription(description); err != nil {
+	if err = ValidateGroupDescription(description); err != nil {
 		return NewErrorMessage(ErrorInvalidArgument, err.Error())
 	}
 
