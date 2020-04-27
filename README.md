@@ -15,24 +15,8 @@ much more.
 
 [Try it for free](https://bloom.sh/download)
 
---------
 
-Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free-and-open-source-google
-
-1. [Download](#download)
-2. [Documentation](#documentation)
-3. [Roadmap](#roadmap)
-4. [Development instructions](#development-instructions)
-5. [Contributing](#contributing)
-6. [Community](#Community)
-7. [Licensing](#licensing)
-8. [Security](#security)
-
---------
-
-## Download
-
-Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) <br/>
+Android: Coming soon <!--[Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) --> <br/>
 iOS: Coming soon
 
 CLI: Coming soom <br/><!-- [See instructions](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br /> -->
@@ -40,6 +24,21 @@ Linux: Coming soom <br/>
 Docker: Coming soon <br/>
 MacOS: Coming soon <br/>
 <!-- Windows: Coming soon <br/> -->
+
+
+--------
+
+Why? How? What? 👉 Read the launch post: https://fatalentropy.com/bloom-a-free-and-open-source-google
+
+1. [Documentation](#documentation)
+2. [Roadmap](#roadmap)
+3. [Development instructions](#development-instructions)
+4. [Contributing](#contributing)
+5. [Community](#Community)
+6. [Licensing](#licensing)
+7. [Security](#security)
+
+--------
 
 
 ## Documentation
