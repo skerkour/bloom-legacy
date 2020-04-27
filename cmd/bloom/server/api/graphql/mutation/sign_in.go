@@ -7,17 +7,16 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.SignedIn, error) {
-	var ret *model.SignedIn
+func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *model.SignedIn, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 	apiCtx := apiutil.ApiCtxFromCtx(ctx)
+
 	if apiCtx == nil {
 		logger.Error("mutation.SignIn: error getting apiCtx from context")
 		return ret, gqlerrors.Internal()
@@ -31,49 +30,27 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
 		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		err = gqlerrors.Internal()
+		return
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
-
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		logger.Error("mutation.SignIn: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
-	}
-
-	// fetch user
-	user, err := users.FindUserByUsername(ctx, tx, input.Username)
-	if err != nil {
-		tx.Rollback()
-		return ret, gqlerrors.New(users.NewError(users.ErrorInvalidUsernamePasswordCombination))
-	}
-
-	// verify password
-	if !crypto.VerifyPasswordHash(input.AuthKey, user.AuthKeyHash) {
-		tx.Rollback()
-		return ret, gqlerrors.New(users.NewError(users.ErrorInvalidUsernamePasswordCombination))
-	}
 
 	device := users.SessionDevice{
 		OS:   input.Device.Os.String(),
 		Type: input.Device.Type.String(),
 	}
-
-	newSession, token, err := users.StartSession(ctx, tx, user.ID, device)
-	if err != nil {
-		tx.Rollback()
-		return ret, gqlerrors.New(err)
+	params := users.SignInParams{
+		Username: input.Username,
+		AuthKey:  input.AuthKey,
+		Device:   device,
 	}
-
-	err = tx.Commit()
+	user, newSession, token, err := users.SignIn(ctx, params)
 	if err != nil {
-		tx.Rollback()
-		logger.Error("mutation.SignIn: committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(users.NewError(users.ErrorSingingIn))
+		err = gqlerrors.New(err)
+		return
 	}
 
 	// TODO: send login email
-
 	ret = &model.SignedIn{
 		Session: &model.Session{
 			ID:    newSession.ID,
@@ -94,5 +71,6 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (*model.
 			IsAdmin:     user.IsAdmin,
 		},
 	}
-	return ret, nil
+
+	return
 }
