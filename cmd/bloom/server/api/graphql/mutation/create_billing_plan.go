@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// CreateBillingPlan is used by instance's admin to create a plan
 func (r *Resolver) CreateBillingPlan(ctx context.Context, input model.BillingPlanInput) (ret *model.BillingPlan, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

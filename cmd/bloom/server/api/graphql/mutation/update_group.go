@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
+// UpdateGroup is used by groups' admins to update the group info
 func (r *Resolver) UpdateGroup(ctx context.Context, input model.GroupInput) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// DisableUser is used by instance's admins to disable an user
 func (r *Resolver) DisableUser(ctx context.Context, id uuid.UUID) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

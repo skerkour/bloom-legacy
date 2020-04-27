@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
+// CancelGroupInvitation is used by groups' admins to cancel a group invitation
 func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

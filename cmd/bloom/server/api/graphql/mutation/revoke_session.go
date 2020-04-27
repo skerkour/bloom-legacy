@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 )
 
+// RevokeSession is used to revoke a session and / or sign out
 func (r *Resolver) RevokeSession(ctx context.Context, input model.RevokeSessionInput) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

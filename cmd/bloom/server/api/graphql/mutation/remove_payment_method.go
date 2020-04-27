@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// RemovePaymentMethod is used to remove a payment method
 func (r *Resolver) RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error) {
 	ret := false
 	var err error

@@ -12,6 +12,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// VerifyUser is used to verify a pending user code received by email
 func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUserInput) (ret bool, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)

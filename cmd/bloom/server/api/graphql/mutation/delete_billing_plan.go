@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// DeleteBillingPlan is used by an instance's admin to delete a plan
 func (r *Resolver) DeleteBillingPlan(ctx context.Context, input model.DeleteBillingPlanInput) (bool, error) {
 	ret := false
 	currentUser := apiutil.UserFromCtx(ctx)

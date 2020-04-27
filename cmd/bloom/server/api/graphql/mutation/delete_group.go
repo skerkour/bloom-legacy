@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
+// DeleteGroup is used by a group's admin to delete the group
 func (r *Resolver) DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

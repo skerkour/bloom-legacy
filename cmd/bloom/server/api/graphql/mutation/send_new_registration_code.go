@@ -12,6 +12,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// SendNewRegistrationCode is used to send a new pending user code by email
 func (resolver *Resolver) SendNewRegistrationCode(ctx context.Context, input model.SendNewRegistrationCodeInput) (ret bool, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)

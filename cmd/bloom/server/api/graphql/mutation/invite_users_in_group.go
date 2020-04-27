@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
+// InviteUsersInGroup is used by groups' admin to invite users in a group, by their usernames
 func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

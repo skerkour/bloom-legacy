@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
+// RemoveGroupMembers is used by groups' admins to remove members from a group
 func (r *Resolver) RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error) {
 	var ret *model.Group
 	currentUser := apiutil.UserFromCtx(ctx)

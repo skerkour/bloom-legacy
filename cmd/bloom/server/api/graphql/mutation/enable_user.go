@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// EnableUser is used by instance's admin to re-enable a previously disabled user
 func (r *Resolver) EnableUser(ctx context.Context, id uuid.UUID) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

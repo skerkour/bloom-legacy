@@ -12,10 +12,13 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// SignIn is used to sign-in, or initiate a pending session if 2fa is enabled
 func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *model.SignedIn, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 	apiCtx := apiutil.ApiCtxFromCtx(ctx)
+	var retSession *model.Session
+	var retPendingSession *model.PendingSession
 
 	if apiCtx == nil {
 		logger.Error("mutation.SignIn: error getting apiCtx from context")
@@ -35,30 +38,45 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	device := users.SessionDevice{
-		OS:   input.Device.Os.String(),
-		Type: input.Device.Type.String(),
-	}
 	params := users.SignInParams{
 		Username: input.Username,
 		AuthKey:  input.AuthKey,
-		Device:   device,
+		Device: users.SessionDevice{
+			OS:   input.Device.Os.String(),
+			Type: input.Device.Type.String(),
+		},
 	}
-	user, newSession, token, err := users.SignIn(ctx, params)
+	user, newSession, pendingSession, token, err := users.SignIn(ctx, params)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return
 	}
 
-	ret = &model.SignedIn{
-		Session: &model.Session{
+	if newSession != nil {
+		retSession = &model.Session{
 			ID:    newSession.ID,
 			Token: &token,
 			Device: &model.SessionDevice{
-				Os:   model.SessionDeviceOs(device.OS),
-				Type: model.SessionDeviceType(device.Type),
+				Os:   model.SessionDeviceOs(newSession.DeviceOS),
+				Type: model.SessionDeviceType(newSession.DeviceType),
 			},
-		},
+		}
+	} else if pendingSession != nil {
+		retPendingSession = &model.PendingSession{
+			ID:    pendingSession.ID,
+			Token: token,
+			TwoFa: &model.TwoFa{
+				Method: model.TwoFAMethodTotp,
+			},
+		}
+	} else {
+		err = gqlerrors.Internal()
+		return
+	}
+
+	ret = &model.SignedIn{
+		Session:        retSession,
+		PendingSession: retPendingSession,
 		Me: &model.User{
 			ID:          &user.ID,
 			AvatarURL:   nil,

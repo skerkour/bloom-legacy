@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// ChangeDefaultPaymentMethod is used by users to change their default payment mehtod
 func (r *Resolver) ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (*model.PaymentMethod, error) {
 	var ret *model.PaymentMethod
 	var err error

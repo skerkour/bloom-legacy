@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// UpdateBillingPlan is used by admons to update a plan
 func (r *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (ret *model.BillingPlan, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 

@@ -12,6 +12,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// CreateGroup is used to create a group
 func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput) (ret *model.Group, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)

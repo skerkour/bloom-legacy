@@ -12,6 +12,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// StartRegistration initiate an account registration
 func (resolver *Resolver) StartRegistration(ctx context.Context, input model.StartRegistrationInput) (ret *model.RegistrationStarted, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)

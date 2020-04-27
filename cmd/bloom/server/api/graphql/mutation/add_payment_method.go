@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 )
 
+// AddPaymentMethod is used by users to add a payment method to their account or group
 func (r *Resolver) AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (*model.PaymentMethod, error) {
 	var ret *model.PaymentMethod
 	var err error

@@ -14,6 +14,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// CompleteRegistration is used to complete an account's registration
 func (r *Resolver) CompleteRegistration(ctx context.Context, input model.CompleteRegistrationInput) (ret *model.SignedIn, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -44,20 +45,19 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		return
 	}
 
-	device := users.SessionDevice{
-		OS:   input.Device.Os.String(),
-		Type: input.Device.Type.String(),
-	}
 	params := users.CompleteRegistrationParams{
 		PendingUserID:       input.ID,
 		Username:            input.Username,
 		AuthKey:             input.AuthKey,
-		Device:              device,
 		PublicKey:           input.PublicKey,
 		EncryptedPrivateKey: input.EncryptedPrivateKey,
 		PrivateKeyNonce:     input.PrivateKeyNonce,
 		EncryptedMasterKey:  input.EncryptedMasterKey,
 		MasterKeyNonce:      input.MasterKeyNonce,
+		Device: users.SessionDevice{
+			OS:   input.Device.Os.String(),
+			Type: input.Device.Type.String(),
+		},
 	}
 	newUser, newSession, token, err := users.CompleteRegistration(ctx, tx, params)
 
@@ -82,8 +82,8 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 			ID:    newSession.ID,
 			Token: &token,
 			Device: &model.SessionDevice{
-				Os:   model.SessionDeviceOs(device.OS),
-				Type: model.SessionDeviceType(device.Type),
+				Os:   model.SessionDeviceOs(newSession.DeviceOS),
+				Type: model.SessionDeviceType(newSession.DeviceType),
 			},
 		},
 		Me: &model.User{

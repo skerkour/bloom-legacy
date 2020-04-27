@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 )
 
+// UpdateUserProfile is used to updated an user's profile
 func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error) {
 	var ret *model.User
 	var err error
