@@ -10,7 +10,7 @@ You are tired of being abused by Big Companies?
 
 **We too, so we built Bloom.**
 
-Bloom is an open source and encrypted productivity suite. It features Drive, Contacts, Calendar and
+Bloom is an open source and encrypted productivity suite. It features Files, Notes, Calendar, Contacts and
 much more.
 
 [Try it for free](https://bloom.sh/download)
