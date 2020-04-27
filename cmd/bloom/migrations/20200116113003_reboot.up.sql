@@ -56,7 +56,7 @@ CREATE TABLE pending_sessions (
   token_hash BYTEA NOT NULL,
   failed_attempts BIGINT NOT NULL,
   salt BYTEA NOT NULL,
-  user_id NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
   PRIMARY KEY(id)
 );
