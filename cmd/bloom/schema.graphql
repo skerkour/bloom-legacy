@@ -72,7 +72,6 @@ type User {
   encryptedMasterKey: Bytes
   masterKeyNonce: Bytes
 
-
   groups: GroupConnection
   paymentMethods: PaymentMethodConnection
   invoices: InvoiceConnection
@@ -224,16 +223,33 @@ type RegistrationStarted {
 
 
 type SignedIn {
-  twoFA: twoFA
+  pendingSession: PendingSession
   session: Session!
   me: User!
 }
 
-type twoFA {
-  """pending session id"""
+type PendingSession {
   id: ID!
   token: String!
+  twoFA: TwoFA
+}
+
+type TwoFA {
   method: TwoFAMethod!
+}
+
+type PasswordUpdateStarted {
+  """pending_password id"""
+  id: ID!
+  twoFA: TwoFA
+}
+
+type Sync {
+  todo: String
+}
+
+type Changes {
+  todo: String
 }
 
 
@@ -274,7 +290,7 @@ input StartRegistrationInput {
   email: String!
 }
 
-input VerifyRegistrationInput {
+input verifyUserInput {
   """pending user id"""
   id: ID!
   code: String!
@@ -388,7 +404,7 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
-"""if groupId and userId are null (reserved for admins), add to current user"""
+"""if groupId and userId (reserved for admins) are null, add to current user"""
 input UpdateBillingSubscriptionInput {
   planId: ID!
   userId: ID
@@ -420,11 +436,30 @@ input UserProfileInput {
   lastName: String
 }
 
+input VerifyPasswordUpdateInput {
+  id: ID!
+  code: String!
+  twoFACode: String
+}
+
+input CompletePasswordUpdateInput {
+  id: ID!
+  authKey: Bytes!
+  device: SessionDeviceInput!
+
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
+}
+
+input SyncInput {
+  currentState: String!
+}
+
 type Mutation {
   # users
   startRegistration(input: StartRegistrationInput!): RegistrationStarted!
   """Verify pending account"""
-  verifyRegistration(input: VerifyRegistrationInput!): Boolean!
+  verifyUser(input: verifyUserInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
   """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
@@ -438,9 +473,9 @@ type Mutation {
   disableUser(id: ID!): Boolean!
   enableUser(id: ID!): Boolean!
   """Update password"""
-  startPasswordUpdate
-  verifypasswordUpdate
-  completePasswordUpdate
+  startPasswordUpdate: PasswordUpdateStarted!
+  verifyPasswordUpdate(input: VerifyPasswordUpdateInput!): Boolean!
+  completePasswordUpdate(input: CompletePasswordUpdateInput!): SignedIn!
 
   # groups
   """Create a group"""
@@ -472,5 +507,5 @@ type Mutation {
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 
   # objects
-  sync
+  sync(input: SyncInput!): Sync!
 }

@@ -58,7 +58,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 		Bio:         user.Bio,
 		Email:       email,
 		DisabledAt:  disabledAt,
-		PublicKey:   model.Bytes(user.PublicKey),
+		PublicKey:   user.PublicKey,
 	}
 
 	return ret, nil

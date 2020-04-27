@@ -24,12 +24,12 @@ func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, err
 	}
 
 	ret = &model.UserConnection{
-		Edges:      []*model.UserEdge{},
+		Nodes:      []*model.User{},
 		TotalCount: int64(len(users)),
 	}
 
 	for _, user := range users {
-		modeluser := &model.User{
+		usr := &model.User{
 			ID:          &user.ID,
 			AvatarURL:   nil,
 			CreatedAt:   &user.CreatedAt,
@@ -40,12 +40,9 @@ func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, err
 			IsAdmin:     user.IsAdmin,
 			Bio:         user.Bio,
 			Email:       &user.Email,
-			PublicKey:   model.Bytes(user.PublicKey),
+			PublicKey:   user.PublicKey,
 		}
-		edge := &model.UserEdge{
-			Node: modeluser,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, usr)
 	}
 
 	return ret, nil

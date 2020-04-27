@@ -17,7 +17,6 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	encryptedPrivateKey := model.Bytes(currentUser.EncryptedPrivateKey)
 	ret = &model.User{
 		ID:                  &currentUser.ID,
 		AvatarURL:           nil,
@@ -29,8 +28,8 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		IsAdmin:             currentUser.IsAdmin,
 		Bio:                 currentUser.Bio,
 		Email:               &currentUser.Email,
-		EncryptedPrivateKey: &encryptedPrivateKey,
-		PublicKey:           model.Bytes(currentUser.PublicKey),
+		EncryptedPrivateKey: &currentUser.EncryptedPrivateKey,
+		PublicKey:           currentUser.PublicKey,
 	}
 
 	return ret, nil

@@ -13,7 +13,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (resolver *Resolver) VerifyRegistration(ctx context.Context, input model.VerifyRegistrationInput) (bool, error) {
+func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUserInput) (bool, error) {
 	ret := false
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)

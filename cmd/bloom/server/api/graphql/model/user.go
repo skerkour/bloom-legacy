@@ -15,19 +15,23 @@ import (
 )
 
 type User struct {
-	ID                  *uuid.UUID `json:"id"`
-	AvatarURL           *string    `json:"avatarUrl"`
-	CreatedAt           *time.Time `json:"createdAt"`
-	Username            string     `json:"username"`
-	FirstName           *string    `json:"firstName"`
-	LastName            *string    `json:"lastName"`
-	DisplayName         string     `json:"displayName"`
-	DisabledAt          *time.Time `json:"disabledAt"`
-	IsAdmin             bool       `json:"isAdmin"`
-	Bio                 string     `json:"bio"`
-	Email               *string    `json:"email"`
-	PublicKey           Bytes      `json:"publicKey"`
-	EncryptedPrivateKey *Bytes     `json:"encryptedPrivateKey"`
+	ID          *uuid.UUID `json:"id"`
+	AvatarURL   *string    `json:"avatarUrl"`
+	CreatedAt   *time.Time `json:"createdAt"`
+	Username    string     `json:"username"`
+	FirstName   *string    `json:"firstName"`
+	LastName    *string    `json:"lastName"`
+	DisplayName string     `json:"displayName"`
+	DisabledAt  *time.Time `json:"disabledAt"`
+	IsAdmin     bool       `json:"isAdmin"`
+	Bio         string     `json:"bio"`
+	Email       *string    `json:"email"`
+
+	PublicKey           []byte  `json:"publicKey"`
+	EncryptedPrivateKey *[]byte `json:"encryptedPrivateKey"`
+	PrivateKeyNonce     *[]byte `json:"privateKeyNonce"`
+	EncryptedMasterKey  *[]byte `json:"encryptedMasterKey"`
+	MasterKeyNonce      *[]byte `json:"masterKeyNonce"`
 }
 
 type UserResolver struct{}
@@ -68,22 +72,19 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 	}
 
 	ret = &GroupInvitationConnection{
-		Edges:      []*GroupInvitationEdge{},
+		Nodes:      []*GroupInvitation{},
 		TotalCount: int64(len(invitations)),
 	}
 
 	for _, invitation := range invitations {
-		invitatio := &GroupInvitation{
+		invit := &GroupInvitation{
 			ID: invitation.ID,
 			Group: &Group{
 				Name:        invitation.GroupName,
 				Description: invitation.GroupDescription,
 			},
 		}
-		edge := &GroupInvitationEdge{
-			Node: invitatio,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, invit)
 	}
 	return ret, nil
 }
@@ -112,24 +113,20 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 	}
 
 	ret = &GroupConnection{
-		Edges:      []*GroupEdge{},
+		Nodes:      []*Group{},
 		TotalCount: int64(len(groups)),
 	}
 
 	for _, group := range groups {
-		groupID := group.ID
 		grp := &Group{
-			ID:          &groupID,
+			ID:          &group.ID,
 			CreatedAt:   &group.CreatedAt,
 			Name:        group.Name,
 			Description: group.Description,
 			//	members: [GroupMember!]
 			// invitations: [GroupInvitation!]
 		}
-		edge := &GroupEdge{
-			Node: grp,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, grp)
 	}
 	return ret, nil
 }
@@ -148,7 +145,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 	}
 
 	ret = &InvoiceConnection{
-		Edges:      []*InvoiceEdge{},
+		Nodes:      []*Invoice{},
 		TotalCount: int64(len(invoices)),
 	}
 
@@ -161,10 +158,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 			StripeHostedURL: invoice.StripeHostedURL,
 			Amount:          invoice.Amount,
 		}
-		edge := &InvoiceEdge{
-			Node: inv,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, inv)
 	}
 
 	return ret, nil
@@ -184,7 +178,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 	}
 
 	ret = &PaymentMethodConnection{
-		Edges:      []*PaymentMethodEdge{},
+		Nodes:      []*PaymentMethod{},
 		TotalCount: int64(len(paymentMethods)),
 	}
 
@@ -197,10 +191,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 			CardExpirationYear:  int(paymentMethod.CardExpirationYear),
 			IsDefault:           paymentMethod.IsDefault,
 		}
-		edge := &PaymentMethodEdge{
-			Node: method,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, method)
 	}
 
 	return ret, nil
@@ -220,7 +211,7 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 	}
 
 	ret = &SessionConnection{
-		Edges:      []*SessionEdge{},
+		Nodes:      []*Session{},
 		TotalCount: int64(len(sessions)),
 	}
 
@@ -234,10 +225,7 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 				Type: SessionDeviceType(session.DeviceType),
 			},
 		}
-		edge := &SessionEdge{
-			Node: sess,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, sess)
 	}
 
 	return ret, nil

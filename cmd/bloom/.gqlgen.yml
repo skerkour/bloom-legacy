@@ -17,6 +17,8 @@ models:
     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.ID
   Int64:
     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Int64
+  Bytes:
+    model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Bytes
 
 
 resolver:

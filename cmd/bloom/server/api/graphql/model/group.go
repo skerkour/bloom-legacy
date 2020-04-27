@@ -81,7 +81,7 @@ func (r *GroupResolver) Invitations(ctx context.Context, group *Group) (*GroupIn
 	}
 
 	ret = &GroupInvitationConnection{
-		Edges:      []*GroupInvitationEdge{},
+		Nodes:      []*GroupInvitation{},
 		TotalCount: int64(len(invitations)),
 	}
 
@@ -98,10 +98,7 @@ func (r *GroupResolver) Invitations(ctx context.Context, group *Group) (*GroupIn
 				AvatarURL:   nil,
 			},
 		}
-		edge := &GroupInvitationEdge{
-			Node: invit,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, invit)
 	}
 	return ret, nil
 }
@@ -177,7 +174,7 @@ func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*Inv
 	}
 
 	ret = &InvoiceConnection{
-		Edges:      []*InvoiceEdge{},
+		Nodes:      []*Invoice{},
 		TotalCount: int64(len(invoices)),
 	}
 
@@ -190,10 +187,7 @@ func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*Inv
 			StripeHostedURL: invoice.StripeHostedURL,
 			Amount:          invoice.Amount,
 		}
-		edge := &InvoiceEdge{
-			Node: inv,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, inv)
 	}
 
 	return ret, nil
@@ -219,7 +213,7 @@ func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group)
 	}
 
 	ret = &PaymentMethodConnection{
-		Edges:      []*PaymentMethodEdge{},
+		Nodes:      []*PaymentMethod{},
 		TotalCount: int64(len(paymentMethods)),
 	}
 
@@ -232,10 +226,7 @@ func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group)
 			CardExpirationYear:  int(paymentMethod.CardExpirationYear),
 			IsDefault:           paymentMethod.IsDefault,
 		}
-		edge := &PaymentMethodEdge{
-			Node: method,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, method)
 	}
 
 	return ret, nil

@@ -24,22 +24,19 @@ func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 	}
 
 	ret = &model.GroupConnection{
-		Edges:      []*model.GroupEdge{},
+		Nodes:      []*model.Group{},
 		TotalCount: int64(len(groups)),
 	}
 
 	for _, group := range groups {
-		groupModel := &model.Group{
+		grp := &model.Group{
 			ID:          &group.ID,
 			CreatedAt:   &group.CreatedAt,
 			Name:        group.Name,
 			Description: group.Description,
 			AvatarURL:   nil,
 		}
-		edge := &model.GroupEdge{
-			Node: groupModel,
-		}
-		ret.Edges = append(ret.Edges, edge)
+		ret.Nodes = append(ret.Nodes, grp)
 	}
 
 	return ret, nil
