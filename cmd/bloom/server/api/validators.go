@@ -6,10 +6,11 @@ import (
 	"errors"
 )
 
+// ValidateIP verfies that a given IP address is valid
 func ValidateIP(ip string) error {
 	parsedIP := net.ParseIP(ip)
 	if parsedIP == nil {
-		return errors.New("ip is not valid")
+		return errors.New("IP is not valid")
 	}
 
 	return nil

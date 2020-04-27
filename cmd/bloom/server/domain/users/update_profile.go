@@ -64,7 +64,7 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 	}
 
 	if input.ID != nil {
-		ret, err = FindUserById(ctx, tx, *input.ID)
+		ret, err = FindUserByID(ctx, tx, *input.ID)
 		if err != nil {
 			tx.Rollback()
 			return ret, err

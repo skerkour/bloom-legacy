@@ -25,6 +25,7 @@ import (
 	"golang.org/x/crypto/acme/autocert"
 )
 
+// Run run the API server
 func Run() error {
 	var allowedOrigins []string
 	router := chi.NewRouter()

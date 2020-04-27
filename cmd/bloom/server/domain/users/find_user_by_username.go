@@ -8,6 +8,8 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// FindUserByUsername returns a user for a given username
+// if tx is nil, use the global `db.DB`
 func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {
 	ret := &User{}
 	var err error

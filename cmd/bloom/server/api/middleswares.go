@@ -17,6 +17,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// SetSecurityHeadersMiddleware sets some security headers
 func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
@@ -26,6 +27,8 @@ func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// SetRequestIDMiddleware injects a random UUIDv4 in each request and set it as header with the
+// `HEADER_BLOOM_REQUEST_ID` key
 func SetRequestIDMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
@@ -33,12 +36,13 @@ func SetRequestIDMiddleware(next http.Handler) http.Handler {
 
 		ctx := r.Context()
 		ctx = context.WithValue(ctx, rzhttp.RequestIDCtxKey, requestID)
-		w.Header().Set(HeaderKeyBloomRequestID, requestID.String())
+		w.Header().Set(HEADER_BLOOM_REQUEST_ID, requestID.String())
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
+// SetContextMiddleware injects `apictx.Context` in requests' context
 func SetContextMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var err error
@@ -72,6 +76,7 @@ func SetContextMiddleware(next http.Handler) http.Handler {
 	})
 }
 
+// SetLoggerMiddleware injects `logger` in the context of requests
 func SetLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
@@ -97,13 +102,15 @@ type graphqlError struct {
 	Extensions map[string]string `json:"extensions"`
 }
 
-func InvalidSession(w http.ResponseWriter, r *http.Request, code string, message string) {
-
+func invalidSession(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
+	code := "permission_denied"
+	message := "Session is not valid"
+
 	b, err := json.Marshal(graphqlRes{
 		Data: nil,
 		Errors: []graphqlError{
-			graphqlError{Message: message, Path: []string{}, Extensions: map[string]string{"code": code}},
+			{Message: message, Path: []string{}, Extensions: map[string]string{"code": code}},
 		},
 	})
 	if err != nil {
@@ -114,6 +121,8 @@ func InvalidSession(w http.ResponseWriter, r *http.Request, code string, message
 	w.Write(b)
 }
 
+// AuthMiddleware is a middleware which checks the `Authorizartion`. If data is provided the
+// middleware verifies that the data is correct and then fill the context of the current request
 func AuthMiddleware(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		currentUser := &users.User{}
@@ -127,7 +136,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 			parts := strings.FieldsFunc(authHeader, isSpace)
 			if len(parts) != 2 || (parts[0] != "Basic" && parts[0] != "Secret") {
-				InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid1")
+				invalidSession(w, r)
 				return
 			}
 
@@ -135,20 +144,20 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
 				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
+					invalidSession(w, r)
 					return
 				}
 				currentSession, err := users.VerifySession(sessionID, sessionSecret)
 				// remove sessionSecret from memory
 				crypto.Zeroize(sessionSecret)
 				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
+					invalidSession(w, r)
 					return
 				}
 
-				currentUser, err = users.FindUserById(reqCtx, nil, currentSession.UserID)
+				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID)
 				if err != nil {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
+					invalidSession(w, r)
 					return
 				}
 				apiCtx.AuthenticatedUser = currentUser
@@ -163,7 +172,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 					service := "bitflow"
 					apiCtx.AuthenticatedService = &service
 				} else {
-					InvalidSession(w, r, "PERMISSION_DENIED", "Session is not valid")
+					invalidSession(w, r)
 					return
 				}
 			}
