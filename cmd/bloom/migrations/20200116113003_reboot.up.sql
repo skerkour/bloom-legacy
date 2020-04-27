@@ -53,7 +53,7 @@ CREATE TABLE pending_sessions (
   id UUID NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-  token_hash BYTEA NOT NULL,
+  hash BYTEA NOT NULL,
   failed_attempts BIGINT NOT NULL,
   salt BYTEA NOT NULL,
   user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

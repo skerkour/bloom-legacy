@@ -11,7 +11,7 @@ type PendingSession struct {
 	ID             uuid.UUID `db:"id"`
 	CreatedAt      time.Time `db:"created_at"`
 	VerifiedAt     time.Time `db:"verified_at"`
-	TokenHash      []byte    `db:"token_hash"`
+	Hash           []byte    `db:"hash"`
 	Salt           []byte    `db:"salt"`
 	FailedAttempts int64     `db:"failed_attempts"`
 
