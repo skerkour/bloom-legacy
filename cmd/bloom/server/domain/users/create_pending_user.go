@@ -13,20 +13,21 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (PendingUser, string, error) {
+func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email string) (ret *PendingUser, code string, err error) {
 	logger := rz.FromCtx(ctx)
 	var existingUser int
-	var err error
 
 	// clean and validate params
 	if err = validator.UserDisplayName(displayName); err != nil {
-		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error())
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
 	}
 
 	email = strings.ToLower(email)
 	email = strings.TrimSpace(email)
 	if err = validator.UserEmail(email, config.DisposableEmailDomains); err != nil {
-		return PendingUser{}, "", NewErrorMessage(ErrorInvalidArgument, err.Error()) // twirp.InvalidArgumentError("email", err.Error())
+		err = NewErrorMessage(ErrorInvalidArgument, err.Error()) // twirp.InvalidArgumentError("email", err.Error())
+		return
 	}
 
 	// check if email does not already exist
@@ -34,28 +35,34 @@ func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	err = tx.Get(&existingUser, queryCountExistingEmails, email)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error fetching existing emails counts", rz.Err(err))
-		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
+		err = NewError(ErrorCreatingPendingUser)
+		return
 	}
 
 	if existingUser != 0 {
-		return PendingUser{}, "", NewError(ErrorEmailAlreadyExists) // twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", email))
+		err = NewError(ErrorEmailAlreadyExists) // twirp.InvalidArgumentError("email", fmt.Sprintf("user with email: '%s' already exists", email))
+		return
 	}
 
 	now := time.Now().UTC()
 	newUuid := uuid.New()
-	verificationCode, err := crypto.RandAlphabet([]byte(userVerificationCodeAlphabet), 8)
+	verificationCode, err := crypto.RandAlphabet([]byte(USER_VERIFICATION_CODE_ALPHABET), 8)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error generating verification code", rz.Err(err))
-		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
+		err = NewError(ErrorCreatingPendingUser)
+		return
 	}
+	code = string(verificationCode)
 
 	// TODO: update params
-	codeHash, err := crypto.HashPassword(verificationCode, crypto.DefaultHashPasswordParams)
+	codeHash, err := crypto.HashPassword(verificationCode, PENDING_USER_CODE_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: hashing verification code", rz.Err(err))
-		return PendingUser{}, "", NewError(ErrorCreatingPendingUser)
+		err = NewError(ErrorCreatingPendingUser)
+		return
 	}
-	ret := PendingUser{
+
+	ret = &PendingUser{
 		ID:                   newUuid,
 		CreatedAt:            now,
 		UpdatedAt:            now,
@@ -73,7 +80,9 @@ func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 		ret.DisplayName, ret.VerificationCodeHash, ret.FailedAttempts, ret.VerifiedAt)
 	if err != nil {
 		logger.Error("error creating new user", rz.Err(err))
-		return ret, "", NewError(ErrorCreatingPendingUser)
+		err = NewError(ErrorCreatingPendingUser)
+		return
 	}
-	return ret, string(verificationCode), nil
+
+	return
 }

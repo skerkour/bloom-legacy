@@ -33,7 +33,7 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (ret *mode
 		return
 	}
 
-	user, err := users.FindUserByUsernameNoTx(ctx, *username)
+	user, err := users.FindUserByUsername(ctx, nil, *username)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

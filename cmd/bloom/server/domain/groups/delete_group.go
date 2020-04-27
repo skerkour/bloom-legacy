@@ -12,7 +12,6 @@ import (
 // DeleteGroup deletes a group. Admin role is required
 func DeleteGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
-	var group Group
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
@@ -25,12 +24,9 @@ func DeleteGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err
 		return err
 	}
 
-	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
-	err = tx.Get(&group, queryGetGroup, groupID)
+	group, err := FindGroupById(ctx, tx, groupID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.DeleteGroup: fetching group", rz.Err(err),
-			rz.String("group.id", groupID.String()))
 		err = NewError(ErrorGroupNotFound)
 		return
 	}

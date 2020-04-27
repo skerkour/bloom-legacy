@@ -19,6 +19,8 @@ CREATE TABLE users (
     public_key BYTEA NOT NULL,
     encrypted_private_key BYTEA NOT NULL,
     private_key_nonce BYTEA NOT NULL,
+    encrypted_master_key BYTEA NOT NULL,
+    master_key_nonce BYTEA NOT NULL,
     state BIGINT NOT NULL,
     -- password_reset_id TEXT,
     -- password_reset_token_hash TEXT,
@@ -84,6 +86,7 @@ CREATE TABLE groups (
     avatar_id TEXT,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
+    state BIGINT NOT NULL,
 
     PRIMARY KEY(id)
 );

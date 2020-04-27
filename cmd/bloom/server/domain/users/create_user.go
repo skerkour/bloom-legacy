@@ -70,7 +70,7 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (*Use
 	now := time.Now().UTC()
 	newUuid := uuid.New()
 	// TODO: update params
-	authKeyHash, err := crypto.HashPassword(params.AuthKey, crypto.DefaultHashPasswordParams)
+	authKeyHash, err := crypto.HashPassword(params.AuthKey, AUTH_KEY_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
 		return ret, NewError(ErrorCompletingRegistration)

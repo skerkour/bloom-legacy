@@ -1,15 +1,12 @@
 package users
 
 import (
-	"context"
 	"time"
 
-	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// User represents an user
 type User struct {
 	ID                  uuid.UUID  `db:"id"`
 	CreatedAt           time.Time  `db:"created_at"`
@@ -26,38 +23,8 @@ type User struct {
 	DisabledAt          *time.Time `db:"disabled_at"`
 	PublicKey           []byte     `db:"public_key"`
 	EncryptedPrivateKey []byte     `db:"encrypted_private_key"`
-	State               int64      `db:"state"`
 	PrivateKeyNonce     []byte     `db:"private_key_nonce"`
-}
-
-func FindUserByUsername(ctx context.Context, tx *sqlx.Tx, username string) (*User, error) {
-	ret := &User{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM users WHERE username = $1"
-	err = tx.Get(ret, queryFind, username)
-	if err != nil {
-		logger.Error("users.FindUserByUsername: finding user", rz.Err(err),
-			rz.String("username", username))
-		return ret, NewError(ErrorUserNotFound)
-	}
-
-	return ret, err
-}
-
-func FindUserByUsernameNoTx(ctx context.Context, username string) (*User, error) {
-	ret := &User{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM users WHERE username = $1"
-	err = db.DB.Get(ret, queryFind, username)
-	if err != nil {
-		logger.Error("users.FindUserByUsernameNoTx: finding user", rz.Err(err),
-			rz.String("username", username))
-		return ret, NewError(ErrorUserNotFound)
-	}
-
-	return ret, err
+	EncryptedMasterKey  []byte     `db:"encrypted_master_key"`
+	MasterKeyNonce      []byte     `db:"master_key_nonce"`
+	State               int64      `db:"state"`
 }

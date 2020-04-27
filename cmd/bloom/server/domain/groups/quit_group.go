@@ -12,7 +12,6 @@ import (
 func QuitGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
 	var remainingAdmins int
-	var group Group
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
@@ -21,12 +20,9 @@ func QuitGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err e
 		return
 	}
 
-	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
-	err = tx.Get(&group, queryGetGroup, groupID)
+	group, err := FindGroupById(ctx, tx, groupID)
 	if err != nil {
 		tx.Rollback()
-		logger.Error("groups.QuitGroup: fetching group", rz.Err(err),
-			rz.String("group.id", groupID.String()))
 		err = NewError(ErrorGroupNotFound)
 		return
 	}

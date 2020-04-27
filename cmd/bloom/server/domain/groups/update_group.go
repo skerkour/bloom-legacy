@@ -22,7 +22,6 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 	logger := rz.FromCtx(ctx)
 	var newName string
 	var newDescription string
-	var group Group
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
@@ -31,8 +30,7 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 		return
 	}
 
-	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
-	err = tx.Get(&group, queryGetGroup, params.ID)
+	ret, err = FindGroupById(ctx, tx, params.ID)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.UpdateGroup: fetching group", rz.Err(err),
@@ -42,30 +40,30 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 	}
 
 	if params.Name == nil {
-		newName = group.Name
+		newName = ret.Name
 	} else {
 		newName = *params.Name
 	}
 
 	if params.Description == nil {
-		newDescription = group.Description
+		newDescription = ret.Description
 	} else {
 		newDescription = *params.Description
 	}
 
-	err = validateUpdateGroup(ctx, tx, actor.ID, group.ID, newName, newDescription)
+	err = validateUpdateGroup(ctx, tx, actor.ID, ret.ID, newName, newDescription)
 	if err != nil {
 		tx.Rollback()
 		return
 	}
 
-	group.UpdatedAt = time.Now().UTC()
-	group.Name = newName
-	group.Description = newDescription
+	ret.UpdatedAt = time.Now().UTC()
+	ret.Name = newName
+	ret.Description = newDescription
 	queryUpdateGroup := `UPDATE groups
 		SET updated_at = $1, name = $2, description = $3
 		WHERE id = $4`
-	_, err = tx.Exec(queryUpdateGroup, group.UpdatedAt, group.Name, group.Description, group.ID)
+	_, err = tx.Exec(queryUpdateGroup, ret.UpdatedAt, ret.Name, ret.Description, ret.ID)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.UpdateGroup: updating group", rz.Err(err))
@@ -79,7 +77,6 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 		err = NewError(ErrorUpdatingGroup)
 	}
 
-	ret = &group
 	return
 }
 

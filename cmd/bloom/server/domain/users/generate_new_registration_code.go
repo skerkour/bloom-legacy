@@ -15,14 +15,14 @@ func generateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *
 	var err error
 
 	now := time.Now().UTC()
-	verificationCode, err := crypto.RandAlphabet([]byte(userVerificationCodeAlphabet), 8)
+	verificationCode, err := crypto.RandAlphabet([]byte(USER_VERIFICATION_CODE_ALPHABET), 8)
 	if err != nil {
 		logger.Error("users.GenerateNewRegistrationCode: error generating verification code", rz.Err(err))
 		return "", NewError(ErrorSendingNewRegistrationCode)
 	}
 
 	// TODO: update params
-	codeHash, err := crypto.HashPassword(verificationCode, crypto.DefaultHashPasswordParams)
+	codeHash, err := crypto.HashPassword(verificationCode, PENDING_USER_CODE_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.GenerateNewRegistrationCode: hashing verification code", rz.Err(err))
 		return "", NewError(ErrorSendingNewRegistrationCode)
