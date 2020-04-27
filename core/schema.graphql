@@ -1,0 +1,4 @@
+"""
+This schema is only used to auto genrate the struct for the communication between the core and
+the apps.
+"""
