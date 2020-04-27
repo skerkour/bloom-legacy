@@ -2,6 +2,7 @@ package groups
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
@@ -11,25 +12,32 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, description string) (Group, error) {
-	logger := rz.FromCtx(ctx)
-	ret := Group{}
-	var err error
+// CreateGroupParams are parameters required to create a group
+type CreateGroupParams struct {
+	Name          string
+	Description   string
+	UsersToInvite []string
+}
 
-	err = validateCreateGroup(name, description)
+// CreateGroup creates a group
+func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params CreateGroupParams) (ret *Group, err error) {
+	logger := rz.FromCtx(ctx)
+
+	// clean and validate params
+	params.Name = strings.TrimSpace(params.Name)
+	params.Description = strings.TrimSpace(params.Description)
+	err = validateCreateGroup(params.Name, params.Description)
 	if err != nil {
 		return ret, err
 	}
 
 	now := time.Now().UTC()
-	newUuid := uuid.New()
-
-	ret = Group{
-		ID:          newUuid,
+	ret = &Group{
+		ID:          uuid.New(),
 		CreatedAt:   now,
 		UpdatedAt:   now,
-		Name:        name,
-		Description: description,
+		Name:        params.Name,
+		Description: params.Description,
 	}
 
 	// create group
@@ -38,7 +46,7 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 		VALUES ($1, $2, $3, $4, $5)`
 	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description)
 	if err != nil {
-		logger.Error("inserting new group", rz.Err(err))
+		logger.Error("groups.CreateGroup: inserting new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)
 	}
 
@@ -46,9 +54,9 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, admin users.User, name, descr
 	queryAddAdminToGroup := `INSERT INTO groups_members
 	(user_id, group_id, role, joined_at, inviter_id)
 	VALUES ($1, $2, $3, $4, $1)`
-	_, err = tx.Exec(queryAddAdminToGroup, admin.ID, ret.ID, RoleAdministrator, now)
+	_, err = tx.Exec(queryAddAdminToGroup, actor.ID, ret.ID, RoleAdministrator, now)
 	if err != nil {
-		logger.Error("inserting admin in new group", rz.Err(err))
+		logger.Error("groups.CreateGroup: inserting admin in new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)
 	}
 

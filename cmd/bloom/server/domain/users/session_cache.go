@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-var GlobalSessionsCache *SessionsCache
+var globalSessionsCache *SessionsCache
 
 type SessionsCache struct {
 	cache map[uuid.UUID]*Session
@@ -48,7 +48,7 @@ func InitGlobalSessionsCache(logger rz.Logger) error {
 	var err error
 	allSessions := []Session{}
 
-	GlobalSessionsCache = newSessionsCache()
+	globalSessionsCache = newSessionsCache()
 
 	queryFind := "SELECT * FROM sessions"
 	err = db.DB.Select(&allSessions, queryFind)
@@ -56,7 +56,7 @@ func InitGlobalSessionsCache(logger rz.Logger) error {
 		return err
 	}
 	for _, session := range allSessions {
-		GlobalSessionsCache.Set(&session)
+		globalSessionsCache.Set(&session)
 	}
 	return nil
 }

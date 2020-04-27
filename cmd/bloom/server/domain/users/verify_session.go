@@ -10,7 +10,7 @@ import (
 // VerifySession verifies that secret matches with sessionID and return the session in case of success
 func VerifySession(sessionID uuid.UUID, secret []byte) (currentSession *Session, err error) {
 	// find session with ID and associated user
-	currentSession = GlobalSessionsCache.Get(sessionID)
+	currentSession = globalSessionsCache.Get(sessionID)
 	if currentSession == nil {
 		err = errors.New("Session is not valid")
 		return

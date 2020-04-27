@@ -27,7 +27,6 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 	// find pending user
 	err = tx.Get(&pendingUser, "SELECT * FROM pending_users WHERE id = $1 FOR UPDATE", params.PendingUserID)
 	if err != nil {
-		tx.Rollback()
 		logger.Error("users.CompleteRegistration: finding pending user", rz.Err(err))
 		err = NewError(ErrorCompletingRegistration)
 		return
@@ -36,7 +35,6 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 	// delete pending user
 	err = DeletePendingUser(ctx, tx, pendingUser.ID.String())
 	if err != nil {
-		tx.Rollback()
 		return
 	}
 
@@ -51,17 +49,15 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 	}
 	retUser, err = createUser(ctx, tx, createUserParams)
 	if err != nil {
-		tx.Rollback()
 		return
 	}
 
 	retSession, token, err = startSession(ctx, tx, retUser.ID, params.Device)
 	if err != nil {
-		tx.Rollback()
 		return
 	}
 
-	GlobalSessionsCache.Set(retSession)
+	globalSessionsCache.Set(retSession)
 
 	return
 }

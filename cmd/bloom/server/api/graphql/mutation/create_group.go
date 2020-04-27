@@ -12,8 +12,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
-func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput) (*model.Group, error) {
-	var ret *model.Group
+func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput) (ret *model.Group, err error) {
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -24,27 +23,36 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		logger.Error("mutation.CreateGroup: Starting transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorCreatingGroup))
+		err = gqlerrors.New(groups.NewError(groups.ErrorCreatingGroup))
+		return
 	}
 
-	newGroup, err := groups.CreateGroup(ctx, tx, *currentUser, input.Name, input.Description)
+	params := groups.CreateGroupParams{
+		Name:          input.Name,
+		Description:   input.Description,
+		UsersToInvite: input.UsersToInvite,
+	}
+	newGroup, err := groups.CreateGroup(ctx, tx, currentUser, params)
 	if err != nil {
 		tx.Rollback()
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	// create customer profile
 	_, err = billing.CreateCustomer(ctx, tx, currentUser, nil, &newGroup.ID)
 	if err != nil {
 		tx.Rollback()
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.CreateGroup: Committing transaction", rz.Err(err))
-		return ret, gqlerrors.New(groups.NewError(groups.ErrorCreatingGroup))
+		err = gqlerrors.New(groups.NewError(groups.ErrorCreatingGroup))
+		return
 	}
 
 	ret = &model.Group{
