@@ -9,8 +9,10 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// BillingPlanResolver is the resolver for the BillingPlan type
 type BillingPlanResolver struct{}
 
+// BillingPlan represents a plan
 type BillingPlan struct {
 	ID          uuid.UUID      `json:"id"`
 	Price       int64          `json:"price"`
@@ -22,6 +24,7 @@ type BillingPlan struct {
 	StripeID    *string        `json:"stripeId"`
 }
 
+// Subscribers is used by admin to get the subscribers of a plan
 func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (*UserConnection, error) {
 	var ret *UserConnection
 	currentUser := apiutil.UserFromCtx(ctx)

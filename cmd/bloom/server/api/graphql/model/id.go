@@ -9,12 +9,14 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// MarshalID encode a `uuid.UUID` to JSON
 func MarshalID(id uuid.UUID) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
 		io.WriteString(w, strconv.Quote(id.String()))
 	})
 }
 
+// UnmarshalID decodes JSON to `uuid.UUID`
 func UnmarshalID(v interface{}) (uuid.UUID, error) {
 	var err error
 	var ret uuid.UUID

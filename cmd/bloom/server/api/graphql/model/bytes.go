@@ -8,6 +8,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+// MarshalBytes encodes a `[]byte` to JSON
 func MarshalBytes(buffer []byte) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
 		encoder := base64.NewEncoder(base64.StdEncoding, w)
@@ -16,6 +17,7 @@ func MarshalBytes(buffer []byte) graphql.Marshaler {
 	})
 }
 
+// UnmarshalBytes decodes JSON to `[]byte`
 func UnmarshalBytes(value interface{}) (buffer []byte, err error) {
 	switch v := value.(type) {
 	case string:

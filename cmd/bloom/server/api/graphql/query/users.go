@@ -30,20 +30,7 @@ func (resolver *Resolver) Users(ctx context.Context) (ret *model.UserConnection,
 	}
 
 	for _, user := range users {
-		usr := &model.User{
-			ID:          &user.ID,
-			AvatarURL:   nil,
-			CreatedAt:   &user.CreatedAt,
-			Username:    user.Username,
-			FirstName:   &user.FirstName,
-			LastName:    &user.LastName,
-			DisplayName: user.DisplayName,
-			IsAdmin:     user.IsAdmin,
-			Bio:         user.Bio,
-			Email:       &user.Email,
-			PublicKey:   user.PublicKey,
-		}
-		ret.Nodes = append(ret.Nodes, usr)
+		ret.Nodes = append(ret.Nodes, model.DomainUserToModelUser(currentUser, &user))
 	}
 	return
 }

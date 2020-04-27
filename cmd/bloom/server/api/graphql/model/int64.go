@@ -9,6 +9,7 @@ import (
 	"github.com/99designs/gqlgen/graphql"
 )
 
+// MarshalInt64 encode a `int64` to JSON
 func MarshalInt64(i int64) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
 		str := strconv.FormatInt(int64(i), 10)
@@ -16,6 +17,7 @@ func MarshalInt64(i int64) graphql.Marshaler {
 	})
 }
 
+// UnmarshalInt64 decodes JSON to `int64`
 func UnmarshalInt64(v interface{}) (i int64, err error) {
 
 	switch value := v.(type) {
