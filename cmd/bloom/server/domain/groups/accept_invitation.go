@@ -6,6 +6,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -44,7 +45,7 @@ func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvit
 		JoinedAt:  time.Now().UTC(),
 		GroupID:   invitation.GroupID,
 		UserID:    actor.ID,
-		Role:      RoleMember,
+		Role:      consts.GROUP_ROLE_MEMBER,
 		InviterID: invitation.InviterID,
 	}
 

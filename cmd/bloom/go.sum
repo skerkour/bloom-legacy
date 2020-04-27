@@ -461,8 +461,8 @@ github.com/yudai/gojsondiff v1.0.0/go.mod h1:AY32+k2cwILAkW1fbgxQ5mUmMiZFgLIV+FB
 github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDfVJdfcVVdX+jpBxNmX4rDAzaS45IcYoM=
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
-gitlab.com/bloom42/bloom/common v0.0.0-20200424154453-5cd32e8f790e h1:phq6LtoBFAz9T5YgEcTpVq3abp0SNGTNp52S7QQ1IRw=
-gitlab.com/bloom42/bloom/common v0.0.0-20200424154453-5cd32e8f790e/go.mod h1:7Bz22Y+YdnzIQK645baz3YjZSe0XVZdja/rCURhwxAw=
+gitlab.com/bloom42/bloom/common v0.0.0-20200427171448-41d4633065b5 h1:X0b5HBcGpkX3UNi8F90UW68iaiLxW0wH+Wjyuw9hz0I=
+gitlab.com/bloom42/bloom/common v0.0.0-20200427171448-41d4633065b5/go.mod h1:BnoB3kVaI1LganiLWHs4a5xn83auMMQ87Ivzh/LxaPg=
 gitlab.com/bloom42/lily v0.0.0-20200424193723-b616911efca0 h1:K1D9T6Ij9u1pWIvK73prj+pCaDt6Krw4gHoNtWzLQSk=
 gitlab.com/bloom42/lily v0.0.0-20200424193723-b616911efca0/go.mod h1:M0SLYeS3B5VzArOImR2EEO/dGM0W4AGxydbJpOwWK2w=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=

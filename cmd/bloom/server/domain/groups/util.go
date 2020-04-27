@@ -6,6 +6,7 @@ import (
 	"github.com/jmoiron/sqlx"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -24,7 +25,7 @@ func CheckUserIsGroupAdmin(ctx context.Context, tx *sqlx.Tx, userID, groupID uui
 		return NewError(ErrorGroupNotFound)
 	}
 
-	if memberhsip.Role != RoleAdministrator {
+	if memberhsip.Role != consts.GROUP_ROLE_ADMINISTRATOR {
 		return NewErrorMessage(ErrorPermissionDenied, "Administrator role is required.")
 	}
 
@@ -45,7 +46,7 @@ func CheckUserIsGroupAdminNoTx(ctx context.Context, userID, groupID uuid.UUID) e
 		return NewError(ErrorGroupNotFound)
 	}
 
-	if memberhsip.Role != RoleAdministrator {
+	if memberhsip.Role != consts.GROUP_ROLE_ADMINISTRATOR {
 		return NewErrorMessage(ErrorPermissionDenied, "Administrator role is required.")
 	}
 

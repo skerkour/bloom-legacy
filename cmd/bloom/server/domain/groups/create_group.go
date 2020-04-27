@@ -7,6 +7,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -53,7 +54,7 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params Cre
 	queryAddAdminToGroup := `INSERT INTO groups_members
 	(user_id, group_id, role, joined_at, inviter_id)
 	VALUES ($1, $2, $3, $4, $1)`
-	_, err = tx.Exec(queryAddAdminToGroup, actor.ID, ret.ID, RoleAdministrator, now)
+	_, err = tx.Exec(queryAddAdminToGroup, actor.ID, ret.ID, consts.GROUP_ROLE_ADMINISTRATOR, now)
 	if err != nil {
 		logger.Error("groups.CreateGroup: inserting admin in new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)

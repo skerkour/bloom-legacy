@@ -5,6 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -43,7 +44,7 @@ func QuitGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err e
 	}
 
 	queryRemainingAdmins := "SELECT COUNT(*) FROM groups_members WHERE group_id = $1 AND role = $2"
-	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, RoleAdministrator)
+	err = tx.Get(&remainingAdmins, queryRemainingAdmins, group.ID, consts.GROUP_ROLE_ADMINISTRATOR)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.QuitGroup: error fetching remaining admins", rz.Err(err))

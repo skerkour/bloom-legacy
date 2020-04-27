@@ -22,7 +22,7 @@ require (
 	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200424154453-5cd32e8f790e
+	gitlab.com/bloom42/bloom/common v0.0.0-20200427171448-41d4633065b5
 	gitlab.com/bloom42/lily v0.0.0-20200424193723-b616911efca0
 	golang.org/x/crypto v0.0.0-20200423211502-4bdfaf469ed5
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect
