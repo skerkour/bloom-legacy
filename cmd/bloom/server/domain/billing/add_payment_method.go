@@ -15,7 +15,12 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, groupId *uuid.UUID) (*PaymentMethod, error) {
+type AddPaymentMethodParams struct {
+	StripeID string
+	GroupID  *uuid.UUID
+}
+
+func AddPaymentMethod(ctx context.Context, actor *users.User, params AddPaymentMethodParams) (*PaymentMethod, error) {
 	var ret *PaymentMethod
 	var err error
 	logger := rz.FromCtx(ctx)
@@ -25,12 +30,12 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	isDefault := false
 
 	// clean and validate params
-	if user == nil {
+	if actor == nil {
 		logger.Error("", rz.Err(NewError(ErrorUserIsNull)))
 		return ret, NewError(ErrorAddingPaymentMethod)
 	}
-	stripeId = strings.TrimSpace(stripeId)
-	if !strings.HasPrefix(stripeId, "pm_") {
+	params.StripeID = strings.TrimSpace(params.StripeID)
+	if !strings.HasPrefix(params.StripeID, "pm_") {
 		return ret, NewError(ErrorStripeIdNotValid)
 	}
 
@@ -42,19 +47,19 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	}
 
 	// fetch customer id
-	if groupId != nil {
+	if params.GroupID != nil {
 		// check that user is admin of group
-		if err = groups.CheckUserIsGroupAdmin(ctx, tx, user.ID, *groupId); err != nil {
+		if err = groups.CheckUserIsGroupAdmin(ctx, tx, actor.ID, *params.GroupID); err != nil {
 			tx.Rollback()
 			return ret, err
 		}
-		customer, err = FindCustomerByGroupId(ctx, tx, *groupId)
+		customer, err = FindCustomerByGroupId(ctx, tx, *params.GroupID)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, user.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)
@@ -65,10 +70,10 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 		isDefault = true
 		// create stripe customer + update customer
 		customerParams := &stripe.CustomerParams{
-			PaymentMethod: stripe.String(stripeId),
+			PaymentMethod: stripe.String(params.StripeID),
 			Email:         stripe.String(customer.Email),
 			InvoiceSettings: &stripe.CustomerInvoiceSettingsParams{
-				DefaultPaymentMethod: stripe.String(stripeId),
+				DefaultPaymentMethod: stripe.String(params.StripeID),
 			},
 		}
 		stripeCustomer, err := stripecustomer.New(customerParams)
@@ -93,7 +98,7 @@ func AddPaymentMethod(ctx context.Context, user *users.User, stripeId string, gr
 	}
 
 	// fetch the stripe payment method
-	stripePaymentMethod, err := paymentmethod.Get(stripeId, nil)
+	stripePaymentMethod, err := paymentmethod.Get(params.StripeID, nil)
 	if err != nil || stripePaymentMethod.Card == nil {
 		tx.Rollback()
 		logger.Error("billing.AddPaymentMethod: fetching stripe payment method", rz.Err(err))

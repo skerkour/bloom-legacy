@@ -18,7 +18,11 @@ func (r *Resolver) AddPaymentMethod(ctx context.Context, input model.AddPaymentM
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	paymentMethod, err := billing.AddPaymentMethod(ctx, currentUser, input.StripeID, input.GroupID)
+	params := billing.AddPaymentMethodParams{
+		StripeID: input.StripeID,
+		GroupID:  input.GroupID,
+	}
+	paymentMethod, err := billing.AddPaymentMethod(ctx, currentUser, params)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
