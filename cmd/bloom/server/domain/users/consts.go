@@ -17,6 +17,8 @@ const (
 	AVATAR_RESIZE              = 256
 	PASSWORD_RESET_TOKEN_BYTES = 256
 	AVATAR_DEFAULT_PATH        = "/imgs/myaccount/profile.jpg"
+
+	MAX_REGISTRATION_ATTEMPTS = 5
 )
 
 var PENDING_USER_CODE_HASH_PARAMS = crypto.DefaultHashPasswordParams

@@ -36,7 +36,7 @@ func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err
 		return
 	}
 
-	if pendingUser.FailedAttempts+1 >= 5 {
+	if pendingUser.FailedAttempts+1 >= MAX_REGISTRATION_ATTEMPTS {
 		tx.Rollback()
 		err = NewError(ErrorMaximumVerificationTrialsReached)
 		return
