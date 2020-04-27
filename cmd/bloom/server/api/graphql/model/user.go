@@ -14,6 +14,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// User is an user
 type User struct {
 	ID          *uuid.UUID `json:"id"`
 	AvatarURL   *string    `json:"avatarUrl"`
@@ -34,6 +35,7 @@ type User struct {
 	MasterKeyNonce      *[]byte `json:"masterKeyNonce"`
 }
 
+// UserResolver is the resolver for the User type
 type UserResolver struct{}
 
 type invit struct {
@@ -47,6 +49,7 @@ type invit struct {
 	InviterDisplayName string    `db:"inviter_display_name"`
 }
 
+// GroupInvitations returns the invitations for the user
 func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) (*GroupInvitationConnection, error) {
 	var ret *GroupInvitationConnection
 	logger := rz.FromCtx(ctx)
@@ -89,6 +92,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 	return ret, nil
 }
 
+// Groups returns the groups of the user Groups
 func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupConnection, error) {
 	var ret *GroupConnection
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -131,6 +135,7 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 	return ret, nil
 }
 
+// Invoices return the invoices of the user
 func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*InvoiceConnection, error) {
 	var ret *InvoiceConnection
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -164,6 +169,7 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 	return ret, nil
 }
 
+// PaymentMethods returns the payment methods of the user
 func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*PaymentMethodConnection, error) {
 	var ret *PaymentMethodConnection
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -197,6 +203,7 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 	return ret, nil
 }
 
+// Sessions returns the sessions of the user
 func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*SessionConnection, error) {
 	var ret *SessionConnection
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -205,7 +212,7 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 		return ret, gqlerrors.AdminRoleRequired()
 	}
 
-	sessions, err := users.FindAllSessionsByUserId(ctx, uuid.UUID(*user.ID))
+	sessions, err := users.FindAllSessionsForUserID(ctx, nil, *user.ID)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
@@ -231,12 +238,13 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 	return ret, nil
 }
 
+// Subscription returns the subscription of the user
 func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*BillingSubscription, error) {
 	var ret *BillingSubscription
 	currentUser := apiutil.UserFromCtx(ctx)
-	var stripePlanId *string
-	var stripeCustomerId *string
-	var stripeSubscriptionId *string
+	var stripePlanID *string
+	var stripeCustomerID *string
+	var stripeSubscriptionID *string
 
 	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
 		return ret, PermissionDeniedToAccessField()
@@ -252,9 +260,9 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 	}
 
 	if currentUser.IsAdmin {
-		stripePlanId = &plan.StripeID
-		stripeCustomerId = customer.StripeCustomerID
-		stripeSubscriptionId = customer.StripeSubscriptionID
+		stripePlanID = &plan.StripeID
+		stripeCustomerID = customer.StripeCustomerID
+		stripeSubscriptionID = customer.StripeSubscriptionID
 	}
 
 	ret = &BillingSubscription{
@@ -266,12 +274,12 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 			Name:        plan.Name,
 			Description: plan.Description,
 			IsPublic:    plan.IsPublic,
-			StripeID:    stripePlanId,
+			StripeID:    stripePlanID,
 			Product:     BillingProduct(plan.Product),
 			Storage:     plan.Storage,
 		},
-		StripeCustomerID:     stripeCustomerId,
-		StripeSubscriptionID: stripeSubscriptionId,
+		StripeCustomerID:     stripeCustomerID,
+		StripeSubscriptionID: stripeSubscriptionID,
 	}
 	return ret, nil
 }
