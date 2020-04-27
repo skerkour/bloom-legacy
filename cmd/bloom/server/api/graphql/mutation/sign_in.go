@@ -77,16 +77,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 	ret = &model.SignedIn{
 		Session:        retSession,
 		PendingSession: retPendingSession,
-		Me: &model.User{
-			ID:          &user.ID,
-			AvatarURL:   nil,
-			CreatedAt:   &user.CreatedAt,
-			Username:    user.Username,
-			FirstName:   &user.FirstName,
-			LastName:    &user.LastName,
-			DisplayName: user.DisplayName,
-			IsAdmin:     user.IsAdmin,
-		},
+		Me:             model.DomainUserToModelUser(user, user),
 	}
 	return
 }

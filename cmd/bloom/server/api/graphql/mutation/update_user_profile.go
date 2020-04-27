@@ -32,17 +32,6 @@ func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfil
 		return ret, gqlerrors.New(err)
 	}
 
-	ret = &model.User{
-		ID:          &user.ID,
-		AvatarURL:   nil,
-		CreatedAt:   &user.CreatedAt,
-		Username:    user.Username,
-		FirstName:   &user.FirstName,
-		LastName:    &user.LastName,
-		DisplayName: user.DisplayName,
-		IsAdmin:     user.IsAdmin,
-		Bio:         user.Bio,
-		Email:       &user.Email,
-	}
+	ret = model.DomainUserToModelUser(currentUser, user)
 	return ret, nil
 }

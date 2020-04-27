@@ -35,6 +35,35 @@ type User struct {
 	MasterKeyNonce      *[]byte `json:"masterKeyNonce"`
 }
 
+// DomainUserToModelUser transform a `users.User` to `model.User` with the good fields, according to
+// actor
+func DomainUserToModelUser(actor *users.User, user *users.User) *User {
+	ret := &User{
+		AvatarURL:   nil,
+		Username:    user.Username,
+		DisplayName: user.DisplayName,
+	}
+
+	// if same user or admin
+	if actor != nil && (actor.IsAdmin || actor.ID == user.ID) {
+		ret.ID = &user.ID
+		ret.FirstName = &user.FirstName
+		ret.LastName = &user.LastName
+		ret.CreatedAt = &user.CreatedAt
+		ret.IsAdmin = user.IsAdmin
+	}
+
+	// only if same user
+	if actor != nil && actor.ID == user.ID {
+		ret.EncryptedMasterKey = &user.EncryptedMasterKey
+		ret.MasterKeyNonce = &user.MasterKeyNonce
+		ret.EncryptedPrivateKey = &user.EncryptedPrivateKey
+		ret.PrivateKeyNonce = &user.MasterKeyNonce
+	}
+
+	return ret
+}
+
 // UserResolver is the resolver for the User type
 type UserResolver struct{}
 
