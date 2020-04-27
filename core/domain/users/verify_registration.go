@@ -17,7 +17,7 @@ func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
 	code := replacer.Replace(params.Code)
 	code = strings.ToLower(code)
 
-	input := model.VerifyRegistrationInput{
+	input := model.VerifyUserInput{
 		ID:   params.ID,
 		Code: code,
 	}

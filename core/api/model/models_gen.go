@@ -23,14 +23,9 @@ type AddPaymentMethodInput struct {
 }
 
 type BillingPlanConnection struct {
-	Edges      []*BillingPlanEdge `json:"edges"`
-	PageInfo   *PageInfo          `json:"pageInfo"`
-	TotalCount int64              `json:"totalCount"`
-}
-
-type BillingPlanEdge struct {
-	Cursor string       `json:"cursor"`
-	Node   *BillingPlan `json:"node"`
+	Nodes      []*BillingPlan `json:"nodes"`
+	PageInfo   *PageInfo      `json:"pageInfo"`
+	TotalCount int64          `json:"totalCount"`
 }
 
 type BillingPlanInput struct {
@@ -70,15 +65,36 @@ type ChangeDefaultPaymentMethodInput struct {
 	ID uuid.UUID `json:"id"`
 }
 
+type Changes struct {
+	Todo *string `json:"todo"`
+}
+
+type CompletePasswordUpdateInput struct {
+	ID                 uuid.UUID           `json:"id"`
+	AuthKey            []byte              `json:"authKey"`
+	Device             *SessionDeviceInput `json:"device"`
+	EncryptedMasterKey []byte              `json:"encryptedMasterKey"`
+	MasterKeyNonce     []byte              `json:"masterKeyNonce"`
+}
+
 type CompleteRegistrationInput struct {
 	// pending user id
 	ID                  uuid.UUID           `json:"id"`
 	Username            string              `json:"username"`
-	AuthKey             Bytes               `json:"authKey"`
+	AuthKey             []byte              `json:"authKey"`
 	Device              *SessionDeviceInput `json:"device"`
-	PublicKey           Bytes               `json:"publicKey"`
-	EncryptedPrivateKey Bytes               `json:"encryptedPrivateKey"`
-	PrivateKeyNonce     Bytes               `json:"privateKeyNonce"`
+	PublicKey           []byte              `json:"publicKey"`
+	EncryptedPrivateKey []byte              `json:"encryptedPrivateKey"`
+	PrivateKeyNonce     []byte              `json:"privateKeyNonce"`
+	EncryptedMasterKey  []byte              `json:"encryptedMasterKey"`
+	MasterKeyNonce      []byte              `json:"masterKeyNonce"`
+}
+
+type CompleteSignInInput struct {
+	// pending_session id
+	ID        uuid.UUID `json:"id"`
+	Token     string    `json:"token"`
+	TwoFACode string    `json:"twoFACode"`
 }
 
 type CreateGroupInput struct {
@@ -102,14 +118,9 @@ type DeleteGroupInput struct {
 }
 
 type GroupConnection struct {
-	Edges      []*GroupEdge `json:"edges"`
-	PageInfo   *PageInfo    `json:"pageInfo"`
-	TotalCount int64        `json:"totalCount"`
-}
-
-type GroupEdge struct {
-	Cursor string `json:"cursor"`
-	Node   *Group `json:"node"`
+	Nodes      []*Group  `json:"nodes"`
+	PageInfo   *PageInfo `json:"pageInfo"`
+	TotalCount int64     `json:"totalCount"`
 }
 
 type GroupInput struct {
@@ -127,14 +138,9 @@ type GroupInvitation struct {
 }
 
 type GroupInvitationConnection struct {
-	Edges      []*GroupInvitationEdge `json:"edges"`
-	PageInfo   *PageInfo              `json:"pageInfo"`
-	TotalCount int64                  `json:"totalCount"`
-}
-
-type GroupInvitationEdge struct {
-	Cursor string           `json:"cursor"`
-	Node   *GroupInvitation `json:"node"`
+	Nodes      []*GroupInvitation `json:"nodes"`
+	PageInfo   *PageInfo          `json:"pageInfo"`
+	TotalCount int64              `json:"totalCount"`
 }
 
 type GroupMemberConnection struct {
@@ -144,7 +150,6 @@ type GroupMemberConnection struct {
 }
 
 type GroupMemberEdge struct {
-	Cursor   string           `json:"cursor"`
 	Node     *User            `json:"node"`
 	Role     *GroupMemberRole `json:"role"`
 	JoinedAt *time.Time       `json:"joinedAt"`
@@ -168,14 +173,9 @@ type Invoice struct {
 }
 
 type InvoiceConnection struct {
-	Edges      []*InvoiceEdge `json:"edges"`
-	PageInfo   *PageInfo      `json:"pageInfo"`
-	TotalCount int64          `json:"totalCount"`
-}
-
-type InvoiceEdge struct {
-	Cursor string   `json:"cursor"`
-	Node   *Invoice `json:"node"`
+	Nodes      []*Invoice `json:"nodes"`
+	PageInfo   *PageInfo  `json:"pageInfo"`
+	TotalCount int64      `json:"totalCount"`
 }
 
 type PageInfo struct {
@@ -183,6 +183,12 @@ type PageInfo struct {
 	HasNextPage     bool    `json:"hasNextPage"`
 	HasPreviousPage bool    `json:"hasPreviousPage"`
 	StartCursor     *string `json:"startCursor"`
+}
+
+type PasswordUpdateStarted struct {
+	// pending_password id
+	ID    uuid.UUID `json:"id"`
+	TwoFa *TwoFa    `json:"twoFA"`
 }
 
 type PaymentMethod struct {
@@ -195,24 +201,20 @@ type PaymentMethod struct {
 }
 
 type PaymentMethodConnection struct {
-	Edges      []*PaymentMethodEdge `json:"edges"`
-	PageInfo   *PageInfo            `json:"pageInfo"`
-	TotalCount int64                `json:"totalCount"`
+	Nodes      []*PaymentMethod `json:"nodes"`
+	PageInfo   *PageInfo        `json:"pageInfo"`
+	TotalCount int64            `json:"totalCount"`
 }
 
-type PaymentMethodEdge struct {
-	Cursor string         `json:"cursor"`
-	Node   *PaymentMethod `json:"node"`
+type PendingSession struct {
+	ID    uuid.UUID `json:"id"`
+	Token string    `json:"token"`
+	TwoFa *TwoFa    `json:"twoFA"`
 }
 
 type QuitGroupInput struct {
 	// group id
 	ID uuid.UUID `json:"id"`
-}
-
-type RegisterInput struct {
-	DisplayName string `json:"displayName"`
-	Email       string `json:"email"`
 }
 
 type RegistrationStarted struct {
@@ -247,9 +249,9 @@ type Session struct {
 }
 
 type SessionConnection struct {
-	Edges      []*SessionEdge `json:"edges"`
-	PageInfo   *PageInfo      `json:"pageInfo"`
-	TotalCount int64          `json:"totalCount"`
+	Nodes      []*Session `json:"nodes"`
+	PageInfo   *PageInfo  `json:"pageInfo"`
+	TotalCount int64      `json:"totalCount"`
 }
 
 type SessionDevice struct {
@@ -262,23 +264,36 @@ type SessionDeviceInput struct {
 	Type SessionDeviceType `json:"type"`
 }
 
-type SessionEdge struct {
-	Cursor string   `json:"cursor"`
-	Node   *Session `json:"node"`
-}
-
 type SignInInput struct {
 	Username string              `json:"username"`
-	AuthKey  Bytes               `json:"authKey"`
+	AuthKey  []byte              `json:"authKey"`
 	Device   *SessionDeviceInput `json:"device"`
 }
 
 type SignedIn struct {
-	Session *Session `json:"session"`
-	Me      *User    `json:"me"`
+	PendingSession *PendingSession `json:"pendingSession"`
+	Session        *Session        `json:"session"`
+	Me             *User           `json:"me"`
 }
 
-// if groupId and userId are null (reserved for admins), add to current user
+type StartRegistrationInput struct {
+	DisplayName string `json:"displayName"`
+	Email       string `json:"email"`
+}
+
+type Sync struct {
+	Todo *string `json:"todo"`
+}
+
+type SyncInput struct {
+	CurrentState string `json:"currentState"`
+}
+
+type TwoFa struct {
+	Method TwoFAMethod `json:"method"`
+}
+
+// if groupId and userId (reserved for admins) are null, add to current user
 type UpdateBillingSubscriptionInput struct {
 	PlanID  uuid.UUID  `json:"planId"`
 	UserID  *uuid.UUID `json:"userId"`
@@ -286,14 +301,9 @@ type UpdateBillingSubscriptionInput struct {
 }
 
 type UserConnection struct {
-	Edges      []*UserEdge `json:"edges"`
-	PageInfo   *PageInfo   `json:"pageInfo"`
-	TotalCount int64       `json:"totalCount"`
-}
-
-type UserEdge struct {
-	Cursor string `json:"cursor"`
-	Node   *User  `json:"node"`
+	Nodes      []*User   `json:"nodes"`
+	PageInfo   *PageInfo `json:"pageInfo"`
+	TotalCount int64     `json:"totalCount"`
 }
 
 type UserProfileInput struct {
@@ -305,7 +315,13 @@ type UserProfileInput struct {
 	LastName    *string    `json:"lastName"`
 }
 
-type VerifyRegistrationInput struct {
+type VerifyPasswordUpdateInput struct {
+	ID        uuid.UUID `json:"id"`
+	Code      string    `json:"code"`
+	TwoFACode *string   `json:"twoFACode"`
+}
+
+type VerifyUserInput struct {
 	// pending user id
 	ID   uuid.UUID `json:"id"`
 	Code string    `json:"code"`
@@ -496,5 +512,44 @@ func (e *SessionDeviceType) UnmarshalGQL(v interface{}) error {
 }
 
 func (e SessionDeviceType) MarshalGQL(w io.Writer) {
+	fmt.Fprint(w, strconv.Quote(e.String()))
+}
+
+type TwoFAMethod string
+
+const (
+	TwoFAMethodTotp TwoFAMethod = "TOTP"
+)
+
+var AllTwoFAMethod = []TwoFAMethod{
+	TwoFAMethodTotp,
+}
+
+func (e TwoFAMethod) IsValid() bool {
+	switch e {
+	case TwoFAMethodTotp:
+		return true
+	}
+	return false
+}
+
+func (e TwoFAMethod) String() string {
+	return string(e)
+}
+
+func (e *TwoFAMethod) UnmarshalGQL(v interface{}) error {
+	str, ok := v.(string)
+	if !ok {
+		return fmt.Errorf("enums must be strings")
+	}
+
+	*e = TwoFAMethod(str)
+	if !e.IsValid() {
+		return fmt.Errorf("%s is not a valid TwoFAMethod", str)
+	}
+	return nil
+}
+
+func (e TwoFAMethod) MarshalGQL(w io.Writer) {
 	fmt.Fprint(w, strconv.Quote(e.String()))
 }
