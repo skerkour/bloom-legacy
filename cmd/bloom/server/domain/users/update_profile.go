@@ -11,7 +11,8 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-type UpdateProfileInput struct {
+// UpdateProfileParams are the parameters for UpdateProfile
+type UpdateProfileParams struct {
 	ID          *uuid.UUID `json:"id"`
 	DisplayName *string    `json:"displayName"`
 	Bio         *string    `json:"bio"`
@@ -19,7 +20,8 @@ type UpdateProfileInput struct {
 	LastName    *string    `json:"lastName"`
 }
 
-func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*User, error) {
+// UpdateProfile update a user's profile
+func UpdateProfile(ctx context.Context, user *User, params UpdateProfileParams) (*User, error) {
 	var err error
 	logger := rz.FromCtx(ctx)
 	var ret *User
@@ -31,35 +33,35 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 		return ret, NewError(ErrorUpdatingProfile)
 	}
 
-	if input.ID != nil && (user.ID != *input.ID || !user.IsAdmin) {
+	if params.ID != nil && (user.ID != *params.ID || !user.IsAdmin) {
 		return ret, NewError(ErrorUserNotFound)
 	}
 
-	if input.DisplayName == nil && input.FirstName == nil && input.Bio == nil && input.LastName == nil {
+	if params.DisplayName == nil && params.FirstName == nil && params.Bio == nil && params.LastName == nil {
 		return ret, NewError(ErrorAllFieldsAreEmpty)
 	}
 
-	if input.Bio != nil {
-		*input.Bio = strings.TrimSpace(*input.Bio)
-		err = ValidateBio(*input.Bio)
+	if params.Bio != nil {
+		*params.Bio = strings.TrimSpace(*params.Bio)
+		err = ValidateBio(*params.Bio)
 		if err != nil {
 			err = NewErrorMessage(ErrorInvalidArgument, err.Error())
 			return ret, err
 		}
 	}
-	if input.DisplayName != nil {
-		*input.DisplayName = strings.TrimSpace(*input.DisplayName)
-		err = ValidateDisplayName(*input.DisplayName)
+	if params.DisplayName != nil {
+		*params.DisplayName = strings.TrimSpace(*params.DisplayName)
+		err = ValidateDisplayName(*params.DisplayName)
 		if err != nil {
 			err = NewErrorMessage(ErrorInvalidArgument, err.Error())
 			return ret, err
 		}
 	}
-	if input.FirstName != nil {
-		*input.FirstName = strings.TrimSpace(*input.FirstName)
+	if params.FirstName != nil {
+		*params.FirstName = strings.TrimSpace(*params.FirstName)
 	}
-	if input.LastName != nil {
-		*input.LastName = strings.TrimSpace(*input.LastName)
+	if params.LastName != nil {
+		*params.LastName = strings.TrimSpace(*params.LastName)
 	}
 
 	// start DB transaction
@@ -69,8 +71,8 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 		return ret, NewError(ErrorUpdatingProfile)
 	}
 
-	if input.ID != nil {
-		ret, err = FindUserByID(ctx, tx, *input.ID)
+	if params.ID != nil {
+		ret, err = FindUserByID(ctx, tx, *params.ID)
 		if err != nil {
 			tx.Rollback()
 			return ret, err
@@ -84,29 +86,29 @@ func UpdateProfile(ctx context.Context, user *User, input UpdateProfileInput) (*
 	i := 1
 	query := fmt.Sprintf("UPDATE users SET updated_at = $%d", i)
 
-	if input.Bio != nil {
+	if params.Bio != nil {
 		i += 1
 		query += fmt.Sprintf(", bio = $%d", i)
-		queryParams = append(queryParams, *input.Bio)
-		ret.Bio = *input.Bio
+		queryParams = append(queryParams, *params.Bio)
+		ret.Bio = *params.Bio
 	}
-	if input.DisplayName != nil {
+	if params.DisplayName != nil {
 		i += 1
 		query += fmt.Sprintf(", display_name = $%d", i)
-		queryParams = append(queryParams, *input.DisplayName)
-		ret.DisplayName = *input.DisplayName
+		queryParams = append(queryParams, *params.DisplayName)
+		ret.DisplayName = *params.DisplayName
 	}
-	if input.FirstName != nil {
+	if params.FirstName != nil {
 		i += 1
 		query += fmt.Sprintf(", first_name = $%d", i)
-		queryParams = append(queryParams, *input.FirstName)
-		ret.FirstName = *input.FirstName
+		queryParams = append(queryParams, *params.FirstName)
+		ret.FirstName = *params.FirstName
 	}
-	if input.LastName != nil {
+	if params.LastName != nil {
 		i += 1
 		query += fmt.Sprintf(", last_name = $%d", i)
-		queryParams = append(queryParams, *input.LastName)
-		ret.LastName = *input.LastName
+		queryParams = append(queryParams, *params.LastName)
+		ret.LastName = *params.LastName
 	}
 
 	i += 1

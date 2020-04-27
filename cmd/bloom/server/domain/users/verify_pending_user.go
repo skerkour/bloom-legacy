@@ -10,11 +10,13 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// VerifyPendingUserParams are the parameters for VerifyPendingUser
 type VerifyPendingUserParams struct {
 	PendingUserID uuid.UUID
 	Code          string
 }
 
+// VerifyPendingUser verifies a pending user
 func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
