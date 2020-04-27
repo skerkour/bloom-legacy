@@ -5,32 +5,58 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group, name, description *string) error {
+type UpdateGroupParams struct {
+	ID          uuid.UUID
+	Name        *string
+	Description *string
+}
+
+func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParams) (ret *Group, err error) {
 	logger := rz.FromCtx(ctx)
-	var err error
 	var newName string
 	var newDescription string
+	var group Group
 
-	if name == nil {
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("groups.UpdateGroup: Starting transaction", rz.Err(err))
+		err = NewError(ErrorUpdatingGroup)
+		return
+	}
+
+	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
+	err = tx.Get(&group, queryGetGroup, params.ID)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("mutation.UpdateGroup: fetching group", rz.Err(err),
+			rz.String("group.id", params.ID.String()))
+		err = NewError(ErrorGroupNotFound)
+		return
+	}
+
+	if params.Name == nil {
 		newName = group.Name
 	} else {
-		newName = *name
+		newName = *params.Name
 	}
 
-	if description == nil {
+	if params.Description == nil {
 		newDescription = group.Description
 	} else {
-		newDescription = *description
+		newDescription = *params.Description
 	}
 
-	if err = validateUpdateGroup(ctx, tx, user.ID, group.ID, newName, newDescription); err != nil {
-		return err
+	err = validateUpdateGroup(ctx, tx, actor.ID, group.ID, newName, newDescription)
+	if err != nil {
+		tx.Rollback()
+		return
 	}
 
 	group.UpdatedAt = time.Now().UTC()
@@ -41,11 +67,20 @@ func UpdateGroup(ctx context.Context, tx *sqlx.Tx, user users.User, group *Group
 		WHERE id = $4`
 	_, err = tx.Exec(queryUpdateGroup, group.UpdatedAt, group.Name, group.Description, group.ID)
 	if err != nil {
+		tx.Rollback()
 		logger.Error("groups.UpdateGroup: updating group", rz.Err(err))
-		return NewError(ErrorUpdatingGroup)
+		err = NewError(ErrorUpdatingGroup)
 	}
 
-	return nil
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.UpdateGroup: Committing transaction", rz.Err(err))
+		err = NewError(ErrorUpdatingGroup)
+	}
+
+	ret = &group
+	return
 }
 
 // validateUpdateGroup Checks that user is member of group and he has administrator role
