@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func DeleteSession(ctx context.Context, tx *sqlx.Tx, sessionId, userId uuid.UUID) error {
+func deleteSession(ctx context.Context, tx *sqlx.Tx, sessionId, userId uuid.UUID) error {
 	logger := rz.FromCtx(ctx)
 
 	queryDeleteSession := "DELETE FROM sessions WHERE id = $1 AND user_id = $2"
