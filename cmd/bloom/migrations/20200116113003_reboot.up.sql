@@ -48,6 +48,15 @@ CREATE TABLE sessions (
 );
 CREATE INDEX index_sessions_on_user_id ON sessions (user_id);
 
+CREATE TABLE pending_sessions (
+  id UUID NOT NULL,
+  created_at TIMESTAMP WITH TIME ZONE NOT NULL,
+  verified_at TIMESTAMP WITH TIME ZONE,
+  token_hash BYTEA NOT NULL,
+  salt BYTEA NOT NULL,
+
+  PRIMARY KEY(id)
+);
 
 CREATE TABLE pending_users (
     id UUID NOT NULL,
