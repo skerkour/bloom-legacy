@@ -6,6 +6,7 @@ import (
 	"net/mail"
 	"text/template"
 
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
 	"gitlab.com/bloom42/lily/email"
 )
 
@@ -38,8 +39,8 @@ func sendUserVerificationCode(toAddr, displayName, code string) error {
 	}
 
 	message := email.Email{
-		From:    &mail.Address{Name: "Bloom", Address: "hello@bloom.sh"},
-		To:      []*mail.Address{&mail.Address{Name: displayName, Address: toAddr}},
+		From:    &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS},
+		To:      []*mail.Address{{Name: displayName, Address: toAddr}},
 		Subject: subject,
 		HTML:    content.Bytes(),
 	}

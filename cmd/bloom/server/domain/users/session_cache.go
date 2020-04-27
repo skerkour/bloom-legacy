@@ -8,22 +8,22 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-var globalSessionsCache *SessionsCache
+var globalSessionsCache *sessionsCache
 
-type SessionsCache struct {
+type sessionsCache struct {
 	cache map[uuid.UUID]*Session
 	mutex *sync.RWMutex
 }
 
-func (cache *SessionsCache) Set(session *Session) {
+func (cache *sessionsCache) Set(session *Session) {
 	cache.mutex.Lock()
 	cache.cache[session.ID] = session
 	cache.mutex.Unlock()
 }
 
-func (cache *SessionsCache) Get(sessionId uuid.UUID) *Session {
+func (cache *sessionsCache) Get(sessionID uuid.UUID) *Session {
 	cache.mutex.RLock()
-	data, ok := cache.cache[sessionId]
+	data, ok := cache.cache[sessionID]
 	cache.mutex.RUnlock()
 	if !ok {
 		return nil
@@ -31,19 +31,21 @@ func (cache *SessionsCache) Get(sessionId uuid.UUID) *Session {
 	return data
 }
 
-func (cache *SessionsCache) Delete(sessionId uuid.UUID) {
+func (cache *sessionsCache) Delete(sessionID uuid.UUID) {
 	cache.mutex.Lock()
-	delete(cache.cache, sessionId)
+	delete(cache.cache, sessionID)
 	cache.mutex.Unlock()
 }
 
-func newSessionsCache() *SessionsCache {
-	return &SessionsCache{
+func newSessionsCache() *sessionsCache {
+	return &sessionsCache{
 		cache: map[uuid.UUID]*Session{},
 		mutex: &sync.RWMutex{},
 	}
 }
 
+// InitGlobalSessionsCache inits the sessions cache used to reduce the number of DB requests for each
+// HTTP requests
 func InitGlobalSessionsCache(logger rz.Logger) error {
 	var err error
 	allSessions := []Session{}

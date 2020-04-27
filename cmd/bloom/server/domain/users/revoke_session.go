@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// RevokeSession revokes a given session
 func RevokeSession(ctx context.Context, actor *User, sessionID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
 
@@ -31,6 +32,8 @@ func RevokeSession(ctx context.Context, actor *User, sessionID uuid.UUID) (err e
 		err = NewError(ErrorDeletingSession)
 		return
 	}
+
+	globalSessionsCache.Delete(sessionID)
 
 	return
 }

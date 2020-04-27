@@ -10,6 +10,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// SendNewRegistrationCode generates, send and replace the code of a pendingUser
 func SendNewRegistrationCode(ctx context.Context, pendingUserID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
