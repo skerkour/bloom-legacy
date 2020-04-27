@@ -5,6 +5,7 @@ import (
 	"gitlab.com/bloom42/lily/email"
 )
 
+// Init initializes the notification service
 func Init(conf config.SMTPConfig) error {
 	smtpConfig := email.SMTPConfig{
 		Host:     conf.Host,
