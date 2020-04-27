@@ -10,13 +10,13 @@ import (
 )
 
 // BillingPlans find all visible billing plans for current user
-func (r *Resolver) BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error) {
-	var ret *model.BillingPlanConnection
+func (r *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingPlanConnection, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	plans, err := billing.FindPlans(ctx, currentUser)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = &model.BillingPlanConnection{

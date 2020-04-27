@@ -10,17 +10,18 @@ import (
 )
 
 // Groups finds all groups
-func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
-	var ret *model.GroupConnection
+func (r *Resolver) Groups(ctx context.Context) (ret *model.GroupConnection, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+		err = gqlerrors.AdminRoleRequired()
+		return
 	}
 
 	groups, err := groups.FindAllGroups(ctx)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = &model.GroupConnection{
@@ -38,6 +39,5 @@ func (r *Resolver) Groups(ctx context.Context) (*model.GroupConnection, error) {
 		}
 		ret.Nodes = append(ret.Nodes, grp)
 	}
-
 	return ret, nil
 }

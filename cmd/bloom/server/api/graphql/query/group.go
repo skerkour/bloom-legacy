@@ -11,22 +11,24 @@ import (
 )
 
 // Group find a group
-func (r *Resolver) Group(ctx context.Context, id uuid.UUID) (*model.Group, error) {
-	var ret *model.Group
+func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+		err = gqlerrors.AuthenticationRequired()
+		return
 	}
 
-	err := groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, id)
+	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, groupID)
 	if err != nil && !currentUser.IsAdmin {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
-	group, err := groups.FindGroupById(ctx, nil, id)
+	group, err := groups.FindGroupById(ctx, nil, groupID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = &model.Group{
@@ -36,6 +38,5 @@ func (r *Resolver) Group(ctx context.Context, id uuid.UUID) (*model.Group, error
 		Description: group.Description,
 		AvatarURL:   nil,
 	}
-
 	return ret, nil
 }

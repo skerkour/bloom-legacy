@@ -9,12 +9,12 @@ import (
 )
 
 // Me returns the current user
-func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
-	var ret *model.User
+func (resolver *Resolver) Me(ctx context.Context) (ret *model.User, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+		err = gqlerrors.AuthenticationRequired()
+		return
 	}
 
 	ret = &model.User{
@@ -31,6 +31,5 @@ func (resolver *Resolver) Me(ctx context.Context) (*model.User, error) {
 		EncryptedPrivateKey: &currentUser.EncryptedPrivateKey,
 		PublicKey:           currentUser.PublicKey,
 	}
-
 	return ret, nil
 }

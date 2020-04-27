@@ -12,8 +12,8 @@ import (
 )
 
 // User finds an user
-func (resolver *Resolver) User(ctx context.Context, username *string) (*model.User, error) {
-	var ret *model.User
+// username is optional for a future use
+func (resolver *Resolver) User(ctx context.Context, username *string) (ret *model.User, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 	var firstName *string
 	var lastName *string
@@ -24,16 +24,19 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 	var disabledAt *time.Time
 
 	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+		err = gqlerrors.AuthenticationRequired()
+		return
 	}
 
 	if username == nil {
-		return ret, gqlerrors.Internal()
+		err = gqlerrors.Internal()
+		return
 	}
 
 	user, err := users.FindUserByUsernameNoTx(ctx, *username)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	if user.ID == currentUser.ID || currentUser.IsAdmin {
@@ -60,6 +63,5 @@ func (resolver *Resolver) User(ctx context.Context, username *string) (*model.Us
 		DisabledAt:  disabledAt,
 		PublicKey:   user.PublicKey,
 	}
-
-	return ret, nil
+	return
 }

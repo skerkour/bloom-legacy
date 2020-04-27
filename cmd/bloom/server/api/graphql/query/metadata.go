@@ -10,12 +10,12 @@ import (
 )
 
 // Metadata returns infrmation about the Bloom server
-func (resolver *Resolver) Metadata(ctx context.Context) (*model.BloomMetadata, error) {
-	var ret *model.BloomMetadata
+func (resolver *Resolver) Metadata(ctx context.Context) (ret *model.BloomMetadata, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+		err = gqlerrors.AdminRoleRequired()
+		return
 	}
 
 	ret = &model.BloomMetadata{
@@ -24,6 +24,5 @@ func (resolver *Resolver) Metadata(ctx context.Context) (*model.BloomMetadata, e
 		Version:   version.Version,
 		GitCommit: version.GitCommit,
 	}
-
-	return ret, nil
+	return
 }

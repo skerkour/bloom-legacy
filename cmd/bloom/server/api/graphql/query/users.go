@@ -10,17 +10,18 @@ import (
 )
 
 // Users finds all users
-func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, error) {
-	var ret *model.UserConnection
+func (resolver *Resolver) Users(ctx context.Context) (ret *model.UserConnection, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil || !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+		err = gqlerrors.AdminRoleRequired()
+		return
 	}
 
 	users, err := users.FindAllUsers(ctx)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = &model.UserConnection{
@@ -44,6 +45,5 @@ func (resolver *Resolver) Users(ctx context.Context) (*model.UserConnection, err
 		}
 		ret.Nodes = append(ret.Nodes, usr)
 	}
-
-	return ret, nil
+	return
 }
