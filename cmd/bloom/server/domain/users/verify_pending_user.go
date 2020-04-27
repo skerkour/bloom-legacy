@@ -38,28 +38,30 @@ func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err
 
 	if pendingUser.FailedAttempts+1 >= 5 {
 		tx.Rollback()
-		return NewError(ErrorMaximumVerificationTrialsReached)
+		err = NewError(ErrorMaximumVerificationTrialsReached)
+		return
 	}
 
 	now := time.Now().UTC()
 	since := now.Sub(pendingUser.UpdatedAt)
 	if since >= 30*time.Minute {
 		tx.Rollback()
-		return NewError(ErrorRegistrationCodeExpired)
+		err = NewError(ErrorRegistrationCodeExpired)
+		return
 	}
 
 	if !crypto.VerifyPasswordHash([]byte(params.Code), pendingUser.VerificationCodeHash) {
 		tx.Rollback()
 		err = NewError(ErrorRegistrationCodeIsNotValid)
-		tx, _ := db.DB.Beginx()
-		if tx != nil {
-			err2 := failPendingUserVerification(ctx, tx, &pendingUser)
+		tx2, _ := db.DB.Beginx()
+		if tx2 != nil {
+			err2 := failPendingUserVerification(ctx, tx2, &pendingUser)
 			if err2 != nil {
-				tx.Rollback()
+				tx2.Rollback()
 				err = NewError(ErrorVerifyingPendingUser)
 				return
 			}
-			tx.Commit()
+			tx2.Commit()
 		}
 		return
 	}
