@@ -4,37 +4,75 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func InviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, usernames []string) error {
+type InviteUsersParams struct {
+	GroupID   uuid.UUID
+	Usernames []string
+}
+
+func InviteUsers(ctx context.Context, actor *users.User, params InviteUsersParams) (retGroup *Group, err error) {
 	logger := rz.FromCtx(ctx)
 	inviteesIds := []string{}
-	var err error
+	var group Group
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("groups.InviteUsers: Starting transaction", rz.Err(err))
+		err = NewError(ErrorInvitingUsers)
+		return
+	}
+
+	queryGetGroup := "SELECT * FROM groups WHERE id = $1"
+	err = tx.Get(&group, queryGetGroup, params.GroupID)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.InviteUsers: fetching group", rz.Err(err),
+			rz.String("group.id", params.GroupID.String()))
+		err = NewError(ErrorGroupNotFound)
+		return
+	}
 
 	queryStr := "SELECT id FROM users WHERE username IN ($1)"
-	query, args, err := sqlx.In(queryStr, usernames)
+	query, args, err := sqlx.In(queryStr, params.Usernames)
 	query = tx.Rebind(query)
 	err = tx.Select(&inviteesIds, query, args...)
 	if err != nil {
-		logger.Error("error fetching invitees ids", rz.Err(err))
-		return NewError(ErrorInvitingUsers)
+		tx.Rollback()
+		logger.Error("groups.InviteUsers: error fetching invitees ids", rz.Err(err))
+		err = NewError(ErrorInvitingUsers)
+		return
 	}
-	if len(inviteesIds) != len(usernames) {
-		return NewError(ErrorUsernamesNotFound)
+	if len(inviteesIds) != len(params.Usernames) {
+		tx.Rollback()
+		err = NewError(ErrorUsernamesNotFound)
+		return
 	}
 
-	if err = validateInviteUsers(ctx, tx, inviter, group, inviteesIds); err != nil {
-		return err
+	err = validateInviteUsers(ctx, tx, actor, group, inviteesIds)
+	if err != nil {
+		tx.Rollback()
+		return
 	}
 
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.InviteUsers: Committing transaction", rz.Err(err))
+		err = NewError(ErrorInvitingUsers)
+		return
+	}
+
+	retGroup = &group
 	// TODO: create invitations
-
-	return nil
+	return
 }
 
-func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter users.User, group Group, inviteesIds []string) error {
+func validateInviteUsers(ctx context.Context, tx *sqlx.Tx, inviter *users.User, group Group, inviteesIds []string) error {
 	logger := rz.FromCtx(ctx)
 	var alreadyInUsers int
 	var err error

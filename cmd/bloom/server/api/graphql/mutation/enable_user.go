@@ -9,19 +9,20 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func (r *Resolver) EnableUser(ctx context.Context, id uuid.UUID) (bool, error) {
-	ret := false
+func (r *Resolver) EnableUser(ctx context.Context, id uuid.UUID) (ret bool, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+		err = gqlerrors.AuthenticationRequired()
+		return
 	}
 
-	err := users.EnableUser(ctx, currentUser, id)
+	err = users.EnableUser(ctx, currentUser, id)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = gqlerrors.New(err)
+		return
 	}
 
 	ret = true
-	return ret, nil
+	return
 }
