@@ -97,6 +97,10 @@ type CompleteSignInInput struct {
 	TwoFACode string    `json:"twoFACode"`
 }
 
+type CompleteTwoFAActivationInput struct {
+	Code string `json:"code"`
+}
+
 type CreateGroupInput struct {
 	Name        string `json:"name"`
 	Description string `json:"description"`
@@ -115,6 +119,10 @@ type DeleteBillingPlanInput struct {
 
 type DeleteGroupInput struct {
 	ID uuid.UUID `json:"id"`
+}
+
+type DisableTwoFAInput struct {
+	Code string `json:"code"`
 }
 
 type GroupConnection struct {
@@ -291,6 +299,10 @@ type SyncInput struct {
 
 type TwoFa struct {
 	Method TwoFAMethod `json:"method"`
+}
+
+type TwoFAActivationStarted struct {
+	QrCode []byte `json:"qrCode"`
 }
 
 // if groupId and userId (reserved for admins) are null, add to current user
