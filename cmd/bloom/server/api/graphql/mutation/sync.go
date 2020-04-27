@@ -8,5 +8,6 @@ import (
 
 // Sync is used to push changes
 func (resolver *Resolver) Sync(ctx context.Context, input model.SyncInput) (*model.Sync, error) {
+	panic("not implemented")
 	return nil, nil
 }

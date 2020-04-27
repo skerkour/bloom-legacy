@@ -42,6 +42,8 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 		AvatarURL:   nil,
 		Username:    user.Username,
 		DisplayName: user.DisplayName,
+		Bio:         user.Bio,
+		PublicKey:   user.PublicKey,
 	}
 
 	// if same user or admin
@@ -51,6 +53,8 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 		ret.LastName = &user.LastName
 		ret.CreatedAt = &user.CreatedAt
 		ret.IsAdmin = user.IsAdmin
+		ret.Email = &user.Email
+		ret.DisabledAt = user.DisabledAt
 	}
 
 	// only if same user

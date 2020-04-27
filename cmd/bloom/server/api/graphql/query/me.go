@@ -17,19 +17,6 @@ func (resolver *Resolver) Me(ctx context.Context) (ret *model.User, err error) {
 		return
 	}
 
-	ret = &model.User{
-		ID:                  &currentUser.ID,
-		AvatarURL:           nil,
-		CreatedAt:           &currentUser.CreatedAt,
-		Username:            currentUser.Username,
-		FirstName:           &currentUser.FirstName,
-		LastName:            &currentUser.LastName,
-		DisplayName:         currentUser.DisplayName,
-		IsAdmin:             currentUser.IsAdmin,
-		Bio:                 currentUser.Bio,
-		Email:               &currentUser.Email,
-		EncryptedPrivateKey: &currentUser.EncryptedPrivateKey,
-		PublicKey:           currentUser.PublicKey,
-	}
+	ret = model.DomainUserToModelUser(currentUser, currentUser)
 	return ret, nil
 }

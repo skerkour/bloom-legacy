@@ -8,5 +8,6 @@ import (
 
 // Changes returns the changes from a given state
 func (resolver *Resolver) Changes(ctx context.Context, sinceState *string) (*model.Changes, error) {
+	panic("not implemented")
 	return nil, nil
 }
