@@ -1,5 +1,8 @@
 # Security Policy
 
+## Security measures
+
+See https://gitlab.com/bloom42/bloom/-/wikis/security
 
 ## Reporting a Vulnerability
 
