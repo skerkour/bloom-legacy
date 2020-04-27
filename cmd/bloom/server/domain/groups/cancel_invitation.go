@@ -3,18 +3,39 @@ package groups
 import (
 	"context"
 
-	"github.com/jmoiron/sqlx"
-
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitation Invitation) error {
+type CancelInvitationParams struct {
+	InvitationID uuid.UUID
+}
+
+func CancelInvitation(ctx context.Context, actor *users.User, params CancelInvitationParams) error {
 	logger := rz.FromCtx(ctx)
 	var err error
+	var invitation Invitation
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		logger.Error("groups.CancelInvitation: Starting transaction", rz.Err(err))
+		return NewError(ErrorCancelingInvitation)
+	}
+
+	queryGetInvitation := "SELECT * FROM groups_invitations WHERE id = $1 FOR UPDATE"
+	err = tx.Get(&invitation, queryGetInvitation, params.InvitationID)
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.CancelInvitation: fetching invitation", rz.Err(err),
+			rz.String("invitation.id", params.InvitationID.String()))
+		return NewError(ErrorInvitationNotFound)
+	}
 
 	// verify that user is admin
-	if err = CheckUserIsGroupAdmin(ctx, tx, user.ID, invitation.GroupID); err != nil {
+	if err = CheckUserIsGroupAdmin(ctx, tx, actor.ID, invitation.GroupID); err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -22,8 +43,17 @@ func CancelInvitation(ctx context.Context, tx *sqlx.Tx, user users.User, invitat
 	queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
 	_, err = tx.Exec(queryDeleteInvitation, invitation.ID)
 	if err != nil {
-		logger.Error("groups.CancelInvitation: creating membership", rz.Err(err))
+		tx.Rollback()
+		logger.Error("groups.CancelInvitation: deleting invitation", rz.Err(err))
 		return NewError(ErrorCancelingInvitation)
 	}
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		logger.Error("groups.CancelInvitation: Committing transaction", rz.Err(err))
+		return NewError(ErrorCancelingInvitation)
+	}
+
 	return nil
 }
