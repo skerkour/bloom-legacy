@@ -45,7 +45,6 @@ func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	}
 
 	now := time.Now().UTC()
-	newUuid := uuid.New()
 	verificationCode, err := crypto.RandAlphabet([]byte(USER_VERIFICATION_CODE_ALPHABET), 8)
 	if err != nil {
 		logger.Error("users.CreatePendingUser: error generating verification code", rz.Err(err))
@@ -63,7 +62,7 @@ func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	}
 
 	ret = &PendingUser{
-		ID:                   newUuid,
+		ID:                   uuid.New(),
 		CreatedAt:            now,
 		UpdatedAt:            now,
 		Email:                email,
@@ -79,7 +78,7 @@ func createPendingUser(ctx context.Context, tx *sqlx.Tx, displayName, email stri
 	_, err = tx.Exec(queryCreatePendingUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Email,
 		ret.DisplayName, ret.VerificationCodeHash, ret.FailedAttempts, ret.VerifiedAt)
 	if err != nil {
-		logger.Error("error creating new user", rz.Err(err))
+		logger.Error("users.createPendingUser: error creating new user", rz.Err(err))
 		err = NewError(ErrorCreatingPendingUser)
 		return
 	}

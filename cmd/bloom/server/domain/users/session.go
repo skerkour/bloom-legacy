@@ -4,7 +4,6 @@ import (
 	"context"
 	"time"
 
-	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
@@ -24,26 +23,6 @@ type Session struct {
 type SessionDevice struct {
 	OS   string
 	Type string
-}
-
-func FindSessionById(ctx context.Context, tx *sqlx.Tx, sessionId uuid.UUID) (*Session, error) {
-	ret := &Session{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	query := "SELECT * FROM sessions WHERE id = $1"
-	if tx == nil {
-		err = db.DB.Get(&ret, query, sessionId)
-	} else {
-		err = tx.Get(&ret, query, sessionId)
-	}
-	if err != nil {
-		logger.Error("users.FindSessionById: finding session", rz.Err(err),
-			rz.String("session.id", sessionId.String()))
-		return ret, NewError(ErrorSessionNotFound)
-	}
-
-	return ret, err
 }
 
 func FindAllSessionsByUserId(ctx context.Context, userId uuid.UUID) ([]Session, error) {

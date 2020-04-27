@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/lily/rz"
 )
 
+// FindAllUsers returns all the existing users
 func FindAllUsers(ctx context.Context) ([]User, error) {
 	ret := []User{}
 	var err error

@@ -6,6 +6,8 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// PendingUser is an entity used before an user account is completed to not fill the users table
+// with semi filled entries
 type PendingUser struct {
 	ID                   uuid.UUID  `db:"id"`
 	CreatedAt            time.Time  `db:"created_at"`
