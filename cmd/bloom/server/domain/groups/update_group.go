@@ -31,7 +31,7 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 		return
 	}
 
-	ret, err = FindGroupById(ctx, tx, params.ID)
+	ret, err = FindGroupById(ctx, tx, params.ID, true)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.UpdateGroup: fetching group", rz.Err(err),

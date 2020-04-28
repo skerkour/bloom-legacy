@@ -21,7 +21,7 @@ func QuitGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err e
 		return
 	}
 
-	group, err := FindGroupById(ctx, tx, groupID)
+	group, err := FindGroupById(ctx, tx, groupID, false)
 	if err != nil {
 		tx.Rollback()
 		err = NewError(ErrorGroupNotFound)

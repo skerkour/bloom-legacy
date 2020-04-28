@@ -25,7 +25,7 @@ func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Gro
 		return
 	}
 
-	group, err := groups.FindGroupById(ctx, nil, groupID)
+	group, err := groups.FindGroupById(ctx, nil, groupID, false)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

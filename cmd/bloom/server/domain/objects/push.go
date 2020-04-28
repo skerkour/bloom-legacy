@@ -38,11 +38,12 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 	logger := rz.FromCtx(ctx)
 	ret = &PushResult{Repositories: []RepositoryPushResult{}}
 
-	// cleant and validate params
+	// clean and validate params
 	for i, repo := range params.Repositories {
 		var curentState int64
 		curentState, err = DecodeStateString(repo.CurrentState)
 		if err != nil {
+			err = NewError(ErrorInternal)
 			return
 		}
 		params.Repositories[i].curentStateInt = curentState
@@ -80,8 +81,15 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 	newState := repo.curentStateInt + 1
 
 	if repo.GroupID != nil {
+		var group *groups.Group
+
+		group, err = groups.FindGroupById(ctx, tx, *repo.GroupID, true)
+		if err != nil {
+			return
+		}
+
 		// check if user is group member
-		err = groups.CheckUserIsGroupMember(ctx, tx, actor.ID, *repo.GroupID)
+		err = groups.CheckUserIsGroupMember(ctx, tx, actor.ID, group.ID)
 		if err != nil {
 			return
 		}
@@ -132,8 +140,13 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 				}
 			}
 		}
+		err = groups.UpdateGroupState(ctx, tx, group, newState)
+		if err != nil {
+			return
+		}
 
 	} else {
+		// user repository
 		if actor.State != repo.curentStateInt {
 			err = NewError(ErrorOutOfSync)
 			return

@@ -14,6 +14,10 @@ func UpdateUserState(ctx context.Context, tx *sqlx.Tx, user *User, newState int6
 	var err error
 	logger := rz.FromCtx(ctx)
 
+	if user.State > newState {
+		return NewError(ErrorInvalidState)
+	}
+
 	user.State = newState
 	user.UpdatedAt = time.Now().UTC()
 

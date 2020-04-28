@@ -70,7 +70,7 @@ func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvit
 		return ret, NewError(ErrorInvitationNotFound)
 	}
 
-	ret, err = FindGroupById(ctx, tx, membership.GroupID)
+	ret, err = FindGroupById(ctx, tx, membership.GroupID, false)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.AcceptInvitation: finding group", rz.Err(err),

@@ -9,12 +9,15 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func FindGroupById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID) (*Group, error) {
+func FindGroupById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID, forUpdate bool) (*Group, error) {
 	ret := &Group{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM groups WHERE id = $1"
+	if forUpdate {
+		queryFind += " FOR UPDATE"
+	}
 	if tx == nil {
 		err = db.DB.Get(ret, queryFind, id)
 	} else {

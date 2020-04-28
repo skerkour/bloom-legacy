@@ -24,7 +24,7 @@ func DeleteGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err
 		return err
 	}
 
-	group, err := FindGroupById(ctx, tx, groupID)
+	group, err := FindGroupById(ctx, tx, groupID, false)
 	if err != nil {
 		tx.Rollback()
 		err = NewError(ErrorGroupNotFound)
