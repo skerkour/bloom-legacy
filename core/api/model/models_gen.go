@@ -237,8 +237,7 @@ type Pull struct {
 }
 
 type PullInput struct {
-	Me     bool        `json:"me"`
-	Groups []uuid.UUID `json:"groups"`
+	Repositories []*RepositoryPullInput `json:"repositories"`
 }
 
 type Push struct {
@@ -278,7 +277,13 @@ type RepositoryPull struct {
 	GroupID        *uuid.UUID `json:"groupId"`
 }
 
+type RepositoryPullInput struct {
+	SinceState string     `json:"sinceState"`
+	GroupID    *uuid.UUID `json:"groupId"`
+}
+
 type RepositoryPush struct {
+	OldState string     `json:"oldState"`
 	NewState string     `json:"newState"`
 	GroupID  *uuid.UUID `json:"groupId"`
 }
