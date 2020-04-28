@@ -10,6 +10,7 @@ const (
 	ErrorInternal DomainError = iota
 	ErrorObjectTooLarge
 	ErrorOutOfSync
+	ErrorObjectNotFound
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -21,8 +22,11 @@ func NewError(domainError DomainError) errors.Error {
 		code = errors.InvalidArgument
 		message = "Object is too large."
 	case ErrorOutOfSync:
-		code = errors.InvalidArgument
-		message = "Out of sync. Please pull changes before pushing."
+		code = errors.OutOfSync
+		message = "Out of sync. Please pull changes before pushing"
+	case ErrorObjectNotFound:
+		code = errors.NotFound
+		message = "Object not found"
 	}
 	return errors.New(code, message)
 }

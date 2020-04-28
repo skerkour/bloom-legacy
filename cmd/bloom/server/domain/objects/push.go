@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
@@ -76,23 +77,117 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 }
 
 func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *RepositoryPush) (ret RepositoryPushResult, err error) {
+	newState := repo.curentStateInt + 1
+
 	if repo.GroupID != nil {
 		// check if user is group member
+		err = groups.CheckUserIsGroupMember(ctx, tx, actor.ID, *repo.GroupID)
+		if err != nil {
+			return
+		}
 		// for each object, check if it exists, if yes, if it belongs to group
 		// update object
 		// else insert object
+		for _, repoObject := range repo.Objects {
+			var object *Object
+			object, err = FindObjectByID(ctx, tx, repoObject.ID, true)
+			if err != nil {
+				return
+			}
+
+			object.Algorithm = repoObject.Algorithm
+			object.Nonce = repoObject.Nonce
+			object.EncryptedKey = repoObject.EncryptedKey
+			object.EncryptedData = repoObject.EncryptedData
+			object.UpdatedAtState = newState
+
+			if object == nil {
+				// insert object
+				object.ID = repoObject.ID
+				object.GroupID = repo.GroupID
+				queryInsert := `INSERT INTO obejcts
+					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, group_id)
+					VALUES ($1, $2, $3, $4, $5, $6, $7)
+				`
+				_, err = tx.Exec(queryInsert, object.ID, object.UpdatedAtState, object.Algorithm,
+					object.Nonce, object.EncryptedKey, object.EncryptedData, object.GroupID)
+				if err != nil {
+					return
+				}
+			} else {
+				// check if it belongs to user
+				if object.GroupID == nil || *object.GroupID != *repo.GroupID {
+					err = NewError(ErrorObjectNotFound)
+					return
+				}
+				// update object
+				queryUpdate := `UPDATE obejcts
+					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
+					WHERE id = $6
+				`
+				_, err = tx.Exec(queryUpdate, object.Algorithm, object.Nonce, object.EncryptedKey,
+					object.EncryptedData, object.UpdatedAtState, object.ID)
+				if err != nil {
+					return
+				}
+			}
+		}
 
 	} else {
 		if actor.State != repo.curentStateInt {
 			err = NewError(ErrorOutOfSync)
 			return
 		}
-		// for each object, check if it exists, if yes, if it belongs to user
-		// update object
-		// else insert object
+		for _, repoObject := range repo.Objects {
+			var object *Object
+			object, err = FindObjectByID(ctx, tx, repoObject.ID, true)
+			if err != nil {
+				return
+			}
+
+			object.Algorithm = repoObject.Algorithm
+			object.Nonce = repoObject.Nonce
+			object.EncryptedKey = repoObject.EncryptedKey
+			object.EncryptedData = repoObject.EncryptedData
+			object.UpdatedAtState = newState
+
+			if object == nil {
+				// insert object
+				object.ID = repoObject.ID
+				object.UserID = &actor.ID
+				queryInsert := `INSERT INTO obejcts
+					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, user_id)
+					VALUES ($1, $2, $3, $4, $5, $6, $7)
+				`
+				_, err = tx.Exec(queryInsert, object.ID, object.UpdatedAtState, object.Algorithm,
+					object.Nonce, object.EncryptedKey, object.EncryptedData, object.UserID)
+				if err != nil {
+					return
+				}
+			} else {
+				// check if it belongs to user
+				if object.UserID == nil || *object.UserID != actor.ID {
+					err = NewError(ErrorObjectNotFound)
+					return
+				}
+				// update object
+				queryUpdate := `UPDATE obejcts
+					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
+					WHERE id = $6
+				`
+				_, err = tx.Exec(queryUpdate, object.Algorithm, object.Nonce, object.EncryptedKey,
+					object.EncryptedData, object.UpdatedAtState, object.ID)
+				if err != nil {
+					return
+				}
+			}
+		}
+		err = users.UpdateUserState(ctx, tx, actor, newState)
+		if err != nil {
+			return
+		}
 	}
 
-	newState := repo.curentStateInt + 1
 	ret.NewState = EncodeState(newState)
 	ret.OldState = repo.CurrentState
 	ret.GroupID = repo.GroupID

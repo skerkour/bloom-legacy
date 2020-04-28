@@ -19,9 +19,9 @@ type Object struct {
 
 // APIObject represents an object as exchange through the API
 type APIObject struct {
-	ID            uuid.UUID `db:"id"`
-	Algorithm     string    `db:"algorithm"`
-	Nonce         []byte    `db:"nonce"`
-	EncryptedKey  []byte    `db:"encrypted_key"`
-	EncryptedData []byte    `db:"encrypted_data"`
+	ID            []byte `db:"id"`
+	Algorithm     string `db:"algorithm"`
+	Nonce         []byte `db:"nonce"`
+	EncryptedKey  []byte `db:"encrypted_key"`
+	EncryptedData []byte `db:"encrypted_data"`
 }
