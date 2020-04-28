@@ -17,6 +17,7 @@ type Object struct {
 	GroupID *uuid.UUID `db:"group_id"`
 }
 
+// APIObject represents an object as exchange through the API
 type APIObject struct {
 	ID            uuid.UUID `db:"id"`
 	Algorithm     string    `db:"algorithm"`

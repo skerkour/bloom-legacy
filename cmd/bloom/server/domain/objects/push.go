@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// PushParams are the parameters for Push
 type PushParams struct {
 	Repositories []RepositoryPush
 }
@@ -27,6 +28,7 @@ type RepositoryPushResult struct {
 }
 
 // Push is used to push changes
-func Push(ctx context.Context, actor *users.User, params PushParams) (err error) {
+func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushResult, err error) {
+	ret = &PushResult{Repositories: []RepositoryPushResult{}}
 	return
 }

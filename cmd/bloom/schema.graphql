@@ -249,6 +249,7 @@ type Push {
 }
 
 type RepositoryPush {
+  oldState: String!
   newState: String!
   groupId: ID
 }
@@ -478,8 +479,12 @@ input CompletePasswordUpdateInput {
 
 
 input PullInput {
-  me: Boolean!
-  groups: [ID!]!
+  repositories: [RepositoryPullInput!]!
+}
+
+input RepositoryPullInput {
+  sinceState: String!
+  groupId: ID
 }
 
 input PushInput {

@@ -253,6 +253,7 @@ type ComplexityRoot struct {
 	RepositoryPush struct {
 		GroupID  func(childComplexity int) int
 		NewState func(childComplexity int) int
+		OldState func(childComplexity int) int
 	}
 
 	Session struct {
@@ -1493,6 +1494,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RepositoryPush.NewState(childComplexity), true
 
+	case "RepositoryPush.oldState":
+		if e.complexity.RepositoryPush.OldState == nil {
+			break
+		}
+
+		return e.complexity.RepositoryPush.OldState(childComplexity), true
+
 	case "Session.createdAt":
 		if e.complexity.Session.CreatedAt == nil {
 			break
@@ -2081,6 +2089,7 @@ type Push {
 }
 
 type RepositoryPush {
+  oldState: String!
   newState: String!
   groupId: ID
 }
@@ -2310,8 +2319,12 @@ input CompletePasswordUpdateInput {
 
 
 input PullInput {
-  me: Boolean!
-  groups: [ID!]!
+  repositories: [RepositoryPullInput!]!
+}
+
+input RepositoryPullInput {
+  sinceState: String!
+  groupId: ID
 }
 
 input PushInput {
@@ -7551,6 +7564,40 @@ func (ec *executionContext) _RepositoryPull_groupId(ctx context.Context, field g
 	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _RepositoryPush_oldState(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPush) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "RepositoryPush",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.OldState, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		if !graphql.HasFieldError(ctx, fc) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	res := resTmp.(string)
+	fc.Result = res
+	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _RepositoryPush_newState(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPush) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -10426,15 +10473,9 @@ func (ec *executionContext) unmarshalInputPullInput(ctx context.Context, obj int
 
 	for k, v := range asMap {
 		switch k {
-		case "me":
+		case "repositories":
 			var err error
-			it.Me, err = ec.unmarshalNBoolean2bool(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "groups":
-			var err error
-			it.Groups, err = ec.unmarshalNID2ᚕgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUIDᚄ(ctx, v)
+			it.Repositories, err = ec.unmarshalNRepositoryPullInput2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10513,6 +10554,30 @@ func (ec *executionContext) unmarshalInputRemovePaymentMethodInput(ctx context.C
 		case "id":
 			var err error
 			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
+func (ec *executionContext) unmarshalInputRepositoryPullInput(ctx context.Context, obj interface{}) (model.RepositoryPullInput, error) {
+	var it model.RepositoryPullInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "sinceState":
+			var err error
+			it.SinceState, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "groupId":
+			var err error
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12025,6 +12090,11 @@ func (ec *executionContext) _RepositoryPush(ctx context.Context, sel ast.Selecti
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("RepositoryPush")
+		case "oldState":
+			out.Values[i] = ec._RepositoryPush_oldState(ctx, field, obj)
+			if out.Values[i] == graphql.Null {
+				invalids++
+			}
 		case "newState":
 			out.Values[i] = ec._RepositoryPush_newState(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
@@ -12803,35 +12873,6 @@ func (ec *executionContext) marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUU
 	return res
 }
 
-func (ec *executionContext) unmarshalNID2ᚕgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUIDᚄ(ctx context.Context, v interface{}) ([]uuid.UUID, error) {
-	var vSlice []interface{}
-	if v != nil {
-		if tmp1, ok := v.([]interface{}); ok {
-			vSlice = tmp1
-		} else {
-			vSlice = []interface{}{v}
-		}
-	}
-	var err error
-	res := make([]uuid.UUID, len(vSlice))
-	for i := range vSlice {
-		res[i], err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, vSlice[i])
-		if err != nil {
-			return nil, err
-		}
-	}
-	return res, nil
-}
-
-func (ec *executionContext) marshalNID2ᚕgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUIDᚄ(ctx context.Context, sel ast.SelectionSet, v []uuid.UUID) graphql.Marshaler {
-	ret := make(graphql.Array, len(v))
-	for i := range v {
-		ret[i] = ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, sel, v[i])
-	}
-
-	return ret
-}
-
 func (ec *executionContext) unmarshalNInt2int(ctx context.Context, v interface{}) (int, error) {
 	return graphql.UnmarshalInt(v)
 }
@@ -13100,6 +13141,38 @@ func (ec *executionContext) marshalNRepositoryPull2ᚖgitlabᚗcomᚋbloom42ᚋb
 		return graphql.Null
 	}
 	return ec._RepositoryPull(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNRepositoryPullInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInput(ctx context.Context, v interface{}) (model.RepositoryPullInput, error) {
+	return ec.unmarshalInputRepositoryPullInput(ctx, v)
+}
+
+func (ec *executionContext) unmarshalNRepositoryPullInput2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInputᚄ(ctx context.Context, v interface{}) ([]*model.RepositoryPullInput, error) {
+	var vSlice []interface{}
+	if v != nil {
+		if tmp1, ok := v.([]interface{}); ok {
+			vSlice = tmp1
+		} else {
+			vSlice = []interface{}{v}
+		}
+	}
+	var err error
+	res := make([]*model.RepositoryPullInput, len(vSlice))
+	for i := range vSlice {
+		res[i], err = ec.unmarshalNRepositoryPullInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInput(ctx, vSlice[i])
+		if err != nil {
+			return nil, err
+		}
+	}
+	return res, nil
+}
+
+func (ec *executionContext) unmarshalNRepositoryPullInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInput(ctx context.Context, v interface{}) (*model.RepositoryPullInput, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalNRepositoryPullInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullInput(ctx, v)
+	return &res, err
 }
 
 func (ec *executionContext) marshalNRepositoryPush2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPush(ctx context.Context, sel ast.SelectionSet, v model.RepositoryPush) graphql.Marshaler {
