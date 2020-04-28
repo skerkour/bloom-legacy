@@ -3,6 +3,7 @@ package objects
 import (
 	"context"
 
+	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
@@ -26,6 +27,7 @@ type PushResult struct {
 }
 
 type RepositoryPushResult struct {
+	OldState string
 	NewState string
 	GroupID  *uuid.UUID
 }
@@ -54,7 +56,7 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 
 	for _, repo := range params.Repositories {
 		var result RepositoryPushResult
-		result, err = pushToRepository(ctx, actor, &repo)
+		result, err = pushToRepository(ctx, tx, actor, &repo)
 		if err != nil {
 			tx.Rollback()
 			return
@@ -73,6 +75,26 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 	return
 }
 
-func pushToRepository(ctx context.Context, actor *users.User, repo *RepositoryPush) (ret RepositoryPushResult, err error) {
+func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *RepositoryPush) (ret RepositoryPushResult, err error) {
+	if repo.GroupID != nil {
+		// check if user is group member
+		// for each object, check if it exists, if yes, if it belongs to group
+		// update object
+		// else insert object
+
+	} else {
+		if actor.State != repo.curentStateInt {
+			err = NewError(ErrorOutOfSync)
+			return
+		}
+		// for each object, check if it exists, if yes, if it belongs to user
+		// update object
+		// else insert object
+	}
+
+	newState := repo.curentStateInt + 1
+	ret.NewState = EncodeState(newState)
+	ret.OldState = repo.CurrentState
+	ret.GroupID = repo.GroupID
 	return
 }

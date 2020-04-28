@@ -9,6 +9,7 @@ type DomainError int
 const (
 	ErrorInternal DomainError = iota
 	ErrorObjectTooLarge
+	ErrorOutOfSync
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -19,6 +20,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorObjectTooLarge:
 		code = errors.InvalidArgument
 		message = "Object is too large."
+	case ErrorOutOfSync:
+		code = errors.InvalidArgument
+		message = "Out of sync. Please pull changes before pushing."
 	}
 	return errors.New(code, message)
 }
