@@ -233,8 +233,7 @@ type PendingSession struct {
 }
 
 type Pull struct {
-	Me     *RepositoryPull   `json:"me"`
-	Groups []*RepositoryPull `json:"groups"`
+	Repositories []*RepositoryPull `json:"repositories"`
 }
 
 type PullInput struct {
@@ -243,13 +242,11 @@ type PullInput struct {
 }
 
 type Push struct {
-	Me     *RepositoryPush   `json:"me"`
-	Groups []*RepositoryPush `json:"groups"`
+	Repositories []*RepositoryPush `json:"repositories"`
 }
 
 type PushInput struct {
-	Me     *RepositoryPushInput   `json:"me"`
-	Groups []*RepositoryPushInput `json:"groups"`
+	Repositories []*RepositoryPushInput `json:"repositories"`
 }
 
 type QuitGroupInput struct {
@@ -291,7 +288,8 @@ type RepositoryPushInput struct {
 	CurrentState string `json:"currentState"`
 	// out of sync objects
 	Objects []*ObjectInput `json:"objects"`
-	GroupID *uuid.UUID     `json:"groupId"`
+	// to indicate whether it's the user's repository, or a group
+	GroupID *uuid.UUID `json:"groupId"`
 }
 
 type RevokeSessionInput struct {
