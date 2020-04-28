@@ -13,8 +13,9 @@ type PullParams struct {
 }
 
 type RepositoryPull struct {
-	SinceState string
-	GroupID    *uuid.UUID
+	SinceState    string
+	sinceStateInt int64
+	GroupID       *uuid.UUID
 }
 
 type PullResult struct {
