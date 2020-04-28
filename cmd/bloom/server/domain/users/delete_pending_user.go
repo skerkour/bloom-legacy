@@ -5,15 +5,16 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func DeletePendingUser(ctx context.Context, tx *sqlx.Tx, pendingUserId string) error {
+func deletePendingUser(ctx context.Context, tx *sqlx.Tx, pendingUserID uuid.UUID) error {
 	logger := rz.FromCtx(ctx)
 
 	queryDeletePendingUser := "DELETE FROM pending_users WHERE id = $1"
-	_, err := tx.Exec(queryDeletePendingUser, pendingUserId)
+	_, err := tx.Exec(queryDeletePendingUser, pendingUserID)
 	if err != nil {
-		logger.Error("error deleting pending user", rz.Err(err), rz.String("pending_user_id", pendingUserId))
+		logger.Error("users.deletePendingUser: error deleting pending user", rz.Err(err), rz.String("pending_user.id", pendingUserID.String()))
 		return NewError(ErrorCompletingRegistration)
 	}
 	return nil

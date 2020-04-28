@@ -12,12 +12,15 @@ import (
 )
 
 type createUserParams struct {
-	PendingUser         PendingUser
+	Email               string
+	DisplayName         string
 	Username            string
 	AuthKey             []byte
 	PublicKey           []byte
 	EncryptedPrivateKey []byte
 	PrivateKeyNonce     []byte
+	EncryptedMasterKey  []byte
+	MasterKeyNonce      []byte
 }
 
 func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret *User, err error) {
@@ -34,7 +37,7 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 
 	// check if email does not already exist
 	queryCountExistingEmails := "SELECT COUNT(*) FROM users WHERE email = $1"
-	err = tx.Get(&existingUser, queryCountExistingEmails, params.PendingUser.Email)
+	err = tx.Get(&existingUser, queryCountExistingEmails, params.Email)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing emails counts", rz.Err(err))
 		err = NewError(ErrorEmailAlreadyExists)
@@ -74,8 +77,6 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		return
 	}
 
-	now := time.Now().UTC()
-	// TODO: update params
 	authKeyHash, err := crypto.HashPassword(params.AuthKey, AUTH_KEY_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
@@ -83,18 +84,27 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		return
 	}
 
+	now := time.Now().UTC()
 	ret = &User{
 		ID:                  uuid.New(),
-		Username:            params.Username,
-		Email:               params.PendingUser.Email,
 		CreatedAt:           now,
 		UpdatedAt:           now,
-		DisplayName:         params.PendingUser.DisplayName,
+		DisabledAt:          nil,
+		Username:            params.Username,
+		Email:               params.Email,
+		DisplayName:         params.DisplayName,
+		Bio:                 "",
+		FirstName:           "",
+		LastName:            "",
 		AuthKeyHash:         authKeyHash,
+		State:               0,
+		IsAdmin:             false,
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
-		State:               0,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
+		EncryptedMasterKey:  params.MasterKeyNonce,
+		MasterKeyNonce:      params.MasterKeyNonce,
+		TwoFASecret:         nil,
 	}
 
 	queryCreateUser := `INSERT INTO users
