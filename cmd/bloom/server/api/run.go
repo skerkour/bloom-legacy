@@ -31,6 +31,7 @@ func Run() error {
 	router := chi.NewRouter()
 	var certManager *autocert.Manager
 	var tlsConfig *tls.Config
+	var serverAddress string
 
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
@@ -89,7 +90,7 @@ func Run() error {
 	})
 	router.NotFound(http.HandlerFunc(NotFoundHandler))
 
-	if !config.Server.HTTP {
+	if config.Server.HTTPSPort != nil {
 		log.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
 			Email:      config.Server.CertsEmail,
@@ -111,10 +112,13 @@ func Run() error {
 			MinVersion:               tls.VersionTLS13,
 			PreferServerCipherSuites: true,
 		}
+		serverAddress = fmt.Sprintf(":%d", *config.Server.HTTPSPort)
+	} else {
+		serverAddress = fmt.Sprintf(":%d", config.Server.HTTPPort)
 	}
 
 	server := http.Server{
-		Addr:         fmt.Sprintf(":%d", config.Server.Port),
+		Addr:         serverAddress,
 		Handler:      router,
 		ReadTimeout:  SERVER_READ_TIMEOUT,
 		WriteTimeout: SERVER_WRITE_TIMEOUT,
@@ -122,13 +126,21 @@ func Run() error {
 		TLSConfig:    tlsConfig,
 	}
 
-	log.Info("Starting server", rz.Uint16("port", config.Server.Port))
+	log.Info("Starting server", rz.Uint16("http_port", config.Server.HTTPPort))
 	go func() {
 		var err error
-		if config.Server.HTTP {
-			err = server.ListenAndServe()
-		} else {
+		if config.Server.HTTPSPort != nil {
+			go func() {
+				httpServerAddress := fmt.Sprintf(":%d", config.Server.HTTPPort)
+				err := http.ListenAndServe(httpServerAddress, certManager.HTTPHandler(nil))
+				if err != nil {
+					log.Fatal("listening HTTP", rz.Err(err))
+				}
+			}()
 			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
+
+		} else {
+			err = server.ListenAndServe()
 		}
 		if err != nil {
 			log.Fatal("listening", rz.Err(err))
