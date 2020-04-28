@@ -96,9 +96,9 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		Bio:                 "",
 		FirstName:           "",
 		LastName:            "",
-		AuthKeyHash:         authKeyHash,
 		State:               0,
 		IsAdmin:             false,
+		AuthKeyHash:         authKeyHash,
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
@@ -108,12 +108,14 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 	}
 
 	queryCreateUser := `INSERT INTO users
-		(id, created_at, updated_at, username, display_name, bio, email, first_name, last_name,
-			is_admin, auth_key_hash, public_key, encrypted_private_key, state, private_key_nonce)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`
-	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username,
-		ret.DisplayName, ret.Bio, ret.Email, ret.FirstName, ret.LastName, false, ret.AuthKeyHash, ret.PublicKey,
-		ret.EncryptedPrivateKey, ret.State, ret.PrivateKeyNonce)
+		(id, created_at, updated_at, disabled_at, username, email, display_name, bio, first_name, last_name,
+			state, is_admin, auth_key_hash, public_key, encrypted_private_key, private_key_nonce,
+			encrypted_master_key, master_key_nonce, two_fa_secret)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`
+	_, err = tx.Exec(queryCreateUser,
+		ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username, ret.Email, ret.DisplayName, ret.Bio, ret.FirstName, ret.LastName,
+		ret.State, ret.IsAdmin, ret.AuthKeyHash, ret.PublicKey, ret.EncryptedPrivateKey, ret.PrivateKeyNonce,
+		ret.EncryptedMasterKey, ret.MasterKeyNonce, ret.TwoFASecret)
 	if err != nil {
 		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
 		err = NewError(ErrorCompletingRegistration)
