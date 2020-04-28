@@ -182,6 +182,22 @@ type InvoiceConnection struct {
 	TotalCount int64      `json:"totalCount"`
 }
 
+type Object struct {
+	ID           []byte `json:"id"`
+	Algorithm    string `json:"algorithm"`
+	Data         []byte `json:"data"`
+	EncryptedKey []byte `json:"encryptedKey"`
+	Nonce        []byte `json:"nonce"`
+}
+
+type ObjectInput struct {
+	ID           []byte `json:"id"`
+	Algorithm    string `json:"algorithm"`
+	Data         []byte `json:"data"`
+	EncryptedKey []byte `json:"encryptedKey"`
+	Nonce        []byte `json:"nonce"`
+}
+
 type PageInfo struct {
 	EndCursor       *string `json:"endCursor"`
 	HasNextPage     bool    `json:"hasNextPage"`
@@ -217,15 +233,23 @@ type PendingSession struct {
 }
 
 type Pull struct {
-	Todo *string `json:"todo"`
+	Me     *RepositoryPull   `json:"me"`
+	Groups []*RepositoryPull `json:"groups"`
+}
+
+type PullInput struct {
+	Me     bool        `json:"me"`
+	Groups []uuid.UUID `json:"groups"`
 }
 
 type Push struct {
-	Todo *string `json:"todo"`
+	Me     *RepositoryPush   `json:"me"`
+	Groups []*RepositoryPush `json:"groups"`
 }
 
 type PushInput struct {
-	CurrentState string `json:"currentState"`
+	Me     *RepositoryPushInput   `json:"me"`
+	Groups []*RepositoryPushInput `json:"groups"`
 }
 
 type QuitGroupInput struct {
@@ -247,6 +271,27 @@ type RemoveGroupMembersInput struct {
 // remove payment method with `id`
 type RemovePaymentMethodInput struct {
 	ID uuid.UUID `json:"id"`
+}
+
+type RepositoryPull struct {
+	OldState       string     `json:"oldState"`
+	NewState       string     `json:"newState"`
+	Objects        []*Object  `json:"objects"`
+	HasMoreChanges bool       `json:"hasMoreChanges"`
+	GroupID        *uuid.UUID `json:"groupId"`
+}
+
+type RepositoryPush struct {
+	NewState string     `json:"newState"`
+	GroupID  *uuid.UUID `json:"groupId"`
+}
+
+type RepositoryPushInput struct {
+	// current state of the client
+	CurrentState string `json:"currentState"`
+	// out of sync objects
+	Objects []*ObjectInput `json:"objects"`
+	GroupID *uuid.UUID     `json:"groupId"`
 }
 
 type RevokeSessionInput struct {
