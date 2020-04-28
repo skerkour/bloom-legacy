@@ -115,7 +115,7 @@ func UpdateProfile(ctx context.Context, user *User, params UpdateProfileParams) 
 	query += fmt.Sprintf(" WHERE id = $%d", i)
 	queryParams = append(queryParams, ret.ID)
 
-	fmt.Println("QUERYYY", query)
+	logger.Debug("users.UpdateProfile: query", rz.String("query", query))
 
 	_, err = tx.Exec(query, queryParams...)
 	if err != nil {
