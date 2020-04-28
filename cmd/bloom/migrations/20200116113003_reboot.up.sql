@@ -226,10 +226,10 @@ CREATE TABLE objects (
     id UUID NOT NULL,
 
     updated_at_state BIGINT NOT NULL,
-    cipher TEXT,
-    nonce BYTEA,
-    encrypted_key BYTEA,
+    algorithm TEXT,
     encrypted_data BYTEA,
+    encrypted_key BYTEA,
+    nonce BYTEA,
 
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     group_id UUID REFERENCES groups(id) ON DELETE CASCADE,

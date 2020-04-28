@@ -81,10 +81,6 @@ type ComplexityRoot struct {
 		Version   func(childComplexity int) int
 	}
 
-	Changes struct {
-		Todo func(childComplexity int) int
-	}
-
 	Group struct {
 		AvatarURL      func(childComplexity int) int
 		CreatedAt      func(childComplexity int) int
@@ -163,6 +159,7 @@ type ComplexityRoot struct {
 		DisableUser                func(childComplexity int, id uuid.UUID) int
 		EnableUser                 func(childComplexity int, id uuid.UUID) int
 		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
+		Push                       func(childComplexity int, input model.PushInput) int
 		QuitGroup                  func(childComplexity int, input model.QuitGroupInput) int
 		RemoveGroupMembers         func(childComplexity int, input model.RemoveGroupMembersInput) int
 		RemovePaymentMethod        func(childComplexity int, input model.RemovePaymentMethodInput) int
@@ -172,7 +169,6 @@ type ComplexityRoot struct {
 		StartPasswordUpdate        func(childComplexity int) int
 		StartRegistration          func(childComplexity int, input model.StartRegistrationInput) int
 		StartTwoFAActivation       func(childComplexity int) int
-		Sync                       func(childComplexity int, input model.SyncInput) int
 		UpdateBillingPlan          func(childComplexity int, input model.BillingPlanInput) int
 		UpdateBillingSubscription  func(childComplexity int, input model.UpdateBillingSubscriptionInput) int
 		UpdateGroup                func(childComplexity int, input model.GroupInput) int
@@ -214,13 +210,21 @@ type ComplexityRoot struct {
 		TwoFa func(childComplexity int) int
 	}
 
+	Pull struct {
+		Todo func(childComplexity int) int
+	}
+
+	Push struct {
+		Todo func(childComplexity int) int
+	}
+
 	Query struct {
 		BillingPlans    func(childComplexity int) int
-		Changes         func(childComplexity int, sinceState *string) int
 		Group           func(childComplexity int, id uuid.UUID) int
 		Groups          func(childComplexity int) int
 		Me              func(childComplexity int) int
 		Metadata        func(childComplexity int) int
+		Pull            func(childComplexity int, sinceState *string) int
 		StripePublicKey func(childComplexity int) int
 		User            func(childComplexity int, username *string) int
 		Users           func(childComplexity int) int
@@ -252,10 +256,6 @@ type ComplexityRoot struct {
 		Me             func(childComplexity int) int
 		PendingSession func(childComplexity int) int
 		Session        func(childComplexity int) int
-	}
-
-	Sync struct {
-		Todo func(childComplexity int) int
 	}
 
 	TwoFa struct {
@@ -341,7 +341,7 @@ type MutationResolver interface {
 	AddPaymentMethod(ctx context.Context, input model.AddPaymentMethodInput) (*model.PaymentMethod, error)
 	RemovePaymentMethod(ctx context.Context, input model.RemovePaymentMethodInput) (bool, error)
 	ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (*model.PaymentMethod, error)
-	Sync(ctx context.Context, input model.SyncInput) (*model.Sync, error)
+	Push(ctx context.Context, input model.PushInput) (*model.Push, error)
 }
 type QueryResolver interface {
 	Me(ctx context.Context) (*model.User, error)
@@ -352,7 +352,7 @@ type QueryResolver interface {
 	BillingPlans(ctx context.Context) (*model.BillingPlanConnection, error)
 	Metadata(ctx context.Context) (*model.BloomMetadata, error)
 	StripePublicKey(ctx context.Context) (string, error)
-	Changes(ctx context.Context, sinceState *string) (*model.Changes, error)
+	Pull(ctx context.Context, sinceState *string) (*model.Pull, error)
 }
 type UserResolver interface {
 	Groups(ctx context.Context, obj *model.User) (*model.GroupConnection, error)
@@ -524,13 +524,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.BloomMetadata.Version(childComplexity), true
-
-	case "Changes.todo":
-		if e.complexity.Changes.Todo == nil {
-			break
-		}
-
-		return e.complexity.Changes.Todo(childComplexity), true
 
 	case "Group.avatarUrl":
 		if e.complexity.Group.AvatarURL == nil {
@@ -988,6 +981,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.InviteUsersInGroup(childComplexity, args["input"].(model.InviteUsersInGroupInput)), true
 
+	case "Mutation.push":
+		if e.complexity.Mutation.Push == nil {
+			break
+		}
+
+		args, err := ec.field_Mutation_push_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Mutation.Push(childComplexity, args["input"].(model.PushInput)), true
+
 	case "Mutation.quitGroup":
 		if e.complexity.Mutation.QuitGroup == nil {
 			break
@@ -1085,18 +1090,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Mutation.StartTwoFAActivation(childComplexity), true
-
-	case "Mutation.sync":
-		if e.complexity.Mutation.Sync == nil {
-			break
-		}
-
-		args, err := ec.field_Mutation_sync_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Mutation.Sync(childComplexity, args["input"].(model.SyncInput)), true
 
 	case "Mutation.updateBillingPlan":
 		if e.complexity.Mutation.UpdateBillingPlan == nil {
@@ -1296,24 +1289,26 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PendingSession.TwoFa(childComplexity), true
 
+	case "Pull.todo":
+		if e.complexity.Pull.Todo == nil {
+			break
+		}
+
+		return e.complexity.Pull.Todo(childComplexity), true
+
+	case "Push.todo":
+		if e.complexity.Push.Todo == nil {
+			break
+		}
+
+		return e.complexity.Push.Todo(childComplexity), true
+
 	case "Query.billingPlans":
 		if e.complexity.Query.BillingPlans == nil {
 			break
 		}
 
 		return e.complexity.Query.BillingPlans(childComplexity), true
-
-	case "Query.changes":
-		if e.complexity.Query.Changes == nil {
-			break
-		}
-
-		args, err := ec.field_Query_changes_args(context.TODO(), rawArgs)
-		if err != nil {
-			return 0, false
-		}
-
-		return e.complexity.Query.Changes(childComplexity, args["sinceState"].(*string)), true
 
 	case "Query.group":
 		if e.complexity.Query.Group == nil {
@@ -1347,6 +1342,18 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Query.Metadata(childComplexity), true
+
+	case "Query.pull":
+		if e.complexity.Query.Pull == nil {
+			break
+		}
+
+		args, err := ec.field_Query_pull_args(context.TODO(), rawArgs)
+		if err != nil {
+			return 0, false
+		}
+
+		return e.complexity.Query.Pull(childComplexity, args["sinceState"].(*string)), true
 
 	case "Query.stripePublicKey":
 		if e.complexity.Query.StripePublicKey == nil {
@@ -1464,13 +1471,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.SignedIn.Session(childComplexity), true
-
-	case "Sync.todo":
-		if e.complexity.Sync.Todo == nil {
-			break
-		}
-
-		return e.complexity.Sync.Todo(childComplexity), true
 
 	case "TwoFA.method":
 		if e.complexity.TwoFa.Method == nil {
@@ -1971,11 +1971,11 @@ type PasswordUpdateStarted {
   twoFA: TwoFA
 }
 
-type Sync {
+type Push {
   todo: String
 }
 
-type Changes {
+type Pull {
   todo: String
 }
 
@@ -2008,8 +2008,8 @@ type Query {
   metadata: BloomMetadata
   """The stripe public key to be used"""
   stripePublicKey: String!
-  """Fetch changes since a given state"""
-  changes(sinceState: String): Changes!
+  """Pull changes since a given state"""
+  pull(sinceState: String): Pull!
 }
 
 ####################################################################################################
@@ -2182,7 +2182,7 @@ input CompletePasswordUpdateInput {
   masterKeyNonce: Bytes!
 }
 
-input SyncInput {
+input PushInput {
   currentState: String!
 }
 
@@ -2250,7 +2250,7 @@ type Mutation {
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 
   # objects
-  sync(input: SyncInput!): Sync!
+  push(input: PushInput!): Push!
 }
 `, BuiltIn: false},
 }
@@ -2498,6 +2498,20 @@ func (ec *executionContext) field_Mutation_inviteUsersInGroup_args(ctx context.C
 	return args, nil
 }
 
+func (ec *executionContext) field_Mutation_push_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 model.PushInput
+	if tmp, ok := rawArgs["input"]; ok {
+		arg0, err = ec.unmarshalNPushInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPushInput(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["input"] = arg0
+	return args, nil
+}
+
 func (ec *executionContext) field_Mutation_quitGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2588,20 +2602,6 @@ func (ec *executionContext) field_Mutation_startRegistration_args(ctx context.Co
 	var arg0 model.StartRegistrationInput
 	if tmp, ok := rawArgs["input"]; ok {
 		arg0, err = ec.unmarshalNStartRegistrationInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐStartRegistrationInput(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["input"] = arg0
-	return args, nil
-}
-
-func (ec *executionContext) field_Mutation_sync_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 model.SyncInput
-	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNSyncInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSyncInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2708,20 +2708,6 @@ func (ec *executionContext) field_Query___type_args(ctx context.Context, rawArgs
 	return args, nil
 }
 
-func (ec *executionContext) field_Query_changes_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
-	var err error
-	args := map[string]interface{}{}
-	var arg0 *string
-	if tmp, ok := rawArgs["sinceState"]; ok {
-		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
-		if err != nil {
-			return nil, err
-		}
-	}
-	args["sinceState"] = arg0
-	return args, nil
-}
-
 func (ec *executionContext) field_Query_group_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
@@ -2733,6 +2719,20 @@ func (ec *executionContext) field_Query_group_args(ctx context.Context, rawArgs 
 		}
 	}
 	args["id"] = arg0
+	return args, nil
+}
+
+func (ec *executionContext) field_Query_pull_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+	var err error
+	args := map[string]interface{}{}
+	var arg0 *string
+	if tmp, ok := rawArgs["sinceState"]; ok {
+		arg0, err = ec.unmarshalOString2ᚖstring(ctx, tmp)
+		if err != nil {
+			return nil, err
+		}
+	}
+	args["sinceState"] = arg0
 	return args, nil
 }
 
@@ -3483,37 +3483,6 @@ func (ec *executionContext) _BloomMetadata_gitCommit(ctx context.Context, field 
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Changes_todo(ctx context.Context, field graphql.CollectedField, obj *model.Changes) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "Changes",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Todo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_id(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -5978,7 +5947,7 @@ func (ec *executionContext) _Mutation_changeDefaultPaymentMethod(ctx context.Con
 	return ec.marshalNPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPaymentMethod(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_sync(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_push(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -5994,7 +5963,7 @@ func (ec *executionContext) _Mutation_sync(ctx context.Context, field graphql.Co
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_sync_args(ctx, rawArgs)
+	args, err := ec.field_Mutation_push_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -6002,7 +5971,7 @@ func (ec *executionContext) _Mutation_sync(ctx context.Context, field graphql.Co
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().Sync(rctx, args["input"].(model.SyncInput))
+		return ec.resolvers.Mutation().Push(rctx, args["input"].(model.PushInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6014,9 +5983,9 @@ func (ec *executionContext) _Mutation_sync(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Sync)
+	res := resTmp.(*model.Push)
 	fc.Result = res
-	return ec.marshalNSync2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSync(ctx, field.Selections, res)
+	return ec.marshalNPush2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPush(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PageInfo_endCursor(ctx context.Context, field graphql.CollectedField, obj *model.PageInfo) (ret graphql.Marshaler) {
@@ -6616,6 +6585,68 @@ func (ec *executionContext) _PendingSession_twoFA(ctx context.Context, field gra
 	return ec.marshalOTwoFA2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFa(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _Pull_todo(ctx context.Context, field graphql.CollectedField, obj *model.Pull) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Pull",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Todo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Push_todo(ctx context.Context, field graphql.CollectedField, obj *model.Push) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Push",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.Todo, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _Query_me(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -6884,7 +6915,7 @@ func (ec *executionContext) _Query_stripePublicKey(ctx context.Context, field gr
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Query_changes(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Query_pull(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -6900,7 +6931,7 @@ func (ec *executionContext) _Query_changes(ctx context.Context, field graphql.Co
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Query_changes_args(ctx, rawArgs)
+	args, err := ec.field_Query_pull_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -6908,7 +6939,7 @@ func (ec *executionContext) _Query_changes(ctx context.Context, field graphql.Co
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Query().Changes(rctx, args["sinceState"].(*string))
+		return ec.resolvers.Query().Pull(rctx, args["sinceState"].(*string))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6920,9 +6951,9 @@ func (ec *executionContext) _Query_changes(ctx context.Context, field graphql.Co
 		}
 		return graphql.Null
 	}
-	res := resTmp.(*model.Changes)
+	res := resTmp.(*model.Pull)
 	fc.Result = res
-	return ec.marshalNChanges2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChanges(ctx, field.Selections, res)
+	return ec.marshalNPull2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPull(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Query___type(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
@@ -7425,37 +7456,6 @@ func (ec *executionContext) _SignedIn_me(ctx context.Context, field graphql.Coll
 	res := resTmp.(*model.User)
 	fc.Result = res
 	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Sync_todo(ctx context.Context, field graphql.CollectedField, obj *model.Sync) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "Sync",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Todo, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*string)
-	fc.Result = res
-	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _TwoFA_method(ctx context.Context, field graphql.CollectedField, obj *model.TwoFa) (ret graphql.Marshaler) {
@@ -9821,6 +9821,24 @@ func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Co
 	return it, nil
 }
 
+func (ec *executionContext) unmarshalInputPushInput(ctx context.Context, obj interface{}) (model.PushInput, error) {
+	var it model.PushInput
+	var asMap = obj.(map[string]interface{})
+
+	for k, v := range asMap {
+		switch k {
+		case "currentState":
+			var err error
+			it.CurrentState, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		}
+	}
+
+	return it, nil
+}
+
 func (ec *executionContext) unmarshalInputQuitGroupInput(ctx context.Context, obj interface{}) (model.QuitGroupInput, error) {
 	var it model.QuitGroupInput
 	var asMap = obj.(map[string]interface{})
@@ -9986,24 +10004,6 @@ func (ec *executionContext) unmarshalInputStartRegistrationInput(ctx context.Con
 		case "email":
 			var err error
 			it.Email, err = ec.unmarshalNString2string(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		}
-	}
-
-	return it, nil
-}
-
-func (ec *executionContext) unmarshalInputSyncInput(ctx context.Context, obj interface{}) (model.SyncInput, error) {
-	var it model.SyncInput
-	var asMap = obj.(map[string]interface{})
-
-	for k, v := range asMap {
-		switch k {
-		case "currentState":
-			var err error
-			it.CurrentState, err = ec.unmarshalNString2string(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10323,30 +10323,6 @@ func (ec *executionContext) _BloomMetadata(ctx context.Context, sel ast.Selectio
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var changesImplementors = []string{"Changes"}
-
-func (ec *executionContext) _Changes(ctx context.Context, sel ast.SelectionSet, obj *model.Changes) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, changesImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Changes")
-		case "todo":
-			out.Values[i] = ec._Changes_todo(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -10874,8 +10850,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "sync":
-			out.Values[i] = ec._Mutation_sync(ctx, field)
+		case "push":
+			out.Values[i] = ec._Mutation_push(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -11075,6 +11051,54 @@ func (ec *executionContext) _PendingSession(ctx context.Context, sel ast.Selecti
 	return out
 }
 
+var pullImplementors = []string{"Pull"}
+
+func (ec *executionContext) _Pull(ctx context.Context, sel ast.SelectionSet, obj *model.Pull) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pullImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Pull")
+		case "todo":
+			out.Values[i] = ec._Pull_todo(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
+var pushImplementors = []string{"Push"}
+
+func (ec *executionContext) _Push(ctx context.Context, sel ast.SelectionSet, obj *model.Push) graphql.Marshaler {
+	fields := graphql.CollectFields(ec.OperationContext, sel, pushImplementors)
+
+	out := graphql.NewFieldSet(fields)
+	var invalids uint32
+	for i, field := range fields {
+		switch field.Name {
+		case "__typename":
+			out.Values[i] = graphql.MarshalString("Push")
+		case "todo":
+			out.Values[i] = ec._Push_todo(ctx, field, obj)
+		default:
+			panic("unknown field " + strconv.Quote(field.Name))
+		}
+	}
+	out.Dispatch()
+	if invalids > 0 {
+		return graphql.Null
+	}
+	return out
+}
+
 var queryImplementors = []string{"Query"}
 
 func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) graphql.Marshaler {
@@ -11184,7 +11208,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 				}
 				return res
 			})
-		case "changes":
+		case "pull":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
 				defer func() {
@@ -11192,7 +11216,7 @@ func (ec *executionContext) _Query(ctx context.Context, sel ast.SelectionSet) gr
 						ec.Error(ctx, ec.Recover(ctx, r))
 					}
 				}()
-				res = ec._Query_changes(ctx, field)
+				res = ec._Query_pull(ctx, field)
 				if res == graphql.Null {
 					atomic.AddUint32(&invalids, 1)
 				}
@@ -11368,30 +11392,6 @@ func (ec *executionContext) _SignedIn(ctx context.Context, sel ast.SelectionSet,
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		default:
-			panic("unknown field " + strconv.Quote(field.Name))
-		}
-	}
-	out.Dispatch()
-	if invalids > 0 {
-		return graphql.Null
-	}
-	return out
-}
-
-var syncImplementors = []string{"Sync"}
-
-func (ec *executionContext) _Sync(ctx context.Context, sel ast.SelectionSet, obj *model.Sync) graphql.Marshaler {
-	fields := graphql.CollectFields(ec.OperationContext, sel, syncImplementors)
-
-	out := graphql.NewFieldSet(fields)
-	var invalids uint32
-	for i, field := range fields {
-		switch field.Name {
-		case "__typename":
-			out.Values[i] = graphql.MarshalString("Sync")
-		case "todo":
-			out.Values[i] = ec._Sync_todo(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11956,20 +11956,6 @@ func (ec *executionContext) unmarshalNChangeDefaultPaymentMethodInput2gitlabᚗc
 	return ec.unmarshalInputChangeDefaultPaymentMethodInput(ctx, v)
 }
 
-func (ec *executionContext) marshalNChanges2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChanges(ctx context.Context, sel ast.SelectionSet, v model.Changes) graphql.Marshaler {
-	return ec._Changes(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNChanges2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐChanges(ctx context.Context, sel ast.SelectionSet, v *model.Changes) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Changes(ctx, sel, v)
-}
-
 func (ec *executionContext) unmarshalNCompletePasswordUpdateInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐCompletePasswordUpdateInput(ctx context.Context, v interface{}) (model.CompletePasswordUpdateInput, error) {
 	return ec.unmarshalInputCompletePasswordUpdateInput(ctx, v)
 }
@@ -12110,6 +12096,38 @@ func (ec *executionContext) marshalNPaymentMethod2ᚖgitlabᚗcomᚋbloom42ᚋbl
 		return graphql.Null
 	}
 	return ec._PaymentMethod(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPull2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPull(ctx context.Context, sel ast.SelectionSet, v model.Pull) graphql.Marshaler {
+	return ec._Pull(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPull2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPull(ctx context.Context, sel ast.SelectionSet, v *model.Pull) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Pull(ctx, sel, v)
+}
+
+func (ec *executionContext) marshalNPush2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPush(ctx context.Context, sel ast.SelectionSet, v model.Push) graphql.Marshaler {
+	return ec._Push(ctx, sel, &v)
+}
+
+func (ec *executionContext) marshalNPush2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPush(ctx context.Context, sel ast.SelectionSet, v *model.Push) graphql.Marshaler {
+	if v == nil {
+		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
+			ec.Errorf(ctx, "must not be null")
+		}
+		return graphql.Null
+	}
+	return ec._Push(ctx, sel, v)
+}
+
+func (ec *executionContext) unmarshalNPushInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐPushInput(ctx context.Context, v interface{}) (model.PushInput, error) {
+	return ec.unmarshalInputPushInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNQuitGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐQuitGroupInput(ctx context.Context, v interface{}) (model.QuitGroupInput, error) {
@@ -12267,24 +12285,6 @@ func (ec *executionContext) marshalNString2ᚕstringᚄ(ctx context.Context, sel
 	}
 
 	return ret
-}
-
-func (ec *executionContext) marshalNSync2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSync(ctx context.Context, sel ast.SelectionSet, v model.Sync) graphql.Marshaler {
-	return ec._Sync(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalNSync2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSync(ctx context.Context, sel ast.SelectionSet, v *model.Sync) graphql.Marshaler {
-	if v == nil {
-		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
-			ec.Errorf(ctx, "must not be null")
-		}
-		return graphql.Null
-	}
-	return ec._Sync(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalNSyncInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSyncInput(ctx context.Context, v interface{}) (model.SyncInput, error) {
-	return ec.unmarshalInputSyncInput(ctx, v)
 }
 
 func (ec *executionContext) unmarshalNTime2timeᚐTime(ctx context.Context, v interface{}) (time.Time, error) {

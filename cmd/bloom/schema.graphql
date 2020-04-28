@@ -244,11 +244,11 @@ type PasswordUpdateStarted {
   twoFA: TwoFA
 }
 
-type Sync {
+type Push {
   todo: String
 }
 
-type Changes {
+type Pull {
   todo: String
 }
 
@@ -281,8 +281,8 @@ type Query {
   metadata: BloomMetadata
   """The stripe public key to be used"""
   stripePublicKey: String!
-  """Fetch changes since a given state"""
-  changes(sinceState: String): Changes!
+  """Pull changes since a given state"""
+  pull(sinceState: String): Pull!
 }
 
 ####################################################################################################
@@ -455,7 +455,7 @@ input CompletePasswordUpdateInput {
   masterKeyNonce: Bytes!
 }
 
-input SyncInput {
+input PushInput {
   currentState: String!
 }
 
@@ -523,5 +523,5 @@ type Mutation {
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 
   # objects
-  sync(input: SyncInput!): Sync!
+  push(input: PushInput!): Push!
 }

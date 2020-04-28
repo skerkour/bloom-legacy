@@ -4,10 +4,11 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
+// Object is an object
 type Object struct {
 	ID             uuid.UUID `db:"id"`
 	UpdatedAtState int64     `db:"updated_at_state"`
-	Cipher         string    `db:"cipher"`
+	Algorithm      string    `db:"algorithm"`
 	Nonce          []byte    `db:"nonce"`
 	EncryptedKey   []byte    `db:"encrypted_key"`
 	EncryptedData  []byte    `db:"encrypted_data"`

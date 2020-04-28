@@ -65,10 +65,6 @@ type ChangeDefaultPaymentMethodInput struct {
 	ID uuid.UUID `json:"id"`
 }
 
-type Changes struct {
-	Todo *string `json:"todo"`
-}
-
 type CompletePasswordUpdateInput struct {
 	ID                 uuid.UUID           `json:"id"`
 	AuthKey            []byte              `json:"authKey"`
@@ -220,6 +216,18 @@ type PendingSession struct {
 	TwoFa *TwoFa    `json:"twoFA"`
 }
 
+type Pull struct {
+	Todo *string `json:"todo"`
+}
+
+type Push struct {
+	Todo *string `json:"todo"`
+}
+
+type PushInput struct {
+	CurrentState string `json:"currentState"`
+}
+
 type QuitGroupInput struct {
 	// group id
 	ID uuid.UUID `json:"id"`
@@ -287,14 +295,6 @@ type SignedIn struct {
 type StartRegistrationInput struct {
 	DisplayName string `json:"displayName"`
 	Email       string `json:"email"`
-}
-
-type Sync struct {
-	Todo *string `json:"todo"`
-}
-
-type SyncInput struct {
-	CurrentState string `json:"currentState"`
 }
 
 type TwoFa struct {

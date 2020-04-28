@@ -26,7 +26,7 @@ func FindUserByID(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, forUpdate 
 		err = tx.Get(ret, queryFind, userID)
 	}
 	if err != nil {
-		logger.Error("finding user", rz.Err(err),
+		logger.Error("users.FindUserByID: finding user", rz.Err(err),
 			rz.String("user.id", userID.String()))
 		return ret, NewError(ErrorUserNotFound)
 	}
