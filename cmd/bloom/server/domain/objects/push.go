@@ -8,8 +8,7 @@ import (
 )
 
 type PushParams struct {
-	Me     *RepositoryPush
-	Groups []RepositoryPush
+	Repositories []RepositoryPush
 }
 
 type RepositoryPush struct {
