@@ -19,8 +19,7 @@ type RepositoryPush struct {
 }
 
 type PushResult struct {
-	Me     *RepositoryPushResult
-	Groups []RepositoryPushResult
+	Repositories []RepositoryPushResult
 }
 
 type RepositoryPushResult struct {

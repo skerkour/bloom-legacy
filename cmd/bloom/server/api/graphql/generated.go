@@ -219,13 +219,11 @@ type ComplexityRoot struct {
 	}
 
 	Pull struct {
-		Groups func(childComplexity int) int
-		Me     func(childComplexity int) int
+		Repositories func(childComplexity int) int
 	}
 
 	Push struct {
-		Groups func(childComplexity int) int
-		Me     func(childComplexity int) int
+		Repositories func(childComplexity int) int
 	}
 
 	Query struct {
@@ -1347,33 +1345,19 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.PendingSession.TwoFa(childComplexity), true
 
-	case "Pull.groups":
-		if e.complexity.Pull.Groups == nil {
+	case "Pull.repositories":
+		if e.complexity.Pull.Repositories == nil {
 			break
 		}
 
-		return e.complexity.Pull.Groups(childComplexity), true
+		return e.complexity.Pull.Repositories(childComplexity), true
 
-	case "Pull.me":
-		if e.complexity.Pull.Me == nil {
+	case "Push.repositories":
+		if e.complexity.Push.Repositories == nil {
 			break
 		}
 
-		return e.complexity.Pull.Me(childComplexity), true
-
-	case "Push.groups":
-		if e.complexity.Push.Groups == nil {
-			break
-		}
-
-		return e.complexity.Push.Groups(childComplexity), true
-
-	case "Push.me":
-		if e.complexity.Push.Me == nil {
-			break
-		}
-
-		return e.complexity.Push.Me(childComplexity), true
+		return e.complexity.Push.Repositories(childComplexity), true
 
 	case "Query.billingPlans":
 		if e.complexity.Query.BillingPlans == nil {
@@ -2093,8 +2077,7 @@ type PasswordUpdateStarted {
 }
 
 type Push {
-  me: RepositoryPush
-  groups: [RepositoryPush!]!
+  repositories: [RepositoryPush!]!
 }
 
 type RepositoryPush {
@@ -2103,8 +2086,7 @@ type RepositoryPush {
 }
 
 type Pull {
-  me: RepositoryPull
-  groups: [RepositoryPull!]!
+  repositories: [RepositoryPull!]!
 }
 
 type RepositoryPull {
@@ -2333,8 +2315,7 @@ input PullInput {
 }
 
 input PushInput {
-  me: RepositoryPushInput
-  groups: [RepositoryPushInput!]!
+  repositories: [RepositoryPushInput!]!
 }
 
 input RepositoryPushInput {
@@ -2342,6 +2323,7 @@ input RepositoryPushInput {
   currentState: String!
   """out of sync objects"""
   objects: [ObjectInput!]!
+  """to indicate whether it's the user's repository, or a group"""
   groupId: ID
 }
 
@@ -6922,7 +6904,7 @@ func (ec *executionContext) _PendingSession_twoFA(ctx context.Context, field gra
 	return ec.marshalOTwoFA2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐTwoFa(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Pull_me(ctx context.Context, field graphql.CollectedField, obj *model.Pull) (ret graphql.Marshaler) {
+func (ec *executionContext) _Pull_repositories(ctx context.Context, field graphql.CollectedField, obj *model.Pull) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -6939,38 +6921,7 @@ func (ec *executionContext) _Pull_me(ctx context.Context, field graphql.Collecte
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Me, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.RepositoryPull)
-	fc.Result = res
-	return ec.marshalORepositoryPull2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPull(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Pull_groups(ctx context.Context, field graphql.CollectedField, obj *model.Pull) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "Pull",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
+		return obj.Repositories, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -6987,7 +6938,7 @@ func (ec *executionContext) _Pull_groups(ctx context.Context, field graphql.Coll
 	return ec.marshalNRepositoryPull2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPullᚄ(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Push_me(ctx context.Context, field graphql.CollectedField, obj *model.Push) (ret graphql.Marshaler) {
+func (ec *executionContext) _Push_repositories(ctx context.Context, field graphql.CollectedField, obj *model.Push) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -7004,38 +6955,7 @@ func (ec *executionContext) _Push_me(ctx context.Context, field graphql.Collecte
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Me, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*model.RepositoryPush)
-	fc.Result = res
-	return ec.marshalORepositoryPush2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPush(ctx, field.Selections, res)
-}
-
-func (ec *executionContext) _Push_groups(ctx context.Context, field graphql.CollectedField, obj *model.Push) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "Push",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Groups, nil
+		return obj.Repositories, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10530,15 +10450,9 @@ func (ec *executionContext) unmarshalInputPushInput(ctx context.Context, obj int
 
 	for k, v := range asMap {
 		switch k {
-		case "me":
+		case "repositories":
 			var err error
-			it.Me, err = ec.unmarshalORepositoryPushInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInput(ctx, v)
-			if err != nil {
-				return it, err
-			}
-		case "groups":
-			var err error
-			it.Groups, err = ec.unmarshalNRepositoryPushInput2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInputᚄ(ctx, v)
+			it.Repositories, err = ec.unmarshalNRepositoryPushInput2ᚕᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInputᚄ(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11848,10 +11762,8 @@ func (ec *executionContext) _Pull(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Pull")
-		case "me":
-			out.Values[i] = ec._Pull_me(ctx, field, obj)
-		case "groups":
-			out.Values[i] = ec._Pull_groups(ctx, field, obj)
+		case "repositories":
+			out.Values[i] = ec._Pull_repositories(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -11877,10 +11789,8 @@ func (ec *executionContext) _Push(ctx context.Context, sel ast.SelectionSet, obj
 		switch field.Name {
 		case "__typename":
 			out.Values[i] = graphql.MarshalString("Push")
-		case "me":
-			out.Values[i] = ec._Push_me(ctx, field, obj)
-		case "groups":
-			out.Values[i] = ec._Push_groups(ctx, field, obj)
+		case "repositories":
+			out.Values[i] = ec._Push_repositories(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -14181,40 +14091,6 @@ func (ec *executionContext) marshalOPendingSession2ᚖgitlabᚗcomᚋbloom42ᚋb
 		return graphql.Null
 	}
 	return ec._PendingSession(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalORepositoryPull2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPull(ctx context.Context, sel ast.SelectionSet, v model.RepositoryPull) graphql.Marshaler {
-	return ec._RepositoryPull(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalORepositoryPull2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPull(ctx context.Context, sel ast.SelectionSet, v *model.RepositoryPull) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._RepositoryPull(ctx, sel, v)
-}
-
-func (ec *executionContext) marshalORepositoryPush2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPush(ctx context.Context, sel ast.SelectionSet, v model.RepositoryPush) graphql.Marshaler {
-	return ec._RepositoryPush(ctx, sel, &v)
-}
-
-func (ec *executionContext) marshalORepositoryPush2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPush(ctx context.Context, sel ast.SelectionSet, v *model.RepositoryPush) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec._RepositoryPush(ctx, sel, v)
-}
-
-func (ec *executionContext) unmarshalORepositoryPushInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInput(ctx context.Context, v interface{}) (model.RepositoryPushInput, error) {
-	return ec.unmarshalInputRepositoryPushInput(ctx, v)
-}
-
-func (ec *executionContext) unmarshalORepositoryPushInput2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInput(ctx context.Context, v interface{}) (*model.RepositoryPushInput, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalORepositoryPushInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐRepositoryPushInput(ctx, v)
-	return &res, err
 }
 
 func (ec *executionContext) marshalOSession2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐSession(ctx context.Context, sel ast.SelectionSet, v model.Session) graphql.Marshaler {

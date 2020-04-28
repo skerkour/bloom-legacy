@@ -245,8 +245,7 @@ type PasswordUpdateStarted {
 }
 
 type Push {
-  me: RepositoryPush
-  groups: [RepositoryPush!]!
+  repositories: [RepositoryPush!]!
 }
 
 type RepositoryPush {
@@ -255,8 +254,7 @@ type RepositoryPush {
 }
 
 type Pull {
-  me: RepositoryPull
-  groups: [RepositoryPull!]!
+  repositories: [RepositoryPull!]!
 }
 
 type RepositoryPull {
@@ -485,8 +483,7 @@ input PullInput {
 }
 
 input PushInput {
-  me: RepositoryPushInput
-  groups: [RepositoryPushInput!]!
+  repositories: [RepositoryPushInput!]!
 }
 
 input RepositoryPushInput {
@@ -494,6 +491,7 @@ input RepositoryPushInput {
   currentState: String!
   """out of sync objects"""
   objects: [ObjectInput!]!
+  """to indicate whether it's the user's repository, or a group"""
   groupId: ID
 }
 
