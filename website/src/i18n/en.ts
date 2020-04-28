@@ -21,7 +21,8 @@ export default {
       description: `As an Open Source project anyone can inspect how Bloom works.
       We use state of the art cryptography to keep your data secure.
       There are no ads, no affiliate marketing, no creepy tracking. <br />
-      Just open technology for a fast, simple, and secure experience.`,
+      Just <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">open technology</a>
+      for a fast, simple, and secure experience.`,
     },
     feature2: {
       title: 'Bring your team together',
@@ -163,7 +164,8 @@ export default {
       encrypted data are stored in a  <a href="scaleway.com" target="_blank" rel="noopener">Scaleway</a>
       datacenter in a privacy friendly country: France.`,
     q3: 'Why Bloom is more ethical than other service providers?',
-    a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
+    a3: `Bloom is <b><a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">100% Open Source</a></b>.
+      Anyone can inspect how Bloom works.
       Also, there are no ads, no affiliate marketing, no creepy tracking.
       Just open technology for a fast, simple, and secure experience.`,
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',

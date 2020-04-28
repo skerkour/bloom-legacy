@@ -21,7 +21,8 @@ export default {
       description: `En tant que projet Open Source, n'importe qui peut regarder comment fonctionne
       Bloom. Nous utilisons l'état de l'art en cryptographie pour garder vos données en sécurité.
       Il n'y a pas de publicité, pas de marketing d'affiliation, pas de trackers envahissants. <br />
-      Seulement de la technologie ouverte pour une expérience rapide, simple et sécure.`,
+      Seulement de la <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">technologie ouverte</a>
+      pour une expérience rapide, simple et sécure.`,
     },
     feature2: {
       title: 'Un outil collaboratif',
@@ -149,7 +150,7 @@ export default {
     others: 'Autres',
   },
   faq: {
-    title: 'Frequently Asked Questions',
+    title: 'Foire Aux Questions',
     q1: 'How secure are my data?',
     a1: `Some of your most personal moments are shared on WhatsApp, which is why we built end-to-end encryption.
       We use state of the art cryptography
@@ -168,7 +169,8 @@ export default {
     q3: 'Why Bloom is more ethical than other service providers?',
     a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
       Also, there are no ads, no affiliate marketing, no creepy tracking.
-      Just open technology for a fast, simple, and secure experience.`,
+      Just <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">open technology</a>
+      for a fast, simple, and secure experience.`,
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',
     a4: `When you don't pay for a service, YOU are the product. <br />
       Your personal data are either shared
