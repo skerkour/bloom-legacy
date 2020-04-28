@@ -106,7 +106,7 @@ CREATE UNIQUE INDEX index_groups_on_avatar_id ON groups (avatar_id);
 
 CREATE TABLE groups_members (
     joined_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    inviter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    inviter_id UUID NOT NULL REFERENCES users(id),
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     role TEXT NOT NULL
@@ -171,8 +171,8 @@ CREATE TABLE billing_customers (
     subscription_updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     plan_id UUID NOT NULL REFERENCES billing_plans(id),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id),
+    group_id UUID REFERENCES groups(id),
 
     PRIMARY KEY(id)
 );
