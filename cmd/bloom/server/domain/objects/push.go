@@ -146,7 +146,7 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		}
 
 	} else {
-		// user repository
+		// user's repository
 		if actor.State != repo.curentStateInt {
 			err = NewError(ErrorOutOfSync)
 			return
