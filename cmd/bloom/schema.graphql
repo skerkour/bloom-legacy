@@ -245,11 +245,34 @@ type PasswordUpdateStarted {
 }
 
 type Push {
-  todo: String
+  me: RepositoryPush
+  groups: [RepositoryPush!]!
+}
+
+type RepositoryPush {
+  newState: String!
+  groupId: ID
 }
 
 type Pull {
-  todo: String
+  me: RepositoryPull
+  groups: [RepositoryPull!]!
+}
+
+type RepositoryPull {
+  oldState: String!
+  newState: String!
+  objects: [Object!]!
+  hasMoreChanges: Boolean!
+  groupId: ID
+}
+
+type Object {
+  id: Bytes!
+  algorithm: String!
+  data: Bytes!
+  encryptedKey: Bytes!
+  nonce: Bytes!
 }
 
 type TwoFAActivationStarted {
@@ -282,7 +305,7 @@ type Query {
   """The stripe public key to be used"""
   stripePublicKey: String!
   """Pull changes since a given state"""
-  pull(sinceState: String): Pull!
+  pull(input: PullInput!): Pull!
 }
 
 ####################################################################################################
@@ -455,8 +478,31 @@ input CompletePasswordUpdateInput {
   masterKeyNonce: Bytes!
 }
 
+
+input PullInput {
+  me: Boolean!
+  groups: [ID!]!
+}
+
 input PushInput {
+  me: RepositoryPushInput
+  groups: [RepositoryPushInput!]!
+}
+
+input RepositoryPushInput {
+  """current state of the client"""
   currentState: String!
+  """out of sync objects"""
+  objects: [ObjectInput!]!
+  groupId: ID
+}
+
+input ObjectInput {
+  id: Bytes!
+  algorithm: String!
+  data: Bytes!
+  encryptedKey: Bytes!
+  nonce: Bytes!
 }
 
 input DisableTwoFAInput {

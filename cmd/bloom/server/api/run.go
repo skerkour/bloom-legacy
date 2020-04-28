@@ -138,7 +138,6 @@ func Run() error {
 				}
 			}()
 			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
-
 		} else {
 			err = server.ListenAndServe()
 		}
