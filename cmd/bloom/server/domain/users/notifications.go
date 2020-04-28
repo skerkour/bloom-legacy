@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"net/mail"
 	"text/template"
+	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
 	"gitlab.com/bloom42/lily/email"
@@ -41,6 +42,45 @@ func sendUserVerificationCode(toAddr, displayName, code string) error {
 	message := email.Email{
 		From:    &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS},
 		To:      []*mail.Address{{Name: displayName, Address: toAddr}},
+		Subject: subject,
+		HTML:    content.Bytes(),
+	}
+	return email.Send(message)
+}
+
+const userSignInAlertTemplate = `
+Hi {{ .Name }}! <br/><br/>
+
+A new device connected to your account on {{ .Time }} from the IP {{ .IP }} <br/><br/>
+
+If it's not you, please change your password immediatly, otherwise you can safely ignore this email.
+`
+
+type userSignInAlertData struct {
+	Name string
+	IP   string
+	Time string
+}
+
+func sendSignInEmailAlert(toAddr, toName, ipAddress string) error {
+	var content bytes.Buffer
+	tmpl := template.Must(template.New("userSignInAlertTemplate").Parse(userSignInAlertTemplate))
+	now := time.Now().UTC()
+	data := userSignInAlertData{
+		Name: toName,
+		IP:   ipAddress,
+		Time: now.Format(time.RFC3339),
+	}
+
+	subject := "Bloom - Sign-in alert"
+	err := tmpl.Execute(&content, data)
+	if err != nil {
+		return err
+	}
+
+	message := email.Email{
+		From:    &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS},
+		To:      []*mail.Address{{Name: toName, Address: toAddr}},
 		Subject: subject,
 		HTML:    content.Bytes(),
 	}
