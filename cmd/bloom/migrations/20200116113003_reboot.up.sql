@@ -78,6 +78,7 @@ CREATE TABLE pending_users (
 
 CREATE TABLE deleted_usernames (
     username TEXT NOT NULL,
+    deleted_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     PRIMARY KEY(username)
 );

@@ -9,14 +9,15 @@ import (
 	"gitlab.com/bloom42/lily/uuid"
 )
 
-func DisableUser(ctx context.Context, actor *User, userId uuid.UUID) error {
+// DisableUser is used to disable an user
+func DisableUser(ctx context.Context, actor *User, userID uuid.UUID) error {
 	logger := rz.FromCtx(ctx)
 
 	if actor == nil || !actor.IsAdmin {
 		return NewError(ErrorAdminRoleRequired)
 	}
 
-	if actor.ID == userId {
+	if actor.ID == userID {
 		return NewError(ErrorCantDisableYourself)
 	}
 
@@ -27,7 +28,7 @@ func DisableUser(ctx context.Context, actor *User, userId uuid.UUID) error {
 		return NewError(ErrorInternal)
 	}
 
-	user, err := FindUserByID(ctx, tx, userId)
+	user, err := FindUserByID(ctx, tx, userID)
 	if err != nil {
 		tx.Rollback()
 		return err
