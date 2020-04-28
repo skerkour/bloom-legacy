@@ -155,7 +155,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 					return
 				}
 
-				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID)
+				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID, false)
 				if err != nil {
 					invalidSession(w, r)
 					return

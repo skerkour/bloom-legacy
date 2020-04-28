@@ -11,12 +11,15 @@ import (
 
 // FindUserByID returns a specific user given its id
 // if tx is nil, use the gloab `db.DB`
-func FindUserByID(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID) (*User, error) {
+func FindUserByID(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, forUpdate bool) (*User, error) {
 	ret := &User{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM users WHERE id = $1"
+	if forUpdate {
+		queryFind += " FOR UPDATE"
+	}
 	if tx == nil {
 		err = db.DB.Get(ret, queryFind, userID)
 	} else {

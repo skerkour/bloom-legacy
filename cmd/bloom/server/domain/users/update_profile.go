@@ -72,7 +72,7 @@ func UpdateProfile(ctx context.Context, user *User, params UpdateProfileParams) 
 	}
 
 	if params.ID != nil {
-		ret, err = FindUserByID(ctx, tx, *params.ID)
+		ret, err = FindUserByID(ctx, tx, *params.ID, true)
 		if err != nil {
 			tx.Rollback()
 			return ret, err

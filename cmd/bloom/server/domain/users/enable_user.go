@@ -24,7 +24,7 @@ func EnableUser(ctx context.Context, actor *User, userID uuid.UUID) error {
 		return NewError(ErrorInternal)
 	}
 
-	user, err := FindUserByID(ctx, tx, userID)
+	user, err := FindUserByID(ctx, tx, userID, true)
 	if err != nil {
 		tx.Rollback()
 		return err
