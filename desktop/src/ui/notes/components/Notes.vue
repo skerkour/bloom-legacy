@@ -1,114 +1,48 @@
 <template>
-    <!-- <v-container fluid grid-list-lg>
-      <v-layout align-center justify-center v-if="!archive">
-        <v-flex xs12 sm6>
-          <v-text-field placeholder="Take a note..." solo @click="openNoteDialog" readonly/>
-        </v-flex>
-      </v-layout>
-      <v-row justify="start">
-        <v-col v-for="note in notes" :key="note.id" cols="12" sm="6" md="4" lg="3">
-          <blm-notes-note
-            :note="note"
-            @archived="noteArchived"
-            @unarchived="noteUnarchived"
-            @updated="noteUpdated"
-            @deleted="noteDeleted"
-          />
-        </v-col>
-    </v-row>
-    </v-container>
+  <v-layout fill-height>
+    <v-col cols="4" class="pa-0">
+      <v-toolbar elevation="0" v-if="!archive">
+         <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" @click="newNote">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <span>New Note</span>
+        </v-tooltip>
+      </v-toolbar>
 
-  <blm-notes-dialog-note
-    :visible="noteDialog"
-    @closed="noteDialogClosed"
-    @created="noteCreated"
-  /> -->
-  <!-- <v-container> -->
-    <v-layout fill-height>
-      <v-col cols="4" class="pa-0">
-        <v-toolbar elevation="0">
-           <v-spacer />
-          <v-tooltip bottom>
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on" @click="newNote">
-                <v-icon>mdi-plus</v-icon>
-              </v-btn>
-            </template>
-            <span>New Note</span>
-          </v-tooltip>
-        </v-toolbar>
+      <v-list-item-group
+        :value="selectedNoteIndex"
+        @change="setSelectedNoteIndex"
+        color="indigo">
+        <v-list three-line class="overflow-y-auto pa-0">
+          <template v-for="(note, index) in notes" class="blm-pointer">
+            <v-list-item :key="`note-${index}`">
 
-        <v-list-item-group
-          :value="currentNoteIndex"
-          @change="selectedNoteChanged"
-          color="indigo">
-          <v-list three-line class="overflow-y-auto pa-0">
-            <template v-for="(note, index) in notes" class="blm-pointer">
-              <v-list-item :key="`note-${index}`">
+              <v-list-item-content class="text-left">
+                <v-list-item-title>{{ note.title }}</v-list-item-title>
+                <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+              </v-list-item-content>
 
-                <v-list-item-content class="text-left">
-                  <v-list-item-title>{{ note.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
-                </v-list-item-content>
+            </v-list-item>
+            <v-divider v-if="index !== notes.length - 1" :key="index"/>
+          </template>
+        </v-list>
+      </v-list-item-group>
+    </v-col>
 
-              </v-list-item>
-              <v-divider v-if="index !== notes.length - 1" :key="index"/>
-            </template>
-          </v-list>
-        </v-list-item-group>
-      </v-col>
-
-      <v-col cols="8" class="pa-0 blm-main-col">
-        <v-toolbar elevation="0" v-if="currentNote">
-          <v-text-field
-            :value="currentNote.title"
-            placeholder="Title"
-            hide-details
-          ></v-text-field>
-
-          <v-menu>
-            <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
-                <v-icon>mdi-dots-vertical</v-icon>
-              </v-btn>
-            </template>
-            <v-list class="text-left">
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon>mdi-pin</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Pin</v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon>mdi-package-down</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Archive</v-list-item-title>
-              </v-list-item>
-              <v-list-item>
-                <v-list-item-icon>
-                  <v-icon>mdi-delete</v-icon>
-                </v-list-item-icon>
-                <v-list-item-title>Delete forever</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
-        </v-toolbar>
-        <div class="overflow-y-auto ps-2" v-if="currentNote">
-          <v-textarea
-            v-model="currentNote.body"
-            placeholder="Take a note..."
-            autofocus
-            hide-details
-            solo
-            flat
-            height="calc(100vh - 80px)"
-          ></v-textarea>
-        </div>
-      </v-col>
-    </v-layout>
-  <!-- </v-container> -->
-
+    <v-col cols="8" class="pa-0 blm-main-col">
+      <blm-notes-note v-if="selectedNote"
+        :note="selectedNote"
+        @archived="noteArchived"
+        @unarchived="noteUnarchived"
+        @updated="noteUpdated"
+        @deleted="noteDeleted"
+      />
+    </v-col>
+  </v-layout>
 </template>
 
 
@@ -120,18 +54,20 @@ import {
   // Watch,
 } from 'vue-property-decorator';
 import BlmNote from './Note.vue';
-import NoteDialog from './NoteDialog.vue';
 import core from '@/core';
-import { Note, Notes, Method } from '@/core/notes';
+import {
+  Note,
+  Notes,
+  Method,
+} from '@/core/notes';
 import { log } from '@/libs/rz';
 
 @Component({
   components: {
-    'blm-notes-dialog-note': NoteDialog,
     'blm-notes-note': BlmNote,
   },
 })
-export default class NotesIndex extends Vue {
+export default class BlmNotes extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) archive!: boolean;
 
@@ -139,9 +75,8 @@ export default class NotesIndex extends Vue {
   error = '';
   isLoading = false;
   notes: Note[] = [];
-  noteDialog = false;
-  currentNote: Note | null = null;
-  currentNoteIndex: number | undefined = 0;
+  selectedNote: Note | null = null;
+  selectedNoteIndex: number | undefined = 0;
 
   // computed
   // lifecycle
@@ -152,8 +87,8 @@ export default class NotesIndex extends Vue {
       await this.fetchNotes();
     }
     if (this.notes.length > 0) {
-      this.currentNote = this.notes[0]; // eslint-disable-line
-      this.currentNoteIndex = 0;
+      this.selectedNote = this.notes[0]; // eslint-disable-line
+      this.selectedNoteIndex = 0;
     }
   }
 
@@ -185,26 +120,7 @@ export default class NotesIndex extends Vue {
     }
   }
 
-  // watch
-  // @Watch('currentNoteIndex')
-  // onCurrentNoteIndexChanged(selected: number | undefined) {
-  //   console.log('CHANGED', selected);
-  //   if (selected !== undefined && selected !== null) {
-  //     this.currentNote = this.notes[selected];
-  //   } else {
-  //     this.currentNote = null;
-  //   }
-  // }
-
   // methods
-  openNoteDialog() {
-    this.noteDialog = true;
-  }
-
-  noteDialogClosed() {
-    this.noteDialog = false;
-  }
-
   noteCreated(note: Note) {
     this.notes = [note, ...this.notes];
   }
@@ -233,13 +149,13 @@ export default class NotesIndex extends Vue {
     this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
   }
 
-  selectedNoteChanged(selected: any) {
+  setSelectedNoteIndex(selected: any) {
     if (selected !== undefined && selected !== null) {
-      this.currentNote = this.notes[selected];
+      this.selectedNote = this.notes[selected];
     } else {
-      this.currentNote = null;
+      this.selectedNote = null;
     }
-    this.currentNoteIndex = selected;
+    this.selectedNoteIndex = selected;
   }
 
   newNote() {
@@ -254,10 +170,7 @@ export default class NotesIndex extends Vue {
       isPinned: false,
     };
     this.notes = [newNote, ...this.notes];
-    this.selectedNoteChanged(0);
-    // this.currentNoteIndex = 0;
-    // this.currentNoteIndex = 0;
-    // [this.currentNote] = this.notes;
+    this.setSelectedNoteIndex(0);
   }
 }
 </script>

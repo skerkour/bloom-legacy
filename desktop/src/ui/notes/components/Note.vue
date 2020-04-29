@@ -1,130 +1,63 @@
 <template>
   <div>
-    <v-card>
-      <v-card-title
-        primary-title
-        @click="update"
-        class="blm-pointer"
-      >
-        <div class="headline">{{ note.title }}</div>
-      </v-card-title>
-      <v-card-text
-        @click="update"
-        class="blm-pointer"
-      >
-        <p class="blm-note-body">{{ note.body }}</p>
-      </v-card-text>
-      <v-divider light></v-divider>
-      <v-card-actions>
-        <v-spacer />
+  <v-toolbar elevation="0" v-if="note">
+        <v-text-field
+          v-model="note.title"
+          placeholder="Title"
+          hide-details
+        ></v-text-field>
 
-        <v-tooltip
-          bottom
-          v-if="note.archivedAt === null"
-        >
+        <v-menu>
           <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            icon
-            slot="activator"
-            color="blue-grey"
-            @click="archiveNote(note)"
-            v-on="on"
-          >
-            <v-icon>mdi-package-down</v-icon>
-          </v-btn>
-          </template>
-          <span>Archive</span>
-        </v-tooltip>
-        <v-tooltip
-          bottom
-          v-else
-        >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            icon
-            slot="activator"
-            color="blue-grey"
-            @click="unarchiveNote(note)"
-            v-on="on"
-          >
-            <v-icon>mdi-package-up</v-icon>
-          </v-btn>
-        </template>
-          <span>Unarchive</span>
-        </v-tooltip>
-
-
-        <v-tooltip
-          bottom
-          v-if="note.isPinned"
-        >
-          <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            icon
-            slot="activator"
-            color="blue-grey"
-            @click="unpinNote(note)"
-            v-on="on"
-          >
-            <v-icon>mdi-pin</v-icon>
-          </v-btn>
-          </template>
-          <span>Unpin</span>
-        </v-tooltip>
-        <v-tooltip
-          bottom
-          v-else
-        >
-        <template v-slot:activator="{ on }">
-          <v-btn
-            text
-            icon
-            slot="activator"
-            color="blue-grey"
-            @click="pinNote(note)"
-            v-on="on"
-          >
-            <v-icon>mdi-pin-outline</v-icon>
-          </v-btn>
-        </template>
-          <span>Pin</span>
-        </v-tooltip>
-
-        <v-tooltip bottom>
-          <template v-slot:activator="{ on: tooltip }">
-          <v-menu slot="activator">
-            <template v-slot:activator="{ on: menu }">
-            <v-btn
-              slot="activator"
-              text
-              color="blue-grey"
-              icon
-              v-on="{ ...tooltip, ...menu }"
-            >
+            <v-btn icon v-on="on">
               <v-icon>mdi-dots-vertical</v-icon>
             </v-btn>
-            </template>
-
-            <v-list>
-              <v-list-item @click="deleteNote">
-                <v-list-item-title>Delete forever</v-list-item-title>
-              </v-list-item>
-            </v-list>
-          </v-menu>
           </template>
-          <span>More actions</span>
-        </v-tooltip>
-      </v-card-actions>
-    </v-card>
-    <blm-notes-dialog-note
-      :visible="dialog"
-      :note="note"
-      @closed="dialogClosed"
-      @updated="noteUpdated"
-    />
+          <v-list class="text-left">
+            <v-list-item v-if="!note.isPinned">
+              <v-list-item-icon>
+                <v-icon>mdi-pin</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Pin</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-else>
+              <v-list-item-icon>
+                <v-icon>mdi-pin-outline</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Unpin</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-if="note.archivedAt === null" @click="archiveNote">
+              <v-list-item-icon>
+                <v-icon>mdi-package-down</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Archive</v-list-item-title>
+            </v-list-item>
+            <v-list-item v-else @click="unarchiveNote">
+              <v-list-item-icon>
+                <v-icon>mdi-package-up</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Unarchive</v-list-item-title>
+            </v-list-item>
+            <v-list-item @click="deleteNote">
+              <v-list-item-icon>
+                <v-icon>mdi-delete</v-icon>
+              </v-list-item-icon>
+              <v-list-item-title>Delete forever</v-list-item-title>
+            </v-list-item>
+          </v-list>
+        </v-menu>
+      </v-toolbar>
+      <div class="overflow-y-auto ps-2" v-if="note">
+        <v-textarea
+          v-model="note.body"
+          placeholder="Take a note..."
+          autofocus
+          hide-details
+          solo
+          flat
+          height="calc(100vh - 80px)"
+        ></v-textarea>
+      </div>
   </div>
 </template>
 
