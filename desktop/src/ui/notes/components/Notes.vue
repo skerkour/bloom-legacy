@@ -1,6 +1,5 @@
 <template>
-  <div>
-    <v-container fluid grid-list-lg>
+    <!-- <v-container fluid grid-list-lg>
       <v-layout align-center justify-center v-if="!archive">
         <v-flex xs12 sm6>
           <v-text-field placeholder="Take a note..." solo @click="openNoteDialog" readonly/>
@@ -23,8 +22,82 @@
     :visible="noteDialog"
     @closed="noteDialogClosed"
     @created="noteCreated"
-  />
-  </div>
+  /> -->
+  <!-- <v-container> -->
+    <v-layout fill-height>
+      <v-col cols="4" class="pa-0">
+        <v-toolbar elevation="0">
+           <v-spacer />
+          <v-tooltip bottom>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon>mdi-plus</v-icon>
+              </v-btn>
+            </template>
+            <span>New Note</span>
+          </v-tooltip>
+        </v-toolbar>
+
+        <v-list three-line class="overflow-y-auto pa-0">
+          <v-list-item v-for="(note, index) in notes" :key="note.id" >
+
+            <v-list-item-content class="text-left">
+              <v-list-item-title>{{ note.title }}</v-list-item-title>
+              <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+            </v-list-item-content>
+
+            <v-divider v-if="index !== notes.length - 1" />
+          </v-list-item>
+        </v-list>
+      </v-col>
+
+      <v-col cols="8" class="pa-0 blm-main-col">
+        <v-toolbar elevation="0">
+          <v-text-field
+            :value="notes[0].title"
+            placeholder="Title"
+          ></v-text-field>
+
+          <v-menu>
+            <template v-slot:activator="{ on }">
+              <v-btn icon v-on="on">
+                <v-icon>mdi-dots-vertical</v-icon>
+              </v-btn>
+            </template>
+            <v-list class="text-left">
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-pin</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Pin</v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-package-down</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Archive</v-list-item-title>
+              </v-list-item>
+              <v-list-item>
+                <v-list-item-icon>
+                  <v-icon>mdi-delete</v-icon>
+                </v-list-item-icon>
+                <v-list-item-title>Delete forever</v-list-item-title>
+              </v-list-item>
+            </v-list>
+          </v-menu>
+        </v-toolbar>
+        <div class="overflow-y-auto pa-2">
+          <v-textarea
+          v-model="notes[0].body"
+          placeholder="Take a note..."
+          autofocus
+        ></v-textarea>
+
+        </div>
+      </v-col>
+    </v-layout>
+  <!-- </v-container> -->
+
 </template>
 
 
@@ -42,7 +115,7 @@ import { log } from '@/libs/rz';
     'blm-notes-note': BlmNote,
   },
 })
-export default class Index extends Vue {
+export default class NotesIndex extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) archive!: boolean;
 
@@ -132,4 +205,7 @@ export default class Index extends Vue {
 
 
 <style lang="scss" scoped>
+.blm-main-col {
+  border-left: 1px solid #dedede;
+}
 </style>

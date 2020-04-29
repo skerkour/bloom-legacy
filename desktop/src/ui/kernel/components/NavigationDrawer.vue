@@ -4,7 +4,7 @@
     floating
     clipped
     app
-    width="250"
+    width="200"
     permanent
     class="blm-navigation-drawer"
     v-if="showDrawer"
