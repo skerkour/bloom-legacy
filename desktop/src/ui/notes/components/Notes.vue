@@ -38,25 +38,29 @@
           </v-tooltip>
         </v-toolbar>
 
-        <v-list three-line class="overflow-y-auto pa-0">
-          <v-list-item v-for="(note, index) in notes" :key="note.id" >
+        <v-list-item-group
+          @change="selectedNoteChanged"
+          :value="currentNoteIndex"
+          color="indigo">
+          <v-list three-line class="overflow-y-auto pa-0">
+            <v-list-item v-for="(note, index) in notes" :key="note.id" >
 
-            <v-list-item-content class="text-left">
-              <v-list-item-title>{{ note.title }}</v-list-item-title>
-              <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
-            </v-list-item-content>
+              <v-list-item-content class="text-left">
+                <v-list-item-title>{{ note.title }}</v-list-item-title>
+                <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+              </v-list-item-content>
 
-            <v-divider v-if="index !== notes.length - 1" />
-          </v-list-item>
-        </v-list>
+              <v-divider v-if="index !== notes.length - 1" />
+            </v-list-item>
+          </v-list>
+        </v-list-item-group>
       </v-col>
 
       <v-col cols="8" class="pa-0 blm-main-col">
-        <v-toolbar elevation="0">
+        <v-toolbar elevation="0" v-if="currentNote">
           <v-text-field
-            :value="notes[0].title"
+            :value="currentNote.title"
             placeholder="Title"
-            outlined
             hide-details
           ></v-text-field>
 
@@ -88,17 +92,16 @@
             </v-list>
           </v-menu>
         </v-toolbar>
-        <div class="overflow-y-auto pa-2">
+        <div class="overflow-y-auto ps-2" v-if="currentNote">
           <v-textarea
-          v-model="notes[0].body"
-          placeholder="Take a note..."
-          autofocus
-          hide-details
-          solo
-          flat
-          height="calc(100vh - 80px)"
-        ></v-textarea>
-
+            v-model="currentNote.body"
+            placeholder="Take a note..."
+            autofocus
+            hide-details
+            solo
+            flat
+            height="calc(100vh - 80px)"
+          ></v-textarea>
         </div>
       </v-col>
     </v-layout>
@@ -130,14 +133,20 @@ export default class NotesIndex extends Vue {
   isLoading = false;
   notes: Note[] = [];
   noteDialog = false;
+  currentNote: Note | null = null;
+  currentNoteIndex: number | undefined = 0;
 
   // computed
   // lifecycle
   async created() {
     if (this.archive) {
-      this.fetchArchive();
+      await this.fetchArchive();
     } else {
-      this.fetchNotes();
+      await this.fetchNotes();
+    }
+    if (this.notes.length > 0) {
+      this.currentNote = this.notes[0]; // eslint-disable-line
+      this.currentNoteIndex = 0;
     }
   }
 
@@ -205,6 +214,15 @@ export default class NotesIndex extends Vue {
 
   noteDeleted(deletedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
+  }
+
+  selectedNoteChanged(selected: any) {
+    if (selected !== undefined && selected !== null) {
+      this.currentNote = this.notes[selected];
+    } else {
+      this.currentNote = null;
+    }
+    this.currentNoteIndex = selected;
   }
 }
 </script>
