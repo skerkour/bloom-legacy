@@ -30,7 +30,7 @@
            <v-spacer />
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-              <v-btn icon v-on="on">
+              <v-btn icon v-on="on" @click="newNote">
                 <v-icon>mdi-plus</v-icon>
               </v-btn>
             </template>
@@ -39,19 +39,21 @@
         </v-toolbar>
 
         <v-list-item-group
-          @change="selectedNoteChanged"
           :value="currentNoteIndex"
+          @change="selectedNoteChanged"
           color="indigo">
           <v-list three-line class="overflow-y-auto pa-0">
-            <v-list-item v-for="(note, index) in notes" :key="note.id" >
+            <template v-for="(note, index) in notes" class="blm-pointer">
+              <v-list-item :key="`note-${index}`">
 
-              <v-list-item-content class="text-left">
-                <v-list-item-title>{{ note.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
-              </v-list-item-content>
+                <v-list-item-content class="text-left">
+                  <v-list-item-title>{{ note.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+                </v-list-item-content>
 
-              <v-divider v-if="index !== notes.length - 1" />
-            </v-list-item>
+              </v-list-item>
+              <v-divider v-if="index !== notes.length - 1" :key="index"/>
+            </template>
           </v-list>
         </v-list-item-group>
       </v-col>
@@ -111,7 +113,12 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component,
+  Prop,
+  Vue,
+  // Watch,
+} from 'vue-property-decorator';
 import BlmNote from './Note.vue';
 import NoteDialog from './NoteDialog.vue';
 import core from '@/core';
@@ -179,6 +186,16 @@ export default class NotesIndex extends Vue {
   }
 
   // watch
+  // @Watch('currentNoteIndex')
+  // onCurrentNoteIndexChanged(selected: number | undefined) {
+  //   console.log('CHANGED', selected);
+  //   if (selected !== undefined && selected !== null) {
+  //     this.currentNote = this.notes[selected];
+  //   } else {
+  //     this.currentNote = null;
+  //   }
+  // }
+
   // methods
   openNoteDialog() {
     this.noteDialog = true;
@@ -223,6 +240,24 @@ export default class NotesIndex extends Vue {
       this.currentNote = null;
     }
     this.currentNoteIndex = selected;
+  }
+
+  newNote() {
+    const newNote: Note = {
+      id: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      title: '',
+      body: '',
+      color: '#ffffff',
+      archivedAt: null,
+      isPinned: false,
+    };
+    this.notes = [newNote, ...this.notes];
+    this.selectedNoteChanged(0);
+    // this.currentNoteIndex = 0;
+    // this.currentNoteIndex = 0;
+    // [this.currentNote] = this.notes;
   }
 }
 </script>
