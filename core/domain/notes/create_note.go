@@ -3,11 +3,12 @@ package notes
 import (
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreateNote(params CreateNoteParams) (Note, error) {
+func CreateNote(params messages.CreateNoteParams) (Note, error) {
 	var err error
 	now := time.Now().UTC()
 	uuid := uuid.New()

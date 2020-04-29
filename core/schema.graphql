@@ -22,14 +22,6 @@ type DashboardData {
 ## billing
 ####################################################################################################
 
-"""
-type MyBillingProfile struct {
-	Me              *model.User                  `json:"me"`
-	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
-	StripePublicKey string                       `json:"stripePublicKey"`
-}
-
-"""
 
 type FetchGroupProfileParams {
   id: ID!
@@ -137,6 +129,14 @@ type DeleteContactParams struct {
 ## groups
 ####################################################################################################
 
+type FetchGroupMembersParams {
+	id: ID!
+}
+
+type FetchGroupDetailsParams  {
+	id: ID!
+}
+
 
 
 ####################################################################################################
@@ -158,6 +158,9 @@ type CreateNoteParams {
   color: String!
 }
 
+type DeleteNoteParams {
+	id: ID!
+}
 
 ####################################################################################################
 ## preferences

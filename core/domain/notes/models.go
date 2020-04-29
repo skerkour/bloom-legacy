@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+type Notes struct {
+	Notes []Note `json:"notes"`
+}
+
 type Note struct {
 	ID         string     `json:"id" db:"id"`
 	CreatedAt  time.Time  `json:"createdAt" db:"created_at"`

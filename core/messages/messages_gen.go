@@ -50,6 +50,18 @@ type DashboardData struct {
 	Users    *model.UserConnection `json:"users"`
 }
 
+type DeleteNoteParams struct {
+	ID uuid.UUID `json:"id"`
+}
+
+type Empty struct {
+	Noop *bool `json:"noop"`
+}
+
+type FetchGroupDetailsParams struct {
+	ID uuid.UUID `json:"id"`
+}
+
 // type Contacts struct {
 // 	Contacts []Contact `json:"contacts"`
 // }
@@ -71,15 +83,10 @@ type DashboardData struct {
 // type DeleteContactParams struct {
 // 	ID string `json:"id"`
 // }
-type Empty struct {
-	Noop *bool `json:"noop"`
+type FetchGroupMembersParams struct {
+	ID uuid.UUID `json:"id"`
 }
 
-// type MyBillingProfile struct {
-// 	Me              *model.User                  `json:"me"`
-// 	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
-// 	StripePublicKey string                       `json:"stripePublicKey"`
-// }
 type FetchGroupProfileParams struct {
 	ID uuid.UUID `json:"id"`
 }
