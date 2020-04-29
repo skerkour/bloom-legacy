@@ -191,11 +191,11 @@ type Object struct {
 }
 
 type ObjectInput struct {
-	ID           []byte `json:"id"`
-	Algorithm    string `json:"algorithm"`
-	Encrypted    []byte `json:"encrypted"`
-	EncryptedKey []byte `json:"encryptedKey"`
-	Nonce        []byte `json:"nonce"`
+	ID            []byte `json:"id"`
+	Algorithm     string `json:"algorithm"`
+	EncryptedData []byte `json:"encryptedData"`
+	EncryptedKey  []byte `json:"encryptedKey"`
+	Nonce         []byte `json:"nonce"`
 }
 
 type PageInfo struct {

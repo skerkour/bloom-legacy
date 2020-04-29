@@ -2343,7 +2343,7 @@ input RepositoryPushInput {
 input ObjectInput {
   id: Bytes!
   algorithm: String!
-  encrypted: Bytes!
+  encryptedData: Bytes!
   encryptedKey: Bytes!
   nonce: Bytes!
 }
@@ -10443,9 +10443,9 @@ func (ec *executionContext) unmarshalInputObjectInput(ctx context.Context, obj i
 			if err != nil {
 				return it, err
 			}
-		case "encrypted":
+		case "encryptedData":
 			var err error
-			it.Encrypted, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			it.EncryptedData, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}

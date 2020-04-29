@@ -78,7 +78,7 @@ func Pull(ctx context.Context, actor *users.User, params PullParams) (ret *PullR
 }
 
 func pullRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *RepositoryPull) (ret RepositoryPullResult, err error) {
-	ret.Objects = []APIObject{}
+	ret.Objects = []Object{}
 	ret.OldState = repo.SinceState
 
 	if repo.GroupID != nil {
