@@ -56,6 +56,8 @@
           <v-text-field
             :value="notes[0].title"
             placeholder="Title"
+            outlined
+            hide-details
           ></v-text-field>
 
           <v-menu>
@@ -91,6 +93,10 @@
           v-model="notes[0].body"
           placeholder="Take a note..."
           autofocus
+          hide-details
+          solo
+          flat
+          height="calc(100vh - 80px)"
         ></v-textarea>
 
         </div>
@@ -207,5 +213,9 @@ export default class NotesIndex extends Vue {
 <style lang="scss" scoped>
 .blm-main-col {
   border-left: 1px solid #dedede;
+}
+
+.v-overflow-btn .v-input__slot::before {
+    border-color: grey !important;
 }
 </style>
