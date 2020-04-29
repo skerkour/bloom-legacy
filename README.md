@@ -70,6 +70,8 @@ You can use [issues](https://gitlab.com/bloom42/bloom/-/issues) if you have some
 Thank you for your interest in contributing! Please refer to
 https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
 
+**TL;DR:** Please open an issue to discuss before making a Merge Request (for things other than typos).
+
 
 ## Licensing
 
