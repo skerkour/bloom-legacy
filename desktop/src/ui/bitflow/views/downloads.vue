@@ -4,12 +4,12 @@
       {{ error }}
     </v-alert>
 
-    <v-toolbar flat dense id="blm-downloads-toolbar">
+    <!-- <v-toolbar flat dense id="blm-downloads-toolbar">
       <v-spacer />
       <v-btn color="primary" @click="addDownload">
         <v-icon left>mdi-plus</v-icon>New Download
       </v-btn>
-    </v-toolbar>
+    </v-toolbar> -->
 
 
     <v-data-table
@@ -68,10 +68,14 @@
     </v-data-table>
 
 
-  <blm-bitflow-dialog-new-download
-    :visible="isNewDownloadDialogVisible"
-    @closed="closeNewDownloadDialog"
-  />
+    <blm-bitflow-dialog-new-download
+      :visible="isNewDownloadDialogVisible"
+      @closed="closeNewDownloadDialog"
+    />
+
+    <v-btn color="red" fab dark bottom right absolute @click="addDownload">
+      <v-icon>mdi-plus</v-icon>
+    </v-btn>
 
   </v-container>
 </template>
