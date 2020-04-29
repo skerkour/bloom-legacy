@@ -3,11 +3,12 @@ package calendar
 import (
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreateEvent(params CreateEventParams) (Event, error) {
+func CreateEvent(params messages.CalendarCreateEventParams) (Event, error) {
 	var err error
 
 	if err = validateCreateEvent(params); err != nil {
@@ -34,7 +35,7 @@ func CreateEvent(params CreateEventParams) (Event, error) {
 	return event, err
 }
 
-func validateCreateEvent(params CreateEventParams) error {
+func validateCreateEvent(params messages.CalendarCreateEventParams) error {
 	if err := valdiateEventDates(params.StartAt, params.EndAt); err != nil {
 		return err
 	}

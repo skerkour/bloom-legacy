@@ -4,6 +4,10 @@ import (
 	"time"
 )
 
+type Events struct {
+	Events []Event `json:"events"`
+}
+
 type Event struct {
 	ID          string    `json:"id" db:"id"`
 	CreatedAt   time.Time `json:"createdAt" db:"created_at"`

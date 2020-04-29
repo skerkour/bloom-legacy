@@ -4,9 +4,10 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func ListEvents(params ListEventsParams) (Events, error) {
+func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 	var err error
 	ret := Events{Events: []Event{}}
 	now := time.Now().UTC()

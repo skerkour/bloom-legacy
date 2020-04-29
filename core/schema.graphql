@@ -7,6 +7,7 @@ scalar UserConnection
 scalar Group
 scalar BillingPlanConnection
 scalar User
+scalar Time
 
 ####################################################################################################
 ## admin
@@ -82,28 +83,23 @@ type CalcResult {
 ## calendar
 ####################################################################################################
 
-"""
-type ListEventsParams struct {
-	StartAt *time.Time `json:"startAt"`
-	EndAt   *time.Time `json:"endAt"`
+type CalendarListEventsParams {
+  startAt: Time
+  endAt: Time
 }
 
-type Events struct {
-	Events []Event `json:"events"`
+type CalendarCreateEventParams {
+  title: String!
+  description: String!
+  startAt: Time!
+  endAt: Time!
 }
 
-type CreateEventParams struct {
-	Title       string    `json:"title"`
-	Description string    `json:"description"`
-	StartAt     time.Time `json:"startAt"`
-	EndAt       time.Time `json:"endAt"`
+type CalendarDeleteEventParams {
+  id: ID!
 }
 
-type DeleteEventParams struct {
-	ID string `json:"id"`
-}
 
-"""
 
 
 
