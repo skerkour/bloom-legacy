@@ -1,4 +1,4 @@
-package objects
+package sync
 
 import (
 	"testing"

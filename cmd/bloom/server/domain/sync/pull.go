@@ -1,4 +1,4 @@
-package objects
+package sync
 
 import (
 	"context"
@@ -30,7 +30,7 @@ type RepositoryPullResult struct {
 	OldState       string
 	NewState       string
 	HasMoreChanges bool
-	Objects        []APIObject
+	Objects        []Object
 	GroupID        *uuid.UUID
 }
 
@@ -98,16 +98,7 @@ func pullRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *R
 			return
 		}
 		ret.NewState = EncodeState(group.State)
-		for _, object := range objects {
-			apiObject := APIObject{
-				ID:            object.ID,
-				Algorithm:     object.Algorithm,
-				Nonce:         object.Nonce,
-				EncryptedData: object.EncryptedData,
-				EncryptedKey:  object.EncryptedKey,
-			}
-			ret.Objects = append(ret.Objects, apiObject)
-		}
+		ret.Objects = objects
 
 	} else {
 		// user's repository
@@ -123,16 +114,7 @@ func pullRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *R
 			return
 		}
 		ret.NewState = EncodeState(actor.State)
-		for _, object := range objects {
-			apiObject := APIObject{
-				ID:            object.ID,
-				Algorithm:     object.Algorithm,
-				Nonce:         object.Nonce,
-				EncryptedData: object.EncryptedData,
-				EncryptedKey:  object.EncryptedKey,
-			}
-			ret.Objects = append(ret.Objects, apiObject)
-		}
+		ret.Objects = objects
 	}
 	return
 }

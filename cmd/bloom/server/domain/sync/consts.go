@@ -1,4 +1,4 @@
-package objects
+package sync
 
 const (
 	STATE_INT64     = "0"

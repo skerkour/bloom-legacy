@@ -23,6 +23,8 @@ const (
 	ErrorAtLeastOneAdministratorShouldRemainsInGroup
 	ErrorUpdatingGroup
 	ErrorRemovingMembersFromGroup
+	ErrorInvalidState
+	ErrorInternal
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -69,6 +71,9 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Error updating group. Please try again."
 	case ErrorRemovingMembersFromGroup:
 		message = "Error removing members from group. Please try again."
+	case ErrorInvalidState:
+		code = errors.InvalidArgument
+		message = "You can't downgrade group's state"
 	}
 
 	return errors.New(code, message)
