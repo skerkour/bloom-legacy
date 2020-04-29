@@ -5,8 +5,8 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
@@ -60,7 +60,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "fetchMyProfile":
 		res, err := users.FetchMyProfile()
 		if err != nil {
@@ -83,7 +83,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "updateProfile":
 		var input model.UserProfileInput
 		err := json.Unmarshal(jsonParams, &input)
@@ -133,7 +133,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "enableUser":
 		var params users.EnableUserParams
 		err := json.Unmarshal(jsonParams, &params)
@@ -144,7 +144,7 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "users")
 	}

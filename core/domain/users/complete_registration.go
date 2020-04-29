@@ -15,15 +15,25 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	client := api.Client()
 	var ret model.SignedIn
 
-	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
-	if authKey == nil {
+	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
+	if err != nil {
+		return ret, errors.New("Internal error. Please try again")
+	}
+	// clean password from memory as we can...
+	params.Password = ""
+
+	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
+	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
 
-	passKey := derivePassKey([]byte(params.Username), []byte(params.Password))
-	if passKey == nil {
+	wrapKey, err := deriveWrapKeyFromPasswordKey(passwordKey, []byte(params.Username))
+	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
+
+	// clean passwordKey from memory
+	crypto.Zeroize(passwordKey)
 
 	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
@@ -31,7 +41,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 
 	// TODO: persist keypair
-	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(passKey, []byte(privateKey))
+	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(wrapKey, []byte(privateKey))
 	if err != nil {
 		return ret, err
 	}

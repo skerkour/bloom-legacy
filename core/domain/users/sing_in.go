@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/coreutil"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
 )
 
@@ -14,10 +15,20 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	client := api.Client()
 	var ret model.SignedIn
 
-	authKey := deriveAuthKey([]byte(params.Username), []byte(params.Password))
-	if authKey == nil {
-		return ret, errors.New("Error deriving auth key")
+	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
+	if err != nil {
+		return ret, errors.New("Internal error. Please try again")
 	}
+	// clean password from memory as we can...
+	params.Password = ""
+
+	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
+	if err != nil {
+		return ret, errors.New("Internal error. Please try again")
+	}
+
+	// clean passwordKey from memory
+	crypto.Zeroize(passwordKey)
 
 	input := model.SignInInput{
 		Username: params.Username,
@@ -49,7 +60,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err = client.Do(context.Background(), req, &resp)
 	if resp.SignIn != nil {
 		if resp.SignIn.Session != nil && resp.SignIn.Session.Token != nil {
 			client.Authenticate(resp.SignIn.Session.ID, *resp.SignIn.Session.Token)

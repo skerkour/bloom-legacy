@@ -5,12 +5,13 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/domain/calendar"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "listEvents":
-		var params calendar.ListEventsParams
+		var params messages.CalendarListEventsParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -21,7 +22,7 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		}
 		return MessageOut{Data: res}
 	case "createEvent":
-		var params calendar.CreateEventParams
+		var params messages.CalendarCreateEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -32,7 +33,7 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		}
 		return MessageOut{Data: res}
 	case "deleteEvent":
-		var params calendar.DeleteEventParams
+		var params messages.CalendarDeleteEventParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

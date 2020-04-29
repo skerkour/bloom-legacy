@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/domain/notes"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
@@ -22,7 +23,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "createNote":
-		var params notes.CreateNoteParams
+		var params messages.CreateNoteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -44,7 +45,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "deleteNote":
-		var params notes.DeleteNoteParams
+		var params messages.DeleteNoteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

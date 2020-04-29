@@ -3,8 +3,8 @@ package contacts
 import (
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/lily/uuid"
 )
 
 func CreateContact(params CreateContactParams) (Contact, error) {
