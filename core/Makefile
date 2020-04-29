@@ -7,13 +7,32 @@ DATE := $(shell date +"%Y-%m-%d")
 .PHONY: all
 all: desktop android
 
+
 .PHONY: fmt
 fmt:
 	go fmt ./...
 
+
 .PHONY: test
 test:
 	go test ./...
+
+
+.PHONY: clean
+clean:
+	rm -rf dist
+
+
+.PHONY: tidy
+tidy:
+	go mod tidy
+
+
+.PHONY: messages
+gqlgen:
+	gqlgen
+	rm messages/generated.go
+
 
 .PHONY: desktop
 desktop:
@@ -65,11 +84,3 @@ android_x86:
 # PHONY: android_amd64
 # android_amd64:
 # 	GOOS=android GOARCH=amd64 CGO_ENABLED=1 CC=x86_64-linux-android-clang go build --tags "android" -o dist/amd64/lib$(NAME).so -buildmode=c-shared ffi/*.go
-
-.PHONY: clean
-clean:
-	rm -rf dist
-
-.PHONY: tidy
-tidy:
-	go mod tidy
