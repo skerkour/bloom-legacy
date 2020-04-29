@@ -2,11 +2,11 @@ package calendar
 
 import (
 	"gitlab.com/bloom42/bloom/core/db"
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func DeleteEvent(params DeleteEventParams) (kernel.Empty, error) {
-	ret := kernel.Empty{}
+func DeleteEvent(params DeleteEventParams) (messages.Empty, error) {
+	ret := messages.Empty{}
 
 	query := "DELETE FROM calendar_events WHERE id = ?"
 	_, err := db.DB.Exec(query, params.ID)

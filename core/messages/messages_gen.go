@@ -13,6 +13,14 @@ type AddPaymentMethodParams struct {
 	Card            *NewStripeCard `json:"card"`
 }
 
+type CalcParams struct {
+	Expression string `json:"expression"`
+}
+
+type CalcResult struct {
+	Result string `json:"result"`
+}
+
 type CreateNoteParams struct {
 	Title string `json:"title"`
 	Body  string `json:"body"`

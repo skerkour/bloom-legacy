@@ -69,16 +69,72 @@ type MyBillingProfile {
 ## calculator
 ####################################################################################################
 
+type CalcParams {
+	expression: String!
+}
+
+type CalcResult {
+ result: String!
+}
+
 
 ####################################################################################################
 ## calendar
 ####################################################################################################
+
+"""
+type ListEventsParams struct {
+	StartAt *time.Time `json:"startAt"`
+	EndAt   *time.Time `json:"endAt"`
+}
+
+type Events struct {
+	Events []Event `json:"events"`
+}
+
+type CreateEventParams struct {
+	Title       string    `json:"title"`
+	Description string    `json:"description"`
+	StartAt     time.Time `json:"startAt"`
+	EndAt       time.Time `json:"endAt"`
+}
+
+type DeleteEventParams struct {
+	ID string `json:"id"`
+}
+
+"""
+
 
 
 ####################################################################################################
 ## contacts
 ####################################################################################################
 
+"""
+type Contacts struct {
+	Contacts []Contact `json:"contacts"`
+}
+
+type CreateContactParams struct {
+	DeviceID      string        `json:"deviceId"`
+	FirstName     string        `json:"firstName"`
+	LastName      string        `json:"lastName"`
+	Notes         string        `json:"notes"`
+	Birthday      *time.Time    `json:"birthday"`
+	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
+	Organizations Organizations `json:"organizations"`
+	Addresses     Addresses     `json:"addresses"`
+	Emails        Emails        `json:"emails"`
+	Phones        Phones        `json:"phones"`
+	Websites      Websites      `json:"websites"`
+}
+
+type DeleteContactParams struct {
+	ID string `json:"id"`
+}
+
+"""
 
 
 ####################################################################################################
