@@ -18,7 +18,7 @@ func StartRegistration(params StartRegistrationParams) (model.RegistrationStarte
 		return model.RegistrationStarted{}, err
 	}
 
-	input := model.RegisterInput{
+	input := model.StartRegistrationInput{
 		Email:       params.Email,
 		DisplayName: params.DisplayName,
 	}
