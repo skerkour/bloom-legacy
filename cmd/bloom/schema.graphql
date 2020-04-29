@@ -269,7 +269,7 @@ type RepositoryPull {
 type Object {
   id: Bytes!
   algorithm: String!
-  data: Bytes!
+  encryptedData: Bytes!
   encryptedKey: Bytes!
   nonce: Bytes!
 }
@@ -503,7 +503,7 @@ input RepositoryPushInput {
 input ObjectInput {
   id: Bytes!
   algorithm: String!
-  data: Bytes!
+  encrypted: Bytes!
   encryptedKey: Bytes!
   nonce: Bytes!
 }

@@ -178,11 +178,11 @@ type ComplexityRoot struct {
 	}
 
 	Object struct {
-		Algorithm    func(childComplexity int) int
-		Data         func(childComplexity int) int
-		EncryptedKey func(childComplexity int) int
-		ID           func(childComplexity int) int
-		Nonce        func(childComplexity int) int
+		Algorithm     func(childComplexity int) int
+		EncryptedData func(childComplexity int) int
+		EncryptedKey  func(childComplexity int) int
+		ID            func(childComplexity int) int
+		Nonce         func(childComplexity int) int
 	}
 
 	PageInfo struct {
@@ -1192,12 +1192,12 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Object.Algorithm(childComplexity), true
 
-	case "Object.data":
-		if e.complexity.Object.Data == nil {
+	case "Object.encryptedData":
+		if e.complexity.Object.EncryptedData == nil {
 			break
 		}
 
-		return e.complexity.Object.Data(childComplexity), true
+		return e.complexity.Object.EncryptedData(childComplexity), true
 
 	case "Object.encryptedKey":
 		if e.complexity.Object.EncryptedKey == nil {
@@ -2109,7 +2109,7 @@ type RepositoryPull {
 type Object {
   id: Bytes!
   algorithm: String!
-  data: Bytes!
+  encryptedData: Bytes!
   encryptedKey: Bytes!
   nonce: Bytes!
 }
@@ -2343,7 +2343,7 @@ input RepositoryPushInput {
 input ObjectInput {
   id: Bytes!
   algorithm: String!
-  data: Bytes!
+  encrypted: Bytes!
   encryptedKey: Bytes!
   nonce: Bytes!
 }
@@ -6218,7 +6218,7 @@ func (ec *executionContext) _Object_algorithm(ctx context.Context, field graphql
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Object_data(ctx context.Context, field graphql.CollectedField, obj *model.Object) (ret graphql.Marshaler) {
+func (ec *executionContext) _Object_encryptedData(ctx context.Context, field graphql.CollectedField, obj *model.Object) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -6235,7 +6235,7 @@ func (ec *executionContext) _Object_data(ctx context.Context, field graphql.Coll
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.Data, nil
+		return obj.EncryptedData, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10443,9 +10443,9 @@ func (ec *executionContext) unmarshalInputObjectInput(ctx context.Context, obj i
 			if err != nil {
 				return it, err
 			}
-		case "data":
+		case "encrypted":
 			var err error
-			it.Data, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			it.Encrypted, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11605,8 +11605,8 @@ func (ec *executionContext) _Object(ctx context.Context, sel ast.SelectionSet, o
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "data":
-			out.Values[i] = ec._Object_data(ctx, field, obj)
+		case "encryptedData":
+			out.Values[i] = ec._Object_encryptedData(ctx, field, obj)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}

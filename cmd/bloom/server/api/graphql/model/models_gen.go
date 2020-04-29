@@ -183,17 +183,17 @@ type InvoiceConnection struct {
 }
 
 type Object struct {
-	ID           []byte `json:"id"`
-	Algorithm    string `json:"algorithm"`
-	Data         []byte `json:"data"`
-	EncryptedKey []byte `json:"encryptedKey"`
-	Nonce        []byte `json:"nonce"`
+	ID            []byte `json:"id"`
+	Algorithm     string `json:"algorithm"`
+	EncryptedData []byte `json:"encryptedData"`
+	EncryptedKey  []byte `json:"encryptedKey"`
+	Nonce         []byte `json:"nonce"`
 }
 
 type ObjectInput struct {
 	ID           []byte `json:"id"`
 	Algorithm    string `json:"algorithm"`
-	Data         []byte `json:"data"`
+	Encrypted    []byte `json:"encrypted"`
 	EncryptedKey []byte `json:"encryptedKey"`
 	Nonce        []byte `json:"nonce"`
 }
