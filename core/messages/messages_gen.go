@@ -110,6 +110,19 @@ type NewStripeCard struct {
 	Cvc      string `json:"cvc"`
 }
 
+type PreferencesDeleteParams struct {
+	Key string `json:"key"`
+}
+
+type PreferencesGetParams struct {
+	Key string `json:"key"`
+}
+
+type PreferencesSetParams struct {
+	Key   string `json:"key"`
+	Value string `json:"value"`
+}
+
 type UserBillingProfile struct {
 	User         *model.User                  `json:"user"`
 	BillingPlans *model.BillingPlanConnection `json:"billingPlans"`
