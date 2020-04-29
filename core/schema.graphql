@@ -2,18 +2,67 @@
 This schema is only used to auto genrate the struct for the communication between the core and
 the apps.
 """
+scalar BloomMetadata
+scalar UserConnection
+scalar Group
+scalar BillingPlanConnection
+scalar User
 
 ####################################################################################################
 ## admin
 ####################################################################################################
 
+type DashboardData {
+  metadata: BloomMetadata
+  users: UserConnection
+}
 
 ####################################################################################################
 ## billing
 ####################################################################################################
 
+"""
+type MyBillingProfile struct {
+	Me              *model.User                  `json:"me"`
+	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
+	StripePublicKey string                       `json:"stripePublicKey"`
+}
 
+"""
 
+type FetchGroupProfileParams {
+  id: ID!
+}
+
+type GroupBillingProfile {
+  group: Group
+  billingPlans: BillingPlanConnection
+  stripePublicKey: String
+}
+
+type UserBillingProfile {
+	user: User
+	billingPlans: BillingPlanConnection
+}
+
+type NewStripeCard {
+	number:   String!
+  expMonth: String!
+  expYear: String!
+  cvc: String!
+}
+
+type AddPaymentMethodParams {
+  stripePublicKey: String
+  groupId: ID
+  card: NewStripeCard!
+}
+
+type MyBillingProfile {
+  me: User
+  billingPlans: BillingPlanConnection
+  stripePublicKey: String!
+}
 
 
 ####################################################################################################

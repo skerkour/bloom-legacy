@@ -4,13 +4,14 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/core/api"
+	"gitlab.com/bloom42/bloom/core/messages"
 	"gitlab.com/bloom42/lily/graphql"
 )
 
-func FetchGroupProfile(params FetchGroupProfileParams) (GroupBillingProfile, error) {
+func FetchGroupProfile(params messages.FetchGroupProfileParams) (messages.GroupBillingProfile, error) {
 	client := api.Client()
 
-	var resp GroupBillingProfile
+	var resp messages.GroupBillingProfile
 	req := graphql.NewRequest(`
 	query($groupId: ID!) {
 		group(id: $groupId) {

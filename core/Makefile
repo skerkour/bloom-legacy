@@ -29,9 +29,10 @@ tidy:
 
 
 .PHONY: messages
-gqlgen:
-	gqlgen
+messages:
+	-gqlgen
 	rm messages/generated.go
+	go mod tidy
 
 
 .PHONY: desktop

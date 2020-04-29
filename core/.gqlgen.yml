@@ -10,20 +10,19 @@ exec:
   filename: messages/generated.go
 
 model:
-  filename: messages/models_gen.go
+  filename: messages/messages_gen.go
 
-# models:
-#   ID:
-#     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.ID
+models:
+  ID:
+    model: gitlab.com/bloom42/lily/uuid.UUID
+#   UserConnection:
+#     model: gitlab.com/bloom42/bloom/core/api/model.UserConnection
+
 #   Int64:
 #     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Int64
 #   Bytes:
 #     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Bytes
 
-
-# resolver:
-#   filename: server/api/graphql/resolver.go
-#   type: Resolver
-
 autobind:
   - gitlab.com/bloom42/bloom/core/messages
+  - gitlab.com/bloom42/bloom/core/api/model

@@ -4,13 +4,14 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/core/api"
+	"gitlab.com/bloom42/bloom/core/messages"
 	"gitlab.com/bloom42/lily/graphql"
 )
 
-func FetchMyProfile() (MyBillingProfile, error) {
+func FetchMyProfile() (messages.MyBillingProfile, error) {
 	client := api.Client()
 
-	var resp MyBillingProfile
+	var resp messages.MyBillingProfile
 	req := graphql.NewRequest(`
 	query {
 		me {
