@@ -1,63 +1,65 @@
 <template>
   <div>
-  <v-toolbar elevation="0" v-if="note">
-        <v-text-field
-          v-model="note.title"
-          placeholder="Title"
-          hide-details
-        ></v-text-field>
+    <v-toolbar elevation="0" v-if="note">
+      <v-text-field
+        v-model="note.title"
+        placeholder="Title"
+        hide-details
+      />
 
-        <v-menu>
-          <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
-              <v-icon>mdi-dots-vertical</v-icon>
-            </v-btn>
-          </template>
-          <v-list class="text-left">
-            <!-- <v-list-item v-if="!note.isPinned">
-              <v-list-item-icon>
-                <v-icon>mdi-pin</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Pin</v-list-item-title>
-            </v-list-item>
-            <v-list-item v-else>
-              <v-list-item-icon>
-                <v-icon>mdi-pin-outline</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Unpin</v-list-item-title>
-            </v-list-item> -->
-            <v-list-item v-if="note.archivedAt === null" @click="archiveNote">
-              <v-list-item-icon>
-                <v-icon>mdi-package-down</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Archive</v-list-item-title>
-            </v-list-item>
-            <v-list-item v-else @click="unarchiveNote">
-              <v-list-item-icon>
-                <v-icon>mdi-package-up</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Unarchive</v-list-item-title>
-            </v-list-item>
-            <v-list-item @click="deleteNote">
-              <v-list-item-icon>
-                <v-icon>mdi-delete</v-icon>
-              </v-list-item-icon>
-              <v-list-item-title>Delete forever</v-list-item-title>
-            </v-list-item>
-          </v-list>
-        </v-menu>
-      </v-toolbar>
-      <div class="overflow-y-auto ps-2" v-if="note">
-        <v-textarea
-          v-model="note.body"
-          placeholder="Take a note..."
-          autofocus
-          hide-details
-          solo
-          flat
-          height="calc(100vh - 80px)"
-        ></v-textarea>
-      </div>
+      <v-menu>
+        <template v-slot:activator="{ on }">
+          <v-btn icon v-on="on">
+            <v-icon>mdi-dots-vertical</v-icon>
+          </v-btn>
+        </template>
+        <v-list class="text-left">
+          <!-- <v-list-item v-if="!note.isPinned">
+            <v-list-item-icon>
+              <v-icon>mdi-pin</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Pin</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-else>
+            <v-list-item-icon>
+              <v-icon>mdi-pin-outline</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Unpin</v-list-item-title>
+          </v-list-item> -->
+          <v-list-item v-if="note.archivedAt === null" @click="archiveNote">
+            <v-list-item-icon>
+              <v-icon>mdi-package-down</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Archive</v-list-item-title>
+          </v-list-item>
+          <v-list-item v-else @click="unarchiveNote">
+            <v-list-item-icon>
+              <v-icon>mdi-package-up</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Unarchive</v-list-item-title>
+          </v-list-item>
+          <v-list-item @click="deleteNote">
+            <v-list-item-icon>
+              <v-icon>mdi-delete</v-icon>
+            </v-list-item-icon>
+            <v-list-item-title>Delete forever</v-list-item-title>
+          </v-list-item>
+        </v-list>
+      </v-menu>
+    </v-toolbar>
+
+    <div class="overflow-y-auto ps-2" v-if="note">
+      <v-textarea
+        v-model="note.body"
+        placeholder="Take a note..."
+        autofocus
+        hide-details
+        solo
+        flat
+        height="calc(100vh - 65px)"
+        no-resize
+      ></v-textarea>
+    </div>
   </div>
 </template>
 
@@ -174,18 +176,15 @@ export default class BlmNote extends Vue {
 
 
 <style scoped lang="scss">
-.v-card {
-  border-radius: 8px;
-
-  .v-card__title {
-    height: 72px;
-  }
-}
-
 .blm-note-body {
   height: 80px;
   text-overflow: ellipsis;
   white-space: pre;
   overflow: hidden;
+}
+
+.v-toolbar {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1) !important;
+  left: 0px !important;
 }
 </style>

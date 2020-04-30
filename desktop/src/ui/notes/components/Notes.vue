@@ -13,24 +13,26 @@
         </v-tooltip>
       </v-toolbar>
 
-      <v-list-item-group
-        v-model="selectedNoteIndex"
-        @change="setSelectedNoteIndex"
-        color="indigo">
-        <v-list three-line class="overflow-y-auto pa-0">
-          <template v-for="(note, index) in notes" class="blm-pointer">
-            <v-list-item :key="`note-${index}`">
+      <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+        <v-list-item-group
+          v-model="selectedNoteIndex"
+          @change="setSelectedNoteIndex"
+          color="indigo" >
+          <v-list three-line class="pa-0">
+            <template v-for="(note, index) in notes" class="blm-pointer">
+              <v-list-item :key="`note-${index}`">
 
-              <v-list-item-content class="text-left">
-                <v-list-item-title>{{ note.title }}</v-list-item-title>
-                <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
-              </v-list-item-content>
+                <v-list-item-content class="text-left">
+                  <v-list-item-title>{{ note.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+                </v-list-item-content>
 
-            </v-list-item>
-            <v-divider v-if="index !== notes.length - 1" :key="index"/>
-          </template>
-        </v-list>
-      </v-list-item-group>
+              </v-list-item>
+              <v-divider v-if="index !== notes.length - 1" :key="index"/>
+            </template>
+          </v-list>
+        </v-list-item-group>
+      </div>
     </v-col>
 
     <v-col cols="8" class="pa-0 blm-main-col">
@@ -257,5 +259,10 @@ export default class BlmNotes extends Vue {
 
 .v-overflow-btn .v-input__slot::before {
     border-color: grey !important;
+}
+
+.v-toolbar {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1) !important;
+  left: 0px !important;
 }
 </style>
