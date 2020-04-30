@@ -177,7 +177,7 @@ export default class BlmNotes extends Vue {
   }
 
   async setSelectedNoteIndex(selected: number | undefined) {
-    // save before chaging note
+    // save before changing / closing note
     await this.save();
 
     if (selected === undefined || selected >= this.notes.length) {
