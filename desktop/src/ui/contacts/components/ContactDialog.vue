@@ -554,18 +554,7 @@ export default class ContactDialog extends Vue {
   emails: Email[] = [{ ...DEFAULT_EMAIL }];
   websites: Website[] = [{ ...DEFAULT_WEBSITE }];
   addresses: Address[] = [{ ...DEFAULT_ADDRESS }];
-  phoneLabels = [
-    'Home',
-    'Work',
-    'Other',
-    'Mobile',
-    'Main',
-    'Home fax',
-    'Work fax',
-  ];
-  addressLabels = ['Home', 'Work', 'Other'];
-  websiteLabels = ['Personal', 'Blog', 'Home page', 'Work', 'Other'];
-  emailLabels = ['Personal', 'Work', 'Other'];
+
 
   // computed
   get show() {

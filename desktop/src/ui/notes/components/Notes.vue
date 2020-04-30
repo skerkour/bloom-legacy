@@ -1,6 +1,6 @@
 <template>
-  <v-layout fill-height>
-    <v-col cols="4" lg="3" class="pa-0">
+  <v-container fill-height fluid class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0 blm-left-col">
       <v-toolbar elevation="0">
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -50,7 +50,7 @@
       </div>
     </v-col>
 
-    <v-col cols="8" lg="9" class="pa-0 blm-main-col">
+    <v-col cols="8" lg="9" class="pa-0">
       <blm-notes-note v-if="selectedNote"
         :note="selectedNote"
         @archived="noteArchived"
@@ -58,7 +58,7 @@
         @deleted="noteDeleted"
       />
     </v-col>
-  </v-layout>
+  </v-container>
 </template>
 
 
@@ -263,8 +263,8 @@ export default class BlmNotes extends Vue {
 
 
 <style lang="scss" scoped>
-.blm-main-col {
-  border-left: 1px solid #dedede;
+.blm-left-col {
+  border-right: 1px solid #dedede;
 }
 
 .v-overflow-btn .v-input__slot::before {

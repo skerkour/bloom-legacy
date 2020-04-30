@@ -1,24 +1,6 @@
 <template>
-  <!-- <v-container fluid>
-    <v-card
-      class="mx-auto"
-      max-width="200"
-      outlined
-      href="/arcade/games/2048/index.html"
-    >
-
-    <v-img
-      src="/assets/imgs/icons/2048.png"
-      height="200px"
-      width="200px"
-    ></v-img>
-
-    <v-card-title>2048</v-card-title>
-
-    </v-card>
-  </v-container> -->
-  <v-layout fill-height>
-    <v-col cols="4" lg="3" class="pa-0">
+  <v-container fill-height fluid class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0 blm-left-col">
       <div style="height: 100vh" class="overflow-y-auto">
         <v-list-item-group v-model="selectedGameIndex" color="indigo" mandatory>
           <v-list three-line class="pa-0">
@@ -42,10 +24,10 @@
       </div>
     </v-col>
 
-    <v-col cols="8" lg="9" class="pa-0 blm-main-col">
+    <v-col cols="8" lg="9" class="pa-0">
       <blm-game :game="games[0]" />
     </v-col>
-  </v-layout>
+  </v-container>
 </template>
 
 
@@ -100,7 +82,7 @@ export default class BlmGames extends Vue {
 
 
 <style lang="scss" scoped>
-.blm-main-col {
-  border-left: 1px solid #dedede;
+.blm-left-col {
+  border-right: 1px solid #dedede;
 }
 </style>

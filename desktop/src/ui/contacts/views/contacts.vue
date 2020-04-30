@@ -1,6 +1,6 @@
 <template>
-  <v-layout fill-height>
-    <v-col cols="4" lg="3" class="pa-0">
+  <v-container fill-height fluid class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0 blm-left-col">
 
       <v-toolbar elevation="0">
         <v-spacer />
@@ -21,27 +21,27 @@
         <v-list-item-group>
           <v-list two-line class="pa-0">
             <template v-for="(contact, index) in contacts" class="blm-pointer">
-              <v-list-item :key="`contact-${index}`">
 
+              <v-list-item :key="`contact-${index}`">
                 <v-list-item-content class="text-left">
                   <v-list-item-title>
                     {{ contact.firstName }} {{ contact.lastName }}
                   </v-list-item-title>
                   <!-- <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle> -->
                 </v-list-item-content>
-
               </v-list-item>
               <v-divider v-if="index !== contacts.length - 1" :key="index"/>
+
             </template>
           </v-list>
         </v-list-item-group>
       </div>
     </v-col>
 
-    <v-col cols="8" lg="9" class="pa-0 blm-main-col">
+    <v-col cols="8" lg="9" class="pa-0">
       <blm-contact v-if="selectedContact" :contact="selectedContact" />
     </v-col>
-  </v-layout>
+  </v-container>
 </template>
 
 
@@ -73,10 +73,6 @@ export default class BlmContacts extends Vue {
   }
   // watch
   // methods
-  newContact() {
-    console.log('NEW CONTACT');
-  }
-
   async findContacts() {
     this.error = '';
     this.loading = true;
@@ -90,6 +86,30 @@ export default class BlmContacts extends Vue {
       this.loading = false;
     }
   }
+
+  async newContact() {
+    // await this.setSelectedNoteIndex(undefined);
+
+    const newContact: Contact = {
+      id: '',
+      createdAt: new Date(),
+      updatedAt: new Date(),
+      birthday: null,
+      firstName: '',
+      lastName: '',
+      notes: '',
+      emails: [],
+      phones: [],
+      websites: [],
+      organizations: [],
+      addresses: [],
+      deviceId: '',
+      bloomUsername: '',
+    };
+    this.contacts = [newContact, ...this.contacts];
+    [this.selectedContact] = this.contacts;
+    // await this.setSelectedNoteIndex(0);
+  }
 }
 </script>
 
@@ -100,7 +120,7 @@ export default class BlmContacts extends Vue {
   left: 0px !important;
 }
 
-.blm-main-col {
-  border-left: 1px solid #dedede;
+.blm-left-col {
+  border-right: 1px solid #dedede;
 }
 </style>
