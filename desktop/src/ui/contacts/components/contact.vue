@@ -568,19 +568,19 @@ export default class BlmContact extends Vue {
       ? new Date(contact.birthday!).toISOString().substr(0, 10) : null;
     this.birthdayFormatted = this.formatDate(this.birthday);
     this.contact.emails = this.contact.emails.length > 0
-      ? contact.emails
+      ? this.contact.emails
       : [{ ...DEFAULT_EMAIL }];
     this.contact.websites = contact.websites.length > 0
-      ? contact.websites
+      ? this.contact.websites
       : [{ ...DEFAULT_WEBSITE }];
     this.contact.phones = contact.phones.length > 0
-      ? contact.phones
+      ? this.contact.phones
       : [{ ...DEFAULT_PHONE }];
     this.contact.organizations = contact.organizations.length > 0
-      ? contact.organizations
+      ? this.contact.organizations
       : [{ ...DEFAULT_ORGANIZATION }];
     this.contact.addresses = contact.addresses.length > 0
-      ? contact.addresses
+      ? this.contact.addresses
       : [{ ...DEFAULT_ADDRESS }];
   }
 

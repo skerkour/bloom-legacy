@@ -87,7 +87,7 @@ export default class BlmContacts extends Vue {
   loading = false;
   contacts: Contact[] = [];
   selectedContact: Contact | null = null;
-  selectedContactIndex: number | undefined = 0;
+  selectedContactIndex: number | null = null;
 
   // computed
   // lifecycle
@@ -126,22 +126,22 @@ export default class BlmContacts extends Vue {
     await this.save();
 
     if (selected === undefined || selected >= this.contacts.length) {
-      this.selectedContactIndex = undefined;
+      this.selectedContactIndex = null;
       this.selectedContact = null;
     } else {
       this.selectedContact = this.contacts[selected];
-      // this.selectedContactIndex = selected;
+      this.selectedContactIndex = selected;
     }
   }
 
   contactDeleted(deletedContact: Contact) {
     this.contacts = this.contacts.filter((cont: Contact) => cont.id !== deletedContact.id);
     this.selectedContact = null;
-    this.selectedContactIndex = 0;
+    this.selectedContactIndex = null;
   }
 
   async newContact() {
-    // await this.setSelectedNoteIndex(undefined);
+    await this.setSelectedContactIndex(undefined);
 
     const newContact: Contact = {
       id: '',
@@ -162,7 +162,7 @@ export default class BlmContacts extends Vue {
     this.contacts = [newContact, ...this.contacts];
     [this.selectedContact] = this.contacts;
     this.selectedContactIndex = 0;
-    // await this.setSelectedNoteIndex(0);
+    // await this.setSelectedContactIndex(0);
   }
 
   async createContact() {
