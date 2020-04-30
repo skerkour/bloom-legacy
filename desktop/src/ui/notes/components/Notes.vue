@@ -1,9 +1,21 @@
 <template>
   <v-layout fill-height>
     <v-col cols="4" lg="3" class="pa-0">
-      <v-toolbar elevation="0" v-if="!archive">
-         <v-spacer />
+      <v-toolbar elevation="0">
         <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" to="/notes" exact v-if="archive">
+              <v-icon>mdi-note</v-icon>
+            </v-btn>
+            <v-btn icon v-on="on" to="/notes/archive" exact v-else>
+              <v-icon>mdi-package-down</v-icon>
+            </v-btn>
+          </template>
+          <span v-if="archive">Go to Notes</span>
+          <span v-else>Go to Archive</span>
+        </v-tooltip>
+        <v-spacer />
+        <v-tooltip bottom v-if="!archive">
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on" @click="newNote">
               <v-icon>mdi-plus</v-icon>

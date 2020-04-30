@@ -66,6 +66,6 @@ export default class Auth extends Vue {
 }
 
 .v-content {
-  margin-left: 80px;
+  margin-left: 72px;
 }
 </style>

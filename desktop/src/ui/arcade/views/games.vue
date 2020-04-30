@@ -100,4 +100,7 @@ export default class BlmGames extends Vue {
 
 
 <style lang="scss" scoped>
+.blm-main-col {
+  border-left: 1px solid #dedede;
+}
 </style>

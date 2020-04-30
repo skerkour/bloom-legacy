@@ -47,7 +47,7 @@
         <v-list-item-avatar color="white" class="blm-pointer" @click="openHelp">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-               <v-icon medium color="grey" v-on="on">mdi-help</v-icon>
+               <v-icon medium color="grey" v-on="on">mdi-help-circle</v-icon>
             </template>
             <span>Help</span>
           </v-tooltip>

@@ -5,6 +5,9 @@
         v-model="note.title"
         placeholder="Title"
         hide-details
+        solo
+        flat
+        class="headline"
       />
 
       <v-menu>
@@ -48,7 +51,7 @@
       </v-menu>
     </v-toolbar>
 
-    <div class="overflow-y-auto ps-2" v-if="note">
+    <div class="overflow-y-auto" v-if="note">
       <v-textarea
         v-model="note.body"
         placeholder="Take a note..."
