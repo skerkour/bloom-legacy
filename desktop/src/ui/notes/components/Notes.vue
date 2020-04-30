@@ -26,10 +26,13 @@
       </v-toolbar>
 
       <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+        <v-alert icon="mdi-alert-circle" type="error" dismissible :value="error !== ''">
+          {{ error }}
+        </v-alert>
         <v-list-item-group
           v-model="selectedNoteIndex"
           @change="setSelectedNoteIndex"
-          color="indigo" >
+          color="indigo">
           <v-list three-line class="pa-0">
             <template v-for="(note, index) in notes" class="blm-pointer">
               <v-list-item :key="`note-${index}`">
@@ -60,12 +63,7 @@
 
 
 <script lang="ts">
-import {
-  Component,
-  Prop,
-  Vue,
-  // Watch,
-} from 'vue-property-decorator';
+import { Component, Prop, Vue } from 'vue-property-decorator';
 import BlmNote from './Note.vue';
 import core from '@/core';
 import {
@@ -96,9 +94,9 @@ export default class BlmNotes extends Vue {
   // computed
   // lifecycle
   async created() {
-    // this.saveInterval = setInterval(() => {
-    //   this.save();
-    // }, 2000);
+    this.saveInterval = setInterval(() => {
+      this.save();
+    }, 2000);
     if (this.archive) {
       await this.findArchived();
     } else {

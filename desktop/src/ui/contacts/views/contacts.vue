@@ -1,6 +1,7 @@
 <template>
   <v-layout fill-height>
     <v-col cols="4" lg="3" class="pa-0">
+
       <v-toolbar elevation="0">
         <v-spacer />
         <v-tooltip bottom>
@@ -12,7 +13,28 @@
           <span>New Contact</span>
         </v-tooltip>
       </v-toolbar>
+
       <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+        <v-alert icon="mdi-alert-circle" type="error" dismissible :value="error !== ''">
+          {{ error }}
+        </v-alert>
+        <v-list-item-group>
+          <v-list two-line class="pa-0">
+            <template v-for="(contact, index) in contacts" class="blm-pointer">
+              <v-list-item :key="`contact-${index}`">
+
+                <v-list-item-content class="text-left">
+                  <v-list-item-title>
+                    {{ contact.firstName }} {{ contact.lastName }}
+                  </v-list-item-title>
+                  <!-- <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle> -->
+                </v-list-item-content>
+
+              </v-list-item>
+              <v-divider v-if="index !== contacts.length - 1" :key="index"/>
+            </template>
+          </v-list>
+        </v-list-item-group>
       </div>
     </v-col>
 
@@ -26,7 +48,8 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BlmContact from '../components/contact.vue';
-import { Contact } from '../../../core/contacts';
+import { Contact, Method, Contacts } from '@/core/contacts';
+import core from '@/core';
 
 
 @Component({
@@ -37,13 +60,35 @@ import { Contact } from '../../../core/contacts';
 export default class BlmContacts extends Vue {
   // props
   // data
+  error = '';
+  loading = false;
+  contacts: Contact[] = [];
   selectedContact: Contact | null = null;
+
   // computed
   // lifecycle
+  async created() {
+    await this.findContacts();
+    // this.setSelectedNoteIndex(0);
+  }
   // watch
   // methods
   newContact() {
     console.log('NEW CONTACT');
+  }
+
+  async findContacts() {
+    this.error = '';
+    this.loading = true;
+
+    try {
+      const res = await core.call(Method.ListContacts, core.Empty);
+      this.contacts = (res as Contacts).contacts;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
   }
 }
 </script>
