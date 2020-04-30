@@ -1,4 +1,4 @@
-const Contacts = () => import(/* webpackChunkName: "chunk-contacts" */ './views/Contacts.vue');
+const Contacts = () => import(/* webpackChunkName: "chunk-contacts" */ './views/contacts.vue');
 
 export default [
   {
