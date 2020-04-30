@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar elevation="0" v-if="contact">
-      <v-toolbar-title>{{ contact.firstName }} {{ contact.lastName }}</v-toolbar-title>
+      <v-toolbar-title>{{ firstName }} {{ lastName }}</v-toolbar-title>
 
       <v-spacer />
       <v-menu>
