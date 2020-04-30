@@ -7,7 +7,7 @@ import (
 func ListNotes() (Notes, error) {
 	ret := Notes{Notes: []Note{}}
 
-	query := "SELECT * FROM notes WHERE archived_at IS NULL ORDER BY is_pinned DESC, created_at ASC"
+	query := "SELECT * FROM notes WHERE archived_at IS NULL ORDER BY updated_at DESC"
 	err := db.DB.Select(&ret.Notes, query)
 	if err != nil {
 		return ret, err
