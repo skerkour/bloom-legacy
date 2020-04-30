@@ -9,14 +9,13 @@
               <v-icon>mdi-calendar-plus</v-icon>
             </v-btn>
           </template>
-          <span>New Note</span>
+          <span>New Event</span>
         </v-tooltip>
       </v-toolbar>
 
       <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
 
       </div>
-
     </v-col>
 
 
