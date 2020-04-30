@@ -1,32 +1,34 @@
 <template>
   <v-container fill-height fluid class="pa-0">
-    <v-col cols="4" lg="3" class="pa-0 blm-left-col">
-      <div style="height: 100vh" class="overflow-y-auto">
-        <v-list-item-group v-model="selectedGameIndex" color="indigo" mandatory>
-          <v-list three-line class="pa-0">
-            <template v-for="(game, index) in games" class="blm-pointer">
-              <v-list-item :key="`note-${index}`">
+    <v-row justify="center" align="center">
+      <v-col cols="4" lg="3" class="pa-0 blm-left-col">
+        <div style="height: 100vh" class="overflow-y-auto">
+          <v-list-item-group v-model="selectedGameIndex" color="indigo" mandatory>
+            <v-list three-line class="pa-0">
+              <template v-for="(game, index) in games" class="blm-pointer">
+                <v-list-item :key="`note-${index}`">
 
-                <v-list-item-avatar>
-                  <v-img :src="game.icon"></v-img>
-                </v-list-item-avatar>
+                  <v-list-item-avatar>
+                    <v-img :src="game.icon"></v-img>
+                  </v-list-item-avatar>
 
-                <v-list-item-content class="text-left">
-                  <v-list-item-title>{{ game.name }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ game.description }}</v-list-item-subtitle>
-                </v-list-item-content>
+                  <v-list-item-content class="text-left">
+                    <v-list-item-title>{{ game.name }}</v-list-item-title>
+                    <v-list-item-subtitle>{{ game.description }}</v-list-item-subtitle>
+                  </v-list-item-content>
 
-              </v-list-item>
-              <v-divider v-if="index !== games.length - 1" :key="index"/>
-            </template>
-          </v-list>
-        </v-list-item-group>
-      </div>
-    </v-col>
+                </v-list-item>
+                <v-divider v-if="index !== games.length - 1" :key="index"/>
+              </template>
+            </v-list>
+          </v-list-item-group>
+        </div>
+      </v-col>
 
-    <v-col cols="8" lg="9" class="pa-0">
-      <blm-game :game="games[0]" />
-    </v-col>
+      <v-col cols="8" lg="9" class="pa-0">
+        <blm-game :game="games[0]" />
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
