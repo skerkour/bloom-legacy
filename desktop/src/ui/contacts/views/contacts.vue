@@ -18,7 +18,10 @@
         <v-alert icon="mdi-alert-circle" type="error" dismissible :value="error !== ''">
           {{ error }}
         </v-alert>
-        <v-list-item-group>
+        <v-list-item-group
+          v-model="selectedContactIndex"
+          @change="setSelectedContactIndex"
+        >
           <v-list two-line class="pa-0">
             <template v-for="(contact, index) in contacts" class="blm-pointer">
 
@@ -39,7 +42,8 @@
     </v-col>
 
     <v-col cols="8" lg="9" class="pa-0">
-      <blm-contact v-if="selectedContact" :contact="selectedContact" rf="contact" />
+      <blm-contact v-if="selectedContact" :contact="selectedContact" ref="contact"
+      @deleted="contactDeleted"/>
     </v-col>
   </v-container>
 </template>
@@ -48,8 +52,27 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import BlmContact from '../components/contact.vue';
-import { Contact, Method, Contacts } from '@/core/contacts';
+import {
+  Contact,
+  Method,
+  Contacts,
+  CreateContactParams,
+} from '@/core/contacts';
 import core from '@/core';
+
+
+const DEFAULT_EMAIL = { email: '', label: 'Personal' };
+const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
+const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
+const DEFAULT_ORGANIZATION = { name: '', title: '' };
+const DEFAULT_ADDRESS = {
+  city: '',
+  country: '',
+  label: 'Home',
+  postalCode: '',
+  street: '',
+  state: '',
+};
 
 
 @Component({
@@ -64,6 +87,7 @@ export default class BlmContacts extends Vue {
   loading = false;
   contacts: Contact[] = [];
   selectedContact: Contact | null = null;
+  selectedContactIndex: number | undefined = 0;
 
   // computed
   // lifecycle
@@ -73,6 +97,16 @@ export default class BlmContacts extends Vue {
   }
   // watch
   // methods
+  async save() {
+    if (this.selectedContact) {
+      if (this.selectedContact.id === '') {
+        await this.createContact();
+      } else {
+        await this.updateContact();
+      }
+    }
+  }
+
   async findContacts() {
     this.error = '';
     this.loading = true;
@@ -87,6 +121,25 @@ export default class BlmContacts extends Vue {
     }
   }
 
+  async setSelectedContactIndex(selected: number | undefined) {
+    // save before changing / closing note
+    await this.save();
+
+    if (selected === undefined || selected >= this.contacts.length) {
+      this.selectedContactIndex = undefined;
+      this.selectedContact = null;
+    } else {
+      this.selectedContact = this.contacts[selected];
+      // this.selectedContactIndex = selected;
+    }
+  }
+
+  contactDeleted(deletedContact: Contact) {
+    this.contacts = this.contacts.filter((cont: Contact) => cont.id !== deletedContact.id);
+    this.selectedContact = null;
+    this.selectedContactIndex = 0;
+  }
+
   async newContact() {
     // await this.setSelectedNoteIndex(undefined);
 
@@ -98,17 +151,70 @@ export default class BlmContacts extends Vue {
       firstName: '',
       lastName: '',
       notes: '',
-      emails: [],
-      phones: [],
-      websites: [],
-      organizations: [],
-      addresses: [],
+      emails: [DEFAULT_EMAIL],
+      phones: [DEFAULT_PHONE],
+      websites: [DEFAULT_WEBSITE],
+      organizations: [DEFAULT_ORGANIZATION],
+      addresses: [DEFAULT_ADDRESS],
       deviceId: '',
       bloomUsername: '',
     };
     this.contacts = [newContact, ...this.contacts];
     [this.selectedContact] = this.contacts;
+    this.selectedContactIndex = 0;
     // await this.setSelectedNoteIndex(0);
+  }
+
+  async createContact() {
+    this.error = '';
+    this.loading = true;
+    const params: CreateContactParams = {
+      birthday: core.toDateIsoString((this.$refs.contact as any).birthday),
+      ...this.selectedContact!,
+      // firstName: this.firstName,
+      // lastName: this.lastName,
+      // notes: this.notes,
+      // emails: this.emails,
+      // phones: this.phones,
+      // websites: this.websites,
+      // organizations: this.organizations,
+      // addresses: this.addresses,
+      // deviceId: '',
+      // bloomUsername: this.bloomUsername,
+    };
+    try {
+      const res = await core.call(Method.CreateContact, params);
+      this.selectedContact = res;
+      // this.$emit('created', (res as Contact));
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async updateContact() {
+    this.error = '';
+    this.loading = true;
+    const contact = { ...this.selectedContact } as Contact;
+    contact.birthday = core.toDateIsoString((this.$refs.contact as any).birthday);
+    // contact.firstName = this.firstName;
+    // contact.lastName = this.lastName;
+    // contact.notes = this.notes;
+    // contact.emails = this.emails;
+    // contact.phones = this.phones;
+    // contact.websites = this.websites;
+    // contact.organizations = this.organizations;
+    // contact.addresses = this.addresses;
+    // contact.bloomUsername = this.bloomUsername;
+    try {
+      await core.call(Method.UpdateContact, contact);
+      // this.$emit('updated', (res as Contact));
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
   }
 }
 </script>
