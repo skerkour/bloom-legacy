@@ -184,16 +184,12 @@ export default class BlmNotes extends Vue {
       this.selectedNoteIndex = undefined;
       this.selectedNote = null;
     } else {
-      console.log('SEEELECTED', selected);
-      console.log(this.notes);
       const note = this.notes[selected];
-      console.log(note);
       this.notes.splice(selected, 1);
       this.selectedNote = note;
       this.notes = [note, ...this.notes];
       this.selectedNoteIndex = 0;
     }
-    console.log('INDEX', this.selectedNoteIndex);
   }
 
   async newNote() {
