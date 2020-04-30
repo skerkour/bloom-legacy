@@ -1,6 +1,6 @@
 <template>
   <v-layout fill-height>
-    <v-col cols="4" lg="9" class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0">
       <v-toolbar elevation="0">
         <v-spacer />
         <v-tooltip bottom>
