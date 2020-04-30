@@ -1,6 +1,6 @@
 <template>
   <v-layout fill-height>
-    <v-col cols="4" class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0">
       <v-toolbar elevation="0" v-if="!archive">
          <v-spacer />
         <v-tooltip bottom>
@@ -35,7 +35,7 @@
       </div>
     </v-col>
 
-    <v-col cols="8" class="pa-0 blm-main-col">
+    <v-col cols="8" lg="9" class="pa-0 blm-main-col">
       <blm-notes-note v-if="selectedNote"
         :note="selectedNote"
         @archived="noteArchived"
