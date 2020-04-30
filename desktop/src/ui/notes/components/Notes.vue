@@ -59,6 +59,7 @@ import {
   Note,
   Notes,
   Method,
+  CreateNote,
 } from '@/core/notes';
 import { log } from '@/libs/rz';
 
@@ -82,9 +83,9 @@ export default class BlmNotes extends Vue {
   // lifecycle
   async created() {
     if (this.archive) {
-      await this.fetchArchive();
+      await this.findArchive();
     } else {
-      await this.fetchNotes();
+      await this.findNotes();
     }
     if (this.notes.length > 0) {
       this.selectedNote = this.notes[0]; // eslint-disable-line
@@ -92,7 +93,18 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  async fetchNotes() {
+  // methods
+  async save() {
+    if (this.selectedNote) {
+      if (this.selectedNote.id === '') {
+        await this.createNote();
+      } else {
+        await this.updateNote();
+      }
+    }
+  }
+
+  async findNotes() {
     this.error = '';
     this.isLoading = true;
 
@@ -106,7 +118,7 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  async fetchArchive() {
+  async findArchive() {
     this.error = '';
     this.isLoading = true;
 
@@ -120,7 +132,6 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  // methods
   noteCreated(note: Note) {
     this.notes = [note, ...this.notes];
   }
@@ -149,7 +160,8 @@ export default class BlmNotes extends Vue {
     this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
   }
 
-  setSelectedNoteIndex(selected: any) {
+  async setSelectedNoteIndex(selected: any) {
+    await this.save();
     if (selected !== undefined && selected !== null) {
       this.selectedNote = this.notes[selected];
     } else {
@@ -171,6 +183,42 @@ export default class BlmNotes extends Vue {
     };
     this.notes = [newNote, ...this.notes];
     this.setSelectedNoteIndex(0);
+  }
+
+  async createNote() {
+    this.error = '';
+    this.isLoading = true;
+    const params: CreateNote = {
+      title: this.selectedNote!.title,
+      body: this.selectedNote!.body,
+      color: '#ffffff',
+    };
+    try {
+      const res = await core.call(Method.CreateNote, params);
+      this.notes[this.selectedNoteIndex!] = res;
+      // this.selectedNote = res;
+      // this.$emit('created', (res as Note));
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
+  }
+
+  async updateNote() {
+    this.error = '';
+    this.isLoading = true;
+    const note = { ...this.selectedNote } as Note;
+    try {
+      const res = await core.call(Method.UpdateNote, note);
+      this.notes[this.selectedNoteIndex!] = res;
+      // this.selectedNote = res;
+      // this.$emit('updated', (res as Note));
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.isLoading = false;
+    }
   }
 }
 </script>
