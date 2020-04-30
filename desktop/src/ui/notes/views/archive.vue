@@ -5,7 +5,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Notes from '../components/Notes.vue';
+import Notes from '../components/notes.vue';
 
 @Component({
   components: {

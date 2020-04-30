@@ -7,7 +7,7 @@
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on" @click="newContact">
-              <v-icon>mdi-plus</v-icon>
+              <v-icon>mdi-account-plus</v-icon>
             </v-btn>
           </template>
           <span>New Contact</span>
@@ -39,7 +39,7 @@
     </v-col>
 
     <v-col cols="8" lg="9" class="pa-0">
-      <blm-contact v-if="selectedContact" :contact="selectedContact" />
+      <blm-contact v-if="selectedContact" :contact="selectedContact" rf="contact" />
     </v-col>
   </v-container>
 </template>

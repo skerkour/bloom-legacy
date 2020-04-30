@@ -8,7 +8,7 @@
               <v-icon>mdi-note</v-icon>
             </v-btn>
             <v-btn icon v-on="on" to="/notes/archive" exact v-else>
-              <v-icon>mdi-package-down</v-icon>
+              <v-icon>mdi-archive</v-icon>
             </v-btn>
           </template>
           <span v-if="archive">Go to Notes</span>
@@ -18,7 +18,7 @@
         <v-tooltip bottom v-if="!archive">
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on" @click="newNote">
-              <v-icon>mdi-plus</v-icon>
+              <v-icon>mdi-pencil-plus</v-icon>
             </v-btn>
           </template>
           <span>New Note</span>
@@ -64,7 +64,7 @@
 
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
-import BlmNote from './Note.vue';
+import BlmNote from './note.vue';
 import core from '@/core';
 import {
   Note,

@@ -5,11 +5,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import Notes from '../components/Notes.vue';
+import BlmNotes from '../components/notes.vue';
 
 @Component({
   components: {
-    'blm-notes': Notes,
+    BlmNotes,
   },
 })
 export default class Archive extends Vue {
