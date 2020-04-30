@@ -5,7 +5,7 @@
         <v-spacer />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
-            <v-btn icon v-on="on">
+            <v-btn icon v-on="on" @click="newContact">
               <v-icon>mdi-plus</v-icon>
             </v-btn>
           </template>
@@ -42,6 +42,9 @@ export default class BlmContacts extends Vue {
   // lifecycle
   // watch
   // methods
+  newContact() {
+    console.log('NEW CONTACT');
+  }
 }
 </script>
 
