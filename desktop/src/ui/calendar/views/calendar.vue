@@ -1,6 +1,65 @@
 <template>
-  <div class="fill-height">
-    <v-row class="fill-height">
+  <v-container fill-height fluid class="pa-0">
+    <v-col cols="4" lg="3" class="pa-0 blm-left-col">
+      <v-toolbar elevation="0">
+        <v-spacer />
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on" @click="createEvent">
+              <v-icon>mdi-calendar-plus</v-icon>
+            </v-btn>
+          </template>
+          <span>New Note</span>
+        </v-tooltip>
+      </v-toolbar>
+
+      <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+
+      </div>
+
+    </v-col>
+
+
+    <v-col cols="8" lg="9" class="pa-0">
+      <v-toolbar elevation="0" class="justify-between">
+        <v-btn text icon color="primary" @click="$refs.calendar.prev()">
+          <v-icon dark>mdi-chevron-left</v-icon>
+        </v-btn>
+        <v-btn text icon color="primary" @click="$refs.calendar.next()">
+          <v-icon dark>mdi-chevron-right</v-icon>
+        </v-btn>
+
+          <p class="mb-4 blm-pointer" @click="centerToday">
+            {{ today }}
+          </p>
+
+          <v-select
+            solo
+            flat
+            v-model="type"
+            :items="typeOptions"
+            hide-details
+          />
+
+      </v-toolbar>
+        <div class="fill-height" style="height: calc(100vh - 65px)">
+          <v-calendar
+            ref="calendar"
+            v-model="focus"
+            :type="type"
+            :start="start"
+            :end="end"
+            :now="now"
+            color="error"
+            @change="calendarChanged"
+            @click:event="editEvent"
+            :events="vuetifyEvents"
+          />
+      </div>
+    </v-col>
+
+
+    <!-- <v-row class="fill-height">
       <v-col cols="3">
         <v-row>
           <v-col cols="3">
@@ -27,31 +86,14 @@
             </v-btn>
           </v-col>
 
-        <!-- <v-select
-          outlined
-          v-model="type"
-          :items="typeOptions"
-        /> -->
+
         </v-row>
       </v-col>
 
       <v-col sm="9" class="col-no-padding pl-2">
 
-        <v-calendar
-          ref="calendar"
-          v-model="focus"
-          :type="type"
-          :start="start"
-          :end="end"
-          :now="now"
-          color="error"
-          @change="calendarChanged"
-          @click:event="editEvent"
-          :events="vuetifyEvents"
-        />
-      </v-col>
 
-    </v-row>
+    </v-row> -->
 
     <blm-calendar-dialog-event
       :visible="showEventDialog"
@@ -61,7 +103,7 @@
       @updated="eventUpdated"
       @deleted="eventDeleted"
     />
-  </div>
+  </v-container>
 </template>
 
 
@@ -79,7 +121,7 @@ import {
     'blm-calendar-dialog-event': EventDialog,
   },
 })
-export default class Index extends Vue {
+export default class BlmCalendar extends Vue {
   // props
   // data
   type = 'month';
@@ -195,6 +237,15 @@ export default class Index extends Vue {
 
 
 <style lang="scss" scoped>
+.blm-left-col {
+  border-right: 1px solid #dedede;
+}
+
+.v-toolbar {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1) !important;
+  left: 0px !important;
+}
+
 .controls {
   position: relative;
 }

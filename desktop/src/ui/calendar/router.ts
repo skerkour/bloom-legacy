@@ -1,4 +1,4 @@
-const Index = () => import(/* webpackChunkName: "chunk-calendar" */ './views/Index.vue');
+const Index = () => import(/* webpackChunkName: "chunk-calendar" */ './views/calendar.vue');
 
 export default [
   {
