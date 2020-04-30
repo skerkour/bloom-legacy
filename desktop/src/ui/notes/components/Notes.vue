@@ -78,18 +78,25 @@ export default class BlmNotes extends Vue {
   notes: Note[] = [];
   selectedNote: Note | null = null;
   selectedNoteIndex: number | undefined = 0;
+  saveInterval: any | null = null;
 
   // computed
   // lifecycle
   async created() {
+    this.saveInterval = setInterval(() => {
+      this.save();
+    }, 2000);
     if (this.archive) {
       await this.findArchive();
     } else {
       await this.findNotes();
     }
-    if (this.notes.length > 0) {
-      this.selectedNote = this.notes[0]; // eslint-disable-line
-      this.selectedNoteIndex = 0;
+    this.setSelectedNoteIndex(0);
+  }
+
+  destroyed() {
+    if (this.saveInterval) {
+      clearInterval(this.saveInterval);
     }
   }
 
@@ -132,14 +139,18 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  noteCreated(note: Note) {
-    this.notes = [note, ...this.notes];
-  }
+  // noteCreated(note: Note) {
+  //   this.notes = [note, ...this.notes];
+  // }
 
   noteUpdated(updatedNote: Note) {
-    const pos = this.notes.map((note: Note) => note.id).indexOf(updatedNote.id);
-    this.notes.splice(pos, 1);
-    this.notes = [updatedNote, ...this.notes];
+    // const pos = this.notes.map((note: Note) => note.id).indexOf(updatedNote.id);
+    // this.notes.splice(pos, 1);
+    // this.notes = [updatedNote, ...this.notes];
+    this.notes[this.selectedNoteIndex!] = updatedNote;
+    this.selectedNote = updatedNote;
+
+
     // this.notes = this.notes.map((note: any) => {
     //   if (note.id === updatedNote.id) {
     //     return updatedNote;
@@ -150,27 +161,32 @@ export default class BlmNotes extends Vue {
 
   noteArchived(archivedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== archivedNote.id);
+    this.setSelectedNoteIndex(0);
   }
 
   noteUnarchived(unarchivedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== unarchivedNote.id);
+    this.setSelectedNoteIndex(0);
   }
 
   noteDeleted(deletedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
+    this.setSelectedNoteIndex(0);
   }
 
-  async setSelectedNoteIndex(selected: any) {
+  async setSelectedNoteIndex(selected: number | undefined) {
     await this.save();
-    if (selected !== undefined && selected !== null) {
-      this.selectedNote = this.notes[selected];
-    } else {
+    if (selected === undefined || selected >= this.notes.length) {
+      this.selectedNoteIndex = undefined;
       this.selectedNote = null;
+    } else {
+      this.selectedNote = this.notes[selected];
+      this.selectedNoteIndex = selected;
     }
-    this.selectedNoteIndex = selected;
   }
 
-  newNote() {
+  async newNote() {
+    await this.setSelectedNoteIndex(undefined);
     const newNote: Note = {
       id: '',
       createdAt: new Date(),
@@ -182,7 +198,7 @@ export default class BlmNotes extends Vue {
       isPinned: false,
     };
     this.notes = [newNote, ...this.notes];
-    this.setSelectedNoteIndex(0);
+    await this.setSelectedNoteIndex(0);
   }
 
   async createNote() {
@@ -196,6 +212,7 @@ export default class BlmNotes extends Vue {
     try {
       const res = await core.call(Method.CreateNote, params);
       this.notes[this.selectedNoteIndex!] = res;
+      this.selectedNote = res;
       // this.selectedNote = res;
       // this.$emit('created', (res as Note));
     } catch (err) {
@@ -212,6 +229,7 @@ export default class BlmNotes extends Vue {
     try {
       const res = await core.call(Method.UpdateNote, note);
       this.notes[this.selectedNoteIndex!] = res;
+      this.selectedNote = res;
       // this.selectedNote = res;
       // this.$emit('updated', (res as Note));
     } catch (err) {

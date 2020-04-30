@@ -37,6 +37,15 @@
       </v-list-item-content>
     </v-list-item>
 
+    <v-list-item exact link to="/myaccount/sign-out">
+      <v-list-item-icon>
+        <v-icon>mdi-power</v-icon>
+      </v-list-item-icon>
+      <v-list-item-content>
+        <v-list-item-title>Sign Out</v-list-item-title>
+      </v-list-item-content>
+    </v-list-item>
+
   </v-list>
 </template>
 

@@ -63,16 +63,16 @@
 
 
 <script lang="ts">
-import { Component, Vue, Prop } from 'vue-property-decorator';
-import NoteDialog from './NoteDialog.vue';
+import {
+  Component,
+  Vue,
+  Prop,
+  // Watch,
+} from 'vue-property-decorator';
 import { Note, DeleteNote, Method } from '@/core/notes';
 import core from '@/core';
 
-@Component({
-  components: {
-    'blm-notes-dialog-note': NoteDialog,
-  },
-})
+@Component
 export default class BlmNote extends Vue {
   // props
   @Prop({ type: Object, required: true }) note!: Note;
