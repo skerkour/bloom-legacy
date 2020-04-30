@@ -1,173 +1,58 @@
 <template>
-  <div>
-    <v-container fluid>
-      <v-toolbar flat dense>
+  <v-layout fill-height>
+    <v-col cols="4" class="pa-0">
+      <v-toolbar elevation="0">
         <v-spacer />
-        <v-btn color="primary" @click="currentContact = null; openContactDialog()">
-          <v-icon left>mdi-plus</v-icon>Create Contact
-        </v-btn>
+        <v-tooltip bottom>
+          <template v-slot:activator="{ on }">
+            <v-btn icon v-on="on">
+              <v-icon>mdi-plus</v-icon>
+            </v-btn>
+          </template>
+          <span>New Contact</span>
+        </v-tooltip>
       </v-toolbar>
+      <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+      </div>
+    </v-col>
 
-      <v-data-table
-        :headers="headers"
-        :items="contacts"
-        item-key="id"
-        hide-default-footer
-        :loading="loading"
-      >
-        <template v-slot:no-data>
-          <p class="text-center">
-            No Contact.
-          </p>
-        </template>
-       <template v-slot:item="{ item }">
-          <tr class="blm-pointer" @click="currentContact = item; openContactDialog()">
-
-            <td class="text-left">
-              <span>{{ item.firstName }} {{ item.lastName}}</span>
-            </td>
-            <td class="text-left">
-              <span>{{ item.bloomUsername }}</span>
-            </td>
-            <td class="text-left">
-              <span v-if="item.emails.length >= 1">
-                {{ item.emails[0].email }}
-              </span>
-            </td>
-            <td class="text-left">
-              <span v-if="item.phones.length >= 1">
-                {{ item.phones[0].phone }}
-              </span>
-            </td>
-            <td class="text-left">
-              <span v-if="item.organizations.length >= 1">
-                <span>
-                  {{ item.organizations[0].title }},
-                </span>
-                <span>
-                  {{ item.organizations[0].name }}
-                </span>
-              </span>
-            </td>
-          </tr>
-        </template>
-      </v-data-table>
-
-    </v-container>
-
-  <blm-contacts-dialog-contact
-    :contact="currentContact"
-    :visible="showContactDialog"
-    @closed="contactDialogClosed"
-    @created="contactCreated"
-    @updated="contactUpdated"
-    @deleted="contactDeleted"
-  />
-  </div>
+    <v-col cols="8" class="pa-0 blm-main-col">
+      <blm-contact :contact="selectedContact" />
+    </v-col>
+  </v-layout>
 </template>
 
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import core from '@/core';
-import { Contact, Contacts, Method } from '@/core/contacts';
-import ContactDialog from '../components/ContactDialog.vue';
-import { log } from '@/libs/rz';
+import BlmContact from '../components/contact.vue';
+import { Contact } from '../../../core/contacts';
 
 
 @Component({
   components: {
-    'blm-contacts-dialog-contact': ContactDialog,
+    BlmContact,
   },
 })
-export default class Index extends Vue {
+export default class BlmContacts extends Vue {
   // props
   // data
-  error = '';
-  loading = false;
-  contacts: Contact[] = [];
-  showContactDialog = false;
-  headers = [
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Name',
-    },
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Username',
-    },
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Email',
-    },
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Phone number',
-    },
-    {
-      align: 'left',
-      sortable: false,
-      text: 'Job title & company',
-    },
-  ];
-  currentContact: Contact | null = null;
-
+  selectedContact: Contact | null = null;
   // computed
   // lifecycle
-  async created() {
-    this.findContacts();
-  }
-
   // watch
   // methods
-  async findContacts() {
-    this.error = '';
-    this.loading = true;
-    try {
-      const res = await core.call(Method.ListContacts, core.Empty);
-      this.contacts = (res as Contacts).contacts;
-    } catch (err) {
-      log.error(err);
-    } finally {
-      this.loading = false;
-    }
-  }
-
-  openContactDialog() {
-    this.showContactDialog = true;
-  }
-
-  contactDialogClosed() {
-    this.showContactDialog = false;
-    this.currentContact = null;
-  }
-
-  contactCreated(contact: Contact) {
-    this.contacts = [contact, ...this.contacts];
-  }
-
-  contactUpdated(updatedContact: Contact) {
-    this.contacts = this.contacts.map((note: any) => {
-      if (note.id === updatedContact.id) {
-        return updatedContact;
-      }
-      return note;
-    });
-  }
-
-  contactDeleted(deletedContact: Contact) {
-    this.contacts = this.contacts.filter(
-      (contact: Contact) => contact.id !== deletedContact.id,
-    );
-    this.currentContact = null;
-  }
 }
 </script>
 
 
 <style lang="scss" scoped>
+.v-toolbar {
+  border-bottom: 1px solid rgba($color: #000000, $alpha: 0.1) !important;
+  left: 0px !important;
+}
+
+.blm-main-col {
+  border-left: 1px solid #dedede;
+}
 </style>
