@@ -28,7 +28,7 @@ import { Component, Vue, Prop } from 'vue-property-decorator';
 import { Contact } from '@/core/contacts';
 
 @Component
-export default class BlmSignOut extends Vue {
+export default class BlmContact extends Vue {
   // props
   @Prop({ type: Object, required: true }) contact!: Contact;
 

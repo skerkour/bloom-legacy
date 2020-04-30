@@ -17,7 +17,7 @@
     </v-col>
 
     <v-col cols="8" class="pa-0 blm-main-col">
-      <blm-contact :contact="selectedContact" />
+      <blm-contact v-if="selectedContact" :contact="selectedContact" />
     </v-col>
   </v-layout>
 </template>

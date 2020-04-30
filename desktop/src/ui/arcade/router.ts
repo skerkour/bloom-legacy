@@ -1,8 +1,8 @@
-const Index = () => import(/* webpackChunkName: "chunk-arcade" */ './views/Index.vue');
+const Games = () => import(/* webpackChunkName: "chunk-arcade" */ './views/games.vue');
 
 export default [
   {
-    component: Index,
+    component: Games,
     path: '/arcade',
   },
 ];
