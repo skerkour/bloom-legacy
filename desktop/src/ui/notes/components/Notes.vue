@@ -14,7 +14,7 @@
       </v-toolbar>
 
       <v-list-item-group
-        :value="selectedNoteIndex"
+        v-model="selectedNoteIndex"
         @change="setSelectedNoteIndex"
         color="indigo">
         <v-list three-line class="overflow-y-auto pa-0">
@@ -38,7 +38,6 @@
         :note="selectedNote"
         @archived="noteArchived"
         @unarchived="noteUnarchived"
-        @updated="noteUpdated"
         @deleted="noteDeleted"
       />
     </v-col>
@@ -83,11 +82,11 @@ export default class BlmNotes extends Vue {
   // computed
   // lifecycle
   async created() {
-    this.saveInterval = setInterval(() => {
-      this.save();
-    }, 2000);
+    // this.saveInterval = setInterval(() => {
+    //   this.save();
+    // }, 2000);
     if (this.archive) {
-      await this.findArchive();
+      await this.findArchived();
     } else {
       await this.findNotes();
     }
@@ -125,7 +124,7 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  async findArchive() {
+  async findArchived() {
     this.error = '';
     this.isLoading = true;
 
@@ -161,32 +160,45 @@ export default class BlmNotes extends Vue {
 
   noteArchived(archivedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== archivedNote.id);
+    this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
 
   noteUnarchived(unarchivedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== unarchivedNote.id);
+    this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
 
   noteDeleted(deletedNote: Note) {
     this.notes = this.notes.filter((note: Note) => note.id !== deletedNote.id);
+    this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
 
   async setSelectedNoteIndex(selected: number | undefined) {
+    // save before chaging note
     await this.save();
+
     if (selected === undefined || selected >= this.notes.length) {
       this.selectedNoteIndex = undefined;
       this.selectedNote = null;
     } else {
-      this.selectedNote = this.notes[selected];
-      this.selectedNoteIndex = selected;
+      console.log('SEEELECTED', selected);
+      console.log(this.notes);
+      const note = this.notes[selected];
+      console.log(note);
+      this.notes.splice(selected, 1);
+      this.selectedNote = note;
+      this.notes = [note, ...this.notes];
+      this.selectedNoteIndex = 0;
     }
+    console.log('INDEX', this.selectedNoteIndex);
   }
 
   async newNote() {
     await this.setSelectedNoteIndex(undefined);
+
     const newNote: Note = {
       id: '',
       createdAt: new Date(),
@@ -211,7 +223,7 @@ export default class BlmNotes extends Vue {
     };
     try {
       const res = await core.call(Method.CreateNote, params);
-      this.notes[this.selectedNoteIndex!] = res;
+      this.notes[0] = res;
       this.selectedNote = res;
       // this.selectedNote = res;
       // this.$emit('created', (res as Note));
@@ -228,7 +240,7 @@ export default class BlmNotes extends Vue {
     const note = { ...this.selectedNote } as Note;
     try {
       const res = await core.call(Method.UpdateNote, note);
-      this.notes[this.selectedNoteIndex!] = res;
+      this.notes[0] = res;
       this.selectedNote = res;
       // this.selectedNote = res;
       // this.$emit('updated', (res as Note));

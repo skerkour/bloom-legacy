@@ -14,7 +14,7 @@
             </v-btn>
           </template>
           <v-list class="text-left">
-            <v-list-item v-if="!note.isPinned">
+            <!-- <v-list-item v-if="!note.isPinned">
               <v-list-item-icon>
                 <v-icon>mdi-pin</v-icon>
               </v-list-item-icon>
@@ -25,7 +25,7 @@
                 <v-icon>mdi-pin-outline</v-icon>
               </v-list-item-icon>
               <v-list-item-title>Unpin</v-list-item-title>
-            </v-list-item>
+            </v-list-item> -->
             <v-list-item v-if="note.archivedAt === null" @click="archiveNote">
               <v-list-item-icon>
                 <v-icon>mdi-package-down</v-icon>
@@ -78,7 +78,6 @@ export default class BlmNote extends Vue {
   @Prop({ type: Object, required: true }) note!: Note;
 
   // data
-  dialog = false;
   error = '';
   isLoading = false;
 
@@ -165,14 +164,6 @@ export default class BlmNote extends Vue {
     } finally {
       this.isLoading = false;
     }
-  }
-
-  update() {
-    this.dialog = true;
-  }
-
-  dialogClosed() {
-    this.dialog = false;
   }
 
   noteUpdated(note: any) {
