@@ -283,7 +283,7 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	customer, err := billing.FindCustomerByUserIdNoTx(ctx, uuid.UUID(*user.ID))
+	customer, err := billing.FindCustomerByUserId(ctx, nil, *user.ID, false)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

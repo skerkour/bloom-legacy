@@ -59,7 +59,7 @@ func AddPaymentMethod(ctx context.Context, actor *users.User, params AddPaymentM
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID, true)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)

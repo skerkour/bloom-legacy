@@ -44,7 +44,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			tx.Rollback()
 			return customer, retPlan, NewError(ErrorAdminRoleRequired)
 		}
-		customer, err = FindCustomerByUserId(ctx, tx, *userId)
+		customer, err = FindCustomerByUserId(ctx, tx, *userId, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err
@@ -62,7 +62,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			return customer, retPlan, err
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err
