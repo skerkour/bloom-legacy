@@ -125,18 +125,20 @@
     </v-row>
 
 
-    <v-row class="justify-center mb-5 mt-5">
-      <v-col cols="12" class="text-center d-block d-sm-none">
-        <blm-download-btn />
-      </v-col>
+    <v-row class="justify-center mt-5">
       <v-col cols="12" class="text-center">
-        <div class="d-none d-sm-inline-block">
-          <blm-download-btn class="mr-5"/>
-        </div>
-        <v-btn to="/#features" outlined x-large exact color="primary" class="ml-sm-5">
-          {{ $t('landing.explore_features') }}
-        </v-btn>
+        <blm-download-btn />
+        <blm-other-downloads-link />
       </v-col>
+      <!-- <v-col cols="12" class="text-center">
+        <div class="d-none d-sm-inline-block">
+          <blm-download-btn />
+          <blm-other-downloads-link />
+        </div> -->
+        <!-- <v-btn to="/#features" outlined x-large exact color="primary" class="ml-sm-5">
+          {{ $t('landing.explore_features') }}
+        </v-btn> -->
+      <!-- </v-col> -->
     </v-row>
 
     <v-row class="blm-features pb-5">
@@ -149,7 +151,8 @@
       v-for="(feature, index) in features" :key="index">
       <v-col cols="12" v-if="feature.name === 'dl_btn'">
         <div style="height: 100px;">
-          <blm-download-btn outlined />
+          <blm-download-btn />
+          <blm-other-downloads-link />
         </div>
       </v-col>
 
@@ -290,7 +293,7 @@ span.caret {
 
 <style scoped lang="scss">
 .blm-features {
-  margin-top: 70px;
+  margin-top: 30px;
 }
 
 .blm-feature {
