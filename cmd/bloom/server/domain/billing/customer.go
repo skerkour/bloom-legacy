@@ -11,51 +11,19 @@ import (
 )
 
 type Customer struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID        uuid.UUID `db:"id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 
-	Email                 string    `json:"email" db:"email"`
-	StripeCustomerID      *string   `json:"stripe_customer_id" db:"stripe_customer_id"`
-	StripeSubscriptionID  *string   `json:"stripe_subscription_id" db:"stripe_subscription_id"`
-	UsedStorage           int64     `json:"used_storage" db:"used_storage"`
-	SubscriptionUpdatedAt time.Time `json:"subscription_updated_at" db:"subscription_updated_at"`
+	Email                 string    `db:"email"`
+	StripeCustomerID      *string   `db:"stripe_customer_id"`
+	StripeSubscriptionID  *string   `db:"stripe_subscription_id"`
+	UsedStorage           int64     `db:"used_storage"`
+	SubscriptionUpdatedAt time.Time `db:"subscription_updated_at"`
 
-	PlanID  uuid.UUID  `json:"plan_id" db:"plan_id"`
-	UserID  *uuid.UUID `json:"user_id" db:"user_id"`
-	GroupID *uuid.UUID `json:"group_id" db:"group_id"`
-}
-
-func FindCustomerByGroupId(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID) (*Customer, error) {
-	ret := &Customer{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_customers WHERE group_id = $1"
-	err = tx.Get(ret, queryFind, groupId)
-	if err != nil {
-		logger.Error("billing.FindCustomerByGroupId: finding customer", rz.Err(err),
-			rz.String("group.id", groupId.String()))
-		return ret, NewError(ErrorCustomerNotFound)
-	}
-
-	return ret, err
-}
-
-func FindCustomerByGroupIdNoTx(ctx context.Context, groupId uuid.UUID) (*Customer, error) {
-	ret := &Customer{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_customers WHERE group_id = $1"
-	err = db.DB.Get(ret, queryFind, groupId)
-	if err != nil {
-		logger.Error("billing.FindCustomerByGroupIdNoTx: finding customer", rz.Err(err),
-			rz.String("group.id", groupId.String()))
-		return ret, NewError(ErrorCustomerNotFound)
-	}
-
-	return ret, err
+	PlanID  uuid.UUID  `db:"plan_id"`
+	UserID  *uuid.UUID `db:"user_id"`
+	GroupID *uuid.UUID `db:"group_id"`
 }
 
 func FindCustomerByPaymentMethod(ctx context.Context, tx *sqlx.Tx, paymentMethod *PaymentMethod) (*Customer, error) {

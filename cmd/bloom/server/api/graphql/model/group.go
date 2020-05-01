@@ -125,7 +125,7 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	customer, err := billing.FindCustomerByGroupIdNoTx(ctx, *group.ID)
+	customer, err := billing.FindCustomerByGroupID(ctx, nil, *group.ID, false)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}

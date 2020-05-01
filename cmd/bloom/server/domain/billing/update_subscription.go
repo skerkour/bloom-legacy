@@ -56,7 +56,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 				return customer, retPlan, err
 			}
 		}
-		customer, err = FindCustomerByGroupId(ctx, tx, *groupId)
+		customer, err = FindCustomerByGroupID(ctx, tx, *groupId, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err

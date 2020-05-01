@@ -5,6 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/lily/rz"
@@ -58,6 +59,7 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 
 	for _, repo := range params.Repositories {
 		var result RepositoryPushResult
+
 		result, err = pushToRepository(ctx, tx, actor, &repo)
 		if err != nil {
 			tx.Rollback()
@@ -79,6 +81,8 @@ func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushR
 
 func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo *RepositoryPush) (ret RepositoryPushResult, err error) {
 	newState := repo.curentStateInt + 1
+	var customer *billing.Customer
+	var pushSize int64
 
 	if repo.GroupID != nil {
 		var group *groups.Group
@@ -93,6 +97,12 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		if err != nil {
 			return
 		}
+
+		customer, err = billing.FindCustomerByGroupID(ctx, tx, group.ID, true)
+		if err != nil {
+			return
+		}
+
 		// for each object, check if it exists, if yes, if it belongs to group
 		// update object
 		// else insert object
@@ -103,16 +113,19 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 				return
 			}
 
-			object.Algorithm = repoObject.Algorithm
-			object.Nonce = repoObject.Nonce
-			object.EncryptedKey = repoObject.EncryptedKey
-			object.EncryptedData = repoObject.EncryptedData
-			object.UpdatedAtState = newState
-
 			if object == nil {
 				// insert object
+				object = &Object{}
+				object.Algorithm = repoObject.Algorithm
+				object.Nonce = repoObject.Nonce
+				object.EncryptedKey = repoObject.EncryptedKey
+				object.EncryptedData = repoObject.EncryptedData
+				object.UpdatedAtState = newState
 				object.ID = repoObject.ID
 				object.GroupID = repo.GroupID
+
+				pushSize += int64(len(object.EncryptedData))
+
 				queryInsert := `INSERT INTO obejcts
 					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, group_id)
 					VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -128,7 +141,18 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 					err = NewError(ErrorObjectNotFound)
 					return
 				}
+
 				// update object
+				pushSize -= int64(len(object.EncryptedData))
+
+				object.Algorithm = repoObject.Algorithm
+				object.Nonce = repoObject.Nonce
+				object.EncryptedKey = repoObject.EncryptedKey
+				object.EncryptedData = repoObject.EncryptedData
+				object.UpdatedAtState = newState
+
+				pushSize += int64(len(object.EncryptedData))
+
 				queryUpdate := `UPDATE obejcts
 					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
 					WHERE id = $6
@@ -144,6 +168,10 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		if err != nil {
 			return
 		}
+		err = billing.CustomerUpdateUsedStorage(ctx, tx, customer, pushSize)
+		if err != nil {
+			return
+		}
 
 	} else {
 		// user's repository
@@ -151,6 +179,12 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 			err = NewError(ErrorOutOfSync)
 			return
 		}
+
+		customer, err = billing.FindCustomerByUserId(ctx, tx, actor.ID, true)
+		if err != nil {
+			return
+		}
+
 		for _, repoObject := range repo.Objects {
 			var object *Object
 			object, err = FindObjectByID(ctx, tx, repoObject.ID, true)
@@ -158,16 +192,19 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 				return
 			}
 
-			object.Algorithm = repoObject.Algorithm
-			object.Nonce = repoObject.Nonce
-			object.EncryptedKey = repoObject.EncryptedKey
-			object.EncryptedData = repoObject.EncryptedData
-			object.UpdatedAtState = newState
-
 			if object == nil {
 				// insert object
+				object = &Object{}
+				object.Algorithm = repoObject.Algorithm
+				object.Nonce = repoObject.Nonce
+				object.EncryptedKey = repoObject.EncryptedKey
+				object.EncryptedData = repoObject.EncryptedData
+				object.UpdatedAtState = newState
 				object.ID = repoObject.ID
 				object.UserID = &actor.ID
+
+				pushSize += int64(len(object.EncryptedData))
+
 				queryInsert := `INSERT INTO obejcts
 					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, user_id)
 					VALUES ($1, $2, $3, $4, $5, $6, $7)
@@ -183,7 +220,18 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 					err = NewError(ErrorObjectNotFound)
 					return
 				}
+
 				// update object
+				pushSize -= int64(len(object.EncryptedData))
+
+				object.Algorithm = repoObject.Algorithm
+				object.Nonce = repoObject.Nonce
+				object.EncryptedKey = repoObject.EncryptedKey
+				object.EncryptedData = repoObject.EncryptedData
+				object.UpdatedAtState = newState
+
+				pushSize += int64(len(object.EncryptedData))
+
 				queryUpdate := `UPDATE obejcts
 					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
 					WHERE id = $6
@@ -195,7 +243,12 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 				}
 			}
 		}
+
 		err = users.UpdateUserState(ctx, tx, actor, newState)
+		if err != nil {
+			return
+		}
+		err = billing.CustomerUpdateUsedStorage(ctx, tx, customer, pushSize)
 		if err != nil {
 			return
 		}
