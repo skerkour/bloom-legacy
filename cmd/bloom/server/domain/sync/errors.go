@@ -11,6 +11,8 @@ const (
 	ErrorObjectTooLarge
 	ErrorOutOfSync
 	ErrorObjectNotFound
+	ErrorInvalidKeySize
+	ErrorInvalidNonceSize
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -27,6 +29,12 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorObjectNotFound:
 		code = errors.NotFound
 		message = "Object not found"
+	case ErrorInvalidKeySize:
+		code = errors.InvalidArgument
+		message = "Key size is not valid"
+	case ErrorInvalidNonceSize:
+		code = errors.InvalidArgument
+		message = "Nonce size is not valid"
 	}
 	return errors.New(code, message)
 }

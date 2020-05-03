@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/rz"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -108,6 +109,16 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		// else insert object
 		for _, repoObject := range repo.Objects {
 			var object *Object
+
+			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) != crypto.KeySize256 {
+				err = NewError(ErrorInvalidKeySize)
+				return
+			}
+			if len(repoObject.Nonce) != 0 && len(repoObject.Nonce) != crypto.AEADNonceSize {
+				err = NewError(ErrorInvalidNonceSize)
+				return
+			}
+
 			object, err = FindObjectByID(ctx, tx, repoObject.ID, true)
 			if err != nil {
 				return
@@ -187,6 +198,16 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 
 		for _, repoObject := range repo.Objects {
 			var object *Object
+
+			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) != crypto.KeySize256 {
+				err = NewError(ErrorInvalidKeySize)
+				return
+			}
+			if len(repoObject.Nonce) != 0 && len(repoObject.Nonce) != crypto.AEADNonceSize {
+				err = NewError(ErrorInvalidNonceSize)
+				return
+			}
+
 			object, err = FindObjectByID(ctx, tx, repoObject.ID, true)
 			if err != nil {
 				return
