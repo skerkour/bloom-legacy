@@ -23,7 +23,7 @@
     "axios": "^0.19.2",
     "core-js": "^3.6.5",
     "electron-updater": "^4.3.1",
-    "moment": "^2.25.1",
+    "moment": "^2.25.3",
     "mousetrap": "^1.6.5",
     "rxjs": "^6.5.5",
     "uuid": "^7.0.3",
