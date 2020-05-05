@@ -86,7 +86,7 @@
           <!-- addresses: TODO(z0mbie42) -->
 
           <!-- organizations -->
-          <v-row>
+          <!-- <v-row>
             <v-col cols="6">
               <v-text-field
                 label="Company"
@@ -100,7 +100,7 @@
                 v-model="contact.organizations[0].title"
               ></v-text-field>
             </v-col>
-          </v-row>
+          </v-row> -->
           <!-- /organizations -->
 
 
