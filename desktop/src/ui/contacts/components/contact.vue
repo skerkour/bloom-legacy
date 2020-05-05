@@ -484,7 +484,7 @@ import core from '@/core';
 const DEFAULT_EMAIL = { email: '', label: 'Personal' };
 const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
 const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
-const DEFAULT_ORGANIZATION = { name: '', title: '' };
+// const DEFAULT_ORGANIZATION = { name: '', title: '' };
 const DEFAULT_ADDRESS = {
   city: '',
   country: '',
@@ -576,9 +576,9 @@ export default class BlmContact extends Vue {
     this.contact.phones = contact.phones.length > 0
       ? this.contact.phones
       : [{ ...DEFAULT_PHONE }];
-    this.contact.organizations = contact.organizations.length > 0
-      ? this.contact.organizations
-      : [{ ...DEFAULT_ORGANIZATION }];
+    // this.contact.organizations = contact.organizations.length > 0
+    //   ? this.contact.organizations
+    //   : [{ ...DEFAULT_ORGANIZATION }];
     this.contact.addresses = contact.addresses.length > 0
       ? this.contact.addresses
       : [{ ...DEFAULT_ADDRESS }];

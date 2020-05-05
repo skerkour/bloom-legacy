@@ -64,7 +64,7 @@ import core from '@/core';
 const DEFAULT_EMAIL = { email: '', label: 'Personal' };
 const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
 const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
-const DEFAULT_ORGANIZATION = { name: '', title: '' };
+// const DEFAULT_ORGANIZATION = { name: '', title: '' };
 const DEFAULT_ADDRESS = {
   city: '',
   country: '',
@@ -154,7 +154,7 @@ export default class BlmContacts extends Vue {
       emails: [DEFAULT_EMAIL],
       phones: [DEFAULT_PHONE],
       websites: [DEFAULT_WEBSITE],
-      organizations: [DEFAULT_ORGANIZATION],
+      organizations: [],
       addresses: [DEFAULT_ADDRESS],
       deviceId: '',
       bloomUsername: '',
