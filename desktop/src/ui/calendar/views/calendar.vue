@@ -1,7 +1,10 @@
 <template>
   <v-container fill-height fluid class="pa-0">
     <v-col cols="4" lg="3" class="pa-0 blm-left-col">
-      <v-toolbar elevation="0">
+      <v-toolbar elevation="0" class="justify-space-between">
+        <p class="ma-0 blm-pointer" @click="centerToday">
+          {{ today }}
+        </p>
         <v-spacer />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -14,7 +17,27 @@
       </v-toolbar>
 
       <div style="height: calc(100vh - 65px)" class="overflow-y-auto">
+        <!-- <v-list-item-group
+          v-model="selectedEventIndex"
+          @change="setSelectedEventIndex"
+          color="indigo"> -->
+          <v-list three-line class="pa-0">
+            <template v-for="(event, index) in events" class="blm-pointer">
+              <v-list-item :key="`event-${index}`" @click="editEvent({ event })">
 
+                <v-list-item-content class="text-left">
+                  <v-list-item-title class="title">{{ event.title }}</v-list-item-title>
+                  <v-list-item-subtitle>
+                    Start at: {{ event.startAt | date }} <br />
+                    End at: {{ event.endAt | date }}
+                  </v-list-item-subtitle>
+                </v-list-item-content>
+
+              </v-list-item>
+              <v-divider v-if="index !== events.length - 1" :key="index"/>
+            </template>
+          </v-list>
+        <!-- </v-list-item-group> -->
       </div>
     </v-col>
 
@@ -28,15 +51,13 @@
           <v-icon dark>mdi-chevron-right</v-icon>
         </v-btn>
 
-          <p class="mb-4 blm-pointer" @click="centerToday">
-            {{ today }}
-          </p>
+        <v-spacer />
 
           <v-select
             solo
             flat
-            v-model="type"
-            :items="typeOptions"
+            v-model="calendarType"
+            :items="calendarTypeOptions"
             hide-details
           />
 
@@ -45,7 +66,7 @@
           <v-calendar
             ref="calendar"
             v-model="focus"
-            :type="type"
+            :type="calendarType"
             :start="start"
             :end="end"
             :now="now"
@@ -123,13 +144,13 @@ import {
 export default class BlmCalendar extends Vue {
   // props
   // data
-  type = 'month';
+  calendarType = 'month';
   now = moment().format('YYYY-MM-DD');
   focus = moment().format('YYYY-MM-DD');
   today = moment().format('dddd ll');
-  typeOptions = [
+  calendarTypeOptions = [
     { text: 'Day', value: 'day' },
-    { text: '4 Day', value: '4day' },
+    // { text: '4 Day', value: '4day' },
     { text: 'Week', value: 'week' },
     { text: 'Month', value: 'month' },
   ];
@@ -144,15 +165,17 @@ export default class BlmCalendar extends Vue {
   error = '';
   events: EventModel[] = [];
   currentEvent: EventModel | null = null;
+  selectedEventIndex: number | undefined = 0;
 
   // computed
   get vuetifyEvents(): any[] {
-    return this.events.map((event: any) => { // eslint-disable-line
-      event.startAt = new Date(event.startAt); // eslint-disable-line
-      event.endAt = new Date(event.endAt); // eslint-disable-line
-      event.start = this.formatDateForVuetify(event.startAt); // eslint-disable-line
-      event.end = this.formatDateForVuetify(event.endAt); // eslint-disable-line
-      event.name = event.title || '(No title)'; // eslint-disable-line
+    return this.events.map((ev: any) => {
+      const event = ev;
+      event.startAt = new Date(event.startAt);
+      event.endAt = new Date(event.endAt);
+      event.start = this.formatDateForVuetify(event.startAt);
+      event.end = this.formatDateForVuetify(event.endAt);
+      event.name = event.title || '(No title)';
       return event;
     });
   }
@@ -179,6 +202,10 @@ export default class BlmCalendar extends Vue {
     } finally {
       this.isLoading = false;
     }
+  }
+
+  setSelectedEventIndex(selected: number | undefined) {
+    console.log(selected);
   }
 
   createEvent() {
