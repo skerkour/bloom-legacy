@@ -94,15 +94,13 @@ export default class BlmNotes extends Vue {
   // computed
   // lifecycle
   async created() {
-    this.saveInterval = setInterval(() => {
-      this.save();
-    }, 2000);
     if (this.archive) {
       await this.findArchived();
     } else {
       await this.findNotes();
     }
     this.setSelectedNoteIndex(0);
+    this.saveInterval = setInterval(this.save, 2000);
   }
 
   async beforeDestroy() {

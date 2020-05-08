@@ -42,8 +42,12 @@
     </v-col>
 
     <v-col cols="8" lg="9" class="pa-0">
-      <blm-contact v-if="selectedContact" :contact="selectedContact" ref="contact"
-      @deleted="contactDeleted"/>
+      <blm-contact
+        v-if="selectedContact"
+        :contact="selectedContact"
+        ref="contact"
+        @deleted="contactDeleted"
+      />
     </v-col>
   </v-container>
 </template>
@@ -94,7 +98,7 @@ export default class BlmContacts extends Vue {
   // lifecycle
   async created() {
     await this.findContacts();
-    // this.setSelectedNoteIndex(0);
+    // this.saveInterval = setInterval(this.save, 2000);
   }
 
   async beforeDestroy() {
@@ -147,7 +151,8 @@ export default class BlmContacts extends Vue {
   }
 
   contactDeleted(deletedContact: Contact) {
-    this.contacts = this.contacts.filter((cont: Contact) => cont.id !== deletedContact.id);
+    const contacts = this.contacts.filter((cont: Contact) => cont.id !== deletedContact.id);
+    this.contacts = contacts;
     this.selectedContact = null;
     this.selectedContactIndex = null;
   }
@@ -197,6 +202,7 @@ export default class BlmContacts extends Vue {
     try {
       const res = await core.call(Method.CreateContact, params);
       this.selectedContact = res;
+      this.selectedContactIndex = 0;
       this.contacts[this.selectedContactIndex!] = res;
       // this.$emit('created', (res as Contact));
     } catch (err) {
