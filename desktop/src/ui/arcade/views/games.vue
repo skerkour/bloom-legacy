@@ -82,6 +82,14 @@ export default class BlmGames extends Vue {
       `,
       launch: '/arcade/games/t-rex/index.html',
     },
+    {
+      icon: '/assets/imgs/icons/tetris.jpg',
+      name: 'Tetris',
+      description: `Tetris is a tile-matching puzzle video game originally designed and programmed
+        by Soviet Russian software engineer Alexey Pajitnov in 1984 for the Electronika 60.
+      `,
+      launch: '/arcade/games/tetris/index.html',
+    },
   ];
 
   // computed
