@@ -26,7 +26,7 @@
       </v-col>
 
       <v-col cols="8" lg="9" class="pa-0">
-        <blm-game :game="games[0]" />
+        <blm-game v-if="selectedGameIndex !== undefined" :game="games[selectedGameIndex]" />
       </v-col>
     </v-row>
   </v-container>
@@ -53,7 +53,7 @@ export type Game = {
 export default class BlmGames extends Vue {
   // props
   // data
-  window2048 = null;
+  gameWindow = null;
   selectedGameIndex = 0;
   games: Game[] = [
     {
@@ -65,20 +65,21 @@ export default class BlmGames extends Vue {
       `,
       launch: '/arcade/games/2048/index.html',
     },
+    {
+      icon: '/assets/imgs/icons/tron.jpg',
+      name: 'Tron',
+      description: `Engage in the most popular and deadly sport of of cyberspace, the light cycle
+        arena. Leave lethal laser trails behind you and entrap your enemies while avoiding a similar
+        fate in a 3D rendition of the classic science fiction movie scene.
+      `,
+      launch: '/arcade/games/tron/index.html',
+    },
   ];
 
   // computed
   // lifecycle
   // watch
   // methods
-  launch2048() {
-    // this.window2048 = new BrowserWindow();
-    // this.window2048.on('closed', () => {
-    //   this.window2048 = null;
-    // });
-
-    // this.window2048.loadURL(`file://${__dirname}/public/arcade/games/2048/index.html`);
-  }
 }
 </script>
 

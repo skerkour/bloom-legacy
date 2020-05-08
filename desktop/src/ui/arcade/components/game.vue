@@ -31,12 +31,19 @@ export default class BlmGame extends Vue {
   @Prop({ type: Object, required: true }) game!: Game;
 
   // data
+  // gameWindow: BrowserWindow | null = null;
   // computed
   // lifecycle
   // watch
   // methods
   launchGame() {
     window.location = this.game.launch as any;
+    // this.gameWindow = new BrowserWindow();
+    // this.gameWindow.on('closed', () => {
+    //   this.gameWindow = null;
+    // });
+
+    // this.gameWindow.loadURL(`file://${__dirname}/public/arcade/${this.game.launch}`);
   }
 }
 </script>
