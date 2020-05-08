@@ -88,6 +88,7 @@ export default class BlmContacts extends Vue {
   contacts: Contact[] = [];
   selectedContact: Contact | null = null;
   selectedContactIndex: number | null = null;
+  saveInterval: any | null = null;
 
   // computed
   // lifecycle
@@ -95,6 +96,17 @@ export default class BlmContacts extends Vue {
     await this.findContacts();
     // this.setSelectedNoteIndex(0);
   }
+
+  async beforeDestroy() {
+    await this.save();
+  }
+
+  destroyed() {
+    if (this.saveInterval) {
+      clearInterval(this.saveInterval);
+    }
+  }
+
   // watch
   // methods
   async save() {
@@ -160,9 +172,9 @@ export default class BlmContacts extends Vue {
       bloomUsername: '',
     };
     this.contacts = [newContact, ...this.contacts];
-    [this.selectedContact] = this.contacts;
-    this.selectedContactIndex = 0;
-    // await this.setSelectedContactIndex(0);
+    // [this.selectedContact] = this.contacts;
+    // this.selectedContactIndex = 0;
+    await this.setSelectedContactIndex(0);
   }
 
   async createContact() {
@@ -185,6 +197,7 @@ export default class BlmContacts extends Vue {
     try {
       const res = await core.call(Method.CreateContact, params);
       this.selectedContact = res;
+      this.contacts[this.selectedContactIndex!] = res;
       // this.$emit('created', (res as Contact));
     } catch (err) {
       this.error = err.message;
