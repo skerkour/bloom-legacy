@@ -98,7 +98,7 @@ export default class BlmContacts extends Vue {
   // lifecycle
   async created() {
     await this.findContacts();
-    // this.saveInterval = setInterval(this.save, 2000);
+    this.saveInterval = setInterval(this.save, 2000);
   }
 
   async beforeDestroy() {
@@ -138,7 +138,7 @@ export default class BlmContacts extends Vue {
   }
 
   async setSelectedContactIndex(selected: number | undefined) {
-    // save before changing / closing note
+    // save before changing / closing contact
     await this.save();
 
     if (selected === undefined || selected >= this.contacts.length) {
@@ -177,8 +177,6 @@ export default class BlmContacts extends Vue {
       bloomUsername: '',
     };
     this.contacts = [newContact, ...this.contacts];
-    // [this.selectedContact] = this.contacts;
-    // this.selectedContactIndex = 0;
     await this.setSelectedContactIndex(0);
   }
 
@@ -188,23 +186,12 @@ export default class BlmContacts extends Vue {
     const params: CreateContactParams = {
       birthday: core.toDateIsoString((this.$refs.contact as any).birthday),
       ...this.selectedContact!,
-      // firstName: this.firstName,
-      // lastName: this.lastName,
-      // notes: this.notes,
-      // emails: this.emails,
-      // phones: this.phones,
-      // websites: this.websites,
-      // organizations: this.organizations,
-      // addresses: this.addresses,
-      // deviceId: '',
-      // bloomUsername: this.bloomUsername,
     };
     try {
       const res = await core.call(Method.CreateContact, params);
-      this.selectedContact = res;
       this.selectedContactIndex = 0;
+      this.selectedContact = res;
       this.contacts[this.selectedContactIndex!] = res;
-      // this.$emit('created', (res as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -215,20 +202,12 @@ export default class BlmContacts extends Vue {
   async updateContact() {
     this.error = '';
     this.loading = true;
+
     const contact = { ...this.selectedContact } as Contact;
     contact.birthday = core.toDateIsoString((this.$refs.contact as any).birthday);
-    // contact.firstName = this.firstName;
-    // contact.lastName = this.lastName;
-    // contact.notes = this.notes;
-    // contact.emails = this.emails;
-    // contact.phones = this.phones;
-    // contact.websites = this.websites;
-    // contact.organizations = this.organizations;
-    // contact.addresses = this.addresses;
-    // contact.bloomUsername = this.bloomUsername;
+
     try {
       await core.call(Method.UpdateContact, contact);
-      // this.$emit('updated', (res as Contact));
     } catch (err) {
       this.error = err.message;
     } finally {
