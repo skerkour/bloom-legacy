@@ -70,9 +70,17 @@ export default class BlmGames extends Vue {
       name: 'Tron',
       description: `Engage in the most popular and deadly sport of of cyberspace, the light cycle
         arena. Leave lethal laser trails behind you and entrap your enemies while avoiding a similar
-        fate in a 3D rendition of the classic science fiction movie scene.
+        fate in a 2D rendition of the classic science fiction movie scene.
       `,
       launch: '/arcade/games/tron/index.html',
+    },
+    {
+      icon: '/assets/imgs/icons/trex.png',
+      name: 'T-Rex',
+      description: `Google Chrome's offline game about dinosaur T-rex running through the
+        desert, jumping over cactuses and dodging pterodactyls.
+      `,
+      launch: '/arcade/games/t-rex/index.html',
     },
   ];
 
