@@ -25,6 +25,17 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// little hack to remove in the future. see https://github.com/vuetifyjs/vuetify/issues/9999
+const ignoreWarnMessage = 'The .native modifier for v-on is only valid on components but it was used on <div>.';
+Vue.config.warnHandler = (msg: any, vm: any, trace: any) => { //eslint-disable-line
+  // `trace` is the component hierarchy trace
+  if (msg === ignoreWarnMessage) {
+    msg = null; //eslint-disable-line
+    vm = null; //eslint-disable-line
+    trace = null; //eslint-disable-line
+  }
+};
+
 async function main() {
   await ipcRenderer.send('server:start');
   await sleep(1000);

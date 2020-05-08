@@ -249,9 +249,24 @@ export default class BlmCalendar extends Vue {
   }
 
   calendarChanged(to: any) {
+    console.log(to);
+    let start = to.start.date;
+    if (to.start.time === '') {
+      start += ' 00:00:00';
+    } else {
+      start += ` ${to.start.time}`;
+    }
+
+    let end = to.end.date;
+    if (to.end.time === '') {
+      end += ' 23:59:59';
+    } else {
+      end += ` ${to.end.time}`;
+    }
+
     this.fetchData(
-      new Date(to.start.date).toISOString() as unknown as Date,
-      new Date(to.end.date).toISOString() as unknown as Date,
+      new Date(start).toISOString() as unknown as Date,
+      new Date(end).toISOString() as unknown as Date,
     );
   }
 
