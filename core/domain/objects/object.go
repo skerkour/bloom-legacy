@@ -13,12 +13,3 @@ type DecryptedObjectData struct {
 	Type string `json:"string"`
 	Data string `json:"data"`
 }
-
-type EncryptedObject struct {
-	ID             string `json:"id"`
-	UpdatedAtState string `json:"updatedAtState"`
-	Cipher         string `json:"cipher"`
-	EncryptedKey   []byte `json:"encryptedKey"`
-	Nonce          []byte `json:"nonce"`
-	EncryptedData  []byte `json:"encryptedData"`
-}
