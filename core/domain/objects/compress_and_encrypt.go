@@ -1,5 +1,5 @@
 package objects
 
-func CompressAndEncrypt(object Object) EncryptedObject {
+func CompressAndEncrypt(object StoredObject) EncryptedObject {
 	return EncryptedObject{}
 }

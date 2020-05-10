@@ -8,6 +8,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 )
@@ -41,6 +42,9 @@ func Init(params InitParams) (InitRes, error) {
 			ret.Preferences[key] = value
 		}
 	}
+
+	// start background sync
+	go objects.Init()
 
 	return ret, err
 }

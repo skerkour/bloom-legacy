@@ -1,6 +1,6 @@
 package objects
 
-type Object struct {
+type StoredObject struct {
 	ID          string `db:"id"`
 	Type        string `db:"type"`
 	Data        string `db:"data"`
