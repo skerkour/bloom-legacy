@@ -1,5 +1,9 @@
 package objects
 
-func compressAndEncrypt(object StoredObject) EncryptedObject {
-	return EncryptedObject{}
+import (
+	"gitlab.com/bloom42/bloom/core/api/model"
+)
+
+func compressAndEncrypt(object StoredObject) (*model.ObjectInput, error) {
+	return &model.ObjectInput{}, nil
 }

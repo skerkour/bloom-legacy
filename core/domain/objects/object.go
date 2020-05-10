@@ -1,10 +1,10 @@
 package objects
 
 type StoredObject struct {
-	ID          string `db:"id"`
-	Type        string `db:"type"`
-	Data        string `db:"data"`
-	IsOutOfSync bool   `db:"is_out_of_sync"`
+	ID        string `db:"id"`
+	Type      string `db:"type"`
+	Data      string `db:"data"`
+	OutOfSync bool   `db:"out_of_sync"`
 
 	GroupID *string `db:"group_id"`
 }
