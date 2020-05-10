@@ -97,6 +97,20 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		return err
 	}
 
+	_, err = tx.Exec(`
+	CREATE TABLE IF NOT EXISTS objects (
+		id TEXT PRIMARY KEY NOT NULL,
+		type TEXT PRIMARY NOT NULL,
+		data TEXT PRIMARY NOT NULL,
+		out_of_sync INTEGER NOT NULL,
+		group_id TEXT
+	)
+	`)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	_, err = tx.Exec("PRAGMA user_version = 1")
 	if err != nil {
 		tx.Rollback()
