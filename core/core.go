@@ -44,7 +44,7 @@ func Init(params InitParams) (InitRes, error) {
 	}
 
 	// start background sync
-	go objects.Init()
+	err = objects.Init()
 
 	return ret, err
 }

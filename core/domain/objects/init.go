@@ -15,6 +15,7 @@ type states struct {
 	states map[string]string
 }
 
+// Init inits the objects (sync) service
 func Init() error {
 	Sync = make(chan bool)
 
