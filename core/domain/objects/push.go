@@ -15,6 +15,7 @@ func push() error {
 	client := api.Client()
 	storedObjects := []StoredObject{}
 	objectsToPush := map[string][]StoredObject{}
+	var masterKey []byte
 
 	input := model.PushInput{
 		Repositories: []*model.RepositoryPushInput{},
@@ -51,7 +52,7 @@ func push() error {
 		}
 		for _, object := range objectsToPush[groupIDStr] {
 			// Todo: encrypt object
-			objectToPush, err3 := compressAndEncrypt(object)
+			objectToPush, err3 := compressAndEncrypt(object, masterKey, compressSnappy)
 			if err3 != nil {
 				return err3
 			}

@@ -2,18 +2,7 @@ package objects
 
 import (
 	"context"
-	"sync"
 )
-
-// Sync force a sync
-var Sync chan bool
-
-var currentStates states
-
-type states struct {
-	mutex  sync.RWMutex
-	states map[string]string
-}
 
 // Init inits the objects (sync) service
 func Init() error {
