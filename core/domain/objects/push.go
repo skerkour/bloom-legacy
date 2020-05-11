@@ -15,7 +15,7 @@ import (
 func push() error {
 	var err error
 	client := api.Client()
-	storedObjects := []StoredObject{}
+	var storedObjects []StoredObject
 	objectsToPush := map[string][]StoredObject{}
 	var masterKey []byte
 	ctx := context.Background()
@@ -60,15 +60,16 @@ func push() error {
 		if groupIDStr != "" {
 			groupUUID, err2 := uuid.Parse(groupIDStr)
 			if err2 != nil {
+				crypto.Zeroize(masterKey) // clear masterKey from memory
 				tx.Rollback()
 				return err2
 			}
 			groupID = &groupUUID
 		}
 		for _, object := range objectsToPush[groupIDStr] {
-			// Todo: encrypt object
 			objectToPush, err3 := compressAndEncrypt(object, masterKey, compressSnappy)
 			if err3 != nil {
+				crypto.Zeroize(masterKey) // clear masterKey from memory
 				tx.Rollback()
 				return err3
 			}
@@ -83,8 +84,7 @@ func push() error {
 	}
 	currentStates.mutex.RUnlock()
 
-	// clear masterKey from memory
-	crypto.Zeroize(masterKey)
+	crypto.Zeroize(masterKey) // clear masterKey from memory
 
 	var resp struct {
 		Push *model.Push `json:"push"`
