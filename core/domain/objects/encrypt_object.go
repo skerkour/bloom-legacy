@@ -11,8 +11,9 @@ import (
 
 // compress and encrypt encodes to JSON, compress and encrypt with an unique key
 // an object
-func compressAndEncryptObject(object StoredObject, masterKey []byte, compressionAlgo compressionAlgorithm) (*model.ObjectInput, error) {
+func encryptObject(object StoredObject, masterKey []byte, compressionAlgo compressionAlgorithm) (*model.ObjectInput, error) {
 	// TODO: improve AD
+	// TODO: verify data
 	var ret *model.ObjectInput
 
 	objectData, err := json.Marshal(object)
@@ -28,7 +29,6 @@ func compressAndEncryptObject(object StoredObject, masterKey []byte, compression
 	// compress object
 	compressedObjectData := snappy.Encode(nil, objectData)
 	crypto.Zeroize(objectData)
-	algorithm := "snappy+xchacha20-poly1305"
 
 	// encrypt object
 	objectNonce, err := crypto.NewAEADNonce()
@@ -61,7 +61,7 @@ func compressAndEncryptObject(object StoredObject, masterKey []byte, compression
 	crypto.Zeroize(objectKey)
 
 	ret = &model.ObjectInput{
-		Algorithm:     algorithm,
+		Algorithm:     DEFAULT_ALGORITHM_STRING,
 		EncryptedData: encryptedObject,
 		EncryptedKey:  encryptedKey,
 		Nonce:         objectNonce,

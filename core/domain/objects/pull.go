@@ -20,6 +20,7 @@ func pull() error {
 		return err
 	}
 
+	// prepare api request
 	input := model.PullInput{
 		Repositories: []*model.RepositoryPullInput{},
 	}
@@ -44,6 +45,7 @@ func pull() error {
 	}
 	currentStates.mutex.RUnlock()
 
+	// build api request
 	var resp struct {
 		Pull *model.Pull `json:"pull"`
 	}
@@ -71,7 +73,6 @@ func pull() error {
 	err = client.Do(context.Background(), req, &resp)
 	if err != nil {
 		tx.Rollback()
-		return err
 		return err
 	}
 
