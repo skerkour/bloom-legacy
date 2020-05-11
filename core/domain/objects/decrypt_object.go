@@ -28,6 +28,7 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 	}
 	objectKey, err := objectKeyCipher.Open(nil, objectKeyNonce, encryptedObject.EncryptedKey, encryptedObject.ID)
 	if err != nil {
+		crypto.Zeroize(objectKey)
 		err = errors.New("Error decrypting object key")
 		return
 	}
@@ -35,6 +36,7 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 	// decrypt object data
 	objectDataCipher, err := crypto.NewAEAD(objectKey)
 	if err != nil {
+		crypto.Zeroize(objectKey)
 		return ret, err
 	}
 	compressedObjectData, err := objectDataCipher.Open(nil, encryptedObject.Nonce, encryptedObject.EncryptedData, encryptedObject.ID)
@@ -47,6 +49,7 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 	// decompress object
 	objectData, err := snappy.Decode(nil, compressedObjectData)
 	if err != nil {
+		crypto.Zeroize(objectData)
 		err = errors.New("Error decompressing object")
 		return
 	}
@@ -54,6 +57,7 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 
 	ret = &StoredObject{}
 	err = json.Unmarshal(objectData, ret)
+	crypto.Zeroize(objectData)
 	if err != nil {
 		err = errors.New("Error parsing object")
 		return
