@@ -16,6 +16,14 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 		err = errors.New("Invalid algorithm")
 		return
 	}
+	if len(encryptedObject.EncryptedData) > MAX_OBJECT_SIZE {
+		err = errors.New("Object is too large")
+		return
+	}
+	if len(encryptedObject.Nonce) != crypto.AEADNonceSize {
+		err = errors.New("Nonce is invalid")
+		return
+	}
 
 	// decrypt objectKey
 	objectKeyCipher, err := crypto.NewAEAD(masterKey)
@@ -44,6 +52,7 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 		err = errors.New("Error decrypting object")
 		return
 	}
+	// wipe objectKey from memory
 	crypto.Zeroize(objectKey)
 
 	// decompress object
@@ -53,10 +62,12 @@ func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *S
 		err = errors.New("Error decompressing object")
 		return
 	}
+	// wipe compressed object from memory
 	crypto.Zeroize(compressedObjectData)
 
 	ret = &StoredObject{}
 	err = json.Unmarshal(objectData, ret)
+	// wipe JSON object from memory
 	crypto.Zeroize(objectData)
 	if err != nil {
 		err = errors.New("Error parsing object")

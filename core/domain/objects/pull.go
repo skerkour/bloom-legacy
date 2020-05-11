@@ -87,6 +87,12 @@ func pull() error {
 	currentStates.mutex.Unlock()
 
 	// TODO: decrypt objects and resolve conflicts
+	// for each object
+	// check if object exist and is out of sync
+	// if yes
+	// create a new object from the local out of sync object (with a new id)
+	// else
+	// save object
 
 	err = tx.Commit()
 	if err != nil {
