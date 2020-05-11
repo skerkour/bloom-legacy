@@ -56,7 +56,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	crypto.Zeroize(privateKey)
 
 	// generate and save a random master key
-	masterKey, err := crypto.RandBytes(crypto.KeySize256)
+	masterKey, err := crypto.NewAEADKey()
 	if err != nil {
 		return ret, err
 	}
