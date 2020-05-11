@@ -14,6 +14,7 @@ import (
 func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, error) {
 	client := api.Client()
 	var ret model.SignedIn
+	ctx := context.Background()
 
 	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
 	if err != nil {
@@ -45,6 +46,17 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
+
+	// generate and save a random master key
+	masterKey, err := crypto.RandBytes(crypto.KeySize256)
+	if err != nil {
+		return ret, err
+	}
+	err = SaveMasterKey(ctx, nil, masterKey)
+	if err != nil {
+		return ret, err
+	}
+	crypto.Zeroize(masterKey)
 
 	input := model.CompleteRegistrationInput{
 		ID:       params.ID,
