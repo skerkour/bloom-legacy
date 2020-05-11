@@ -6,6 +6,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -16,16 +18,21 @@ func push() error {
 	storedObjects := []StoredObject{}
 	objectsToPush := map[string][]StoredObject{}
 	var masterKey []byte
+	ctx := context.Background()
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		return err
+	}
 
 	input := model.PushInput{
 		Repositories: []*model.RepositoryPushInput{},
 	}
 
-	// TODO: find and encrypt outOfSync objects
-
-	query := "SELECT * FROM objects WHERE out_of_sync = ?"
-	err = db.DB.Select(&storedObjects, query, true)
+	// find objects that need to be pushed
+	storedObjects, err = FindOutOfSyncObjects(ctx, tx)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -38,6 +45,13 @@ func push() error {
 		objectsToPush[groupID] = append(objectsToPush[groupID], object)
 	}
 
+	masterKey, err = users.FindMasterKey(ctx, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// format and encrypt objects
 	currentStates.mutex.RLock()
 	for groupIDStr, state := range currentStates.states {
 		var groupID *uuid.UUID
@@ -46,6 +60,7 @@ func push() error {
 		if groupIDStr != "" {
 			groupUUID, err2 := uuid.Parse(groupIDStr)
 			if err2 != nil {
+				tx.Rollback()
 				return err2
 			}
 			groupID = &groupUUID
@@ -54,6 +69,7 @@ func push() error {
 			// Todo: encrypt object
 			objectToPush, err3 := compressAndEncrypt(object, masterKey, compressSnappy)
 			if err3 != nil {
+				tx.Rollback()
 				return err3
 			}
 			objectsPushInput = append(objectsPushInput, objectToPush)
@@ -66,6 +82,9 @@ func push() error {
 		input.Repositories = append(input.Repositories, repo)
 	}
 	currentStates.mutex.RUnlock()
+
+	// clear masterKey from memory
+	crypto.Zeroize(masterKey)
 
 	var resp struct {
 		Push *model.Push `json:"push"`
@@ -85,6 +104,7 @@ func push() error {
 
 	err = client.Do(context.Background(), req, &resp)
 	if err != nil {
+		tx.Rollback()
 		return err
 	}
 
@@ -97,6 +117,12 @@ func push() error {
 		}
 	}
 	currentStates.mutex.Unlock()
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
 	return nil
 }
