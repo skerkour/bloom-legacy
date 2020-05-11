@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/crypto"
 )
 
-func decryptoObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *StoredObject, err error) {
+func decryptObject(encryptedObject *model.ObjectInput, masterKey []byte) (ret *StoredObject, err error) {
 	// TODO: improve AD
 	// TODO: verify data
 	if encryptedObject.Algorithm != DEFAULT_ALGORITHM_STRING {
