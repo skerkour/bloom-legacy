@@ -5,6 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/lily/graphql"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -12,6 +13,12 @@ import (
 func pull() error {
 	var err error
 	client := api.Client()
+	// ctx := context.Background()
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
+		return err
+	}
 
 	input := model.PullInput{
 		Repositories: []*model.RepositoryPullInput{},
@@ -24,6 +31,7 @@ func pull() error {
 		if groupIDStr != "" {
 			groupUUID, err2 := uuid.Parse(groupIDStr)
 			if err2 != nil {
+				tx.Rollback()
 				return err2
 			}
 			groupID = &groupUUID
@@ -62,6 +70,8 @@ func pull() error {
 
 	err = client.Do(context.Background(), req, &resp)
 	if err != nil {
+		tx.Rollback()
+		return err
 		return err
 	}
 
@@ -75,7 +85,13 @@ func pull() error {
 	}
 	currentStates.mutex.Unlock()
 
-	// TODO: resolve conflicts
+	// TODO: decrypt objects and resolve conflicts
+
+	err = tx.Commit()
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
 	return err
 }
