@@ -20,8 +20,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
-	// clean password from memory as we can...
-	params.Password = ""
+	params.Password = "" // clean password from memory as we can...
 
 	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
@@ -33,19 +32,27 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		return ret, errors.New("Internal error. Please try again")
 	}
 
-	// clean passwordKey from memory
-	crypto.Zeroize(passwordKey)
+	crypto.Zeroize(passwordKey) // clean passwordKey from memory
 
 	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
 		return ret, err
 	}
+	err = SavePublicKey(ctx, nil, publicKey)
+	if err != nil {
+		return ret, err
+	}
+	err = SavePrivateKey(ctx, nil, privateKey)
+	if err != nil {
+		return ret, err
+	}
 
-	// TODO: persist keypair
+	// encrypt privateKey
 	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(wrapKey, []byte(privateKey))
 	if err != nil {
 		return ret, err
 	}
+	crypto.Zeroize(privateKey)
 
 	// generate and save a random master key
 	masterKey, err := crypto.RandBytes(crypto.KeySize256)
@@ -56,7 +63,12 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
+	encryptedMasterKey, masterKeyNonce, err := encryptWithPassKey(wrapKey, []byte(masterKey))
+	if err != nil {
+		return ret, err
+	}
 	crypto.Zeroize(masterKey)
+	crypto.Zeroize(wrapKey)
 
 	input := model.CompleteRegistrationInput{
 		ID:       params.ID,
@@ -69,6 +81,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 		PublicKey:           []byte(publicKey),
 		EncryptedPrivateKey: encryptedPrivateKey,
 		PrivateKeyNonce:     privateKeyNonce,
+		EncryptedMasterKey:  encryptedMasterKey,
+		MasterKeyNonce:      masterKeyNonce,
 	}
 	var resp struct {
 		CompleteRegistration *model.SignedIn `json:"completeRegistration"`
@@ -94,6 +108,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 
 	err = client.Do(context.Background(), req, &resp)
 	if resp.CompleteRegistration != nil {
+		crypto.Zeroize(authKey)
+
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
 			client.Authenticate(resp.CompleteRegistration.Session.ID, *resp.CompleteRegistration.Session.Token)
 			err = PersistSession(resp.CompleteRegistration)
