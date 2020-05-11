@@ -110,7 +110,8 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		for _, repoObject := range repo.Objects {
 			var object *Object
 
-			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) != crypto.KeySize256 {
+			// take in account the tag
+			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) > crypto.KeySize256+100 {
 				err = NewError(ErrorInvalidKeySize)
 				return
 			}
@@ -199,7 +200,8 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 		for _, repoObject := range repo.Objects {
 			var object *Object
 
-			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) != crypto.KeySize256 {
+			// take in account the tag
+			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) > crypto.KeySize256+100 {
 				err = NewError(ErrorInvalidKeySize)
 				return
 			}
