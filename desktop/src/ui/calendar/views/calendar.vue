@@ -204,9 +204,9 @@ export default class BlmCalendar extends Vue {
     }
   }
 
-  setSelectedEventIndex(selected: number | undefined) {
-    console.log(selected);
-  }
+  // setSelectedEventIndex(selected: number | undefined) {
+  //   console.log(selected);
+  // }
 
   createEvent() {
     this.currentEvent = null;
@@ -249,7 +249,6 @@ export default class BlmCalendar extends Vue {
   }
 
   calendarChanged(to: any) {
-    console.log(to);
     let start = to.start.date;
     if (to.start.time === '') {
       start += ' 00:00:00';
