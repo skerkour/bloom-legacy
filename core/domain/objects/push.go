@@ -60,7 +60,7 @@ func push() error {
 		if groupIDStr != "" {
 			groupUUID, err2 := uuid.Parse(groupIDStr)
 			if err2 != nil {
-				crypto.Zeroize(masterKey) // clear masterKey from memory
+				crypto.Zeroize(masterKey)
 				tx.Rollback()
 				return err2
 			}
@@ -69,7 +69,7 @@ func push() error {
 		for _, object := range objectsToPush[groupIDStr] {
 			objectToPush, err3 := compressAndEncrypt(object, masterKey, compressSnappy)
 			if err3 != nil {
-				crypto.Zeroize(masterKey) // clear masterKey from memory
+				crypto.Zeroize(masterKey)
 				tx.Rollback()
 				return err3
 			}
@@ -84,7 +84,8 @@ func push() error {
 	}
 	currentStates.mutex.RUnlock()
 
-	crypto.Zeroize(masterKey) // clear masterKey from memory
+	// clear masterKey from memory
+	crypto.Zeroize(masterKey)
 
 	var resp struct {
 		Push *model.Push `json:"push"`

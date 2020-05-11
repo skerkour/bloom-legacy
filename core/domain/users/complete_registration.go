@@ -20,7 +20,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
-	params.Password = "" // clean password from memory as we can...
+	// clean password from memory as we can...
+	params.Password = ""
 
 	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
@@ -31,8 +32,8 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
-
-	crypto.Zeroize(passwordKey) // clean passwordKey from memory
+	// clean passwordKey from memory
+	crypto.Zeroize(passwordKey)
 
 	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
@@ -70,6 +71,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	crypto.Zeroize(masterKey)
 	crypto.Zeroize(wrapKey)
 
+	// prepare API request
 	input := model.CompleteRegistrationInput{
 		ID:       params.ID,
 		Username: params.Username,
@@ -107,9 +109,10 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	req.Var("input", input)
 
 	err = client.Do(context.Background(), req, &resp)
-	if resp.CompleteRegistration != nil {
-		crypto.Zeroize(authKey)
+	// remove authKey from memory
+	crypto.Zeroize(authKey)
 
+	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
 			client.Authenticate(resp.CompleteRegistration.Session.ID, *resp.CompleteRegistration.Session.Token)
 			err = PersistSession(resp.CompleteRegistration)
