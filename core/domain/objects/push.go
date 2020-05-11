@@ -67,7 +67,7 @@ func push() error {
 			groupID = &groupUUID
 		}
 		for _, object := range objectsToPush[groupIDStr] {
-			objectToPush, err3 := compressAndEncryptObject(object, masterKey, compressSnappy)
+			objectToPush, err3 := compressAndEncryptObject(object, masterKey, compressAlgoSnappy)
 			if err3 != nil {
 				crypto.Zeroize(masterKey)
 				tx.Rollback()

@@ -12,6 +12,7 @@ import (
 // compress and encrypt encodes to JSON, compress and encrypt with an unique key
 // an object
 func compressAndEncryptObject(object StoredObject, masterKey []byte, compressionAlgo compressionAlgorithm) (*model.ObjectInput, error) {
+	// TODO: improve AD
 	var ret *model.ObjectInput
 
 	objectData, err := json.Marshal(object)
@@ -26,6 +27,7 @@ func compressAndEncryptObject(object StoredObject, masterKey []byte, compression
 
 	// compress object
 	compressedObjectData := snappy.Encode(nil, objectData)
+	crypto.Zeroize(objectData)
 	algorithm := "snappy+xchacha20-poly1305"
 
 	// encrypt object
@@ -41,7 +43,8 @@ func compressAndEncryptObject(object StoredObject, masterKey []byte, compression
 	if err != nil {
 		return ret, err
 	}
-	encryptedObject := objectCipher.Seal(nil, objectNonce, compressedObjectData, nil)
+	encryptedObject := objectCipher.Seal(nil, objectNonce, compressedObjectData, objectID)
+	crypto.Zeroize(compressedObjectData)
 
 	// encrypt objectKey
 	objectKeyCipher, err := crypto.NewAEAD(masterKey)
@@ -52,7 +55,7 @@ func compressAndEncryptObject(object StoredObject, masterKey []byte, compression
 	if err != nil {
 		return ret, err
 	}
-	encryptedKey := objectKeyCipher.Seal(nil, objectKeyNonce, objectKey, nil)
+	encryptedKey := objectKeyCipher.Seal(nil, objectKeyNonce, objectKey, objectID)
 
 	// wipe objectKey from memory
 	crypto.Zeroize(objectKey)
