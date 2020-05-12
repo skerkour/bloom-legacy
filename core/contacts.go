@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/domain/contacts"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
 
@@ -38,7 +39,7 @@ func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		}
 		return MessageOut{Data: messages.Empty{}}
 	case "updateContact":
-		var params contacts.Contact
+		var params objects.Object
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

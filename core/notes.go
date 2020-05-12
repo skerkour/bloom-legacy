@@ -7,6 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/notes"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
+import "gitlab.com/bloom42/bloom/core/domain/objects"
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
@@ -34,7 +35,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "updateNote":
-		var params notes.Note
+		var params objects.Object
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -50,11 +51,11 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.DeleteNote(params)
+		err = notes.DeleteNote(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: res}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "notes")
 	}

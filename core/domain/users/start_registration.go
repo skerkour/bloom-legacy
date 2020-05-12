@@ -3,7 +3,6 @@ package users
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/common/validator"
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/lily/graphql"
@@ -13,10 +12,6 @@ import (
 func StartRegistration(params StartRegistrationParams) (model.RegistrationStarted, error) {
 	client := api.Client()
 	var ret model.RegistrationStarted
-
-	if err := validator.UserDisplayName(params.DisplayName); err != nil {
-		return model.RegistrationStarted{}, err
-	}
 
 	input := model.StartRegistrationInput{
 		Email:       params.Email,
