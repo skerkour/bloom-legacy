@@ -1,20 +1,15 @@
 package notes
 
 import (
-	"gitlab.com/bloom42/bloom/core/db"
+	"context"
+
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func DeleteNote(params messages.DeleteNoteParams) (messages.Empty, error) {
-	ret := messages.Empty{}
+func DeleteNote(params messages.DeleteNoteParams) (ret messages.Empty, err error) {
 
-	stmt, err := db.DB.Prepare("DELETE FROM notes WHERE id = ?")
-	if err != nil {
-		return ret, err
-	}
-	defer stmt.Close()
-
-	_, err = stmt.Exec(&params.ID)
+	err = objects.DeleteObject(context.Background(), nil, params.ID)
 
 	return ret, err
 }

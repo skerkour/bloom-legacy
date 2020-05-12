@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/crypto"
 )
 
-func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *StoredObject, err error) {
+func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object, err error) {
 	// TODO: improve AD
 	// TODO: verify data
 	if encryptedObject.Algorithm != DEFAULT_ALGORITHM_STRING {
@@ -65,7 +65,7 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Stored
 	// wipe compressed object from memory
 	crypto.Zeroize(compressedObjectData)
 
-	ret = &StoredObject{}
+	ret = &Object{}
 	err = json.Unmarshal(objectData, ret)
 	// wipe JSON object from memory
 	crypto.Zeroize(objectData)

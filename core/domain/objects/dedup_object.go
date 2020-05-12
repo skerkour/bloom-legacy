@@ -1,8 +1,8 @@
 package objects
 
-func dedupObject(object *StoredObject, username []byte) (*StoredObject, error) {
+func dedupObject(object *Object, username []byte) (*Object, error) {
 	var err error
-	ret := &StoredObject{}
+	ret := &Object{}
 
 	ret.Data = make([]byte, len(object.Data))
 	copy(ret.Data, object.Data)

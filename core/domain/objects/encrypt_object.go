@@ -10,7 +10,7 @@ import (
 
 // compress and encrypt encodes to JSON, compress and encrypt with an unique key
 // an object
-func encryptObject(object StoredObject, masterKey []byte, compressionAlgo compressionAlgorithm) (*model.ObjectInput, error) {
+func encryptObject(object Object, masterKey []byte, compressionAlgo compressionAlgorithm) (*model.ObjectInput, error) {
 	// TODO: improve AD
 	// TODO: verify data
 	var ret *model.ObjectInput

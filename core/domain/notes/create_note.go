@@ -1,21 +1,20 @@
 package notes
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/messages"
-	"gitlab.com/bloom42/lily/uuid"
 )
 
-func CreateNote(params messages.CreateNoteParams) (Note, error) {
+func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 	var err error
+	var ret *objects.Object
+
 	now := time.Now().UTC()
-	uuid := uuid.New()
 	note := Note{
-		ID:         uuid.String(),
-		CreatedAt:  now,
-		UpdatedAt:  now,
 		ArchivedAt: nil,
 		Title:      params.Title,
 		Body:       params.Body,
@@ -23,10 +22,17 @@ func CreateNote(params messages.CreateNoteParams) (Note, error) {
 		IsPinned:   false,
 	}
 
-	query := `INSERT INTO notes (id, created_at, updated_at, archived_at, title,
-		body, color, is_pinned)
-		VALUES (?, ?, ?, ?, ?, ?, ?, ?)`
-	_, err = db.DB.Exec(query, &note.ID, &note.CreatedAt, &note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned)
+	id, err := objects.GenerateObjectID([]byte(kernel.Me.Username))
+	if err != nil {
+		return ret, err
+	}
 
-	return note, err
+	ret, err = NoteToObject(id, now, now, nil, true, &note)
+	if err != nil {
+		return ret, err
+	}
+
+	err = objects.SaveObject(context.Background(), nil, ret)
+
+	return ret, err
 }

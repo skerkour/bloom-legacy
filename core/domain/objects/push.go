@@ -15,8 +15,8 @@ import (
 func push() error {
 	var err error
 	client := api.Client()
-	var storedObjects []StoredObject
-	objectsToPush := map[string][]StoredObject{}
+	var storedObjects []Object
+	objectsToPush := map[string][]Object{}
 	var masterKey []byte
 	ctx := context.Background()
 
@@ -40,7 +40,7 @@ func push() error {
 		var groupID string
 
 		if object.GroupID != nil {
-			groupID = *object.GroupID
+			groupID = object.GroupID.String()
 		}
 		objectsToPush[groupID] = append(objectsToPush[groupID], object)
 	}

@@ -17,6 +17,8 @@ models:
     model: gitlab.com/bloom42/lily/uuid.UUID
   Time:
     model: time.Time
+  Bytes:
+    model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Bytes
 #   UserConnection:
 #     model: gitlab.com/bloom42/bloom/core/api/model.UserConnection
 

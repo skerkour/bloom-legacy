@@ -52,7 +52,7 @@ func Init(key *string) error {
 		return err
 	}
 
-	err = os.MkdirAll(dbDir, 0740)
+	err = os.MkdirAll(dbDir, 0700)
 	if err != nil {
 		return err
 	}

@@ -40,9 +40,10 @@ type CalendarListEventsParams struct {
 }
 
 type CreateNoteParams struct {
-	Title string `json:"title"`
-	Body  string `json:"body"`
-	Color string `json:"color"`
+	Title   string     `json:"title"`
+	Body    string     `json:"body"`
+	Color   string     `json:"color"`
+	GroupID *uuid.UUID `json:"groupId"`
 }
 
 type DashboardData struct {
@@ -51,7 +52,7 @@ type DashboardData struct {
 }
 
 type DeleteNoteParams struct {
-	ID uuid.UUID `json:"id"`
+	ID []byte `json:"id"`
 }
 
 type Empty struct {
