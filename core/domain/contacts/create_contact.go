@@ -34,7 +34,7 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 		return ret, err
 	}
 
-	ret, err = ContactToObject(id, now, now, nil, true, &contact)
+	ret, err = objects.ToObject(id, CONTACT_TYPE, now, now, nil, true, &contact)
 	if err != nil {
 		return ret, err
 	}

@@ -1,28 +1,53 @@
 package notes
 
 import (
-	"gitlab.com/bloom42/bloom/core/db"
+	"context"
+	"encoding/json"
+
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 )
 
 func ListNotes() (Notes, error) {
-	ret := Notes{Notes: []Note{}}
+	ret := Notes{Notes: []objects.Object{}}
 
-	query := "SELECT * FROM notes WHERE archived_at IS NULL ORDER BY updated_at DESC"
-	err := db.DB.Select(&ret.Notes, query)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, NOTE_TYPE)
 	if err != nil {
 		return ret, err
+	}
+
+	for _, obj := range objects {
+		var note Note
+
+		err = json.Unmarshal(obj.Data, &note)
+		if err != nil {
+			return ret, err
+		}
+		if note.ArchivedAt == nil {
+			ret.Notes = append(ret.Notes, obj)
+		}
 	}
 
 	return ret, nil
 }
 
 func ListArchived() (Notes, error) {
-	ret := Notes{Notes: []Note{}}
+	ret := Notes{Notes: []objects.Object{}}
 
-	query := "SELECT * FROM notes WHERE archived_at IS NOT NULL ORDER BY updated_at DESC"
-	err := db.DB.Select(&ret.Notes, query)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, NOTE_TYPE)
 	if err != nil {
 		return ret, err
+	}
+
+	for _, obj := range objects {
+		var note Note
+
+		err = json.Unmarshal(obj.Data, &note)
+		if err != nil {
+			return ret, err
+		}
+		if note.ArchivedAt != nil {
+			ret.Notes = append(ret.Notes, obj)
+		}
 	}
 
 	return ret, nil

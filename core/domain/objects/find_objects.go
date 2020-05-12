@@ -37,3 +37,16 @@ func FindOutOfSyncObjects(ctx context.Context, tx *sqlx.Tx) ([]Object, error) {
 	}
 	return ret, err
 }
+
+func FindObjectsByType(ctx context.Context, tx *sqlx.Tx, typ string) ([]Object, error) {
+	ret := []Object{}
+	var err error
+
+	query := "SELECT * FROM objects WHERE type = ?"
+	if tx == nil {
+		err = db.DB.Select(&ret, query, typ)
+	} else {
+		err = tx.Select(&ret, query, typ)
+	}
+	return ret, err
+}

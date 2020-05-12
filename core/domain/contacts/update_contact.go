@@ -17,8 +17,8 @@ func UpdateContact(contact objects.Object) (objects.Object, error) {
 		return contact, err
 	}
 	cleanContactCollections(cont)
-	cleanedContact, err := ContactToObject(contact.ID, contact.CreatedAt, now, contact.GroupID, true, cont)
 
+	cleanedContact, err := objects.ToObject(contact.ID, CONTACT_TYPE, contact.CreatedAt, now, contact.GroupID, true, cont)
 	if err != nil {
 		return contact, err
 	}

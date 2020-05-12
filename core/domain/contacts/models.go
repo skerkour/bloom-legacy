@@ -7,11 +7,10 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/domain/objects"
-	"gitlab.com/bloom42/lily/uuid"
 )
 
 type Contacts struct {
-	Contacts []Contact `json:"contacts"`
+	Contacts []objects.Object `json:"contacts"`
 }
 
 type Contact struct {
@@ -31,23 +30,6 @@ type Contact struct {
 func ObjectToContact(object *objects.Object) (ret *Contact, err error) {
 	ret = &Contact{}
 	err = json.Unmarshal(object.Data, ret)
-	return
-}
-
-func ContactToObject(id []byte, createdAt, updatedAt time.Time, groupID *uuid.UUID, outOfSync bool, contact *Contact) (ret *objects.Object, err error) {
-	jsonData, err := json.Marshal(contact)
-	if err != nil {
-		return
-	}
-	ret = &objects.Object{
-		ID:        id,
-		CreatedAt: createdAt,
-		UpdatedAt: updatedAt,
-		Type:      "NOTE_TYPE",
-		OutOfSync: outOfSync,
-		GroupID:   groupID,
-		Data:      jsonData,
-	}
 	return
 }
 

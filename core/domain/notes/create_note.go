@@ -27,7 +27,7 @@ func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 		return ret, err
 	}
 
-	ret, err = NoteToObject(id, now, now, nil, true, &note)
+	ret, err = objects.ToObject(id, NOTE_TYPE, now, now, nil, true, &note)
 	if err != nil {
 		return ret, err
 	}

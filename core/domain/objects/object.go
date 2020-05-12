@@ -1,6 +1,7 @@
 package objects
 
 import (
+	"encoding/json"
 	"time"
 
 	"gitlab.com/bloom42/lily/crypto"
@@ -25,5 +26,22 @@ func GenerateObjectID(username []byte) (ret []byte, err error) {
 		return
 	}
 	ret, err = crypto.DeriveKeyFromKey(username, randData, crypto.KeySize512)
+	return
+}
+
+func ToObject(id []byte, typ string, createdAt, updatedAt time.Time, groupID *uuid.UUID, outOfSync bool, entity interface{}) (ret *Object, err error) {
+	jsonData, err := json.Marshal(entity)
+	if err != nil {
+		return
+	}
+	ret = &Object{
+		ID:        id,
+		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
+		Type:      typ,
+		OutOfSync: outOfSync,
+		GroupID:   groupID,
+		Data:      jsonData,
+	}
 	return
 }
