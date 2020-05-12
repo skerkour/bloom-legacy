@@ -6,7 +6,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/coreutil"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
 )
@@ -34,8 +34,8 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 		Username: params.Username,
 		AuthKey:  authKey,
 		Device: &model.SessionDeviceInput{
-			Os:   model.SessionDeviceOs(coreutil.GetDeviceOS()),
-			Type: model.SessionDeviceType(coreutil.GetDeviceType()),
+			Os:   model.SessionDeviceOs(kernel.GetDeviceOS()),
+			Type: model.SessionDeviceType(kernel.GetDeviceType()),
 		},
 	}
 	var resp struct {

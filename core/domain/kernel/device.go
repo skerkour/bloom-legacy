@@ -1,4 +1,4 @@
-package coreutil
+package kernel
 
 import (
 	"runtime"
