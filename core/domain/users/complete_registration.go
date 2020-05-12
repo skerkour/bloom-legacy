@@ -22,23 +22,27 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 	// clean password from memory as we can...
 	params.Password = ""
+	defer crypto.Zeroize(passwordKey)
 
 	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
+	defer crypto.Zeroize(authKey)
 
 	wrapKey, err := deriveWrapKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
 	// clean passwordKey from memory
-	crypto.Zeroize(passwordKey)
+	defer crypto.Zeroize(wrapKey)
 
 	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
 		return ret, err
 	}
+	defer crypto.Zeroize(privateKey)
+
 	err = SavePublicKey(ctx, nil, publicKey)
 	if err != nil {
 		return ret, err
@@ -53,13 +57,14 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
-	crypto.Zeroize(privateKey)
 
 	// generate and save a random master key
 	masterKey, err := crypto.NewAEADKey()
 	if err != nil {
 		return ret, err
 	}
+	defer crypto.Zeroize(masterKey)
+
 	err = SaveMasterKey(ctx, nil, masterKey)
 	if err != nil {
 		return ret, err
@@ -68,8 +73,6 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
-	crypto.Zeroize(masterKey)
-	crypto.Zeroize(wrapKey)
 
 	// prepare API request
 	input := model.CompleteRegistrationInput{
@@ -110,7 +113,6 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 
 	err = client.Do(context.Background(), req, &resp)
 	// remove authKey from memory
-	crypto.Zeroize(authKey)
 
 	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {

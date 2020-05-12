@@ -3,6 +3,7 @@ package users
 import (
 	"context"
 	"encoding/base64"
+	"errors"
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
@@ -25,7 +26,10 @@ func findKey(ctx context.Context, tx *sqlx.Tx, preferencesKey string) ([]byte, e
 	if err != nil {
 		return nil, err
 	}
+	if encodedKey == nil {
+		return nil, errors.New("Key not found")
+	}
 
-	decodedKey, err := base64.StdEncoding.DecodeString(encodedKey)
+	decodedKey, err := base64.StdEncoding.DecodeString(*encodedKey)
 	return decodedKey, err
 }

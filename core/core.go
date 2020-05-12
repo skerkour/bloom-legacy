@@ -8,6 +8,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
@@ -33,6 +34,7 @@ func Init(params InitParams) (InitRes, error) {
 		client.Authenticate(signedIn.Session.ID, *signedIn.Session.Token)
 		ret.Preferences["me"] = signedIn.Me
 		ret.Preferences["session"] = signedIn.Session
+		kernel.Me = signedIn.Me
 	}
 
 	ctx := context.Background()

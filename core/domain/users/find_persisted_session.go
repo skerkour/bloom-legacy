@@ -1,11 +1,11 @@
 package users
 
 import (
-	"database/sql"
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/preferences"
+	"golang.org/x/net/context"
 )
 
 func FindPersistedSession() (*model.SignedIn, error) {
@@ -13,45 +13,26 @@ func FindPersistedSession() (*model.SignedIn, error) {
 	me := model.User{}
 	session := model.Session{}
 	var err error
-	var meValue string
-	var sessionValue string
+	var meValue *string
+	var sessionValue *string
+	ctx := context.Background()
 
-	row := db.DB.QueryRow("SELECT value FROM preferences WHERE key = ?", "me")
-	if row == nil {
-		return ret, nil
-	}
-
-	err = row.Scan(&meValue)
-	switch err {
-	case nil:
-		break
-	case sql.ErrNoRows:
-		return ret, nil
-	default:
+	meValue, err = preferences.Get(ctx, nil, "me")
+	if err != nil || meValue == nil {
 		return ret, err
 	}
 
-	err = json.Unmarshal([]byte(meValue), &me)
+	err = json.Unmarshal([]byte(*meValue), &me)
 	if err != nil {
 		return ret, err
 	}
 
-	row = db.DB.QueryRow("SELECT value FROM preferences WHERE key = ?", "session")
-	if row == nil {
-		return ret, nil
-	}
-
-	err = row.Scan(&sessionValue)
-	switch err {
-	case nil:
-		break
-	case sql.ErrNoRows:
-		return ret, nil
-	default:
+	sessionValue, err = preferences.Get(ctx, nil, "session")
+	if err != nil || sessionValue == nil {
 		return ret, err
 	}
 
-	err = json.Unmarshal([]byte(sessionValue), &session)
+	err = json.Unmarshal([]byte(*sessionValue), &session)
 	if err != nil {
 		return ret, err
 	}

@@ -6,6 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
@@ -100,7 +101,16 @@ func pull() error {
 			if ofsStoredObject != nil {
 				// resolve conflict
 				// create a new object from the local out of sync object (with a new id)
-
+				dedupedObject, err := dedupObject(ofsStoredObject, []byte(kernel.Me.Username))
+				if err != nil {
+					tx.Rollback()
+					return err
+				}
+				err = SaveObject(ctx, tx, dedupedObject)
+				if err != nil {
+					tx.Rollback()
+					return err
+				}
 			} else {
 				// save object
 				err = SaveObject(ctx, tx, decryptedObject)
