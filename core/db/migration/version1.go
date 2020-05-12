@@ -100,6 +100,8 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 	_, err = tx.Exec(`
 	CREATE TABLE IF NOT EXISTS objects (
 		id BLOB PRIMARY KEY NOT NULL,
+		created_at DATETIME NOT NULL,
+		updated_at DATETIME NOT NULL,
 		type TEXT PRIMARY NOT NULL,
 		data JSON PRIMARY NOT NULL,
 		out_of_sync INTEGER NOT NULL,
