@@ -3,6 +3,8 @@ package objects
 import (
 	"context"
 	"time"
+
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
 // backgroundSync is a worker that do background sync
@@ -24,9 +26,12 @@ func backgroundSync(ctx context.Context) {
 }
 
 func backSync() {
-	err := pull()
-	if err != nil {
-		return
+	// sync only if user is authenticated
+	if kernel.Me != nil {
+		err := pull()
+		if err != nil {
+			return
+		}
+		push()
 	}
-	push()
 }
