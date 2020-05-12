@@ -115,7 +115,7 @@
 
     </v-row> -->
 
-    <blm-calendar-dialog-event
+    <blm-calendar-event-dialog
       :visible="showEventDialog"
       :event="currentEvent"
       @closed="closeEventDialog"
@@ -130,7 +130,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
-import EventDialog from '../components/EventDialog.vue';
+import BlmCalendarEventDialog from '../components/event_dialog.vue';
 import core from '@/core';
 import {
   ListEvents, Event as EventModel, Events, Method,
@@ -138,7 +138,7 @@ import {
 
 @Component({
   components: {
-    'blm-calendar-dialog-event': EventDialog,
+    BlmCalendarEventDialog,
   },
 })
 export default class BlmCalendar extends Vue {
