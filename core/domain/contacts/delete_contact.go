@@ -1,10 +1,15 @@
 package contacts
 
 import (
-	"gitlab.com/bloom42/bloom/core/db"
+	"context"
+
+	"gitlab.com/bloom42/bloom/core/domain/objects"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func DeleteContact(params DeleteContactParams) error {
-	_, err := db.DB.Exec("DELETE FROM contacts WHERE id = ?", params.ID)
+func DeleteContact(params messages.DeleteContactParams) (err error) {
+
+	err = objects.DeleteObject(context.Background(), nil, params.ID)
+
 	return err
 }

@@ -51,18 +51,6 @@ type DashboardData struct {
 	Users    *model.UserConnection `json:"users"`
 }
 
-type DeleteNoteParams struct {
-	ID []byte `json:"id"`
-}
-
-type Empty struct {
-	Noop *bool `json:"noop"`
-}
-
-type FetchGroupDetailsParams struct {
-	ID uuid.UUID `json:"id"`
-}
-
 // type Contacts struct {
 // 	Contacts []Contact `json:"contacts"`
 // }
@@ -84,6 +72,22 @@ type FetchGroupDetailsParams struct {
 // type DeleteContactParams struct {
 // 	ID string `json:"id"`
 // }
+type DeleteContactParams struct {
+	ID []byte `json:"id"`
+}
+
+type DeleteNoteParams struct {
+	ID []byte `json:"id"`
+}
+
+type Empty struct {
+	Noop *bool `json:"noop"`
+}
+
+type FetchGroupDetailsParams struct {
+	ID uuid.UUID `json:"id"`
+}
+
 type FetchGroupMembersParams struct {
 	ID uuid.UUID `json:"id"`
 }

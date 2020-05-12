@@ -1,21 +1,20 @@
 package contacts
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/core/db"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 )
 
-func CreateContact(params CreateContactParams) (Contact, error) {
+func CreateContact(params CreateContactParams) (*objects.Object, error) {
 	// TODO(z0mbie42): validators
 	var err error
+	var ret *objects.Object
+
 	now := time.Now().UTC()
-	uuid := uuid.New()
 	contact := Contact{
-		ID:            uuid.String(),
-		CreatedAt:     now,
-		UpdatedAt:     now,
 		DeviceID:      params.DeviceID,
 		FirstName:     params.FirstName,
 		LastName:      params.LastName,
@@ -30,40 +29,17 @@ func CreateContact(params CreateContactParams) (Contact, error) {
 
 	cleanContactCollections(&contact)
 
-	query := `
-	INSERT INTO contacts
-		(id,
-		created_at,
-		updated_at,
-		first_name,
-		last_name,
-		notes,
-		addresses,
-		birthday,
-		organizations,
-		emails,
-		phones,
-		websites,
-		device_id,
-		bloom_username)
-	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14)
-	`
-	_, err = db.DB.Exec(query,
-		&contact.ID,
-		&contact.CreatedAt,
-		&contact.UpdatedAt,
-		&contact.FirstName,
-		&contact.LastName,
-		&contact.Notes,
-		&contact.Addresses,
-		&contact.Birthday,
-		&contact.Organizations,
-		&contact.Emails,
-		&contact.Phones,
-		&contact.Websites,
-		&contact.DeviceID,
-		contact.BloomUsername,
-	)
+	id, err := objects.GenerateObjectID([]byte(kernel.Me.Username))
+	if err != nil {
+		return ret, err
+	}
 
-	return contact, err
+	ret, err = ContactToObject(id, now, now, nil, true, &contact)
+	if err != nil {
+		return ret, err
+	}
+
+	err = objects.SaveObject(context.Background(), nil, ret)
+
+	return ret, err
 }

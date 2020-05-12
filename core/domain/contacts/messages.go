@@ -4,10 +4,6 @@ import (
 	"time"
 )
 
-type Contacts struct {
-	Contacts []Contact `json:"contacts"`
-}
-
 type CreateContactParams struct {
 	DeviceID      string        `json:"deviceId"`
 	FirstName     string        `json:"firstName"`
@@ -20,8 +16,4 @@ type CreateContactParams struct {
 	Emails        Emails        `json:"emails"`
 	Phones        Phones        `json:"phones"`
 	Websites      Websites      `json:"websites"`
-}
-
-type DeleteContactParams struct {
-	ID string `json:"id"`
 }
