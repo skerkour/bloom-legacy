@@ -50,6 +50,7 @@ func push() error {
 		tx.Rollback()
 		return err
 	}
+	defer crypto.Zeroize(masterKey) // clear masterKey from memory
 
 	// format and encrypt objects
 	currentStates.mutex.RLock()
@@ -58,20 +59,22 @@ func push() error {
 		objectsPushInput := []*model.ObjectInput{}
 
 		if groupIDStr != "" {
-			groupUUID, err2 := uuid.Parse(groupIDStr)
-			if err2 != nil {
-				crypto.Zeroize(masterKey)
+			var groupUUID uuid.UUID
+
+			groupUUID, err = uuid.Parse(groupIDStr)
+			if err != nil {
 				tx.Rollback()
-				return err2
+				return err
 			}
 			groupID = &groupUUID
 		}
 		for _, object := range objectsToPush[groupIDStr] {
-			objectToPush, err3 := encryptObject(object, masterKey, compressAlgoSnappy)
-			if err3 != nil {
-				crypto.Zeroize(masterKey)
+			var objectToPush *model.ObjectInput
+
+			objectToPush, err = encryptObject(object, masterKey, compressAlgoSnappy)
+			if err != nil {
 				tx.Rollback()
-				return err3
+				return err
 			}
 			objectsPushInput = append(objectsPushInput, objectToPush)
 		}
@@ -83,9 +86,6 @@ func push() error {
 		input.Repositories = append(input.Repositories, repo)
 	}
 	currentStates.mutex.RUnlock()
-
-	// clear masterKey from memory
-	crypto.Zeroize(masterKey)
 
 	var resp struct {
 		Push *model.Push `json:"push"`

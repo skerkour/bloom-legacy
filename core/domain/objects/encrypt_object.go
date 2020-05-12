@@ -1,7 +1,6 @@
 package objects
 
 import (
-	"encoding/base64"
 	"encoding/json"
 
 	"github.com/golang/snappy"
@@ -17,11 +16,6 @@ func encryptObject(object StoredObject, masterKey []byte, compressionAlgo compre
 	var ret *model.ObjectInput
 
 	objectData, err := json.Marshal(object)
-	if err != nil {
-		return ret, err
-	}
-
-	objectID, err := base64.StdEncoding.DecodeString(object.ID)
 	if err != nil {
 		return ret, err
 	}
@@ -43,7 +37,7 @@ func encryptObject(object StoredObject, masterKey []byte, compressionAlgo compre
 	if err != nil {
 		return ret, err
 	}
-	encryptedObject := objectCipher.Seal(nil, objectNonce, compressedObjectData, objectID)
+	encryptedObject := objectCipher.Seal(nil, objectNonce, compressedObjectData, object.ID)
 	crypto.Zeroize(compressedObjectData)
 
 	// encrypt objectKey
@@ -51,11 +45,11 @@ func encryptObject(object StoredObject, masterKey []byte, compressionAlgo compre
 	if err != nil {
 		return ret, err
 	}
-	objectKeyNonce, err := crypto.DeriveKeyFromKey(objectNonce, objectID, crypto.AEADNonceSize)
+	objectKeyNonce, err := crypto.DeriveKeyFromKey(objectNonce, object.ID, crypto.AEADNonceSize)
 	if err != nil {
 		return ret, err
 	}
-	encryptedKey := objectKeyCipher.Seal(nil, objectKeyNonce, objectKey, objectID)
+	encryptedKey := objectKeyCipher.Seal(nil, objectKeyNonce, objectKey, object.ID)
 
 	// wipe objectKey from memory
 	crypto.Zeroize(objectKey)

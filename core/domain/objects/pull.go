@@ -6,6 +6,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
 	"gitlab.com/bloom42/lily/uuid"
 )
@@ -13,7 +15,8 @@ import (
 func pull() error {
 	var err error
 	client := api.Client()
-	// ctx := context.Background()
+	ctx := context.Background()
+	var masterKey []byte
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
@@ -30,10 +33,11 @@ func pull() error {
 		var groupID *uuid.UUID
 
 		if groupIDStr != "" {
-			groupUUID, err2 := uuid.Parse(groupIDStr)
-			if err2 != nil {
+			var groupUUID uuid.UUID
+			groupUUID, err = uuid.Parse(groupIDStr)
+			if err != nil {
 				tx.Rollback()
-				return err2
+				return err
 			}
 			groupID = &groupUUID
 		}
@@ -70,29 +74,52 @@ func pull() error {
 	`)
 	req.Var("input", input)
 
-	err = client.Do(context.Background(), req, &resp)
+	err = client.Do(ctx, req, &resp)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	currentStates.mutex.Lock()
+	masterKey, err = users.FindMasterKey(ctx, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+	defer crypto.Zeroize(masterKey)
+
 	for _, repo := range resp.Pull.Repositories {
+
+		for _, object := range repo.Objects {
+			decryptedObject, err := decryptObject(object, masterKey)
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+			// check if object exist and is out of sync
+			ofsStoredObject, err := FindOutOfSyncObjectByID(ctx, tx, decryptedObject.ID)
+			if ofsStoredObject != nil {
+				// resolve conflict
+				// create a new object from the local out of sync object (with a new id)
+
+			} else {
+				// save object
+				err = SaveObject(ctx, tx, decryptedObject)
+				if err != nil {
+					tx.Rollback()
+					return err
+				}
+			}
+
+		}
+
+		currentStates.mutex.Lock()
 		if repo.GroupID != nil {
 			currentStates.states[repo.GroupID.String()] = repo.NewState
 		} else {
 			currentStates.states[""] = repo.NewState
 		}
+		currentStates.mutex.Unlock()
 	}
-	currentStates.mutex.Unlock()
-
-	// TODO: decrypt objects and resolve conflicts
-	// for each object
-	// check if object exist and is out of sync
-	// if yes
-	// create a new object from the local out of sync object (with a new id)
-	// else
-	// save object
 
 	err = tx.Commit()
 	if err != nil {
