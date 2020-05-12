@@ -8,9 +8,6 @@ import (
 )
 
 type Contact struct {
-	ID            string        `json:"id" db:"id"`
-	CreatedAt     time.Time     `json:"createdAt" db:"created_at"`
-	UpdatedAt     time.Time     `json:"updatedAt" db:"updated_at"`
 	DeviceID      string        `json:"deviceId" db:"device_id"`
 	FirstName     string        `json:"firstName" db:"first_name"`
 	LastName      string        `json:"lastName" db:"last_name"`

@@ -80,9 +80,8 @@ func Init(key *string) error {
 		migration.Version1{},
 	}
 
-	for _, migrat := range migrations {
-		migrat.Run(DB, userVersion)
-		userVersion += 1
+	for i := userVersion; i < len(migrations); i++ {
+		migrations[i].Run(DB, i+1)
 	}
 
 	return err
