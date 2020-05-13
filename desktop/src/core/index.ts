@@ -10,6 +10,15 @@ export type InitRes = {
   preferences: any,
 }
 
+export type BlmObject = {
+  id: string,
+  createdAt: Date,
+  updatedAt: Date,
+  type: string,
+  data: any,
+  groupId: string | null,
+}
+
 async function call(method: string, params: any): Promise<any> {
   const message = JSON.stringify({
     method,

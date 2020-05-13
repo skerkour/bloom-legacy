@@ -2,7 +2,7 @@
   <div>
     <v-toolbar elevation="0" v-if="note">
       <v-text-field
-        v-model="note.title"
+        v-model="note.data.title"
         placeholder="Title"
         hide-details
         solo
@@ -29,7 +29,7 @@
             </v-list-item-icon>
             <v-list-item-title>Unpin</v-list-item-title>
           </v-list-item> -->
-          <v-list-item v-if="note.archivedAt === null" @click="archiveNote">
+          <v-list-item v-if="note.data.archivedAt === null" @click="archiveNote">
             <v-list-item-icon>
               <v-icon>mdi-package-down</v-icon>
             </v-list-item-icon>
@@ -53,7 +53,7 @@
 
     <div class="overflow-y-auto" v-if="note">
       <v-textarea
-        v-model="note.body"
+        v-model="note.data.body"
         placeholder="Take a note..."
         autofocus
         hide-details
@@ -75,12 +75,12 @@ import {
   // Watch,
 } from 'vue-property-decorator';
 import { Note, DeleteNote, Method } from '@/core/notes';
-import core from '@/core';
+import core, { BlmObject } from '@/core';
 
 @Component
 export default class BlmNote extends Vue {
   // props
-  @Prop({ type: Object, required: true }) note!: Note;
+  @Prop({ type: Object, required: true }) note!: BlmObject;
 
   // data
   error = '';
@@ -93,8 +93,8 @@ export default class BlmNote extends Vue {
   async archiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as Note;
-    note.archivedAt = new Date().toISOString() as unknown as Date;
+    const note = { ...this.note } as BlmObject;
+    note.data.archivedAt = new Date().toISOString() as unknown as Date;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -109,8 +109,8 @@ export default class BlmNote extends Vue {
   async unarchiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as Note;
-    note.archivedAt = null;
+    const note = { ...this.note } as BlmObject;
+    note.data.archivedAt = null;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -125,12 +125,12 @@ export default class BlmNote extends Vue {
   async pinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as Note;
-    note.isPinned = true;
+    const note = { ...this.note } as BlmObject;
+    note.data.isPinned = true;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
-      this.$emit('updated', (res as Note));
+      this.$emit('updated', (res as BlmObject));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -141,12 +141,12 @@ export default class BlmNote extends Vue {
   async unpinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as Note;
-    note.isPinned = false;
+    const note = { ...this.note } as BlmObject;
+    note.data.isPinned = false;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
-      this.$emit('updated', (res as Note));
+      this.$emit('updated', (res as BlmObject));
     } catch (err) {
       this.error = err.message;
     } finally {
