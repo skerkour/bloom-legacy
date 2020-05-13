@@ -100,7 +100,7 @@ export default class BlmNotes extends Vue {
       await this.findNotes();
     }
     this.setSelectedNoteIndex(0);
-    // this.saveInterval = setInterval(this.save, 2000);
+    this.saveInterval = setInterval(this.save, 2000);
   }
 
   async beforeDestroy() {
