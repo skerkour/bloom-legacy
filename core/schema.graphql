@@ -90,11 +90,8 @@ type CalendarCreateEventParams {
 }
 
 type CalendarDeleteEventParams {
-  id: ID!
+  id: Bytes!
 }
-
-
-
 
 
 ####################################################################################################

@@ -31,7 +31,7 @@ type CalendarCreateEventParams struct {
 }
 
 type CalendarDeleteEventParams struct {
-	ID uuid.UUID `json:"id"`
+	ID []byte `json:"id"`
 }
 
 type CalendarListEventsParams struct {
@@ -67,10 +67,6 @@ type DashboardData struct {
 // 	Emails        Emails        `json:"emails"`
 // 	Phones        Phones        `json:"phones"`
 // 	Websites      Websites      `json:"websites"`
-// }
-//
-// type DeleteContactParams struct {
-// 	ID string `json:"id"`
 // }
 type DeleteContactParams struct {
 	ID []byte `json:"id"`
