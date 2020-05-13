@@ -17,7 +17,7 @@ type Object struct {
 	Data      []byte    `db:"data" json:"data"`
 	OutOfSync bool      `db:"out_of_sync" json:"-"`
 
-	GroupID *uuid.UUID `db:"group_id" json:"group_id"`
+	GroupID *uuid.UUID `db:"group_id" json:"groupId"`
 }
 
 func GenerateObjectID(username []byte) (ret []byte, err error) {
