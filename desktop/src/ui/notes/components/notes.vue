@@ -130,10 +130,7 @@ export default class BlmNotes extends Vue {
 
     try {
       const res = await core.call(Method.ListNotes, core.Empty);
-      this.notes = (res as Notes).notes.map((note: any) => {
-        note.data = JSON.parse(note.data); // eslint-disable-line
-        return note;
-      });
+      this.notes = (res as Notes).notes;
     } catch (err) {
       log.error(err);
     } finally {
@@ -147,10 +144,7 @@ export default class BlmNotes extends Vue {
 
     try {
       const res = await core.call(Method.ListArchived, core.Empty);
-      this.notes = (res as Notes).notes.map((note: any) => {
-        note.data = JSON.parse(note.data); // eslint-disable-line
-        return note;
-      });
+      this.notes = (res as Notes).notes;
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -243,7 +237,6 @@ export default class BlmNotes extends Vue {
     };
     try {
       const res = await core.call(Method.CreateNote, params);
-      res.data = JSON.parse(res.data);
       this.notes[0] = res;
       this.selectedNote = res;
       // this.selectedNote = res;
@@ -260,9 +253,7 @@ export default class BlmNotes extends Vue {
     this.isLoading = true;
     const note = { ...this.selectedNote } as BlmObject<Note>;
     try {
-      note.data = JSON.stringify(note.data) as any;
       const res = await core.call(Method.UpdateNote, note);
-      res.data = JSON.parse(res.data);
       this.notes[0] = res;
       this.selectedNote = res;
       // this.selectedNote = res;
