@@ -1,9 +1,7 @@
 package contacts
 
 import (
-	"database/sql/driver"
 	"encoding/json"
-	"errors"
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/domain/objects"
@@ -40,22 +38,22 @@ type Organization struct {
 
 type Organizations []Organization
 
-func (o Organizations) Value() (driver.Value, error) {
-	data, err := json.Marshal(o)
-	if err != nil {
-		return nil, err
-	}
-	return string(data), nil
-}
+// func (o Organizations) Value() (driver.Value, error) {
+// 	data, err := json.Marshal(o)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return string(data), nil
+// }
 
-func (o *Organizations) Scan(src interface{}) error {
-	sourceStr, ok := src.(string)
-	if !ok {
-		return errors.New("Incompatible type for contacts.Organizations")
-	}
-	err := json.Unmarshal([]byte(sourceStr), o)
-	return err
-}
+// func (o *Organizations) Scan(src interface{}) error {
+// 	sourceStr, ok := src.(string)
+// 	if !ok {
+// 		return errors.New("Incompatible type for contacts.Organizations")
+// 	}
+// 	err := json.Unmarshal([]byte(sourceStr), o)
+// 	return err
+// }
 
 type Address struct {
 	Street     string `json:"street"`
@@ -68,22 +66,22 @@ type Address struct {
 
 type Addresses []Address
 
-func (a Addresses) Value() (driver.Value, error) {
-	data, err := json.Marshal(a)
-	if err != nil {
-		return nil, err
-	}
-	return string(data), nil
-}
+// func (a Addresses) Value() (driver.Value, error) {
+// 	data, err := json.Marshal(a)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return string(data), nil
+// }
 
-func (a *Addresses) Scan(src interface{}) error {
-	sourceStr, ok := src.(string)
-	if !ok {
-		return errors.New("Incompatible type for contacts.Addresses")
-	}
-	err := json.Unmarshal([]byte(sourceStr), a)
-	return err
-}
+// func (a *Addresses) Scan(src interface{}) error {
+// 	sourceStr, ok := src.(string)
+// 	if !ok {
+// 		return errors.New("Incompatible type for contacts.Addresses")
+// 	}
+// 	err := json.Unmarshal([]byte(sourceStr), a)
+// 	return err
+// }
 
 type Email struct {
 	Email string `json:"email"`
@@ -92,22 +90,22 @@ type Email struct {
 
 type Emails []Email
 
-func (e Emails) Value() (driver.Value, error) {
-	data, err := json.Marshal(e)
-	if err != nil {
-		return nil, err
-	}
-	return string(data), nil
-}
+// func (e Emails) Value() (driver.Value, error) {
+// 	data, err := json.Marshal(e)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return string(data), nil
+// }
 
-func (e *Emails) Scan(src interface{}) error {
-	sourceStr, ok := src.(string)
-	if !ok {
-		return errors.New("Incompatible type for contacts.Emails")
-	}
-	err := json.Unmarshal([]byte(sourceStr), e)
-	return err
-}
+// func (e *Emails) Scan(src interface{}) error {
+// 	sourceStr, ok := src.(string)
+// 	if !ok {
+// 		return errors.New("Incompatible type for contacts.Emails")
+// 	}
+// 	err := json.Unmarshal([]byte(sourceStr), e)
+// 	return err
+// }
 
 type Phone struct {
 	Phone string `json:"phone"`
@@ -116,22 +114,22 @@ type Phone struct {
 
 type Phones []Phone
 
-func (p Phones) Value() (driver.Value, error) {
-	data, err := json.Marshal(p)
-	if err != nil {
-		return nil, err
-	}
-	return string(data), nil
-}
+// func (p Phones) Value() (driver.Value, error) {
+// 	data, err := json.Marshal(p)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return string(data), nil
+// }
 
-func (p *Phones) Scan(src interface{}) error {
-	sourceStr, ok := src.(string)
-	if !ok {
-		return errors.New("Incompatible type for contacts.Phones")
-	}
-	err := json.Unmarshal([]byte(sourceStr), p)
-	return err
-}
+// func (p *Phones) Scan(src interface{}) error {
+// 	sourceStr, ok := src.(string)
+// 	if !ok {
+// 		return errors.New("Incompatible type for contacts.Phones")
+// 	}
+// 	err := json.Unmarshal([]byte(sourceStr), p)
+// 	return err
+// }
 
 type Website struct {
 	Website string `json:"website"`
@@ -140,19 +138,19 @@ type Website struct {
 
 type Websites []Website
 
-func (w Websites) Value() (driver.Value, error) {
-	data, err := json.Marshal(w)
-	if err != nil {
-		return nil, err
-	}
-	return string(data), nil
-}
+// func (w Websites) Value() (driver.Value, error) {
+// 	data, err := json.Marshal(w)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	return string(data), nil
+// }
 
-func (w *Websites) Scan(src interface{}) error {
-	sourceStr, ok := src.(string)
-	if !ok {
-		return errors.New("Incompatible type for contacts.Websites")
-	}
-	err := json.Unmarshal([]byte(sourceStr), w)
-	return err
-}
+// func (w *Websites) Scan(src interface{}) error {
+// 	sourceStr, ok := src.(string)
+// 	if !ok {
+// 		return errors.New("Incompatible type for contacts.Websites")
+// 	}
+// 	err := json.Unmarshal([]byte(sourceStr), w)
+// 	return err
+// }
