@@ -30,6 +30,10 @@ export type Contacts = {
   contacts: BlmObject<Contact>[],
 }
 
+export type Events = {
+  events: BlmObject<Event>[],
+}
+
 
 async function call(method: string, params: any): Promise<any> {
   const message = JSON.stringify({

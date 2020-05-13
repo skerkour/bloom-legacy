@@ -26,10 +26,10 @@
               <v-list-item :key="`event-${index}`" @click="editEvent({ event })">
 
                 <v-list-item-content class="text-left">
-                  <v-list-item-title class="title">{{ event.title }}</v-list-item-title>
+                  <v-list-item-title class="title">{{ event.data.title }}</v-list-item-title>
                   <v-list-item-subtitle>
-                    Start at: {{ event.startAt | date }} <br />
-                    End at: {{ event.endAt | date }}
+                    Start at: {{ event.data.startAt | date }} <br />
+                    End at: {{ event.data.endAt | date }}
                   </v-list-item-subtitle>
                 </v-list-item-content>
 
@@ -131,9 +131,9 @@
 import { Component, Vue } from 'vue-property-decorator';
 import moment from 'moment';
 import BlmCalendarEventDialog from '../components/event_dialog.vue';
-import core from '@/core';
+import core, { BlmObject, Events } from '@/core';
 import {
-  ListEvents, Event as EventModel, Events, Method,
+  ListEvents, Event as EventModel, Method,
 } from '@/core/calendar';
 
 @Component({
@@ -163,19 +163,19 @@ export default class BlmCalendar extends Vue {
   showEventDialog = false;
   isLoading = false;
   error = '';
-  events: EventModel[] = [];
-  currentEvent: EventModel | null = null;
+  events: BlmObject<EventModel>[] = [];
+  currentEvent: BlmObject<EventModel> | null = null;
   selectedEventIndex: number | undefined = 0;
 
   // computed
   get vuetifyEvents(): any[] {
-    return this.events.map((ev: any) => {
-      const event = ev;
-      event.startAt = new Date(event.startAt);
-      event.endAt = new Date(event.endAt);
-      event.start = this.formatDateForVuetify(event.startAt);
-      event.end = this.formatDateForVuetify(event.endAt);
-      event.name = event.title || '(No title)';
+    return this.events.map((ev: BlmObject<EventModel>) => {
+      const event = ev as any;
+      event.data.startAt = new Date(ev.data.startAt);
+      event.data.endAt = new Date(ev.data.endAt);
+      event.start = this.formatDateForVuetify(ev.data.startAt);
+      event.end = this.formatDateForVuetify(ev.data.endAt);
+      event.name = ev.data.title || '(No title)';
       return event;
     });
   }
@@ -231,16 +231,16 @@ export default class BlmCalendar extends Vue {
     this.currentEvent = null;
   }
 
-  eventCreated(event: EventModel) {
+  eventCreated(event: BlmObject<EventModel>) {
     this.events.push(event);
   }
 
-  eventDeleted(event: EventModel) {
-    this.events = this.events.filter((c: EventModel) => c.id !== event.id);
+  eventDeleted(event: BlmObject<EventModel>) {
+    this.events = this.events.filter((c: BlmObject<EventModel>) => c.id !== event.id);
   }
 
-  eventUpdated(updatedEvent: EventModel) {
-    this.events = this.events.map((event: any) => {
+  eventUpdated(updatedEvent: BlmObject<EventModel>) {
+    this.events = this.events.map((event: BlmObject<EventModel>) => {
       if (event.id === updatedEvent.id) {
         return updatedEvent;
       }

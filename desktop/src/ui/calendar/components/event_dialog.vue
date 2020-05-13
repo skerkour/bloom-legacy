@@ -22,7 +22,7 @@
       </v-card-title>
       <v-card-title dark class="headline" v-else>
         <h3 class="headline mb-0">
-          <h3 class="headline mb-0">{{ event.title }}</h3>
+          <h3 class="headline mb-0">{{ event.data.title }}</h3>
         </h3>
         <v-spacer />
         <v-btn text @click="cancel">
@@ -187,7 +187,7 @@ import {
   Watch,
 } from 'vue-property-decorator';
 import moment from 'moment';
-import core from '@/core';
+import core, { BlmObject } from '@/core';
 import {
   DeleteEvent, CreateEvent, Event as EventModel, Method,
 } from '@/core/calendar';
@@ -197,7 +197,7 @@ import {
 export default class EventDialog extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
-  @Prop({ type: Object, default: null }) event!: EventModel | null;
+  @Prop({ type: Object, default: null }) event!: BlmObject<EventModel> | null;
 
   // data
   title = '';
@@ -252,14 +252,14 @@ export default class EventDialog extends Vue {
   // lifecycle
   // watch
   @Watch('event')
-  onEventChanged(event: any) {
+  onEventChanged(event: BlmObject<EventModel>) {
     if (event !== null) {
-      this.title = event.title;
-      this.description = event.description;
-      this.startAt = event.startAt;
-      this.startAtTime = this.dateToTimeSring(event.startAt);
-      this.endAt = event.endAt;
-      this.endAtTime = this.dateToTimeSring(event.endAt);
+      this.title = event.data.title;
+      this.description = event.data.description;
+      this.startAt = event.data.startAt;
+      this.startAtTime = this.dateToTimeSring(event.data.startAt);
+      this.endAt = event.data.endAt;
+      this.endAtTime = this.dateToTimeSring(event.data.endAt);
     } else {
       this.emptyFields();
     }
@@ -326,7 +326,7 @@ export default class EventDialog extends Vue {
 
     try {
       const res = await core.call(Method.CreateEvent, params);
-      this.$emit('created', (res as Event));
+      this.$emit('created', (res as BlmObject<EventModel>));
       this.close();
     } catch (err) {
       this.error = err.message;
@@ -338,14 +338,14 @@ export default class EventDialog extends Vue {
   async updateEvent() {
     this.error = '';
     this.loading = true;
-    const event = { ...this.event } as EventModel;
-    event.title = this.title;
-    event.description = this.description;
-    event.startAt = this.timeToDate(this.startAt, this.startAtTime);
-    event.endAt = this.timeToDate(this.endAt, this.endAtTime);
+    const event = { ...this.event } as BlmObject<EventModel>;
+    event.data.title = this.title;
+    event.data.description = this.description;
+    event.data.startAt = this.timeToDate(this.startAt, this.startAtTime);
+    event.data.endAt = this.timeToDate(this.endAt, this.endAtTime);
     try {
       const res = await core.call(Method.UpdateEvent, event);
-      this.$emit('updated', (res as Event));
+      this.$emit('updated', (res as BlmObject<EventModel>));
       this.close();
     } catch (err) {
       this.error = err.message;

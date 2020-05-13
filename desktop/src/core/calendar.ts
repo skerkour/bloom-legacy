@@ -9,17 +9,10 @@ export enum Method {
 
 
 export type Event = {
-  id: string,
   title: string,
   description: string,
-  createdAt: Date,
-  updatedAt: Date,
   startAt: Date,
   endAt: Date,
-}
-
-export type Events = {
-  events: Event[],
 }
 
 export type ListEvents = {
