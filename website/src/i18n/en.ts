@@ -176,7 +176,7 @@ export default {
       On the other side, with Bloom, we work for the people who value respect and privacy: You.
       Not investors, not advertisers.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
-    a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
+    a5: `Being an human scale company, we do our best to provide a fast and friendly support. <br />
       The people we value are our customers paying us, not the advertisers.`,
     q6: 'Do you issue refunds?',
     a6: `We do not issue refunds, but we offer a free tier
