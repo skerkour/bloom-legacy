@@ -1,5 +1,5 @@
 import moment from 'moment';
 
-export default function (text: string) {
+export default function calendar(text: string) {
   return moment(text).calendar();
 }

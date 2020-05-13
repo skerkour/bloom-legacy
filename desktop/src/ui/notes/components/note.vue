@@ -97,7 +97,9 @@ export default class BlmNote extends Vue {
     note.data.archivedAt = new Date().toISOString() as unknown as Date;
 
     try {
+      note.data = JSON.stringify(note.data) as any;
       const res = await core.call(Method.UpdateNote, note);
+      res.data = JSON.parse(res.data);
       this.$emit('archived', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -113,7 +115,9 @@ export default class BlmNote extends Vue {
     note.data.archivedAt = null;
 
     try {
+      note.data = JSON.stringify(note.data) as any;
       const res = await core.call(Method.UpdateNote, note);
+      res.data = JSON.parse(res.data);
       this.$emit('unarchived', (res as Note));
     } catch (err) {
       this.error = err.message;
@@ -129,7 +133,9 @@ export default class BlmNote extends Vue {
     note.data.isPinned = true;
 
     try {
+      note.data = JSON.stringify(note.data) as any;
       const res = await core.call(Method.UpdateNote, note);
+      res.data = JSON.parse(res.data);
       this.$emit('updated', (res as BlmObject<Note>));
     } catch (err) {
       this.error = err.message;
@@ -145,7 +151,9 @@ export default class BlmNote extends Vue {
     note.data.isPinned = false;
 
     try {
+      note.data = JSON.stringify(note.data) as any;
       const res = await core.call(Method.UpdateNote, note);
+      res.data = JSON.parse(res.data);
       this.$emit('updated', (res as BlmObject<Note>));
     } catch (err) {
       this.error = err.message;
