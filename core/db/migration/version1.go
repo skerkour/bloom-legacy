@@ -46,8 +46,8 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		id BLOB PRIMARY KEY NOT NULL,
 		created_at DATETIME NOT NULL,
 		updated_at DATETIME NOT NULL,
-		type TEXT PRIMARY NOT NULL,
-		data JSON PRIMARY NOT NULL,
+		type TEXT NOT NULL,
+		data JSON NOT NULL,
 		out_of_sync INTEGER NOT NULL,
 		group_id TEXT
 	)

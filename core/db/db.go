@@ -81,7 +81,7 @@ func Init(key *string) error {
 	}
 
 	for i := userVersion; i < len(migrations); i++ {
-		migrations[i].Run(DB, i+1)
+		migrations[i].Run(DB, i)
 	}
 
 	return err
