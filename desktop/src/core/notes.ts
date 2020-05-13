@@ -1,5 +1,3 @@
-import { BlmObject } from './index';
-
 export const NOTE_TYPE = 'com.bloom42.bloom.note';
 
 export enum Method {
@@ -16,10 +14,6 @@ export type Note = {
   color: string,
   archivedAt: Date | null,
   isPinned: boolean,
-}
-
-export type Notes = {
-  notes: BlmObject[],
 }
 
 export type CreateNote = {

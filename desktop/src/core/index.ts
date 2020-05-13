@@ -1,5 +1,8 @@
 import * as models from '@/api/models';
 import { log } from '@/libs/rz';
+import { Contact } from './contacts';
+import { Note } from './notes';
+import { Event } from './calendar';
 
 const { ipcRenderer } = window as any;
 
@@ -10,14 +13,23 @@ export type InitRes = {
   preferences: any,
 }
 
-export type BlmObject = {
+export type BlmObject<T extends Note | Contact | Event> = {
   id: string,
   createdAt: Date,
   updatedAt: Date,
   type: string,
-  data: any,
+  data: T,
   groupId: string | null,
 }
+
+export type Notes = {
+  notes: BlmObject<Note>[],
+}
+
+export type Contacts = {
+  contacts: BlmObject<Contact>[],
+}
+
 
 async function call(method: string, params: any): Promise<any> {
   const message = JSON.stringify({

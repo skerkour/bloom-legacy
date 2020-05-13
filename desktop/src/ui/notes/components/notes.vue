@@ -38,8 +38,8 @@
               <v-list-item :key="`note-${index}`">
 
                 <v-list-item-content class="text-left">
-                  <v-list-item-title>{{ note.title }}</v-list-item-title>
-                  <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle>
+                  <v-list-item-title>{{ note.data.title }}</v-list-item-title>
+                  <v-list-item-subtitle>{{ note.data.body }}</v-list-item-subtitle>
                 </v-list-item-content>
 
               </v-list-item>
@@ -65,9 +65,9 @@
 <script lang="ts">
 import { Component, Prop, Vue } from 'vue-property-decorator';
 import BlmNote from './note.vue';
-import core, { BlmObject } from '@/core';
+import core, { BlmObject, Notes } from '@/core';
 import {
-  Notes,
+  Note,
   Method,
   CreateNote,
   NOTE_TYPE,
@@ -86,8 +86,8 @@ export default class BlmNotes extends Vue {
   // data
   error = '';
   isLoading = false;
-  notes: BlmObject[] = [];
-  selectedNote: BlmObject | null = null;
+  notes: BlmObject<Note>[] = [];
+  selectedNote: BlmObject<Note> | null = null;
   selectedNoteIndex: number | undefined = 0;
   saveInterval: any | null = null;
 
@@ -156,7 +156,7 @@ export default class BlmNotes extends Vue {
   //   this.notes = [note, ...this.notes];
   // }
 
-  noteUpdated(updatedNote: BlmObject) {
+  noteUpdated(updatedNote: BlmObject<Note>) {
     // const pos = this.notes.map((note: Note) => note.id).indexOf(updatedNote.id);
     // this.notes.splice(pos, 1);
     // this.notes = [updatedNote, ...this.notes];
@@ -172,20 +172,20 @@ export default class BlmNotes extends Vue {
     // });
   }
 
-  noteArchived(archivedNote: BlmObject) {
-    this.notes = this.notes.filter((note: BlmObject) => note.id !== archivedNote.id);
+  noteArchived(archivedNote: BlmObject<Note>) {
+    this.notes = this.notes.filter((note: BlmObject<Note>) => note.id !== archivedNote.id);
     this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
 
-  noteUnarchived(unarchivedNote: BlmObject) {
-    this.notes = this.notes.filter((note: BlmObject) => note.id !== unarchivedNote.id);
+  noteUnarchived(unarchivedNote: BlmObject<Note>) {
+    this.notes = this.notes.filter((note: BlmObject<Note>) => note.id !== unarchivedNote.id);
     this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
 
-  noteDeleted(deletedNote: BlmObject) {
-    this.notes = this.notes.filter((note: BlmObject) => note.id !== deletedNote.id);
+  noteDeleted(deletedNote: BlmObject<Note>) {
+    this.notes = this.notes.filter((note: BlmObject<Note>) => note.id !== deletedNote.id);
     this.selectedNote = null;
     this.setSelectedNoteIndex(0);
   }
@@ -209,7 +209,7 @@ export default class BlmNotes extends Vue {
   async newNote() {
     await this.setSelectedNoteIndex(undefined);
 
-    const newNote: BlmObject = {
+    const newNote: BlmObject<Note> = {
       id: '',
       createdAt: new Date(),
       updatedAt: new Date(),
@@ -251,7 +251,7 @@ export default class BlmNotes extends Vue {
   async updateNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.selectedNote } as BlmObject;
+    const note = { ...this.selectedNote } as BlmObject<Note>;
     try {
       const res = await core.call(Method.UpdateNote, note);
       this.notes[0] = res;

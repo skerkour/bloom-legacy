@@ -1,4 +1,4 @@
-/* eslint-disable camelcase */
+export const CONTACT_TYPE = 'com.bloom42.bloom.contact';
 
 export enum Method {
   ListContacts = 'contacts.listContacts',
@@ -8,9 +8,6 @@ export enum Method {
 }
 
 export type Contact = {
-  id: string,
-  createdAt: Date,
-  updatedAt: Date,
   birthday: Date | null,
   firstName: string,
   lastName: string,
@@ -51,10 +48,6 @@ export type Address = {
   postalCode: string,
   street: string,
   state: string,
-}
-
-export type Contacts = {
-  contacts: Contact[],
 }
 
 export type CreateContactParams = {

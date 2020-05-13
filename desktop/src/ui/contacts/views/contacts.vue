@@ -28,7 +28,7 @@
               <v-list-item :key="`contact-${index}`">
                 <v-list-item-content class="text-left">
                   <v-list-item-title>
-                    {{ contact.firstName }} {{ contact.lastName }}
+                    {{ contact.data.firstName }} {{ contact.data.lastName }}
                   </v-list-item-title>
                   <!-- <v-list-item-subtitle>{{ note.body }}</v-list-item-subtitle> -->
                 </v-list-item-content>
@@ -57,12 +57,12 @@
 import { Component, Vue } from 'vue-property-decorator';
 import BlmContact from '../components/contact.vue';
 import {
+  CONTACT_TYPE,
   Contact,
   Method,
-  Contacts,
   CreateContactParams,
 } from '@/core/contacts';
-import core from '@/core';
+import core, { BlmObject, Contacts } from '@/core';
 
 
 const DEFAULT_EMAIL = { email: '', label: 'Personal' };
@@ -89,8 +89,8 @@ export default class BlmContacts extends Vue {
   // data
   error = '';
   loading = false;
-  contacts: Contact[] = [];
-  selectedContact: Contact | null = null;
+  contacts: BlmObject<Contact>[] = [];
+  selectedContact: BlmObject<Contact> | null = null;
   selectedContactIndex: number | null = null;
   saveInterval: any | null = null;
 
@@ -150,8 +150,9 @@ export default class BlmContacts extends Vue {
     }
   }
 
-  contactDeleted(deletedContact: Contact) {
-    const contacts = this.contacts.filter((cont: Contact) => cont.id !== deletedContact.id);
+  contactDeleted(deletedContact: BlmObject<Contact>) {
+    const contacts = this.contacts
+      .filter((cont: BlmObject<Contact>) => cont.id !== deletedContact.id);
     this.contacts = contacts;
     this.selectedContact = null;
     this.selectedContactIndex = null;
@@ -160,21 +161,25 @@ export default class BlmContacts extends Vue {
   async newContact() {
     await this.setSelectedContactIndex(undefined);
 
-    const newContact: Contact = {
+    const newContact: BlmObject<Contact> = {
       id: '',
       createdAt: new Date(),
       updatedAt: new Date(),
-      birthday: null,
-      firstName: '',
-      lastName: '',
-      notes: '',
-      emails: [DEFAULT_EMAIL],
-      phones: [DEFAULT_PHONE],
-      websites: [DEFAULT_WEBSITE],
-      organizations: [],
-      addresses: [DEFAULT_ADDRESS],
-      deviceId: '',
-      bloomUsername: '',
+      data: {
+        birthday: null,
+        firstName: '',
+        lastName: '',
+        notes: '',
+        emails: [DEFAULT_EMAIL],
+        phones: [DEFAULT_PHONE],
+        websites: [DEFAULT_WEBSITE],
+        organizations: [],
+        addresses: [DEFAULT_ADDRESS],
+        deviceId: '',
+        bloomUsername: '',
+      },
+      groupId: null,
+      type: CONTACT_TYPE,
     };
     this.contacts = [newContact, ...this.contacts];
     await this.setSelectedContactIndex(0);
@@ -185,7 +190,7 @@ export default class BlmContacts extends Vue {
     this.loading = true;
     const params: CreateContactParams = {
       birthday: core.toDateIsoString((this.$refs.contact as any).birthday),
-      ...this.selectedContact!,
+      ...this.selectedContact!.data,
     };
     try {
       const res = await core.call(Method.CreateContact, params);
@@ -203,8 +208,8 @@ export default class BlmContacts extends Vue {
     this.error = '';
     this.loading = true;
 
-    const contact = { ...this.selectedContact } as Contact;
-    contact.birthday = core.toDateIsoString((this.$refs.contact as any).birthday);
+    const contact = { ...this.selectedContact } as BlmObject<Contact>;
+    contact.data.birthday = core.toDateIsoString((this.$refs.contact as any).birthday);
 
     try {
       await core.call(Method.UpdateContact, contact);

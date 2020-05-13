@@ -80,7 +80,7 @@ import core, { BlmObject } from '@/core';
 @Component
 export default class BlmNote extends Vue {
   // props
-  @Prop({ type: Object, required: true }) note!: BlmObject;
+  @Prop({ type: Object, required: true }) note!: BlmObject<Note>;
 
   // data
   error = '';
@@ -93,7 +93,7 @@ export default class BlmNote extends Vue {
   async archiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as BlmObject;
+    const note = { ...this.note } as BlmObject<Note>;
     note.data.archivedAt = new Date().toISOString() as unknown as Date;
 
     try {
@@ -109,7 +109,7 @@ export default class BlmNote extends Vue {
   async unarchiveNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as BlmObject;
+    const note = { ...this.note } as BlmObject<Note>;
     note.data.archivedAt = null;
 
     try {
@@ -125,12 +125,12 @@ export default class BlmNote extends Vue {
   async pinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as BlmObject;
+    const note = { ...this.note } as BlmObject<Note>;
     note.data.isPinned = true;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
-      this.$emit('updated', (res as BlmObject));
+      this.$emit('updated', (res as BlmObject<Note>));
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -141,12 +141,12 @@ export default class BlmNote extends Vue {
   async unpinNote() {
     this.error = '';
     this.isLoading = true;
-    const note = { ...this.note } as BlmObject;
+    const note = { ...this.note } as BlmObject<Note>;
     note.data.isPinned = false;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
-      this.$emit('updated', (res as BlmObject));
+      this.$emit('updated', (res as BlmObject<Note>));
     } catch (err) {
       this.error = err.message;
     } finally {

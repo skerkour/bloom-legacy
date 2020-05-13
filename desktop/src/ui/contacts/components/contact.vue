@@ -1,7 +1,7 @@
 <template>
   <div>
     <v-toolbar elevation="0" v-if="contact">
-      <v-toolbar-title>{{ contact.firstName }} {{ contact.lastName }}</v-toolbar-title>
+      <v-toolbar-title>{{ contact.data.firstName }} {{ contact.data.lastName }}</v-toolbar-title>
 
       <v-spacer />
       <v-menu>
@@ -27,20 +27,20 @@
           <v-col cols="6">
             <v-text-field
               label="First name"
-              v-model="contact.firstName"
+              v-model="contact.data.firstName"
               prepend-icon="mdi-account"
             />
           </v-col>
           <v-col cols="6">
             <v-text-field
               label="Last name"
-              v-model="contact.lastName"
+              v-model="contact.data.lastName"
             />
           </v-col>
           <v-col cols="12">
             <v-text-field
               label="Bloom username"
-              v-model="contact.bloomUsername"
+              v-model="contact.data.bloomUsername"
               prefix="@"
             />
           </v-col>
@@ -90,14 +90,14 @@
             <v-col cols="6">
               <v-text-field
                 label="Company"
-                v-model="contact.organizations[0].name"
+                v-model="contact.data.organizations[0].name"
                 prepend-icon="mdi-domain"
               ></v-text-field>
             </v-col>
             <v-col cols="6">
               <v-text-field
                 label="Job title"
-                v-model="contact.organizations[0].title"
+                v-model="contact.data.organizations[0].title"
               ></v-text-field>
             </v-col>
           </v-row> -->
@@ -109,7 +109,7 @@
             <v-col cols="12">
               <v-list class="pt-0 pb-0">
                 <v-list-item
-                  v-for="(phone, index) in contact.phones"
+                  v-for="(phone, index) in contact.data.phones"
                   :key="index"
                   class="contacts-add-row"
                 >
@@ -150,7 +150,8 @@
                         <span>Remove</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="1" class="pl-0 pr-0" v-if="index === contact.phones.length - 1">
+                    <v-col cols="1" class="pl-0 pr-0"
+                      v-if="index === contact.data.phones.length - 1">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -181,7 +182,7 @@
             <v-col cols="12">
               <v-list class="pt-0 pb-0">
                 <v-list-item
-                  v-for="(email, index) in contact.emails"
+                  v-for="(email, index) in contact.data.emails"
                   :key="index"
                   class="contacts-add-row"
                 >
@@ -234,7 +235,7 @@
                     >
                       <v-tooltip
                         bottom
-                        v-if="index === contact.emails.length - 1"
+                        v-if="index === contact.data.emails.length - 1"
                       >
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -264,7 +265,7 @@
             <v-col cols="12">
               <v-list class="pt-0 pb-0">
                 <v-list-item
-                  v-for="(website, index) in contact.websites"
+                  v-for="(website, index) in contact.data.websites"
                   :key="index"
                   class="contacts-add-row"
                 >
@@ -317,7 +318,7 @@
                     >
                       <v-tooltip
                         bottom
-                        v-if="index === contact.websites.length - 1"
+                        v-if="index === contact.data.websites.length - 1"
                       >
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -346,7 +347,7 @@
           <v-row>
             <v-col cols="12">
               <v-list class="pt-0 pb-0">
-                <v-list-item v-for="(address, index) in contact.addresses" :key="index">
+                <v-list-item v-for="(address, index) in contact.data.addresses" :key="index">
                   <v-row align="center">
                     <v-col cols="1" class="pl-0 pr-0">
                       <v-icon v-if="index === 0">mdi-home</v-icon>
@@ -419,7 +420,8 @@
                         <span>Remove</span>
                       </v-tooltip>
                     </v-col>
-                    <v-col cols="1" class="pl-0 pr-0" v-if="index === contact.addresses.length - 1">
+                    <v-col cols="1" class="pl-0 pr-0"
+                      v-if="index === contact.data.addresses.length - 1">
                       <v-tooltip bottom>
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -449,7 +451,7 @@
             <v-col cols="12">
               <v-textarea
                 label="Notes"
-                v-model="contact.notes"
+                v-model="contact.data.notes"
                 prepend-icon="mdi-calendar-text"
               ></v-textarea>
             </v-col>
@@ -479,7 +481,7 @@ import {
   Method,
   // Address,
 } from '@/core/contacts';
-import core from '@/core';
+import core, { BlmObject } from '@/core';
 
 const DEFAULT_EMAIL = { email: '', label: 'Personal' };
 const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
@@ -497,7 +499,7 @@ const DEFAULT_ADDRESS = {
 @Component
 export default class BlmContact extends Vue {
   // props
-  @Prop({ type: Object, required: true }) contact!: Contact;
+  @Prop({ type: Object, required: true }) contact!: BlmObject<Contact>;
 
   // data
   error = '';
@@ -559,28 +561,28 @@ export default class BlmContact extends Vue {
 
 
   @Watch('contact')
-  onContactChanged(contact: Contact) {
-    // this.firstName = contact.firstName;
-    // this.lastName = contact.lastName;
-    // this.notes = contact.notes;
-    // this.bloomUsername = contact.bloomUsername;
-    this.birthday = contact.birthday
-      ? new Date(contact.birthday!).toISOString().substr(0, 10) : null;
+  onContactChanged(contact: BlmObject<Contact>) {
+    // this.firstName = contact.data.firstName;
+    // this.lastName = contact.data.lastName;
+    // this.notes = contact.data.notes;
+    // this.bloomUsername = contact.data.bloomUsername;
+    this.birthday = contact.data.birthday
+      ? new Date(contact.data.birthday!).toISOString().substr(0, 10) : null;
     this.birthdayFormatted = this.formatDate(this.birthday);
-    this.contact.emails = this.contact.emails.length > 0
-      ? this.contact.emails
+    this.contact.data.emails = this.contact.data.emails.length > 0
+      ? this.contact.data.emails
       : [{ ...DEFAULT_EMAIL }];
-    this.contact.websites = contact.websites.length > 0
-      ? this.contact.websites
+    this.contact.data.websites = contact.data.websites.length > 0
+      ? this.contact.data.websites
       : [{ ...DEFAULT_WEBSITE }];
-    this.contact.phones = contact.phones.length > 0
-      ? this.contact.phones
+    this.contact.data.phones = contact.data.phones.length > 0
+      ? this.contact.data.phones
       : [{ ...DEFAULT_PHONE }];
-    // this.contact.organizations = contact.organizations.length > 0
-    //   ? this.contact.organizations
+    // this.contact.data.organizations = contact.data.organizations.length > 0
+    //   ? this.contact.data.organizations
     //   : [{ ...DEFAULT_ORGANIZATION }];
-    this.contact.addresses = contact.addresses.length > 0
-      ? this.contact.addresses
+    this.contact.data.addresses = contact.data.addresses.length > 0
+      ? this.contact.data.addresses
       : [{ ...DEFAULT_ADDRESS }];
   }
 
@@ -604,42 +606,42 @@ export default class BlmContact extends Vue {
   }
 
   addPhone() {
-    this.contact.phones.push({ ...DEFAULT_PHONE });
+    this.contact.data.phones.push({ ...DEFAULT_PHONE });
   }
 
   removePhone(index: number) {
-    this.contact.phones.splice(index, 1);
-    if (this.contact.phones.length === 0) {
+    this.contact.data.phones.splice(index, 1);
+    if (this.contact.data.phones.length === 0) {
       this.addPhone();
     }
   }
 
   addEmail() {
-    this.contact.emails.push({ ...DEFAULT_EMAIL });
+    this.contact.data.emails.push({ ...DEFAULT_EMAIL });
   }
   removeEmail(index: number) {
-    this.contact.emails.splice(index, 1);
-    if (this.contact.emails.length === 0) {
+    this.contact.data.emails.splice(index, 1);
+    if (this.contact.data.emails.length === 0) {
       this.addEmail();
     }
   }
 
   addWebsite() {
-    this.contact.websites.push({ ...DEFAULT_WEBSITE });
+    this.contact.data.websites.push({ ...DEFAULT_WEBSITE });
   }
   removeWebsite(index: number) {
-    this.contact.websites.splice(index, 1);
-    if (this.contact.websites.length === 0) {
+    this.contact.data.websites.splice(index, 1);
+    if (this.contact.data.websites.length === 0) {
       this.addWebsite();
     }
   }
 
   addAddress() {
-    this.contact.addresses.push({ ...DEFAULT_ADDRESS });
+    this.contact.data.addresses.push({ ...DEFAULT_ADDRESS });
   }
   removeAddress(index: number) {
-    this.contact.addresses.splice(index, 1);
-    if (this.contact.addresses.length === 0) {
+    this.contact.data.addresses.splice(index, 1);
+    if (this.contact.data.addresses.length === 0) {
       this.addAddress();
     }
   }

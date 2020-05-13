@@ -1,3 +1,5 @@
+export const CALENDAR_EVENT_TYPE = 'com.bloom42.bloom.calendar_event';
+
 export enum Method {
   ListEvents = 'calendar.listEvents',
   CreateEvent = 'calendar.createEvent',
