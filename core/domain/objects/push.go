@@ -53,14 +53,14 @@ func push() error {
 	}
 	defer crypto.Zeroize(masterKey) // clear masterKey from memory
 
-	groups, err := groups.FindGroups(ctx, tx)
+	myGroups, err := groups.FindGroups(ctx, tx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
 	// format and encrypt objects
-	for _, group := range groups.Groups {
+	for _, group := range myGroups.Groups {
 		repo := &model.RepositoryPushInput{
 			CurrentState: group.State,
 			GroupID:      &group.ID,
@@ -116,16 +116,19 @@ func push() error {
 		return err
 	}
 
-	// TODO: update groups states
-	// currentStates.mutex.Lock()
-	// for _, repo := range resp.Push.Repositories {
-	// 	if repo.GroupID != nil {
-	// 		currentStates.states[repo.GroupID.String()] = repo.NewState
-	// 	} else {
-	// 		currentStates.states[""] = repo.NewState
-	// 	}
-	// }
-	// currentStates.mutex.Unlock()
+	// update groups and me states
+	for _, repo := range resp.Push.Repositories {
+		if repo.GroupID != nil {
+			err = groups.SaveGroupState(ctx, tx, *(repo.GroupID), repo.NewState)
+		} else {
+			kernel.Me.State = &repo.NewState
+			err = users.SaveMe(ctx, tx, kernel.Me)
+		}
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
 
 	err = tx.Commit()
 	if err != nil {

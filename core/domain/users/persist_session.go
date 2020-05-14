@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 
+	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
@@ -44,4 +45,14 @@ func PersistSession(signin *model.SignedIn) error {
 	}
 
 	return nil
+}
+
+func SaveMe(ctx context.Context, tx *sqlx.Tx, me *model.User) error {
+	meData, err := json.Marshal(me)
+	if err != nil {
+		return err
+	}
+
+	err = preferences.Set(context.Background(), tx, "me", string(meData))
+	return err
 }

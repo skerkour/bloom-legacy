@@ -29,13 +29,13 @@ func pull() error {
 		Repositories: []*model.RepositoryPullInput{},
 	}
 
-	groups, err := groups.FindGroups(ctx, tx)
+	myGroups, err := groups.FindGroups(ctx, tx)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	for _, group := range groups.Groups {
+	for _, group := range myGroups.Groups {
 		repo := &model.RepositoryPullInput{
 			SinceState: group.State,
 			GroupID:    &group.ID,
@@ -127,14 +127,20 @@ func pull() error {
 			}
 
 		}
+	}
 
-		currentStates.mutex.Lock()
+	// update groups and me states
+	for _, repo := range resp.Pull.Repositories {
 		if repo.GroupID != nil {
-			currentStates.states[repo.GroupID.String()] = repo.NewState
+			err = groups.SaveGroupState(ctx, tx, *(repo.GroupID), repo.NewState)
 		} else {
-			currentStates.states[""] = repo.NewState
+			kernel.Me.State = &repo.NewState
+			err = users.SaveMe(ctx, tx, kernel.Me)
 		}
-		currentStates.mutex.Unlock()
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
 	}
 
 	err = tx.Commit()

@@ -23,6 +23,7 @@ func UpdateGroup(input model.GroupInput) (model.Group, error) {
 			avatarUrl
 			name
 			description
+			state
 			members {
 				totalCount
 			}
@@ -34,8 +35,8 @@ func UpdateGroup(input model.GroupInput) (model.Group, error) {
 	err := client.Do(context.Background(), req, &resp)
 	if err == nil {
 		group := resp.Group
-		_, err = db.DB.Exec("UPDATE groups SET name = ?, description = ?, avatar_url = ? WHERE id = ?",
-			group.Name, group.Description, group.AvatarURL, group.ID)
+		_, err = db.DB.Exec("UPDATE groups SET name = ?, description = ?, avatar_url = ?, state = ? WHERE id = ?",
+			group.Name, group.Description, group.AvatarURL, group.State, group.ID)
 	}
 
 	return resp.Group, err

@@ -33,7 +33,8 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		created_at DATETIME NOT NULL,
 		name TEXT NOT NULL,
 		description TEXT NOT NULL,
-		avatar_url TEXT
+		avatar_url TEXT,
+		state string NOT NULL
 	)
 	`)
 	if err != nil {
