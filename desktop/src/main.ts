@@ -4,7 +4,7 @@ import router from '@/router';
 import store, { Mutations } from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
-import core from '@/core';
+import core, { InitRes } from '@/core';
 import { log, Level } from '@/libs/rz';
 
 const { ipcRenderer } = window as any;
@@ -37,9 +37,19 @@ Vue.config.warnHandler = (msg: any, vm: any, trace: any) => { //eslint-disable-l
 };
 
 async function main() {
+  let res: InitRes | null = null;
   await ipcRenderer.send('server:start');
-  await sleep(1000);
-  const res = await core.init(['theme']);
+
+  while (true) { // eslint-disable-line
+    try {
+      res = await core.init(['theme']); // eslint-disable-line
+      break;
+    } catch (err) {
+      await sleep(50); // eslint-disable-line
+      continue; // eslint-disable-line
+    }
+  }
+
   if (res.preferences.me) {
     const params = {
       me: res.preferences.me,
