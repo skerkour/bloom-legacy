@@ -7,17 +7,19 @@ import (
 )
 
 type User struct {
-	ID               *uuid.UUID                 `json:"id"`
-	AvatarURL        *string                    `json:"avatarUrl"`
-	CreatedAt        *time.Time                 `json:"createdAt"`
-	Username         string                     `json:"username"`
-	FirstName        *string                    `json:"firstName"`
-	LastName         *string                    `json:"lastName"`
-	DisplayName      string                     `json:"displayName"`
-	IsAdmin          bool                       `json:"isAdmin"`
-	DisabledAt       *time.Time                 `json:"disabledAt"`
-	Bio              string                     `json:"bio"`
-	Email            *string                    `json:"email"`
+	ID          *uuid.UUID `json:"id"`
+	AvatarURL   *string    `json:"avatarUrl"`
+	CreatedAt   *time.Time `json:"createdAt"`
+	Username    string     `json:"username"`
+	FirstName   *string    `json:"firstName"`
+	LastName    *string    `json:"lastName"`
+	DisplayName string     `json:"displayName"`
+	IsAdmin     bool       `json:"isAdmin"`
+	DisabledAt  *time.Time `json:"disabledAt"`
+	Bio         string     `json:"bio"`
+	Email       *string    `json:"email"`
+	State       *string    `json:"state"`
+
 	Sessions         *SessionConnection         `json:"sessions"`
 	Subscription     *BillingSubscription       `json:"subscription"`
 	Invoices         *InvoiceConnection         `json:"invoices"`
