@@ -91,6 +91,7 @@ type ComplexityRoot struct {
 		Members        func(childComplexity int) int
 		Name           func(childComplexity int) int
 		PaymentMethods func(childComplexity int) int
+		State          func(childComplexity int) int
 		Subscription   func(childComplexity int) int
 	}
 
@@ -309,6 +310,7 @@ type ComplexityRoot struct {
 		PrivateKeyNonce     func(childComplexity int) int
 		PublicKey           func(childComplexity int) int
 		Sessions            func(childComplexity int) int
+		State               func(childComplexity int) int
 		Subscription        func(childComplexity int) int
 		Username            func(childComplexity int) int
 	}
@@ -609,6 +611,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.PaymentMethods(childComplexity), true
+
+	case "Group.state":
+		if e.complexity.Group.State == nil {
+			break
+		}
+
+		return e.complexity.Group.State(childComplexity), true
 
 	case "Group.subscription":
 		if e.complexity.Group.Subscription == nil {
@@ -1739,6 +1748,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.User.Sessions(childComplexity), true
 
+	case "User.state":
+		if e.complexity.User.State == nil {
+			break
+		}
+
+		return e.complexity.User.State(childComplexity), true
+
 	case "User.subscription":
 		if e.complexity.User.Subscription == nil {
 			break
@@ -1905,6 +1921,7 @@ type User {
   bio: String!
   isAdmin: Boolean!
   disabledAt: Time
+  state: String
 
   publicKey: Bytes!
   encryptedPrivateKey: Bytes
@@ -1949,6 +1966,8 @@ type Group {
   avatarUrl: String
   name: String!
   description: String!
+  state: String
+
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
@@ -3806,6 +3825,37 @@ func (ec *executionContext) _Group_description(ctx context.Context, field graphq
 	res := resTmp.(string)
 	fc.Result = res
 	return ec.marshalNString2string(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_state(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.State, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_members(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -8483,6 +8533,37 @@ func (ec *executionContext) _User_disabledAt(ctx context.Context, field graphql.
 	return ec.marshalOTime2ᚖtimeᚐTime(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _User_state(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "User",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.State, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*string)
+	fc.Result = res
+	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _User_publicKey(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -11079,6 +11160,8 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 			if out.Values[i] == graphql.Null {
 				atomic.AddUint32(&invalids, 1)
 			}
+		case "state":
+			out.Values[i] = ec._Group_state(ctx, field, obj)
 		case "members":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -12351,6 +12434,8 @@ func (ec *executionContext) _User(ctx context.Context, sel ast.SelectionSet, obj
 			}
 		case "disabledAt":
 			out.Values[i] = ec._User_disabledAt(ctx, field, obj)
+		case "state":
+			out.Values[i] = ec._User_state(ctx, field, obj)
 		case "publicKey":
 			out.Values[i] = ec._User_publicKey(ctx, field, obj)
 			if out.Values[i] == graphql.Null {

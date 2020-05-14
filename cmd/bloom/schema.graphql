@@ -65,6 +65,7 @@ type User {
   bio: String!
   isAdmin: Boolean!
   disabledAt: Time
+  state: String
 
   publicKey: Bytes!
   encryptedPrivateKey: Bytes
@@ -109,6 +110,8 @@ type Group {
   avatarUrl: String
   name: String!
   description: String!
+  state: String
+
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription

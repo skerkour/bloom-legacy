@@ -2,6 +2,7 @@ package model
 
 import (
 	"context"
+	"strconv"
 	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
@@ -27,6 +28,7 @@ type User struct {
 	IsAdmin     bool       `json:"isAdmin"`
 	Bio         string     `json:"bio"`
 	Email       *string    `json:"email"`
+	State       *string    `json:"state"`
 
 	PublicKey           []byte  `json:"publicKey"`
 	EncryptedPrivateKey *[]byte `json:"encryptedPrivateKey"`
@@ -59,10 +61,14 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 
 	// only if same user
 	if actor != nil && actor.ID == user.ID {
+		var state string
+
 		ret.EncryptedMasterKey = &user.EncryptedMasterKey
 		ret.MasterKeyNonce = &user.MasterKeyNonce
 		ret.EncryptedPrivateKey = &user.EncryptedPrivateKey
 		ret.PrivateKeyNonce = &user.MasterKeyNonce
+		state = strconv.FormatInt(user.State, 10)
+		ret.State = &state
 	}
 
 	return ret

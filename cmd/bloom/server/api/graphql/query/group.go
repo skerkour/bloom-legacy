@@ -2,6 +2,7 @@ package query
 
 import (
 	"context"
+	"strconv"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
@@ -13,6 +14,7 @@ import (
 // Group find a group
 func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
+	var state string
 
 	if currentUser == nil {
 		err = gqlerrors.AuthenticationRequired()
@@ -31,12 +33,14 @@ func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Gro
 		return
 	}
 
+	state = strconv.FormatInt(group.State, 10)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,
 		Name:        group.Name,
 		Description: group.Description,
 		AvatarURL:   nil,
+		State:       &state,
 	}
 	return ret, nil
 }

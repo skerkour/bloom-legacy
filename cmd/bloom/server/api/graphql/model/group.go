@@ -18,6 +18,7 @@ type Group struct {
 	Name        string     `json:"name"`
 	Description string     `json:"description"`
 	AvatarURL   *string    `json:"avatarUrl"`
+	State       *string    `json:"state"`
 }
 
 // GroupResolver is the resolver for the Group type
