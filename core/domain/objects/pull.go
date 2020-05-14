@@ -96,6 +96,14 @@ func pull() error {
 				tx.Rollback()
 				return err
 			}
+			if decryptedObject == nil {
+				// remove local object
+				err = DeleteObject(ctx, tx, object.ID)
+				if err != nil {
+					tx.Rollback()
+					return err
+				}
+			}
 			// check if object exist and is out of sync
 			ofsStoredObject, err := FindOutOfSyncObjectByID(ctx, tx, decryptedObject.ID)
 			if ofsStoredObject != nil {

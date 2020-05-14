@@ -36,15 +36,18 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object
 	}
 	objectKey, err := objectKeyCipher.Open(nil, objectKeyNonce, encryptedObject.EncryptedKey, encryptedObject.ID)
 	if err != nil {
-		crypto.Zeroize(objectKey)
 		err = errors.New("Error decrypting object key")
 		return
+	}
+	defer crypto.Zeroize(objectKey) // wipe objectKey from memory
+
+	if len(encryptedObject.EncryptedData) == 0 {
+		return nil, nil
 	}
 
 	// decrypt object data
 	objectDataCipher, err := crypto.NewAEAD(objectKey)
 	if err != nil {
-		crypto.Zeroize(objectKey)
 		return ret, err
 	}
 	compressedObjectData, err := objectDataCipher.Open(nil, encryptedObject.Nonce, encryptedObject.EncryptedData, encryptedObject.ID)
@@ -52,23 +55,19 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object
 		err = errors.New("Error decrypting object")
 		return
 	}
-	// wipe objectKey from memory
-	crypto.Zeroize(objectKey)
+	defer crypto.Zeroize(compressedObjectData) // wipe compressed object from memory
 
 	// decompress object
 	objectData, err := snappy.Decode(nil, compressedObjectData)
 	if err != nil {
-		crypto.Zeroize(objectData)
+
 		err = errors.New("Error decompressing object")
 		return
 	}
-	// wipe compressed object from memory
-	crypto.Zeroize(compressedObjectData)
+	defer crypto.Zeroize(objectData) // wipe JSON object from memory
 
 	ret = &Object{}
 	err = json.Unmarshal(objectData, ret)
-	// wipe JSON object from memory
-	crypto.Zeroize(objectData)
 	if err != nil {
 		err = errors.New("Error parsing object")
 		return
