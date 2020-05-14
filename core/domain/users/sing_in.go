@@ -11,6 +11,7 @@ import (
 	"gitlab.com/bloom42/lily/graphql"
 )
 
+// SignIn sign in
 func SignIn(params SignInParams) (model.SignedIn, error) {
 	client := api.Client()
 	var ret model.SignedIn
@@ -21,14 +22,13 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	}
 	// clean password from memory as we can...
 	params.Password = ""
+	defer crypto.Zeroize(passwordKey) // clean passwordKey from memory
 
 	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
-
-	// clean passwordKey from memory
-	crypto.Zeroize(passwordKey)
+	defer crypto.Zeroize(authKey) // clean authKey from memory
 
 	input := model.SignInInput{
 		Username: params.Username,
