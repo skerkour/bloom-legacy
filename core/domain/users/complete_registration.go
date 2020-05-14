@@ -117,7 +117,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
 			client.Authenticate(resp.CompleteRegistration.Session.ID, *resp.CompleteRegistration.Session.Token)
-			err = PersistSession(resp.CompleteRegistration)
+			err = SaveSignedIn(resp.CompleteRegistration)
 			if err != nil {
 				return ret, err
 			}

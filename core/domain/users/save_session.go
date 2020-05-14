@@ -10,29 +10,21 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 )
 
-func PersistSession(signin *model.SignedIn) error {
-	meData, err := json.Marshal(signin.Me)
-	if err != nil {
-		return err
-	}
-
-	sessionData, err := json.Marshal(signin.Session)
-	if err != nil {
-		return err
-	}
+func SaveSignedIn(signin *model.SignedIn) error {
+	ctx := context.Background()
 
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		return err
 	}
 
-	err = preferences.Set(context.Background(), tx, "me", string(meData))
+	err = SaveMe(ctx, tx, signin.Me)
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	err = preferences.Set(context.Background(), tx, "session", string(sessionData))
+	err = SaveSession(ctx, tx, signin.Session)
 	if err != nil {
 		tx.Rollback()
 		return err
@@ -53,6 +45,16 @@ func SaveMe(ctx context.Context, tx *sqlx.Tx, me *model.User) error {
 		return err
 	}
 
-	err = preferences.Set(context.Background(), tx, "me", string(meData))
+	err = preferences.Set(ctx, tx, "me", string(meData))
+	return err
+}
+
+func SaveSession(ctx context.Context, tx *sqlx.Tx, session *model.Session) error {
+	sessionData, err := json.Marshal(session)
+	if err != nil {
+		return err
+	}
+
+	err = preferences.Set(ctx, tx, "session", string(sessionData))
 	return err
 }

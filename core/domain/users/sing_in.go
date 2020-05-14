@@ -65,7 +65,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	if resp.SignIn != nil {
 		if resp.SignIn.Session != nil && resp.SignIn.Session.Token != nil {
 			client.Authenticate(resp.SignIn.Session.ID, *resp.SignIn.Session.Token)
-			err = PersistSession(resp.SignIn)
+			err = SaveSignedIn(resp.SignIn)
 			if err != nil {
 				return ret, err
 			}
