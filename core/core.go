@@ -12,6 +12,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func Init(params InitParams) (InitRes, error) {
@@ -64,6 +65,12 @@ func handleCoreMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "sync":
+		err := objects.Sync()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "core")
 	}

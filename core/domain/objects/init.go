@@ -6,7 +6,7 @@ import (
 
 // Init inits the objects (sync) service
 func Init() error {
-	Sync = make(chan bool)
+	SyncChan = make(chan bool)
 
 	ctx := context.Background()
 	go backgroundSync(ctx)

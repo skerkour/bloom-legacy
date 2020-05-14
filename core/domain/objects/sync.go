@@ -7,6 +7,22 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
+// Sync sync the local data with the pod (pull + conflict resolution + push)
+func Sync() (err error) {
+	syncyingMutext.Lock()
+	defer syncyingMutext.Unlock()
+
+	// sync only if user is authenticated
+	if kernel.Me != nil {
+		err = pull()
+		if err != nil {
+			return
+		}
+		err = push()
+	}
+	return
+}
+
 // backgroundSync is a worker that do background sync
 func backgroundSync(ctx context.Context) {
 	ticker := time.NewTicker(4 * time.Second)
@@ -18,23 +34,9 @@ func backgroundSync(ctx context.Context) {
 			ticker.Stop()
 			break
 		case <-ticker.C:
-			backSync()
-		case <-Sync:
-			backSync()
+			Sync()
+		case <-SyncChan:
+			Sync()
 		}
-	}
-}
-
-func backSync() {
-	syncyingMutext.Lock()
-	defer syncyingMutext.Unlock()
-
-	// sync only if user is authenticated
-	if kernel.Me != nil {
-		err := pull()
-		if err != nil {
-			return
-		}
-		push()
 	}
 }
