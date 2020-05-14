@@ -54,6 +54,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 					displayName
 					isAdmin
 					avatarUrl
+					state
 				}
 			}
 		}

@@ -105,14 +105,14 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 					displayName
 					isAdmin
 					avatarUrl
+					state
 				}
 			}
 		}
 	`)
 	req.Var("input", input)
 
-	err = client.Do(context.Background(), req, &resp)
-	// remove authKey from memory
+	err = client.Do(ctx, req, &resp)
 
 	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
