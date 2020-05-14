@@ -74,9 +74,7 @@ export default class SignInForm extends Vue {
     try {
       const res: models.SignedIn = await core.call(Method.SignIn, params);
       this.$store.commit(Mutations.SIGN_IN.toString(), res);
-      // sync data
-      await core.call(Method.Sync, core.Empty);
-      this.$router.push({ path: '/' });
+      this.$router.push({ path: '/sync' });
     } catch (err) {
       this.error = err.message;
     } finally {
