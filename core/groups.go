@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
+import "context"
 
 func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
@@ -34,7 +35,7 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: messages.Empty{}}
 	case "findGroups":
-		res, err := groups.FindGroups()
+		res, err := groups.FindGroups(context.Background(), nil)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

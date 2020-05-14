@@ -26,6 +26,9 @@ func backgroundSync(ctx context.Context) {
 }
 
 func backSync() {
+	syncyingMutext.Lock()
+	defer syncyingMutext.Unlock()
+
 	// sync only if user is authenticated
 	if kernel.Me != nil {
 		err := pull()

@@ -6,11 +6,11 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
-	"gitlab.com/bloom42/lily/uuid"
 )
 
 func pull() error {
@@ -29,26 +29,24 @@ func pull() error {
 		Repositories: []*model.RepositoryPullInput{},
 	}
 
-	currentStates.mutex.RLock()
-	for groupIDStr, state := range currentStates.states {
-		var groupID *uuid.UUID
+	groups, err := groups.FindGroups(ctx, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
 
-		if groupIDStr != "" {
-			var groupUUID uuid.UUID
-			groupUUID, err = uuid.Parse(groupIDStr)
-			if err != nil {
-				tx.Rollback()
-				return err
-			}
-			groupID = &groupUUID
-		}
+	for _, group := range groups.Groups {
 		repo := &model.RepositoryPullInput{
-			SinceState: state,
-			GroupID:    groupID,
+			SinceState: group.State,
+			GroupID:    &group.ID,
 		}
 		input.Repositories = append(input.Repositories, repo)
 	}
-	currentStates.mutex.RUnlock()
+	myRepo := &model.RepositoryPullInput{
+		SinceState: *kernel.Me.State,
+		GroupID:    nil,
+	}
+	input.Repositories = append(input.Repositories, myRepo)
 
 	// build api request
 	var resp struct {

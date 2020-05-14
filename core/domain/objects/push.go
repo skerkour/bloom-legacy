@@ -6,10 +6,11 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/groups"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/graphql"
-	"gitlab.com/bloom42/lily/uuid"
 )
 
 func push() error {
@@ -52,21 +53,33 @@ func push() error {
 	}
 	defer crypto.Zeroize(masterKey) // clear masterKey from memory
 
+	groups, err := groups.FindGroups(ctx, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	// format and encrypt objects
-	currentStates.mutex.RLock()
-	for groupIDStr, state := range currentStates.states {
-		var groupID *uuid.UUID
+	for _, group := range groups.Groups {
+		repo := &model.RepositoryPushInput{
+			CurrentState: group.State,
+			GroupID:      &group.ID,
+		}
+		input.Repositories = append(input.Repositories, repo)
+	}
+	myRepo := &model.RepositoryPushInput{
+		CurrentState: *kernel.Me.State,
+		GroupID:      nil,
+	}
+	input.Repositories = append(input.Repositories, myRepo)
+
+	// for each repo, add the outOfSync objects
+	for i, repo := range input.Repositories {
+		var groupIDStr string
 		objectsPushInput := []*model.ObjectInput{}
 
-		if groupIDStr != "" {
-			var groupUUID uuid.UUID
-
-			groupUUID, err = uuid.Parse(groupIDStr)
-			if err != nil {
-				tx.Rollback()
-				return err
-			}
-			groupID = &groupUUID
+		if repo.GroupID != nil {
+			groupIDStr = repo.GroupID.String()
 		}
 		for _, object := range objectsToPush[groupIDStr] {
 			var objectToPush *model.ObjectInput
@@ -78,14 +91,8 @@ func push() error {
 			}
 			objectsPushInput = append(objectsPushInput, objectToPush)
 		}
-		repo := &model.RepositoryPushInput{
-			CurrentState: state,
-			GroupID:      groupID,
-			Objects:      objectsPushInput,
-		}
-		input.Repositories = append(input.Repositories, repo)
+		input.Repositories[i].Objects = objectsPushInput
 	}
-	currentStates.mutex.RUnlock()
 
 	var resp struct {
 		Push *model.Push `json:"push"`
@@ -109,15 +116,16 @@ func push() error {
 		return err
 	}
 
-	currentStates.mutex.Lock()
-	for _, repo := range resp.Push.Repositories {
-		if repo.GroupID != nil {
-			currentStates.states[repo.GroupID.String()] = repo.NewState
-		} else {
-			currentStates.states[""] = repo.NewState
-		}
-	}
-	currentStates.mutex.Unlock()
+	// TODO: update groups states
+	// currentStates.mutex.Lock()
+	// for _, repo := range resp.Push.Repositories {
+	// 	if repo.GroupID != nil {
+	// 		currentStates.states[repo.GroupID.String()] = repo.NewState
+	// 	} else {
+	// 		currentStates.states[""] = repo.NewState
+	// 	}
+	// }
+	// currentStates.mutex.Unlock()
 
 	err = tx.Commit()
 	if err != nil {
