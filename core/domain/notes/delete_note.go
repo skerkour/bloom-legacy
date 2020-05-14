@@ -11,5 +11,8 @@ func DeleteNote(params messages.DeleteNoteParams) (err error) {
 
 	err = objects.DeleteObject(context.Background(), nil, params.ID)
 
+	// request sync
+	objects.SyncChan <- true
+
 	return err
 }

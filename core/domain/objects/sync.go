@@ -8,6 +8,7 @@ import (
 )
 
 // Sync sync the local data with the pod (pull + conflict resolution + push)
+// it should only be manually called after signing in to sync data
 func Sync() (err error) {
 	syncyingMutext.Lock()
 	defer syncyingMutext.Unlock()

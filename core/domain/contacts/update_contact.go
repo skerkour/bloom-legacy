@@ -25,5 +25,8 @@ func UpdateContact(contact objects.Object) (objects.Object, error) {
 
 	err = objects.SaveObject(context.Background(), nil, cleanedContact)
 
+	// request sync
+	objects.SyncChan <- true
+
 	return *cleanedContact, err
 }

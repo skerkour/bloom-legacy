@@ -16,5 +16,8 @@ func UpdateNote(note objects.Object) (objects.Object, error) {
 
 	err = objects.SaveObject(context.Background(), nil, &note)
 
+	// request sync
+	objects.SyncChan <- true
+
 	return note, err
 }

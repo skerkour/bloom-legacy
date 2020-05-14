@@ -34,5 +34,8 @@ func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 
 	err = objects.SaveObject(context.Background(), nil, ret)
 
+	// request sync
+	objects.SyncChan <- true
+
 	return ret, err
 }

@@ -39,11 +39,11 @@ func handleCalendarMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := calendar.DeleteEvent(params)
+		err = calendar.DeleteEvent(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: res}
+		return MessageOut{Data: messages.Empty{}}
 	case "updateEvent":
 		var params objects.Object
 		err := json.Unmarshal(jsonParams, &params)

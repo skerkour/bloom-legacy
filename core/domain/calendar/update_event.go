@@ -19,7 +19,11 @@ func UpdateEvent(event objects.Object) (objects.Object, error) {
 	}
 
 	event.UpdatedAt = time.Now().UTC()
+	event.OutOfSync = true
 	err = objects.SaveObject(context.Background(), nil, &event)
+
+	// request sync
+	objects.SyncChan <- true
 
 	return event, err
 }

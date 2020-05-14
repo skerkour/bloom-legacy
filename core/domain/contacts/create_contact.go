@@ -41,5 +41,8 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 
 	err = objects.SaveObject(context.Background(), nil, ret)
 
+	// request sync
+	objects.SyncChan <- true
+
 	return ret, err
 }
