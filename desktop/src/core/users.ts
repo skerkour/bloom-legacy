@@ -15,6 +15,7 @@ export enum Method {
   FetchUserDetails = 'users.fetchUserDetails',
   EnableUser = 'users.enalbeUser',
   DisableUser = 'users.disableUser',
+  Sync = 'core.sync',
 }
 
 export type StartRegistration = {
