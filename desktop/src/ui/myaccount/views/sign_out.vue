@@ -4,6 +4,9 @@
       <v-btn color="error" depressed @click="openConfirmDialog">
         <v-icon left>mdi-power</v-icon> Sign Out
       </v-btn>
+      <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
+        {{ error }}
+      </v-alert>
     </v-row>
 
 
@@ -34,20 +37,34 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
+import core from '@/core';
+import { Method } from '@/core/users';
+import { Mutations } from '@/store';
 
 @Component
 export default class BlmSignOut extends Vue {
   // props
   // data
   confirmDialog = false;
+  loading = false;
+  error = '';
   // computed
   // lifecycle
   // watch
   // methods
 
 
-  signOut() {
+  async signOut() {
     this.closeConfirmDialog();
+    this.error = '';
+    this.loading = true;
+    try {
+      await core.call(Method.SignOut, core.Empty);
+      this.$store.commit(Mutations.SIGN_OUT.toString());
+      window.location.reload();
+    } catch (err) {
+      this.error = err.message;
+    }
   }
 
   cancel() {
