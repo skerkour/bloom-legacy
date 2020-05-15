@@ -22,7 +22,7 @@ func (resolver *Resolver) StartRegistration(ctx context.Context, input model.Sta
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := crypto.RandInt64(500, 800)
+	sleep, err := crypto.RandInt64(1000, 1500)
 	if err != nil {
 		logger.Error("mutation.StartRegistration: generating random int", rz.Err(err))
 		err = gqlerrors.Internal()

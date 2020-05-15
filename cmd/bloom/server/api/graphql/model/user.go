@@ -30,11 +30,11 @@ type User struct {
 	Email       *string    `json:"email"`
 	State       *string    `json:"state"`
 
-	PublicKey           []byte  `json:"publicKey"`
-	EncryptedPrivateKey *[]byte `json:"encryptedPrivateKey"`
-	PrivateKeyNonce     *[]byte `json:"privateKeyNonce"`
-	EncryptedMasterKey  *[]byte `json:"encryptedMasterKey"`
-	MasterKeyNonce      *[]byte `json:"masterKeyNonce"`
+	PublicKey           []byte `json:"publicKey"`
+	EncryptedPrivateKey []byte `json:"encryptedPrivateKey"`
+	PrivateKeyNonce     []byte `json:"privateKeyNonce"`
+	EncryptedMasterKey  []byte `json:"encryptedMasterKey"`
+	MasterKeyNonce      []byte `json:"masterKeyNonce"`
 }
 
 // DomainUserToModelUser transform a `users.User` to `model.User` with the good fields, according to
@@ -63,10 +63,10 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 	if actor != nil && actor.ID == user.ID {
 		var state string
 
-		ret.EncryptedMasterKey = &user.EncryptedMasterKey
-		ret.MasterKeyNonce = &user.MasterKeyNonce
-		ret.EncryptedPrivateKey = &user.EncryptedPrivateKey
-		ret.PrivateKeyNonce = &user.MasterKeyNonce
+		ret.EncryptedMasterKey = user.EncryptedMasterKey
+		ret.MasterKeyNonce = user.MasterKeyNonce
+		ret.EncryptedPrivateKey = user.EncryptedPrivateKey
+		ret.PrivateKeyNonce = user.PrivateKeyNonce
 		state = sync.EncodeState(user.State)
 		ret.State = &state
 	}

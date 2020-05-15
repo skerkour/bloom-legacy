@@ -121,7 +121,7 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
-		EncryptedMasterKey:  params.MasterKeyNonce,
+		EncryptedMasterKey:  params.EncryptedMasterKey,
 		MasterKeyNonce:      params.MasterKeyNonce,
 		TwoFASecret:         nil,
 	}

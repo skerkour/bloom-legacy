@@ -8624,9 +8624,9 @@ func (ec *executionContext) _User_encryptedPrivateKey(ctx context.Context, field
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*[]byte)
+	res := resTmp.([]byte)
 	fc.Result = res
-	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+	return ec.marshalOBytes2ᚕbyte(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_privateKeyNonce(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -8655,9 +8655,9 @@ func (ec *executionContext) _User_privateKeyNonce(ctx context.Context, field gra
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*[]byte)
+	res := resTmp.([]byte)
 	fc.Result = res
-	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+	return ec.marshalOBytes2ᚕbyte(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_encryptedMasterKey(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -8686,9 +8686,9 @@ func (ec *executionContext) _User_encryptedMasterKey(ctx context.Context, field 
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*[]byte)
+	res := resTmp.([]byte)
 	fc.Result = res
-	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+	return ec.marshalOBytes2ᚕbyte(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_masterKeyNonce(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -8717,9 +8717,9 @@ func (ec *executionContext) _User_masterKeyNonce(ctx context.Context, field grap
 	if resTmp == nil {
 		return graphql.Null
 	}
-	res := resTmp.(*[]byte)
+	res := resTmp.([]byte)
 	fc.Result = res
-	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+	return ec.marshalOBytes2ᚕbyte(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_groups(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -13866,21 +13866,6 @@ func (ec *executionContext) unmarshalOBytes2ᚕbyte(ctx context.Context, v inter
 
 func (ec *executionContext) marshalOBytes2ᚕbyte(ctx context.Context, sel ast.SelectionSet, v []byte) graphql.Marshaler {
 	return model.MarshalBytes(v)
-}
-
-func (ec *executionContext) unmarshalOBytes2ᚖᚕbyte(ctx context.Context, v interface{}) (*[]byte, error) {
-	if v == nil {
-		return nil, nil
-	}
-	res, err := ec.unmarshalOBytes2ᚕbyte(ctx, v)
-	return &res, err
-}
-
-func (ec *executionContext) marshalOBytes2ᚖᚕbyte(ctx context.Context, sel ast.SelectionSet, v *[]byte) graphql.Marshaler {
-	if v == nil {
-		return graphql.Null
-	}
-	return ec.marshalOBytes2ᚕbyte(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {
