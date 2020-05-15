@@ -62,6 +62,9 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	req.Var("input", input)
 
 	err = client.Do(context.Background(), req, &resp)
+	if err != nil {
+		return ret, err
+	}
 	if resp.SignIn != nil {
 		if resp.SignIn.Session != nil && resp.SignIn.Session.Token != nil {
 			client.Authenticate(resp.SignIn.Session.ID, *resp.SignIn.Session.Token)

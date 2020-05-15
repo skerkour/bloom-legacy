@@ -32,6 +32,10 @@ func VerifyUser(params VerifyRegistrationParams) (bool, error) {
 	req.Var("input", input)
 
 	err := client.Do(context.Background(), req, &resp)
+	if err != nil {
+		return ret, err
+	}
+
 	if resp.VerifyUser != nil {
 		ret = *resp.VerifyUser
 	}

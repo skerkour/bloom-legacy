@@ -37,6 +37,10 @@ func StartRegistration(params StartRegistrationParams) (model.RegistrationStarte
 	req.Var("input", input)
 
 	err := client.Do(ctx, req, &resp)
+	if err != nil {
+		return ret, err
+	}
+
 	if resp.StartRegistration != nil {
 		ret = *resp.StartRegistration
 	}

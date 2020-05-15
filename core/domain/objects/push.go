@@ -110,7 +110,7 @@ func push() error {
 	`)
 	req.Var("input", input)
 
-	err = client.Do(context.Background(), req, &resp)
+	err = client.Do(ctx, req, &resp)
 	if err != nil {
 		tx.Rollback()
 		return err

@@ -113,6 +113,9 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	req.Var("input", input)
 
 	err = client.Do(ctx, req, &resp)
+	if err != nil {
+		return ret, err
+	}
 
 	if resp.CompleteRegistration != nil {
 		if resp.CompleteRegistration.Session != nil && resp.CompleteRegistration.Session.Token != nil {
