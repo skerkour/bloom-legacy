@@ -11,7 +11,7 @@ func TestObjectTypes(t *testing.T) {
 		OBJECT_TYPE_CALENDAR_EVENT,
 	}
 	expected := []string{
-		"com.bloom42.bloom.note",
+		"com.bloom42.notes.note",
 		"com.bloom42.contacts.contact",
 		"com.bloom42.calendar.event",
 	}
