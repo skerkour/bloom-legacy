@@ -25,7 +25,7 @@
           <v-btn text @click="cancel">
             Cancel
           </v-btn>
-          <v-btn color="error" text @click="signOut">
+          <v-btn color="error" outlined @click="signOut">
             <v-icon left>mdi-power</v-icon> Yes! Sign me out
           </v-btn>
         </v-card-actions>
