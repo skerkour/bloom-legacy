@@ -44,6 +44,7 @@ func Pull(ctx context.Context, actor *users.User, params PullParams) (ret *PullR
 		var sinceStateInt int64
 		sinceStateInt, err = DecodeStateString(repo.SinceState)
 		if err != nil {
+			logger.Warn("Error decoding state", rz.String("state", repo.SinceState), rz.String("user.id", actor.ID.String()))
 			err = NewError(ErrorInternal)
 			return
 		}

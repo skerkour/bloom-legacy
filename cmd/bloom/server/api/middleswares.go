@@ -3,7 +3,6 @@ package api
 import (
 	"context"
 	"encoding/json"
-	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -129,6 +128,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		currentUser := &users.User{}
 
 		reqCtx := r.Context()
+		logger := rz.FromCtx(reqCtx)
 
 		apiCtx := apiutil.ApiCtxFromCtx(r.Context())
 		authHeader := r.Header.Get("authorization")
@@ -137,6 +137,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 			parts := strings.FieldsFunc(authHeader, isSpace)
 			if len(parts) != 2 || (parts[0] != "Basic" && parts[0] != "Secret") {
+				logger.Debug("Session is not formated correctly")
 				invalidSession(w, r)
 				return
 			}
@@ -146,21 +147,21 @@ func AuthMiddleware(next http.Handler) http.Handler {
 				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
 				defer crypto.Zeroize(sessionSecret) // defer sessionSecret from memory
 				if err != nil {
-					fmt.Println("session not valid 1")
+					logger.Debug("Error parsing session token")
 					invalidSession(w, r)
 					return
 				}
 
 				currentSession, err := users.VerifySession(sessionID, sessionSecret)
 				if err != nil {
-					fmt.Println("session not valid 2")
+					logger.Debug("Error verifying session")
 					invalidSession(w, r)
 					return
 				}
 
 				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID, false)
 				if err != nil {
-					fmt.Println("session not valid 3")
+					logger.Debug("Error finding user in auth middleware")
 					invalidSession(w, r)
 					return
 				}

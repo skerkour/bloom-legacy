@@ -2,7 +2,6 @@ package users
 
 import (
 	"errors"
-	"fmt"
 
 	"gitlab.com/bloom42/lily/crypto"
 	"gitlab.com/bloom42/lily/uuid"
@@ -13,14 +12,12 @@ func VerifySession(sessionID uuid.UUID, secret []byte) (currentSession *Session,
 	// find session with ID and associated user
 	currentSession = globalSessionsCache.Get(sessionID)
 	if currentSession == nil {
-		fmt.Println("Session not found in cache")
 		err = errors.New("Session is not valid")
 		return
 	}
 
 	err = verifySessionHash(currentSession, secret)
 	if err != nil {
-		fmt.Println("Session hash not valid")
 		currentSession = nil
 		err = errors.New("Session is not valid")
 		return

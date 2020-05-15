@@ -2,12 +2,12 @@ package query
 
 import (
 	"context"
-	"strconv"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
 	"gitlab.com/bloom42/lily/uuid"
 )
 
@@ -33,7 +33,7 @@ func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Gro
 		return
 	}
 
-	state = strconv.FormatInt(group.State, 10)
+	state = sync.EncodeState(group.State)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,

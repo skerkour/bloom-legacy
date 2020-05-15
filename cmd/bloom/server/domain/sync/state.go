@@ -13,6 +13,10 @@ func EncodeState(state int64) string {
 
 // DecodeStateString decodes a state string to its int64 representation
 func DecodeStateString(str string) (state int64, err error) {
+	if str == "" {
+		state = 0
+		return
+	}
 	decoded, err := base64.StdEncoding.DecodeString(str)
 	if err != nil {
 		return
