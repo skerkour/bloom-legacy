@@ -37,6 +37,23 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	// clean passwordKey from memory
 	defer crypto.Zeroize(wrapKey)
 
+	// generate and save a random master key
+	masterKey, err := crypto.NewAEADKey()
+	if err != nil {
+		return ret, err
+	}
+	defer crypto.Zeroize(masterKey)
+
+	err = SaveMasterKey(ctx, nil, masterKey)
+	if err != nil {
+		return ret, err
+	}
+	encryptedMasterKey, masterKeyNonce, err := encrypt(wrapKey, []byte(masterKey))
+	if err != nil {
+		return ret, err
+	}
+
+	// generate and save keyPair
 	publicKey, privateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
 	if err != nil {
 		return ret, err
@@ -53,23 +70,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 
 	// encrypt privateKey
-	encryptedPrivateKey, privateKeyNonce, err := encryptWithWrapKey(wrapKey, []byte(privateKey))
-	if err != nil {
-		return ret, err
-	}
-
-	// generate and save a random master key
-	masterKey, err := crypto.NewAEADKey()
-	if err != nil {
-		return ret, err
-	}
-	defer crypto.Zeroize(masterKey)
-
-	err = SaveMasterKey(ctx, nil, masterKey)
-	if err != nil {
-		return ret, err
-	}
-	encryptedMasterKey, masterKeyNonce, err := encryptWithWrapKey(wrapKey, []byte(masterKey))
+	encryptedPrivateKey, privateKeyNonce, err := encrypt(masterKey, []byte(privateKey))
 	if err != nil {
 		return ret, err
 	}

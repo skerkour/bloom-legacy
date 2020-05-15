@@ -15,6 +15,7 @@ import (
 func SignIn(params SignInParams) (model.SignedIn, error) {
 	client := api.Client()
 	var ret model.SignedIn
+	ctx := context.Background()
 
 	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
 	if err != nil {
@@ -55,13 +56,19 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 					isAdmin
 					avatarUrl
 					state
+
+					publicKey
+					encryptedPrivateKey
+					privateKeyNonce
+					encryptedMasterKey
+					masterKeyNonce
 				}
 			}
 		}
 	`)
 	req.Var("input", input)
 
-	err = client.Do(context.Background(), req, &resp)
+	err = client.Do(ctx, req, &resp)
 	if err != nil {
 		return ret, err
 	}
@@ -74,7 +81,50 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			}
 			ret = *resp.SignIn
 			ret.Session.Token = nil
-			kernel.Me = resp.SignIn.Me
+			me := resp.SignIn.Me
+
+			// decrypt and save keys
+			wrapKey, err := deriveWrapKeyFromPasswordKey(passwordKey, []byte(params.Username))
+			if err != nil {
+				return ret, errors.New("Internal error. Please try again")
+			}
+			// clean passwordKey from memory
+			defer crypto.Zeroize(wrapKey)
+
+			// decrypt master_key
+			masterKey, err := decrypt(wrapKey, *me.MasterKeyNonce, *me.EncryptedMasterKey)
+			if err != nil {
+				return ret, errors.New("Internal error. Please try again")
+			}
+			defer crypto.Zeroize(masterKey) // clean masterKey from memory
+
+			err = SaveMasterKey(ctx, nil, masterKey)
+			if err != nil {
+				return ret, err
+			}
+
+			// decrypt private_key
+			privateKey, err := decrypt(masterKey, *me.PrivateKeyNonce, *me.EncryptedPrivateKey)
+			if err != nil {
+				return ret, errors.New("Internal error. Please try again")
+			}
+			defer crypto.Zeroize(privateKey) // clean privateKey from memory
+
+			// save key_pair
+			err = SavePublicKey(ctx, nil, me.PublicKey)
+			if err != nil {
+				return ret, err
+			}
+			err = SavePrivateKey(ctx, nil, privateKey)
+			if err != nil {
+				return ret, err
+			}
+
+			kernel.Me = me
+			kernel.Me.EncryptedMasterKey = nil
+			kernel.Me.EncryptedPrivateKey = nil
+			kernel.Me.MasterKeyNonce = nil
+			kernel.Me.PrivateKeyNonce = nil
 		}
 	}
 	return ret, err

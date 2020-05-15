@@ -26,7 +26,7 @@ func Sync() (err error) {
 
 // backgroundSync is a worker that do background sync
 func backgroundSync(ctx context.Context) {
-	ticker := time.NewTicker(4 * time.Second)
+	ticker := time.NewTicker(10 * time.Second)
 
 	for {
 		select {
