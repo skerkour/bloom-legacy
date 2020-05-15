@@ -2,6 +2,8 @@ package objects
 
 import (
 	"encoding/json"
+
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 )
 
 func dedupObject(object *Object, username []byte) (*Object, error) {
@@ -27,19 +29,19 @@ func dedupObjectAddConflict(object *Object) {
 		return
 	}
 	switch object.Type {
-	case "com.bloom42.bloom.note":
+	case kernel.OBJECT_TYPE_NOTE:
 		if val, ok := objDataMap["title"]; ok {
 			if valStr, ok := val.(string); ok {
 				objDataMap["title"] = "[Conflict] " + valStr
 			}
 		}
-	case "com.bloom42.bloom.contact":
+	case kernel.OBJECT_TYPE_CONTACT:
 		if val, ok := objDataMap["firstName"]; ok {
 			if valStr, ok := val.(string); ok {
 				objDataMap["firstName"] = "[Conflict] " + valStr
 			}
 		}
-	case "com.bloom42.bloom.calendar_event":
+	case kernel.OBJECT_TYPE_CALENDAR_EVENT:
 		if val, ok := objDataMap["title"]; ok {
 			if valStr, ok := val.(string); ok {
 				objDataMap["title"] = "[Conflict] " + valStr

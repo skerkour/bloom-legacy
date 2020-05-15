@@ -5,6 +5,7 @@ import (
 	"encoding/json"
 	"time"
 
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
@@ -23,7 +24,7 @@ func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 		params.EndAt = &endOfMonth
 	}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, EVENT_TYPE)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT)
 	if err != nil {
 		return ret, err
 	}

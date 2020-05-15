@@ -30,7 +30,7 @@ func CreateEvent(params messages.CalendarCreateEventParams) (*objects.Object, er
 		return ret, err
 	}
 
-	ret, err = objects.ToObject(id, EVENT_TYPE, now, now, nil, true, &event)
+	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CALENDAR_EVENT, now, now, nil, true, &event)
 	if err != nil {
 		return ret, err
 	}
