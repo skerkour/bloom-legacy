@@ -2,7 +2,7 @@ import * as models from '@/api/models';
 
 export enum Method {
   StartRegistration = 'users.startRegistration',
-  VerifyRegistration = 'users.verifyRegistration',
+  VerifyUser = 'users.verifyUser',
   CompleteRegistration = 'users.completeRegistration',
   SignIn = 'users.signIn',
   SignOut = 'users.signOut',
