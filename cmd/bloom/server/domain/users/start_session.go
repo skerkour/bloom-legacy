@@ -15,6 +15,7 @@ func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 	logger := rz.FromCtx(ctx)
 
 	newSessionID, secret, hash, salt, err := newSession()
+	defer crypto.Zeroize(secret) // wipe secret from memory
 	if err != nil {
 		logger.Error("users.StartSession: generating new session", rz.Err(err))
 		err = NewError(ErrorSingingIn)
@@ -46,8 +47,6 @@ func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 
 	tokenByte := append(ret.ID.Bytes(), secret...)
 	token = base64.StdEncoding.EncodeToString(tokenByte)
-	// remove secret from memory
-	crypto.Zeroize(secret)
 
 	return
 }

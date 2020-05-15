@@ -55,9 +55,10 @@ func SignIn(ctx context.Context, params SignInParams) (user *User, newSession *S
 		return
 	}
 
-	// TODO: send alert email
-
+	// send alert email
 	go sendSignInEmailAlert(user.Email, user.DisplayName, params.IPAddress)
+
+	globalSessionsCache.Set(newSession)
 
 	return
 }

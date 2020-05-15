@@ -3,6 +3,7 @@ package api
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"net"
 	"net/http"
 	"strings"
@@ -143,28 +144,28 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			if parts[0] == "Basic" {
 
 				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
+				defer crypto.Zeroize(sessionSecret) // defer sessionSecret from memory
 				if err != nil {
+					fmt.Println("session not valid 1")
 					invalidSession(w, r)
 					return
 				}
+
 				currentSession, err := users.VerifySession(sessionID, sessionSecret)
-				// remove sessionSecret from memory
-				crypto.Zeroize(sessionSecret)
 				if err != nil {
+					fmt.Println("session not valid 2")
 					invalidSession(w, r)
 					return
 				}
 
 				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID, false)
 				if err != nil {
+					fmt.Println("session not valid 3")
 					invalidSession(w, r)
 					return
 				}
 				apiCtx.AuthenticatedUser = currentUser
 				apiCtx.Session = currentSession
-
-				// update session's fields if necessary
-				// go session.Access(reqCtx, *authenticatedAccount, *currentSession, ctx.IP, ctx.UserAgent, ctx.RequestID)
 
 			} else { // Secret
 				secret := parts[1]
