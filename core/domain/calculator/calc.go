@@ -35,6 +35,9 @@ func evalExpr(exp ast.Expr) float64 {
 			i, _ := strconv.ParseFloat(exp.Value, 64)
 			return i
 		}
+	// parenthesis (e.g. "(1 + 2 ) * 3".)
+	case *ast.ParenExpr:
+		return (evalExpr(exp.X))
 	}
 
 	return 0
@@ -53,6 +56,9 @@ func evalBinaryExpr(exp *ast.BinaryExpr) float64 {
 		return left * right
 	case token.QUO:
 		return left / right
+	case token.REM:
+		// modulus
+		return float64(int(left) % int(right))
 	}
 
 	return 0
