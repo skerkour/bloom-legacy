@@ -53,7 +53,7 @@ func pull() error {
 		Pull *model.Pull `json:"pull"`
 	}
 	req := graphql.NewRequest(`
-		mutation ($input: PullInput!) {
+		query ($input: PullInput!) {
 			pull(input: $input) {
 				repositories {
 					oldState

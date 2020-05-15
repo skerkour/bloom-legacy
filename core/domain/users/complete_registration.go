@@ -126,6 +126,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 			}
 			ret = *resp.CompleteRegistration
 			ret.Session.Token = nil
+			kernel.Me = resp.CompleteRegistration.Me
 		}
 	}
 

@@ -74,6 +74,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			}
 			ret = *resp.SignIn
 			ret.Session.Token = nil
+			kernel.Me = resp.SignIn.Me
 		}
 	}
 	return ret, err
