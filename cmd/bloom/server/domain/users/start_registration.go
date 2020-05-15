@@ -52,12 +52,7 @@ func StartRegistration(ctx context.Context, params StartRegistrationParams) (new
 		return
 	}
 
-	err = sendUserVerificationCode(newPendingUser.Email, newPendingUser.DisplayName, verificationCode)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("users.StartRegistration: Sending confirmation email", rz.Err(err))
-		return
-	}
+	go sendUserVerificationCode(newPendingUser.Email, newPendingUser.DisplayName, verificationCode)
 
 	err = tx.Commit()
 	if err != nil {

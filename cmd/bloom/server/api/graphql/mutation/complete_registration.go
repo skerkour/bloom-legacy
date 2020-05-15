@@ -60,6 +60,11 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		},
 	}
 	newUser, newSession, token, err := users.CompleteRegistration(ctx, tx, params)
+	if err != nil {
+		tx.Rollback()
+		err = gqlerrors.New(err)
+		return
+	}
 
 	// create customer profile
 	_, err = billing.CreateCustomer(ctx, tx, newUser, &newUser.ID, nil)

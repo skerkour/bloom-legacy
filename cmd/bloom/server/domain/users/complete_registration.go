@@ -49,6 +49,8 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
+		EncryptedMasterKey:  params.EncryptedMasterKey,
+		MasterKeyNonce:      params.MasterKeyNonce,
 	}
 	retUser, err = createUser(ctx, tx, createUserParams)
 	if err != nil {

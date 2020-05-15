@@ -80,8 +80,8 @@ func SetContextMiddleware(next http.Handler) http.Handler {
 func SetLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(string); ok {
-				logger = logger.With(rz.Fields(rz.String("request_id", rid)))
+			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(uuid.UUID); ok {
+				logger = logger.With(rz.Fields(rz.String("request_id", rid.String())))
 				ctx := logger.ToCtx(r.Context())
 				r = r.WithContext(ctx)
 			}

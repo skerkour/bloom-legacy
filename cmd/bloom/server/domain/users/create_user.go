@@ -1,7 +1,9 @@
 package users
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
@@ -26,12 +28,29 @@ type createUserParams struct {
 func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret *User, err error) {
 	logger := rz.FromCtx(ctx)
 	var existingUser int
+	zeroNonce := make([]byte, crypto.AEADNonceSize)
 
 	// validate params
 	params.Username = strings.TrimSpace(params.Username)
 	err = ValidateUsername(params.Username)
 	if err != nil {
 		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
+		return
+	}
+	if len(params.PrivateKeyNonce) != crypto.AEADNonceSize {
+		err = NewErrorMessage(ErrorInvalidArgument, "privateKeyNonce has bad size")
+		return
+	}
+	if bytes.Equal(params.PrivateKeyNonce, zeroNonce) {
+		err = NewErrorMessage(ErrorInvalidArgument, "privateKeyNonce cannot be empty")
+		return
+	}
+	if len(params.MasterKeyNonce) != crypto.AEADNonceSize {
+		err = NewErrorMessage(ErrorInvalidArgument, fmt.Sprintf("masterKeyNonce has bad size (%d)", len(params.MasterKeyNonce)))
+		return
+	}
+	if bytes.Equal(params.MasterKeyNonce, zeroNonce) {
+		err = NewErrorMessage(ErrorInvalidArgument, "masterKeyNonce cannot be empty")
 		return
 	}
 
@@ -113,7 +132,8 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 			encrypted_master_key, master_key_nonce, two_fa_secret)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`
 	_, err = tx.Exec(queryCreateUser,
-		ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username, ret.Email, ret.DisplayName, ret.Bio, ret.FirstName, ret.LastName,
+		ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.DisabledAt, ret.Username, ret.Email, ret.DisplayName,
+		ret.Bio, ret.FirstName, ret.LastName,
 		ret.State, ret.IsAdmin, ret.AuthKeyHash, ret.PublicKey, ret.EncryptedPrivateKey, ret.PrivateKeyNonce,
 		ret.EncryptedMasterKey, ret.MasterKeyNonce, ret.TwoFASecret)
 	if err != nil {
