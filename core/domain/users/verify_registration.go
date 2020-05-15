@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/lily/graphql"
 )
 
-func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
+func VerifyUser(params VerifyRegistrationParams) (bool, error) {
 	client := api.Client()
 	ret := false
 
@@ -22,18 +22,18 @@ func VerifyRegistration(params VerifyRegistrationParams) (bool, error) {
 		Code: code,
 	}
 	var resp struct {
-		VerifyRegistration *bool `json:"verifyRegistration"`
+		VerifyUser *bool `json:"verifyUser"`
 	}
 	req := graphql.NewRequest(`
-        mutation ($input: VerifyRegistrationInput!) {
-			verifyRegistration(input: $input)
+        mutation ($input: verifyUserInput!) {
+			verifyUser(input: $input)
 		}
 	`)
 	req.Var("input", input)
 
 	err := client.Do(context.Background(), req, &resp)
-	if resp.VerifyRegistration != nil {
-		ret = *resp.VerifyRegistration
+	if resp.VerifyUser != nil {
+		ret = *resp.VerifyUser
 	}
 
 	return ret, err

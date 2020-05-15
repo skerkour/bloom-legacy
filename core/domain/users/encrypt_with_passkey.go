@@ -1,8 +1,18 @@
 package users
 
-// TODO
-func encryptWithPassKey(passkey, plaintext []byte) (ciphertext, nonce []byte, err error) {
-	ciphertext = make([]byte, len(plaintext))
-	nonce = make([]byte, 24)
-	return ciphertext, nonce, err
+import (
+	"gitlab.com/bloom42/lily/crypto"
+)
+
+func encryptWithWrapKey(wrapKey, plaintext []byte) (ciphertext, nonce []byte, err error) {
+	nonce, err = crypto.NewAEADNonce()
+	if err != nil {
+		return
+	}
+	cipher, err := crypto.NewAEAD(wrapKey)
+	if err != nil {
+		return
+	}
+	ciphertext = cipher.Seal(nil, nonce, plaintext, nil)
+	return
 }

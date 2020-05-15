@@ -53,7 +53,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 
 	// encrypt privateKey
-	encryptedPrivateKey, privateKeyNonce, err := encryptWithPassKey(wrapKey, []byte(privateKey))
+	encryptedPrivateKey, privateKeyNonce, err := encryptWithWrapKey(wrapKey, []byte(privateKey))
 	if err != nil {
 		return ret, err
 	}
@@ -69,7 +69,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
-	encryptedMasterKey, masterKeyNonce, err := encryptWithPassKey(wrapKey, []byte(masterKey))
+	encryptedMasterKey, masterKeyNonce, err := encryptWithWrapKey(wrapKey, []byte(masterKey))
 	if err != nil {
 		return ret, err
 	}

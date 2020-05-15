@@ -13,12 +13,12 @@ func derivePasswordKeyFromPassword(password, username []byte) (key []byte, err e
 
 func deriveWrapKeyFromPasswordKey(passwordKey, username []byte) (key []byte, err error) {
 	message := append([]byte("com.bloom42.bloom/wrap_key"), username...)
-	key, err = crypto.DeriveKeyFromKey(key, message, crypto.KeySize512)
+	key, err = crypto.DeriveKeyFromKey(key, message, crypto.KeySize256)
 	return
 }
 
 func deriveAuthKeyFromPasswordKey(passwordKey, username []byte) (key []byte, err error) {
 	message := append([]byte("com.bloom42.bloom/auth_key"), username...)
-	key, err = crypto.DeriveKeyFromKey(key, message, crypto.KeySize256)
+	key, err = crypto.DeriveKeyFromKey(key, message, crypto.KeySize512)
 	return
 }

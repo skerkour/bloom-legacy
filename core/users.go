@@ -22,13 +22,13 @@ func handleUsersMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "verifyRegistration":
+	case "verifyUser":
 		var params users.VerifyRegistrationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := users.VerifyRegistration(params)
+		res, err := users.VerifyUser(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
