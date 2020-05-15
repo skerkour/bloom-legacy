@@ -36,6 +36,11 @@ func push() error {
 		tx.Rollback()
 		return err
 	}
+	// if no objects to push, abort
+	if len(storedObjects) == 0 {
+		tx.Rollback()
+		return nil
+	}
 
 	for _, object := range storedObjects {
 		var groupID string

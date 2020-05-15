@@ -20,11 +20,11 @@ type User struct {
 	Email       *string    `json:"email"`
 	State       *string    `json:"state"`
 
-	PublicKey           []byte  `json:"publicKey"`
-	EncryptedPrivateKey *[]byte `json:"encryptedPrivateKey"`
-	PrivateKeyNonce     *[]byte `json:"privateKeyNonce"`
-	EncryptedMasterKey  *[]byte `json:"encryptedMasterKey"`
-	MasterKeyNonce      *[]byte `json:"masterKeyNonce"`
+	PublicKey           []byte `json:"publicKey"`
+	EncryptedPrivateKey []byte `json:"encryptedPrivateKey"`
+	PrivateKeyNonce     []byte `json:"privateKeyNonce"`
+	EncryptedMasterKey  []byte `json:"encryptedMasterKey"`
+	MasterKeyNonce      []byte `json:"masterKeyNonce"`
 
 	Sessions         *SessionConnection         `json:"sessions"`
 	Subscription     *BillingSubscription       `json:"subscription"`
