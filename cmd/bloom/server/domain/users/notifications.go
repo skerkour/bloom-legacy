@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
-	"gitlab.com/bloom42/lily/email"
 )
 
 const userVerificationEmailTemplate = `
@@ -39,13 +38,9 @@ func sendUserVerificationCode(toAddr, displayName, code string) error {
 		return err
 	}
 
-	message := email.Email{
-		From:    &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS},
-		To:      []*mail.Address{{Name: displayName, Address: toAddr}},
-		Subject: subject,
-		HTML:    content.Bytes(),
-	}
-	return email.Send(message)
+	from := &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS}
+	to := []*mail.Address{{Name: displayName, Address: toAddr}}
+	return notification.SendHTMLEmailWithDefaultTemplate(from, to, subject, content.Bytes())
 }
 
 const userSignInAlertTemplate = `
@@ -78,11 +73,7 @@ func sendSignInEmailAlert(toAddr, toName, ipAddress string) error {
 		return err
 	}
 
-	message := email.Email{
-		From:    &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS},
-		To:      []*mail.Address{{Name: toName, Address: toAddr}},
-		Subject: subject,
-		HTML:    content.Bytes(),
-	}
-	return email.Send(message)
+	from := &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS}
+	to := []*mail.Address{{Name: toName, Address: toAddr}}
+	return notification.SendHTMLEmailWithDefaultTemplate(from, to, subject, content.Bytes())
 }

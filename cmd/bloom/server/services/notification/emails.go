@@ -10,17 +10,19 @@ import (
 
 // DefaultTemplateParams are the params for SendHTMLEmailWithDefaultTemplate
 type DefaultTemplateParams struct {
-	Title           string
-	OnlineLink      string
-	Content         string
-	UnsubscribeLink string
+	Title string
+	Body  string
 }
 
 // SendHTMLEmailWithDefaultTemplate sends an HTML message with the default HTML template
-func SendHTMLEmailWithDefaultTemplate(from *mail.Address, to *mail.Address, subject string, markdown []byte, params DefaultTemplateParams) error {
+func SendHTMLEmailWithDefaultTemplate(from *mail.Address, to []*mail.Address, subject string, body []byte) error {
 	var content bytes.Buffer
 	tmpl := template.Must(template.New("DefaultEmailTemplate").Parse(DEFAULT_EMAIL_TEMPLATE))
 
+	params := DefaultTemplateParams{
+		Title: subject,
+		Body:  string(body),
+	}
 	err := tmpl.Execute(&content, params)
 	if err != nil {
 		return err
@@ -28,10 +30,10 @@ func SendHTMLEmailWithDefaultTemplate(from *mail.Address, to *mail.Address, subj
 
 	message := email.Email{
 		From:    from,
-		To:      []*mail.Address{to},
+		To:      to,
 		Subject: subject,
 		HTML:    content.Bytes(),
-		Text:    markdown,
+		// Text:    markdown,
 	}
 	return email.Send(message)
 }
