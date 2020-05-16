@@ -38,12 +38,12 @@
           </ul>
         </v-col>
 
-        <v-col cols="12" class="blm-footer-year-col">
+        <!-- <v-col cols="12" class="blm-footer-year-col">
           <p class="text-center blm-footer-year">
-            <!-- <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span><br/><br/> -->
+             <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span><br/><br/>
             <span>&copy; 2018 - {{ new Date().getFullYear() }} Bloom</span>
           </p>
-        </v-col>
+        </v-col> -->
 
       </v-row>
     </v-container>
