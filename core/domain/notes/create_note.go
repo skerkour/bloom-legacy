@@ -19,7 +19,7 @@ func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 		Title:      params.Title,
 		Body:       params.Body,
 		Color:      params.Color,
-		IsPinned:   false,
+		IsFavorite: false,
 	}
 
 	id, err := objects.GenerateObjectID([]byte(kernel.Me.Username))
