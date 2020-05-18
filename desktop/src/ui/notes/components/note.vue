@@ -17,7 +17,7 @@
           </v-btn>
         </template>
         <v-list class="text-left">
-          <!-- <v-list-item v-if="!note.isPinned">
+          <!-- <v-list-item v-if="!note.isFavorite">
             <v-list-item-icon>
               <v-icon>mdi-pin</v-icon>
             </v-list-item-icon>
@@ -126,7 +126,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as BlmObject<Note>;
-    note.data.isPinned = true;
+    note.data.isFavorite = true;
 
     try {
       const res = await core.call(Method.UpdateNote, note);
@@ -142,7 +142,7 @@ export default class BlmNote extends Vue {
     this.error = '';
     this.isLoading = true;
     const note = { ...this.note } as BlmObject<Note>;
-    note.data.isPinned = false;
+    note.data.isFavorite = false;
 
     try {
       const res = await core.call(Method.UpdateNote, note);

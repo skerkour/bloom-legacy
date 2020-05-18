@@ -218,7 +218,7 @@ export default class BlmNotes extends Vue {
         body: '',
         color: '#ffffff',
         archivedAt: null,
-        isPinned: false,
+        isFavorite: false,
       },
       groupId: null,
       type: NOTE_TYPE,

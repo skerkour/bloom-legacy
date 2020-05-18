@@ -13,7 +13,7 @@ export type Note = {
   body: string,
   color: string,
   archivedAt: Date | null,
-  isPinned: boolean,
+  isFavorite: boolean,
 }
 
 export type CreateNote = {
