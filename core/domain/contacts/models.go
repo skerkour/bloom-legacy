@@ -12,6 +12,7 @@ type Contacts struct {
 }
 
 type Contact struct {
+	IsFavorite    bool          `json:"isFavorite"`
 	DeviceID      string        `json:"deviceId"`
 	FirstName     string        `json:"firstName"`
 	LastName      string        `json:"lastName"`

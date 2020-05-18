@@ -25,6 +25,7 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 		Emails:        params.Emails,
 		Phones:        params.Phones,
 		Websites:      params.Websites,
+		IsFavorite:    false,
 	}
 
 	cleanContactCollections(&contact)

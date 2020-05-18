@@ -47,7 +47,7 @@ func SaveMe(ctx context.Context, tx *sqlx.Tx, me *model.User) error {
 		return err
 	}
 
-	err = preferences.Set(ctx, tx, ME_KEY, string(meData))
+	err = preferences.Set(ctx, tx, PREFERENCES_KEY_ME, string(meData))
 	return err
 }
 
@@ -58,6 +58,6 @@ func SaveSession(ctx context.Context, tx *sqlx.Tx, session *model.Session) error
 		return err
 	}
 
-	err = preferences.Set(ctx, tx, SESSION_KEY, string(sessionData))
+	err = preferences.Set(ctx, tx, PREFERENCES_KEY_SESSION, string(sessionData))
 	return err
 }
