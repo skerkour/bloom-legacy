@@ -2,7 +2,7 @@ package notification
 
 import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
-	"gitlab.com/bloom42/lily/email"
+	"gitlab.com/bloom42/gobox/email"
 )
 
 // Init initializes the notification service

@@ -6,9 +6,9 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device SessionDevice) (ret *Session, token string, err error) {

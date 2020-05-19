@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // UpdateGroupParams are the parameters for UpdateGroup

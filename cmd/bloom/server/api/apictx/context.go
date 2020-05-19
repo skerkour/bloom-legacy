@@ -2,7 +2,7 @@ package apictx
 
 import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type Context struct {

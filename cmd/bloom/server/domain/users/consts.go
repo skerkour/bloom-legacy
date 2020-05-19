@@ -1,6 +1,6 @@
 package users
 
-import "gitlab.com/bloom42/lily/crypto"
+import "gitlab.com/bloom42/gobox/crypto"
 
 const (
 	USER_VERIFICATION_CODE_ALPHABET = "abcdefghijklmopqrstuvwxyz0123456789"

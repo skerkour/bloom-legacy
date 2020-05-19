@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 type ApiRes struct {

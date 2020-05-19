@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 func failPendingUserVerification(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) error {

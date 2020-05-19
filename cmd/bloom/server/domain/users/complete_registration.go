@@ -4,8 +4,8 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // CompleteRegistrationParams are the parameters for CompleteRegistration

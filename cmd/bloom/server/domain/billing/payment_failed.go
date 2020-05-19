@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/stripe/stripe-go"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 func PaymentFailed(ctx context.Context, stripeInvoice *stripe.Invoice) error {

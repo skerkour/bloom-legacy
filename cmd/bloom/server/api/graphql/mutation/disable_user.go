@@ -6,7 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // DisableUser is used by instance's admins to disable an user

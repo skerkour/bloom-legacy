@@ -16,7 +16,7 @@ import (
 	gqlparser "github.com/vektah/gqlparser/v2"
 	"github.com/vektah/gqlparser/v2/ast"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // region    ************************** generated!.gotpl **************************
@@ -2642,7 +2642,7 @@ func (ec *executionContext) field_Mutation_disableUser_args(ctx context.Context,
 	args := map[string]interface{}{}
 	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2656,7 +2656,7 @@ func (ec *executionContext) field_Mutation_enableUser_args(ctx context.Context, 
 	args := map[string]interface{}{}
 	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2894,7 +2894,7 @@ func (ec *executionContext) field_Query_group_args(ctx context.Context, rawArgs 
 	args := map[string]interface{}{}
 	var arg0 uuid.UUID
 	if tmp, ok := rawArgs["id"]; ok {
-		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, tmp)
+		arg0, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -2998,7 +2998,7 @@ func (ec *executionContext) _BillingPlan_id(ctx context.Context, field graphql.C
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _BillingPlan_price(ctx context.Context, field graphql.CollectedField, obj *model.BillingPlan) (ret graphql.Marshaler) {
@@ -3694,7 +3694,7 @@ func (ec *executionContext) _Group_id(ctx context.Context, field graphql.Collect
 	}
 	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -4143,7 +4143,7 @@ func (ec *executionContext) _GroupInvitation_id(ctx context.Context, field graph
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _GroupInvitation_group(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
@@ -4570,7 +4570,7 @@ func (ec *executionContext) _Invoice_id(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Invoice_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Invoice) (ret graphql.Marshaler) {
@@ -6531,7 +6531,7 @@ func (ec *executionContext) _PasswordUpdateStarted_id(ctx context.Context, field
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PasswordUpdateStarted_twoFA(ctx context.Context, field graphql.CollectedField, obj *model.PasswordUpdateStarted) (ret graphql.Marshaler) {
@@ -6596,7 +6596,7 @@ func (ec *executionContext) _PaymentMethod_id(ctx context.Context, field graphql
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PaymentMethod_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.PaymentMethod) (ret graphql.Marshaler) {
@@ -6899,7 +6899,7 @@ func (ec *executionContext) _PendingSession_id(ctx context.Context, field graphq
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _PendingSession_token(ctx context.Context, field graphql.CollectedField, obj *model.PendingSession) (ret graphql.Marshaler) {
@@ -7444,7 +7444,7 @@ func (ec *executionContext) _RegistrationStarted_id(ctx context.Context, field g
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _RepositoryPull_oldState(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPull) (ret graphql.Marshaler) {
@@ -7611,7 +7611,7 @@ func (ec *executionContext) _RepositoryPull_groupId(ctx context.Context, field g
 	}
 	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _RepositoryPush_oldState(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPush) (ret graphql.Marshaler) {
@@ -7710,7 +7710,7 @@ func (ec *executionContext) _RepositoryPush_groupId(ctx context.Context, field g
 	}
 	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_id(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -7744,7 +7744,7 @@ func (ec *executionContext) _Session_id(ctx context.Context, field graphql.Colle
 	}
 	res := resTmp.(uuid.UUID)
 	fc.Result = res
-	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Session_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.Session) (ret graphql.Marshaler) {
@@ -8208,7 +8208,7 @@ func (ec *executionContext) _User_id(ctx context.Context, field graphql.Collecte
 	}
 	res := resTmp.(*uuid.UUID)
 	fc.Result = res
-	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, field.Selections, res)
+	return ec.marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _User_createdAt(ctx context.Context, field graphql.CollectedField, obj *model.User) (ret graphql.Marshaler) {
@@ -10070,7 +10070,7 @@ func (ec *executionContext) unmarshalInputAcceptGroupInvitationInput(ctx context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10094,7 +10094,7 @@ func (ec *executionContext) unmarshalInputAddPaymentMethodInput(ctx context.Cont
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10112,7 +10112,7 @@ func (ec *executionContext) unmarshalInputBillingPlanInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10166,7 +10166,7 @@ func (ec *executionContext) unmarshalInputCancelGroupInvitationInput(ctx context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10184,7 +10184,7 @@ func (ec *executionContext) unmarshalInputChangeDefaultPaymentMethodInput(ctx co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10202,7 +10202,7 @@ func (ec *executionContext) unmarshalInputCompletePasswordUpdateInput(ctx contex
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10244,7 +10244,7 @@ func (ec *executionContext) unmarshalInputCompleteRegistrationInput(ctx context.
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10310,7 +10310,7 @@ func (ec *executionContext) unmarshalInputCompleteSignInInput(ctx context.Contex
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10388,7 +10388,7 @@ func (ec *executionContext) unmarshalInputDeclineGroupInvitationInput(ctx contex
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10406,7 +10406,7 @@ func (ec *executionContext) unmarshalInputDeleteBillingPlanInput(ctx context.Con
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10424,7 +10424,7 @@ func (ec *executionContext) unmarshalInputDeleteGroupInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10460,7 +10460,7 @@ func (ec *executionContext) unmarshalInputGroupInput(ctx context.Context, obj in
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10490,7 +10490,7 @@ func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10592,7 +10592,7 @@ func (ec *executionContext) unmarshalInputQuitGroupInput(ctx context.Context, ob
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10610,7 +10610,7 @@ func (ec *executionContext) unmarshalInputRemoveGroupMembersInput(ctx context.Co
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10634,7 +10634,7 @@ func (ec *executionContext) unmarshalInputRemovePaymentMethodInput(ctx context.C
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10658,7 +10658,7 @@ func (ec *executionContext) unmarshalInputRepositoryPullInput(ctx context.Contex
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10688,7 +10688,7 @@ func (ec *executionContext) unmarshalInputRepositoryPushInput(ctx context.Contex
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10706,7 +10706,7 @@ func (ec *executionContext) unmarshalInputRevokeSessionInput(ctx context.Context
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10724,7 +10724,7 @@ func (ec *executionContext) unmarshalInputSendNewRegistrationCodeInput(ctx conte
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10820,19 +10820,19 @@ func (ec *executionContext) unmarshalInputUpdateBillingSubscriptionInput(ctx con
 		switch k {
 		case "planId":
 			var err error
-			it.PlanID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.PlanID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "userId":
 			var err error
-			it.UserID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.UserID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
 		case "groupId":
 			var err error
-			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10850,7 +10850,7 @@ func (ec *executionContext) unmarshalInputUserProfileInput(ctx context.Context, 
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10892,7 +10892,7 @@ func (ec *executionContext) unmarshalInputVerifyPasswordUpdateInput(ctx context.
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10922,7 +10922,7 @@ func (ec *executionContext) unmarshalInputverifyUserInput(ctx context.Context, o
 		switch k {
 		case "id":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -12944,11 +12944,11 @@ func (ec *executionContext) unmarshalNGroupInput2gitlabᚗcomᚋbloom42ᚋbloom�
 	return ec.unmarshalInputGroupInput(ctx, v)
 }
 
-func (ec *executionContext) unmarshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
+func (ec *executionContext) unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
 	return model.UnmarshalID(v)
 }
 
-func (ec *executionContext) marshalNID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+func (ec *executionContext) marshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
 	res := model.MarshalID(v)
 	if res == graphql.Null {
 		if !graphql.HasFieldError(ctx, graphql.GetFieldContext(ctx)) {
@@ -14078,27 +14078,27 @@ func (ec *executionContext) marshalOGroupMemberRole2ᚖgitlabᚗcomᚋbloom42ᚋ
 	return v
 }
 
-func (ec *executionContext) unmarshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
+func (ec *executionContext) unmarshalOID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, v interface{}) (uuid.UUID, error) {
 	return model.UnmarshalID(v)
 }
 
-func (ec *executionContext) marshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
+func (ec *executionContext) marshalOID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v uuid.UUID) graphql.Marshaler {
 	return model.MarshalID(v)
 }
 
-func (ec *executionContext) unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, v interface{}) (*uuid.UUID, error) {
+func (ec *executionContext) unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, v interface{}) (*uuid.UUID, error) {
 	if v == nil {
 		return nil, nil
 	}
-	res, err := ec.unmarshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, v)
+	res, err := ec.unmarshalOID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 	return &res, err
 }
 
-func (ec *executionContext) marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v *uuid.UUID) graphql.Marshaler {
+func (ec *executionContext) marshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx context.Context, sel ast.SelectionSet, v *uuid.UUID) graphql.Marshaler {
 	if v == nil {
 		return graphql.Null
 	}
-	return ec.marshalOID2gitlabᚗcomᚋbloom42ᚋlilyᚋuuidᚐUUID(ctx, sel, *v)
+	return ec.marshalOID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOInvoice2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v model.Invoice) graphql.Marshaler {

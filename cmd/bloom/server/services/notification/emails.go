@@ -5,7 +5,7 @@ import (
 	"net/mail"
 	"text/template"
 
-	"gitlab.com/bloom42/lily/email"
+	"gitlab.com/bloom42/gobox/email"
 )
 
 // DefaultTemplateParams are the params for SendHTMLEmailWithDefaultTemplate

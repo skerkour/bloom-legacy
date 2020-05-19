@@ -6,8 +6,8 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 func generateNewRegistrationCode(ctx context.Context, tx *sqlx.Tx, pendingUser *PendingUser) (string, error) {

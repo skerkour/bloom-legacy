@@ -8,9 +8,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // StartRegistrationParams are parameters for StartRegistration

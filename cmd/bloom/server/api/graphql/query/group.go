@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // Group find a group

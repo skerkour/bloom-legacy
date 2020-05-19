@@ -7,7 +7,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // FindObjectByID finds an object by its id. returns no error but nil if object not found

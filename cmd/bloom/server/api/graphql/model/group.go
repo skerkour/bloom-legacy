@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // Group is used to share data with other people

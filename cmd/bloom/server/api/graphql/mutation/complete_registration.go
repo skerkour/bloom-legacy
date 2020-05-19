@@ -10,8 +10,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // CompleteRegistration is used to complete an account's registration

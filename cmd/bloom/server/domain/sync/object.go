@@ -1,7 +1,7 @@
 package sync
 
 import (
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // Object is an object

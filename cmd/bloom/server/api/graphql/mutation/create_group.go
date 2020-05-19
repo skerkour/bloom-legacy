@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // CreateGroup is used to create a group
