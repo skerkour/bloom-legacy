@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/keyring"
-	"gitlab.com/bloom42/lily/rz/log"
+	"gitlab.com/bloom42/gobox/keyring"
+	"gitlab.com/bloom42/gobox/rz/log"
 
 	// import sqlite drivers
 	_ "github.com/mattn/go-sqlite3"

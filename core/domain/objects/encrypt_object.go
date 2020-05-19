@@ -5,7 +5,7 @@ import (
 
 	"github.com/golang/snappy"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/crypto"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 // compress and encrypt encodes to JSON, compress and encrypt with an unique key

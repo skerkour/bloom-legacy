@@ -6,7 +6,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
-	"gitlab.com/bloom42/lily/crypto"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 // SaveMasterKey saves the masterKey in preferences

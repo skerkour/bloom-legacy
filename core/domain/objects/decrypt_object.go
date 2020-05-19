@@ -6,7 +6,7 @@ import (
 
 	"github.com/golang/snappy"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/crypto"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object, err error) {

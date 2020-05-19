@@ -14,7 +14,7 @@ model:
 
 models:
   ID:
-    model: gitlab.com/bloom42/lily/uuid.UUID
+    model: gitlab.com/bloom42/gobox/uuid.UUID
   Time:
     model: time.Time
   Bytes:

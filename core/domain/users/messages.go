@@ -1,6 +1,6 @@
 package users
 
-import "gitlab.com/bloom42/lily/uuid"
+import "gitlab.com/bloom42/gobox/uuid"
 
 type SignInParams struct {
 	Username string `json:"username"`

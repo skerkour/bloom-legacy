@@ -9,6 +9,5 @@ require (
 	github.com/lib/pq v1.5.2 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
 	gitlab.com/bloom42/gobox v0.0.0-20200519150838-fc534b6ec981
-	gitlab.com/bloom42/lily v0.0.0-20200515091102-a0bf06b7e69b
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
 )

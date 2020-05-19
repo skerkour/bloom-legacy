@@ -6,7 +6,7 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type AddPaymentMethodParams struct {

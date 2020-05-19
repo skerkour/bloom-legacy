@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"testing"
 
-	"gitlab.com/bloom42/lily/crypto"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 func TestDerivePasswordKeyFromPassword(t *testing.T) {

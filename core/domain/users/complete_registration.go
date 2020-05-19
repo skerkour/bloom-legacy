@@ -7,8 +7,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
 func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, error) {

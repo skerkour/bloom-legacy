@@ -5,7 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/db"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func SaveGroupState(ctx context.Context, tx *sqlx.Tx, groupID uuid.UUID, newState string) (err error) {

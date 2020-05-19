@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"time"
 
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // Object is an object stored in the local database

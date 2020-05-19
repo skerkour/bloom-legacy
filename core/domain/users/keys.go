@@ -1,7 +1,7 @@
 package users
 
 import (
-	"gitlab.com/bloom42/lily/crypto"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 func derivePasswordKeyFromPassword(password, username []byte) (key []byte, err error) {

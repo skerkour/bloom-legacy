@@ -9,8 +9,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
 func pull() error {

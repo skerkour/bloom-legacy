@@ -5,8 +5,8 @@ import (
 	"fmt"
 
 	"gitlab.com/bloom42/bloom/core/version"
-	"gitlab.com/bloom42/lily/graphql"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/graphql"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type ApiClient struct {
