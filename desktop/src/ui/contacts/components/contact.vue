@@ -120,7 +120,7 @@
                     <v-col cols="5">
                       <v-text-field
                         label="Phone"
-                        v-model="phone.phone"
+                        v-model="phone.value"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
@@ -196,7 +196,7 @@
                     <v-col cols="5">
                       <v-text-field
                         label="Email"
-                        v-model="email.email"
+                        v-model="email.value"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
@@ -265,7 +265,7 @@
             <v-col cols="12">
               <v-list class="pt-0 pb-0">
                 <v-list-item
-                  v-for="(website, index) in contact.data.websites"
+                  v-for="(website, index) in contact.data.online"
                   :key="index"
                   class="contacts-add-row"
                 >
@@ -279,7 +279,7 @@
                     <v-col cols="5">
                       <v-text-field
                         label="Website"
-                        v-model="website.website"
+                        v-model="website.value"
                       ></v-text-field>
                     </v-col>
                     <v-col cols="4">
@@ -318,7 +318,7 @@
                     >
                       <v-tooltip
                         bottom
-                        v-if="index === contact.data.websites.length - 1"
+                        v-if="index === contact.data.online.length - 1"
                       >
                         <template v-slot:activator="{ on }">
                           <v-btn
@@ -483,9 +483,9 @@ import {
 } from '@/core/contacts';
 import core, { BlmObject } from '@/core';
 
-const DEFAULT_EMAIL = { email: '', label: 'Personal' };
-const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
-const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
+const DEFAULT_EMAIL = { value: '', label: 'Personal' };
+const DEFAULT_WEBSITE = { value: '', label: 'Personal' };
+const DEFAULT_PHONE = { value: '', label: 'Mobile' };
 // const DEFAULT_ORGANIZATION = { name: '', title: '' };
 const DEFAULT_ADDRESS = {
   city: '',
@@ -572,8 +572,8 @@ export default class BlmContact extends Vue {
     this.contact.data.emails = this.contact.data.emails.length > 0
       ? this.contact.data.emails
       : [{ ...DEFAULT_EMAIL }];
-    this.contact.data.websites = contact.data.websites.length > 0
-      ? this.contact.data.websites
+    this.contact.data.online = contact.data.online.length > 0
+      ? this.contact.data.online
       : [{ ...DEFAULT_WEBSITE }];
     this.contact.data.phones = contact.data.phones.length > 0
       ? this.contact.data.phones
@@ -627,11 +627,11 @@ export default class BlmContact extends Vue {
   }
 
   addWebsite() {
-    this.contact.data.websites.push({ ...DEFAULT_WEBSITE });
+    this.contact.data.online.push({ ...DEFAULT_WEBSITE });
   }
   removeWebsite(index: number) {
-    this.contact.data.websites.splice(index, 1);
-    if (this.contact.data.websites.length === 0) {
+    this.contact.data.online.splice(index, 1);
+    if (this.contact.data.online.length === 0) {
       this.addWebsite();
     }
   }

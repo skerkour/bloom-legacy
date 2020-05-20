@@ -65,9 +65,9 @@ import {
 import core, { BlmObject, Contacts } from '@/core';
 
 
-const DEFAULT_EMAIL = { email: '', label: 'Personal' };
-const DEFAULT_WEBSITE = { website: '', label: 'Personal' };
-const DEFAULT_PHONE = { phone: '', label: 'Mobile' };
+const DEFAULT_EMAIL = { value: '', label: 'Personal' };
+const DEFAULT_WEBSITE = { value: '', label: 'Personal' };
+const DEFAULT_PHONE = { value: '', label: 'Mobile' };
 // const DEFAULT_ORGANIZATION = { name: '', title: '' };
 const DEFAULT_ADDRESS = {
   city: '',
@@ -166,13 +166,15 @@ export default class BlmContacts extends Vue {
       createdAt: new Date(),
       updatedAt: new Date(),
       data: {
+        prefix: '',
+        suffix: '',
         birthday: null,
         firstName: '',
         lastName: '',
         notes: '',
         emails: [DEFAULT_EMAIL],
         phones: [DEFAULT_PHONE],
-        websites: [DEFAULT_WEBSITE],
+        online: [DEFAULT_WEBSITE],
         organizations: [],
         addresses: [DEFAULT_ADDRESS],
         deviceId: '',

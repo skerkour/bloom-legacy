@@ -24,7 +24,7 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 		Addresses:     params.Addresses,
 		Emails:        params.Emails,
 		Phones:        params.Phones,
-		Websites:      params.Websites,
+		Online:        params.Online,
 		IsFavorite:    false,
 	}
 

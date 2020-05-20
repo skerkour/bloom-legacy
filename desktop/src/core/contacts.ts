@@ -8,31 +8,23 @@ export enum Method {
 }
 
 export type Contact = {
+  prefix: string,
+  suffix: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,
   notes: string,
-  emails: Email[],
-  phones: Phone[],
-  websites: Website[],
+  emails: ContactInformation[],
+  phones: ContactInformation[],
+  online: ContactInformation[],
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
   bloomUsername: string,
 }
 
-export type Email = {
-  email: string,
-  label: string,
-}
-
-export type Phone = {
-  phone: string,
-  label: string,
-}
-
-export type Website = {
-  website: string,
+export type ContactInformation = {
+  value: string,
   label: string,
 }
 
@@ -51,13 +43,15 @@ export type Address = {
 }
 
 export type CreateContactParams = {
+  prefix: string,
+  suffix: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,
   notes: string,
-  emails: Email[],
-  phones: Phone[],
-  websites: Website[],
+  emails: ContactInformation[],
+  phones: ContactInformation[],
+  online: ContactInformation[],
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
