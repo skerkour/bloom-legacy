@@ -10,6 +10,7 @@ export enum Method {
 export type Contact = {
   prefix: string,
   suffix: string,
+  nickname: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,
@@ -45,6 +46,7 @@ export type Address = {
 export type CreateContactParams = {
   prefix: string,
   suffix: string,
+  nickname: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,

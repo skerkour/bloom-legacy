@@ -10,7 +10,9 @@ export enum Method {
 
 export type Event = {
   title: string,
+  location: string,
   description: string,
+  status: string,
   startAt: Date,
   endAt: Date,
 }
@@ -18,15 +20,4 @@ export type Event = {
 export type ListEvents = {
   startAt: Date | undefined,
   endAt: Date | undefined,
-}
-
-export type CreateEvent = {
-  title: string,
-  description: string,
-  startAt: Date,
-  endAt: Date,
-}
-
-export type DeleteEvent = {
-  id: string,
 }

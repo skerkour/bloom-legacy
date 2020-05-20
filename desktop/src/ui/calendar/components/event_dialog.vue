@@ -188,10 +188,8 @@ import {
 } from 'vue-property-decorator';
 import moment from 'moment';
 import core, { BlmObject } from '@/core';
-import {
-  DeleteEvent, CreateEvent, Event as EventModel, Method,
-} from '@/core/calendar';
-
+import { Event as EventModel, Method } from '@/core/calendar';
+import { CalendarCreateEventParams, CalendarDeleteEventParams } from '@/core/messages';
 
 @Component
 export default class EventDialog extends Vue {
@@ -317,7 +315,8 @@ export default class EventDialog extends Vue {
     this.loading = true;
     const startAt = this.timeToDate(this.startAt, this.startAtTime);
     const endAt = this.timeToDate(this.endAt, this.endAtTime);
-    const params: CreateEvent = {
+    const params: CalendarCreateEventParams = {
+      location: '',
       title: this.title,
       description: this.description,
       startAt,
@@ -357,7 +356,7 @@ export default class EventDialog extends Vue {
   async deleteEvent() {
     this.error = '';
     this.loading = true;
-    const params: DeleteEvent = {
+    const params: CalendarDeleteEventParams = {
       id: this.event!.id,
     };
     try {
