@@ -15,6 +15,7 @@ type Event struct {
 	Title       string    `json:"title"`
 	Location    string    `json:"location"`
 	Description string    `json:"description"`
+	Status      string    `json:"status"` // confirmed, tentative, cancelled
 	StartAt     time.Time `json:"startAt"`
 	EndAt       time.Time `json:"endAt"`
 }
