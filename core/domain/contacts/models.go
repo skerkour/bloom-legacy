@@ -16,6 +16,7 @@ type Contact struct {
 	DeviceID      string              `json:"deviceId"`
 	Prefix        string              `json:"prefix"`
 	Suffix        string              `json:"suffix"`
+	Nickname      string              `json:"nickname"`
 	FirstName     string              `json:"firstName"`
 	LastName      string              `json:"lastName"`
 	BloomUsername string              `json:"bloomUsername"`

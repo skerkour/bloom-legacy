@@ -84,6 +84,7 @@ type CalendarListEventsParams {
 
 type CalendarCreateEventParams {
   title: String!
+  location: String!
   description: String!
   startAt: Time!
   endAt: Time!

@@ -13,6 +13,7 @@ type Events struct {
 
 type Event struct {
 	Title       string    `json:"title"`
+	Location    string    `json:"location"`
 	Description string    `json:"description"`
 	StartAt     time.Time `json:"startAt"`
 	EndAt       time.Time `json:"endAt"`

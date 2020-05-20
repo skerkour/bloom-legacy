@@ -25,6 +25,7 @@ type CalcResult struct {
 
 type CalendarCreateEventParams struct {
 	Title       string    `json:"title"`
+	Location    string    `json:"location"`
 	Description string    `json:"description"`
 	StartAt     time.Time `json:"startAt"`
 	EndAt       time.Time `json:"endAt"`
