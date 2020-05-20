@@ -21,6 +21,7 @@ type Contact struct {
 	LastName      string              `json:"lastName"`
 	BloomUsername string              `json:"bloomUsername"`
 	Notes         string              `json:"notes"`
+	PublicKey     []byte              `json:"publicKey"`
 	Birthday      *time.Time          `json:"birthday"`
 	Organizations Organizations       `json:"organizations"`
 	Addresses     Addresses           `json:"addresses"`
