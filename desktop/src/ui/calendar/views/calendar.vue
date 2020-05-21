@@ -40,7 +40,7 @@
 
 
     <v-col cols="8" lg="9" class="pa-0">
-      <v-toolbar elevation="0" class="justify-between">
+      <v-toolbar elevation="0">
         <v-btn text icon color="primary" @click="$refs.calendar.prev()">
           <v-icon dark>mdi-chevron-left</v-icon>
         </v-btn>
@@ -50,7 +50,7 @@
 
         <!-- <v-spacer /> -->
 
-        <p class="ma-0 blm-pointer" @click="centerToday">
+        <p class="ma-0 blm-pointer ml-3" @click="centerToday">
           {{ today }}
         </p>
 
