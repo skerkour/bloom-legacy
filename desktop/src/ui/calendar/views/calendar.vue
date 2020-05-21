@@ -2,9 +2,6 @@
   <v-container fill-height fluid class="pa-0">
     <v-col cols="4" lg="3" class="pa-0 blm-left-col">
       <v-toolbar elevation="0" class="justify-space-between">
-        <p class="ma-0 blm-pointer" @click="centerToday">
-          {{ today }}
-        </p>
         <v-spacer />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -51,15 +48,19 @@
           <v-icon dark>mdi-chevron-right</v-icon>
         </v-btn>
 
-        <v-spacer />
+        <!-- <v-spacer /> -->
 
-          <v-select
+        <p class="ma-0 blm-pointer" @click="centerToday">
+          {{ today }}
+        </p>
+
+          <!-- <v-select
             solo
             flat
             v-model="calendarType"
             :items="calendarTypeOptions"
             hide-details
-          />
+          /> -->
 
       </v-toolbar>
         <div class="fill-height" style="height: calc(100vh - 65px)">
