@@ -26,7 +26,7 @@
     "moment": "^2.26.0",
     "mousetrap": "^1.6.5",
     "rxjs": "^6.5.5",
-    "uuid": "^8.0.0",
+    "uuid": "^8.1.0",
     "vue": "^2.6.11",
     "vue-class-component": "^7.2.3",
     "vue-property-decorator": "^8.4.2",
