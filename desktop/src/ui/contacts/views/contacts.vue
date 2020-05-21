@@ -166,6 +166,7 @@ export default class BlmContacts extends Vue {
       createdAt: new Date(),
       updatedAt: new Date(),
       data: {
+        nickname: '',
         prefix: '',
         suffix: '',
         birthday: null,
