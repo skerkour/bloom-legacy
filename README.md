@@ -63,8 +63,9 @@ See https://gitlab.com/bloom42/bloom/-/wikis/development
 Please use [issues](https://gitlab.com/bloom42/bloom/-/issues) if you have some suggestions or want to report bugs.
 
 * [Twitter: @42bloom](https://twitter.com/@42bloom)
-* [Mastdon @42bloom@mastodon.social](https://mastodon.social/@42bloom) to never miss an update.
+* [Mastdon: @42bloom@mastodon.social](https://mastodon.social/@42bloom) to never miss an update.
 * [Blog / Newsletter: https://fatalentropy.com](https://fatalentropy.com)
+
 
 ## Contributing
 
