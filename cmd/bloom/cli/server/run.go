@@ -32,7 +32,7 @@ var runCmd = &cobra.Command{
 		// init internal services
 		log.SetLogger(log.With(
 			rz.Fields(
-				rz.String("service", "bloom_api"), rz.String("host", "abcd.local"), rz.String("env", config.Env),
+				rz.String("service", "bloom_api"), rz.String("env", config.Env),
 			),
 		))
 
