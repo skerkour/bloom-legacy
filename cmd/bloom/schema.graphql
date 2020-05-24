@@ -319,7 +319,7 @@ input StartRegistrationInput {
   email: String!
 }
 
-input verifyUserInput {
+input VerifyUserInput {
   """pending user id"""
   id: ID!
   code: String!
@@ -523,7 +523,7 @@ type Mutation {
   # users
   startRegistration(input: StartRegistrationInput!): RegistrationStarted!
   """Verify pending account"""
-  verifyUser(input: verifyUserInput!): Boolean!
+  verifyUser(input: VerifyUserInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
   """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
