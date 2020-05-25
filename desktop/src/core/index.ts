@@ -40,7 +40,7 @@ async function call(method: string, params: any): Promise<any> {
     method,
     params,
   };
-  log.with({ data: message }).debug('code.call.req');
+  log.with({ data: message }).debug('core.call.req');
 
   const data: any = await ipcRenderer.invoke('core:call', message);
   log.with({ data }).debug('core.call.res');
