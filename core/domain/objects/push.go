@@ -11,6 +11,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 func push() error {
@@ -117,6 +119,7 @@ func push() error {
 
 	err = client.Do(ctx, req, &resp)
 	if err != nil {
+		log.Error("error pushing objects", rz.Err(err))
 		tx.Rollback()
 		return err
 	}
