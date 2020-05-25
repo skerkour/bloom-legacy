@@ -195,8 +195,8 @@ ipcMain.handle('core:call', async (event: any, message: any) => {
   const res = await axios({
     url: CALL_URL,
     method: 'post',
-    data: message,
+    data: JSON.stringify(message),
     socketPath: UNIX_SOCKET_PATH,
   });
-  return res;
+  return res.data;
 });

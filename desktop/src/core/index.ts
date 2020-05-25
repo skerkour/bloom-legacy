@@ -36,16 +36,16 @@ export type Events = {
 
 
 async function call(method: string, params: any): Promise<any> {
-  const message = JSON.stringify({
+  const message = {
     method,
     params,
-  });
-  log.with({ msg: message }).debug('jsonMessage');
+  };
+  log.with({ data: message }).debug('code.call.req');
 
-  const res: any = await ipcRenderer.invoke('core:call', message);
-  log.with({ res: res.data }).debug('resMessage');
+  const data: any = await ipcRenderer.invoke('core:call', message);
+  log.with({ data }).debug('core.call.res');
 
-  const { data } = res;
+  // const { data } = res;
   if (data.error !== null) {
     throw data.error;
   }
