@@ -55,6 +55,7 @@ func encryptObject(object Object, masterKey []byte, compressionAlgo compressionA
 	crypto.Zeroize(objectKey)
 
 	ret = &model.ObjectInput{
+		ID:            object.ID,
 		Algorithm:     DEFAULT_ALGORITHM_STRING,
 		EncryptedData: encryptedObject,
 		EncryptedKey:  encryptedKey,
