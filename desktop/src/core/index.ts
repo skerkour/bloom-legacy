@@ -45,7 +45,6 @@ async function call(method: string, params: any): Promise<any> {
   const data: any = await ipcRenderer.invoke('core:call', message);
   log.with({ data }).debug('core.call.res');
 
-  // const { data } = res;
   if (data.error !== null) {
     throw data.error;
   }
