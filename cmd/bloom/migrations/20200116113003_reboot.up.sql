@@ -223,7 +223,7 @@ CREATE INDEX index_billing_invoices_on_customer_id ON billing_invoices (customer
 -- Objects
 -- ################################################################################################@
 CREATE TABLE objects (
-    id UUID NOT NULL,
+    id BYTEA NOT NULL,
 
     updated_at_state BIGINT NOT NULL,
     algorithm TEXT,

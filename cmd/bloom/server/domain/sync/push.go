@@ -2,6 +2,7 @@ package sync
 
 import (
 	"context"
+	"encoding/base64"
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
@@ -84,6 +85,7 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 	newState := repo.curentStateInt + 1
 	var customer *billing.Customer
 	var pushSize int64
+	logger := rz.FromCtx(ctx)
 
 	if repo.GroupID != nil {
 		var group *groups.Group
@@ -138,13 +140,17 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 
 				pushSize += int64(len(object.EncryptedData))
 
-				queryInsert := `INSERT INTO obejcts
+				queryInsert := `INSERT INTO objects
 					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, group_id)
 					VALUES ($1, $2, $3, $4, $5, $6, $7)
 				`
 				_, err = tx.Exec(queryInsert, object.ID, object.UpdatedAtState, object.Algorithm,
 					object.Nonce, object.EncryptedKey, object.EncryptedData, object.GroupID)
 				if err != nil {
+					logger.Error("sync.push: inserting object",
+						rz.String("object.id", base64.StdEncoding.EncodeToString(object.ID)),
+						rz.String("object.group_id", object.GroupID.String()),
+					)
 					return
 				}
 			} else {
@@ -165,13 +171,17 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 
 				pushSize += int64(len(object.EncryptedData))
 
-				queryUpdate := `UPDATE obejcts
+				queryUpdate := `UPDATE objects
 					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
 					WHERE id = $6
 				`
 				_, err = tx.Exec(queryUpdate, object.Algorithm, object.Nonce, object.EncryptedKey,
 					object.EncryptedData, object.UpdatedAtState, object.ID)
 				if err != nil {
+					logger.Error("sync.push: inserting object",
+						rz.String("object.id", base64.StdEncoding.EncodeToString(object.ID)),
+						rz.String("object.group_id", object.GroupID.String()),
+					)
 					return
 				}
 			}
@@ -228,13 +238,17 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 
 				pushSize += int64(len(object.EncryptedData))
 
-				queryInsert := `INSERT INTO obejcts
+				queryInsert := `INSERT INTO objects
 					(id, updated_at_state, algorithm, nonce, encrypted_key, encrypted_data, user_id)
 					VALUES ($1, $2, $3, $4, $5, $6, $7)
 				`
 				_, err = tx.Exec(queryInsert, object.ID, object.UpdatedAtState, object.Algorithm,
 					object.Nonce, object.EncryptedKey, object.EncryptedData, object.UserID)
 				if err != nil {
+					logger.Error("sync.push: inserting object",
+						rz.String("object.id", base64.StdEncoding.EncodeToString(object.ID)),
+						rz.String("object.user_id", object.UserID.String()),
+					)
 					return
 				}
 			} else {
@@ -255,13 +269,17 @@ func pushToRepository(ctx context.Context, tx *sqlx.Tx, actor *users.User, repo 
 
 				pushSize += int64(len(object.EncryptedData))
 
-				queryUpdate := `UPDATE obejcts
+				queryUpdate := `UPDATE objects
 					SET algorithm = $1, nonce = $2, encrypted_key = $3, encrypted_data = $4, updated_at_state = $5
 					WHERE id = $6
 				`
 				_, err = tx.Exec(queryUpdate, object.Algorithm, object.Nonce, object.EncryptedKey,
 					object.EncryptedData, object.UpdatedAtState, object.ID)
 				if err != nil {
+					logger.Error("sync.push: inserting object",
+						rz.String("object.id", base64.StdEncoding.EncodeToString(object.ID)),
+						rz.String("object.user_id", object.UserID.String()),
+					)
 					return
 				}
 			}
