@@ -15,13 +15,19 @@ func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 	ret := Events{Events: []objects.Object{}}
 	now := time.Now().UTC()
 	startOfMonth := time.Date(now.Year(), now.Month(), 1, 0, 0, 0, 0, time.Local)
+	var startAt time.Time
+	var endAt time.Time
 
 	if params.StartAt == nil {
-		params.StartAt = &startOfMonth
+		startAt = startOfMonth
+	} else {
+		startAt = *params.StartAt
 	}
 	if params.EndAt == nil {
-		endOfMonth := startOfMonth.AddDate(0, 1, 0).Add(time.Nanosecond * -1)
-		params.EndAt = &endOfMonth
+		// end of current month
+		endAt = startOfMonth.AddDate(0, 1, 0).Add(time.Nanosecond * -1)
+	} else {
+		endAt = *params.EndAt
 	}
 
 	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT)
@@ -36,8 +42,8 @@ func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 		if err != nil {
 			return ret, err
 		}
-		if event.StartAt.After(*params.StartAt) && event.StartAt.Before(*params.EndAt) ||
-			event.EndAt.After(*params.StartAt) && event.EndAt.Before(*params.EndAt) {
+		if event.StartAt.After(startAt) && event.StartAt.Before(endAt) ||
+			event.EndAt.After(startAt) && event.EndAt.Before(endAt) {
 			ret.Events = append(ret.Events, obj)
 		}
 	}
