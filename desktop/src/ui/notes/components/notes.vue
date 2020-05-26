@@ -90,6 +90,8 @@ export default class BlmNotes extends Vue {
   selectedNote: BlmObject<Note> | null = null;
   selectedNoteIndex: number | undefined = 0;
   saveInterval: any | null = null;
+  lastSavedTitle = '';
+  lastSavedBody = '';
 
   // computed
   // lifecycle
@@ -203,6 +205,8 @@ export default class BlmNotes extends Vue {
       this.selectedNote = note;
       this.notes = [note, ...this.notes];
       this.selectedNoteIndex = 0;
+      this.lastSavedTitle = this.selectedNote.data.title;
+      this.lastSavedBody = this.selectedNote.data.body;
     }
   }
 
@@ -249,6 +253,11 @@ export default class BlmNotes extends Vue {
   }
 
   async updateNote() {
+    if (this.lastSavedTitle === this.selectedNote!.data.title
+      && this.lastSavedBody === this.selectedNote!.data.body) {
+      return;
+    }
+
     this.error = '';
     this.isLoading = true;
     const note = { ...this.selectedNote } as BlmObject<Note>;
@@ -256,6 +265,9 @@ export default class BlmNotes extends Vue {
       const res = await core.call(Method.UpdateNote, note);
       this.notes[0] = res;
       this.selectedNote = res;
+
+      this.lastSavedBody = this.selectedNote!.data.body;
+      this.lastSavedTitle = this.selectedNote!.data.title;
       // this.selectedNote = res;
       // this.$emit('updated', (res as Note));
     } catch (err) {
