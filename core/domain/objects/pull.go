@@ -15,11 +15,12 @@ import (
 	"gitlab.com/bloom42/gobox/rz/log"
 )
 
-func pull() error {
+func pull(init bool) error {
 	var err error
 	client := api.Client()
 	ctx := context.Background()
 	var masterKey []byte
+	sinceState := "" // on initial sync, we request an empty state
 
 	// prepare api request
 	input := model.PullInput{
@@ -38,8 +39,11 @@ func pull() error {
 		}
 		input.Repositories = append(input.Repositories, repo)
 	}
+	if init != true {
+		sinceState = *kernel.Me.State
+	}
 	myRepo := &model.RepositoryPullInput{
-		SinceState: *kernel.Me.State,
+		SinceState: sinceState,
 		GroupID:    nil,
 	}
 	input.Repositories = append(input.Repositories, myRepo)
@@ -95,14 +99,7 @@ func pull() error {
 				tx.Rollback()
 				return err
 			}
-			if len(decryptedObject.Data) < 3 {
-				// remove local object
-				err = DeleteObject(ctx, tx, object.ID)
-				if err != nil {
-					tx.Rollback()
-					return err
-				}
-			}
+
 			// check if object exist and is out of sync
 			ofsStoredObject, err := FindOutOfSyncObjectByID(ctx, tx, decryptedObject.ID)
 			if ofsStoredObject != nil {
@@ -114,17 +111,42 @@ func pull() error {
 					tx.Rollback()
 					return err
 				}
+				// empty object
+				if len(decryptedObject.Data) < 3 {
+					// remove local object
+					err = DeleteObject(ctx, tx, decryptedObject.ID)
+					if err != nil {
+						tx.Rollback()
+						return err
+					}
+				} else {
+					err = SaveObject(ctx, tx, decryptedObject)
+					if err != nil {
+						tx.Rollback()
+						return err
+					}
+				}
+				// in all situations, save deduped (local OFS) object
 				err = SaveObject(ctx, tx, dedupedObject)
 				if err != nil {
 					tx.Rollback()
 					return err
 				}
+
 			} else {
-				// save object
-				err = SaveObject(ctx, tx, decryptedObject)
-				if err != nil {
-					tx.Rollback()
-					return err
+				if len(decryptedObject.Data) < 3 {
+					// remove local object
+					err = DeleteObject(ctx, tx, object.ID)
+					if err != nil {
+						tx.Rollback()
+						return err
+					}
+				} else {
+					err = SaveObject(ctx, tx, decryptedObject)
+					if err != nil {
+						tx.Rollback()
+						return err
+					}
 				}
 			}
 

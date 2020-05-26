@@ -66,7 +66,7 @@ func handleCoreMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "sync":
-		err := objects.Sync()
+		err := objects.Sync(true)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

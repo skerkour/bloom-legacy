@@ -11,13 +11,13 @@ import (
 
 // Sync sync the local data with the pod (pull + conflict resolution + push)
 // it should only be manually called after signing in to sync data
-func Sync() (err error) {
+func Sync(init bool) (err error) {
 	syncyingMutext.Lock()
 	defer syncyingMutext.Unlock()
 
 	// sync only if user is authenticated
 	if kernel.Me != nil {
-		err = pull()
+		err = pull(init)
 		if err != nil {
 			log.Debug("Error pulling data", rz.Err(err))
 			return
@@ -41,9 +41,9 @@ func backgroundSync(ctx context.Context) {
 			ticker.Stop()
 			break
 		case <-ticker.C:
-			Sync()
+			Sync(false)
 		case <-SyncChan:
-			Sync()
+			Sync(false)
 		}
 	}
 }

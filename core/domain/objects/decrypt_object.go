@@ -68,7 +68,7 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object
 	ret = &Object{}
 	err = json.Unmarshal(objectData, ret)
 	if err != nil {
-		err = errors.New("Error parsing object")
+		err = errors.New("Error parsing object JSON")
 		return
 	}
 
