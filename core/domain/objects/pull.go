@@ -142,6 +142,7 @@ func pull() error {
 			err = users.SaveMe(ctx, tx, kernel.Me)
 		}
 		if err != nil {
+			log.Debug("Error saving state")
 			tx.Rollback()
 			return err
 		}

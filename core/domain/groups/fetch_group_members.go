@@ -33,16 +33,14 @@ func FetchGroupMembers(params messages.FetchGroupMembersParams) (*model.Group, e
 				totalCount
 			}
 			invitations {
-				edges {
-					node {
-						inviter {
-							username
-							displayName
-						}
-						invitee {
-							username
-							displayName
-						}
+				nodes {
+					inviter {
+						username
+						displayName
+					}
+					invitee {
+						username
+						displayName
 					}
 				}
 				totalCount

@@ -45,18 +45,16 @@ func FetchUsers() (*model.UserConnection, error) {
 	req := graphql.NewRequest(`
 	query {
 		users {
-			edges {
-				node {
-					id
-					createdAt
-					avatarUrl
-					displayName
-					bio
-					email
-					firstName
-					lastName
-					username
-				}
+			nodes {
+				id
+				createdAt
+				avatarUrl
+				displayName
+				bio
+				email
+				firstName
+				lastName
+				username
 			}
 			totalCount
 		}
@@ -100,41 +98,35 @@ func FetchUserDetails(params FetchUserParams) (*model.User, error) {
 				}
 			}
 			paymentMethods {
-				edges {
-					node {
-						id
-						createdAt
-						cardLast4
-						cardExpirationMonth
-						cardExpirationYear
-						isDefault
-					}
+				nodes {
+					id
+					createdAt
+					cardLast4
+					cardExpirationMonth
+					cardExpirationYear
+					isDefault
 				}
 			}
 			invoices {
-				edges {
-					node {
-						id
-						createdAt
-						amount
-						stripeId
-						stripeHostedUrl
-						stripePdfUrl
-						paidAt
-					}
+				nodes {
+					id
+					createdAt
+					amount
+					stripeId
+					stripeHostedUrl
+					stripePdfUrl
+					paidAt
 				}
 			}
 			groups {
-				edges {
-					node {
-						id
-						createdAt
-						avatarUrl
-						name
-						description
-						members {
-							totalCount
-						}
+				nodes {
+					id
+					createdAt
+					avatarUrl
+					name
+					description
+					members {
+						totalCount
 					}
 				}
 			}

@@ -18,14 +18,12 @@ func FetchMySessions() (model.User, error) {
 	query {
 		me {
 			sessions {
-				edges {
-					node {
-						id
-						createdAt
-						device {
-							os
-							type
-						}
+				nodes {
+					id
+					createdAt
+					device {
+						os
+						type
 					}
 				}
 			}

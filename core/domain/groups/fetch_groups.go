@@ -17,19 +17,17 @@ func FetchGroups() (*model.GroupConnection, error) {
 	req := graphql.NewRequest(`
 	query {
 		groups {
-			edges {
-				node {
-					id
-					createdAt
-					avatarUrl
-					name
-					description
-					members {
-						totalCount
-					}
-					invitations {
-						totalCount
-					}
+			nodes {
+				id
+				createdAt
+				avatarUrl
+				name
+				description
+				members {
+					totalCount
+				}
+				invitations {
+					totalCount
 				}
 			}
 			totalCount

@@ -18,16 +18,14 @@ func InviteUsers(input model.InviteUsersInGroupInput) (*model.Group, error) {
 	mutation($input: InviteUsersInGroupInput!) {
 		inviteUsersInGroup(input: $input) {
 			invitations {
-				edges {
-					node {
-						inviter {
-							username
-							displayName
-						}
-						invitee {
-							username
-							displayName
-						}
+				nodes {
+					inviter {
+						username
+						displayName
+					}
+					invitee {
+						username
+						displayName
 					}
 				}
 				totalCount

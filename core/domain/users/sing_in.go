@@ -129,11 +129,11 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			ret = *resp.SignIn
 			ret.Session.Token = nil
 
+			me.EncryptedMasterKey = nil
+			me.EncryptedPrivateKey = nil
+			me.MasterKeyNonce = nil
+			me.PrivateKeyNonce = nil
 			kernel.Me = me
-			kernel.Me.EncryptedMasterKey = nil
-			kernel.Me.EncryptedPrivateKey = nil
-			kernel.Me.MasterKeyNonce = nil
-			kernel.Me.PrivateKeyNonce = nil
 		}
 	}
 	return ret, err

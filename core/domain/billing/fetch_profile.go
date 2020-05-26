@@ -28,41 +28,35 @@ func FetchMyProfile() (messages.MyBillingProfile, error) {
 				}
 			}
 			paymentMethods {
-				edges {
-					node {
-						id
-						createdAt
-						cardLast4
-						cardExpirationMonth
-						cardExpirationYear
-						isDefault
-					}
+				nodes {
+					id
+					createdAt
+					cardLast4
+					cardExpirationMonth
+					cardExpirationYear
+					isDefault
 				}
 			}
 			invoices {
-				edges {
-					node {
-						id
-						createdAt
-						amount
-						stripeId
-						stripeHostedUrl
-						stripePdfUrl
-						paidAt
-					}
+				nodes {
+					id
+					createdAt
+					amount
+					stripeId
+					stripeHostedUrl
+					stripePdfUrl
+					paidAt
 				}
 			}
 		}
 		billingPlans {
-			edges {
-				node {
-					id
-					product
-					price
-					name
-					description
-					storage
-				}
+			nodes {
+				id
+				product
+				price
+				name
+				description
+				storage
 			}
 		}
 		stripePublicKey

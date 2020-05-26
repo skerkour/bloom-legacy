@@ -48,28 +48,24 @@ func FetchGroupDetails(params messages.FetchGroupDetailsParams) (*model.Group, e
 				}
 			}
 			paymentMethods {
-				edges {
-					node {
-						id
-						createdAt
-						cardLast4
-						cardExpirationMonth
-						cardExpirationYear
-						isDefault
-					}
+				nodes {
+					id
+					createdAt
+					cardLast4
+					cardExpirationMonth
+					cardExpirationYear
+					isDefault
 				}
 			}
 			invoices {
-				edges {
-					node {
-						id
-						createdAt
-						amount
-						stripeId
-						stripeHostedUrl
-						stripePdfUrl
-						paidAt
-					}
+				nodes {
+					id
+					createdAt
+					amount
+					stripeId
+					stripeHostedUrl
+					stripePdfUrl
+					paidAt
 				}
 			}
 		}
