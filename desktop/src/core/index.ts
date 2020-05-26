@@ -59,8 +59,8 @@ function toDateIsoString(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-async function init(preferences: string[]): Promise<InitRes> {
-  return call('core.init', { preferences });
+async function init(env: string, preferences: string[]): Promise<InitRes> {
+  return call('core.init', { env, preferences });
 }
 
 export default {

@@ -42,7 +42,7 @@ async function main() {
 
   while (true) { // eslint-disable-line
     try {
-      res = await core.init(['theme']); // eslint-disable-line
+      res = await core.init(process.env.NODE_ENV!, ['theme']); // eslint-disable-line
       break;
     } catch (err) {
       await sleep(100); // eslint-disable-line
