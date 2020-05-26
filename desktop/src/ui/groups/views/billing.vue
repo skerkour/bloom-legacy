@@ -180,7 +180,7 @@ export default class Billing extends Vue {
     try {
       const res = await core.call(Method.FetchGroupProfile, params);
       this.group = res.group;
-      this.plans = res.billingPlans.nodes!;
+      this.plans = res.billingPlans.nodes;
       this.stripePublicKey = res.stripePublicKey;
     } catch (err) {
       this.error = err.message;
@@ -219,7 +219,7 @@ export default class Billing extends Vue {
     try {
       const res: Maybe<PaymentMethod> = await core
         .call(Method.AddPaymentMethod, params);
-      this.group!.paymentMethods!.nodes!.push(res!);
+      this.group!.paymentMethods!.nodes.push(res!);
       if (this.planAfterAddingPaymentMethod) {
         await this.updateSubscription(this.planAfterAddingPaymentMethod);
       }
@@ -239,7 +239,7 @@ export default class Billing extends Vue {
 
     try {
       await core.call(Method.RemovePaymentMethod, input);
-      this.group!.paymentMethods!.nodes = this.group!.paymentMethods!.nodes!
+      this.group!.paymentMethods!.nodes = this.group!.paymentMethods!.nodes
         .filter((node: Maybe<PaymentMethod>) => node!.id !== paymentMenthod.id); // eslint-disable-line
     } catch (err) {
       this.paymentMethodError = err.message;
@@ -277,16 +277,16 @@ export default class Billing extends Vue {
     try {
       await core.call(Method.ChangeDefaultPaymentMethod, input);
       const paymentMehtods = this.group!.paymentMethods!
-        .nodes!.map((paymentMethod: Maybe<PaymentMethod>, index: number) => {
+        .nodes.map((paymentMethod: Maybe<PaymentMethod>, index: number) => {
           if (paymentMethod!.isDefault) {
             const newPaymentMethod = paymentMethod;
             newPaymentMethod!.isDefault = false;
-            this.$set(this.group!.paymentMethods!.nodes!, index, newPaymentMethod);
+            this.$set(this.group!.paymentMethods!.nodes, index, newPaymentMethod);
           }
           if (paymentMethod!.id === newDefaultPaymentMethod.id) {
             const newPaymentMethod = paymentMethod;
             newPaymentMethod!.isDefault = true;
-            this.$set(this.group!.paymentMethods!.nodes!, index, newPaymentMethod);
+            this.$set(this.group!.paymentMethods!.nodes, index, newPaymentMethod);
           }
           return paymentMethod!;
         });

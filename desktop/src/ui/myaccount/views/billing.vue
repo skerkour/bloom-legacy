@@ -172,7 +172,7 @@ export default class Billing extends Vue {
       const res = await core.call(Method.FetchMyProfile, core.Empty);
       this.me = res.me;
       this.plans = res.billingPlans
-        .nodes!.map((node: models.Maybe<models.BillingPlan>) => node!);
+        .nodes.map((node: models.Maybe<models.BillingPlan>) => node!);
       this.stripePublicKey = res.stripePublicKey;
     } catch (err) {
       this.error = err.message;
@@ -210,7 +210,7 @@ export default class Billing extends Vue {
     try {
       const res: models.PaymentMethod = await core
         .call(Method.AddPaymentMethod, params);
-      this.me!.paymentMethods!.nodes!.push(res);
+      this.me!.paymentMethods!.nodes.push(res);
       if (this.planAfterAddingPaymentMethod) {
         await this.updateSubscription(this.planAfterAddingPaymentMethod);
       }
@@ -230,7 +230,7 @@ export default class Billing extends Vue {
 
     try {
       await core.call(Method.RemovePaymentMethod, input);
-      this.me!.paymentMethods!.nodes = this.me!.paymentMethods!.nodes!
+      this.me!.paymentMethods!.nodes = this.me!.paymentMethods!.nodes
         .filter((node: models.Maybe<models.PaymentMethod>) => node!.id !== paymentMenthod.id); // eslint-disable-line
     } catch (err) {
       this.paymentMethodError = err.message;
@@ -271,12 +271,12 @@ export default class Billing extends Vue {
           if (paymentMethod!.isDefault) {
             const newPaymentMethod = paymentMethod;
             newPaymentMethod!.isDefault = false;
-            this.$set(this.me!.paymentMethods!.nodes!, index, newPaymentMethod);
+            this.$set(this.me!.paymentMethods!.nodes, index, newPaymentMethod);
           }
           if (paymentMethod!.id === newDefaultPaymentMethod.id) {
             const newPaymentMethod = paymentMethod;
             newPaymentMethod!.isDefault = true;
-            this.$set(this.me!.paymentMethods!.nodes!, index, newPaymentMethod);
+            this.$set(this.me!.paymentMethods!.nodes, index, newPaymentMethod);
           }
           return paymentMethod!;
         });

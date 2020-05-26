@@ -36,7 +36,7 @@ export default class Devices extends Vue {
   // computed
   get devices(): models.Session[] {
     if (this.me) {
-      return this.me.sessions!.nodes!.map((session: models.Maybe<models.Session>) => session!);
+      return this.me.sessions!.nodes;
     }
     return [];
   }
@@ -62,7 +62,7 @@ export default class Devices extends Vue {
   }
 
   onSessionRevoked(session: models.Session) {
-    this.me!.sessions!.nodes = this.me!.sessions!.nodes!
+    this.me!.sessions!.nodes = this.me!.sessions!.nodes
       .filter((node: models.Maybe<models.Session>) => node!.id !== session.id);
   }
 }
