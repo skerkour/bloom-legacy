@@ -79,8 +79,6 @@ func pull(init bool) error {
 		return err
 	}
 
-	log.Debug("Received from pull", rz.Any("resp", resp))
-
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		return err
