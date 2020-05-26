@@ -11,6 +11,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 func pull() error {
@@ -91,10 +93,11 @@ func pull() error {
 		for _, object := range repo.Objects {
 			decryptedObject, err := decryptObject(object, masterKey)
 			if err != nil {
+				log.Debug("Error decrypting object", rz.Err(err))
 				tx.Rollback()
 				return err
 			}
-			if decryptedObject == nil {
+			if len(decryptedObject.Data) < 3 {
 				// remove local object
 				err = DeleteObject(ctx, tx, object.ID)
 				if err != nil {
@@ -109,6 +112,7 @@ func pull() error {
 				// create a new object from the local out of sync object (with a new id)
 				dedupedObject, err := dedupObject(ofsStoredObject, []byte(kernel.Me.Username))
 				if err != nil {
+					log.Debug("Error deduping object", rz.Err(err))
 					tx.Rollback()
 					return err
 				}

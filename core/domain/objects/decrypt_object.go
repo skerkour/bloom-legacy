@@ -41,9 +41,9 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object
 	}
 	defer crypto.Zeroize(objectKey) // wipe objectKey from memory
 
-	if len(encryptedObject.EncryptedData) == 0 {
-		return nil, nil
-	}
+	// if len(encryptedObject.EncryptedData) == 0 {
+	// 	return nil, nil
+	// }
 
 	// decrypt object data
 	objectDataCipher, err := crypto.NewAEAD(objectKey)
@@ -60,7 +60,6 @@ func decryptObject(encryptedObject *model.Object, masterKey []byte) (ret *Object
 	// decompress object
 	objectData, err := snappy.Decode(nil, compressedObjectData)
 	if err != nil {
-
 		err = errors.New("Error decompressing object")
 		return
 	}

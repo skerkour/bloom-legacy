@@ -5,6 +5,8 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 // Sync sync the local data with the pod (pull + conflict resolution + push)
@@ -17,9 +19,13 @@ func Sync() (err error) {
 	if kernel.Me != nil {
 		err = pull()
 		if err != nil {
+			log.Debug("Error pulling data", rz.Err(err))
 			return
 		}
 		err = push()
+		if err != nil {
+			log.Debug("Error pushing data", rz.Err(err))
+		}
 	}
 	return
 }

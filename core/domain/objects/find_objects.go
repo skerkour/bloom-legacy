@@ -42,7 +42,7 @@ func FindObjectsByType(ctx context.Context, tx *sqlx.Tx, typ string) ([]Object, 
 	ret := []Object{}
 	var err error
 
-	query := "SELECT * FROM objects WHERE type = ?"
+	query := "SELECT * FROM objects WHERE type = ? AND length(data) > 2"
 	if tx == nil {
 		err = db.DB.Select(&ret, query, typ)
 	} else {

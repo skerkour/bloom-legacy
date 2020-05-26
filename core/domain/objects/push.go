@@ -138,6 +138,22 @@ func push() error {
 		}
 	}
 
+	// delete empty object
+	deleteEmptyObjectQuery := "DELETE FROM objects WHERE length(data) < 3 AND out_of_sync = ?"
+	_, err = tx.Exec(deleteEmptyObjectQuery, true)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	// update outofSync object to not OufOfSync
+	updateOutOfSyncObjectsQuery := "UPDATE objects SET out_of_sync = ? WHERE out_of_sync = ?"
+	_, err = tx.Exec(updateOutOfSyncObjectsQuery, false, true)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
 	err = tx.Commit()
 	if err != nil {
 		tx.Rollback()
