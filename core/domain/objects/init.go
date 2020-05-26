@@ -8,8 +8,7 @@ import (
 func Init() error {
 	SyncChan = make(chan bool)
 
-	ctx := context.Background()
-	go backgroundSync(ctx)
+	go backgroundSync(context.Background())
 
 	return nil
 }

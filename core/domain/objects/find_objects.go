@@ -21,6 +21,10 @@ func FindOutOfSyncObjectByID(ctx context.Context, tx *sqlx.Tx, id []byte) (*Obje
 	if err == sql.ErrNoRows {
 		return nil, nil
 	}
+	// no object found
+	if len(ret.ID) == 0 {
+		return nil, nil
+	}
 
 	return ret, err
 }

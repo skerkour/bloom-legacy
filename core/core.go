@@ -13,6 +13,8 @@ import (
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 func Init(params InitParams) (InitRes, error) {
@@ -21,6 +23,11 @@ func Init(params InitParams) (InitRes, error) {
 		Preferences: map[string]interface{}{},
 	}
 	client := api.Client()
+
+	log.Debug("Initializing core", rz.Any("params", params))
+	if params.Env != "development" && params.Env != "dev" {
+		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
+	}
 
 	err = db.Init(params.DBKey)
 	if err != nil {

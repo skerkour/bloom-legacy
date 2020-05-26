@@ -21,6 +21,7 @@ type ErrorData struct {
 type InitParams struct {
 	Preferences []string `json:"preferences"`
 	DBKey       *string  `json:"dbKey"`
+	Env         string   `json:"env"`
 }
 
 type InitRes struct {

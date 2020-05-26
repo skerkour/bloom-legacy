@@ -54,6 +54,8 @@ func main() {
 	// remove Unix socket if exists
 	os.Remove(UNIX_SOCKET)
 
+	log.SetLogger(log.With(rz.Formatter(rz.FormatterConsole())))
+
 	http.HandleFunc("/electronCall", handleElectronPost)
 
 	unixListener, err := net.Listen("unix", UNIX_SOCKET)

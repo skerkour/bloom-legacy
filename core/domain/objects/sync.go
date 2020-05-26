@@ -22,10 +22,10 @@ func Sync(init bool) (err error) {
 			log.Debug("Error pulling data", rz.Err(err))
 			return
 		}
-		err = push()
-		if err != nil {
-			log.Debug("Error pushing data", rz.Err(err))
-		}
+		// err = push()
+		// if err != nil {
+		// 	log.Debug("Error pushing data", rz.Err(err))
+		// }
 	}
 	return
 }

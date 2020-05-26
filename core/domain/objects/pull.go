@@ -2,6 +2,7 @@ package objects
 
 import (
 	"context"
+	"encoding/base64"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
@@ -78,6 +79,8 @@ func pull(init bool) error {
 		return err
 	}
 
+	log.Debug("Received from pull", rz.Any("resp", resp))
+
 	tx, err := db.DB.Beginx()
 	if err != nil {
 		return err
@@ -93,6 +96,7 @@ func pull(init bool) error {
 	for _, repo := range resp.Pull.Repositories {
 
 		for _, object := range repo.Objects {
+			log.Debug("decrypting object", rz.String("objects.id", base64.StdEncoding.EncodeToString(object.ID)))
 			decryptedObject, err := decryptObject(object, masterKey)
 			if err != nil {
 				log.Debug("Error decrypting object", rz.Err(err))
@@ -103,6 +107,7 @@ func pull(init bool) error {
 			// check if object exist and is out of sync
 			ofsStoredObject, err := FindOutOfSyncObjectByID(ctx, tx, decryptedObject.ID)
 			if ofsStoredObject != nil {
+				log.Debug("CONFLICT FOUND WHILE PULLING. Starting to dedup object", rz.Any("OFS object", ofsStoredObject))
 				// resolve conflict
 				// create a new object from the local out of sync object (with a new id)
 				dedupedObject, err := dedupObject(ofsStoredObject, []byte(kernel.Me.Username))
