@@ -6,37 +6,22 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 )
 
 // SaveSignedIn saves signedIn info in preferences
-func SaveSignedIn(signin *model.SignedIn) error {
-	ctx := context.Background()
-
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		return err
-	}
+func SaveSignedIn(ctx context.Context, tx *sqlx.Tx, signin *model.SignedIn) error {
+	var err error
 
 	err = SaveMe(ctx, tx, signin.Me)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
 	err = SaveSession(ctx, tx, signin.Session)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
-
-	err = tx.Commit()
-	if err != nil {
-		tx.Rollback()
-		return err
-	}
-
 	return nil
 }
 

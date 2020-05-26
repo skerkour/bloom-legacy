@@ -120,7 +120,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 				return ret, err
 			}
 
-			err = SaveSignedIn(resp.SignIn)
+			err = SaveSignedIn(ctx, nil, resp.SignIn)
 			if err != nil {
 				return ret, err
 			}

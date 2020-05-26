@@ -21,19 +21,13 @@ func pull() error {
 	ctx := context.Background()
 	var masterKey []byte
 
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		return err
-	}
-
 	// prepare api request
 	input := model.PullInput{
 		Repositories: []*model.RepositoryPullInput{},
 	}
 
-	myGroups, err := groups.FindGroups(ctx, tx)
+	myGroups, err := groups.FindGroups(ctx, nil)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
@@ -77,7 +71,11 @@ func pull() error {
 
 	err = client.Do(ctx, req, &resp)
 	if err != nil {
-		tx.Rollback()
+		return err
+	}
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
 		return err
 	}
 

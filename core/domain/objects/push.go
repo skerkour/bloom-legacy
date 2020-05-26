@@ -23,24 +23,17 @@ func push() error {
 	var masterKey []byte
 	ctx := context.Background()
 
-	tx, err := db.DB.Beginx()
-	if err != nil {
-		return err
-	}
-
 	input := model.PushInput{
 		Repositories: []*model.RepositoryPushInput{},
 	}
 
 	// find objects that need to be pushed
-	storedObjects, err = FindOutOfSyncObjects(ctx, tx)
+	storedObjects, err = FindOutOfSyncObjects(ctx, nil)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 	// if no objects to push, abort
 	if len(storedObjects) == 0 {
-		tx.Rollback()
 		return nil
 	}
 
@@ -53,16 +46,14 @@ func push() error {
 		objectsToPush[groupID] = append(objectsToPush[groupID], object)
 	}
 
-	masterKey, err = users.FindMasterKey(ctx, tx)
+	masterKey, err = users.FindMasterKey(ctx, nil)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 	defer crypto.Zeroize(masterKey) // clear masterKey from memory
 
-	myGroups, err := groups.FindGroups(ctx, tx)
+	myGroups, err := groups.FindGroups(ctx, nil)
 	if err != nil {
-		tx.Rollback()
 		return err
 	}
 
@@ -93,7 +84,6 @@ func push() error {
 
 			objectToPush, err = encryptObject(object, masterKey, compressAlgoSnappy)
 			if err != nil {
-				tx.Rollback()
 				return err
 			}
 			objectsPushInput = append(objectsPushInput, objectToPush)
@@ -120,7 +110,11 @@ func push() error {
 	err = client.Do(ctx, req, &resp)
 	if err != nil {
 		log.Error("error pushing objects", rz.Err(err))
-		tx.Rollback()
+		return err
+	}
+
+	tx, err := db.DB.Beginx()
+	if err != nil {
 		return err
 	}
 
