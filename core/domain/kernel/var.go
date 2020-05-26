@@ -5,3 +5,4 @@ import (
 )
 
 var Me *model.User
+var Env string

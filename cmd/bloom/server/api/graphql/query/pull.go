@@ -55,5 +55,6 @@ func (resolver *Resolver) Pull(ctx context.Context, input model.PullInput) (ret 
 		}
 		ret.Repositories = append(ret.Repositories, repository)
 	}
+
 	return
 }

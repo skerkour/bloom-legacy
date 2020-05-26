@@ -29,6 +29,8 @@ func Init(params InitParams) (InitRes, error) {
 		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
 	}
 
+	kernel.Env = params.Env
+
 	err = db.Init(params.DBKey)
 	if err != nil {
 		return ret, err
