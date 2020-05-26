@@ -68,7 +68,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { User, UserEdge, Maybe } from '@/api/models';
+import { User } from '@/api/models';
 import { Method, FetchUserParams } from '@/core/users';
 import core from '@/core';
 
@@ -111,7 +111,7 @@ export default class AdminUsersView extends Vue {
 
     try {
       const res = await core.call(Method.FetchUsers, core.Empty);
-      this.users = res.edges.map((edge: Maybe<UserEdge>) => edge!.node!);
+      this.users = res.nodes;
       this.totalUserCount = res.totalCount;
     } catch (err) {
       this.error = err.message;

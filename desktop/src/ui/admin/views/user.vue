@@ -95,7 +95,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-  User, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge, Group, GroupEdge,
+  User, Invoice, PaymentMethod, Group,
 } from '@/api/models';
 import {
   FetchUserParams, Method, EnableUserParams, DisableUserParams,
@@ -126,23 +126,21 @@ export default class AdminUserView extends Vue {
     if (this.user === null) {
       return [];
     }
-    return this.user.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+    return this.user.invoices!.nodes;
   }
 
   get paymentMethods(): PaymentMethod[] {
     if (this.user === null) {
       return [];
     }
-    return this.user.paymentMethods!
-      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+    return this.user.paymentMethods!.nodes;
   }
 
   get groups(): Group[] {
     if (this.user === null) {
       return [];
     }
-    return this.user.groups!
-      .edges!.map((edge: Maybe<GroupEdge>) => edge!.node!);
+    return this.user.groups!.nodes;
   }
 
   // lifecycle

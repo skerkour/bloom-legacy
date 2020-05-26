@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid style="height: calc(100vh)" class="text-left overflow-y-auto">
 
     <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
       {{ error }}
@@ -147,15 +147,14 @@ export default class Billing extends Vue {
     if (this.me === null) {
       return [];
     }
-    return this.me.invoices!.edges!.map((edge: models.Maybe<models.InvoiceEdge>) => edge!.node!);
+    return this.me.invoices!.nodes;
   }
 
   get paymentMethods(): models.PaymentMethod[] {
     if (this.me === null) {
       return [];
     }
-    return this.me.paymentMethods!
-      .edges!.map((edge: models.Maybe<models.PaymentMethodEdge>) => edge!.node!);
+    return this.me.paymentMethods!.nodes;
   }
 
   // lifecycle
@@ -173,7 +172,7 @@ export default class Billing extends Vue {
       const res = await core.call(Method.FetchMyProfile, core.Empty);
       this.me = res.me;
       this.plans = res.billingPlans
-        .edges!.map((edge: models.Maybe<models.BillingPlanEdge>) => edge!.node!);
+        .nodes!.map((node: models.Maybe<models.BillingPlan>) => node!);
       this.stripePublicKey = res.stripePublicKey;
     } catch (err) {
       this.error = err.message;
@@ -209,9 +208,9 @@ export default class Billing extends Vue {
     };
 
     try {
-      const res: models.Maybe<models.PaymentMethod> = await core
+      const res: models.PaymentMethod = await core
         .call(Method.AddPaymentMethod, params);
-      this.me!.paymentMethods!.edges!.push({ node: res, cursor: '' });
+      this.me!.paymentMethods!.nodes!.push(res);
       if (this.planAfterAddingPaymentMethod) {
         await this.updateSubscription(this.planAfterAddingPaymentMethod);
       }
@@ -231,8 +230,8 @@ export default class Billing extends Vue {
 
     try {
       await core.call(Method.RemovePaymentMethod, input);
-      this.me!.paymentMethods!.edges = this.me!.paymentMethods!.edges!
-        .filter((edge: models.Maybe<models.PaymentMethodEdge>) => edge!.node!.id !== paymentMenthod.id); // eslint-disable-line
+      this.me!.paymentMethods!.nodes = this.me!.paymentMethods!.nodes!
+        .filter((node: models.Maybe<models.PaymentMethod>) => node!.id !== paymentMenthod.id); // eslint-disable-line
     } catch (err) {
       this.paymentMethodError = err.message;
     } finally {
@@ -268,20 +267,20 @@ export default class Billing extends Vue {
     try {
       await core.call(Method.ChangeDefaultPaymentMethod, input);
       const paymentMehtods = this.me!.paymentMethods!
-        .edges!.map((edge: models.Maybe<models.PaymentMethodEdge>, index: number) => {
-          if (edge!.node!.isDefault) {
-            const newEdge = edge;
-            newEdge!.node!.isDefault = false;
-            this.$set(this.me!.paymentMethods!.edges!, index, newEdge);
+        .nodes.map((paymentMethod: models.Maybe<models.PaymentMethod>, index: number) => {
+          if (paymentMethod!.isDefault) {
+            const newPaymentMethod = paymentMethod;
+            newPaymentMethod!.isDefault = false;
+            this.$set(this.me!.paymentMethods!.nodes!, index, newPaymentMethod);
           }
-          if (edge!.node!.id === newDefaultPaymentMethod.id) {
-            const newEdge = edge;
-            newEdge!.node!.isDefault = true;
-            this.$set(this.me!.paymentMethods!.edges!, index, newEdge);
+          if (paymentMethod!.id === newDefaultPaymentMethod.id) {
+            const newPaymentMethod = paymentMethod;
+            newPaymentMethod!.isDefault = true;
+            this.$set(this.me!.paymentMethods!.nodes!, index, newPaymentMethod);
           }
-          return edge;
+          return paymentMethod!;
         });
-      this.me!.paymentMethods!.edges = paymentMehtods;
+      this.me!.paymentMethods!.nodes = paymentMehtods;
     } catch (err) {
       this.error = err.message;
     } finally {

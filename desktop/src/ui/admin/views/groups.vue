@@ -21,7 +21,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { GroupEdge, Maybe, Group } from '@/api/models';
+import { Group } from '@/api/models';
 import { Method } from '@/core/groups';
 import core from '@/core';
 import BlmGroupsSimpleTable from '@/ui/groups/components/simple_table.vue';
@@ -55,7 +55,7 @@ export default class AdminGroupsView extends Vue {
 
     try {
       const res = await core.call(Method.FetchGroups, core.Empty);
-      this.groups = res.edges.map((edge: Maybe<GroupEdge>) => edge!.node!);
+      this.groups = res.nodes;
       this.totalGroupCount = res.totalCount;
     } catch (err) {
       this.error = err.message;

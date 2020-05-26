@@ -120,7 +120,6 @@ import {
   GroupMemberEdge,
   Maybe,
   GroupInvitationConnection,
-  GroupInvitationEdge,
   GroupInvitation,
   RemoveGroupMembersInput,
 } from '@/api/models';
@@ -190,7 +189,7 @@ export default class GroupsMembersView extends Vue {
 
   get invitations(): GroupInvitation[] {
     if (this.group) {
-      return this.group.invitations!.edges!.map((edge: Maybe<GroupInvitationEdge>) => edge!.node!);
+      return this.group.invitations!.nodes;
     }
     return [];
   }

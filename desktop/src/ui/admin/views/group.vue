@@ -58,7 +58,7 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-  Group, Invoice, Maybe, InvoiceEdge, PaymentMethod, PaymentMethodEdge,
+  Group, Invoice, PaymentMethod,
 } from '@/api/models';
 import { FetchGroupDetailsParams, Method } from '@/core/groups';
 import core from '@/core';
@@ -85,15 +85,14 @@ export default class AdminGroupView extends Vue {
     if (this.group === null) {
       return [];
     }
-    return this.group.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+    return this.group.invoices!.nodes;
   }
 
   get paymentMethods(): PaymentMethod[] {
     if (this.group === null) {
       return [];
     }
-    return this.group.paymentMethods!
-      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+    return this.group.paymentMethods!.nodes;
   }
 
   // lifecycle
