@@ -36,9 +36,9 @@ func FindObjectSinceState(ctx context.Context, tx *sqlx.Tx, sinceState int64, us
 		whereID = *groupID
 	}
 	if tx == nil {
-		err = db.DB.Select(&ret, queryFind, whereID)
+		err = db.DB.Select(&ret, queryFind, sinceState, whereID)
 	} else {
-		err = tx.Select(&ret, queryFind, whereID)
+		err = tx.Select(&ret, queryFind, sinceState, whereID)
 	}
 	if err != nil {
 		logger.Error("objects.FindObjectSinceState: finding objects", rz.Err(err),
