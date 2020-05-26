@@ -82,7 +82,7 @@ type User {
 }
 
 type UserConnection {
-  nodes: [User]
+  nodes: [User!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -98,7 +98,7 @@ type PaymentMethod {
 }
 
 type PaymentMethodConnection {
-  nodes: [PaymentMethod]
+  nodes: [PaymentMethod!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -120,7 +120,7 @@ type Group {
 }
 
 type GroupConnection {
-  nodes: [Group]
+  nodes: [Group!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -147,7 +147,7 @@ type GroupInvitation {
 }
 
 type GroupInvitationConnection {
-  nodes: [GroupInvitation]
+  nodes: [GroupInvitation!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -164,7 +164,7 @@ type Invoice {
 }
 
 type InvoiceConnection {
-  nodes: [Invoice]
+  nodes: [Invoice!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -185,7 +185,7 @@ type BillingPlan {
 }
 
 type BillingPlanConnection {
-  nodes: [BillingPlan]
+  nodes: [BillingPlan!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -208,7 +208,7 @@ type Session {
 }
 
 type SessionConnection {
-  nodes: [Session]
+  nodes: [Session!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
