@@ -85,7 +85,7 @@ export default class Groups extends Vue {
     };
 
     try {
-      const res: Group = await core.call(Method.InviteUsers, params);
+      const res: Group = await core.call(Method.InviteUser, params);
       this.cancel();
       this.$emit('invited', res.invitations);
     } catch (err) {
