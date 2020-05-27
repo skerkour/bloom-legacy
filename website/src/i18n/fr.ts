@@ -246,27 +246,30 @@ export default {
         téléphone. Bloom Notes fonctionnes sur n'importe quel appareil.`,
       },
     },
-    bitflow_description: `Un gestionnaire de téléchargement dans le Cloud.
-    Télécharger n'importe quel fichier ou torrent directement dans votre cloud Bloom.`,
-    bitflow: {
-      description: 'Téléchargez vos torrents dans un cloud sécurisé. Simple. Rapide.',
-      feature1: {
-        name: 'Téléchargez n\'importe où, n\'importe quand',
-        description: `Vos fichiers sont téléchargés directement dans votre cloud Bloom et peuvent
-        être accédés depuis n'importe quel téléphone, tablette ou ordinateur. Qu'importe où vous allez,
-        vos téléchargements suivront.`,
-      },
-      feature2: {
-        name: 'Plus besoin d\'installer un logiciels de torrents',
-        description: `Avec Bitflow, vous n'avez pas besoin de télécharger d'autres programmes. Bitflow supporte
-        aujourd'hui les protocoles HTTP(S) et torrent.`,
-      },
-      feature3: {
-        name: 'Téléchargez vos gros fichiers plus rapidement',
-        description: `Il peut prendre beaucoup de temps pour télécharger des gros fichiers sur une ligne
-        résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
-      },
-    },
+    // bitflow_description: `Un gestionnaire de téléchargement dans le Cloud.
+    // Télécharger n'importe quel fichier ou torrent directement dans votre cloud Bloom.`,
+    // bitflow: {
+    //   description: 'Téléchargez vos torrents dans un cloud sécurisé. Simple. Rapide.',
+    //   feature1: {
+    //     name: 'Téléchargez n\'importe où, n\'importe quand',
+    //     description: `Vos fichiers sont téléchargés directement dans votre cloud Bloom et peuvent
+    //     être accédés depuis n'importe quel téléphone, tablette ou ordinateur. Qu'importe où
+    //     vous allez,
+    //     vos téléchargements suivront.`,
+    //   },
+    //   feature2: {
+    //     name: 'Plus besoin d\'installer un logiciels de torrents',
+    //     description: `Avec Bitflow, vous n'avez pas besoin de télécharger d'autres programmes.
+    //     Bitflow supporte
+    //     aujourd'hui les protocoles HTTP(S) et torrent.`,
+    //   },
+    //   feature3: {
+    //     name: 'Téléchargez vos gros fichiers plus rapidement',
+    //     description: `Il peut prendre beaucoup de temps pour télécharger des gros fichiers sur
+    //     une ligne
+    //     résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
+    //   },
+    // },
     arcade_description: 'N\'arrêtez jamais le fun!',
     arcade: {
       description: 'La meilleure place pour jouer',

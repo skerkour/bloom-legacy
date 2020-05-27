@@ -225,12 +225,12 @@ export default class Index extends Vue {
         learnMore: 'contacts',
       },
       { name: 'dl_btn' },
-      {
-        name: 'Bitflow',
-        icon: '/static/imgs/icons/bitflow.svg',
-        description: this.$t('features.bitflow_description'),
-        learnMore: 'bitflow',
-      },
+      // {
+      //   name: 'Bitflow',
+      //   icon: '/static/imgs/icons/bitflow.svg',
+      //   description: this.$t('features.bitflow_description'),
+      //   learnMore: 'bitflow',
+      // },
       {
         name: 'Arcade',
         icon: '/static/imgs/icons/arcade.svg',

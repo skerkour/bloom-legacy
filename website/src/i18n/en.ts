@@ -248,26 +248,27 @@ export default {
         laptop then update notes on your phone. Bloom Notes works on any device or platform.`,
       },
     },
-    bitflow_description: `Your cloud-based download manager.
-    Download any file and torrent directly to a secure cloud. Fast. Online.`,
-    bitflow: {
-      description: 'Download torrents to a secure cloud. Fast. Online.',
-      feature1: {
-        name: 'Download anywhere, anytime',
-        description: `Your files are downloaded directly to your Bloom files and can can be accessed from
-        any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
-      },
-      feature2: {
-        name: 'No need to install a torrent client',
-        description: `With Bitflow you don’t need to download any program, all you need is a
-        browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
-      },
-      feature3: {
-        name: 'Download big files faster',
-        description: `It takes a long time to download large files with a residential bandwidth.
-        Not with Bitflow! We'll download your files in the blink of an eye!`,
-      },
-    },
+    // bitflow_description: `Your cloud-based download manager.
+    // Download any file and torrent directly to a secure cloud. Fast. Online.`,
+    // bitflow: {
+    //   description: 'Download torrents to a secure cloud. Fast. Online.',
+    //   feature1: {
+    //     name: 'Download anywhere, anytime',
+    //     description: `Your files are downloaded directly to your Bloom files and can can be
+    //     accessed from
+    //     any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
+    //   },
+    //   feature2: {
+    //     name: 'No need to install a torrent client',
+    //     description: `With Bitflow you don’t need to download any program, all you need is a
+    //     browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
+    //   },
+    //   feature3: {
+    //     name: 'Download big files faster',
+    //     description: `It takes a long time to download large files with a residential bandwidth.
+    //     Not with Bitflow! We'll download your files in the blink of an eye!`,
+    //   },
+    // },
     arcade_description: `The best place to play! <br />
     None of our games contain ad.`,
     arcade: {
