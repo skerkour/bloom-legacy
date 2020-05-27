@@ -268,8 +268,6 @@ export default class BlmNotes extends Vue {
 
       this.lastSavedBody = this.selectedNote!.data.body;
       this.lastSavedTitle = this.selectedNote!.data.title;
-      // this.selectedNote = res;
-      // this.$emit('updated', (res as Note));
     } catch (err) {
       this.error = err.message;
     } finally {
