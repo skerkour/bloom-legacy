@@ -108,9 +108,13 @@ CREATE UNIQUE INDEX index_groups_on_avatar_id ON groups (avatar_id);
 CREATE TABLE groups_members (
     joined_at TIMESTAMP WITH TIME ZONE NOT NULL,
     inviter_id UUID NOT NULL REFERENCES users(id),
+
+    role TEXT NOT NULL,
+    encrypted_master_key BYTEA NOT NULL,
+    master_key_nonce BYTEA NOT NULL,
+
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    role TEXT NOT NULL
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE INDEX index_groups_members_on_group_id ON groups_members (group_id);

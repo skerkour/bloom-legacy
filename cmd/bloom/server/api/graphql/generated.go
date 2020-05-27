@@ -82,17 +82,19 @@ type ComplexityRoot struct {
 	}
 
 	Group struct {
-		AvatarURL      func(childComplexity int) int
-		CreatedAt      func(childComplexity int) int
-		Description    func(childComplexity int) int
-		ID             func(childComplexity int) int
-		Invitations    func(childComplexity int) int
-		Invoices       func(childComplexity int) int
-		Members        func(childComplexity int) int
-		Name           func(childComplexity int) int
-		PaymentMethods func(childComplexity int) int
-		State          func(childComplexity int) int
-		Subscription   func(childComplexity int) int
+		AvatarURL          func(childComplexity int) int
+		CreatedAt          func(childComplexity int) int
+		Description        func(childComplexity int) int
+		EncryptedMasterKey func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Invitations        func(childComplexity int) int
+		Invoices           func(childComplexity int) int
+		MasterKeyNonce     func(childComplexity int) int
+		Members            func(childComplexity int) int
+		Name               func(childComplexity int) int
+		PaymentMethods     func(childComplexity int) int
+		State              func(childComplexity int) int
+		Subscription       func(childComplexity int) int
 	}
 
 	GroupConnection struct {
@@ -326,6 +328,8 @@ type BillingPlanResolver interface {
 	Subscribers(ctx context.Context, obj *model.BillingPlan) (*model.UserConnection, error)
 }
 type GroupResolver interface {
+	EncryptedMasterKey(ctx context.Context, obj *model.Group) (*[]byte, error)
+	MasterKeyNonce(ctx context.Context, obj *model.Group) (*[]byte, error)
 	Members(ctx context.Context, obj *model.Group) (*model.GroupMemberConnection, error)
 	Invitations(ctx context.Context, obj *model.Group) (*model.GroupInvitationConnection, error)
 	Subscription(ctx context.Context, obj *model.Group) (*model.BillingSubscription, error)
@@ -570,6 +574,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Group.Description(childComplexity), true
 
+	case "Group.encryptedMasterKey":
+		if e.complexity.Group.EncryptedMasterKey == nil {
+			break
+		}
+
+		return e.complexity.Group.EncryptedMasterKey(childComplexity), true
+
 	case "Group.id":
 		if e.complexity.Group.ID == nil {
 			break
@@ -590,6 +601,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.Group.Invoices(childComplexity), true
+
+	case "Group.masterKeyNonce":
+		if e.complexity.Group.MasterKeyNonce == nil {
+			break
+		}
+
+		return e.complexity.Group.MasterKeyNonce(childComplexity), true
 
 	case "Group.members":
 		if e.complexity.Group.Members == nil {
@@ -1968,6 +1986,9 @@ type Group {
   description: String!
   state: String
 
+  encryptedMasterKey: Bytes
+  masterKeyNonce: Bytes
+
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
@@ -2224,8 +2245,8 @@ input SendNewRegistrationCodeInput {
 input CreateGroupInput {
   name: String!
   description: String!
-  """users to invite, by username"""
-  usersToInvite: [String!]!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input DeleteGroupInput {
@@ -3859,6 +3880,68 @@ func (ec *executionContext) _Group_state(ctx context.Context, field graphql.Coll
 	res := resTmp.(*string)
 	fc.Result = res
 	return ec.marshalOString2ᚖstring(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_encryptedMasterKey(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Group().EncryptedMasterKey(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _Group_masterKeyNonce(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "Group",
+		Field:    field,
+		Args:     nil,
+		IsMethod: true,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return ec.resolvers.Group().MasterKeyNonce(rctx, obj)
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
 }
 
 func (ec *executionContext) _Group_members(ctx context.Context, field graphql.CollectedField, obj *model.Group) (ret graphql.Marshaler) {
@@ -10389,9 +10472,15 @@ func (ec *executionContext) unmarshalInputCreateGroupInput(ctx context.Context, 
 			if err != nil {
 				return it, err
 			}
-		case "usersToInvite":
+		case "encryptedMasterKey":
 			var err error
-			it.UsersToInvite, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			it.EncryptedMasterKey, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "masterKeyNonce":
+			var err error
+			it.MasterKeyNonce, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11186,6 +11275,28 @@ func (ec *executionContext) _Group(ctx context.Context, sel ast.SelectionSet, ob
 			}
 		case "state":
 			out.Values[i] = ec._Group_state(ctx, field, obj)
+		case "encryptedMasterKey":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Group_encryptedMasterKey(ctx, field, obj)
+				return res
+			})
+		case "masterKeyNonce":
+			field := field
+			out.Concurrently(i, func() (res graphql.Marshaler) {
+				defer func() {
+					if r := recover(); r != nil {
+						ec.Error(ctx, ec.Recover(ctx, r))
+					}
+				}()
+				res = ec._Group_masterKeyNonce(ctx, field, obj)
+				return res
+			})
 		case "members":
 			field := field
 			out.Concurrently(i, func() (res graphql.Marshaler) {
@@ -14144,6 +14255,21 @@ func (ec *executionContext) unmarshalOBytes2ᚕbyte(ctx context.Context, v inter
 
 func (ec *executionContext) marshalOBytes2ᚕbyte(ctx context.Context, sel ast.SelectionSet, v []byte) graphql.Marshaler {
 	return model.MarshalBytes(v)
+}
+
+func (ec *executionContext) unmarshalOBytes2ᚖᚕbyte(ctx context.Context, v interface{}) (*[]byte, error) {
+	if v == nil {
+		return nil, nil
+	}
+	res, err := ec.unmarshalOBytes2ᚕbyte(ctx, v)
+	return &res, err
+}
+
+func (ec *executionContext) marshalOBytes2ᚖᚕbyte(ctx context.Context, sel ast.SelectionSet, v *[]byte) graphql.Marshaler {
+	if v == nil {
+		return graphql.Null
+	}
+	return ec.marshalOBytes2ᚕbyte(ctx, sel, *v)
 }
 
 func (ec *executionContext) marshalOGroup2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx context.Context, sel ast.SelectionSet, v model.Group) graphql.Marshaler {

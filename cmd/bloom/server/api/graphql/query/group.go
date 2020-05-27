@@ -21,7 +21,7 @@ func (r *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *model.Gro
 		return
 	}
 
-	err = groups.CheckUserIsGroupMemberNoTx(ctx, currentUser.ID, groupID)
+	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, groupID)
 	if err != nil && !currentUser.IsAdmin {
 		err = gqlerrors.New(err)
 		return

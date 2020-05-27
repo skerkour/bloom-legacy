@@ -14,9 +14,10 @@ import (
 
 // CreateGroupParams are parameters required to create a group
 type CreateGroupParams struct {
-	Name          string
-	Description   string
-	UsersToInvite []string
+	Name               string
+	Description        string
+	EncryptedMasterKey []byte
+	MasterKeyNonce     []byte
 }
 
 // CreateGroup creates a group
@@ -52,9 +53,10 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params Cre
 
 	// admin creator to group
 	queryAddAdminToGroup := `INSERT INTO groups_members
-	(user_id, group_id, role, joined_at, inviter_id)
-	VALUES ($1, $2, $3, $4, $1)`
-	_, err = tx.Exec(queryAddAdminToGroup, actor.ID, ret.ID, consts.GROUP_ROLE_ADMINISTRATOR, now)
+	(user_id, inviter_id, group_id, joined_at, role, encrypted_master_key, master_key_nonce)
+	VALUES ($1, $1, $2, $3, $4, $5, $6)`
+	_, err = tx.Exec(queryAddAdminToGroup, actor.ID, ret.ID, now, consts.GROUP_ROLE_ADMINISTRATOR,
+		params.EncryptedMasterKey, params.MasterKeyNonce)
 	if err != nil {
 		logger.Error("groups.CreateGroup: inserting admin in new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)

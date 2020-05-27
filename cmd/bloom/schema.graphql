@@ -112,6 +112,9 @@ type Group {
   description: String!
   state: String
 
+  encryptedMasterKey: Bytes
+  masterKeyNonce: Bytes
+
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
@@ -368,8 +371,8 @@ input SendNewRegistrationCodeInput {
 input CreateGroupInput {
   name: String!
   description: String!
-  """users to invite, by username"""
-  usersToInvite: [String!]!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input DeleteGroupInput {

@@ -48,25 +48,13 @@ func FindCustomerByStripeCustomerId(ctx context.Context, tx *sqlx.Tx, stripeCust
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM billing_customers WHERE stripe_customer_id = $1"
-	err = tx.Get(ret, queryFind, stripeCustomerId)
+	if tx == nil {
+		err = tx.Get(ret, queryFind, stripeCustomerId)
+	} else {
+		err = db.DB.Get(ret, queryFind, stripeCustomerId)
+	}
 	if err != nil {
 		logger.Error("billing.FindCustomerByStripeCustomerId: finding customer", rz.Err(err),
-			rz.String("srtripe_customer_id", stripeCustomerId))
-		return ret, NewError(ErrorCustomerNotFound)
-	}
-
-	return ret, err
-}
-
-func FindCustomerByStripeCustomerIdNoTx(ctx context.Context, stripeCustomerId string) (*Customer, error) {
-	ret := &Customer{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_customers WHERE stripe_customer_id = $1"
-	err = db.DB.Get(ret, queryFind, stripeCustomerId)
-	if err != nil {
-		logger.Error("billing.FindCustomerByStripeCustomerIdNoTx: finding customer", rz.Err(err),
 			rz.String("srtripe_customer_id", stripeCustomerId))
 		return ret, NewError(ErrorCustomerNotFound)
 	}

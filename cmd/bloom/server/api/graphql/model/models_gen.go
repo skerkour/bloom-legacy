@@ -98,10 +98,10 @@ type CompleteTwoFAActivationInput struct {
 }
 
 type CreateGroupInput struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	// users to invite, by username
-	UsersToInvite []string `json:"usersToInvite"`
+	Name               string `json:"name"`
+	Description        string `json:"description"`
+	EncryptedMasterKey []byte `json:"encryptedMasterKey"`
+	MasterKeyNonce     []byte `json:"masterKeyNonce"`
 }
 
 type DeclineGroupInvitationInput struct {

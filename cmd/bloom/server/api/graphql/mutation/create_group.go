@@ -29,9 +29,10 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 	}
 
 	params := groups.CreateGroupParams{
-		Name:          input.Name,
-		Description:   input.Description,
-		UsersToInvite: input.UsersToInvite,
+		Name:               input.Name,
+		Description:        input.Description,
+		EncryptedMasterKey: input.EncryptedMasterKey,
+		MasterKeyNonce:     input.MasterKeyNonce,
 	}
 	newGroup, err := groups.CreateGroup(ctx, tx, currentUser, params)
 	if err != nil {
