@@ -8,14 +8,14 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func InviteUsers(input model.InviteUsersInGroupInput) (*model.Group, error) {
+func InviteUser(input model.InviteUserInGroupInput) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
-		Group *model.Group `json:"inviteUsersInGroup"`
+		Group *model.Group `json:"inviteUserInGroup"`
 	}
 	req := graphql.NewRequest(`
-	mutation($input: InviteUsersInGroupInput!) {
+	mutation($input: InviteUserInGroupInput!) {
 		inviteUsersInGroup(input: $input) {
 			invitations {
 				nodes {
