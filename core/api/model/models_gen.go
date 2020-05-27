@@ -135,10 +135,14 @@ type GroupInput struct {
 }
 
 type GroupInvitation struct {
-	ID      uuid.UUID `json:"id"`
-	Group   *Group    `json:"group"`
-	Inviter *User     `json:"inviter"`
-	Invitee *User     `json:"invitee"`
+	ID                          uuid.UUID `json:"id"`
+	Group                       *Group    `json:"group"`
+	Inviter                     *User     `json:"inviter"`
+	Invitee                     *User     `json:"invitee"`
+	EphemeralPublicKey          *[]byte   `json:"ephemeralPublicKey"`
+	InvitationSignature         *[]byte   `json:"invitationSignature"`
+	EncryptedMasterKey          *[]byte   `json:"encryptedMasterKey"`
+	EncryptedMasterKeySignature *[]byte   `json:"encryptedMasterKeySignature"`
 }
 
 type GroupInvitationConnection struct {
@@ -159,11 +163,13 @@ type GroupMemberEdge struct {
 	JoinedAt *time.Time       `json:"joinedAt"`
 }
 
-type InviteUsersInGroupInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
-	// users to invite, by username
-	Users []string `json:"users"`
+type InviteUserInGroupInput struct {
+	GroupID                     uuid.UUID `json:"groupId"`
+	Username                    string    `json:"username"`
+	EphemeralPublicKey          []byte    `json:"ephemeralPublicKey"`
+	InvitationSignature         []byte    `json:"invitationSignature"`
+	EncryptedMasterKey          []byte    `json:"encryptedMasterKey"`
+	EncryptedMasterKeySignature []byte    `json:"encryptedMasterKeySignature"`
 }
 
 type Invoice struct {

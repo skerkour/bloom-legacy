@@ -14,6 +14,9 @@ type Group struct {
 	AvatarURL   *string    `json:"avatarUrl"`
 	State       *string    `json:"state"`
 
+	EncryptedMasterKey *[]byte `json:"encryptedMasterKey"`
+	MasterKeyNonce     *[]byte `json:"masterKeyNonce"`
+
 	Members        *GroupMemberConnection     `json:"members"`
 	Invitations    *GroupInvitationConnection `json:"invitations"`
 	Subscription   *BillingSubscription       `json:"subscription"`
