@@ -127,6 +127,11 @@ CREATE TABLE groups_invitations (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
+    ephemeral_public_key BYTEA NOT NULL,
+    invitation_signature BYTEA NOT NULL,
+    encrypted_master_key BYTEA NOT NULL,
+    encrypted_master_key_signature BYTEA NOT NULL,
+
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     invitee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     inviter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -135,6 +140,7 @@ CREATE TABLE groups_invitations (
 );
 CREATE INDEX index_groups_invitations_on_group_id ON groups_invitations (group_id);
 CREATE INDEX index_groups_invitations_on_invitee_id ON groups_invitations (invitee_id);
+CREATE INDEX index_groups_invitations_on_inviter_id ON groups_invitations (inviter_id);
 
 
 -- ################################################################################################@

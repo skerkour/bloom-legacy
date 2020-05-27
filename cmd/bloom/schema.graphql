@@ -147,6 +147,11 @@ type GroupInvitation {
   group: Group!
   inviter: User!
   invitee: User!
+
+  ephemeralPublicKey: Bytes
+  invitationSignature: Bytes
+  encryptedMasterKey: Bytes
+  encryptedMasterKeySignature: Bytes
 }
 
 type GroupInvitationConnection {
@@ -408,11 +413,13 @@ input DeclineGroupInvitationInput {
   id: ID!
 }
 
-input InviteUsersInGroupInput {
-  """group id"""
-  id: ID!
-  """users to invite, by username"""
-  users: [String!]!
+input InviteUserInGroupInput {
+  groupId: ID!
+  username: String!
+  ephemeralPublicKey: Bytes!
+  invitationSignature: Bytes!
+  encryptedMasterKey: Bytes!
+  encryptedMasterKeySignature: Bytes!
 }
 
 input QuitGroupInput {
@@ -558,7 +565,7 @@ type Mutation {
   """Remove users from a group"""
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
   """Invite users in a group"""
-  inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  inviteUserInGroup(input: InviteUserInGroupInput!): Group!
   """Accept a group invitaiton and join it"""
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Group!
   """Decline a group invitation"""

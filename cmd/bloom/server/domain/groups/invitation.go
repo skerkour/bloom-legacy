@@ -7,11 +7,16 @@ import (
 )
 
 type Invitation struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
+	ID        uuid.UUID `db:"id"`
+	CreatedAt time.Time `db:"created_at"`
+	UpdatedAt time.Time `db:"updated_at"`
 
-	GroupID   uuid.UUID `json:"group_id" db:"group_id"`
-	InviteeID uuid.UUID `json:"invitee_id" db:"invitee_id"`
-	InviterID uuid.UUID `json:"inviter_id" db:"inviter_id"`
+	EphemeralPublicKey          []byte `db:"ephemeral_public_key"`
+	InvitationSignature         []byte `db:"invitation_signature"`
+	EncryptedMasterKey          []byte `db:"encrypted_master_key"`
+	EncryptedMasterKeySignature []byte `db:"encrypted_master_key_signature"`
+
+	GroupID   uuid.UUID `db:"group_id"`
+	InviteeID uuid.UUID `db:"invitee_id"`
+	InviterID uuid.UUID `db:"inviter_id"`
 }

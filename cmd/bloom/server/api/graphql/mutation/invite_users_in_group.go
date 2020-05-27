@@ -10,18 +10,22 @@ import (
 )
 
 // InviteUsersInGroup is used by groups' admin to invite users in a group, by their usernames
-func (r *Resolver) InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (ret *model.Group, err error) {
+func (r *Resolver) InviteUserInGroup(ctx context.Context, input model.InviteUserInGroupInput) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
 	if currentUser == nil {
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	params := groups.InviteUsersParams{
-		GroupID:   input.ID,
-		Usernames: input.Users,
+	params := groups.InviteUserParams{
+		GroupID:                     input.GroupID,
+		Username:                    input.Username,
+		EphemeralPublicKey:          input.EphemeralPublicKey,
+		InvitationSignature:         input.InvitationSignature,
+		EncryptedMasterKey:          input.EncryptedMasterKey,
+		EncryptedMasterKeySignature: input.EncryptedMasterKeySignature,
 	}
-	group, err := groups.InviteUsers(ctx, currentUser, params)
+	group, err := groups.InviteUser(ctx, currentUser, params)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

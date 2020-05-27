@@ -104,10 +104,14 @@ type ComplexityRoot struct {
 	}
 
 	GroupInvitation struct {
-		Group   func(childComplexity int) int
-		ID      func(childComplexity int) int
-		Invitee func(childComplexity int) int
-		Inviter func(childComplexity int) int
+		EncryptedMasterKey          func(childComplexity int) int
+		EncryptedMasterKeySignature func(childComplexity int) int
+		EphemeralPublicKey          func(childComplexity int) int
+		Group                       func(childComplexity int) int
+		ID                          func(childComplexity int) int
+		InvitationSignature         func(childComplexity int) int
+		Invitee                     func(childComplexity int) int
+		Inviter                     func(childComplexity int) int
 	}
 
 	GroupInvitationConnection struct {
@@ -161,7 +165,7 @@ type ComplexityRoot struct {
 		DisableTwoFa               func(childComplexity int, input model.DisableTwoFAInput) int
 		DisableUser                func(childComplexity int, id uuid.UUID) int
 		EnableUser                 func(childComplexity int, id uuid.UUID) int
-		InviteUsersInGroup         func(childComplexity int, input model.InviteUsersInGroupInput) int
+		InviteUserInGroup          func(childComplexity int, input model.InviteUserInGroupInput) int
 		Push                       func(childComplexity int, input model.PushInput) int
 		QuitGroup                  func(childComplexity int, input model.QuitGroupInput) int
 		RemoveGroupMembers         func(childComplexity int, input model.RemoveGroupMembersInput) int
@@ -357,7 +361,7 @@ type MutationResolver interface {
 	DeleteGroup(ctx context.Context, input model.DeleteGroupInput) (bool, error)
 	UpdateGroup(ctx context.Context, input model.GroupInput) (*model.Group, error)
 	RemoveGroupMembers(ctx context.Context, input model.RemoveGroupMembersInput) (*model.Group, error)
-	InviteUsersInGroup(ctx context.Context, input model.InviteUsersInGroupInput) (*model.Group, error)
+	InviteUserInGroup(ctx context.Context, input model.InviteUserInGroupInput) (*model.Group, error)
 	AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (*model.Group, error)
 	DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (bool, error)
 	CancelGroupInvitation(ctx context.Context, input model.CancelGroupInvitationInput) (bool, error)
@@ -665,6 +669,27 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.GroupConnection.TotalCount(childComplexity), true
 
+	case "GroupInvitation.encryptedMasterKey":
+		if e.complexity.GroupInvitation.EncryptedMasterKey == nil {
+			break
+		}
+
+		return e.complexity.GroupInvitation.EncryptedMasterKey(childComplexity), true
+
+	case "GroupInvitation.encryptedMasterKeySignature":
+		if e.complexity.GroupInvitation.EncryptedMasterKeySignature == nil {
+			break
+		}
+
+		return e.complexity.GroupInvitation.EncryptedMasterKeySignature(childComplexity), true
+
+	case "GroupInvitation.ephemeralPublicKey":
+		if e.complexity.GroupInvitation.EphemeralPublicKey == nil {
+			break
+		}
+
+		return e.complexity.GroupInvitation.EphemeralPublicKey(childComplexity), true
+
 	case "GroupInvitation.group":
 		if e.complexity.GroupInvitation.Group == nil {
 			break
@@ -678,6 +703,13 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupInvitation.ID(childComplexity), true
+
+	case "GroupInvitation.invitationSignature":
+		if e.complexity.GroupInvitation.InvitationSignature == nil {
+			break
+		}
+
+		return e.complexity.GroupInvitation.InvitationSignature(childComplexity), true
 
 	case "GroupInvitation.invitee":
 		if e.complexity.GroupInvitation.Invitee == nil {
@@ -1018,17 +1050,17 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.Mutation.EnableUser(childComplexity, args["id"].(uuid.UUID)), true
 
-	case "Mutation.inviteUsersInGroup":
-		if e.complexity.Mutation.InviteUsersInGroup == nil {
+	case "Mutation.inviteUserInGroup":
+		if e.complexity.Mutation.InviteUserInGroup == nil {
 			break
 		}
 
-		args, err := ec.field_Mutation_inviteUsersInGroup_args(context.TODO(), rawArgs)
+		args, err := ec.field_Mutation_inviteUserInGroup_args(context.TODO(), rawArgs)
 		if err != nil {
 			return 0, false
 		}
 
-		return e.complexity.Mutation.InviteUsersInGroup(childComplexity, args["input"].(model.InviteUsersInGroupInput)), true
+		return e.complexity.Mutation.InviteUserInGroup(childComplexity, args["input"].(model.InviteUserInGroupInput)), true
 
 	case "Mutation.push":
 		if e.complexity.Mutation.Push == nil {
@@ -2021,6 +2053,11 @@ type GroupInvitation {
   group: Group!
   inviter: User!
   invitee: User!
+
+  ephemeralPublicKey: Bytes
+  invitationSignature: Bytes
+  encryptedMasterKey: Bytes
+  encryptedMasterKeySignature: Bytes
 }
 
 type GroupInvitationConnection {
@@ -2282,11 +2319,13 @@ input DeclineGroupInvitationInput {
   id: ID!
 }
 
-input InviteUsersInGroupInput {
-  """group id"""
-  id: ID!
-  """users to invite, by username"""
-  users: [String!]!
+input InviteUserInGroupInput {
+  groupId: ID!
+  username: String!
+  ephemeralPublicKey: Bytes!
+  invitationSignature: Bytes!
+  encryptedMasterKey: Bytes!
+  encryptedMasterKeySignature: Bytes!
 }
 
 input QuitGroupInput {
@@ -2432,7 +2471,7 @@ type Mutation {
   """Remove users from a group"""
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
   """Invite users in a group"""
-  inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  inviteUserInGroup(input: InviteUserInGroupInput!): Group!
   """Accept a group invitaiton and join it"""
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Group!
   """Decline a group invitation"""
@@ -2686,12 +2725,12 @@ func (ec *executionContext) field_Mutation_enableUser_args(ctx context.Context, 
 	return args, nil
 }
 
-func (ec *executionContext) field_Mutation_inviteUsersInGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
+func (ec *executionContext) field_Mutation_inviteUserInGroup_args(ctx context.Context, rawArgs map[string]interface{}) (map[string]interface{}, error) {
 	var err error
 	args := map[string]interface{}{}
-	var arg0 model.InviteUsersInGroupInput
+	var arg0 model.InviteUserInGroupInput
 	if tmp, ok := rawArgs["input"]; ok {
-		arg0, err = ec.unmarshalNInviteUsersInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUsersInGroupInput(ctx, tmp)
+		arg0, err = ec.unmarshalNInviteUserInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUserInGroupInput(ctx, tmp)
 		if err != nil {
 			return nil, err
 		}
@@ -4337,6 +4376,130 @@ func (ec *executionContext) _GroupInvitation_invitee(ctx context.Context, field 
 	return ec.marshalNUser2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐUser(ctx, field.Selections, res)
 }
 
+func (ec *executionContext) _GroupInvitation_ephemeralPublicKey(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupInvitation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EphemeralPublicKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupInvitation_invitationSignature(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupInvitation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.InvitationSignature, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupInvitation_encryptedMasterKey(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupInvitation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EncryptedMasterKey, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+}
+
+func (ec *executionContext) _GroupInvitation_encryptedMasterKeySignature(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+	defer func() {
+		if r := recover(); r != nil {
+			ec.Error(ctx, ec.Recover(ctx, r))
+			ret = graphql.Null
+		}
+	}()
+	fc := &graphql.FieldContext{
+		Object:   "GroupInvitation",
+		Field:    field,
+		Args:     nil,
+		IsMethod: false,
+	}
+
+	ctx = graphql.WithFieldContext(ctx, fc)
+	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
+		ctx = rctx // use context from middleware stack in children
+		return obj.EncryptedMasterKeySignature, nil
+	})
+	if err != nil {
+		ec.Error(ctx, err)
+		return graphql.Null
+	}
+	if resTmp == nil {
+		return graphql.Null
+	}
+	res := resTmp.(*[]byte)
+	fc.Result = res
+	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
+}
+
 func (ec *executionContext) _GroupInvitationConnection_nodes(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitationConnection) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -5765,7 +5928,7 @@ func (ec *executionContext) _Mutation_removeGroupMembers(ctx context.Context, fi
 	return ec.marshalNGroup2ᚖgitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐGroup(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _Mutation_inviteUsersInGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
+func (ec *executionContext) _Mutation_inviteUserInGroup(ctx context.Context, field graphql.CollectedField) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -5781,7 +5944,7 @@ func (ec *executionContext) _Mutation_inviteUsersInGroup(ctx context.Context, fi
 
 	ctx = graphql.WithFieldContext(ctx, fc)
 	rawArgs := field.ArgumentMap(ec.Variables)
-	args, err := ec.field_Mutation_inviteUsersInGroup_args(ctx, rawArgs)
+	args, err := ec.field_Mutation_inviteUserInGroup_args(ctx, rawArgs)
 	if err != nil {
 		ec.Error(ctx, err)
 		return graphql.Null
@@ -5789,7 +5952,7 @@ func (ec *executionContext) _Mutation_inviteUsersInGroup(ctx context.Context, fi
 	fc.Args = args
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return ec.resolvers.Mutation().InviteUsersInGroup(rctx, args["input"].(model.InviteUsersInGroupInput))
+		return ec.resolvers.Mutation().InviteUserInGroup(rctx, args["input"].(model.InviteUserInGroupInput))
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10592,21 +10755,45 @@ func (ec *executionContext) unmarshalInputGroupInput(ctx context.Context, obj in
 	return it, nil
 }
 
-func (ec *executionContext) unmarshalInputInviteUsersInGroupInput(ctx context.Context, obj interface{}) (model.InviteUsersInGroupInput, error) {
-	var it model.InviteUsersInGroupInput
+func (ec *executionContext) unmarshalInputInviteUserInGroupInput(ctx context.Context, obj interface{}) (model.InviteUserInGroupInput, error) {
+	var it model.InviteUserInGroupInput
 	var asMap = obj.(map[string]interface{})
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "groupId":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "users":
+		case "username":
 			var err error
-			it.Users, err = ec.unmarshalNString2ᚕstringᚄ(ctx, v)
+			it.Username, err = ec.unmarshalNString2string(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "ephemeralPublicKey":
+			var err error
+			it.EphemeralPublicKey, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "invitationSignature":
+			var err error
+			it.InvitationSignature, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "encryptedMasterKey":
+			var err error
+			it.EncryptedMasterKey, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "encryptedMasterKeySignature":
+			var err error
+			it.EncryptedMasterKeySignature, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11431,6 +11618,14 @@ func (ec *executionContext) _GroupInvitation(ctx context.Context, sel ast.Select
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
+		case "ephemeralPublicKey":
+			out.Values[i] = ec._GroupInvitation_ephemeralPublicKey(ctx, field, obj)
+		case "invitationSignature":
+			out.Values[i] = ec._GroupInvitation_invitationSignature(ctx, field, obj)
+		case "encryptedMasterKey":
+			out.Values[i] = ec._GroupInvitation_encryptedMasterKey(ctx, field, obj)
+		case "encryptedMasterKeySignature":
+			out.Values[i] = ec._GroupInvitation_encryptedMasterKeySignature(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -11738,8 +11933,8 @@ func (ec *executionContext) _Mutation(ctx context.Context, sel ast.SelectionSet)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "inviteUsersInGroup":
-			out.Values[i] = ec._Mutation_inviteUsersInGroup(ctx, field)
+		case "inviteUserInGroup":
+			out.Values[i] = ec._Mutation_inviteUserInGroup(ctx, field)
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
@@ -13264,8 +13459,8 @@ func (ec *executionContext) marshalNInt642int64(ctx context.Context, sel ast.Sel
 	return res
 }
 
-func (ec *executionContext) unmarshalNInviteUsersInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUsersInGroupInput(ctx context.Context, v interface{}) (model.InviteUsersInGroupInput, error) {
-	return ec.unmarshalInputInviteUsersInGroupInput(ctx, v)
+func (ec *executionContext) unmarshalNInviteUserInGroupInput2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInviteUserInGroupInput(ctx context.Context, v interface{}) (model.InviteUserInGroupInput, error) {
+	return ec.unmarshalInputInviteUserInGroupInput(ctx, v)
 }
 
 func (ec *executionContext) marshalNInvoice2gitlabᚗcomᚋbloom42ᚋbloomᚋcmdᚋbloomᚋserverᚋapiᚋgraphqlᚋmodelᚐInvoice(ctx context.Context, sel ast.SelectionSet, v model.Invoice) graphql.Marshaler {
