@@ -62,11 +62,11 @@ func InviteUser(params messages.InviteUserInGroupParams) (*model.Group, error) {
 	defer crypto.Zeroize(signature)
 
 	input := model.InviteUserInGroupInput{
-		Username:           params.Username,
-		GroupID:            params.GroupID,
-		EphemeralPublicKey: ephemeralPublicKey,
-		Signature:          signature,
-
+		Username:                    params.Username,
+		GroupID:                     params.GroupID,
+		EphemeralPublicKey:          ephemeralPublicKey,
+		Signature:                   signature,
+		EncryptedMasterKey:          encryptedMasterKey,
 		EncryptedMasterKeySignature: masterKeySignature,
 	}
 	var resp struct {
