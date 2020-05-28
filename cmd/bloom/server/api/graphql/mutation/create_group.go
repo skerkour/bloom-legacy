@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
 	"gitlab.com/bloom42/gobox/rz"
 )
 
@@ -57,11 +58,13 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 		return
 	}
 
+	state := sync.EncodeState(newGroup.State)
 	ret = &model.Group{
 		ID:          &newGroup.ID,
 		Name:        newGroup.Name,
 		Description: newGroup.Description,
 		CreatedAt:   &newGroup.CreatedAt,
+		State:       &state,
 	}
 	return ret, nil
 }

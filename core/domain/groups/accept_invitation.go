@@ -22,10 +22,10 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	}
 
 	groupMasterKey, err := myPrivateKey.Decrypt(*invitation.EncryptedMasterKey, *invitation.EphemeralPublicKey)
+	defer crypto.Zeroize(groupMasterKey)
 	if err != nil {
 		return nil, err
 	}
-	defer crypto.Zeroize(groupMasterKey)
 
 	// encrypt group's key
 	myMasterKey, err := keys.FindUserMasterKey(ctx, nil)
@@ -68,10 +68,10 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	err = client.Do(ctx, req, &resp)
 	if err == nil {
 		group := resp.Group
-		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key)
-		VALUES (?, ?, ?, ?, ?, ?)`
+		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key, state)
+		VALUES (?, ?, ?, ?, ?, ?, ?)`
 		_, err = db.DB.Exec(queryInsert, group.ID, group.CreatedAt, group.Name, group.Description,
-			group.AvatarURL, groupMasterKey)
+			group.AvatarURL, groupMasterKey, "")
 	}
 
 	return resp.Group, err

@@ -61,10 +61,10 @@ func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
 	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
 		group := resp.CreateGroup
-		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key)
-		VALUES (?, ?, ?, ?, ?, ?)`
+		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key, state)
+		VALUES (?, ?, ?, ?, ?, ?, ?)`
 		_, err = db.DB.Exec(queryInsert, group.ID, group.CreatedAt, group.Name, group.Description,
-			group.AvatarURL, groupMasterKey)
+			group.AvatarURL, groupMasterKey, group.State)
 	}
 
 	return &resp.CreateGroup, err
