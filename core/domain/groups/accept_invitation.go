@@ -13,6 +13,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
+// AcceptInvitation accept a group invitation, decrypt the group's key and save it
 func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	client := api.Client()
 	ctx := context.Background()
