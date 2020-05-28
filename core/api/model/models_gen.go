@@ -140,7 +140,7 @@ type GroupInvitation struct {
 	Inviter                     *User     `json:"inviter"`
 	Invitee                     *User     `json:"invitee"`
 	EphemeralPublicKey          *[]byte   `json:"ephemeralPublicKey"`
-	InvitationSignature         *[]byte   `json:"invitationSignature"`
+	Signature                   *[]byte   `json:"signature"`
 	EncryptedMasterKey          *[]byte   `json:"encryptedMasterKey"`
 	EncryptedMasterKeySignature *[]byte   `json:"encryptedMasterKeySignature"`
 }
@@ -167,7 +167,7 @@ type InviteUserInGroupInput struct {
 	GroupID                     uuid.UUID `json:"groupId"`
 	Username                    string    `json:"username"`
 	EphemeralPublicKey          []byte    `json:"ephemeralPublicKey"`
-	InvitationSignature         []byte    `json:"invitationSignature"`
+	Signature                   []byte    `json:"signature"`
 	EncryptedMasterKey          []byte    `json:"encryptedMasterKey"`
 	EncryptedMasterKeySignature []byte    `json:"encryptedMasterKeySignature"`
 }
