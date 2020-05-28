@@ -2305,18 +2305,17 @@ input RemoveGroupMembersInput {
 }
 
 input AcceptGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input CancelGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
 input DeclineGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
 input InviteUserInGroupInput {
@@ -10335,9 +10334,21 @@ func (ec *executionContext) unmarshalInputAcceptGroupInvitationInput(ctx context
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "invitationID":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.InvitationID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "encryptedMasterKey":
+			var err error
+			it.EncryptedMasterKey, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			if err != nil {
+				return it, err
+			}
+		case "masterKeyNonce":
+			var err error
+			it.MasterKeyNonce, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10431,9 +10442,9 @@ func (ec *executionContext) unmarshalInputCancelGroupInvitationInput(ctx context
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "invitationID":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.InvitationID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10659,9 +10670,9 @@ func (ec *executionContext) unmarshalInputDeclineGroupInvitationInput(ctx contex
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "invitationID":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.InvitationID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}

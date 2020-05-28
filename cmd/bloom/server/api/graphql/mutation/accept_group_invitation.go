@@ -19,7 +19,9 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 	}
 
 	params := groups.AcceptInvitationParams{
-		InvitationID: input.ID,
+		InvitationID:       input.InvitationID,
+		EncryptedMasterKey: input.EncryptedMasterKey,
+		MasterKeyNonce:     input.MasterKeyNonce,
 	}
 	group, err := groups.AcceptInvitation(ctx, currentUser, params)
 	if err != nil {

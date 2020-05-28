@@ -17,7 +17,7 @@ func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.Decli
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	err = groups.DeclineInvitation(ctx, currentUser, input.ID)
+	err = groups.DeclineInvitation(ctx, currentUser, input.InvitationID)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

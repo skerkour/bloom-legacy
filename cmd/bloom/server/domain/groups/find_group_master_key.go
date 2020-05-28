@@ -9,8 +9,8 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-func FindGroupMasterKey(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID, userID uuid.UUID) (Member, error) {
-	ret := Member{}
+func FindGroupMasterKey(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID, userID uuid.UUID) (Membership, error) {
+	ret := Membership{}
 	var err error
 	logger := rz.FromCtx(ctx)
 

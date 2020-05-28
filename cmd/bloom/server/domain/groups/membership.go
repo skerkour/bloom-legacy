@@ -8,9 +8,11 @@ import (
 
 // Membership is the Go struct representing the `groups_members` table
 type Membership struct {
-	JoinedAt  time.Time `json:"joined_at" db:"joined_at"`
-	GroupID   uuid.UUID `json:"group_id" db:"group_id"`
-	UserID    uuid.UUID `json:"user_id" db:"user_id"`
-	Role      string    `json:"role" db:"role"`
-	InviterID uuid.UUID `json:"inviter_id" db:"inviter_id"`
+	JoinedAt           time.Time `db:"joined_at"`
+	GroupID            uuid.UUID `db:"group_id"`
+	UserID             uuid.UUID `db:"user_id"`
+	Role               string    `db:"role"`
+	EncryptedMasterKey []byte    `db:"encrypted_master_key"`
+	MasterKeyNonce     []byte    `db:"master_key_nonce"`
+	InviterID          uuid.UUID `db:"inviter_id"`
 }

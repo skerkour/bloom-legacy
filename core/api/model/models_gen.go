@@ -12,8 +12,9 @@ import (
 )
 
 type AcceptGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID       uuid.UUID `json:"invitationID"`
+	EncryptedMasterKey []byte    `json:"encryptedMasterKey"`
+	MasterKeyNonce     []byte    `json:"masterKeyNonce"`
 }
 
 type AddPaymentMethodInput struct {
@@ -56,8 +57,7 @@ type BloomMetadata struct {
 }
 
 type CancelGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID uuid.UUID `json:"invitationID"`
 }
 
 // set payment method with `id` as the default one
@@ -105,8 +105,7 @@ type CreateGroupInput struct {
 }
 
 type DeclineGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID uuid.UUID `json:"invitationID"`
 }
 
 type DeleteBillingPlanInput struct {

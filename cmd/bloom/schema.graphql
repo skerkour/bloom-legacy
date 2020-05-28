@@ -399,18 +399,17 @@ input RemoveGroupMembersInput {
 }
 
 input AcceptGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input CancelGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
 input DeclineGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
 input InviteUserInGroupInput {
