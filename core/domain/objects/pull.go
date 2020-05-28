@@ -9,6 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
@@ -84,7 +85,7 @@ func pull(init bool) error {
 		return err
 	}
 
-	masterKey, err = users.FindMasterKey(ctx, tx)
+	masterKey, err = keys.FindUserMasterKey(ctx, tx)
 	if err != nil {
 		tx.Rollback()
 		return err

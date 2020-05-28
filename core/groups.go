@@ -52,7 +52,7 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "inviteUser":
-		var params model.InviteUserInGroupInput
+		var params messages.InviteUserInGroupParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

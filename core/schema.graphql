@@ -130,13 +130,17 @@ type DeleteContactParams {
 ####################################################################################################
 
 type FetchGroupMembersParams {
-	id: ID!
+	groupID: ID!
 }
 
 type FetchGroupDetailsParams  {
-	id: ID!
+	groupID: ID!
 }
 
+type InviteUserInGroupParams  {
+	groupID: ID!
+  username: String!
+}
 
 
 ####################################################################################################

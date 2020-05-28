@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
 )
@@ -98,7 +99,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			}
 			defer crypto.Zeroize(masterKey) // clean masterKey from memory
 
-			err = SaveMasterKey(ctx, nil, masterKey)
+			err = keys.SaveUserMasterKey(ctx, nil, masterKey)
 			if err != nil {
 				return ret, err
 			}
@@ -111,11 +112,11 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			defer crypto.Zeroize(privateKey) // clean privateKey from memory
 
 			// save key_pair
-			err = SavePublicKey(ctx, nil, me.PublicKey)
+			err = keys.SaveUserPublicKey(ctx, nil, me.PublicKey)
 			if err != nil {
 				return ret, err
 			}
-			err = SavePrivateKey(ctx, nil, privateKey)
+			err = keys.SaveUserPrivateKey(ctx, nil, privateKey)
 			if err != nil {
 				return ret, err
 			}

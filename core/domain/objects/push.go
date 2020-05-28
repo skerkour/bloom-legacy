@@ -8,6 +8,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
@@ -46,7 +47,7 @@ func push() error {
 		objectsToPush[groupID] = append(objectsToPush[groupID], object)
 	}
 
-	masterKey, err = users.FindMasterKey(ctx, nil)
+	masterKey, err = keys.FindUserMasterKey(ctx, nil)
 	if err != nil {
 		return err
 	}

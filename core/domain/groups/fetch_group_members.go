@@ -48,7 +48,7 @@ func FetchGroupMembers(params messages.FetchGroupMembersParams) (*model.Group, e
 		}
 	}
 	`)
-	req.Var("input", params.ID)
+	req.Var("input", params.GroupID)
 
 	err := client.Do(context.Background(), req, &resp)
 

@@ -71,7 +71,7 @@ func FetchGroupDetails(params messages.FetchGroupDetailsParams) (*model.Group, e
 		}
 	}
 	`)
-	req.Var("groupId", params.ID)
+	req.Var("groupId", params.GroupID)
 
 	err := client.Do(context.Background(), req, &resp)
 

@@ -82,11 +82,11 @@ type Empty struct {
 }
 
 type FetchGroupDetailsParams struct {
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 }
 
 type FetchGroupMembersParams struct {
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 }
 
 type FetchGroupProfileParams struct {
@@ -97,6 +97,11 @@ type GroupBillingProfile struct {
 	Group           *model.Group                 `json:"group"`
 	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
 	StripePublicKey *string                      `json:"stripePublicKey"`
+}
+
+type InviteUserInGroupParams struct {
+	GroupID  uuid.UUID `json:"groupID"`
+	Username string    `json:"username"`
 }
 
 type MyBillingProfile struct {
