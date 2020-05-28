@@ -131,6 +131,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 		invit := &GroupInvitation{
 			ID: invitation.ID,
 			Group: &Group{
+				ID:          &invitation.GroupID,
 				Name:        invitation.GroupName,
 				Description: invitation.GroupDescription,
 			},

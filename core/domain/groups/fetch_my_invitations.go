@@ -20,6 +20,7 @@ func FetchMyInvitations() (*model.User, error) {
 			invitations {
 				nodes {
 					group {
+						id
 						name
 						description
 					}

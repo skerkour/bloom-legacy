@@ -2,10 +2,12 @@ package groups
 
 import (
 	"context"
+	"errors"
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
@@ -15,12 +17,43 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	client := api.Client()
 	ctx := context.Background()
 
-	// decrypt group's key
+	if invitation.EncryptedMasterKey == nil {
+		return nil, errors.New("Encrypted master key is null")
+	}
+	if invitation.EphemeralPublicKey == nil {
+		return nil, errors.New("Ephemeral public key is null")
+	}
+
 	myPrivateKey, err := keys.FindUserPrivateKey(ctx, nil)
+	defer crypto.Zeroize(myPrivateKey)
 	if err != nil {
 		return nil, err
 	}
 
+	myPublicKey, err := keys.FindUserPublicKey(ctx, nil)
+	defer crypto.Zeroize(myPublicKey)
+	if err != nil {
+		return nil, err
+	}
+
+	// verify signatures
+	inviterPublicKey := crypto.PublicKey(invitation.Inviter.PublicKey)
+
+	verified, err := inviterPublicKey.Verify(*invitation.EncryptedMasterKey, *invitation.EncryptedMasterKeySignature)
+	if err != nil {
+		return nil, err
+	}
+	if !verified {
+		return nil, errors.New("Group's master key signature is not valid")
+	}
+
+	verified, err = VerifyInvitationSignature(inviterPublicKey, *invitation.Signature, *invitation.Group.ID,
+		kernel.Me.Username, myPublicKey, *invitation.EphemeralPublicKey)
+	if !verified {
+		return nil, errors.New("Group's invitation signature is not valid")
+	}
+
+	// decrypt group's key
 	groupMasterKey, err := myPrivateKey.DecryptAnonymous(*invitation.EncryptedMasterKey, *invitation.EphemeralPublicKey)
 	defer crypto.Zeroize(groupMasterKey)
 	if err != nil {
