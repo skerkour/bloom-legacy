@@ -8,6 +8,6 @@ require (
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.5.2 // indirect
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible
-	gitlab.com/bloom42/gobox v0.0.0-20200528144705-ba9bca59c0df
+	gitlab.com/bloom42/gobox v0.0.0-20200528170305-9dc8039ff24d
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b
 )

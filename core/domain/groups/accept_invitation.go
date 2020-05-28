@@ -21,7 +21,7 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 		return nil, err
 	}
 
-	groupMasterKey, err := myPrivateKey.Decrypt(*invitation.EncryptedMasterKey, *invitation.EphemeralPublicKey)
+	groupMasterKey, err := myPrivateKey.DecryptAnonymous(*invitation.EncryptedMasterKey, *invitation.EphemeralPublicKey)
 	defer crypto.Zeroize(groupMasterKey)
 	if err != nil {
 		return nil, err
