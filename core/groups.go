@@ -62,6 +62,12 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "fetchInvitations":
+		res, err := groups.FetchMyInvitations()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
 	case "acceptInvitation":
 		var params model.GroupInvitation
 		err := json.Unmarshal(jsonParams, &params)
@@ -84,12 +90,17 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: messages.Empty{}}
-	case "fetchInvitations":
-		res, err := groups.FetchMyInvitations()
+	case "cancelInvitation":
+		var params model.CancelGroupInvitationInput
+		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: res}
+		err = groups.CancelInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	case "removeMembers":
 		var params model.RemoveGroupMembersInput
 		err := json.Unmarshal(jsonParams, &params)
