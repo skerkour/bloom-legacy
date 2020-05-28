@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchMyGroupInvitations() (*model.User, error) {
+func FetchMyInvitations() (*model.User, error) {
 	client := api.Client()
 
 	var resp struct {
@@ -26,6 +26,7 @@ func FetchMyGroupInvitations() (*model.User, error) {
 					inviter {
 						username
 						displayName
+						publicKey
 					}
 					ephemeralPublicKey
 					signature
