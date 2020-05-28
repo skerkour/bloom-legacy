@@ -18,6 +18,8 @@ gitlab.com/bloom42/gobox v0.0.0-20200528144705-ba9bca59c0df h1:UfGrTnevdSYgRXaxv
 gitlab.com/bloom42/gobox v0.0.0-20200528144705-ba9bca59c0df/go.mod h1:+LU59smDWFulOzTQso+NYPkFH0Ycdm6/YVuyulwzjv0=
 gitlab.com/bloom42/gobox v0.0.0-20200528170305-9dc8039ff24d h1:vm5bO4xXIjson/bDXX8/bh6F9QD4foLfbMw3/NXUkjg=
 gitlab.com/bloom42/gobox v0.0.0-20200528170305-9dc8039ff24d/go.mod h1:+LU59smDWFulOzTQso+NYPkFH0Ycdm6/YVuyulwzjv0=
+gitlab.com/bloom42/gobox v0.0.0-20200528192937-7e7635c22408 h1:CJaQjkl66ashgKvyvkmi6QTu2KgJG/3M8hS4GBkW8Ms=
+gitlab.com/bloom42/gobox v0.0.0-20200528192937-7e7635c22408/go.mod h1:+LU59smDWFulOzTQso+NYPkFH0Ycdm6/YVuyulwzjv0=
 golang.org/x/crypto v0.0.0-20190308221718-c2843e01d9a2/go.mod h1:djNgcEr1/C05ACkg1iLfiJU5Ep61QUkGW8qpdssI0+w=
 golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37 h1:cg5LA/zNPRzIXIWSCxQW10Rvpy94aQh3LT/ShoCpkHw=
 golang.org/x/crypto v0.0.0-20200510223506-06a226fb4e37/go.mod h1:LzIPMQfyMNhhGPhUkYOs5KpL4U8rLKemX1yGLhDgUto=
