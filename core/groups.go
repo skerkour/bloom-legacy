@@ -2,13 +2,13 @@ package core
 
 import (
 	"C"
+	"context"
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/messages"
 )
-import "context"
 
 func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
@@ -69,6 +69,23 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		res, err := groups.AcceptInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "declineInvitation":
+		var params model.DeclineGroupInvitationInput
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = groups.DeclineInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
+	case "fetchInvitations":
+		res, err := groups.FetchMyInvitations()
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

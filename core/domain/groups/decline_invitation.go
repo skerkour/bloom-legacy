@@ -8,7 +8,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func DeclineInvitation(input model.DeclineGroupInvitationInput) (bool, error) {
+func DeclineInvitation(input model.DeclineGroupInvitationInput) error {
 	client := api.Client()
 
 	var resp struct {
@@ -23,5 +23,5 @@ func DeclineInvitation(input model.DeclineGroupInvitationInput) (bool, error) {
 
 	err := client.Do(context.Background(), req, &resp)
 
-	return resp.Success, err
+	return err
 }
