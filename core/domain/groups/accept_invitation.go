@@ -16,12 +16,10 @@ import (
 func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	client := api.Client()
 	ctx := context.Background()
+	var err error
 
-	if invitation.EncryptedMasterKey == nil {
-		return nil, errors.New("Encrypted master key is null")
-	}
-	if invitation.EphemeralPublicKey == nil {
-		return nil, errors.New("Ephemeral public key is null")
+	if err = validateAcceptInvitationParams(invitation); err != nil {
+		return nil, err
 	}
 
 	myPrivateKey, err := keys.FindUserPrivateKey(ctx, nil)
@@ -108,4 +106,36 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	}
 
 	return resp.Group, err
+}
+
+func validateAcceptInvitationParams(params model.GroupInvitation) (err error) {
+	if params.EncryptedMasterKey == nil {
+		err = errors.New("Encrypted master key is null")
+		return
+	}
+	if params.EphemeralPublicKey == nil {
+		err = errors.New("Ephemeral public key is null")
+		return
+	}
+	if params.Group == nil {
+		err = errors.New("Group is null")
+		return
+	}
+	if params.EncryptedMasterKeySignature == nil {
+		err = errors.New("Encrypted master key signature is null")
+		return
+	}
+	if params.Signature == nil {
+		err = errors.New("Invitation signature is null")
+		return
+	}
+	if params.Inviter == nil {
+		err = errors.New("Inviter is null")
+		return
+	}
+	if params.Inviter.PublicKey == nil {
+		err = errors.New("Inviter's public key is null")
+		return
+	}
+	return
 }
