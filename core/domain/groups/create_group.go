@@ -7,7 +7,6 @@ import (
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/keys"
-	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
 )
@@ -30,7 +29,7 @@ func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
 		return nil, err
 	}
 
-	encryptedGroupMasterKey, nonce, err := users.Encrypt(userMasterKey, groupMasterKey)
+	encryptedGroupMasterKey, nonce, err := crypto.AEADEncrypt(userMasterKey, groupMasterKey, nil)
 	defer crypto.Zeroize(encryptedGroupMasterKey)
 	defer crypto.Zeroize(nonce)
 	if err != nil {

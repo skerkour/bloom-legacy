@@ -49,7 +49,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	if err != nil {
 		return ret, err
 	}
-	encryptedMasterKey, masterKeyNonce, err := Encrypt(wrapKey, []byte(masterKey))
+	encryptedMasterKey, masterKeyNonce, err := crypto.AEADEncrypt(wrapKey, []byte(masterKey), nil)
 	if err != nil {
 		return ret, err
 	}
@@ -71,7 +71,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	}
 
 	// encrypt privateKey
-	encryptedPrivateKey, privateKeyNonce, err := Encrypt(masterKey, []byte(privateKey))
+	encryptedPrivateKey, privateKeyNonce, err := crypto.AEADEncrypt(masterKey, []byte(privateKey), nil)
 	if err != nil {
 		return ret, err
 	}

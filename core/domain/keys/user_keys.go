@@ -14,11 +14,11 @@ func FindUserMasterKey(ctx context.Context, tx *sqlx.Tx) ([]byte, error) {
 	return findUserKey(ctx, tx, PREFERENCES_KEY_MASTER_KEY)
 }
 
-func FindUserPrivateKey(ctx context.Context, tx *sqlx.Tx) ([]byte, error) {
+func FindUserPrivateKey(ctx context.Context, tx *sqlx.Tx) (crypto.PrivateKey, error) {
 	return findUserKey(ctx, tx, PREFERENCES_KEY_PRIVATE_KEY)
 }
 
-func FindUserPublicKey(ctx context.Context, tx *sqlx.Tx) ([]byte, error) {
+func FindUserPublicKey(ctx context.Context, tx *sqlx.Tx) (crypto.PublicKey, error) {
 	return findUserKey(ctx, tx, PREFERENCES_KEY_PUBLIC_KEY)
 }
 

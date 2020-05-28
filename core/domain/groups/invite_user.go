@@ -22,18 +22,18 @@ func InviteUser(params messages.InviteUserInGroupParams) (*model.Group, error) {
 	// clean input
 	params.Username = strings.ToLower(strings.TrimSpace(params.Username))
 
+	// find my private key
+	myPrivateKey, err := keys.FindUserPrivateKey(ctx, nil)
+	if err != nil {
+		return ret, err
+	}
+	defer crypto.Zeroize(myPrivateKey)
+
 	// fetch user's public key
 	invitee, err := users.FetchUser(users.FetchUserParams{Username: params.Username})
 	if err != nil {
 		return ret, err
 	}
-
-	// generate ephemeral keypair
-	ephemeralPublicKey, ephemeralPrivateKey, err := crypto.GenerateKeyPair(crypto.RandReader())
-	if err != nil {
-		return ret, err
-	}
-	defer crypto.Zeroize(ephemeralPrivateKey)
 
 	// encrypt and sign group's masterKey
 	groupMasterKey, err := keys.FindGroupMasterKey(ctx, nil, params.GroupID)
@@ -42,12 +42,32 @@ func InviteUser(params messages.InviteUserInGroupParams) (*model.Group, error) {
 	}
 	defer crypto.Zeroize(groupMasterKey)
 
+	inviteePublicKey := crypto.PublicKey(invitee.PublicKey)
+	encryptedMasterKey, ephemeralPublicKey, err := inviteePublicKey.EncryptAnonymous(groupMasterKey)
+	if err != nil {
+		return ret, err
+	}
+
+	masterKeySignature, err := myPrivateKey.Sign(crypto.RandReader(), encryptedMasterKey, crypto.PrivateKeySignerOpts)
+	if err != nil {
+		return ret, err
+	}
+	defer crypto.Zeroize(masterKeySignature)
+
 	// sign invitation
+	signature, err := SignInvitation(myPrivateKey, params.GroupID, invitee.Username, invitee.PublicKey, ephemeralPublicKey)
+	if err != nil {
+		return ret, nil
+	}
+	defer crypto.Zeroize(signature)
 
 	input := model.InviteUserInGroupInput{
 		Username:           params.Username,
 		GroupID:            params.GroupID,
 		EphemeralPublicKey: ephemeralPublicKey,
+		Signature:          signature,
+
+		EncryptedMasterKeySignature: masterKeySignature,
 	}
 	var resp struct {
 		Group *model.Group `json:"inviteUserInGroup"`
