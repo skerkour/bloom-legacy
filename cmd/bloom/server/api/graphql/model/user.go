@@ -78,14 +78,21 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 type UserResolver struct{}
 
 type invit struct {
-	ID                 uuid.UUID `db:"invitation_id"`
-	CreatedAt          time.Time `db:"invitation_created_at"`
-	GroupID            uuid.UUID `db:"group_id"`
-	GroupCreatedAt     time.Time `db:"group_created_at"`
-	GroupName          string    `db:"group_name"`
-	GroupDescription   string    `db:"group_description"`
-	InviterUsername    string    `db:"inviter_username"`
-	InviterDisplayName string    `db:"inviter_display_name"`
+	ID                          uuid.UUID `db:"invitation_id"`
+	CreatedAt                   time.Time `db:"invitation_created_at"`
+	EncryptedMasterKey          []byte    `db:"invitation_encrypted_master_key"`
+	EncryptedMasterKeySignature []byte    `db:"invitation_encrypted_master_key_signature"`
+	EphemeralPublicKey          []byte    `db:"invitation_ephemeral_public_key"`
+	Signature                   []byte    `db:"invitation_signature"`
+
+	GroupID          uuid.UUID `db:"group_id"`
+	GroupCreatedAt   time.Time `db:"group_created_at"`
+	GroupName        string    `db:"group_name"`
+	GroupDescription string    `db:"group_description"`
+
+	InviterUsername    string `db:"inviter_username"`
+	InviterDisplayName string `db:"inviter_display_name"`
+	InviterPublicKey   []byte `db:"inviter_public_key"`
 }
 
 // GroupInvitations returns the invitations for the user
@@ -104,8 +111,10 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 
 	invitations := []invit{}
 	err := db.DB.Select(&invitations, `SELECT invit.id AS invitation_id, invit.created_at AS invitation_created_at,
+		invit.encrypted_master_key AS invitation_encrypted_master_key, invit.encrypted_master_key_signature AS invitation_encrypted_master_key_signature,
+		invit.ephemeral_public_key AS invitation_ephemeral_public_key, invit.signature AS invitation_signature,
 		groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
-			users.username AS inviter_username, users.display_name AS inviter_display_name
+			users.username AS inviter_username, users.display_name AS inviter_display_name, users.public_key AS inviter_public_key
 			FROM groups_invitations AS invit, groups, users
 			WHERE invit.group_id = groups.id AND invit.invitee_id = $1 AND users.id = invit.inviter_id`, user.ID)
 	if err != nil {
@@ -125,6 +134,15 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 				Name:        invitation.GroupName,
 				Description: invitation.GroupDescription,
 			},
+			Inviter: &User{
+				Username:    invitation.InviterUsername,
+				DisplayName: invitation.InviterDisplayName,
+				PublicKey:   invitation.InviterPublicKey,
+			},
+			EphemeralPublicKey:          &invitation.EphemeralPublicKey,
+			Signature:                   &invitation.Signature,
+			EncryptedMasterKey:          &invitation.EncryptedMasterKey,
+			EncryptedMasterKeySignature: &invitation.EncryptedMasterKeySignature,
 		}
 		ret.Nodes = append(ret.Nodes, invit)
 	}

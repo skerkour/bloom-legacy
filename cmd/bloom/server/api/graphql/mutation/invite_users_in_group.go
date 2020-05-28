@@ -21,7 +21,7 @@ func (r *Resolver) InviteUserInGroup(ctx context.Context, input model.InviteUser
 		GroupID:                     input.GroupID,
 		Username:                    input.Username,
 		EphemeralPublicKey:          input.EphemeralPublicKey,
-		InvitationSignature:         input.InvitationSignature,
+		Signature:                   input.Signature,
 		EncryptedMasterKey:          input.EncryptedMasterKey,
 		EncryptedMasterKeySignature: input.EncryptedMasterKeySignature,
 	}

@@ -12,7 +12,7 @@ type Invitation struct {
 	UpdatedAt time.Time `db:"updated_at"`
 
 	EphemeralPublicKey          []byte `db:"ephemeral_public_key"`
-	InvitationSignature         []byte `db:"invitation_signature"`
+	Signature                   []byte `db:"signature"`
 	EncryptedMasterKey          []byte `db:"encrypted_master_key"`
 	EncryptedMasterKeySignature []byte `db:"encrypted_master_key_signature"`
 

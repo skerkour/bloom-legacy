@@ -128,7 +128,7 @@ CREATE TABLE groups_invitations (
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     ephemeral_public_key BYTEA NOT NULL,
-    invitation_signature BYTEA NOT NULL,
+    signature BYTEA NOT NULL,
     encrypted_master_key BYTEA NOT NULL,
     encrypted_master_key_signature BYTEA NOT NULL,
 

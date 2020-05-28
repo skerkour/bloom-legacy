@@ -15,7 +15,7 @@ type InviteUserParams struct {
 	GroupID                     uuid.UUID
 	Username                    string
 	EphemeralPublicKey          []byte
-	InvitationSignature         []byte
+	Signature                   []byte
 	EncryptedMasterKey          []byte
 	EncryptedMasterKeySignature []byte
 }
@@ -69,7 +69,7 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 		CreatedAt:                   now,
 		UpdatedAt:                   now,
 		EphemeralPublicKey:          params.EphemeralPublicKey,
-		InvitationSignature:         params.InvitationSignature,
+		Signature:                   params.Signature,
 		EncryptedMasterKey:          params.EncryptedMasterKey,
 		EncryptedMasterKeySignature: params.EncryptedMasterKeySignature,
 		GroupID:                     group.ID,
@@ -77,11 +77,11 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 		InviterID:                   actor.ID,
 	}
 	queryInsertInvitation := `INSERT INTO groups_invitations
-		(id, created_at, updated_at, ephemeral_public_key, invitation_signature, encrypted_master_key,
+		(id, created_at, updated_at, ephemeral_public_key, signature, encrypted_master_key,
 			encrypted_master_key_signature, group_id, invitee_id, inviter_id)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
 	_, err = tx.Exec(queryInsertInvitation, invitation.ID, invitation.CreatedAt, invitation.UpdatedAt,
-		invitation.EphemeralPublicKey, invitation.InvitationSignature, invitation.EncryptedMasterKey,
+		invitation.EphemeralPublicKey, invitation.Signature, invitation.EncryptedMasterKey,
 		invitation.EncryptedMasterKeySignature, invitation.GroupID, invitation.InviteeID, invitation.InviterID)
 	if err != nil {
 		tx.Rollback()
