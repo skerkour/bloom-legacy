@@ -26,6 +26,7 @@ func FetchUser(params FetchUserParams) (*model.User, error) {
 			firstName
 			lastName
 			username
+			publicKey
 		}
 	}
 	`)

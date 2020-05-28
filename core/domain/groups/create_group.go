@@ -6,6 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/bloom/core/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
@@ -16,7 +17,7 @@ func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
 	var err error
 	ctx := context.Background()
 
-	userMasterKey, err := users.FindMasterKey(ctx, nil)
+	userMasterKey, err := keys.FindUserMasterKey(ctx, nil)
 	defer crypto.Zeroize(userMasterKey)
 	if err != nil {
 		return nil, err
