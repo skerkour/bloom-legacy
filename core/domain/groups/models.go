@@ -16,5 +16,6 @@ type Group struct {
 	Name        string    `json:"name" db:"name"`
 	Description string    `json:"description" db:"description"`
 	AvatarURL   *string   `json:"avatarUrl" db:"avatar_url"`
-	State       string    `db:"state" json:"state"`
+	State       string    `json:"state" db:"state"`
+	MasterKey   []byte    `json:"-" db:"master_key"`
 }

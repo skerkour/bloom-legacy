@@ -90,7 +90,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			defer crypto.Zeroize(wrapKey)
 
 			// decrypt master_key
-			masterKey, err := decrypt(wrapKey, me.MasterKeyNonce, me.EncryptedMasterKey)
+			masterKey, err := Decrypt(wrapKey, me.MasterKeyNonce, me.EncryptedMasterKey)
 			if err != nil {
 				// log.Error(err.Error())
 				// return ret, err
@@ -104,7 +104,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			}
 
 			// decrypt private_key
-			privateKey, err := decrypt(masterKey, me.PrivateKeyNonce, me.EncryptedPrivateKey)
+			privateKey, err := Decrypt(masterKey, me.PrivateKeyNonce, me.EncryptedPrivateKey)
 			if err != nil {
 				return ret, errors.New("Internal error. Please try again privateKey")
 			}

@@ -4,7 +4,7 @@ import (
 	"gitlab.com/bloom42/gobox/crypto"
 )
 
-func encrypt(key, plaintext []byte) (ciphertext, nonce []byte, err error) {
+func Encrypt(key, plaintext []byte) (ciphertext, nonce []byte, err error) {
 	nonce, err = crypto.NewAEADNonce()
 	if err != nil {
 		return
@@ -17,7 +17,7 @@ func encrypt(key, plaintext []byte) (ciphertext, nonce []byte, err error) {
 	return
 }
 
-func decrypt(key, nonce, ciphertext []byte) (plaintext []byte, err error) {
+func Decrypt(key, nonce, ciphertext []byte) (plaintext []byte, err error) {
 	cipher, err := crypto.NewAEAD(key)
 	if err != nil {
 		return
