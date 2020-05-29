@@ -134,14 +134,13 @@ type GroupInput struct {
 }
 
 type GroupInvitation struct {
-	ID                          uuid.UUID `json:"id"`
-	Group                       *Group    `json:"group"`
-	Inviter                     *User     `json:"inviter"`
-	Invitee                     *User     `json:"invitee"`
-	EphemeralPublicKey          *[]byte   `json:"ephemeralPublicKey"`
-	Signature                   *[]byte   `json:"signature"`
-	EncryptedMasterKey          *[]byte   `json:"encryptedMasterKey"`
-	EncryptedMasterKeySignature *[]byte   `json:"encryptedMasterKeySignature"`
+	ID                 uuid.UUID `json:"id"`
+	Group              *Group    `json:"group"`
+	Inviter            *User     `json:"inviter"`
+	Invitee            *User     `json:"invitee"`
+	EphemeralPublicKey *[]byte   `json:"ephemeralPublicKey"`
+	EncryptedMasterKey *[]byte   `json:"encryptedMasterKey"`
+	Signature          *[]byte   `json:"signature"`
 }
 
 type GroupInvitationConnection struct {
@@ -163,12 +162,11 @@ type GroupMemberEdge struct {
 }
 
 type InviteUserInGroupInput struct {
-	GroupID                     uuid.UUID `json:"groupId"`
-	Username                    string    `json:"username"`
-	EphemeralPublicKey          []byte    `json:"ephemeralPublicKey"`
-	Signature                   []byte    `json:"signature"`
-	EncryptedMasterKey          []byte    `json:"encryptedMasterKey"`
-	EncryptedMasterKeySignature []byte    `json:"encryptedMasterKeySignature"`
+	GroupID            uuid.UUID `json:"groupId"`
+	Username           string    `json:"username"`
+	EphemeralPublicKey []byte    `json:"ephemeralPublicKey"`
+	EncryptedMasterKey []byte    `json:"encryptedMasterKey"`
+	Signature          []byte    `json:"signature"`
 }
 
 type Invoice struct {

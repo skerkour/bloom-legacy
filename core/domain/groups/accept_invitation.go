@@ -35,19 +35,11 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 		return nil, err
 	}
 
-	// verify signatures
+	// verify signature
 	inviterPublicKey := crypto.PublicKey(invitation.Inviter.PublicKey)
 
-	verified, err := inviterPublicKey.Verify(*invitation.EncryptedMasterKey, *invitation.EncryptedMasterKeySignature)
-	if err != nil {
-		return nil, err
-	}
-	if !verified {
-		return nil, errors.New("Group's master key signature is not valid")
-	}
-
-	verified, err = VerifyInvitationSignature(inviterPublicKey, *invitation.Signature, *invitation.Group.ID,
-		kernel.Me.Username, myPublicKey, *invitation.EphemeralPublicKey)
+	verified, err := VerifyInvitationSignature(inviterPublicKey, *invitation.Signature, *invitation.Group.ID,
+		kernel.Me.Username, myPublicKey, *invitation.EphemeralPublicKey, *invitation.EncryptedMasterKey)
 	if !verified {
 		return nil, errors.New("Group's invitation signature is not valid")
 	}
@@ -120,10 +112,6 @@ func validateAcceptInvitationParams(params model.GroupInvitation) (err error) {
 	}
 	if params.Group == nil {
 		err = errors.New("Group is null")
-		return
-	}
-	if params.EncryptedMasterKeySignature == nil {
-		err = errors.New("Encrypted master key signature is null")
 		return
 	}
 	if params.Signature == nil {

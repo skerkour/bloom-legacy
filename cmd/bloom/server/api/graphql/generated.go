@@ -104,14 +104,13 @@ type ComplexityRoot struct {
 	}
 
 	GroupInvitation struct {
-		EncryptedMasterKey          func(childComplexity int) int
-		EncryptedMasterKeySignature func(childComplexity int) int
-		EphemeralPublicKey          func(childComplexity int) int
-		Group                       func(childComplexity int) int
-		ID                          func(childComplexity int) int
-		Invitee                     func(childComplexity int) int
-		Inviter                     func(childComplexity int) int
-		Signature                   func(childComplexity int) int
+		EncryptedMasterKey func(childComplexity int) int
+		EphemeralPublicKey func(childComplexity int) int
+		Group              func(childComplexity int) int
+		ID                 func(childComplexity int) int
+		Invitee            func(childComplexity int) int
+		Inviter            func(childComplexity int) int
+		Signature          func(childComplexity int) int
 	}
 
 	GroupInvitationConnection struct {
@@ -675,13 +674,6 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 		}
 
 		return e.complexity.GroupInvitation.EncryptedMasterKey(childComplexity), true
-
-	case "GroupInvitation.encryptedMasterKeySignature":
-		if e.complexity.GroupInvitation.EncryptedMasterKeySignature == nil {
-			break
-		}
-
-		return e.complexity.GroupInvitation.EncryptedMasterKeySignature(childComplexity), true
 
 	case "GroupInvitation.ephemeralPublicKey":
 		if e.complexity.GroupInvitation.EphemeralPublicKey == nil {
@@ -2055,9 +2047,8 @@ type GroupInvitation {
   invitee: User!
 
   ephemeralPublicKey: Bytes
-  signature: Bytes
   encryptedMasterKey: Bytes
-  encryptedMasterKeySignature: Bytes
+  signature: Bytes
 }
 
 type GroupInvitationConnection {
@@ -2322,9 +2313,8 @@ input InviteUserInGroupInput {
   groupId: ID!
   username: String!
   ephemeralPublicKey: Bytes!
-  signature: Bytes!
   encryptedMasterKey: Bytes!
-  encryptedMasterKeySignature: Bytes!
+  signature: Bytes!
 }
 
 input QuitGroupInput {
@@ -4406,37 +4396,6 @@ func (ec *executionContext) _GroupInvitation_ephemeralPublicKey(ctx context.Cont
 	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GroupInvitation_signature(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
-	defer func() {
-		if r := recover(); r != nil {
-			ec.Error(ctx, ec.Recover(ctx, r))
-			ret = graphql.Null
-		}
-	}()
-	fc := &graphql.FieldContext{
-		Object:   "GroupInvitation",
-		Field:    field,
-		Args:     nil,
-		IsMethod: false,
-	}
-
-	ctx = graphql.WithFieldContext(ctx, fc)
-	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
-		ctx = rctx // use context from middleware stack in children
-		return obj.Signature, nil
-	})
-	if err != nil {
-		ec.Error(ctx, err)
-		return graphql.Null
-	}
-	if resTmp == nil {
-		return graphql.Null
-	}
-	res := resTmp.(*[]byte)
-	fc.Result = res
-	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
-}
-
 func (ec *executionContext) _GroupInvitation_encryptedMasterKey(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
@@ -4468,7 +4427,7 @@ func (ec *executionContext) _GroupInvitation_encryptedMasterKey(ctx context.Cont
 	return ec.marshalOBytes2ᚖᚕbyte(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _GroupInvitation_encryptedMasterKeySignature(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
+func (ec *executionContext) _GroupInvitation_signature(ctx context.Context, field graphql.CollectedField, obj *model.GroupInvitation) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -4485,7 +4444,7 @@ func (ec *executionContext) _GroupInvitation_encryptedMasterKeySignature(ctx con
 	ctx = graphql.WithFieldContext(ctx, fc)
 	resTmp, err := ec.ResolverMiddleware(ctx, func(rctx context.Context) (interface{}, error) {
 		ctx = rctx // use context from middleware stack in children
-		return obj.EncryptedMasterKeySignature, nil
+		return obj.Signature, nil
 	})
 	if err != nil {
 		ec.Error(ctx, err)
@@ -10790,21 +10749,15 @@ func (ec *executionContext) unmarshalInputInviteUserInGroupInput(ctx context.Con
 			if err != nil {
 				return it, err
 			}
-		case "signature":
-			var err error
-			it.Signature, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
-			if err != nil {
-				return it, err
-			}
 		case "encryptedMasterKey":
 			var err error
 			it.EncryptedMasterKey, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
-		case "encryptedMasterKeySignature":
+		case "signature":
 			var err error
-			it.EncryptedMasterKeySignature, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
+			it.Signature, err = ec.unmarshalNBytes2ᚕbyte(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -11631,12 +11584,10 @@ func (ec *executionContext) _GroupInvitation(ctx context.Context, sel ast.Select
 			}
 		case "ephemeralPublicKey":
 			out.Values[i] = ec._GroupInvitation_ephemeralPublicKey(ctx, field, obj)
-		case "signature":
-			out.Values[i] = ec._GroupInvitation_signature(ctx, field, obj)
 		case "encryptedMasterKey":
 			out.Values[i] = ec._GroupInvitation_encryptedMasterKey(ctx, field, obj)
-		case "encryptedMasterKeySignature":
-			out.Values[i] = ec._GroupInvitation_encryptedMasterKeySignature(ctx, field, obj)
+		case "signature":
+			out.Values[i] = ec._GroupInvitation_signature(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

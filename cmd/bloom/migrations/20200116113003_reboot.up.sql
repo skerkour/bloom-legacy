@@ -130,7 +130,6 @@ CREATE TABLE groups_invitations (
     ephemeral_public_key BYTEA NOT NULL,
     signature BYTEA NOT NULL,
     encrypted_master_key BYTEA NOT NULL,
-    encrypted_master_key_signature BYTEA NOT NULL,
 
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     invitee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,

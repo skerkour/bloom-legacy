@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 )
 
-// InviteUsersInGroup is used by groups' admin to invite users in a group, by their usernames
+// InviteUserInGroup is used by groups' admin to invite users in a group, by their usernames
 func (r *Resolver) InviteUserInGroup(ctx context.Context, input model.InviteUserInGroupInput) (ret *model.Group, err error) {
 	currentUser := apiutil.UserFromCtx(ctx)
 
@@ -18,12 +18,11 @@ func (r *Resolver) InviteUserInGroup(ctx context.Context, input model.InviteUser
 	}
 
 	params := groups.InviteUserParams{
-		GroupID:                     input.GroupID,
-		Username:                    input.Username,
-		EphemeralPublicKey:          input.EphemeralPublicKey,
-		Signature:                   input.Signature,
-		EncryptedMasterKey:          input.EncryptedMasterKey,
-		EncryptedMasterKeySignature: input.EncryptedMasterKeySignature,
+		GroupID:            input.GroupID,
+		Username:           input.Username,
+		EphemeralPublicKey: input.EphemeralPublicKey,
+		Signature:          input.Signature,
+		EncryptedMasterKey: input.EncryptedMasterKey,
 	}
 	group, err := groups.InviteUser(ctx, currentUser, params)
 	if err != nil {

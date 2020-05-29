@@ -12,12 +12,11 @@ import (
 )
 
 type InviteUserParams struct {
-	GroupID                     uuid.UUID
-	Username                    string
-	EphemeralPublicKey          []byte
-	Signature                   []byte
-	EncryptedMasterKey          []byte
-	EncryptedMasterKeySignature []byte
+	GroupID            uuid.UUID
+	Username           string
+	EphemeralPublicKey []byte
+	Signature          []byte
+	EncryptedMasterKey []byte
 }
 
 func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams) (retGroup *Group, err error) {
@@ -65,24 +64,23 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 	// create invitation
 	now := time.Now().UTC()
 	invitation = &Invitation{
-		ID:                          uuid.New(),
-		CreatedAt:                   now,
-		UpdatedAt:                   now,
-		EphemeralPublicKey:          params.EphemeralPublicKey,
-		Signature:                   params.Signature,
-		EncryptedMasterKey:          params.EncryptedMasterKey,
-		EncryptedMasterKeySignature: params.EncryptedMasterKeySignature,
-		GroupID:                     group.ID,
-		InviteeID:                   inviteeId,
-		InviterID:                   actor.ID,
+		ID:                 uuid.New(),
+		CreatedAt:          now,
+		UpdatedAt:          now,
+		EphemeralPublicKey: params.EphemeralPublicKey,
+		Signature:          params.Signature,
+		EncryptedMasterKey: params.EncryptedMasterKey,
+		GroupID:            group.ID,
+		InviteeID:          inviteeId,
+		InviterID:          actor.ID,
 	}
 	queryInsertInvitation := `INSERT INTO groups_invitations
 		(id, created_at, updated_at, ephemeral_public_key, signature, encrypted_master_key,
-			encrypted_master_key_signature, group_id, invitee_id, inviter_id)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)`
+			group_id, invitee_id, inviter_id)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)`
 	_, err = tx.Exec(queryInsertInvitation, invitation.ID, invitation.CreatedAt, invitation.UpdatedAt,
 		invitation.EphemeralPublicKey, invitation.Signature, invitation.EncryptedMasterKey,
-		invitation.EncryptedMasterKeySignature, invitation.GroupID, invitation.InviteeID, invitation.InviterID)
+		invitation.GroupID, invitation.InviteeID, invitation.InviterID)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.InviteUser: inserting new invitation", rz.Err(err))

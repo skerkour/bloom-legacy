@@ -140,10 +140,9 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 				DisplayName: invitation.InviterDisplayName,
 				PublicKey:   invitation.InviterPublicKey,
 			},
-			EphemeralPublicKey:          &invitation.EphemeralPublicKey,
-			Signature:                   &invitation.Signature,
-			EncryptedMasterKey:          &invitation.EncryptedMasterKey,
-			EncryptedMasterKeySignature: &invitation.EncryptedMasterKeySignature,
+			EphemeralPublicKey: &invitation.EphemeralPublicKey,
+			Signature:          &invitation.Signature,
+			EncryptedMasterKey: &invitation.EncryptedMasterKey,
 		}
 		ret.Nodes = append(ret.Nodes, invit)
 	}

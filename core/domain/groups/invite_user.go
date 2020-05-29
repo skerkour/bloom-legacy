@@ -48,26 +48,19 @@ func InviteUser(params messages.InviteUserInGroupParams) (*model.Group, error) {
 		return ret, err
 	}
 
-	masterKeySignature, err := myPrivateKey.Sign(crypto.RandReader(), encryptedMasterKey, crypto.PrivateKeySignerOpts)
-	if err != nil {
-		return ret, err
-	}
-	defer crypto.Zeroize(masterKeySignature)
-
 	// sign invitation
-	signature, err := SignInvitation(myPrivateKey, params.GroupID, invitee.Username, invitee.PublicKey, ephemeralPublicKey)
+	signature, err := SignInvitation(myPrivateKey, params.GroupID, invitee.Username, invitee.PublicKey, ephemeralPublicKey, encryptedMasterKey)
 	if err != nil {
 		return ret, nil
 	}
 	defer crypto.Zeroize(signature)
 
 	input := model.InviteUserInGroupInput{
-		Username:                    params.Username,
-		GroupID:                     params.GroupID,
-		EphemeralPublicKey:          ephemeralPublicKey,
-		Signature:                   signature,
-		EncryptedMasterKey:          encryptedMasterKey,
-		EncryptedMasterKeySignature: masterKeySignature,
+		Username:           params.Username,
+		GroupID:            params.GroupID,
+		EphemeralPublicKey: ephemeralPublicKey,
+		Signature:          signature,
+		EncryptedMasterKey: encryptedMasterKey,
 	}
 	var resp struct {
 		Group *model.Group `json:"inviteUserInGroup"`

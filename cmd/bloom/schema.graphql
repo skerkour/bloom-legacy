@@ -149,9 +149,8 @@ type GroupInvitation {
   invitee: User!
 
   ephemeralPublicKey: Bytes
-  signature: Bytes
   encryptedMasterKey: Bytes
-  encryptedMasterKeySignature: Bytes
+  signature: Bytes
 }
 
 type GroupInvitationConnection {
@@ -416,9 +415,8 @@ input InviteUserInGroupInput {
   groupId: ID!
   username: String!
   ephemeralPublicKey: Bytes!
-  signature: Bytes!
   encryptedMasterKey: Bytes!
-  encryptedMasterKeySignature: Bytes!
+  signature: Bytes!
 }
 
 input QuitGroupInput {
