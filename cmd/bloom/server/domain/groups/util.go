@@ -51,7 +51,7 @@ func CheckUserIsGroupMember(ctx context.Context, tx *sqlx.Tx, userID, groupID uu
 		err = tx.Get(&memberhsip, queryGetMembership, groupID, userID)
 	}
 	if err != nil {
-		logger.Error("groups.checkUserIsGroupAdmin: fetching group membership", rz.Err(err),
+		logger.Error("groups.checkUserIsGroupMember: fetching group membership", rz.Err(err),
 			rz.String("group.id", groupID.String()), rz.String("user.id", userID.String()))
 		return NewError(ErrorGroupNotFound)
 	}

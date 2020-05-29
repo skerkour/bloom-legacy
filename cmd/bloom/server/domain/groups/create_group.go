@@ -39,13 +39,14 @@ func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params Cre
 		UpdatedAt:   now,
 		Name:        params.Name,
 		Description: params.Description,
+		State:       0,
 	}
 
 	// create group
 	queryCreateGroup := `INSERT INTO groups
-		(id, created_at, updated_at, name, description)
-		VALUES ($1, $2, $3, $4, $5)`
-	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description)
+		(id, created_at, updated_at, name, description, state)
+		VALUES ($1, $2, $3, $4, $5, $6)`
+	_, err = tx.Exec(queryCreateGroup, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Name, ret.Description, ret.State)
 	if err != nil {
 		logger.Error("groups.CreateGroup: inserting new group", rz.Err(err))
 		return ret, NewError(ErrorCreatingGroup)
