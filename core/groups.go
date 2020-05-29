@@ -91,7 +91,7 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: messages.Empty{}}
 	case "cancelInvitation":
-		var params model.CancelGroupInvitationInput
+		var params messages.GroupsCancelInvitationParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

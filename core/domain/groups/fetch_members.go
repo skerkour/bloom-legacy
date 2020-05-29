@@ -34,6 +34,7 @@ func FetchMembers(params messages.GroupsFetchMembersParams) (*model.Group, error
 			}
 			invitations {
 				nodes {
+					id
 					inviter {
 						username
 						displayName

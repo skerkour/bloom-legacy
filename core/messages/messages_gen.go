@@ -55,7 +55,6 @@ type DashboardData struct {
 // type Contacts struct {
 //   Contacts []Contact `json:"contacts"`
 // }
-//
 // type CreateContactParams struct {
 //   DeviceID      string        `json:"deviceId"`
 //   FirstName     string        `json:"firstName"`
@@ -89,6 +88,10 @@ type GroupBillingProfile struct {
 	Group           *model.Group                 `json:"group"`
 	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
 	StripePublicKey *string                      `json:"stripePublicKey"`
+}
+
+type GroupsCancelInvitationParams struct {
+	InvitationID uuid.UUID `json:"invitationID"`
 }
 
 type GroupsCreateParams struct {

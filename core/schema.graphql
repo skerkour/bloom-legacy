@@ -146,6 +146,10 @@ type GroupsInviteUserParams  {
   username: String!
 }
 
+type GroupsCancelInvitationParams  {
+	invitationID: ID!
+}
+
 
 ####################################################################################################
 ## kernel
