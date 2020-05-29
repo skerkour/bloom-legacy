@@ -19,7 +19,6 @@ export type Scalars = {
   Bytes: any;
 };
 
-
 export type DashboardData = {
   __typename?: 'DashboardData';
   metadata?: Maybe<Scalars['BloomMetadata']>;
@@ -148,6 +147,11 @@ export type GroupsInviteUserParams = {
 
 export type GroupsCancelInvitationParams = {
   __typename?: 'GroupsCancelInvitationParams';
+  invitationID: Scalars['ID'];
+};
+
+export type GroupsDeclineInvitationParams = {
+  __typename?: 'GroupsDeclineInvitationParams';
   invitationID: Scalars['ID'];
 };
 

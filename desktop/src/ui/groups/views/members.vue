@@ -108,7 +108,7 @@
                   <v-list>
                     <v-list-item @click="cancelInvitation(item)">
                       <v-list-item-icon>
-                        <v-icon>mdi-cancel</v-icon>
+                        <v-icon color="error">mdi-cancel</v-icon>
                       </v-list-item-icon>
                       <v-list-item-title>Cancel invitation</v-list-item-title>
                     </v-list-item>

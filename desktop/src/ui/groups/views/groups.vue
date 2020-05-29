@@ -94,14 +94,14 @@
                   </template>
 
                   <v-list>
-                    <v-list-item>
+                    <v-list-item @click="acceptInvitation(item)">
                       <v-list-item-icon>
                         <v-icon color="success">mdi-check</v-icon>
                       </v-list-item-icon>
                       <v-list-item-title>Join group</v-list-item-title>
                     </v-list-item>
 
-                    <v-list-item>
+                    <v-list-item @click="declineInvitation(item)">
                       <v-list-item-icon>
                         <v-icon color="red">mdi-cancel</v-icon>
                       </v-list-item-icon>
@@ -130,6 +130,7 @@ import { Group, GroupInvitation, User } from '@/api/models';
 import core from '@/core';
 import { Method, Groups } from '@/core/groups';
 import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
+import { GroupsDeclineInvitationParams } from '../../../core/messages';
 
 @Component({
   components: {
@@ -218,7 +219,37 @@ export default class GroupsView extends Vue {
     }
   }
 
-  // async acceptInvitation(invitation: GroupInvitation)
+  async acceptInvitation(invitation: GroupInvitation) {
+    this.invitationsError = '';
+    this.invitationsLoading = true;
+
+    try {
+      const res: Group = await core.call(Method.AcceptInvitation, invitation);
+      this.groups.push(res);
+    } catch (err) {
+      this.invitationsError = err.message;
+    } finally {
+      this.invitationsLoading = false;
+    }
+  }
+
+  async declineInvitation(invitation: GroupInvitation) {
+    this.invitationsError = '';
+    this.invitationsLoading = true;
+    const params: GroupsDeclineInvitationParams = {
+      invitationID: invitation.id,
+    };
+
+    try {
+      await core.call(Method.DeclineInvitation, params);
+      this.invitations = this.invitations
+        .filter((invit: GroupInvitation) => invitation.id !== invit.id);
+    } catch (err) {
+      this.invitationsError = err.message;
+    } finally {
+      this.invitationsLoading = false;
+    }
+  }
 
   openNewGroupDialog() {
     this.showNewGroupDialog = true;
