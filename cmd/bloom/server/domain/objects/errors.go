@@ -1,4 +1,4 @@
-package sync
+package objects
 
 import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"

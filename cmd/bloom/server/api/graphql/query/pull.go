@@ -6,7 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/objects"
 )
 
 // Pull returns the changes from a given state
@@ -18,17 +18,17 @@ func (resolver *Resolver) Pull(ctx context.Context, input model.PullInput) (ret 
 		return
 	}
 
-	repositories := []sync.RepositoryPull{}
+	repositories := []objects.RepositoryPull{}
 	for _, repo := range input.Repositories {
-		repository := sync.RepositoryPull{
+		repository := objects.RepositoryPull{
 			SinceState: repo.SinceState,
 			GroupID:    repo.GroupID,
 		}
 		repositories = append(repositories, repository)
 	}
 
-	params := sync.PullParams{Repositories: repositories}
-	result, err := sync.Pull(ctx, currentUser, params)
+	params := objects.PullParams{Repositories: repositories}
+	result, err := objects.Pull(ctx, currentUser, params)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

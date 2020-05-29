@@ -456,6 +456,7 @@ github.com/yudai/gojsondiff v1.0.0/go.mod h1:AY32+k2cwILAkW1fbgxQ5mUmMiZFgLIV+FB
 github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDfVJdfcVVdX+jpBxNmX4rDAzaS45IcYoM=
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
+gitlab.com/bloom42/bloom v0.0.0-20200507191022-b05498037a55 h1:EqoGYIhS21SrDTFJl9gg0E8LGCn2lo/MHcYK6AjQiYg=
 gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55 h1:RVYsovx2PTIfHpHUsEm9wrS9zNZvuSnHuN0iLQ418EA=
 gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55/go.mod h1:BnoB3kVaI1LganiLWHs4a5xn83auMMQ87Ivzh/LxaPg=
 gitlab.com/bloom42/gobox v0.0.0-20200519150838-fc534b6ec981 h1:69z6EHfKMUFx+fXVOX5gUPoMagYNM23ddaMiPJCA4o4=

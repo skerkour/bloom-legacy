@@ -7,7 +7,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/objects"
 )
 
 // AcceptGroupInvitation accepts a group invitaiton
@@ -28,7 +28,7 @@ func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.Accept
 		return ret, gqlerrors.New(err)
 	}
 
-	state := sync.EncodeState(group.State)
+	state := objects.EncodeState(group.State)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,

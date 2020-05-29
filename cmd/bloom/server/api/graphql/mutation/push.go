@@ -6,7 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/objects"
 )
 
 // Push is used to push changes
@@ -18,15 +18,15 @@ func (resolver *Resolver) Push(ctx context.Context, input model.PushInput) (ret 
 		return
 	}
 
-	repositories := []sync.RepositoryPush{}
+	repositories := []objects.RepositoryPush{}
 	for _, repo := range input.Repositories {
-		repositoryPush := sync.RepositoryPush{
+		repositoryPush := objects.RepositoryPush{
 			CurrentState: repo.CurrentState,
 			GroupID:      repo.GroupID,
-			Objects:      []sync.APIObject{},
+			Objects:      []objects.APIObject{},
 		}
 		for _, object := range repo.Objects {
-			obj := sync.APIObject{
+			obj := objects.APIObject{
 				ID:            object.ID,
 				Algorithm:     object.Algorithm,
 				EncryptedData: object.EncryptedData,
@@ -38,8 +38,8 @@ func (resolver *Resolver) Push(ctx context.Context, input model.PushInput) (ret 
 		repositories = append(repositories, repositoryPush)
 	}
 
-	params := sync.PushParams{Repositories: repositories}
-	result, err := sync.Push(ctx, currentUser, params)
+	params := objects.PushParams{Repositories: repositories}
+	result, err := objects.Push(ctx, currentUser, params)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

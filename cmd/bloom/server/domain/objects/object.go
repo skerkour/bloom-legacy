@@ -1,4 +1,4 @@
-package sync
+package objects
 
 import (
 	"gitlab.com/bloom42/gobox/uuid"
