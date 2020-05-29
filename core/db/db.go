@@ -74,6 +74,11 @@ func Init(key *string) error {
 		return err
 	}
 
+	_, err = DB.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		return err
+	}
+
 	// see https://github.com/signalapp/Signal-Desktop/blob/master/app/sql.js
 	// for reference
 	migrations := []migration.Version{

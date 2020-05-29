@@ -51,7 +51,7 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		type TEXT NOT NULL,
 		data JSON NOT NULL,
 		out_of_sync INTEGER NOT NULL,
-		group_id TEXT
+		group_id TEXT REFERENCES groups(id) ON DELETE CASCADE
 	)
 	`)
 	if err != nil {

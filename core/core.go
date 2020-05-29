@@ -49,6 +49,10 @@ func Init(params InitParams) (InitRes, error) {
 
 	ctx := context.Background()
 	for _, key := range params.Preferences {
+		// prevent user's keys exfiltration
+		if strings.Contains(key, "key") {
+			continue
+		}
 		value, err := preferences.Get(ctx, nil, key)
 		if err == nil {
 			ret.Preferences[key] = value
