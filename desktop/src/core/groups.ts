@@ -10,6 +10,7 @@ export enum Method {
   FetchGroups = 'groups.fetchGroups',
   FetchDetails = 'groups.fetchDetails',
   CancelInvitation = 'groups.cancelInvitation',
+  FetchMyInvitations = 'groups.fetchMyInvitations',
 }
 
 export type Groups = {

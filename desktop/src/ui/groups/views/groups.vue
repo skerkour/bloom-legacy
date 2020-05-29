@@ -1,8 +1,16 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid class="text-left overflow-y-auto" style="height: 100vh">
     <v-row>
-      <v-alert type="error" :value="error !== ''">
-        {{ error }}
+      <v-col cols="12">
+        <h2 class="headline">
+          My Groups
+        </h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-alert type="error" :value="groupsError !== ''">
+        {{ groupsError }}
       </v-alert>
     </v-row>
 
@@ -20,7 +28,7 @@
           :headers="groupsHeaders"
           :items="groups"
           item-key="id"
-          :loading="loading"
+          :loading="groupsLoading"
           loading-text="Loading... Please wait"
           hide-default-footer>
           <template v-slot:item="{ item }" >
@@ -44,6 +52,71 @@
       </v-col>
     </v-row>
 
+    <v-row>
+      <v-col cols="12">
+        <h2 class="headline">
+          My Invitations
+        </h2>
+      </v-col>
+    </v-row>
+
+    <v-row>
+      <v-alert type="error" :value="invitationsError !== ''">
+        {{ invitationsError }}
+      </v-alert>
+    </v-row>
+
+
+    <v-row>
+      <v-col cols="12" sm="10" lg="8">
+        <v-data-table
+          :headers="invitationsHeaders"
+          :items="invitations"
+          item-key="invitee.username"
+          :loading="loading"
+          loading-text="Loading... Please wait"
+          no-data-text="No invitation"
+          hide-default-footer>
+          <template v-slot:item="{ item }">
+            <tr>
+              <td>
+                <span>{{ item.group.name }}</span>
+              </td>
+              <td>
+                <span>{{ item.inviter.displayName }} @{{ item.inviter.username }}</span>
+              </td>
+              <td>
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" v-if="!item.isDefault">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item>
+                      <v-list-item-icon>
+                        <v-icon color="success">mdi-check</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Join group</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item>
+                      <v-list-item-icon>
+                        <v-icon color="red">mdi-cancel</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Decline invitation</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
+              </td>
+            </tr>
+          </template>
+        </v-data-table>
+      </v-col>
+    </v-row>
+
+
   <blm-groups-new-group-dialog :visible="showNewGroupDialog"
       @closed="newGroupDialogClosed" @created="groupCreated" />
 
@@ -53,7 +126,7 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { Group } from '@/api/models';
+import { Group, GroupInvitation, User } from '@/api/models';
 import core from '@/core';
 import { Method, Groups } from '@/core/groups';
 import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
@@ -66,9 +139,12 @@ import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
 export default class GroupsView extends Vue {
   // props
   // data
-  error = '';
+  groupsError = '';
+  invitationsError = '';
   groups: Group[] = [];
-  loading = false;
+  invitations: GroupInvitation[] = [];
+  groupsLoading = false;
+  invitationsLoading = false;
   showNewGroupDialog = false;
   groupsHeaders = [
     {
@@ -83,29 +159,66 @@ export default class GroupsView extends Vue {
       text: 'Description',
       value: 'description',
     },
-  ]
+  ];
+  invitationsHeaders = [
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Group',
+      value: 'group.name',
+    },
+    {
+      align: 'left',
+      sortable: true,
+      text: 'Inviter',
+      value: 'inviter.displayName',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Actions',
+      value: 'actions',
+    },
+  ];
 
   // computed
   // lifecycle
   created() {
-    this.fetchData();
+    this.findGroups();
+    this.fetchMyInvitations();
   }
 
   // watch
   // methods
-  async fetchData() {
-    this.error = '';
-    this.loading = true;
+  async findGroups() {
+    this.groupsError = '';
+    this.groupsLoading = true;
 
     try {
       const res: Groups = await core.call(Method.FindGroups, core.Empty);
       this.groups = res.groups;
     } catch (err) {
-      this.error = err.message;
+      this.groupsError = err.message;
     } finally {
-      this.loading = false;
+      this.groupsLoading = false;
     }
   }
+
+  async fetchMyInvitations() {
+    this.invitationsError = '';
+    this.invitationsLoading = true;
+
+    try {
+      const res: User = await core.call(Method.FetchMyInvitations, core.Empty);
+      this.invitations = res.groupInvitations!.nodes;
+    } catch (err) {
+      this.invitationsError = err.message;
+    } finally {
+      this.invitationsLoading = false;
+    }
+  }
+
+  // async acceptInvitation(invitation: GroupInvitation)
 
   openNewGroupDialog() {
     this.showNewGroupDialog = true;
