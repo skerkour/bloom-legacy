@@ -22,8 +22,8 @@ func DeleteObject(ctx context.Context, tx *sqlx.Tx, objectID []byte) error {
 		_, err = tx.Exec(query, args...)
 	}
 	if err != nil {
-		log.Debug("Error deleting object", rz.Err(err), rz.String("object.id", base64.StdEncoding.EncodeToString(objectID)))
-
+		log.Debug("Error deleting object", rz.Err(err),
+			rz.String("object.id", base64.StdEncoding.EncodeToString(objectID)))
 	}
 	return err
 }

@@ -13,6 +13,7 @@ import (
 func DeleteGroup(params messages.GroupsDeleteParams) error {
 	client := api.Client()
 	var err error
+	ctx := context.Background()
 
 	input := model.DeleteGroupInput{
 		ID: params.GroupID,
@@ -27,10 +28,10 @@ func DeleteGroup(params messages.GroupsDeleteParams) error {
 	`)
 	req.Var("input", input)
 
-	err = client.Do(context.Background(), req, &resp)
+	err = client.Do(ctx, req, &resp)
 	if err == nil {
 		_, err = db.DB.Exec("DELETE FROM groups WHERE id = ?", input.ID)
-		db.DB.Exec("DELETE FROM objects WHERE group_id = ?", input.ID)
+		DeleteGroupObjects(ctx, nil, input.ID)
 	}
 
 	return err

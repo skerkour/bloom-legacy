@@ -10,7 +10,6 @@ func Init(enableBackgroundSync bool) error {
 
 	if enableBackgroundSync {
 		go backgroundSync(context.Background())
-
 	}
 	return nil
 }

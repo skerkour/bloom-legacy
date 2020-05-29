@@ -11,6 +11,7 @@ import (
 
 func QuitGroup(input model.QuitGroupInput) (bool, error) {
 	client := api.Client()
+	ctx := context.Background()
 
 	var resp struct {
 		Success bool `json:"quitGroup"`
@@ -22,9 +23,10 @@ func QuitGroup(input model.QuitGroupInput) (bool, error) {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err := client.Do(ctx, req, &resp)
 	if err == nil {
 		_, err = db.DB.Exec("DELETE FROM groups WHERE id = ?", input.ID)
+		DeleteGroupObjects(ctx, nil, input.ID)
 	}
 
 	return resp.Success, err
