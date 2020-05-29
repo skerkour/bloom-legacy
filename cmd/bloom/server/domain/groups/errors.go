@@ -61,7 +61,7 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Some usernames were not found. Please verify your invitees list and retry."
 	case ErrorUserAlreadyInGroup:
 		code = errors.AlreadyExists
-		message = "At least one user is already in group or invited. Please remove it and retry."
+		message = "User is already in group or invited. Please remove it and retry."
 	case ErrorQuittingGroup:
 		message = "Error quitting group. Please try again."
 	case ErrorAtLeastOneAdministratorShouldRemainsInGroup:

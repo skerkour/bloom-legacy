@@ -21,7 +21,7 @@ type InviteUserParams struct {
 
 func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams) (retGroup *Group, err error) {
 	logger := rz.FromCtx(ctx)
-	var inviteeId uuid.UUID
+	var inviteeID uuid.UUID
 	var group Group
 	var invitation *Invitation
 
@@ -43,7 +43,7 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 	}
 
 	queryStr := "SELECT id FROM users WHERE username = $1"
-	err = tx.Get(&inviteeId, queryStr, params.Username)
+	err = tx.Get(&inviteeID, queryStr, params.Username)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.InviteUser: error fetching invitee", rz.Err(err))
@@ -51,11 +51,7 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 		return
 	}
 
-	if err = CheckUserIsGroupAdmin(ctx, tx, actor.ID, group.ID); err != nil {
-		return
-	}
-
-	err = validateInviteUser(ctx, tx, actor, group, inviteeId)
+	err = validateInviteUser(ctx, tx, actor, group, inviteeID)
 	if err != nil {
 		tx.Rollback()
 		return
@@ -71,7 +67,7 @@ func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams)
 		Signature:          params.Signature,
 		EncryptedMasterKey: params.EncryptedMasterKey,
 		GroupID:            group.ID,
-		InviteeID:          inviteeId,
+		InviteeID:          inviteeID,
 		InviterID:          actor.ID,
 	}
 	queryInsertInvitation := `INSERT INTO groups_invitations
@@ -111,10 +107,16 @@ func validateInviteUser(ctx context.Context, tx *sqlx.Tx, inviter *users.User, g
 	}
 
 	//  check that user is not already in group or awaiting invitations
-	queryStr := `SELECT COUNT(*)
-		FROM groups_members, groups_invitations
-		WHERE (groups_members.group_id = $1 AND groups_members.user_id = $2)
-			OR (groups_invitations.invitee_id = $2)`
+	// queryStr := `SELECT COUNT(*)
+	// 	FROM groups_members, groups_invitations
+	// 	WHERE (groups_members.group_id = $1 AND groups_members.user_id = $2)
+	// 		OR (groups_invitations.invitee_id = $2)`
+	queryStr := `SELECT SUM(count_members + count_invitations) FROM
+	(SELECT COUNT(*) AS count_members FROM groups_members
+		WHERE group_id = $1 AND user_id = $2) AS count_members,
+
+	(SELECT COUNT(*) AS count_invitations FROM groups_invitations
+		WHERE invitee_id = $2) AS count_invitations`
 
 	// query, args, err := sqlx.In(queryStr, group.ID, inviteesIds)
 	// query = tx.Rebind(query)
