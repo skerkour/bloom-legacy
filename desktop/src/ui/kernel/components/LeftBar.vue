@@ -6,7 +6,7 @@
     absolute
     fill-height
     dark
-    class="blm-left-bar"
+    class="blm-left-bar overflow-y-auto"
   >
     <v-list>
       <v-list-item>
@@ -149,5 +149,6 @@ export default class LeftBar extends Vue {
   z-index: 100;
   overflow-y: auto;
   width: 72px !important;
+  height: 100vh;
 }
 </style>
