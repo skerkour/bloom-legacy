@@ -25,7 +25,7 @@ func VerifyUser(params VerifyRegistrationParams) (bool, error) {
 		VerifyUser *bool `json:"verifyUser"`
 	}
 	req := graphql.NewRequest(`
-        mutation ($input: verifyUserInput!) {
+        mutation ($input: VerifyUserInput!) {
 			verifyUser(input: $input)
 		}
 	`)
