@@ -31,7 +31,8 @@ func DeleteGroup(params messages.GroupsDeleteParams) error {
 	err = client.Do(ctx, req, &resp)
 	if err == nil {
 		_, err = db.DB.Exec("DELETE FROM groups WHERE id = ?", input.ID)
-		DeleteGroupObjects(ctx, nil, input.ID)
+		// automatically deleted thanks to ON CASCADE
+		// DeleteGroupObjects(ctx, nil, input.ID)
 	}
 
 	return err

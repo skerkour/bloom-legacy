@@ -23,6 +23,7 @@ func Init(params InitParams) (InitRes, error) {
 		Preferences: map[string]interface{}{},
 	}
 	client := api.Client()
+	ctx := context.Background()
 
 	log.Debug("Initializing core", rz.Any("params", params))
 	if params.Env != "development" && params.Env != "dev" {
@@ -47,7 +48,6 @@ func Init(params InitParams) (InitRes, error) {
 		kernel.Me = signedIn.Me
 	}
 
-	ctx := context.Background()
 	for _, key := range params.Preferences {
 		// prevent user's keys exfiltration
 		if strings.Contains(key, "key") {
