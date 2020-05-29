@@ -11,6 +11,7 @@ export type Scalars = {
   Int64: any;
 };
 
+
 export enum SessionDeviceOs {
   Linux = 'LINUX',
   Macos = 'MACOS',
@@ -114,6 +115,8 @@ export type Group = {
   name: Scalars['String'];
   description: Scalars['String'];
   state?: Maybe<Scalars['String']>;
+  encryptedMasterKey?: Maybe<Scalars['Bytes']>;
+  masterKeyNonce?: Maybe<Scalars['Bytes']>;
   members?: Maybe<GroupMemberConnection>;
   invitations?: Maybe<GroupInvitationConnection>;
   subscription?: Maybe<BillingSubscription>;
@@ -148,6 +151,9 @@ export type GroupInvitation = {
   group: Group;
   inviter: User;
   invitee: User;
+  ephemeralPublicKey?: Maybe<Scalars['Bytes']>;
+  encryptedMasterKey?: Maybe<Scalars['Bytes']>;
+  signature?: Maybe<Scalars['Bytes']>;
 };
 
 export type GroupInvitationConnection = {
@@ -396,8 +402,8 @@ export type SendNewRegistrationCodeInput = {
 export type CreateGroupInput = {
   name: Scalars['String'];
   description: Scalars['String'];
-  /** users to invite, by username */
-  usersToInvite: Array<Scalars['String']>;
+  encryptedMasterKey: Scalars['Bytes'];
+  masterKeyNonce: Scalars['Bytes'];
 };
 
 export type DeleteGroupInput = {
@@ -419,25 +425,25 @@ export type RemoveGroupMembersInput = {
 };
 
 export type AcceptGroupInvitationInput = {
-  /** group id */
-  id: Scalars['ID'];
+  invitationID: Scalars['ID'];
+  encryptedMasterKey: Scalars['Bytes'];
+  masterKeyNonce: Scalars['Bytes'];
 };
 
 export type CancelGroupInvitationInput = {
-  /** group id */
-  id: Scalars['ID'];
+  invitationID: Scalars['ID'];
 };
 
 export type DeclineGroupInvitationInput = {
-  /** group id */
-  id: Scalars['ID'];
+  invitationID: Scalars['ID'];
 };
 
-export type InviteUsersInGroupInput = {
-  /** group id */
-  id: Scalars['ID'];
-  /** users to invite, by username */
-  users: Array<Scalars['String']>;
+export type InviteUserInGroupInput = {
+  groupId: Scalars['ID'];
+  username: Scalars['String'];
+  ephemeralPublicKey: Scalars['Bytes'];
+  encryptedMasterKey: Scalars['Bytes'];
+  signature: Scalars['Bytes'];
 };
 
 export type QuitGroupInput = {
@@ -579,7 +585,7 @@ export type Mutation = {
   /** Remove users from a group */
   removeGroupMembers: Group;
   /** Invite users in a group */
-  inviteUsersInGroup: Group;
+  inviteUserInGroup: Group;
   /** Accept a group invitaiton and join it */
   acceptGroupInvitation: Group;
   /** Decline a group invitation */
@@ -689,8 +695,8 @@ export type MutationRemoveGroupMembersArgs = {
 };
 
 
-export type MutationInviteUsersInGroupArgs = {
-  input: InviteUsersInGroupInput;
+export type MutationInviteUserInGroupArgs = {
+  input: InviteUserInGroupInput;
 };
 
 

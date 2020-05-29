@@ -20,13 +20,17 @@
         </v-col>
 
         <v-col cols="12">
-          <v-combobox
+          <!-- <v-combobox
             v-model="usersToInvite"
             label="Usernames"
             multiple
             chips
             :loading="loading"
-        ></v-combobox>
+        ></v-combobox> -->
+        <v-text-field
+           v-model="userToInvite"
+           :loading="loading"
+        />
         </v-col>
 
       </v-card-text>
@@ -46,7 +50,7 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { InviteUsersInGroupInput, Group } from '@/api/models';
+import { InviteUserInGroupInput, Group } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
 
@@ -59,7 +63,7 @@ export default class Groups extends Vue {
   // data
   error = '';
   loading = false;
-  usersToInvite = [];
+  userToInvite = '';
 
   // computed
   get show() {
@@ -79,9 +83,12 @@ export default class Groups extends Vue {
   async invite() {
     this.loading = true;
     this.error = '';
-    const params: InviteUsersInGroupInput = {
-      id: this.groupId,
-      users: this.usersToInvite,
+    const params: InviteUserInGroupInput = {
+      groupId: this.groupId,
+      username: this.userToInvite,
+      ephemeralPublicKey: null,
+      encryptedMasterKey: null,
+      signature: null,
     };
 
     try {
@@ -96,7 +103,7 @@ export default class Groups extends Vue {
   }
 
   cancel() {
-    this.usersToInvite = [];
+    this.userToInvite = '';
     this.error = '';
     this.loading = false;
     this.close();

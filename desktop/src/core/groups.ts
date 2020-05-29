@@ -14,11 +14,3 @@ export enum Method {
 export type Groups = {
   groups: Group[],
 }
-
-export type FetchGroupMembersParams = {
-  id: string,
-}
-
-export type FetchGroupDetailsParams = {
-  id: string,
-}

@@ -1,4 +1,3 @@
-/* eslint-disable */
 export type Maybe<T> = T | null;
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
@@ -19,12 +18,6 @@ export type Scalars = {
   Time: any;
   Bytes: any;
 };
-
-
-
-
-
-
 
 
 export type DashboardData = {
@@ -103,25 +96,7 @@ export type CalendarDeleteEventParams = {
   id: Scalars['Bytes'];
 };
 
-/**
- * type Contacts struct {
- * 	Contacts []Contact `json:"contacts"`
- * }
- *
- * type CreateContactParams struct {
- * 	DeviceID      string        `json:"deviceId"`
- * 	FirstName     string        `json:"firstName"`
- * 	LastName      string        `json:"lastName"`
- * 	Notes         string        `json:"notes"`
- * 	Birthday      *time.Time    `json:"birthday"`
- * 	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
- * 	Organizations Organizations `json:"organizations"`
- * 	Addresses     Addresses     `json:"addresses"`
- * 	Emails        Emails        `json:"emails"`
- * 	Phones        Phones        `json:"phones"`
- * 	Websites      Websites      `json:"websites"`
- * }
- */
+
 export type DeleteContactParams = {
   __typename?: 'DeleteContactParams';
   id: Scalars['Bytes'];
@@ -129,12 +104,18 @@ export type DeleteContactParams = {
 
 export type FetchGroupMembersParams = {
   __typename?: 'FetchGroupMembersParams';
-  id: Scalars['ID'];
+  groupID: Scalars['ID'];
 };
 
 export type FetchGroupDetailsParams = {
   __typename?: 'FetchGroupDetailsParams';
-  id: Scalars['ID'];
+  groupID: Scalars['ID'];
+};
+
+export type InviteUserInGroupParams = {
+  __typename?: 'InviteUserInGroupParams';
+  groupID: Scalars['ID'];
+  username: Scalars['String'];
 };
 
 export type Empty = {

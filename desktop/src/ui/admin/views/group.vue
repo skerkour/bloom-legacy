@@ -60,7 +60,8 @@ import { Component, Vue } from 'vue-property-decorator';
 import {
   Group, Invoice, PaymentMethod,
 } from '@/api/models';
-import { FetchGroupDetailsParams, Method } from '@/core/groups';
+import { Method } from '@/core/groups';
+import { FetchGroupDetailsParams } from '@/core/messages';
 import core from '@/core';
 import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
 import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
@@ -107,7 +108,7 @@ export default class AdminGroupView extends Vue {
     this.error = '';
     this.loading = true;
     const params: FetchGroupDetailsParams = {
-      id: this.groupId,
+      groupID: this.groupId,
     };
 
     try {

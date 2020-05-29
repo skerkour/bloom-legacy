@@ -27,11 +27,11 @@ export default function getApps() {
       path: '/files',
       icon: '/assets/imgs/icons/files.svg',
     },
-    {
-      name: 'Bitflow',
-      path: '/bitflow',
-      icon: '/assets/imgs/icons/bitflow.svg',
-    },
+    // {
+    //   name: 'Bitflow',
+    //   path: '/bitflow',
+    //   icon: '/assets/imgs/icons/bitflow.svg',
+    // },
     // {
     //   name: 'Gallery',
     //   path: '/gallery',

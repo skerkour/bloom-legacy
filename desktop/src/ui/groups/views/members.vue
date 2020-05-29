@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid class="text-left overflow-y-auto" style="height: 100vh">
     <v-row>
       <v-col cols="12" v-if="error">
         <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
@@ -124,7 +124,9 @@ import {
   RemoveGroupMembersInput,
 } from '@/api/models';
 import core from '@/core';
-import { Method, FetchGroupMembersParams } from '@/core/groups';
+import { Method } from '@/core/groups';
+import { FetchGroupMembersParams } from '@/core/messages';
+
 
 @Component({
   components: {
@@ -205,7 +207,7 @@ export default class GroupsMembersView extends Vue {
     this.error = '';
     this.loading = true;
     const params: FetchGroupMembersParams = {
-      id: this.$route.params.groupId,
+      groupID: this.$route.params.groupId,
     };
 
     try {

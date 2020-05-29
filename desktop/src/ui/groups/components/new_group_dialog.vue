@@ -89,7 +89,8 @@ export default class Groups extends Vue {
     const params: CreateGroupInput = {
       name: this.name,
       description: this.description,
-      usersToInvite: [],
+      encryptedMasterKey: null,
+      masterKeyNonce: null,
     };
 
     try {

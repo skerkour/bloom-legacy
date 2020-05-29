@@ -7,7 +7,6 @@ import NotesRouter from '@/ui/notes/router';
 import ArcadeRouter from '@/ui/arcade/router';
 import CalendarRouter from '@/ui/calendar/router';
 import FilesRouter from '@/ui/files/router';
-import BitflowRouter from '@/ui/bitflow/router';
 import ContactsRouter from '@/ui/contacts/router';
 import CalculatorRouter from '@/ui/calculator/router';
 import AdminRouter from '@/ui/admin/router';
@@ -30,7 +29,6 @@ const router = new Router({
     ...CalendarRouter,
     ...ArcadeRouter,
     ...FilesRouter,
-    ...BitflowRouter,
     ...ContactsRouter,
     ...CalculatorRouter,
     ...AdminRouter,

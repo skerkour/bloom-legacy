@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid class="text-left overflow-y-auto" style="height: 100vh">
 
     <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
       {{ error }}
