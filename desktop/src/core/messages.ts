@@ -141,6 +141,11 @@ export type GroupsInviteUserParams = {
   username: Scalars['String'];
 };
 
+export type GroupsCancelInvitationParams = {
+  __typename?: 'GroupsCancelInvitationParams';
+  invitationID: Scalars['ID'];
+};
+
 export type Empty = {
   __typename?: 'Empty';
   empty?: Maybe<Scalars['Boolean']>;

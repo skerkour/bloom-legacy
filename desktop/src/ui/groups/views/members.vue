@@ -98,7 +98,22 @@
                 <span>{{ item.inviter.displayName }} @{{ item.inviter.username }}</span>
               </td>
               <td>
-                Actions
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" v-if="!item.isDefault">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item @click="cancelInvitation(item)">
+                      <v-list-item-icon>
+                        <v-icon>mdi-cancel</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Cancel invitation</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </td>
             </tr>
           </template>
@@ -125,7 +140,7 @@ import {
 } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
-import { GroupsFetchMembersParams } from '@/core/messages';
+import { GroupsFetchMembersParams, GroupsCancelInvitationParams } from '@/core/messages';
 
 
 @Component({
@@ -244,6 +259,25 @@ export default class GroupsMembersView extends Vue {
     try {
       const res: Group = await core.call(Method.RemoveMembers, params);
       this.group!.members = res.members;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async cancelInvitation(invitation: GroupInvitation) {
+    this.loading = true;
+    this.error = '';
+    console.log(invitation);
+    const params: GroupsCancelInvitationParams = {
+      invitationID: invitation.id,
+    };
+
+    try {
+      await core.call(Method.CancelInvitation, params);
+      this.group!.invitations!.nodes = this.group!.invitations!.nodes
+        .filter((invit: GroupInvitation) => invitation.id !== invit.id);
     } catch (err) {
       this.error = err.message;
     } finally {
