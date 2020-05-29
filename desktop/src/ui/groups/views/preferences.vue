@@ -51,9 +51,9 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import { DeleteGroupInput } from '../../../api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
+import { GroupsDeleteParams } from '@/core/messages';
 
 @Component
 export default class GroupsPreferencesView extends Vue {
@@ -75,8 +75,8 @@ export default class GroupsPreferencesView extends Vue {
   async deleteGroup() {
     this.loading = true;
     this.error = '';
-    const params: DeleteGroupInput = {
-      id: this.groupId,
+    const params: GroupsDeleteParams = {
+      groupID: this.groupId,
     };
 
     try {

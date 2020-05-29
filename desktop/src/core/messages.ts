@@ -125,6 +125,11 @@ export type GroupsCreateParams = {
   description: Scalars['String'];
 };
 
+export type GroupsDeleteParams = {
+  __typename?: 'GroupsDeleteParams';
+  groupID: Scalars['ID'];
+};
+
 export type GroupsFetchMembersParams = {
   __typename?: 'GroupsFetchMembersParams';
   groupID: Scalars['ID'];
