@@ -1,14 +1,16 @@
 package objects
 
-// import (
-// 	"context"
-// )
+import (
+	"context"
+)
 
 // Init inits the objects (sync) service
-func Init() error {
+func Init(enableBackgroundSync bool) error {
 	SyncChan = make(chan bool)
 
-	// go backgroundSync(context.Background())
+	if enableBackgroundSync {
+		go backgroundSync(context.Background())
 
+	}
 	return nil
 }
