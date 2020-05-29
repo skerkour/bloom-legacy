@@ -99,6 +99,10 @@ type GroupsCreateParams struct {
 	Description string `json:"description"`
 }
 
+type GroupsDeleteParams struct {
+	GroupID uuid.UUID `json:"groupID"`
+}
+
 type GroupsFetchDetailsParams struct {
 	GroupID uuid.UUID `json:"groupID"`
 }

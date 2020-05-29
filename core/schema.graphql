@@ -133,6 +133,10 @@ type GroupsCreateParams {
   description: String!
 }
 
+type GroupsDeleteParams {
+  groupID: ID!
+}
+
 type GroupsFetchMembersParams {
 	groupID: ID!
 }
