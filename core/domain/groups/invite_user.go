@@ -20,7 +20,8 @@ func InviteUser(params messages.GroupsInviteUserParams) (*model.Group, error) {
 	var ret *model.Group
 
 	// clean input
-	params.Username = strings.ToLower(strings.TrimSpace(params.Username))
+	params.Username = strings.ToLower(params.Username)
+	params.Username = strings.TrimSpace(params.Username)
 
 	// find my private key
 	myPrivateKey, err := keys.FindUserPrivateKey(ctx, nil)
@@ -59,15 +60,15 @@ func InviteUser(params messages.GroupsInviteUserParams) (*model.Group, error) {
 		Username:           params.Username,
 		GroupID:            params.GroupID,
 		EphemeralPublicKey: ephemeralPublicKey,
-		Signature:          signature,
 		EncryptedMasterKey: encryptedMasterKey,
+		Signature:          signature,
 	}
 	var resp struct {
 		Group *model.Group `json:"inviteUserInGroup"`
 	}
 	req := graphql.NewRequest(`
 	mutation($input: InviteUserInGroupInput!) {
-		inviteUsersInGroup(input: $input) {
+		inviteUserInGroup(input: $input) {
 			invitations {
 				nodes {
 					inviter {

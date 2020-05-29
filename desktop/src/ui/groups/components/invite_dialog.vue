@@ -30,6 +30,9 @@
         <v-text-field
            v-model="userToInvite"
            :loading="loading"
+           placeholder="Username"
+           prefix="@"
+           @keyup.enter.native="invite"
         />
         </v-col>
 
@@ -50,9 +53,11 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { InviteUserInGroupInput, Group } from '@/api/models';
+import { Group } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
+import { GroupsInviteUserParams } from '@/core/messages';
+
 
 @Component
 export default class Groups extends Vue {
@@ -83,12 +88,9 @@ export default class Groups extends Vue {
   async invite() {
     this.loading = true;
     this.error = '';
-    const params: InviteUserInGroupInput = {
-      groupId: this.groupId,
+    const params: GroupsInviteUserParams = {
+      groupID: this.groupId,
       username: this.userToInvite,
-      ephemeralPublicKey: null,
-      encryptedMasterKey: null,
-      signature: null,
     };
 
     try {
