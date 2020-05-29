@@ -17,8 +17,12 @@ func FetchMyInvitations() (*model.User, error) {
 	req := graphql.NewRequest(`
 	query {
 		me {
-			invitations {
+			groupInvitations {
 				nodes {
+					id
+					ephemeralPublicKey
+					signature
+					encryptedMasterKey
 					group {
 						id
 						name
@@ -29,10 +33,6 @@ func FetchMyInvitations() (*model.User, error) {
 						displayName
 						publicKey
 					}
-					ephemeralPublicKey
-					signature
-					encryptedMasterKey
-					encryptedMasterKeySignature
 				}
 				totalCount
 			}
