@@ -4,11 +4,11 @@ export enum Method {
   CreateGroup = 'groups.createGroup',
   DeleteGroup = 'groups.deleteGroup',
   FindGroups = 'groups.findGroups',
-  FetchGroupMembers = 'groups.fetchGroupMembers',
+  FetchMembers = 'groups.fetchMembers',
   InviteUser = 'groups.inviteUser',
   RemoveMembers = 'groups.removeMembers',
   FetchGroups = 'groups.fetchGroups',
-  FetchGroupDetails = 'groups.fetchGroupDetails',
+  FetchDetails = 'groups.fetchDetails',
 }
 
 export type Groups = {

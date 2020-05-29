@@ -125,7 +125,7 @@ import {
 } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
-import { FetchGroupMembersParams } from '@/core/messages';
+import { GroupsFetchMembersParams } from '@/core/messages';
 
 
 @Component({
@@ -206,12 +206,12 @@ export default class GroupsMembersView extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
-    const params: FetchGroupMembersParams = {
+    const params: GroupsFetchMembersParams = {
       groupID: this.$route.params.groupId,
     };
 
     try {
-      this.group = await core.call(Method.FetchGroupMembers, params);
+      this.group = await core.call(Method.FetchMembers, params);
     } catch (err) {
       this.error = err.message;
     } finally {

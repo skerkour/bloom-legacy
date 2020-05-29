@@ -96,31 +96,54 @@ export type CalendarDeleteEventParams = {
   id: Scalars['Bytes'];
 };
 
-
+/**
+ * type Contacts struct {
+ *   Contacts []Contact `json:"contacts"`
+ * }
+ * type CreateContactParams struct {
+ *   DeviceID      string        `json:"deviceId"`
+ *   FirstName     string        `json:"firstName"`
+ *   LastName      string        `json:"lastName"`
+ *   Notes         string        `json:"notes"`
+ *   Birthday      *time.Time    `json:"birthday"`
+ *   BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
+ *   Organizations Organizations `json:"organizations"`
+ *   Addresses     Addresses     `json:"addresses"`
+ *   Emails        Emails        `json:"emails"`
+ *   Phones        Phones        `json:"phones"`
+ *   Websites      Websites      `json:"websites"`
+ * }
+ */
 export type DeleteContactParams = {
   __typename?: 'DeleteContactParams';
   id: Scalars['Bytes'];
 };
 
-export type FetchGroupMembersParams = {
-  __typename?: 'FetchGroupMembersParams';
+export type GroupsCreateParams = {
+  __typename?: 'GroupsCreateParams';
+  name: Scalars['String'];
+  description: Scalars['String'];
+};
+
+export type GroupsFetchMembersParams = {
+  __typename?: 'GroupsFetchMembersParams';
   groupID: Scalars['ID'];
 };
 
-export type FetchGroupDetailsParams = {
-  __typename?: 'FetchGroupDetailsParams';
+export type GroupsFetchDetailsParams = {
+  __typename?: 'GroupsFetchDetailsParams';
   groupID: Scalars['ID'];
 };
 
-export type InviteUserInGroupParams = {
-  __typename?: 'InviteUserInGroupParams';
+export type GroupsInviteUserParams = {
+  __typename?: 'GroupsInviteUserParams';
   groupID: Scalars['ID'];
   username: Scalars['String'];
 };
 
 export type Empty = {
   __typename?: 'Empty';
-  noop?: Maybe<Scalars['Boolean']>;
+  empty?: Maybe<Scalars['Boolean']>;
 };
 
 export type CreateNoteParams = {

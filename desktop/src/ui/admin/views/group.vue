@@ -61,7 +61,7 @@ import {
   Group, Invoice, PaymentMethod,
 } from '@/api/models';
 import { Method } from '@/core/groups';
-import { FetchGroupDetailsParams } from '@/core/messages';
+import { GroupsFetchDetailsParams } from '@/core/messages';
 import core from '@/core';
 import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
 import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
@@ -107,12 +107,12 @@ export default class AdminGroupView extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
-    const params: FetchGroupDetailsParams = {
+    const params: GroupsFetchDetailsParams = {
       groupID: this.groupId,
     };
 
     try {
-      this.group = await core.call(Method.FetchGroupDetails, params);
+      this.group = await core.call(Method.FetchDetails, params);
     } catch (err) {
       this.error = err.message;
     } finally {
