@@ -14,7 +14,7 @@ func FindGroupInvitations(ctx context.Context, tx *sqlx.Tx, groupId uuid.UUID) (
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	query := `SELECT groups_invitations.id invitation_id, groups_invitations.group_id invitation_group_id,
+	query := `SELECT DISTINCT ON (invitation_id) groups_invitations.id invitation_id, groups_invitations.group_id invitation_group_id,
 	groups_invitations.created_at invitation_created_at, inviters.*, invitees.*
 			FROM
 				(SELECT

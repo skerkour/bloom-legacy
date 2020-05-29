@@ -92,6 +92,7 @@ func (resolver *GroupResolver) Invitations(ctx context.Context, group *Group) (*
 
 	for _, invitation := range invitations {
 		invit := &GroupInvitation{
+			ID: invitation.ID,
 			Inviter: &User{
 				Username:    invitation.InviterUsername,
 				DisplayName: invitation.InviterUsername,
