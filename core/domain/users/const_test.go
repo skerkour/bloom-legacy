@@ -10,9 +10,6 @@ func TestPreferencesKeys(t *testing.T) {
 		PREFERENCES_KEY_SESSION,
 	}
 	expected := []string{
-		"master_key",
-		"private_key",
-		"public_key",
 		"me",
 		"session",
 	}
