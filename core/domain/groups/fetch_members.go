@@ -9,15 +9,15 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchGroupMembers(params messages.FetchGroupMembersParams) (*model.Group, error) {
+func FetchMembers(params messages.GroupsFetchMembersParams) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
 		Group *model.Group `json:"group"`
 	}
 	req := graphql.NewRequest(`
-	query($input: ID!) {
-		group(id: $input) {
+	query($groupID: ID!) {
+		group(id: $groupID) {
 			id
 			name
 			members {
@@ -48,7 +48,7 @@ func FetchGroupMembers(params messages.FetchGroupMembersParams) (*model.Group, e
 		}
 	}
 	`)
-	req.Var("input", params.GroupID)
+	req.Var("groupID", params.GroupID)
 
 	err := client.Do(context.Background(), req, &resp)
 

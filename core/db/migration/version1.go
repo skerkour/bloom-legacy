@@ -34,6 +34,7 @@ func (v Version1) Run(db *sqlx.DB, userVersion int) error {
 		name TEXT NOT NULL,
 		description TEXT NOT NULL,
 		avatar_url TEXT,
+		master_key BLOB NOT NULL,
 		state string NOT NULL
 	)
 	`)

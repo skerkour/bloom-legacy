@@ -13,7 +13,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func InviteUser(params messages.InviteUserInGroupParams) (*model.Group, error) {
+func InviteUser(params messages.GroupsInviteUserParams) (*model.Group, error) {
 	client := api.Client()
 	ctx := context.Background()
 	var err error

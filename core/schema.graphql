@@ -101,21 +101,20 @@ type CalendarDeleteEventParams {
 
 """
 type Contacts struct {
-	Contacts []Contact `json:"contacts"`
+  Contacts []Contact `json:"contacts"`
 }
-
 type CreateContactParams struct {
-	DeviceID      string        `json:"deviceId"`
-	FirstName     string        `json:"firstName"`
-	LastName      string        `json:"lastName"`
-	Notes         string        `json:"notes"`
-	Birthday      *time.Time    `json:"birthday"`
-	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
-	Organizations Organizations `json:"organizations"`
-	Addresses     Addresses     `json:"addresses"`
-	Emails        Emails        `json:"emails"`
-	Phones        Phones        `json:"phones"`
-	Websites      Websites      `json:"websites"`
+  DeviceID      string        `json:"deviceId"`
+  FirstName     string        `json:"firstName"`
+  LastName      string        `json:"lastName"`
+  Notes         string        `json:"notes"`
+  Birthday      *time.Time    `json:"birthday"`
+  BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
+  Organizations Organizations `json:"organizations"`
+  Addresses     Addresses     `json:"addresses"`
+  Emails        Emails        `json:"emails"`
+  Phones        Phones        `json:"phones"`
+  Websites      Websites      `json:"websites"`
 }
 
 """
@@ -129,15 +128,20 @@ type DeleteContactParams {
 ## groups
 ####################################################################################################
 
-type FetchGroupMembersParams {
+type GroupsCreateParams {
+  name: String!
+  description: String!
+}
+
+type GroupsFetchMembersParams {
 	groupID: ID!
 }
 
-type FetchGroupDetailsParams  {
+type GroupsFetchDetailsParams  {
 	groupID: ID!
 }
 
-type InviteUserInGroupParams  {
+type GroupsInviteUserParams  {
 	groupID: ID!
   username: String!
 }
@@ -148,7 +152,7 @@ type InviteUserInGroupParams  {
 ####################################################################################################
 
 type Empty {
-  noop: Boolean
+  empty: Boolean
 }
 
 

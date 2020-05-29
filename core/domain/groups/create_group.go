@@ -7,11 +7,12 @@ import (
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/keys"
+	"gitlab.com/bloom42/bloom/core/messages"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
+func CreateGroup(params messages.GroupsCreateParams) (*model.Group, error) {
 	client := api.Client()
 	var err error
 	ctx := context.Background()
@@ -36,9 +37,12 @@ func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
 		return nil, err
 	}
 
-	input.EncryptedMasterKey = encryptedGroupMasterKey
-	input.MasterKeyNonce = nonce
-
+	input := model.CreateGroupInput{
+		Name:               params.Name,
+		Description:        params.Description,
+		EncryptedMasterKey: encryptedGroupMasterKey,
+		MasterKeyNonce:     nonce,
+	}
 	var resp struct {
 		CreateGroup model.Group `json:"createGroup"`
 	}
@@ -64,7 +68,7 @@ func CreateGroup(input model.CreateGroupInput) (*model.Group, error) {
 		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key, state)
 		VALUES (?, ?, ?, ?, ?, ?, ?)`
 		_, err = db.DB.Exec(queryInsert, group.ID, group.CreatedAt, group.Name, group.Description,
-			group.AvatarURL, groupMasterKey, group.State)
+			group.AvatarURL, groupMasterKey, "")
 	}
 
 	return &resp.CreateGroup, err

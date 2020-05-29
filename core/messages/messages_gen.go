@@ -53,21 +53,21 @@ type DashboardData struct {
 }
 
 // type Contacts struct {
-// 	Contacts []Contact `json:"contacts"`
+//   Contacts []Contact `json:"contacts"`
 // }
 //
 // type CreateContactParams struct {
-// 	DeviceID      string        `json:"deviceId"`
-// 	FirstName     string        `json:"firstName"`
-// 	LastName      string        `json:"lastName"`
-// 	Notes         string        `json:"notes"`
-// 	Birthday      *time.Time    `json:"birthday"`
-// 	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
-// 	Organizations Organizations `json:"organizations"`
-// 	Addresses     Addresses     `json:"addresses"`
-// 	Emails        Emails        `json:"emails"`
-// 	Phones        Phones        `json:"phones"`
-// 	Websites      Websites      `json:"websites"`
+//   DeviceID      string        `json:"deviceId"`
+//   FirstName     string        `json:"firstName"`
+//   LastName      string        `json:"lastName"`
+//   Notes         string        `json:"notes"`
+//   Birthday      *time.Time    `json:"birthday"`
+//   BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
+//   Organizations Organizations `json:"organizations"`
+//   Addresses     Addresses     `json:"addresses"`
+//   Emails        Emails        `json:"emails"`
+//   Phones        Phones        `json:"phones"`
+//   Websites      Websites      `json:"websites"`
 // }
 type DeleteContactParams struct {
 	ID []byte `json:"id"`
@@ -78,15 +78,7 @@ type DeleteNoteParams struct {
 }
 
 type Empty struct {
-	Noop *bool `json:"noop"`
-}
-
-type FetchGroupDetailsParams struct {
-	GroupID uuid.UUID `json:"groupID"`
-}
-
-type FetchGroupMembersParams struct {
-	GroupID uuid.UUID `json:"groupID"`
+	Empty *bool `json:"empty"`
 }
 
 type FetchGroupProfileParams struct {
@@ -99,7 +91,20 @@ type GroupBillingProfile struct {
 	StripePublicKey *string                      `json:"stripePublicKey"`
 }
 
-type InviteUserInGroupParams struct {
+type GroupsCreateParams struct {
+	Name        string `json:"name"`
+	Description string `json:"description"`
+}
+
+type GroupsFetchDetailsParams struct {
+	GroupID uuid.UUID `json:"groupID"`
+}
+
+type GroupsFetchMembersParams struct {
+	GroupID uuid.UUID `json:"groupID"`
+}
+
+type GroupsInviteUserParams struct {
 	GroupID  uuid.UUID `json:"groupID"`
 	Username string    `json:"username"`
 }

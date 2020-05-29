@@ -13,7 +13,7 @@ import (
 func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "createGroup":
-		var params model.CreateGroupInput
+		var params messages.GroupsCreateParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -40,19 +40,19 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetchGroupMembers":
-		var params messages.FetchGroupMembersParams
+	case "fetchMembers":
+		var params messages.GroupsFetchMembersParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := groups.FetchGroupMembers(params)
+		res, err := groups.FetchMembers(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "inviteUser":
-		var params messages.InviteUserInGroupParams
+		var params messages.GroupsInviteUserParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -118,8 +118,8 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetchGroupDetails":
-		var params messages.FetchGroupDetailsParams
+	case "fetchDetails":
+		var params messages.GroupsFetchDetailsParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

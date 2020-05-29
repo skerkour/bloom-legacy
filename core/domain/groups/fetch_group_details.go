@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchGroupDetails(params messages.FetchGroupDetailsParams) (*model.Group, error) {
+func FetchGroupDetails(params messages.GroupsFetchDetailsParams) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
@@ -25,6 +25,7 @@ func FetchGroupDetails(params messages.FetchGroupDetailsParams) (*model.Group, e
 			description
 			members {
 				edges {
+					role
 					node {
 						id
 						username
