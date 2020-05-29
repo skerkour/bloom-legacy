@@ -9,9 +9,11 @@
     </v-row>
 
     <v-row>
-      <v-alert type="error" :value="groupsError !== ''">
-        {{ groupsError }}
-      </v-alert>
+      <v-col cols="12" sm="10" lg="8">
+        <v-alert type="error" :value="groupsError !== ''">
+          {{ groupsError }}
+        </v-alert>
+      </v-col>
     </v-row>
 
     <v-row>
@@ -61,9 +63,11 @@
     </v-row>
 
     <v-row>
-      <v-alert type="error" :value="invitationsError !== ''">
-        {{ invitationsError }}
-      </v-alert>
+      <v-col cols="12" sm="10" lg="8">
+        <v-alert type="error" :value="invitationsError !== ''">
+          {{ invitationsError }}
+        </v-alert>
+      </v-col>
     </v-row>
 
 
@@ -226,6 +230,8 @@ export default class GroupsView extends Vue {
     try {
       const res: Group = await core.call(Method.AcceptInvitation, invitation);
       this.groups.push(res);
+      this.invitations = this.invitations
+        .filter((invit: GroupInvitation) => invitation.id !== invit.id);
     } catch (err) {
       this.invitationsError = err.message;
     } finally {
