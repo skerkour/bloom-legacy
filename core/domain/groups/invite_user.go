@@ -71,6 +71,7 @@ func InviteUser(params messages.GroupsInviteUserParams) (*model.Group, error) {
 		inviteUserInGroup(input: $input) {
 			invitations {
 				nodes {
+					id
 					inviter {
 						username
 						displayName

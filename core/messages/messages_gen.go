@@ -99,6 +99,10 @@ type GroupsCreateParams struct {
 	Description string `json:"description"`
 }
 
+type GroupsDeclineInvitationParams struct {
+	InvitationID uuid.UUID `json:"invitationID"`
+}
+
 type GroupsDeleteParams struct {
 	GroupID uuid.UUID `json:"groupID"`
 }
