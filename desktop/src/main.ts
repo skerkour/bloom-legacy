@@ -4,7 +4,7 @@ import router from '@/router';
 import store, { Mutations } from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
-import core, { InitRes } from '@/core';
+import core, { InitRes, InitParams } from '@/core';
 import { log, Level } from '@/libs/rz';
 
 const { ipcRenderer } = window as any;
@@ -42,7 +42,12 @@ async function main() {
 
   while (true) { // eslint-disable-line
     try {
-      res = await core.init(process.env.NODE_ENV!, ['theme']); // eslint-disable-line
+      const params: InitParams = {
+        env: process.env.NODE_ENV!,
+        preferences: ['theme'],
+        backgroundSync: false,
+      };
+      res = await core.init(params); // eslint-disable-line
       break;
     } catch (err) {
       await sleep(100); // eslint-disable-line

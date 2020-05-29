@@ -34,6 +34,12 @@ export type Events = {
   events: BlmObject<Event>[],
 }
 
+export type InitParams = {
+  env: string,
+  preferences: string[],
+  backgroundSync: boolean,
+}
+
 
 async function call(method: string, params: any): Promise<any> {
   const message = {
@@ -59,8 +65,8 @@ function toDateIsoString(date: string | null): Date | null {
   return new Date(date).toISOString() as unknown as Date;
 }
 
-async function init(env: string, preferences: string[]): Promise<InitRes> {
-  return call('core.init', { env, preferences });
+async function init(params: InitParams): Promise<InitRes> {
+  return call('core.init', params);
 }
 
 export default {
