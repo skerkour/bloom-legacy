@@ -232,6 +232,7 @@ export default class GroupsView extends Vue {
       this.groups.push(res);
       this.invitations = this.invitations
         .filter((invit: GroupInvitation) => invitation.id !== invit.id);
+      this.$router.push({ path: '/sync', query: { redirect: encodeURIComponent('/groups') } });
     } catch (err) {
       this.invitationsError = err.message;
     } finally {

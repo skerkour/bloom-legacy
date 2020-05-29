@@ -36,7 +36,12 @@ export default class Synv extends Vue {
     this.error = '';
     try {
       await core.call(Method.Sync, core.Empty);
-      this.$router.push({ path: '/' });
+      if (this.$route.query.redirect) {
+        const redirect = decodeURIComponent(this.$route.query.redirect! as string);
+        this.$router.push({ path: redirect });
+      } else {
+        this.$router.push({ path: '/' });
+      }
     } catch (err) {
       this.error = err.message;
     }
