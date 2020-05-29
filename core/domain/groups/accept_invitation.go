@@ -6,7 +6,6 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/db"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/keys"
 	"gitlab.com/bloom42/gobox/crypto"
@@ -18,6 +17,7 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	client := api.Client()
 	ctx := context.Background()
 	var err error
+	inviterPublicKey := crypto.PublicKey(invitation.Inviter.PublicKey)
 
 	if err = validateAcceptInvitationParams(invitation); err != nil {
 		return nil, err
@@ -36,10 +36,11 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 	}
 
 	// verify signature
-	inviterPublicKey := crypto.PublicKey(invitation.Inviter.PublicKey)
-
 	verified, err := VerifyInvitationSignature(inviterPublicKey, *invitation.Signature, *invitation.Group.ID,
 		kernel.Me.Username, myPublicKey, *invitation.EphemeralPublicKey, *invitation.EncryptedMasterKey)
+	if err != nil {
+		return nil, err
+	}
 	if !verified {
 		return nil, errors.New("Group's invitation signature is not valid")
 	}
@@ -91,11 +92,7 @@ func AcceptInvitation(invitation model.GroupInvitation) (*model.Group, error) {
 
 	err = client.Do(ctx, req, &resp)
 	if err == nil {
-		group := resp.Group
-		queryInsert := `INSERT INTO groups (id, created_at, name, description, avatar_url, master_key, state)
-		VALUES (?, ?, ?, ?, ?, ?, ?)`
-		_, err = db.DB.Exec(queryInsert, group.ID, group.CreatedAt, group.Name, group.Description,
-			group.AvatarURL, groupMasterKey, "")
+		err = SaveGroup(ctx, nil, resp.Group, groupMasterKey, "")
 	}
 
 	return resp.Group, err

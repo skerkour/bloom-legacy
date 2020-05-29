@@ -52,8 +52,8 @@ android_x86_build_dev:
 	cp dist/android/x86/lib$(NAME).so ../mobile/android/app/src/main/jniLibs/x86/lib$(NAME).so
 
 
-.PHONY: dev_desktop
-dev_desktop:
+.PHONY: dev
+dev:
 	gowatch -build="make desktop_build_dev"
 
 .PHONY: dev_android
