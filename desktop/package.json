@@ -54,7 +54,7 @@
     "electron-icon-maker": "0.0.4",
     "eslint": "^7.1.0",
     "eslint-plugin-vue": "^6.2.2",
-    "sass": "^1.26.5",
+    "sass": "^1.26.7",
     "sass-loader": "^8.0.2",
     "ts-jest": "^26.0.0",
     "typescript": "^3.9.3",
