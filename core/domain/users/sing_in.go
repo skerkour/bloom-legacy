@@ -22,7 +22,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	username := strings.ToLower(params.Username)
 	username = strings.TrimSpace(username)
 
-	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(username))
+	passwordKey, err := keys.DerivePasswordKeyFromPassword([]byte(params.Password), []byte(username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
@@ -30,7 +30,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 	params.Password = ""
 	defer crypto.Zeroize(passwordKey) // clean passwordKey from memory
 
-	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(username))
+	authKey, err := keys.DeriveAuthKeyFromPasswordKey(passwordKey, []byte(username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
@@ -83,7 +83,7 @@ func SignIn(params SignInParams) (model.SignedIn, error) {
 			me := resp.SignIn.Me
 
 			// decrypt and save keys
-			wrapKey, err := deriveWrapKeyFromPasswordKey(passwordKey, []byte(username))
+			wrapKey, err := keys.DeriveWrapKeyFromPasswordKey(passwordKey, []byte(username))
 			if err != nil {
 				return ret, errors.New("Internal error. Please try again")
 			}

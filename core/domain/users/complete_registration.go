@@ -17,7 +17,7 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	var ret model.SignedIn
 	ctx := context.Background()
 
-	passwordKey, err := derivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
+	passwordKey, err := keys.DerivePasswordKeyFromPassword([]byte(params.Password), []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
@@ -25,13 +25,13 @@ func CompleteRegistration(params CompleteRegistrationParams) (model.SignedIn, er
 	params.Password = ""
 	defer crypto.Zeroize(passwordKey)
 
-	authKey, err := deriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
+	authKey, err := keys.DeriveAuthKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}
 	defer crypto.Zeroize(authKey)
 
-	wrapKey, err := deriveWrapKeyFromPasswordKey(passwordKey, []byte(params.Username))
+	wrapKey, err := keys.DeriveWrapKeyFromPasswordKey(passwordKey, []byte(params.Username))
 	if err != nil {
 		return ret, errors.New("Internal error. Please try again")
 	}

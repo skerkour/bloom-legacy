@@ -1,4 +1,4 @@
-package users
+package keys
 
 import (
 	"bytes"
@@ -13,7 +13,7 @@ func TestDerivePasswordKeyFromPassword(t *testing.T) {
 	expectedKeySize := 64
 	zeroBuffer := make([]byte, expectedKeySize)
 
-	key, err := derivePasswordKeyFromPassword(password, username)
+	key, err := DerivePasswordKeyFromPassword(password, username)
 	if err != nil {
 		t.Error(err)
 	}
@@ -36,7 +36,7 @@ func TestDeriveWrapKeyFromPasswordKey(t *testing.T) {
 		t.Error(err)
 	}
 
-	key, err := deriveWrapKeyFromPasswordKey(passwordKey, username)
+	key, err := DeriveWrapKeyFromPasswordKey(passwordKey, username)
 	if err != nil {
 		t.Error(err)
 	}
@@ -59,7 +59,7 @@ func TestDeriveAuthKeyFromPasswordKey(t *testing.T) {
 		t.Error(err)
 	}
 
-	key, err := deriveAuthKeyFromPasswordKey(passwordKey, username)
+	key, err := DeriveAuthKeyFromPasswordKey(passwordKey, username)
 	if err != nil {
 		t.Error(err)
 	}
