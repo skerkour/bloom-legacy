@@ -15,6 +15,7 @@ import (
 	"gitlab.com/bloom42/gobox/graphql"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/rz/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func pull(init bool) error {
@@ -53,6 +54,7 @@ func pull(init bool) error {
 	// build api request
 	var resp struct {
 		Pull *model.Pull `json:"pull"`
+		Me   *model.User `json:"me"`
 	}
 	req := graphql.NewRequest(`
 		query ($input: PullInput!) {
@@ -69,6 +71,20 @@ func pull(init bool) error {
 					}
 					hasMoreChanges
 					groupId
+				}
+			}
+			me {
+				groups {
+					nodes {
+						id
+						createdAt
+						avatarUrl
+						name
+						description
+						encryptedMasterKey
+						masterKeyNonce
+					}
+					totalCount
 				}
 			}
 		}
@@ -92,6 +108,52 @@ func pull(init bool) error {
 	}
 	defer crypto.Zeroize(masterKey)
 
+	// find all local groups
+	localGroups, err := groups.FindGroups(ctx, tx)
+	if err != nil {
+		tx.Rollback()
+		return err
+	}
+
+	fetchedGroupsSet := map[uuid.UUID]model.Group{}
+	for _, fetchedGroup := range resp.Me.Groups.Nodes {
+		fetchedGroupsSet[*fetchedGroup.ID] = *fetchedGroup
+	}
+
+	for _, localGroup := range localGroups.Groups {
+		_, found := fetchedGroupsSet[localGroup.ID]
+		if !found {
+			// group not found in server. We are no longer a member. Remove local group.
+			_, err = tx.Exec("DELETE FROM groups WHERE id = ?", localGroup.ID)
+			if err != nil {
+				tx.Rollback()
+				return err
+			}
+		} else {
+			// group found in server, we can ignore
+			delete(fetchedGroupsSet, localGroup.ID)
+		}
+	}
+
+	// for all fetched groups not found locally
+	log.Debug("REMAINING GROUPS", rz.Any("groups", fetchedGroupsSet))
+
+	for _, fetchedGroup := range fetchedGroupsSet {
+		// create local group
+		groupMasterKey, err := crypto.AEADDecrypt(masterKey, *fetchedGroup.MasterKeyNonce, *fetchedGroup.EncryptedMasterKey, nil)
+		defer crypto.Zeroize(groupMasterKey)
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+		err = groups.SaveGroup(ctx, tx, &fetchedGroup, groupMasterKey, "")
+		if err != nil {
+			tx.Rollback()
+			return err
+		}
+	}
+
+	// sync objects
 	for _, repo := range resp.Pull.Repositories {
 
 		for _, object := range repo.Objects {

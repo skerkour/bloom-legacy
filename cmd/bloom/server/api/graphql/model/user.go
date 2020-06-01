@@ -152,6 +152,7 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupConnection, error) {
 	var ret *GroupConnection
 	currentUser := apiutil.UserFromCtx(ctx)
+	logger := rz.FromCtx(ctx)
 
 	if currentUser == nil {
 		return ret, gqlerrors.AuthenticationRequired()
@@ -161,12 +162,7 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		return ret, PermissionDeniedToAccessField()
 	}
 
-	logger := rz.FromCtx(ctx)
-
-	groups := []groups.Group{}
-	err := db.DB.Select(&groups, `SELECT groups.* FROM groups
-		INNER JOIN groups_members ON groups.id = groups_members.group_id
-		WHERE groups_members.user_id = $1`, currentUser.ID)
+	groups, err := groups.FindGroupsForUser(ctx, nil, currentUser.ID)
 	if err != nil {
 		logger.Error("User.groups: fetching groups", rz.Err(err))
 		return ret, gqlerrors.Internal()
@@ -177,17 +173,16 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		TotalCount: int64(len(groups)),
 	}
 
-	for _, group := range groups {
+	for i := range groups {
 		grp := &Group{
-			ID:          &group.ID,
-			CreatedAt:   &group.CreatedAt,
-			Name:        group.Name,
-			Description: group.Description,
-			//	members: [GroupMember!]
-			// invitations: [GroupInvitation!]
+			ID:          &groups[i].ID,
+			CreatedAt:   &groups[i].CreatedAt,
+			Name:        groups[i].Name,
+			Description: groups[i].Description,
 		}
 		ret.Nodes = append(ret.Nodes, grp)
 	}
+
 	return ret, nil
 }
 

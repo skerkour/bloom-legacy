@@ -14,7 +14,7 @@ func FindGroupsForUser(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID) ([]Gr
 	var err error
 	logger := rz.FromCtx(ctx)
 
-	query := `SELECT * FROM groups
+	query := `SELECT groups.* FROM groups
 		INNER JOIN groups_members ON groups_members.group_id = groups.id
 		WHERE groups_members.user_id = $1`
 	if tx == nil {
