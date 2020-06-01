@@ -6,12 +6,13 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/objects"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func ListNotes() (Notes, error) {
+func FindNotes(params messages.NotesFindParams) (Notes, error) {
 	ret := Notes{Notes: []objects.Object{}}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_NOTE)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_NOTE, params.GroupID)
 	if err != nil {
 		return ret, err
 	}
@@ -31,10 +32,10 @@ func ListNotes() (Notes, error) {
 	return ret, nil
 }
 
-func ListArchived() (Notes, error) {
+func FindArchived(params messages.NotesFindParams) (Notes, error) {
 	ret := Notes{Notes: []objects.Object{}}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_NOTE)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_NOTE, params.GroupID)
 	if err != nil {
 		return ret, err
 	}

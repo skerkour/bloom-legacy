@@ -10,7 +10,7 @@ import (
 func ListContacts() (Contacts, error) {
 	ret := Contacts{Contacts: []objects.Object{}}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CONTACT)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CONTACT, nil)
 	if err != nil {
 		return ret, err
 	}

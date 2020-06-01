@@ -11,14 +11,24 @@ import "gitlab.com/bloom42/bloom/core/domain/objects"
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "listNotes":
-		res, err := notes.ListNotes()
+	case "findNotes":
+		var params messages.NotesFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := notes.FindNotes(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "listArchived":
-		res, err := notes.ListArchived()
+	case "findArchived":
+		var params messages.NotesFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := notes.FindArchived(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

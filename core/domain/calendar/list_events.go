@@ -30,7 +30,7 @@ func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 		endAt = *params.EndAt
 	}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT, nil)
 	if err != nil {
 		return ret, err
 	}

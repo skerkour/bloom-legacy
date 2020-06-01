@@ -6,6 +6,9 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func FindOutOfSyncObjectByID(ctx context.Context, tx *sqlx.Tx, id []byte) (*Object, error) {
@@ -42,15 +45,26 @@ func FindOutOfSyncObjects(ctx context.Context, tx *sqlx.Tx) ([]Object, error) {
 	return ret, err
 }
 
-func FindObjectsByType(ctx context.Context, tx *sqlx.Tx, typ string) ([]Object, error) {
+func FindObjectsByType(ctx context.Context, tx *sqlx.Tx, typ string, groupID *uuid.UUID) ([]Object, error) {
 	ret := []Object{}
 	var err error
 
+	log.Debug("Finding objects by type", rz.String("type", typ), rz.Any("group.id", groupID))
+
 	query := "SELECT * FROM objects WHERE type = ? AND length(data) > 2"
-	if tx == nil {
-		err = db.DB.Select(&ret, query, typ)
+	args := []interface{}{typ}
+	if groupID == nil {
+		query += " AND group_id IS NULL"
 	} else {
-		err = tx.Select(&ret, query, typ)
+		query += " AND group_id = ?"
+		args = append(args, groupID.String())
 	}
+	if tx == nil {
+		err = db.DB.Select(&ret, query, args...)
+	} else {
+		err = tx.Select(&ret, query, args...)
+	}
+
+	log.Debug("Found objects", rz.Int("len(objects)", len(ret)))
 	return ret, err
 }

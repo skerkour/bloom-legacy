@@ -142,6 +142,10 @@ type NewStripeCard struct {
 	Cvc      string `json:"cvc"`
 }
 
+type NotesFindParams struct {
+	GroupID *uuid.UUID `json:"groupID"`
+}
+
 type PreferencesDeleteParams struct {
 	Key string `json:"key"`
 }
