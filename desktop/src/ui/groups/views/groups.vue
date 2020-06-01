@@ -28,7 +28,7 @@
       <v-col cols="12" sm="10" lg="8">
         <v-data-table
           :headers="groupsHeaders"
-          :items="groups"
+          :items="$store.state.groups"
           item-key="id"
           :loading="groupsLoading"
           loading-text="Loading... Please wait"
@@ -157,9 +157,10 @@
 import { Component, Vue } from 'vue-property-decorator';
 import { Group, GroupInvitation, User } from '@/api/models';
 import core from '@/core';
-import { Method, Groups } from '@/core/groups';
+import { Method } from '@/core/groups';
 import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
 import { GroupsDeclineInvitationParams, GroupsQuitParams, GroupsDeleteParams } from '@/core/messages';
+import { Mutations } from '@/store';
 
 @Component({
   components: {
@@ -171,7 +172,6 @@ export default class GroupsView extends Vue {
   // data
   groupsError = '';
   invitationsError = '';
-  groups: Group[] = [];
   invitations: GroupInvitation[] = [];
   groupsLoading = false;
   invitationsLoading = false;
@@ -220,26 +220,11 @@ export default class GroupsView extends Vue {
   // computed
   // lifecycle
   created() {
-    this.findGroups();
     this.fetchMyInvitations();
   }
 
   // watch
   // methods
-  async findGroups() {
-    this.groupsError = '';
-    this.groupsLoading = true;
-
-    try {
-      const res: Groups = await core.call(Method.FindGroups, core.Empty);
-      this.groups = res.groups;
-    } catch (err) {
-      this.groupsError = err.message;
-    } finally {
-      this.groupsLoading = false;
-    }
-  }
-
   async fetchMyInvitations() {
     this.invitationsError = '';
     this.invitationsLoading = true;
@@ -260,9 +245,9 @@ export default class GroupsView extends Vue {
 
     try {
       const res: Group = await core.call(Method.AcceptInvitation, invitation);
-      this.groups.push(res);
       this.invitations = this.invitations
         .filter((invit: GroupInvitation) => invitation.id !== invit.id);
+      this.$store.commit(Mutations.ADD_GROUP.toString(), res);
       this.$router.push({ path: '/sync', query: { redirect: encodeURIComponent('/groups') } });
     } catch (err) {
       this.invitationsError = err.message;
@@ -298,8 +283,7 @@ export default class GroupsView extends Vue {
 
     try {
       await core.call(Method.QuitGroup, params);
-      this.groups = this.groups
-        .filter((grp: Group) => group.id !== grp.id);
+      this.$store.commit(Mutations.REMOVE_GROUP.toString(), group.id);
     } catch (err) {
       this.groupsError = err.message;
     } finally {
@@ -316,8 +300,7 @@ export default class GroupsView extends Vue {
 
     try {
       await core.call(Method.DeleteGroup, params);
-      this.groups = this.groups
-        .filter((grp: Group) => group.id !== grp.id);
+      this.$store.commit(Mutations.REMOVE_GROUP.toString(), group.id);
     } catch (err) {
       this.groupsError = err.message;
     } finally {
@@ -330,7 +313,7 @@ export default class GroupsView extends Vue {
   }
 
   groupCreated(group: Group) {
-    this.groups.push(group);
+    this.$store.commit(Mutations.ADD_GROUP.toString(), group);
   }
 
   newGroupDialogClosed() {

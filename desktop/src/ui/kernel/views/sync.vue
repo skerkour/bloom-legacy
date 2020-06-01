@@ -17,8 +17,11 @@
 
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
-import core from '@/core';
+import core, { Groups } from '@/core';
 import { Method } from '@/core/users';
+import { Method as GroupsMethod } from '@/core/groups';
+import { Mutations } from '@/store';
+
 
 @Component
 export default class Synv extends Vue {
@@ -36,6 +39,8 @@ export default class Synv extends Vue {
     this.error = '';
     try {
       await core.call(Method.Sync, core.Empty);
+      const res: Groups = await core.call(GroupsMethod.FindGroups, core.Empty);
+      this.$store.commit(Mutations.SET_GROUPS.toString(), res.groups);
       if (this.$route.query.redirect) {
         const redirect = decodeURIComponent(this.$route.query.redirect! as string);
         this.$router.push({ path: redirect });

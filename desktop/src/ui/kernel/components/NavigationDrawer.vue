@@ -57,7 +57,7 @@ export default class NavigationDrawer extends Vue {
   // computed
   get showDrawer(): boolean {
     if (this.app === 'groups') {
-      if (this.$route.params.groupId) {
+      if (this.$route.params.groupID) {
         return true;
       }
       return false;

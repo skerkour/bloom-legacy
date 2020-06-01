@@ -181,7 +181,7 @@ export default class BlmContacts extends Vue {
         deviceId: '',
         bloomUsername: '',
       },
-      groupId: null,
+      groupID: null,
       type: CONTACT_TYPE,
     };
     this.contacts = [newContact, ...this.contacts];

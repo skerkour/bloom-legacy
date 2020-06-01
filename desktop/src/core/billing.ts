@@ -22,7 +22,7 @@ export type NewStripeCard = {
 
 export type AppPaymentMethodParams= {
   stripePublicKey: string | null,
-  groupId: string | null,
+  groupID: string | null,
   card: NewStripeCard,
 }
 

@@ -145,7 +145,7 @@ export default class Billing extends Vue {
   showAddPaymentDialog = false;
   stripePublicKey: string | null = null;
   paymentMethodError = '';
-  groupId = '';
+  groupID = '';
 
   // computed
   get invoices(): Invoice[] {
@@ -164,7 +164,7 @@ export default class Billing extends Vue {
 
   // lifecycle
   created() {
-    this.groupId = this.$route.params.groupId;
+    this.groupID = this.$route.params.groupID;
     this.fetchData();
   }
 
@@ -174,7 +174,7 @@ export default class Billing extends Vue {
     this.error = '';
     this.loading = true;
     const params: FetchGroupProfileParams = {
-      id: this.groupId,
+      id: this.groupID,
     };
 
     try {
@@ -211,7 +211,7 @@ export default class Billing extends Vue {
     this.paymentMethodError = '';
     this.loading = true;
     const params = {
-      groupId: this.groupId,
+      groupID: this.groupID,
       stripePublicKey: this.stripePublicKey,
       card,
     };
@@ -253,7 +253,7 @@ export default class Billing extends Vue {
     this.loading = true;
     this.planAfterAddingPaymentMethod = null;
     const input: UpdateBillingSubscriptionInput = {
-      groupId: this.groupId,
+      groupID: this.groupID,
       planId: newPlan.id,
     };
 

@@ -224,7 +224,7 @@ export default class BlmNotes extends Vue {
         archivedAt: null,
         isFavorite: false,
       },
-      groupId: null,
+      groupID: null,
       type: NOTE_TYPE,
     };
     this.notes = [newNote, ...this.notes];

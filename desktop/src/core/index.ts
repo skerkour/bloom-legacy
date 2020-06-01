@@ -9,8 +9,8 @@ const { ipcRenderer } = window as any;
 const Empty = {};
 
 export type InitRes = {
-  signedIn: models.SignedIn | null,
   preferences: any,
+  groups: models.Group[],
 }
 
 export type BlmObject<T extends Note | Contact | Event> = {
@@ -19,7 +19,7 @@ export type BlmObject<T extends Note | Contact | Event> = {
   updatedAt: Date,
   type: string,
   data: T,
-  groupId: string | null,
+  groupID: string | null,
 }
 
 export type Notes = {
@@ -33,6 +33,11 @@ export type Contacts = {
 export type Events = {
   events: BlmObject<Event>[],
 }
+
+export type Groups = {
+  groups: models.Group[],
+}
+
 
 export type InitParams = {
   env: string,

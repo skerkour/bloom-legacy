@@ -221,7 +221,7 @@ export default class GroupsMembersView extends Vue {
     this.error = '';
     this.loading = true;
     const params: GroupsFetchMembersParams = {
-      groupID: this.$route.params.groupId,
+      groupID: this.$route.params.groupID,
     };
 
     try {

@@ -19,7 +19,6 @@ export type Scalars = {
   Bytes: any;
 };
 
-
 export type DashboardData = {
   __typename?: 'DashboardData';
   metadata?: Maybe<Scalars['BloomMetadata']>;
@@ -55,7 +54,7 @@ export type NewStripeCard = {
 export type AddPaymentMethodParams = {
   __typename?: 'AddPaymentMethodParams';
   stripePublicKey?: Maybe<Scalars['String']>;
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
   card: NewStripeCard;
 };
 
@@ -177,7 +176,7 @@ export type CreateNoteParams = {
   title: Scalars['String'];
   body: Scalars['String'];
   color: Scalars['String'];
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type DeleteNoteParams = {

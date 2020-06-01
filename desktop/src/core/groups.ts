@@ -1,5 +1,4 @@
-import { Group } from '@/api/models';
-
+/* eslint-disable */
 export enum Method {
   CreateGroup = 'groups.createGroup',
   DeleteGroup = 'groups.deleteGroup',
@@ -16,8 +15,4 @@ export enum Method {
   FetchMyInvitations = 'groups.fetchMyInvitations',
   AcceptInvitation = 'groups.acceptInvitation',
   DeclineInvitation = 'groups.declineInvitation',
-}
-
-export type Groups = {
-  groups: Group[],
 }

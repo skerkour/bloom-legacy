@@ -54,6 +54,7 @@ import { Component, Vue } from 'vue-property-decorator';
 import core from '@/core';
 import { Method } from '@/core/groups';
 import { GroupsDeleteParams } from '@/core/messages';
+import { Mutations } from '@/store';
 
 @Component
 export default class GroupsPreferencesView extends Vue {
@@ -61,12 +62,12 @@ export default class GroupsPreferencesView extends Vue {
   // data
   loading = false;
   error = '';
-  groupId = '';
+  groupID = '';
   deleteGroupDialog = false;
 
   // computed
   created() {
-    this.groupId = this.$route.params.groupId;
+    this.groupID = this.$route.params.groupID;
   }
 
   // lifecycle
@@ -76,11 +77,12 @@ export default class GroupsPreferencesView extends Vue {
     this.loading = true;
     this.error = '';
     const params: GroupsDeleteParams = {
-      groupID: this.groupId,
+      groupID: this.groupID,
     };
 
     try {
       await core.call(Method.DeleteGroup, params);
+      this.$store.commit(Mutations.REMOVE_GROUP.toString(), this.groupID);
       this.$router.push({ path: '/groups' });
     } catch (err) {
       this.error = err.message;

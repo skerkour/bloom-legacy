@@ -11,6 +11,7 @@ interface AppState {
   pendingAccount?: StorePendingAccount,
   me: models.User | null,
   session: models.Session | null,
+  groups: models.Group[],
 }
 
 export enum Mutations {
@@ -20,6 +21,9 @@ export enum Mutations {
   CLEAR_PENDING_ACCOUNT,
   SWITCH_DARK_MODE,
   UPDATE_DISPLAY_NAME,
+  SET_GROUPS,
+  ADD_GROUP,
+  REMOVE_GROUP,
 }
 
 export default new Vuex.Store<AppState>({
@@ -27,6 +31,7 @@ export default new Vuex.Store<AppState>({
     darkMode: false,
     me: null,
     session: null,
+    groups: [],
   },
   mutations: {
     [Mutations.SIGN_IN](state: AppState, params: models.SignedIn) {
@@ -48,6 +53,16 @@ export default new Vuex.Store<AppState>({
     },
     [Mutations.UPDATE_DISPLAY_NAME](state: AppState, displayName: string) {
       state.me!.displayName = displayName;
+    },
+    [Mutations.SET_GROUPS](state: AppState, groups: models.Group[]) {
+      state.groups = groups;
+    },
+    [Mutations.ADD_GROUP](state: AppState, group: models.Group) {
+      state.groups.push(group);
+    },
+    [Mutations.REMOVE_GROUP](state: AppState, groupID: string) {
+      state.groups = state.groups
+        .filter((group: models.Group) => group.id !== groupID);
     },
   },
   actions: {

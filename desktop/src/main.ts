@@ -66,6 +66,8 @@ async function main() {
     store.commit(Mutations.SWITCH_DARK_MODE.toString());
   }
 
+  store.commit(Mutations.SET_GROUPS.toString(), res.groups);
+
   Vue.use(filters);
 
   new Vue({

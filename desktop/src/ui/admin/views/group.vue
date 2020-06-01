@@ -79,7 +79,7 @@ export default class AdminGroupView extends Vue {
   error = '';
   group: Group | null = null;
   loading = false;
-  groupId = '';
+  groupID = '';
 
   // computed
   get invoices(): Invoice[] {
@@ -98,7 +98,7 @@ export default class AdminGroupView extends Vue {
 
   // lifecycle
   created() {
-    this.groupId = this.$route.params.groupId;
+    this.groupID = this.$route.params.groupID;
     this.fetchData();
   }
 
@@ -108,7 +108,7 @@ export default class AdminGroupView extends Vue {
     this.error = '';
     this.loading = true;
     const params: GroupsFetchDetailsParams = {
-      groupID: this.groupId,
+      groupID: this.groupID,
     };
 
     try {

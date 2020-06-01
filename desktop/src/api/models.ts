@@ -273,7 +273,7 @@ export type RepositoryPush = {
   __typename?: 'RepositoryPush';
   oldState: Scalars['String'];
   newState: Scalars['String'];
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type Pull = {
@@ -287,7 +287,7 @@ export type RepositoryPull = {
   newState: Scalars['String'];
   objects: Array<Object>;
   hasMoreChanges: Scalars['Boolean'];
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type Object = {
@@ -418,8 +418,7 @@ export type GroupInput = {
 };
 
 export type RemoveGroupMembersInput = {
-  /** group id */
-  id: Scalars['ID'];
+  groupID: Scalars['ID'];
   /** members to remvove, by username */
   members: Array<Scalars['String']>;
 };
@@ -439,7 +438,7 @@ export type DeclineGroupInvitationInput = {
 };
 
 export type InviteUserInGroupInput = {
-  groupId: Scalars['ID'];
+  groupID: Scalars['ID'];
   username: Scalars['String'];
   ephemeralPublicKey: Scalars['Bytes'];
   encryptedMasterKey: Scalars['Bytes'];
@@ -447,8 +446,7 @@ export type InviteUserInGroupInput = {
 };
 
 export type QuitGroupInput = {
-  /** group id */
-  id: Scalars['ID'];
+  groupID: Scalars['ID'];
 };
 
 export type BillingPlanInput = {
@@ -467,17 +465,17 @@ export type DeleteBillingPlanInput = {
   id: Scalars['ID'];
 };
 
-/** if groupId and userId (reserved for admins) are null, add to current user */
+/** if groupID and userId (reserved for admins) are null, add to current user */
 export type UpdateBillingSubscriptionInput = {
   planId: Scalars['ID'];
   userId?: Maybe<Scalars['ID']>;
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type AddPaymentMethodInput = {
   stripeId: Scalars['String'];
-  /** if groupId is null, add to current user */
-  groupId?: Maybe<Scalars['ID']>;
+  /** if groupID is null, add to current user */
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 /** remove payment method with `id` */
@@ -519,7 +517,7 @@ export type PullInput = {
 
 export type RepositoryPullInput = {
   sinceState: Scalars['String'];
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type PushInput = {
@@ -532,7 +530,7 @@ export type RepositoryPushInput = {
   /** out of sync objects */
   objects: Array<ObjectInput>;
   /** to indicate whether it's the user's repository, or a group */
-  groupId?: Maybe<Scalars['ID']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type ObjectInput = {

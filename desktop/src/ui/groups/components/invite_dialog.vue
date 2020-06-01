@@ -63,7 +63,7 @@ import { GroupsInviteUserParams } from '@/core/messages';
 export default class Groups extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
-  @Prop({ type: String, default: false }) groupId!: string;
+  @Prop({ type: String, default: false }) groupID!: string;
 
   // data
   error = '';
@@ -89,7 +89,7 @@ export default class Groups extends Vue {
     this.loading = true;
     this.error = '';
     const params: GroupsInviteUserParams = {
-      groupID: this.groupId,
+      groupID: this.groupID,
       username: this.userToInvite,
     };
 
