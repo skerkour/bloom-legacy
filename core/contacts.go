@@ -10,8 +10,13 @@ import (
 
 func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "listContacts":
-		res, err := contacts.ListContacts()
+	case "findContacts":
+		var params messages.ContactsFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := contacts.FindContacts(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}

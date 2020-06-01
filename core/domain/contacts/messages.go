@@ -2,6 +2,8 @@ package contacts
 
 import (
 	"time"
+
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type CreateContactParams struct {
@@ -19,4 +21,5 @@ type CreateContactParams struct {
 	Emails        ContactInformations `json:"emails"`
 	Phones        ContactInformations `json:"phones"`
 	Online        ContactInformations `json:"online"`
+	GroupID       *uuid.UUID          `json:"groupID"`
 }

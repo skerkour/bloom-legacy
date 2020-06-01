@@ -9,7 +9,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
+func CreateNote(params messages.NotesCreateParams) (*objects.Object, error) {
 	var err error
 	var ret *objects.Object
 
@@ -27,7 +27,7 @@ func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 		return ret, err
 	}
 
-	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_NOTE, now, now, nil, true, &note)
+	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_NOTE, now, now, params.GroupID, true, &note)
 	if err != nil {
 		return ret, err
 	}
@@ -35,7 +35,7 @@ func CreateNote(params messages.CreateNoteParams) (*objects.Object, error) {
 	err = objects.SaveObject(context.Background(), nil, ret)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return ret, err
 }

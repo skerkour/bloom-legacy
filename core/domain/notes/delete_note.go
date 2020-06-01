@@ -7,12 +7,12 @@ import (
 	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func DeleteNote(params messages.DeleteNoteParams) (err error) {
+func DeleteNote(params messages.NotesDeleteParams) (err error) {
 
 	err = objects.DeleteObject(context.Background(), nil, params.ID)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return err
 }

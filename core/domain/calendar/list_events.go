@@ -10,7 +10,7 @@ import (
 	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
+func FindEvents(params messages.CalendarFindEventsParams) (Events, error) {
 	var err error
 	ret := Events{Events: []objects.Object{}}
 	now := time.Now().UTC()
@@ -30,7 +30,7 @@ func ListEvents(params messages.CalendarListEventsParams) (Events, error) {
 		endAt = *params.EndAt
 	}
 
-	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT, nil)
+	objects, err := objects.FindObjectsByType(context.Background(), nil, kernel.OBJECT_TYPE_CALENDAR_EVENT, params.GroupID)
 	if err != nil {
 		return ret, err
 	}

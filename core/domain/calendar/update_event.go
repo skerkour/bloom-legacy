@@ -23,7 +23,7 @@ func UpdateEvent(event objects.Object) (objects.Object, error) {
 	err = objects.SaveObject(context.Background(), nil, &event)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return event, err
 }

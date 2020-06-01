@@ -24,26 +24,25 @@ type CalcResult struct {
 }
 
 type CalendarCreateEventParams struct {
-	Title       string    `json:"title"`
-	Location    string    `json:"location"`
-	Description string    `json:"description"`
-	StartAt     time.Time `json:"startAt"`
-	EndAt       time.Time `json:"endAt"`
+	Title       string     `json:"title"`
+	Location    string     `json:"location"`
+	Description string     `json:"description"`
+	StartAt     time.Time  `json:"startAt"`
+	EndAt       time.Time  `json:"endAt"`
+	GroupID     *uuid.UUID `json:"groupID"`
 }
 
 type CalendarDeleteEventParams struct {
 	ID []byte `json:"id"`
 }
 
-type CalendarListEventsParams struct {
+type CalendarFindEventsParams struct {
 	StartAt *time.Time `json:"startAt"`
 	EndAt   *time.Time `json:"endAt"`
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
-type CreateNoteParams struct {
-	Title   string     `json:"title"`
-	Body    string     `json:"body"`
-	Color   string     `json:"color"`
+type ContactsFindParams struct {
 	GroupID *uuid.UUID `json:"groupID"`
 }
 
@@ -69,10 +68,6 @@ type DashboardData struct {
 //   Websites      Websites      `json:"websites"`
 // }
 type DeleteContactParams struct {
-	ID []byte `json:"id"`
-}
-
-type DeleteNoteParams struct {
 	ID []byte `json:"id"`
 }
 
@@ -140,6 +135,17 @@ type NewStripeCard struct {
 	ExpMonth string `json:"expMonth"`
 	ExpYear  string `json:"expYear"`
 	Cvc      string `json:"cvc"`
+}
+
+type NotesCreateParams struct {
+	Title   string     `json:"title"`
+	Body    string     `json:"body"`
+	Color   string     `json:"color"`
+	GroupID *uuid.UUID `json:"groupID"`
+}
+
+type NotesDeleteParams struct {
+	ID []byte `json:"id"`
 }
 
 type NotesFindParams struct {

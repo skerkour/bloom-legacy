@@ -11,7 +11,7 @@ func DeleteEvent(params messages.CalendarDeleteEventParams) error {
 	err := objects.DeleteObject(context.Background(), nil, params.ID)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return err
 }

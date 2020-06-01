@@ -35,7 +35,7 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 		return ret, err
 	}
 
-	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CONTACT, now, now, nil, true, &contact)
+	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CONTACT, now, now, params.GroupID, true, &contact)
 	if err != nil {
 		return ret, err
 	}
@@ -43,7 +43,7 @@ func CreateContact(params CreateContactParams) (*objects.Object, error) {
 	err = objects.SaveObject(context.Background(), nil, ret)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return ret, err
 }

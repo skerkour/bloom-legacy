@@ -34,7 +34,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "createNote":
-		var params messages.CreateNoteParams
+		var params messages.NotesCreateParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -56,7 +56,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "deleteNote":
-		var params messages.DeleteNoteParams
+		var params messages.NotesDeleteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

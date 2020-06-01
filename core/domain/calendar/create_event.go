@@ -30,7 +30,7 @@ func CreateEvent(params messages.CalendarCreateEventParams) (*objects.Object, er
 		return ret, err
 	}
 
-	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CALENDAR_EVENT, now, now, nil, true, &event)
+	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CALENDAR_EVENT, now, now, params.GroupID, true, &event)
 	if err != nil {
 		return ret, err
 	}
@@ -38,7 +38,7 @@ func CreateEvent(params messages.CalendarCreateEventParams) (*objects.Object, er
 	err = objects.SaveObject(context.Background(), nil, ret)
 
 	// request sync
-	objects.SyncChan <- true
+	// objects.SyncChan <- true
 
 	return ret, err
 }

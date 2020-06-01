@@ -77,9 +77,10 @@ type CalcResult {
 ## calendar
 ####################################################################################################
 
-type CalendarListEventsParams {
+type CalendarFindEventsParams {
   startAt: Time
   endAt: Time
+  groupID: ID
 }
 
 type CalendarCreateEventParams {
@@ -88,6 +89,7 @@ type CalendarCreateEventParams {
   description: String!
   startAt: Time!
   endAt: Time!
+  groupID: ID
 }
 
 type CalendarDeleteEventParams {
@@ -121,6 +123,10 @@ type CreateContactParams struct {
 
 type DeleteContactParams {
 	id: Bytes!
+}
+
+type ContactsFindParams {
+  groupID: ID
 }
 
 
@@ -181,17 +187,16 @@ type Empty {
 ## notes
 ####################################################################################################
 
-type CreateNoteParams {
+type NotesCreateParams {
   title: String!
   body: String!
   color: String!
   groupID: ID
 }
 
-type DeleteNoteParams {
+type NotesDeleteParams {
 	id: Bytes!
 }
-
 
 type NotesFindParams {
 	groupID: ID
