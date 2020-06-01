@@ -1,7 +1,7 @@
 export const CONTACT_TYPE = 'com.bloom42.bloom.contact';
 
 export enum Method {
-  ListContacts = 'contacts.listContacts',
+  FindContacts = 'contacts.findContacts',
   CreateContact = 'contacts.createContact',
   UpdateContact = 'contacts.updateContact',
   DeleteContact = 'contacts.deleteContact',
@@ -58,6 +58,7 @@ export type CreateContactParams = {
   addresses: Address[],
   deviceId: string,
   bloomUsername: string,
+  groupID: string | null,
 }
 
 export type DeleteContact = {

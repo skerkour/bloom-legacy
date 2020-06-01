@@ -74,8 +74,9 @@ import {
   Prop,
   // Watch,
 } from 'vue-property-decorator';
-import { Note, DeleteNote, Method } from '@/core/notes';
+import { Note, Method } from '@/core/notes';
 import core, { BlmObject } from '@/core';
+import { NotesDeleteParams } from '../../../core/messages';
 
 @Component
 export default class BlmNote extends Vue {
@@ -157,7 +158,7 @@ export default class BlmNote extends Vue {
   async deleteNote() {
     this.error = '';
     this.isLoading = true;
-    const params: DeleteNote = {
+    const params: NotesDeleteParams = {
       id: this.note.id,
     };
 

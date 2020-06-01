@@ -15,13 +15,3 @@ export type Note = {
   archivedAt: Date | null,
   isFavorite: boolean,
 }
-
-export type CreateNote = {
-  title: string,
-  body: string,
-  color: string,
-}
-
-export type DeleteNote = {
-  id: string,
-}

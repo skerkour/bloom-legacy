@@ -2,6 +2,8 @@
   <v-container fill-height fluid class="pa-0">
     <v-col cols="4" lg="3" class="pa-0 blm-left-col">
       <v-toolbar elevation="0" class="justify-space-between">
+        <blm-group-selector />
+
         <v-spacer />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -129,17 +131,20 @@
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import moment from 'moment';
 import BlmCalendarEventDialog from '../components/event_dialog.vue';
 import core, { BlmObject, Events } from '@/core';
-import {
-  ListEvents, Event as EventModel, Method,
-} from '@/core/calendar';
+import { Event as EventModel, Method } from '@/core/calendar';
+import { Group } from '@/api/models';
+import BlmGroupSelector from '@/ui/kernel/components/group_selector.vue';
+import { CalendarFindEventsParams } from '../../../core/messages';
+
 
 @Component({
   components: {
     BlmCalendarEventDialog,
+    BlmGroupSelector,
   },
 })
 export default class BlmCalendar extends Vue {
@@ -183,20 +188,26 @@ export default class BlmCalendar extends Vue {
 
   // lifecycle
   async created() {
-    this.fetchData();
+    this.findCalendarEvents(this.$store.state.selectedGroup);
   }
 
   // watch
+  @Watch('$store.state.selectedGroup')
+  async onSelectedGroupChanged(group: Group | null) {
+    this.findCalendarEvents(group);
+  }
+
   // methods
-  async fetchData(startAt?: Date, endAt?: Date) {
+  async findCalendarEvents(group: Group | null, startAt?: Date, endAt?: Date) {
     this.error = '';
     this.isLoading = true;
-    const params: ListEvents = {
+    const params: CalendarFindEventsParams = {
       startAt,
       endAt,
+      groupID: group?.id || null,
     };
     try {
-      const res = await core.call(Method.ListEvents, params);
+      const res = await core.call(Method.FindEvents, params);
       this.events = (res as Events).events;
     } catch (err) {
       this.error = err.message;
@@ -264,7 +275,8 @@ export default class BlmCalendar extends Vue {
       end += ` ${to.end.time}`;
     }
 
-    this.fetchData(
+    this.findCalendarEvents(
+      this.$store.state.selectedGroup,
       new Date(start).toISOString() as unknown as Date,
       new Date(end).toISOString() as unknown as Date,
     );

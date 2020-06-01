@@ -72,12 +72,11 @@ import core, { BlmObject, Notes } from '@/core';
 import {
   Note,
   Method,
-  CreateNote,
   NOTE_TYPE,
 } from '@/core/notes';
 import { log } from '@/libs/rz';
 import BlmGroupSelector from '@/ui/kernel/components/group_selector.vue';
-import { NotesFindParams } from '@/core/messages';
+import { NotesFindParams, NotesCreateParams } from '@/core/messages';
 import { Group } from '@/api/models';
 
 
@@ -120,7 +119,8 @@ export default class BlmNotes extends Vue {
 
   // watch
   @Watch('$store.state.selectedGroup')
-  onSelectedGroupChanged(group: Group | null) {
+  async onSelectedGroupChanged(group: Group | null) {
+    await this.save();
     this.load(group);
   }
 
@@ -258,10 +258,11 @@ export default class BlmNotes extends Vue {
   async createNote() {
     this.error = '';
     this.isLoading = true;
-    const params: CreateNote = {
+    const params: NotesCreateParams = {
       title: this.selectedNote!.data.title,
       body: this.selectedNote!.data.body,
       color: '#ffffff',
+      groupID: this.$store.state.selectedGroup?.id || null,
     };
     try {
       const res = await core.call(Method.CreateNote, params);

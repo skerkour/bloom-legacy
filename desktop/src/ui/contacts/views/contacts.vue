@@ -3,6 +3,8 @@
     <v-col cols="4" lg="3" class="pa-0 blm-left-col">
 
       <v-toolbar elevation="0">
+        <blm-group-selector />
+
         <v-spacer />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
@@ -54,7 +56,7 @@
 
 
 <script lang="ts">
-import { Component, Vue } from 'vue-property-decorator';
+import { Component, Vue, Watch } from 'vue-property-decorator';
 import BlmContact from '../components/contact.vue';
 import {
   CONTACT_TYPE,
@@ -63,6 +65,9 @@ import {
   CreateContactParams,
 } from '@/core/contacts';
 import core, { BlmObject, Contacts } from '@/core';
+import { ContactsFindParams } from '@/core/messages';
+import { Group } from '@/api/models';
+import BlmGroupSelector from '@/ui/kernel/components/group_selector.vue';
 
 
 const DEFAULT_EMAIL = { value: '', label: 'Personal' };
@@ -82,6 +87,7 @@ const DEFAULT_ADDRESS = {
 @Component({
   components: {
     BlmContact,
+    BlmGroupSelector,
   },
 })
 export default class BlmContacts extends Vue {
@@ -97,7 +103,7 @@ export default class BlmContacts extends Vue {
   // computed
   // lifecycle
   async created() {
-    await this.findContacts();
+    await this.load(this.$store.state.selectedGroup);
     this.saveInterval = setInterval(this.save, 2000);
   }
 
@@ -112,7 +118,17 @@ export default class BlmContacts extends Vue {
   }
 
   // watch
+  @Watch('$store.state.selectedGroup')
+  async onSelectedGroupChanged(group: Group | null) {
+    await this.save();
+    this.load(group);
+  }
+
   // methods
+  async load(group: Group | null) {
+    await this.findContacts(group);
+  }
+
   async save() {
     if (this.selectedContact) {
       if (this.selectedContact.id === '') {
@@ -123,12 +139,15 @@ export default class BlmContacts extends Vue {
     }
   }
 
-  async findContacts() {
+  async findContacts(group: Group | null) {
     this.error = '';
     this.loading = true;
+    const params: ContactsFindParams = {
+      groupID: group?.id || null,
+    };
 
     try {
-      const res = await core.call(Method.ListContacts, core.Empty);
+      const res = await core.call(Method.FindContacts, params);
       this.contacts = (res as Contacts).contacts;
     } catch (err) {
       this.error = err.message;
@@ -194,6 +213,7 @@ export default class BlmContacts extends Vue {
     const params: CreateContactParams = {
       birthday: core.toDateIsoString((this.$refs.contact as any).birthday),
       ...this.selectedContact!.data,
+      groupID: this.$store.state.selectedGroup?.id || null,
     };
     try {
       const res = await core.call(Method.CreateContact, params);

@@ -321,6 +321,7 @@ export default class EventDialog extends Vue {
       description: this.description,
       startAt,
       endAt,
+      groupID: this.$store.state.selectedGroup?.id || null,
     };
 
     try {

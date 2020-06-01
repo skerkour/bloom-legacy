@@ -19,6 +19,7 @@ export type Scalars = {
   Bytes: any;
 };
 
+
 export type DashboardData = {
   __typename?: 'DashboardData';
   metadata?: Maybe<Scalars['BloomMetadata']>;
@@ -75,10 +76,11 @@ export type CalcResult = {
   result: Scalars['String'];
 };
 
-export type CalendarListEventsParams = {
-  __typename?: 'CalendarListEventsParams';
+export type CalendarFindEventsParams = {
+  __typename?: 'CalendarFindEventsParams';
   startAt?: Maybe<Scalars['Time']>;
   endAt?: Maybe<Scalars['Time']>;
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type CalendarCreateEventParams = {
@@ -88,6 +90,7 @@ export type CalendarCreateEventParams = {
   description: Scalars['String'];
   startAt: Scalars['Time'];
   endAt: Scalars['Time'];
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type CalendarDeleteEventParams = {
@@ -116,6 +119,11 @@ export type CalendarDeleteEventParams = {
 export type DeleteContactParams = {
   __typename?: 'DeleteContactParams';
   id: Scalars['Bytes'];
+};
+
+export type ContactsFindParams = {
+  __typename?: 'ContactsFindParams';
+  groupID?: Maybe<Scalars['ID']>;
 };
 
 export type GroupsCreateParams = {
@@ -171,16 +179,16 @@ export type Empty = {
   empty?: Maybe<Scalars['Boolean']>;
 };
 
-export type CreateNoteParams = {
-  __typename?: 'CreateNoteParams';
+export type NotesCreateParams = {
+  __typename?: 'NotesCreateParams';
   title: Scalars['String'];
   body: Scalars['String'];
   color: Scalars['String'];
   groupID?: Maybe<Scalars['ID']>;
 };
 
-export type DeleteNoteParams = {
-  __typename?: 'DeleteNoteParams';
+export type NotesDeleteParams = {
+  __typename?: 'NotesDeleteParams';
   id: Scalars['Bytes'];
 };
 

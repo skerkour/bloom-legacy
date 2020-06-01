@@ -11,6 +11,8 @@
     @change="onChanged"
     dense
     hide-details
+    solo
+    flat
   />
 </template>
 
