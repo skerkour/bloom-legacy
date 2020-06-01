@@ -136,11 +136,10 @@ import {
   Maybe,
   GroupInvitationConnection,
   GroupInvitation,
-  RemoveGroupMembersInput,
 } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
-import { GroupsFetchMembersParams, GroupsCancelInvitationParams } from '@/core/messages';
+import { GroupsFetchMembersParams, GroupsCancelInvitationParams, GroupsRemoveMembersParams } from '@/core/messages';
 
 
 @Component({
@@ -251,9 +250,9 @@ export default class GroupsMembersView extends Vue {
   async removeGroupMember(member: GroupMemberEdge) {
     this.loading = true;
     this.error = '';
-    const params: RemoveGroupMembersInput = {
-      id: this.group!.id!,
-      members: [member!.node!.username],
+    const params: GroupsRemoveMembersParams = {
+      groupID: this.group!.id!,
+      username: member!.node!.username,
     };
 
     try {
