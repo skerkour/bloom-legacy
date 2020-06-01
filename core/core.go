@@ -8,6 +8,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/groups"
 	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
@@ -61,7 +62,16 @@ func Init(params InitParams) (InitRes, error) {
 
 	// start background sync
 	err = objects.Init(params.BackgroundSync)
+	if err != nil {
+		return ret, err
+	}
 
+	myGroups, err := groups.FindGroups(ctx, nil)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Groups = myGroups.Groups
 	return ret, err
 }
 

@@ -101,7 +101,7 @@ func push() error {
 				repositories {
 					oldState
 					newState
-					groupId
+					groupID
 				}
 			}
 		}

@@ -17,7 +17,7 @@ type Object struct {
 	Data      json.RawMessage `db:"data" json:"data"`
 	OutOfSync bool            `db:"out_of_sync" json:"-"`
 
-	GroupID *uuid.UUID `db:"group_id" json:"groupId"`
+	GroupID *uuid.UUID `db:"group_id" json:"groupID"`
 }
 
 func GenerateObjectID(username []byte) (ret []byte, err error) {

@@ -1,6 +1,10 @@
 package core
 
-import "encoding/json"
+import (
+	"encoding/json"
+
+	"gitlab.com/bloom42/bloom/core/domain/groups"
+)
 
 type MessageIn struct {
 	Method string          `json:"method"`
@@ -27,4 +31,5 @@ type InitParams struct {
 
 type InitRes struct {
 	Preferences map[string]interface{} `json:"preferences"`
+	Groups      []groups.Group         `json:"groups"`
 }

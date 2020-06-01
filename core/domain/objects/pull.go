@@ -70,7 +70,7 @@ func pull(init bool) error {
 						nonce
 					}
 					hasMoreChanges
-					groupId
+					groupID
 				}
 			}
 			me {

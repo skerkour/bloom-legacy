@@ -13,8 +13,8 @@ func FetchGroupProfile(params messages.FetchGroupProfileParams) (messages.GroupB
 
 	var resp messages.GroupBillingProfile
 	req := graphql.NewRequest(`
-	query($groupId: ID!) {
-		group(id: $groupId) {
+	query($groupID: ID!) {
+		group(id: $groupID) {
 			id
 			subscription {
 				updatedAt
@@ -62,7 +62,7 @@ func FetchGroupProfile(params messages.FetchGroupProfileParams) (messages.GroupB
 		stripePublicKey
 	}
 	`)
-	req.Var("groupId", params.ID)
+	req.Var("groupID", params.ID)
 
 	err := client.Do(context.Background(), req, &resp)
 

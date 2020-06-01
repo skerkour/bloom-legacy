@@ -11,7 +11,7 @@ import (
 
 type AddPaymentMethodParams struct {
 	StripePublicKey *string        `json:"stripePublicKey"`
-	GroupID         *uuid.UUID     `json:"groupId"`
+	GroupID         *uuid.UUID     `json:"groupID"`
 	Card            *NewStripeCard `json:"card"`
 }
 
@@ -44,7 +44,7 @@ type CreateNoteParams struct {
 	Title   string     `json:"title"`
 	Body    string     `json:"body"`
 	Color   string     `json:"color"`
-	GroupID *uuid.UUID `json:"groupId"`
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type DashboardData struct {

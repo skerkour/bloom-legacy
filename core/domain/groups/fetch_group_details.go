@@ -16,8 +16,8 @@ func FetchGroupDetails(params messages.GroupsFetchDetailsParams) (*model.Group, 
 		Group *model.Group `json:"group"`
 	}
 	req := graphql.NewRequest(`
-	query($groupId: ID!) {
-		group(id: $groupId) {
+	query($groupID: ID!) {
+		group(id: $groupID) {
 			id
 			createdAt
 			avatarUrl
@@ -72,7 +72,7 @@ func FetchGroupDetails(params messages.GroupsFetchDetailsParams) (*model.Group, 
 		}
 	}
 	`)
-	req.Var("groupId", params.GroupID)
+	req.Var("groupID", params.GroupID)
 
 	err := client.Do(context.Background(), req, &resp)
 
