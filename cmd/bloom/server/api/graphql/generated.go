@@ -1496,7 +1496,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RegistrationStarted.ID(childComplexity), true
 
-	case "RepositoryPull.groupId":
+	case "RepositoryPull.groupID":
 		if e.complexity.RepositoryPull.GroupID == nil {
 			break
 		}
@@ -1531,7 +1531,7 @@ func (e *executableSchema) Complexity(typeName, field string, childComplexity in
 
 		return e.complexity.RepositoryPull.OldState(childComplexity), true
 
-	case "RepositoryPush.groupId":
+	case "RepositoryPush.groupID":
 		if e.complexity.RepositoryPush.GroupID == nil {
 			break
 		}
@@ -2159,7 +2159,7 @@ type Push {
 type RepositoryPush {
   oldState: String!
   newState: String!
-  groupId: ID
+  groupID: ID
 }
 
 type Pull {
@@ -2171,7 +2171,7 @@ type RepositoryPull {
   newState: String!
   objects: [Object!]!
   hasMoreChanges: Boolean!
-  groupId: ID
+  groupID: ID
 }
 
 type Object {
@@ -2309,7 +2309,7 @@ input DeclineGroupInvitationInput {
 }
 
 input InviteUserInGroupInput {
-  groupId: ID!
+  groupID: ID!
   username: String!
   ephemeralPublicKey: Bytes!
   encryptedMasterKey: Bytes!
@@ -2317,8 +2317,7 @@ input InviteUserInGroupInput {
 }
 
 input QuitGroupInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
 }
 
 input BillingPlanInput {
@@ -2337,17 +2336,17 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
-"""if groupId and userId (reserved for admins) are null, add to current user"""
+"""if groupID and userId (reserved for admins) are null, add to current user"""
 input UpdateBillingSubscriptionInput {
   planId: ID!
   userId: ID
-  groupId: ID
+  groupID: ID
 }
 
 input AddPaymentMethodInput {
   stripeId: String!
-  """if groupId is null, add to current user"""
-  groupId: ID
+  """if groupID is null, add to current user"""
+  groupID: ID
 }
 
 """remove payment method with ` + "`" + `id` + "`" + `"""
@@ -2391,7 +2390,7 @@ input PullInput {
 
 input RepositoryPullInput {
   sinceState: String!
-  groupId: ID
+  groupID: ID
 }
 
 input PushInput {
@@ -2404,7 +2403,7 @@ input RepositoryPushInput {
   """out of sync objects"""
   objects: [ObjectInput!]!
   """to indicate whether it's the user's repository, or a group"""
-  groupId: ID
+  groupID: ID
 }
 
 input ObjectInput {
@@ -7801,7 +7800,7 @@ func (ec *executionContext) _RepositoryPull_hasMoreChanges(ctx context.Context, 
 	return ec.marshalNBoolean2bool(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _RepositoryPull_groupId(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPull) (ret graphql.Marshaler) {
+func (ec *executionContext) _RepositoryPull_groupID(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPull) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -7900,7 +7899,7 @@ func (ec *executionContext) _RepositoryPush_newState(ctx context.Context, field 
 	return ec.marshalNString2string(ctx, field.Selections, res)
 }
 
-func (ec *executionContext) _RepositoryPush_groupId(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPush) (ret graphql.Marshaler) {
+func (ec *executionContext) _RepositoryPush_groupID(ctx context.Context, field graphql.CollectedField, obj *model.RepositoryPush) (ret graphql.Marshaler) {
 	defer func() {
 		if r := recover(); r != nil {
 			ec.Error(ctx, ec.Recover(ctx, r))
@@ -10328,7 +10327,7 @@ func (ec *executionContext) unmarshalInputAddPaymentMethodInput(ctx context.Cont
 			if err != nil {
 				return it, err
 			}
-		case "groupId":
+		case "groupID":
 			var err error
 			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
@@ -10730,7 +10729,7 @@ func (ec *executionContext) unmarshalInputInviteUserInGroupInput(ctx context.Con
 
 	for k, v := range asMap {
 		switch k {
-		case "groupId":
+		case "groupID":
 			var err error
 			it.GroupID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
@@ -10850,9 +10849,9 @@ func (ec *executionContext) unmarshalInputQuitGroupInput(ctx context.Context, ob
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "groupID":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}
@@ -10916,7 +10915,7 @@ func (ec *executionContext) unmarshalInputRepositoryPullInput(ctx context.Contex
 			if err != nil {
 				return it, err
 			}
-		case "groupId":
+		case "groupID":
 			var err error
 			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
@@ -10946,7 +10945,7 @@ func (ec *executionContext) unmarshalInputRepositoryPushInput(ctx context.Contex
 			if err != nil {
 				return it, err
 			}
-		case "groupId":
+		case "groupID":
 			var err error
 			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
@@ -11090,7 +11089,7 @@ func (ec *executionContext) unmarshalInputUpdateBillingSubscriptionInput(ctx con
 			if err != nil {
 				return it, err
 			}
-		case "groupId":
+		case "groupID":
 			var err error
 			it.GroupID, err = ec.unmarshalOID2ᚖgitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
@@ -12452,8 +12451,8 @@ func (ec *executionContext) _RepositoryPull(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "groupId":
-			out.Values[i] = ec._RepositoryPull_groupId(ctx, field, obj)
+		case "groupID":
+			out.Values[i] = ec._RepositoryPull_groupID(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}
@@ -12486,8 +12485,8 @@ func (ec *executionContext) _RepositoryPush(ctx context.Context, sel ast.Selecti
 			if out.Values[i] == graphql.Null {
 				invalids++
 			}
-		case "groupId":
-			out.Values[i] = ec._RepositoryPush_groupId(ctx, field, obj)
+		case "groupID":
+			out.Values[i] = ec._RepositoryPush_groupID(ctx, field, obj)
 		default:
 			panic("unknown field " + strconv.Quote(field.Name))
 		}

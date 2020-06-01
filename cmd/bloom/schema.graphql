@@ -261,7 +261,7 @@ type Push {
 type RepositoryPush {
   oldState: String!
   newState: String!
-  groupId: ID
+  groupID: ID
 }
 
 type Pull {
@@ -273,7 +273,7 @@ type RepositoryPull {
   newState: String!
   objects: [Object!]!
   hasMoreChanges: Boolean!
-  groupId: ID
+  groupID: ID
 }
 
 type Object {
@@ -411,7 +411,7 @@ input DeclineGroupInvitationInput {
 }
 
 input InviteUserInGroupInput {
-  groupId: ID!
+  groupID: ID!
   username: String!
   ephemeralPublicKey: Bytes!
   encryptedMasterKey: Bytes!
@@ -419,8 +419,7 @@ input InviteUserInGroupInput {
 }
 
 input QuitGroupInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
 }
 
 input BillingPlanInput {
@@ -439,17 +438,17 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
-"""if groupId and userId (reserved for admins) are null, add to current user"""
+"""if groupID and userId (reserved for admins) are null, add to current user"""
 input UpdateBillingSubscriptionInput {
   planId: ID!
   userId: ID
-  groupId: ID
+  groupID: ID
 }
 
 input AddPaymentMethodInput {
   stripeId: String!
-  """if groupId is null, add to current user"""
-  groupId: ID
+  """if groupID is null, add to current user"""
+  groupID: ID
 }
 
 """remove payment method with `id`"""
@@ -493,7 +492,7 @@ input PullInput {
 
 input RepositoryPullInput {
   sinceState: String!
-  groupId: ID
+  groupID: ID
 }
 
 input PushInput {
@@ -506,7 +505,7 @@ input RepositoryPushInput {
   """out of sync objects"""
   objects: [ObjectInput!]!
   """to indicate whether it's the user's repository, or a group"""
-  groupId: ID
+  groupID: ID
 }
 
 input ObjectInput {
