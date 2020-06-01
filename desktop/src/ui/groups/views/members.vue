@@ -268,7 +268,6 @@ export default class GroupsMembersView extends Vue {
   async cancelInvitation(invitation: GroupInvitation) {
     this.loading = true;
     this.error = '';
-    console.log(invitation);
     const params: GroupsCancelInvitationParams = {
       invitationID: invitation.id,
     };
