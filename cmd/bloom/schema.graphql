@@ -391,8 +391,7 @@ input GroupInput {
 }
 
 input RemoveGroupMembersInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
   """members to remvove, by username"""
   members: [String!]!
 }

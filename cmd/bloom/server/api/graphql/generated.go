@@ -2289,8 +2289,7 @@ input GroupInput {
 }
 
 input RemoveGroupMembersInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
   """members to remvove, by username"""
   members: [String!]!
 }
@@ -10869,9 +10868,9 @@ func (ec *executionContext) unmarshalInputRemoveGroupMembersInput(ctx context.Co
 
 	for k, v := range asMap {
 		switch k {
-		case "id":
+		case "groupID":
 			var err error
-			it.ID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
+			it.GroupID, err = ec.unmarshalNID2gitlabᚗcomᚋbloom42ᚋgoboxᚋuuidᚐUUID(ctx, v)
 			if err != nil {
 				return it, err
 			}

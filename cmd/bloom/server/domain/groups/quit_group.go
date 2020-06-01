@@ -51,7 +51,7 @@ func QuitGroup(ctx context.Context, actor *users.User, groupID uuid.UUID) (err e
 		err = NewError(ErrorQuittingGroup)
 		return
 	}
-	if remainingAdmins != 0 {
+	if remainingAdmins == 0 {
 		tx.Rollback()
 		err = NewError(ErrorAtLeastOneAdministratorShouldRemainsInGroup)
 		return

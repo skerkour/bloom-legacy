@@ -261,8 +261,7 @@ type RegistrationStarted struct {
 }
 
 type RemoveGroupMembersInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 	// members to remvove, by username
 	Members []string `json:"members"`
 }
