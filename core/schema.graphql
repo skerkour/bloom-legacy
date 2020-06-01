@@ -163,6 +163,10 @@ type GroupsRemoveMembersParams {
   username: String!
 }
 
+type GroupsQuitParams {
+  groupID: ID!
+}
+
 
 ####################################################################################################
 ## kernel

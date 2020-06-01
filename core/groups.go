@@ -129,6 +129,17 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "quitGroup":
+		var params messages.GroupsQuitParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = groups.QuitGroup(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "groups")
 	}

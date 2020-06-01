@@ -19,8 +19,8 @@ type AcceptGroupInvitationInput struct {
 
 type AddPaymentMethodInput struct {
 	StripeID string `json:"stripeId"`
-	// if groupId is null, add to current user
-	GroupID *uuid.UUID `json:"groupId"`
+	// if groupID is null, add to current user
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type BillingPlanConnection struct {
@@ -162,7 +162,7 @@ type GroupMemberEdge struct {
 }
 
 type InviteUserInGroupInput struct {
-	GroupID            uuid.UUID `json:"groupId"`
+	GroupID            uuid.UUID `json:"groupID"`
 	Username           string    `json:"username"`
 	EphemeralPublicKey []byte    `json:"ephemeralPublicKey"`
 	EncryptedMasterKey []byte    `json:"encryptedMasterKey"`
@@ -252,8 +252,7 @@ type PushInput struct {
 }
 
 type QuitGroupInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 }
 
 type RegistrationStarted struct {
@@ -276,18 +275,18 @@ type RepositoryPull struct {
 	NewState       string     `json:"newState"`
 	Objects        []*Object  `json:"objects"`
 	HasMoreChanges bool       `json:"hasMoreChanges"`
-	GroupID        *uuid.UUID `json:"groupId"`
+	GroupID        *uuid.UUID `json:"groupID"`
 }
 
 type RepositoryPullInput struct {
 	SinceState string     `json:"sinceState"`
-	GroupID    *uuid.UUID `json:"groupId"`
+	GroupID    *uuid.UUID `json:"groupID"`
 }
 
 type RepositoryPush struct {
 	OldState string     `json:"oldState"`
 	NewState string     `json:"newState"`
-	GroupID  *uuid.UUID `json:"groupId"`
+	GroupID  *uuid.UUID `json:"groupID"`
 }
 
 type RepositoryPushInput struct {
@@ -296,7 +295,7 @@ type RepositoryPushInput struct {
 	// out of sync objects
 	Objects []*ObjectInput `json:"objects"`
 	// to indicate whether it's the user's repository, or a group
-	GroupID *uuid.UUID `json:"groupId"`
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type RevokeSessionInput struct {
@@ -355,11 +354,11 @@ type TwoFAActivationStarted struct {
 	QrCode []byte `json:"qrCode"`
 }
 
-// if groupId and userId (reserved for admins) are null, add to current user
+// if groupID and userId (reserved for admins) are null, add to current user
 type UpdateBillingSubscriptionInput struct {
 	PlanID  uuid.UUID  `json:"planId"`
 	UserID  *uuid.UUID `json:"userId"`
-	GroupID *uuid.UUID `json:"groupId"`
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type UserConnection struct {

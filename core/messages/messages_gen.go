@@ -120,6 +120,10 @@ type GroupsInviteUserParams struct {
 	Username string    `json:"username"`
 }
 
+type GroupsQuitParams struct {
+	GroupID uuid.UUID `json:"groupID"`
+}
+
 type GroupsRemoveMembersParams struct {
 	GroupID  uuid.UUID `json:"groupID"`
 	Username string    `json:"username"`
