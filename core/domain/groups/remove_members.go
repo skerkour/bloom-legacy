@@ -5,12 +5,17 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
+	"gitlab.com/bloom42/bloom/core/messages"
 	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func RemoveMembers(input model.RemoveGroupMembersInput) (*model.Group, error) {
+func RemoveMembers(params messages.GroupsRemoveMembersParams) (*model.Group, error) {
 	client := api.Client()
 
+	input := model.RemoveGroupMembersInput{
+		GroupID: params.GroupID,
+		Members: []string{params.Username},
+	}
 	var resp struct {
 		Group *model.Group `json:"removeGroupMembers"`
 	}

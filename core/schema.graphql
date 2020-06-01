@@ -158,6 +158,11 @@ type GroupsDeclineInvitationParams  {
 	invitationID: ID!
 }
 
+type GroupsRemoveMembersParams {
+  groupID: ID!
+  username: String!
+}
+
 
 ####################################################################################################
 ## kernel

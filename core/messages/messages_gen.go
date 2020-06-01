@@ -120,6 +120,11 @@ type GroupsInviteUserParams struct {
 	Username string    `json:"username"`
 }
 
+type GroupsRemoveMembersParams struct {
+	GroupID  uuid.UUID `json:"groupID"`
+	Username string    `json:"username"`
+}
+
 type MyBillingProfile struct {
 	Me              *model.User                  `json:"me"`
 	BillingPlans    *model.BillingPlanConnection `json:"billingPlans"`
