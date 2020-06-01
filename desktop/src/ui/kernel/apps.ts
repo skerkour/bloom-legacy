@@ -27,6 +27,11 @@ export default function getApps() {
       path: '/files',
       icon: '/assets/imgs/icons/files.svg',
     },
+    {
+      name: 'Contacts',
+      path: '/contacts',
+      icon: '/assets/imgs/icons/contacts.svg',
+    },
     // {
     //   name: 'Bitflow',
     //   path: '/bitflow',
@@ -47,11 +52,6 @@ export default function getApps() {
     //   path: '/books',
     //   icon: '/assets/imgs/icons/books.svg',
     // },
-    {
-      name: 'Contacts',
-      path: '/contacts',
-      icon: '/assets/imgs/icons/contacts.svg',
-    },
     {
       name: 'Calculator',
       path: '/calculator',
