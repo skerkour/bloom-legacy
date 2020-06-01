@@ -43,7 +43,7 @@
           Cancel
         </v-btn>
         <v-btn color="primary" @click="createGroup()" :loading="loading">
-          Add
+          Create
         </v-btn>
       </v-card-actions>
     </v-card>
