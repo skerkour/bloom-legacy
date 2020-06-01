@@ -162,6 +162,11 @@ export type GroupsRemoveMembersParams = {
   username: Scalars['String'];
 };
 
+export type GroupsQuitParams = {
+  __typename?: 'GroupsQuitParams';
+  groupID: Scalars['ID'];
+};
+
 export type Empty = {
   __typename?: 'Empty';
   empty?: Maybe<Scalars['Boolean']>;

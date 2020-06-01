@@ -34,8 +34,8 @@
           loading-text="Loading... Please wait"
           hide-default-footer>
           <template v-slot:item="{ item }" >
-            <tr @click="goto(`/groups/${item.id}/members`)" class="blm-pointer">
-              <td>
+            <tr>
+              <td @click="goto(`/groups/${item.id}/members`)" class="blm-pointer">
                <v-avatar color="white" v-if="item.avatarUrl" size="42">
                   <v-img :src="item.avatarUrl"></v-img>
                 </v-avatar>
@@ -45,8 +45,33 @@
                 &nbsp;
                 <span>{{ item.name }}</span>
               </td>
-              <td>
+              <td @click="goto(`/groups/${item.id}/members`)" class="blm-pointer">
                 <span>{{ item.description }}</span>
+              </td>
+              <td>
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item @click="quitGroup(item)">
+                      <v-list-item-icon>
+                        <v-icon>mdi-cancel</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Quit group</v-list-item-title>
+                    </v-list-item>
+
+                    <v-list-item @click="deleteGroup(item)">
+                      <v-list-item-icon>
+                        <v-icon color="red">mdi-delete</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Delete group</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </td>
             </tr>
           </template>
@@ -92,7 +117,7 @@
               <td>
                 <v-menu bottom left>
                   <template v-slot:activator="{ on }">
-                    <v-btn icon v-on="on" v-if="!item.isDefault">
+                    <v-btn icon v-on="on">
                       <v-icon>mdi-dots-vertical</v-icon>
                     </v-btn>
                   </template>
@@ -134,7 +159,7 @@ import { Group, GroupInvitation, User } from '@/api/models';
 import core from '@/core';
 import { Method, Groups } from '@/core/groups';
 import BlmGroupsNewGroupDialog from '../components/new_group_dialog.vue';
-import { GroupsDeclineInvitationParams } from '../../../core/messages';
+import { GroupsDeclineInvitationParams, GroupsQuitParams, GroupsDeleteParams } from '@/core/messages';
 
 @Component({
   components: {
@@ -163,6 +188,12 @@ export default class GroupsView extends Vue {
       sortable: false,
       text: 'Description',
       value: 'description',
+    },
+    {
+      align: 'left',
+      sortable: false,
+      text: 'Actions',
+      value: 'actions',
     },
   ];
   invitationsHeaders = [
@@ -255,6 +286,42 @@ export default class GroupsView extends Vue {
       this.invitationsError = err.message;
     } finally {
       this.invitationsLoading = false;
+    }
+  }
+
+  async quitGroup(group: Group) {
+    this.groupsError = '';
+    this.groupsLoading = true;
+    const params: GroupsQuitParams = {
+      groupID: group.id!,
+    };
+
+    try {
+      await core.call(Method.QuitGroup, params);
+      this.groups = this.groups
+        .filter((grp: Group) => group.id !== grp.id);
+    } catch (err) {
+      this.groupsError = err.message;
+    } finally {
+      this.groupsLoading = false;
+    }
+  }
+
+  async deleteGroup(group: Group) {
+    this.groupsError = '';
+    this.groupsLoading = true;
+    const params: GroupsDeleteParams = {
+      groupID: group.id!,
+    };
+
+    try {
+      await core.call(Method.DeleteGroup, params);
+      this.groups = this.groups
+        .filter((grp: Group) => group.id !== grp.id);
+    } catch (err) {
+      this.groupsError = err.message;
+    } finally {
+      this.groupsLoading = false;
     }
   }
 

@@ -6,6 +6,7 @@ export enum Method {
   FindGroups = 'groups.findGroups',
   FetchGroups = 'groups.fetchGroups',
   FetchDetails = 'groups.fetchDetails',
+  QuitGroup = 'groups.quitGroup',
   // members
   FetchMembers = 'groups.fetchMembers',
   InviteUser = 'groups.inviteUser',
