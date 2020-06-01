@@ -184,6 +184,11 @@ export type DeleteNoteParams = {
   id: Scalars['Bytes'];
 };
 
+export type NotesFindParams = {
+  __typename?: 'NotesFindParams';
+  groupID?: Maybe<Scalars['ID']>;
+};
+
 export type PreferencesSetParams = {
   __typename?: 'PreferencesSetParams';
   key: Scalars['String'];

@@ -2,6 +2,7 @@
   <v-container fill-height fluid class="pa-0">
     <v-col cols="4" lg="3" class="pa-0 blm-left-col">
       <v-toolbar elevation="0">
+        <blm-group-selector />
         <v-tooltip bottom>
           <template v-slot:activator="{ on }">
             <v-btn icon v-on="on" to="/notes" exact v-if="archive">
@@ -63,7 +64,9 @@
 
 
 <script lang="ts">
-import { Component, Prop, Vue } from 'vue-property-decorator';
+import {
+  Component, Prop, Vue, Watch,
+} from 'vue-property-decorator';
 import BlmNote from './note.vue';
 import core, { BlmObject, Notes } from '@/core';
 import {
@@ -73,10 +76,15 @@ import {
   NOTE_TYPE,
 } from '@/core/notes';
 import { log } from '@/libs/rz';
+import BlmGroupSelector from '@/ui/kernel/components/group_selector.vue';
+import { NotesFindParams } from '@/core/messages';
+import { Group } from '@/api/models';
+
 
 @Component({
   components: {
     'blm-notes-note': BlmNote,
+    BlmGroupSelector,
   },
 })
 export default class BlmNotes extends Vue {
@@ -96,12 +104,7 @@ export default class BlmNotes extends Vue {
   // computed
   // lifecycle
   async created() {
-    if (this.archive) {
-      await this.findArchived();
-    } else {
-      await this.findNotes();
-    }
-    this.setSelectedNoteIndex(0);
+    await this.load(this.$store.state.selectedGroup);
     this.saveInterval = setInterval(this.save, 2000);
   }
 
@@ -115,7 +118,22 @@ export default class BlmNotes extends Vue {
     }
   }
 
+  // watch
+  @Watch('$store.state.selectedGroup')
+  onSelectedGroupChanged(group: Group | null) {
+    this.load(group);
+  }
+
   // methods
+  async load(group: Group | null) {
+    if (this.archive) {
+      await this.findArchived(group);
+    } else {
+      await this.findNotes(group);
+    }
+    this.setSelectedNoteIndex(0);
+  }
+
   async save() {
     if (this.selectedNote) {
       if (this.selectedNote.id === '') {
@@ -126,12 +144,15 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  async findNotes() {
+  async findNotes(group: Group | null) {
     this.error = '';
     this.isLoading = true;
+    const params: NotesFindParams = {
+      groupID: group?.id || null,
+    };
 
     try {
-      const res = await core.call(Method.ListNotes, core.Empty);
+      const res = await core.call(Method.FindNotes, params);
       this.notes = (res as Notes).notes;
     } catch (err) {
       log.error(err);
@@ -140,12 +161,15 @@ export default class BlmNotes extends Vue {
     }
   }
 
-  async findArchived() {
+  async findArchived(group: Group | null) {
     this.error = '';
     this.isLoading = true;
+    const params: NotesFindParams = {
+      groupID: group?.id || null,
+    };
 
     try {
-      const res = await core.call(Method.ListArchived, core.Empty);
+      const res = await core.call(Method.FindNotes, params);
       this.notes = (res as Notes).notes;
     } catch (err) {
       this.error = err.message;

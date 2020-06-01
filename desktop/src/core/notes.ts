@@ -1,8 +1,8 @@
 export const NOTE_TYPE = 'com.bloom42.bloom.note';
 
 export enum Method {
-  ListNotes = 'notes.listNotes',
-  ListArchived = 'notes.listArchived',
+  FindNotes = 'notes.findNotes',
+  FindArchived = 'notes.findArchived',
   CreateNote = 'notes.createNote',
   UpdateNote = 'notes.updateNote',
   DeleteNote = 'notes.deleteNote',

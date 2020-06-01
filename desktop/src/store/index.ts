@@ -12,6 +12,7 @@ interface AppState {
   me: models.User | null,
   session: models.Session | null,
   groups: models.Group[],
+  selectedGroup: models.Group | null,
 }
 
 export enum Mutations {
@@ -24,6 +25,7 @@ export enum Mutations {
   SET_GROUPS,
   ADD_GROUP,
   REMOVE_GROUP,
+  SET_SELECTED_GROUP,
 }
 
 export default new Vuex.Store<AppState>({
@@ -32,6 +34,7 @@ export default new Vuex.Store<AppState>({
     me: null,
     session: null,
     groups: [],
+    selectedGroup: null,
   },
   mutations: {
     [Mutations.SIGN_IN](state: AppState, params: models.SignedIn) {
@@ -63,6 +66,9 @@ export default new Vuex.Store<AppState>({
     [Mutations.REMOVE_GROUP](state: AppState, groupID: string) {
       state.groups = state.groups
         .filter((group: models.Group) => group.id !== groupID);
+    },
+    [Mutations.SET_SELECTED_GROUP](state: AppState, selectedGroup: models.Group | null) {
+      state.selectedGroup = selectedGroup;
     },
   },
   actions: {
