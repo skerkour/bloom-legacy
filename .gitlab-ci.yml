@@ -157,29 +157,6 @@ test:website:
     - make lint
 
 
-# test:bitflow:
-#   stage: test
-#   image: $GO_IMAGE
-#   tags:
-#     - docker
-#   script:
-#     - cd bitflow/
-#     - cp bitflow.default.json bitflow.json
-#     - make test
-# test:bitflow:
-#   stage: test
-#   image: $RUST_IMAGE
-#   tags:
-#     - docker
-#   script:
-#     - apt update && apt install -y gcc make git
-#     - rustup default $RUST_VERSION
-#     - rustup component add rustfmt clippy
-#     - cd bitflow
-#     - make fmt_check
-#     - make lint
-#     - make test
-
 ####################################################################################################
 ## Build
 ####################################################################################################
@@ -235,20 +212,6 @@ build:mobile:
     - make assets
     - make build
 
-# build:server:
-#   stage: build
-#   image: $RUST_IMAGE
-#   tags:
-#     - docker
-#   script:
-#     - cd server
-#     - apt update && apt install -y gcc make git
-#     - rustup default $RUST_VERSION
-#     - make assets
-#     - make build
-#   artifacts:
-#     paths:
-#     - server/dist
 
 build:cli:
   stage: build
@@ -287,31 +250,6 @@ build:website:
     paths:
     - website/dist
 
-
-# build:bitflow:docker:
-#   stage: build
-#   image: docker:stable
-#   tags:
-#     - docker
-#   script:
-#     - apk update && apk add make
-#     - cd bitflow/
-#     - make docker
-
-
-# build:bitflow:
-#   stage: build
-#   image: $RUST_IMAGE
-#   tags:
-#     - docker
-#   script:
-#     - apt update && apt install -y gcc make git
-#     - rustup default $RUST_VERSION
-#     - cd bitflow
-#     - make build
-#   artifacts:
-#     paths:
-#     - bitflow/dist
 
 ####################################################################################################
 ## Package
@@ -366,6 +304,69 @@ release:status_page:
     - make docker_login
     - make release
 
+
+
+
+# test:bitflow:
+#   stage: test
+#   image: $GO_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd bitflow/
+#     - cp bitflow.default.json bitflow.json
+#     - make test
+# test:bitflow:
+#   stage: test
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - rustup component add rustfmt clippy
+#     - cd bitflow
+#     - make fmt_check
+#     - make lint
+#     - make test
+# build:server:
+#   stage: build
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd server
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - make assets
+#     - make build
+#   artifacts:
+#     paths:
+#     - server/dist
+# build:bitflow:docker:
+#   stage: build
+#   image: docker:stable
+#   tags:
+#     - docker
+#   script:
+#     - apk update && apk add make
+#     - cd bitflow/
+#     - make docker
+
+
+# build:bitflow:
+#   stage: build
+#   image: $RUST_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - apt update && apt install -y gcc make git
+#     - rustup default $RUST_VERSION
+#     - cd bitflow
+#     - make build
+#   artifacts:
+#     paths:
+#     - bitflow/dist
 
 # release:server:stable:
 #   # only:
