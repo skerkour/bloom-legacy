@@ -4,6 +4,7 @@ the apps.
 """
 scalar BloomMetadata
 scalar UserConnection
+scalar GroupConnection
 scalar Group
 scalar BillingPlanConnection
 scalar User
@@ -18,6 +19,7 @@ scalar Bytes
 type DashboardData {
   metadata: BloomMetadata
   users: UserConnection
+  groups: GroupConnection
 }
 
 ####################################################################################################

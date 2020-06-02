@@ -25,6 +25,15 @@
         </router-link>
       </v-col>
 
+      <v-col cols="12" sm="6" md="3">
+        <router-link to="/admin/groups">
+          <v-card outlined>
+            <v-card-title>Groups</v-card-title>
+            <v-card-text>{{ data.groups.totalCount }}</v-card-text>
+          </v-card>
+        </router-link>
+      </v-col>
+
     </v-row>
 
   </v-container>

@@ -23,6 +23,9 @@ func FetchDashboardData() (messages.DashboardData, error) {
 		users {
 			totalCount
 		}
+		groups {
+			totalCount
+		}
 	}
 	`)
 

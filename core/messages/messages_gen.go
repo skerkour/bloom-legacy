@@ -47,8 +47,9 @@ type ContactsFindParams struct {
 }
 
 type DashboardData struct {
-	Metadata *model.BloomMetadata  `json:"metadata"`
-	Users    *model.UserConnection `json:"users"`
+	Metadata *model.BloomMetadata   `json:"metadata"`
+	Users    *model.UserConnection  `json:"users"`
+	Groups   *model.GroupConnection `json:"groups"`
 }
 
 // type Contacts struct {
