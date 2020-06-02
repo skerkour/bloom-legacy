@@ -1,0 +1,12 @@
+# project
+tmp/
+.tmp/
+dist/
+.env
+.env.local
+.env.*.local
+/target
+
+.*.magnet
+downloads/
+bitflow.sane

@@ -1,83 +1,92 @@
-.PHONY: build clean re dev test build_static release fmt fmt_check lint
-.PHONY: docker_login docker_build docker_release dev_docker_build dev_docker_run docker_release_nightly
-
 DIST_DIR = dist
-NAME := $(shell cat Cargo.toml | grep "^name\s=" | cut -d '"' -f2)
-VERSION := $(shell cat Cargo.toml | grep "^version\s=" | cut -d '"' -f2)
-DOCKER_IMAGE = registry.gitlab.com/bloom42/bloom/$(NAME)
+NAME := bitflow
+VERSION := $(shell cat version/version.go| grep "\sVersion =" | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
+GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
+DOCKER_IMAGE = registry.$(GO_PKG)
+DEFAULT_CONFIG_FILE = bitflow.default.json
+DIST_CONFIG_FILE = bitflow.json
 
-
+.PHONY: all
 all: build
 
+.PHONY: build
 build:
 	mkdir -p $(DIST_DIR)
-	cargo build --release
-	cp target/release/$(NAME) $(DIST_DIR)/$(NAME)
+	go build -o $(DIST_DIR)/$(NAME)
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
-build_debug:
-	mkdir -p $(DIST_DIR)
-	cargo build
-	cp target/debug/$(NAME) $(DIST_DIR)/$(NAME)
-
+.PHONY: build_static
 build_static:
-	mkdir -p $(DIST_DIR)
-	cargo build -p $(NAME) --release --target=x86_64-unknown-linux-musl
-	cp target/x86_64-unknown-linux-musl/release/$(NAME) $(DIST_DIR)/$(NAME)
+	CGO_ENABLED=0 go build -o  $(DIST_DIR)/$(NAME) -a -ldflags "-extldflags "-static" -w -s"
+	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
+
+.PHONY: dev
 dev:
-	cargo watch -x 'run -- worker'
+	gowatch -log-prefix=false -build="make build" -command="$(DIST_DIR)/$(NAME) worker"
 
+
+.PHONY: clean
 clean:
-	rm -rf $(DIST_DIR) target/
+	rm -rf $(DIST_DIR)
 
+.PHONY: re
 re: clean build
 
+.PHONY: test
 test:
-	cargo test
+	go vet -all ./...
+	go test -v -race -covermode=atomic ./...
 
+
+.PHONY: mod_download
+mod_download:
+	go mod download
+
+
+.PHONY: mod_verify
+mod_verify:
+	go mod verify
+
+
+.PHONY: tidy
+tidy:
+	go mod tidy
+
+
+.PHONY: fmt
 fmt:
-	cargo fmt
+	go fmt ./...
 
+
+.PHONY: fmt_check
 fmt_check:
-	cargo fmt --all -- --check
+	test -z $$(gofmt -l $$(find . -name '*.go' -type f -print | grep -v /vendor/))
 
+.PHONY: lint
 lint:
-	cargo clippy -- -D warnings -A clippy::needless_return
+	# test -z $$(gofmt -l $$(find . -name '*.go' -type f -print | grep -v /vendor/))
 
-audit:
-	cargo audit
-
+.PHONY: release
 release:
+	git checkout release
+	git merge master
+	git push
 	git tag v$(VERSION)
 	git push origin v$(VERSION)
-
-crates_login:
-	cargo login ${CRATES_TOKEN}
-
-crates_publish:
-	cargo publish
+	git checkout master
 
 
-dev_docker_build:
-	docker build -t $(DOCKER_IMAGE)_dev:latest -f dev.Dockerfile .
-
-dev_docker_run:
-	docker run -ti -v `pwd`:/bitflow $(DOCKER_IMAGE)_dev:latest
-
-
-docker_build:
+.PHONY: docker
+docker:
 	docker build -t $(DOCKER_IMAGE):latest .
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):$(VERSION)
 
+.PHONY: docker_login
 docker_login:
 	docker login -u gitlab-ci-token -p ${CI_JOB_TOKEN} ${CI_REGISTRY}
 
+.PHONY: docker_release
 docker_release:
-	docker push $(DOCKER_IMAGE):$(VERSION)
 	docker push $(DOCKER_IMAGE):latest
-
-docker_release_nightly:
-	docker tag $(DOCKER_IMAGE):latest $(DOCKER_IMAGE):nightly-$(DATE)
-	docker push $(DOCKER_IMAGE):nightly-$(DATE)
