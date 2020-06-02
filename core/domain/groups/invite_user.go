@@ -44,7 +44,7 @@ func InviteUser(params messages.GroupsInviteUserParams) (*model.Group, error) {
 	defer crypto.Zeroize(groupMasterKey)
 
 	inviteePublicKey := crypto.PublicKey(invitee.PublicKey)
-	encryptedMasterKey, ephemeralPublicKey, err := inviteePublicKey.EncryptAnonymous(groupMasterKey)
+	encryptedMasterKey, ephemeralPublicKey, err := inviteePublicKey.EncryptEphemeral(groupMasterKey)
 	if err != nil {
 		return ret, err
 	}
