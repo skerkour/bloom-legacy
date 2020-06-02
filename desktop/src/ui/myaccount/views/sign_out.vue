@@ -17,7 +17,8 @@
         </v-card-title>
 
         <v-card-text>
-          Do you really want to sign out?
+          Please be sure that all your data synchronized (you need to be connected to internet).
+          Otherwise it may result in <b>data loss</b>.
         </v-card-text>
 
         <v-card-actions>
