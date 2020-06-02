@@ -19,7 +19,7 @@ func (r *Resolver) RemoveGroupMembers(ctx context.Context, input model.RemoveGro
 	}
 
 	params := groups.RemoveMembersParams{
-		GroupID:   input.ID,
+		GroupID:   input.GroupID,
 		Usernames: input.Members,
 	}
 	group, err := groups.RemoveMembers(ctx, currentUser, params)

@@ -57,4 +57,14 @@ func TestEval(t *testing.T) {
 	if expected != res {
 		t.Errorf("%s = %f; want %f", exp, res, expected)
 	}
+
+	exp = "(2 + 2) * 4"
+	expected = 16
+	res, err = Eval(exp)
+	if err != nil {
+		t.Errorf("err is not null: %v", err)
+	}
+	if expected != res {
+		t.Errorf("%s = %f; want %f", exp, res, expected)
+	}
 }

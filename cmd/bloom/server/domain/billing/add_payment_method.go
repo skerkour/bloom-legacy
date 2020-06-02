@@ -11,8 +11,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type AddPaymentMethodParams struct {
@@ -53,13 +53,13 @@ func AddPaymentMethod(ctx context.Context, actor *users.User, params AddPaymentM
 			tx.Rollback()
 			return ret, err
 		}
-		customer, err = FindCustomerByGroupId(ctx, tx, *params.GroupID)
+		customer, err = FindCustomerByGroupID(ctx, tx, *params.GroupID, true)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID, true)
 		if err != nil {
 			tx.Rollback()
 			return ret, NewError(ErrorAddingPaymentMethod)

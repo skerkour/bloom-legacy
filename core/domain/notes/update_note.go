@@ -1,28 +1,23 @@
 package notes
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 )
 
-func UpdateNote(note Note) (Note, error) {
+func UpdateNote(note objects.Object) (objects.Object, error) {
 	now := time.Now().UTC()
 	var err error
 
 	note.UpdatedAt = now
+	note.OutOfSync = true
 
-	query := `
-	UPDATE notes SET
-		updated_at = ?,
-		archived_at = ?,
-		title = ?,
-		body = ?,
-		color = ?,
-		is_pinned = ?
-	WHERE id = ?
-	`
-	_, err = db.DB.Exec(query, &note.UpdatedAt, &note.ArchivedAt, &note.Title, &note.Body, &note.Color, &note.IsPinned, &note.ID)
+	err = objects.SaveObject(context.Background(), nil, &note)
+
+	// request sync
+	// objects.SyncChan <- true
 
 	return note, err
 }

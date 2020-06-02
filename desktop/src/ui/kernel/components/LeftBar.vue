@@ -6,7 +6,7 @@
     absolute
     fill-height
     dark
-    class="blm-left-bar"
+    class="blm-left-bar overflow-y-auto"
   >
     <v-list>
       <v-list-item>
@@ -47,7 +47,7 @@
         <v-list-item-avatar color="white" class="blm-pointer" @click="openHelp">
           <v-tooltip bottom>
             <template v-slot:activator="{ on }">
-               <v-icon medium color="grey" v-on="on">mdi-help</v-icon>
+               <v-icon medium color="grey" v-on="on">mdi-help-circle</v-icon>
             </template>
             <span>Help</span>
           </v-tooltip>
@@ -149,5 +149,6 @@ export default class LeftBar extends Vue {
   z-index: 100;
   overflow-y: auto;
   width: 72px !important;
+  height: 100vh;
 }
 </style>

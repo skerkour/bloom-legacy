@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid style="height: 100vh" class="overflow-y-auto">
     <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
       {{ error }}
     </v-alert>
@@ -45,7 +45,7 @@ export default class AdminBillingPlansView extends Vue {
 
     try {
       const res = await core.call(BillingMethod.FetchPlans, core.Empty);
-      this.plans = res.edges.map((edge: models.Maybe<models.BillingPlanEdge>) => edge!.node!);
+      this.plans = res.nodes;
     } catch (err) {
       this.error = err.message;
     } finally {

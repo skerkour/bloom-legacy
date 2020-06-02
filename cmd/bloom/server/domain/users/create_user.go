@@ -1,28 +1,34 @@
 package users
 
 import (
+	"bytes"
 	"context"
+	"fmt"
 	"strings"
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type createUserParams struct {
-	PendingUser         PendingUser
+	Email               string
+	DisplayName         string
 	Username            string
 	AuthKey             []byte
 	PublicKey           []byte
 	EncryptedPrivateKey []byte
 	PrivateKeyNonce     []byte
+	EncryptedMasterKey  []byte
+	MasterKeyNonce      []byte
 }
 
 func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret *User, err error) {
 	logger := rz.FromCtx(ctx)
 	var existingUser int
+	zeroNonce := make([]byte, crypto.AEADNonceSize)
 
 	// validate params
 	params.Username = strings.TrimSpace(params.Username)
@@ -31,10 +37,26 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		err = NewErrorMessage(ErrorInvalidArgument, err.Error())
 		return
 	}
+	if len(params.PrivateKeyNonce) != crypto.AEADNonceSize {
+		err = NewErrorMessage(ErrorInvalidArgument, "privateKeyNonce has bad size")
+		return
+	}
+	if bytes.Equal(params.PrivateKeyNonce, zeroNonce) {
+		err = NewErrorMessage(ErrorInvalidArgument, "privateKeyNonce cannot be empty")
+		return
+	}
+	if len(params.MasterKeyNonce) != crypto.AEADNonceSize {
+		err = NewErrorMessage(ErrorInvalidArgument, fmt.Sprintf("masterKeyNonce has bad size (%d)", len(params.MasterKeyNonce)))
+		return
+	}
+	if bytes.Equal(params.MasterKeyNonce, zeroNonce) {
+		err = NewErrorMessage(ErrorInvalidArgument, "masterKeyNonce cannot be empty")
+		return
+	}
 
 	// check if email does not already exist
 	queryCountExistingEmails := "SELECT COUNT(*) FROM users WHERE email = $1"
-	err = tx.Get(&existingUser, queryCountExistingEmails, params.PendingUser.Email)
+	err = tx.Get(&existingUser, queryCountExistingEmails, params.Email)
 	if err != nil {
 		logger.Error("users.CreateUser: error fetching existing emails counts", rz.Err(err))
 		err = NewError(ErrorEmailAlreadyExists)
@@ -74,8 +96,6 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		return
 	}
 
-	now := time.Now().UTC()
-	// TODO: update params
 	authKeyHash, err := crypto.HashPassword(params.AuthKey, AUTH_KEY_HASH_PARAMS)
 	if err != nil {
 		logger.Error("users.CreateUser: hashing auth key", rz.Err(err))
@@ -83,27 +103,39 @@ func createUser(ctx context.Context, tx *sqlx.Tx, params createUserParams) (ret 
 		return
 	}
 
+	now := time.Now().UTC()
 	ret = &User{
 		ID:                  uuid.New(),
-		Username:            params.Username,
-		Email:               params.PendingUser.Email,
 		CreatedAt:           now,
 		UpdatedAt:           now,
-		DisplayName:         params.PendingUser.DisplayName,
+		DisabledAt:          nil,
+		Username:            params.Username,
+		Email:               params.Email,
+		DisplayName:         params.DisplayName,
+		Bio:                 "",
+		FirstName:           "",
+		LastName:            "",
+		State:               0,
+		IsAdmin:             false,
 		AuthKeyHash:         authKeyHash,
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
-		State:               0,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
+		EncryptedMasterKey:  params.EncryptedMasterKey,
+		MasterKeyNonce:      params.MasterKeyNonce,
+		TwoFASecret:         nil,
 	}
 
 	queryCreateUser := `INSERT INTO users
-		(id, created_at, updated_at, username, display_name, bio, email, first_name, last_name,
-			is_admin, auth_key_hash, public_key, encrypted_private_key, state, private_key_nonce)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)`
-	_, err = tx.Exec(queryCreateUser, ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.Username,
-		ret.DisplayName, ret.Bio, ret.Email, ret.FirstName, ret.LastName, false, ret.AuthKeyHash, ret.PublicKey,
-		ret.EncryptedPrivateKey, ret.State, ret.PrivateKeyNonce)
+		(id, created_at, updated_at, disabled_at, username, email, display_name, bio, first_name, last_name,
+			state, is_admin, auth_key_hash, public_key, encrypted_private_key, private_key_nonce,
+			encrypted_master_key, master_key_nonce, two_fa_secret)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18, $19)`
+	_, err = tx.Exec(queryCreateUser,
+		ret.ID, ret.CreatedAt, ret.UpdatedAt, ret.DisabledAt, ret.Username, ret.Email, ret.DisplayName,
+		ret.Bio, ret.FirstName, ret.LastName,
+		ret.State, ret.IsAdmin, ret.AuthKeyHash, ret.PublicKey, ret.EncryptedPrivateKey, ret.PrivateKeyNonce,
+		ret.EncryptedMasterKey, ret.MasterKeyNonce, ret.TwoFASecret)
 	if err != nil {
 		logger.Error("users.CreateUser: inserting new user", rz.Err(err))
 		err = NewError(ErrorCompletingRegistration)

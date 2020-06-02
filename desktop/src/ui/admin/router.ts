@@ -24,7 +24,7 @@ export default [
   },
   {
     component: Group,
-    path: '/admin/groups/:groupId',
+    path: '/admin/groups/:groupID',
   },
   {
     component: Plans,

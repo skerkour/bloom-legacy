@@ -1,50 +1,33 @@
 package contacts
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 )
 
-func UpdateContact(contact Contact) (Contact, error) {
-	// TODO: validators
-	cleanContactCollections(&contact)
-	var err error
+func UpdateContact(contact objects.Object) (objects.Object, error) {
 	now := time.Now().UTC()
+	var err error
 
-	contact.UpdatedAt = now
+	// TODO: validators
+	cont, err := ObjectToContact(&contact)
+	if err != nil {
+		return contact, err
+	}
+	cleanContactCollections(cont)
 
-	query := `
-		UPDATE contacts SET
-			updated_at = $1,
-			first_name = $2,
-			last_name = $3,
-			notes = $4,
-			addresses = $5,
-			birthday = $6,
-			organizations = $7,
-			emails = $8,
-			phones = $9,
-			websites = $10,
-			device_id = $11,
-			bloom_username = $12
-		WHERE id = $13
-	`
-	_, err = db.DB.Exec(query,
-		contact.UpdatedAt,
-		contact.FirstName,
-		contact.LastName,
-		contact.Notes,
-		contact.Addresses,
-		contact.Birthday,
-		contact.Organizations,
-		contact.Emails,
-		contact.Phones,
-		contact.Websites,
-		contact.DeviceID,
-		contact.BloomUsername,
-		contact.ID,
-	)
+	cleanedContact, err := objects.ToObject(contact.ID, kernel.OBJECT_TYPE_CONTACT, contact.CreatedAt, now, contact.GroupID, true, cont)
+	if err != nil {
+		return contact, err
+	}
 
-	return contact, err
+	err = objects.SaveObject(context.Background(), nil, cleanedContact)
+
+	// request sync
+	// objects.SyncChan <- true
+
+	return *cleanedContact, err
 }

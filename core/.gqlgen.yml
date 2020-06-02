@@ -1,0 +1,32 @@
+# .gqlgen.yml example
+#
+# Refer to https://gqlgen.com/config/
+# for detailed .gqlgen.yml documentation.
+
+schema:
+  - schema.graphql
+
+exec:
+  filename: messages/generated.go
+
+model:
+  filename: messages/messages_gen.go
+
+models:
+  ID:
+    model: gitlab.com/bloom42/gobox/uuid.UUID
+  Time:
+    model: time.Time
+  Bytes:
+    model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Bytes
+#   UserConnection:
+#     model: gitlab.com/bloom42/bloom/core/api/model.UserConnection
+
+#   Int64:
+#     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Int64
+#   Bytes:
+#     model: gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model.Bytes
+
+autobind:
+  - gitlab.com/bloom42/bloom/core/messages
+  - gitlab.com/bloom42/bloom/core/api/model

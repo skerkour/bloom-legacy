@@ -5,16 +5,19 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
-func FindGroupById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID) (*Group, error) {
+func FindGroupById(ctx context.Context, tx *sqlx.Tx, id uuid.UUID, forUpdate bool) (*Group, error) {
 	ret := &Group{}
 	var err error
 	logger := rz.FromCtx(ctx)
 
 	queryFind := "SELECT * FROM groups WHERE id = $1"
+	if forUpdate {
+		queryFind += " FOR UPDATE"
+	}
 	if tx == nil {
 		err = db.DB.Get(ret, queryFind, id)
 	} else {

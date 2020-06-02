@@ -1,5 +1,7 @@
+export const CALENDAR_EVENT_TYPE = 'com.bloom42.bloom.calendar_event';
+
 export enum Method {
-  ListEvents = 'calendar.listEvents',
+  FindEvents = 'calendar.findEvents',
   CreateEvent = 'calendar.createEvent',
   UpdateEvent = 'calendar.updateEvent',
   DeleteEvent = 'calendar.deleteEvent',
@@ -7,31 +9,10 @@ export enum Method {
 
 
 export type Event = {
-  id: string,
   title: string,
+  location: string,
   description: string,
-  createdAt: Date,
-  updatedAt: Date,
+  status: string,
   startAt: Date,
   endAt: Date,
-}
-
-export type Events = {
-  events: Event[],
-}
-
-export type ListEvents = {
-  startAt: Date | undefined,
-  endAt: Date | undefined,
-}
-
-export type CreateEvent = {
-  title: string,
-  description: string,
-  startAt: Date,
-  endAt: Date,
-}
-
-export type DeleteEvent = {
-  id: string,
 }

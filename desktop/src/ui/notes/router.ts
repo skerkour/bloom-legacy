@@ -1,5 +1,5 @@
-const Notes = () => import(/* webpackChunkName: "chunk-notes" */ './views/Notes.vue');
-const Archive = () => import(/* webpackChunkName: "chunk-notes" */ './views/Archive.vue');
+const Notes = () => import(/* webpackChunkName: "chunk-notes" */ './views/notes.vue');
+const Archive = () => import(/* webpackChunkName: "chunk-notes" */ './views/archive.vue');
 
 export default [
   {

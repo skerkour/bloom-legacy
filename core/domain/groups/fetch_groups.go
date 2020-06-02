@@ -5,7 +5,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
 func FetchGroups() (*model.GroupConnection, error) {
@@ -17,19 +17,17 @@ func FetchGroups() (*model.GroupConnection, error) {
 	req := graphql.NewRequest(`
 	query {
 		groups {
-			edges {
-				node {
-					id
-					createdAt
-					avatarUrl
-					name
-					description
-					members {
-						totalCount
-					}
-					invitations {
-						totalCount
-					}
+			nodes {
+				id
+				createdAt
+				avatarUrl
+				name
+				description
+				members {
+					totalCount
+				}
+				invitations {
+					totalCount
 				}
 			}
 			totalCount

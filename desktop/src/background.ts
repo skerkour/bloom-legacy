@@ -178,14 +178,22 @@ ipcMain.on('server:start', () => {
   if (process.env.WEBPACK_DEV_SERVER_URL) {
     bloomdPath = `./${DAEMON_NAME}`;
   }
-  child = execFile(bloomdPath, (err, data) => {
-    if (data) {
-      console.log(data.toString());
+  child = execFile(bloomdPath, (err, stdout, stderr) => {
+    // print on exit
+    if (stderr) {
+      console.error(stderr.toString());
     }
     if (err) {
       console.error(err);
     }
   });
+  if (child !== null && child.stdout !== null) {
+    // stream stdout
+    child.stdout!.setEncoding('utf8');
+    child.stdout!.on('data', (data) => {
+      console.log(data.toString());
+    });
+  }
   return true;
 });
 
@@ -195,8 +203,8 @@ ipcMain.handle('core:call', async (event: any, message: any) => {
   const res = await axios({
     url: CALL_URL,
     method: 'post',
-    data: message,
+    data: JSON.stringify(message),
     socketPath: UNIX_SOCKET_PATH,
   });
-  return res;
+  return res.data;
 });

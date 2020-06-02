@@ -1,0 +1,173 @@
+html, body, figure, figcaption, ul, li, h1 {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  text-align: inherit;
+}
+
+ul {
+  list-style: none;
+}
+
+body {
+  /*font-family: sans-serif;*/
+  font-family: 'Orbitron', sans-serif;
+  text-align: center;
+  font-weight: bold;
+  color: white;
+  background: black;
+}
+
+.tron-logo {
+  width: 400px;
+  margin: auto;
+  padding: 10px;
+}
+
+.tron-logo img {
+  max-width: 100%;
+}
+
+figure {
+  display: inline-block;
+  /*will need to modify these if the size of the board changes*/
+  min-width: 800px;
+  min-height: 560px;
+  max-width: 850px;
+  max-height: 580px;
+  /* border: 10px solid #5EC4F2; */
+}
+
+li {
+  float: left;
+  width: 8px;
+  height: 8px;
+}
+
+.player {
+  background: blue;
+}
+
+.player2 {
+  background: #FF4500;
+}
+
+h1 {
+  color: white;
+  font-family: 'Audiowide', cursive;
+  /*font-family: 'Orbitron', sans-serif;*/
+  font-size: 30px;
+}
+
+.intro-outro {
+  display: flex;
+  align-items: center;
+  flex-direction: column;
+  position: absolute;
+  z-index: 2;
+  left: 0;
+  right: 0;
+  top: 100px;
+  width: 800px;
+  margin: auto;
+}
+
+.end-display {
+  padding-top: 100px;
+}
+
+#start, #replay, #two-player {
+  border: 4px solid red;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+  background-color: black;
+  margin-bottom: 8px;
+}
+
+#computer-win, #you-win, #player1-win, #player2-win {
+  padding-bottom: 30px;
+  font-size: 40px;
+}
+
+#instructions {
+  padding-bottom: 34px;
+  width: 675px;
+  font-size: 22px;
+  font-family: 'Audiowide', cursive;
+}
+
+h1#instructions {
+  text-decoration: underline;
+  padding-bottom: 10px;
+  font-size: 30px;
+}
+
+.display {
+  display: flex;
+  justify-content: center;
+}
+
+.leftspace {
+  position: relative;
+  width: 200px;
+  margin-right: 10px;
+}
+
+.rightspace {
+  width: 200px;
+  margin-left: 10px;
+}
+
+.medium, .hard, .back {
+  border: 4px solid red;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+  background-color: black;
+  margin-bottom: 12px;
+}
+
+.easy {
+  color: red;
+  border: 4px solid red;
+  border-radius: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
+  padding-left: 30px;
+  padding-right: 30px;
+  cursor: pointer;
+  background-color: black;
+  margin-bottom: 12px;
+}
+
+.left-header {
+  text-decoration: underline;
+  margin-bottom: 14px;
+}
+
+.score {
+  font-size: 26px;
+  margin-bottom: 60px
+}
+
+.blue-wins {
+  font-size: 26px;
+  font-family: 'Orbitron', sans-serif;
+  color: blue;
+  margin-right: 10px;
+}
+
+.red-wins {
+  font-size: 26px;
+  font-family: 'Orbitron', sans-serif;
+  color: #FF4500;
+  margin-left: 10px;
+}

@@ -9,7 +9,7 @@ import (
 	"github.com/stripe/stripe-go/webhook"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 func StripeHandler(w http.ResponseWriter, req *http.Request) {

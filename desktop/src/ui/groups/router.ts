@@ -10,14 +10,14 @@ export default [
   },
   {
     component: Members,
-    path: '/groups/:groupId/members',
+    path: '/groups/:groupID/members',
   },
   {
     component: Preferences,
-    path: '/groups/:groupId/preferences',
+    path: '/groups/:groupID/preferences',
   },
   {
     component: Billing,
-    path: '/groups/:groupId/billing',
+    path: '/groups/:groupID/billing',
   },
 ];

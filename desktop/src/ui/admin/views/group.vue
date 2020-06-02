@@ -1,5 +1,5 @@
 <template>
-  <v-container>
+  <v-container fluid style="height: 100vh" class="overflow-y-auto">
     <v-row justify="center">
       <v-col cols="12">
         <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
@@ -58,9 +58,10 @@
 <script lang="ts">
 import { Component, Vue } from 'vue-property-decorator';
 import {
-  Group, Invoice, Maybe, InvoiceEdge, PaymentMethod, PaymentMethodEdge,
+  Group, Invoice, PaymentMethod,
 } from '@/api/models';
-import { FetchGroupDetailsParams, Method } from '@/core/groups';
+import { Method } from '@/core/groups';
+import { GroupsFetchDetailsParams } from '@/core/messages';
 import core from '@/core';
 import PaymentMethodsTable from '@/ui/billing/components/payment_methods_table.vue';
 import InvoicesTable from '@/ui/billing/components/invoices_table.vue';
@@ -78,27 +79,26 @@ export default class AdminGroupView extends Vue {
   error = '';
   group: Group | null = null;
   loading = false;
-  groupId = '';
+  groupID = '';
 
   // computed
   get invoices(): Invoice[] {
     if (this.group === null) {
       return [];
     }
-    return this.group.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+    return this.group.invoices!.nodes;
   }
 
   get paymentMethods(): PaymentMethod[] {
     if (this.group === null) {
       return [];
     }
-    return this.group.paymentMethods!
-      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+    return this.group.paymentMethods!.nodes;
   }
 
   // lifecycle
   created() {
-    this.groupId = this.$route.params.groupId;
+    this.groupID = this.$route.params.groupID;
     this.fetchData();
   }
 
@@ -107,12 +107,12 @@ export default class AdminGroupView extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
-    const params: FetchGroupDetailsParams = {
-      id: this.groupId,
+    const params: GroupsFetchDetailsParams = {
+      groupID: this.groupID,
     };
 
     try {
-      this.group = await core.call(Method.FetchGroupDetails, params);
+      this.group = await core.call(Method.FetchDetails, params);
     } catch (err) {
       this.error = err.message;
     } finally {

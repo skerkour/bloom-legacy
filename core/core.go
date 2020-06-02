@@ -8,8 +8,14 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/groups"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
 	"gitlab.com/bloom42/bloom/core/domain/users"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 func Init(params InitParams) (InitRes, error) {
@@ -18,6 +24,14 @@ func Init(params InitParams) (InitRes, error) {
 		Preferences: map[string]interface{}{},
 	}
 	client := api.Client()
+	ctx := context.Background()
+
+	log.Debug("Initializing core", rz.Any("params", params))
+	if params.Env != "development" && params.Env != "dev" {
+		log.SetLogger(log.With(rz.Level(rz.InfoLevel)))
+	}
+
+	kernel.Env = params.Env
 
 	err = db.Init(params.DBKey)
 	if err != nil {
@@ -32,16 +46,32 @@ func Init(params InitParams) (InitRes, error) {
 		client.Authenticate(signedIn.Session.ID, *signedIn.Session.Token)
 		ret.Preferences["me"] = signedIn.Me
 		ret.Preferences["session"] = signedIn.Session
+		kernel.Me = signedIn.Me
 	}
 
-	ctx := context.Background()
 	for _, key := range params.Preferences {
+		// prevent user's keys exfiltration
+		if strings.Contains(key, "key") {
+			continue
+		}
 		value, err := preferences.Get(ctx, nil, key)
 		if err == nil {
 			ret.Preferences[key] = value
 		}
 	}
 
+	// start background sync
+	err = objects.Init(params.BackgroundSync)
+	if err != nil {
+		return ret, err
+	}
+
+	myGroups, err := groups.FindGroups(ctx, nil)
+	if err != nil {
+		return ret, err
+	}
+
+	ret.Groups = myGroups.Groups
 	return ret, err
 }
 
@@ -58,6 +88,12 @@ func handleCoreMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "sync":
+		err := objects.Sync(true)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "core")
 	}

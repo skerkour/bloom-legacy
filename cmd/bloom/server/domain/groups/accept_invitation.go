@@ -6,12 +6,15 @@ import (
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type AcceptInvitationParams struct {
-	InvitationID uuid.UUID
+	InvitationID       uuid.UUID
+	EncryptedMasterKey []byte
+	MasterKeyNonce     []byte
 }
 
 func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvitationParams) (ret *Group, err error) {
@@ -41,19 +44,21 @@ func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvit
 	}
 
 	membership := Membership{
-		JoinedAt:  time.Now().UTC(),
-		GroupID:   invitation.GroupID,
-		UserID:    actor.ID,
-		Role:      RoleMember,
-		InviterID: invitation.InviterID,
+		JoinedAt:           time.Now().UTC(),
+		GroupID:            invitation.GroupID,
+		UserID:             actor.ID,
+		Role:               consts.GROUP_ROLE_MEMBER,
+		InviterID:          invitation.InviterID,
+		EncryptedMasterKey: params.EncryptedMasterKey,
+		MasterKeyNonce:     params.MasterKeyNonce,
 	}
 
 	// create membership
 	queryCreateMembership := `INSERT INTO groups_members
-		(joined_at, inviter_id, group_id, user_id, role)
-		VALUES ($1, $2, $3, $4, $5)`
+		(joined_at, inviter_id, group_id, user_id, role, encrypted_master_key, master_key_nonce)
+		VALUES ($1, $2, $3, $4, $5, $6, $7)`
 	_, err = tx.Exec(queryCreateMembership, membership.JoinedAt, membership.InviterID, membership.GroupID,
-		membership.UserID, membership.Role)
+		membership.UserID, membership.Role, membership.EncryptedMasterKey, membership.MasterKeyNonce)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.AcceptInvitation: creating membership", rz.Err(err))
@@ -69,7 +74,7 @@ func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvit
 		return ret, NewError(ErrorInvitationNotFound)
 	}
 
-	ret, err = FindGroupById(ctx, tx, membership.GroupID)
+	ret, err = FindGroupById(ctx, tx, membership.GroupID, false)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("groups.AcceptInvitation: finding group", rz.Err(err),

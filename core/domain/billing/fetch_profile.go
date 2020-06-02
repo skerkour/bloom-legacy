@@ -4,13 +4,14 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/core/api"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchMyProfile() (MyBillingProfile, error) {
+func FetchMyProfile() (messages.MyBillingProfile, error) {
 	client := api.Client()
 
-	var resp MyBillingProfile
+	var resp messages.MyBillingProfile
 	req := graphql.NewRequest(`
 	query {
 		me {
@@ -27,41 +28,35 @@ func FetchMyProfile() (MyBillingProfile, error) {
 				}
 			}
 			paymentMethods {
-				edges {
-					node {
-						id
-						createdAt
-						cardLast4
-						cardExpirationMonth
-						cardExpirationYear
-						isDefault
-					}
+				nodes {
+					id
+					createdAt
+					cardLast4
+					cardExpirationMonth
+					cardExpirationYear
+					isDefault
 				}
 			}
 			invoices {
-				edges {
-					node {
-						id
-						createdAt
-						amount
-						stripeId
-						stripeHostedUrl
-						stripePdfUrl
-						paidAt
-					}
+				nodes {
+					id
+					createdAt
+					amount
+					stripeId
+					stripeHostedUrl
+					stripePdfUrl
+					paidAt
 				}
 			}
 		}
 		billingPlans {
-			edges {
-				node {
-					id
-					product
-					price
-					name
-					description
-					storage
-				}
+			nodes {
+				id
+				product
+				price
+				name
+				description
+				storage
 			}
 		}
 		stripePublicKey

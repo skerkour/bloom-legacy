@@ -53,10 +53,10 @@ CREATE TABLE pending_sessions (
   id UUID NOT NULL,
   created_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-  token_hash BYTEA NOT NULL,
+  hash BYTEA NOT NULL,
   failed_attempts BIGINT NOT NULL,
   salt BYTEA NOT NULL,
-  user_id NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+  user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
 
   PRIMARY KEY(id)
 );
@@ -78,6 +78,7 @@ CREATE TABLE pending_users (
 
 CREATE TABLE deleted_usernames (
     username TEXT NOT NULL,
+    deleted_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     PRIMARY KEY(username)
 );
@@ -106,10 +107,14 @@ CREATE UNIQUE INDEX index_groups_on_avatar_id ON groups (avatar_id);
 
 CREATE TABLE groups_members (
     joined_at TIMESTAMP WITH TIME ZONE NOT NULL,
-    inviter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+    inviter_id UUID NOT NULL REFERENCES users(id),
+
+    role TEXT NOT NULL,
+    encrypted_master_key BYTEA NOT NULL,
+    master_key_nonce BYTEA NOT NULL,
+
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
-    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
-    role TEXT NOT NULL
+    user_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE
 );
 
 CREATE INDEX index_groups_members_on_group_id ON groups_members (group_id);
@@ -122,6 +127,10 @@ CREATE TABLE groups_invitations (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
+    ephemeral_public_key BYTEA NOT NULL,
+    signature BYTEA NOT NULL,
+    encrypted_master_key BYTEA NOT NULL,
+
     group_id UUID NOT NULL REFERENCES groups(id) ON DELETE CASCADE,
     invitee_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
     inviter_id UUID NOT NULL REFERENCES users(id) ON DELETE CASCADE,
@@ -130,6 +139,7 @@ CREATE TABLE groups_invitations (
 );
 CREATE INDEX index_groups_invitations_on_group_id ON groups_invitations (group_id);
 CREATE INDEX index_groups_invitations_on_invitee_id ON groups_invitations (invitee_id);
+CREATE INDEX index_groups_invitations_on_inviter_id ON groups_invitations (inviter_id);
 
 
 -- ################################################################################################@
@@ -171,8 +181,8 @@ CREATE TABLE billing_customers (
     subscription_updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
     plan_id UUID NOT NULL REFERENCES billing_plans(id),
-    user_id UUID REFERENCES users(id) ON DELETE CASCADE,
-    group_id UUID REFERENCES groups(id) ON DELETE CASCADE,
+    user_id UUID REFERENCES users(id),
+    group_id UUID REFERENCES groups(id),
 
     PRIMARY KEY(id)
 );
@@ -222,13 +232,13 @@ CREATE INDEX index_billing_invoices_on_customer_id ON billing_invoices (customer
 -- Objects
 -- ################################################################################################@
 CREATE TABLE objects (
-    id UUID NOT NULL,
+    id BYTEA NOT NULL,
 
     updated_at_state BIGINT NOT NULL,
-    cipher TEXT,
-    nonce BYTEA,
-    encrypted_key BYTEA,
+    algorithm TEXT,
     encrypted_data BYTEA,
+    encrypted_key BYTEA,
+    nonce BYTEA,
 
     user_id UUID REFERENCES users(id) ON DELETE CASCADE,
     group_id UUID REFERENCES groups(id) ON DELETE CASCADE,

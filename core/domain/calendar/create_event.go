@@ -1,40 +1,49 @@
 package calendar
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func CreateEvent(params CreateEventParams) (Event, error) {
+func CreateEvent(params messages.CalendarCreateEventParams) (*objects.Object, error) {
 	var err error
+	var ret *objects.Object
 
 	if err = validateCreateEvent(params); err != nil {
-		return Event{}, err
+		return ret, err
 	}
 
 	now := time.Now().UTC()
-	uuid := uuid.New()
 	event := Event{
-		ID:          uuid.String(),
-		CreatedAt:   now,
-		UpdatedAt:   now,
 		Title:       params.Title,
 		Description: params.Description,
 		StartAt:     params.StartAt,
 		EndAt:       params.EndAt,
 	}
 
-	query := `INSERT INTO calendar_events (id, created_at, updated_at, title, description, start_at, end_at)
-	VALUES ($1, $2, $3, $4, $5, $6, $7)`
-	_, err = db.DB.Exec(query, &event.ID, &event.CreatedAt, &event.UpdatedAt, &event.Title,
-		&event.Description, &event.StartAt, &event.EndAt)
+	id, err := objects.GenerateObjectID([]byte(kernel.Me.Username))
+	if err != nil {
+		return ret, err
+	}
 
-	return event, err
+	ret, err = objects.ToObject(id, kernel.OBJECT_TYPE_CALENDAR_EVENT, now, now, params.GroupID, true, &event)
+	if err != nil {
+		return ret, err
+	}
+
+	err = objects.SaveObject(context.Background(), nil, ret)
+
+	// request sync
+	// objects.SyncChan <- true
+
+	return ret, err
 }
 
-func validateCreateEvent(params CreateEventParams) error {
+func validateCreateEvent(params messages.CalendarCreateEventParams) error {
 	if err := valdiateEventDates(params.StartAt, params.EndAt); err != nil {
 		return err
 	}

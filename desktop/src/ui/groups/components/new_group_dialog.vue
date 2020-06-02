@@ -43,7 +43,7 @@
           Cancel
         </v-btn>
         <v-btn color="primary" @click="createGroup()" :loading="loading">
-          Add
+          Create
         </v-btn>
       </v-card-actions>
     </v-card>
@@ -53,8 +53,9 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { CreateGroupInput, Maybe, Group } from '@/api/models';
+import { Maybe, Group } from '@/api/models';
 import core from '@/core';
+import { GroupsCreateParams } from '@/core/messages';
 import { Method } from '@/core/groups';
 
 @Component
@@ -86,10 +87,9 @@ export default class Groups extends Vue {
   async createGroup() {
     this.loading = true;
     this.error = '';
-    const params: CreateGroupInput = {
+    const params: GroupsCreateParams = {
       name: this.name,
       description: this.description,
-      usersToInvite: [],
     };
 
     try {

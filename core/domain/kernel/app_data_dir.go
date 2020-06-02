@@ -1,7 +1,7 @@
 package kernel
 
 import (
-	"gitlab.com/bloom42/lily/appdir"
+	"gitlab.com/bloom42/gobox/appdir"
 )
 
 // appDataDir is used to cache AppDataDir

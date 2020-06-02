@@ -11,10 +11,10 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/rz/rzhttp"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/rzhttp"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // SetSecurityHeadersMiddleware sets some security headers
@@ -80,8 +80,8 @@ func SetContextMiddleware(next http.Handler) http.Handler {
 func SetLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler {
 	return func(next http.Handler) http.Handler {
 		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(string); ok {
-				logger = logger.With(rz.Fields(rz.String("request_id", rid)))
+			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(uuid.UUID); ok {
+				logger = logger.With(rz.Fields(rz.String("request_id", rid.String())))
 				ctx := logger.ToCtx(r.Context())
 				r = r.WithContext(ctx)
 			}
@@ -128,6 +128,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 		currentUser := &users.User{}
 
 		reqCtx := r.Context()
+		logger := rz.FromCtx(reqCtx)
 
 		apiCtx := apiutil.ApiCtxFromCtx(r.Context())
 		authHeader := r.Header.Get("authorization")
@@ -136,6 +137,7 @@ func AuthMiddleware(next http.Handler) http.Handler {
 
 			parts := strings.FieldsFunc(authHeader, isSpace)
 			if len(parts) != 2 || (parts[0] != "Basic" && parts[0] != "Secret") {
+				logger.Debug("Session is not formated correctly")
 				invalidSession(w, r)
 				return
 			}
@@ -143,28 +145,28 @@ func AuthMiddleware(next http.Handler) http.Handler {
 			if parts[0] == "Basic" {
 
 				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
+				defer crypto.Zeroize(sessionSecret) // defer sessionSecret from memory
 				if err != nil {
-					invalidSession(w, r)
-					return
-				}
-				currentSession, err := users.VerifySession(sessionID, sessionSecret)
-				// remove sessionSecret from memory
-				crypto.Zeroize(sessionSecret)
-				if err != nil {
+					logger.Debug("Error parsing session token")
 					invalidSession(w, r)
 					return
 				}
 
-				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID)
+				currentSession, err := users.VerifySession(sessionID, sessionSecret)
 				if err != nil {
+					logger.Debug("Error verifying session")
+					invalidSession(w, r)
+					return
+				}
+
+				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID, false)
+				if err != nil {
+					logger.Debug("Error finding user in auth middleware")
 					invalidSession(w, r)
 					return
 				}
 				apiCtx.AuthenticatedUser = currentUser
 				apiCtx.Session = currentSession
-
-				// update session's fields if necessary
-				// go session.Access(reqCtx, *authenticatedAccount, *currentSession, ctx.IP, ctx.UserAgent, ctx.RequestID)
 
 			} else { // Secret
 				secret := parts[1]

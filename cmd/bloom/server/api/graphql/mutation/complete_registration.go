@@ -10,8 +10,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // CompleteRegistration is used to complete an account's registration
@@ -60,6 +60,11 @@ func (r *Resolver) CompleteRegistration(ctx context.Context, input model.Complet
 		},
 	}
 	newUser, newSession, token, err := users.CompleteRegistration(ctx, tx, params)
+	if err != nil {
+		tx.Rollback()
+		err = gqlerrors.New(err)
+		return
+	}
 
 	// create customer profile
 	_, err = billing.CreateCustomer(ctx, tx, newUser, &newUser.ID, nil)

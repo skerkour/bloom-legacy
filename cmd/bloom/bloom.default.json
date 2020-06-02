@@ -4,7 +4,8 @@
   "website_url": "https://bloom.sh",
 
   "server": {
-    "port": 8443,
+    "http_port": 8080,
+    "https_port": 8443,
     "domains": ["bloom.bloom42.com"],
     "certs_directory": "/certs",
     "certs_email": ""

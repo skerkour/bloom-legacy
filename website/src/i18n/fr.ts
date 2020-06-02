@@ -21,7 +21,8 @@ export default {
       description: `En tant que projet Open Source, n'importe qui peut regarder comment fonctionne
       Bloom. Nous utilisons l'état de l'art en cryptographie pour garder vos données en sécurité.
       Il n'y a pas de publicité, pas de marketing d'affiliation, pas de trackers envahissants. <br />
-      Seulement de la technologie ouverte pour une expérience rapide, simple et sécure.`,
+      Seulement de la <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">technologie ouverte</a>
+      pour une expérience rapide, simple et sécure.`,
     },
     feature2: {
       title: 'Un outil collaboratif',
@@ -149,7 +150,7 @@ export default {
     others: 'Autres',
   },
   faq: {
-    title: 'Frequently Asked Questions',
+    title: 'Foire Aux Questions',
     q1: 'How secure are my data?',
     a1: `Some of your most personal moments are shared on WhatsApp, which is why we built end-to-end encryption.
       We use state of the art cryptography
@@ -168,7 +169,8 @@ export default {
     q3: 'Why Bloom is more ethical than other service providers?',
     a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
       Also, there are no ads, no affiliate marketing, no creepy tracking.
-      Just open technology for a fast, simple, and secure experience.`,
+      Just <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">open technology</a>
+      for a fast, simple, and secure experience.`,
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',
     a4: `When you don't pay for a service, YOU are the product. <br />
       Your personal data are either shared
@@ -177,7 +179,7 @@ export default {
       On the other side, with Bloom, we work for the people who value respect and privacy: You.
       Not investors, not advertisers.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
-    a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
+    a5: `Being an human scale company, we do our best to provide a fast and friendly support. <br />
       The people we value are our customers paying us, not the advertisers.`,
     q6: 'Do you issue refunds?',
     a6: `We do not issue refunds, but we offer a free tier
@@ -244,27 +246,30 @@ export default {
         téléphone. Bloom Notes fonctionnes sur n'importe quel appareil.`,
       },
     },
-    bitflow_description: `Un gestionnaire de téléchargement dans le Cloud.
-    Télécharger n'importe quel fichier ou torrent directement dans votre cloud Bloom.`,
-    bitflow: {
-      description: 'Téléchargez vos torrents dans un cloud sécurisé. Simple. Rapide.',
-      feature1: {
-        name: 'Téléchargez n\'importe où, n\'importe quand',
-        description: `Vos fichiers sont téléchargés directement dans votre cloud Bloom et peuvent
-        être accédés depuis n'importe quel téléphone, tablette ou ordinateur. Qu'importe où vous allez,
-        vos téléchargements suivront.`,
-      },
-      feature2: {
-        name: 'Plus besoin d\'installer un logiciels de torrents',
-        description: `Avec Bitflow, vous n'avez pas besoin de télécharger d'autres programmes. Bitflow supporte
-        aujourd'hui les protocoles HTTP(S) et torrent.`,
-      },
-      feature3: {
-        name: 'Téléchargez vos gros fichiers plus rapidement',
-        description: `Il peut prendre beaucoup de temps pour télécharger des gros fichiers sur une ligne
-        résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
-      },
-    },
+    // bitflow_description: `Un gestionnaire de téléchargement dans le Cloud.
+    // Télécharger n'importe quel fichier ou torrent directement dans votre cloud Bloom.`,
+    // bitflow: {
+    //   description: 'Téléchargez vos torrents dans un cloud sécurisé. Simple. Rapide.',
+    //   feature1: {
+    //     name: 'Téléchargez n\'importe où, n\'importe quand',
+    //     description: `Vos fichiers sont téléchargés directement dans votre cloud Bloom et peuvent
+    //     être accédés depuis n'importe quel téléphone, tablette ou ordinateur. Qu'importe où
+    //     vous allez,
+    //     vos téléchargements suivront.`,
+    //   },
+    //   feature2: {
+    //     name: 'Plus besoin d\'installer un logiciels de torrents',
+    //     description: `Avec Bitflow, vous n'avez pas besoin de télécharger d'autres programmes.
+    //     Bitflow supporte
+    //     aujourd'hui les protocoles HTTP(S) et torrent.`,
+    //   },
+    //   feature3: {
+    //     name: 'Téléchargez vos gros fichiers plus rapidement',
+    //     description: `Il peut prendre beaucoup de temps pour télécharger des gros fichiers sur
+    //     une ligne
+    //     résidentielle. Pas avec Bitflow! Nous téléchargeons vos fichiers en un clin d'oeil!`,
+    //   },
+    // },
     arcade_description: 'N\'arrêtez jamais le fun!',
     arcade: {
       description: 'La meilleure place pour jouer',

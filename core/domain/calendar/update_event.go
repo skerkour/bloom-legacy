@@ -1,36 +1,34 @@
 package calendar
 
 import (
+	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
 )
 
-func UpdateEvent(event Event) (Event, error) {
+func UpdateEvent(event objects.Object) (objects.Object, error) {
 	var err error
 
-	if err = validateUpdateEvent(event); err != nil {
+	ev, err := ObjectToEvent(&event)
+	if err != nil {
+		return event, err
+	}
+	if err = validateUpdateEvent(ev); err != nil {
 		return event, err
 	}
 
 	event.UpdatedAt = time.Now().UTC()
+	event.OutOfSync = true
+	err = objects.SaveObject(context.Background(), nil, &event)
 
-	query := `
-		UPDATE calendar_events SET
-			updated_at = ?,
-			title = ?,
-			description = ?,
-			start_at = ?,
-			end_at = ?
-		WHERE id = ?
-	`
-	_, err = db.DB.Exec(query, &event.UpdatedAt, &event.Title, &event.Description, &event.StartAt,
-		&event.EndAt, &event.ID)
+	// request sync
+	// objects.SyncChan <- true
 
 	return event, err
 }
 
-func validateUpdateEvent(params Event) error {
+func validateUpdateEvent(params *Event) error {
 	if err := valdiateEventDates(params.StartAt, params.EndAt); err != nil {
 		return err
 	}

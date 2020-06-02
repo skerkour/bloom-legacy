@@ -4,13 +4,19 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/domain/contacts"
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"gitlab.com/bloom42/bloom/core/domain/objects"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "listContacts":
-		res, err := contacts.ListContacts()
+	case "findContacts":
+		var params messages.ContactsFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := contacts.FindContacts(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
@@ -27,7 +33,7 @@ func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		}
 		return MessageOut{Data: res}
 	case "deleteContact":
-		var params contacts.DeleteContactParams
+		var params messages.DeleteContactParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -36,9 +42,9 @@ func handleContactsMehtod(method string, jsonParams json.RawMessage) MessageOut 
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "updateContact":
-		var params contacts.Contact
+		var params objects.Object
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error

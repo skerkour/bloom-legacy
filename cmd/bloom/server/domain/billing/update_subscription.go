@@ -9,8 +9,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // ChangeSubscription Updates plan for customer
@@ -44,7 +44,7 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 			tx.Rollback()
 			return customer, retPlan, NewError(ErrorAdminRoleRequired)
 		}
-		customer, err = FindCustomerByUserId(ctx, tx, *userId)
+		customer, err = FindCustomerByUserId(ctx, tx, *userId, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err
@@ -56,13 +56,13 @@ func ChangeSubscription(ctx context.Context, actor *users.User, userId, groupId 
 				return customer, retPlan, err
 			}
 		}
-		customer, err = FindCustomerByGroupId(ctx, tx, *groupId)
+		customer, err = FindCustomerByGroupID(ctx, tx, *groupId, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err
 		}
 	} else {
-		customer, err = FindCustomerByUserId(ctx, tx, actor.ID)
+		customer, err = FindCustomerByUserId(ctx, tx, actor.ID, true)
 		if err != nil {
 			tx.Rollback()
 			return customer, retPlan, err

@@ -4,12 +4,13 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/core/api"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchDashboardData() (DashboardData, error) {
+func FetchDashboardData() (messages.DashboardData, error) {
 	client := api.Client()
-	var ret DashboardData
+	var ret messages.DashboardData
 
 	req := graphql.NewRequest(`
 	query {
@@ -20,6 +21,9 @@ func FetchDashboardData() (DashboardData, error) {
 			gitCommit
 		}
 		users {
+			totalCount
+		}
+		groups {
 			totalCount
 		}
 	}

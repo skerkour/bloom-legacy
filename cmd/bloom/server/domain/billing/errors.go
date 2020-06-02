@@ -38,6 +38,8 @@ const (
 	ErrorCreatingInvoice
 	ErrorUpdatingInvoice
 	ErrorInvoiceIsNull
+	ErrorInvalidCustomerStorage
+	ErrorInternal
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -121,6 +123,9 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Error updating invoice. Please try again."
 	case ErrorInvoiceIsNull:
 		message = "Invoice is null"
+	case ErrorInvalidCustomerStorage:
+		code = errors.InvalidArgument
+		message = "Invalid storage amount."
 	}
 
 	return errors.New(code, message)

@@ -5,8 +5,8 @@ import (
 	"path/filepath"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/keyring"
-	"gitlab.com/bloom42/lily/rz/log"
+	"gitlab.com/bloom42/gobox/keyring"
+	"gitlab.com/bloom42/gobox/rz/log"
 
 	// import sqlite drivers
 	_ "github.com/mattn/go-sqlite3"
@@ -52,7 +52,7 @@ func Init(key *string) error {
 		return err
 	}
 
-	err = os.MkdirAll(dbDir, 0740)
+	err = os.MkdirAll(dbDir, 0700)
 	if err != nil {
 		return err
 	}
@@ -74,15 +74,19 @@ func Init(key *string) error {
 		return err
 	}
 
+	_, err = DB.Exec("PRAGMA foreign_keys = ON;")
+	if err != nil {
+		return err
+	}
+
 	// see https://github.com/signalapp/Signal-Desktop/blob/master/app/sql.js
 	// for reference
 	migrations := []migration.Version{
 		migration.Version1{},
 	}
 
-	for _, migrat := range migrations {
-		migrat.Run(DB, userVersion)
-		userVersion += 1
+	for i := userVersion; i < len(migrations); i++ {
+		migrations[i].Run(DB, i)
 	}
 
 	return err

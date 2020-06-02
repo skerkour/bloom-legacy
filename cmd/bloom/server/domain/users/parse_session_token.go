@@ -4,8 +4,8 @@ import (
 	"encoding/base64"
 	"errors"
 
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // ParseSessionToken parse the given token and returns the session id and secret

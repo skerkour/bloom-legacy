@@ -4,15 +4,16 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // SignInParams are the parameters for SignIn
 type SignInParams struct {
-	Username string
-	AuthKey  []byte
-	Device   SessionDevice
+	Username  string
+	AuthKey   []byte
+	Device    SessionDevice
+	IPAddress string
 }
 
 // SignIn is used to sign-in an user
@@ -51,11 +52,13 @@ func SignIn(ctx context.Context, params SignInParams) (user *User, newSession *S
 	if err != nil {
 		tx.Rollback()
 		logger.Error("users.SignIn: committing transaction", rz.Err(err))
-
 		return
 	}
 
-	// TODO: send alert email
+	// send alert email
+	go sendSignInEmailAlert(user.Email, user.DisplayName, params.IPAddress)
+
+	globalSessionsCache.Set(newSession)
 
 	return
 }

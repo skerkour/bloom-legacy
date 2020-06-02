@@ -65,6 +65,7 @@ type User {
   bio: String!
   isAdmin: Boolean!
   disabledAt: Time
+  state: String
 
   publicKey: Bytes!
   encryptedPrivateKey: Bytes
@@ -81,7 +82,7 @@ type User {
 }
 
 type UserConnection {
-  nodes: [User]
+  nodes: [User!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -97,7 +98,7 @@ type PaymentMethod {
 }
 
 type PaymentMethodConnection {
-  nodes: [PaymentMethod]
+  nodes: [PaymentMethod!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -109,6 +110,11 @@ type Group {
   avatarUrl: String
   name: String!
   description: String!
+  state: String
+
+  encryptedMasterKey: Bytes
+  masterKeyNonce: Bytes
+
   members: GroupMemberConnection
   invitations: GroupInvitationConnection
   subscription: BillingSubscription
@@ -117,7 +123,7 @@ type Group {
 }
 
 type GroupConnection {
-  nodes: [Group]
+  nodes: [Group!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -141,10 +147,14 @@ type GroupInvitation {
   group: Group!
   inviter: User!
   invitee: User!
+
+  ephemeralPublicKey: Bytes
+  encryptedMasterKey: Bytes
+  signature: Bytes
 }
 
 type GroupInvitationConnection {
-  nodes: [GroupInvitation]
+  nodes: [GroupInvitation!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -161,7 +171,7 @@ type Invoice {
 }
 
 type InvoiceConnection {
-  nodes: [Invoice]
+  nodes: [Invoice!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -182,7 +192,7 @@ type BillingPlan {
 }
 
 type BillingPlanConnection {
-  nodes: [BillingPlan]
+  nodes: [BillingPlan!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -205,7 +215,7 @@ type Session {
 }
 
 type SessionConnection {
-  nodes: [Session]
+  nodes: [Session!]!
   pageInfo: PageInfo!
   totalCount: Int64!
 }
@@ -244,12 +254,34 @@ type PasswordUpdateStarted {
   twoFA: TwoFA
 }
 
-type Sync {
-  todo: String
+type Push {
+  repositories: [RepositoryPush!]!
 }
 
-type Changes {
-  todo: String
+type RepositoryPush {
+  oldState: String!
+  newState: String!
+  groupID: ID
+}
+
+type Pull {
+  repositories: [RepositoryPull!]!
+}
+
+type RepositoryPull {
+  oldState: String!
+  newState: String!
+  objects: [Object!]!
+  hasMoreChanges: Boolean!
+  groupID: ID
+}
+
+type Object {
+  id: Bytes!
+  algorithm: String!
+  encryptedData: Bytes!
+  encryptedKey: Bytes!
+  nonce: Bytes!
 }
 
 type TwoFAActivationStarted {
@@ -281,8 +313,8 @@ type Query {
   metadata: BloomMetadata
   """The stripe public key to be used"""
   stripePublicKey: String!
-  """Fetch changes since a given state"""
-  changes(sinceState: String): Changes!
+  """Pull changes since a given state"""
+  pull(input: PullInput!): Pull!
 }
 
 ####################################################################################################
@@ -294,7 +326,7 @@ input StartRegistrationInput {
   email: String!
 }
 
-input verifyUserInput {
+input VerifyUserInput {
   """pending user id"""
   id: ID!
   code: String!
@@ -343,8 +375,8 @@ input SendNewRegistrationCodeInput {
 input CreateGroupInput {
   name: String!
   description: String!
-  """users to invite, by username"""
-  usersToInvite: [String!]!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input DeleteGroupInput {
@@ -359,37 +391,35 @@ input GroupInput {
 }
 
 input RemoveGroupMembersInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
   """members to remvove, by username"""
   members: [String!]!
 }
 
 input AcceptGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
+  encryptedMasterKey: Bytes!
+  masterKeyNonce: Bytes!
 }
 
 input CancelGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
 input DeclineGroupInvitationInput {
-  """group id"""
-  id: ID!
+  invitationID: ID!
 }
 
-input InviteUsersInGroupInput {
-  """group id"""
-  id: ID!
-  """users to invite, by username"""
-  users: [String!]!
+input InviteUserInGroupInput {
+  groupID: ID!
+  username: String!
+  ephemeralPublicKey: Bytes!
+  encryptedMasterKey: Bytes!
+  signature: Bytes!
 }
 
 input QuitGroupInput {
-  """group id"""
-  id: ID!
+  groupID: ID!
 }
 
 input BillingPlanInput {
@@ -408,17 +438,17 @@ input DeleteBillingPlanInput {
   id: ID!
 }
 
-"""if groupId and userId (reserved for admins) are null, add to current user"""
+"""if groupID and userId (reserved for admins) are null, add to current user"""
 input UpdateBillingSubscriptionInput {
   planId: ID!
   userId: ID
-  groupId: ID
+  groupID: ID
 }
 
 input AddPaymentMethodInput {
   stripeId: String!
-  """if groupId is null, add to current user"""
-  groupId: ID
+  """if groupID is null, add to current user"""
+  groupID: ID
 }
 
 """remove payment method with `id`"""
@@ -455,8 +485,35 @@ input CompletePasswordUpdateInput {
   masterKeyNonce: Bytes!
 }
 
-input SyncInput {
+
+input PullInput {
+  repositories: [RepositoryPullInput!]!
+}
+
+input RepositoryPullInput {
+  sinceState: String!
+  groupID: ID
+}
+
+input PushInput {
+  repositories: [RepositoryPushInput!]!
+}
+
+input RepositoryPushInput {
+  """current state of the client"""
   currentState: String!
+  """out of sync objects"""
+  objects: [ObjectInput!]!
+  """to indicate whether it's the user's repository, or a group"""
+  groupID: ID
+}
+
+input ObjectInput {
+  id: Bytes!
+  algorithm: String!
+  encryptedData: Bytes!
+  encryptedKey: Bytes!
+  nonce: Bytes!
 }
 
 input DisableTwoFAInput {
@@ -471,7 +528,7 @@ type Mutation {
   # users
   startRegistration(input: StartRegistrationInput!): RegistrationStarted!
   """Verify pending account"""
-  verifyUser(input: verifyUserInput!): Boolean!
+  verifyUser(input: VerifyUserInput!): Boolean!
   sendNewRegistrationCode(input: SendNewRegistrationCodeInput!): Boolean!
   """Complete registration and create account"""
   completeRegistration(input: CompleteRegistrationInput!): SignedIn!
@@ -503,7 +560,7 @@ type Mutation {
   """Remove users from a group"""
   removeGroupMembers(input: RemoveGroupMembersInput!): Group!
   """Invite users in a group"""
-  inviteUsersInGroup(input: InviteUsersInGroupInput!): Group!
+  inviteUserInGroup(input: InviteUserInGroupInput!): Group!
   """Accept a group invitaiton and join it"""
   acceptGroupInvitation(input: AcceptGroupInvitationInput!): Group!
   """Decline a group invitation"""
@@ -523,5 +580,5 @@ type Mutation {
   changeDefaultPaymentMethod(input: ChangeDefaultPaymentMethodInput!): PaymentMethod!
 
   # objects
-  sync(input: SyncInput!): Sync!
+  push(input: PushInput!): Push!
 }

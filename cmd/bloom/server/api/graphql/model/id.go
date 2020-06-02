@@ -6,7 +6,7 @@ import (
 	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // MarshalID encode a `uuid.UUID` to JSON

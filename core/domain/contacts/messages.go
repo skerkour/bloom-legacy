@@ -2,26 +2,24 @@ package contacts
 
 import (
 	"time"
+
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
-type Contacts struct {
-	Contacts []Contact `json:"contacts"`
-}
-
 type CreateContactParams struct {
-	DeviceID      string        `json:"deviceId"`
-	FirstName     string        `json:"firstName"`
-	LastName      string        `json:"lastName"`
-	Notes         string        `json:"notes"`
-	Birthday      *time.Time    `json:"birthday"`
-	BloomUsername string        `json:"bloomUsername" db:"bloom_username"`
-	Organizations Organizations `json:"organizations"`
-	Addresses     Addresses     `json:"addresses"`
-	Emails        Emails        `json:"emails"`
-	Phones        Phones        `json:"phones"`
-	Websites      Websites      `json:"websites"`
-}
-
-type DeleteContactParams struct {
-	ID string `json:"id"`
+	DeviceID      string              `json:"deviceId"`
+	Prefix        string              `json:"prefix"`
+	Suffix        string              `json:"suffix"`
+	Nickname      string              `json:"nickname"`
+	FirstName     string              `json:"firstName"`
+	LastName      string              `json:"lastName"`
+	Notes         string              `json:"notes"`
+	Birthday      *time.Time          `json:"birthday"`
+	BloomUsername string              `json:"bloomUsername" db:"bloom_username"`
+	Organizations Organizations       `json:"organizations"`
+	Addresses     Addresses           `json:"addresses"`
+	Emails        ContactInformations `json:"emails"`
+	Phones        ContactInformations `json:"phones"`
+	Online        ContactInformations `json:"online"`
+	GroupID       *uuid.UUID          `json:"groupID"`
 }

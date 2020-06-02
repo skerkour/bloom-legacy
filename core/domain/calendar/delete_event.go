@@ -1,15 +1,17 @@
 package calendar
 
 import (
-	"gitlab.com/bloom42/bloom/core/db"
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
+	"context"
+
+	"gitlab.com/bloom42/bloom/core/domain/objects"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
-func DeleteEvent(params DeleteEventParams) (kernel.Empty, error) {
-	ret := kernel.Empty{}
+func DeleteEvent(params messages.CalendarDeleteEventParams) error {
+	err := objects.DeleteObject(context.Background(), nil, params.ID)
 
-	query := "DELETE FROM calendar_events WHERE id = ?"
-	_, err := db.DB.Exec(query, params.ID)
+	// request sync
+	// objects.SyncChan <- true
 
-	return ret, err
+	return err
 }

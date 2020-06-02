@@ -18,7 +18,7 @@ func (r *Resolver) CancelGroupInvitation(ctx context.Context, input model.Cancel
 	}
 
 	params := groups.CancelInvitationParams{
-		InvitationID: input.ID,
+		InvitationID: input.InvitationID,
 	}
 	err = groups.CancelInvitation(ctx, currentUser, params)
 	if err != nil {

@@ -30,7 +30,6 @@
         <v-col cols="12" sm="4" class="pa-4">
           <h5 class="title pb-3"><b>{{ $t('footer.community.title') }}</b></h5>
           <ul>
-             <li><a class="nav-link" href="https://www.reddit.com/r/bloom42" target="_blank" rel="noopener">Reddit</a></li>
             <li><a class="nav-link" href="https://fatalentropy.com" target="_blank" rel="noopener">Blog</a></li>
             <li><a class="nav-link" href="https://twitter.com/42bloom" target="_blank" rel="noopener">Twitter</a></li>
             <li><a class="nav-link" href="https://gitlab.com/bloom42" target="_blank" rel="noopener">GitLab</a></li>
@@ -39,12 +38,12 @@
           </ul>
         </v-col>
 
-        <v-col cols="12" class="blm-footer-year-col">
+        <!-- <v-col cols="12" class="blm-footer-year-col">
           <p class="text-center blm-footer-year">
-            <!-- <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span><br/><br/> -->
+             <span><a href="mailto:hello@bloom.sh">hello@bloom.sh</a></span><br/><br/>
             <span>&copy; 2018 - {{ new Date().getFullYear() }} Bloom</span>
           </p>
-        </v-col>
+        </v-col> -->
 
       </v-row>
     </v-container>

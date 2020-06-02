@@ -187,10 +187,10 @@
 
     </v-row>
 
-  <blm-download-dialog-cli
+  <!-- <blm-download-dialog-cli
     :visible="isCliDialogVisible"
     @closed="cliDialogClosed"
-  />
+  /> -->
   </v-container>
 </template>
 

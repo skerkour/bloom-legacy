@@ -10,7 +10,7 @@ You are tired of being abused by Big Companies?
 
 **We too, so we built Bloom.**
 
-Bloom is an open source and encrypted productivity suite. It features Files, Notes, Calendar, Contacts and
+Bloom is an open source and encrypted productivity suite: Files, Notes, Calendar, Contacts &
 much more.
 
 [Try it for free](https://bloom.sh/download)
@@ -62,15 +62,17 @@ See https://gitlab.com/bloom42/bloom/-/wikis/development
 
 Please use [issues](https://gitlab.com/bloom42/bloom/-/issues) if you have some suggestions or want to report bugs.
 
-
-You can follow us on [Twitter @42bloom](https://twitter.com/@42bloom) or on [Mastdon @42bloom@mastodon.social](https://mastodon.social/@42bloom) to never miss an update.
-
+ Twitter: [@42bloom](https://twitter.com/@42bloom)
+* Mastodon: [@42bloom@mastodon.social](https://mastodon.social/@42bloom)
+* Blog / Newsletter: [FatalEntropy.com](https://fatalentropy.com)
 
 
 ## Contributing
 
 Thank you for your interest in contributing! Please refer to
 https://gitlab.com/bloom42/wiki/-/wikis/organization/contributing for guidance.
+
+**TL;DR:** Please open an issue to discuss before making a Merge Request (for things other than typos).
 
 
 ## Licensing

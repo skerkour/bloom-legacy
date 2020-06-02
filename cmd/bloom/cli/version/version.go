@@ -6,7 +6,7 @@ import (
 
 	"github.com/spf13/cobra"
 	"gitlab.com/bloom42/bloom/cmd/bloom/version"
-	"gitlab.com/bloom42/lily/rz/log"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 type versionJSON struct {

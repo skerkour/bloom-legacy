@@ -23,6 +23,8 @@ const (
 	ErrorAtLeastOneAdministratorShouldRemainsInGroup
 	ErrorUpdatingGroup
 	ErrorRemovingMembersFromGroup
+	ErrorInvalidState
+	ErrorInternal
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -59,7 +61,7 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Some usernames were not found. Please verify your invitees list and retry."
 	case ErrorUserAlreadyInGroup:
 		code = errors.AlreadyExists
-		message = "At least one user is already in group or invited. Please remove it and retry."
+		message = "User is already in group or invited. Please remove it and retry."
 	case ErrorQuittingGroup:
 		message = "Error quitting group. Please try again."
 	case ErrorAtLeastOneAdministratorShouldRemainsInGroup:
@@ -69,6 +71,9 @@ func NewError(domainError DomainError) errors.Error {
 		message = "Error updating group. Please try again."
 	case ErrorRemovingMembersFromGroup:
 		message = "Error removing members from group. Please try again."
+	case ErrorInvalidState:
+		code = errors.InvalidArgument
+		message = "You can't downgrade group's state"
 	}
 
 	return errors.New(code, message)

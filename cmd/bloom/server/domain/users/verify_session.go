@@ -3,8 +3,8 @@ package users
 import (
 	"errors"
 
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // VerifySession verifies that secret matches with sessionID and return the session in case of success

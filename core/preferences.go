@@ -4,14 +4,14 @@ import (
 	"context"
 	"encoding/json"
 
-	"gitlab.com/bloom42/bloom/core/domain/kernel"
 	"gitlab.com/bloom42/bloom/core/domain/preferences"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
 
 func handlePreferencesMehtod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "get":
-		var params preferences.GetParams
+		var params messages.PreferencesGetParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -22,7 +22,7 @@ func handlePreferencesMehtod(method string, jsonParams json.RawMessage) MessageO
 		}
 		return MessageOut{Data: res}
 	case "set":
-		var params preferences.SetParams
+		var params messages.PreferencesSetParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -31,9 +31,9 @@ func handlePreferencesMehtod(method string, jsonParams json.RawMessage) MessageO
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "delete":
-		var params preferences.DeleteParams
+		var params messages.PreferencesDeleteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -42,7 +42,7 @@ func handlePreferencesMehtod(method string, jsonParams json.RawMessage) MessageO
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "preferences")
 	}

@@ -9,14 +9,15 @@
           @keydown="formulaChanged"
           v-model="formula"
           @keyup.enter.native="evaluate"
+          autofocus
         ></v-text-field>
       </v-col>
 
-      <v-flex xs12 text-xs-center v-if="error !== ''">
-        <v-alert icon="mdi-alert-circle" type="error">
+      <v-col cols="12" text-xs-center v-if="error !== ''">
+        <v-alert icon="mdi-alert-circle" type="error" dismissible>
           {{ error }}
         </v-alert>
-      </v-flex>
+      </v-col>
 
       <v-col cols="12">
         <h3>{{ result }}</h3>

@@ -2,10 +2,12 @@ package groups
 
 import (
 	"time"
+
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type InvitationPopulated struct {
-	ID                 string    `db:"invitation_id"`
+	ID                 uuid.UUID `db:"invitation_id"`
 	CreatedAt          time.Time `db:"invitation_created_at"`
 	GroupID            string    `db:"invitation_group_id"`
 	InviterID          string    `db:"inviter_id"`

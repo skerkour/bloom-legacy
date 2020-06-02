@@ -22,11 +22,11 @@ test:
 
 .PHONY: dev
 dev:
-	gowatch -log-prefix=false -build="make build" -command="dist/$(NAME) server run"
+	gowatch -log-prefix=false -build="make build" -command="$(DIST_DIR)/$(NAME) server run"
 
 .PHONY: build
 build:
-	CGO_ENABLED=0 go build -o dist/$(NAME) -ldflags "-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
+	CGO_ENABLED=0 go build -o $(DIST_DIR)/$(NAME) -ldflags "-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
 		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
 		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
 	cp -r migrations $(DIST_DIR)/
@@ -34,7 +34,7 @@ build:
 
 .PHONY: build_static
 build_static:
-	CGO_ENABLED=0 go build -o dist/$(NAME) -a -ldflags "-extldflags "-static" -w -s \
+	CGO_ENABLED=0 go build -o $(DIST_DIR)/$(NAME) -a -ldflags "-extldflags "-static" -w -s \
 		-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
 		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
 		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
@@ -44,7 +44,7 @@ build_static:
 
 .PHONY: clean
 clean:
-	rm -rf dist
+	rm -rf $(DIST_DIR)
 
 
 .PHONY: gqlgen

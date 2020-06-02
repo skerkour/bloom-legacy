@@ -6,8 +6,8 @@ import (
 	_ "github.com/golang-migrate/migrate/v4/source/file"
 	"github.com/spf13/cobra"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/rz/log"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
 )
 
 var revertAllMigrationsFlag bool

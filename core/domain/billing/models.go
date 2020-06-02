@@ -1,15 +1,12 @@
 package billing
 
-type NewStripePaymentMethod struct {
-	Type string        `json:"type"`
-	Card NewStripeCard `json:"card"`
-}
+import (
+	"gitlab.com/bloom42/bloom/core/messages"
+)
 
-type NewStripeCard struct {
-	Number   string `json:"number"`
-	ExpMonth string `json:"expMonth"`
-	ExpYear  string `json:"expYear"`
-	Cvc      string `jsjon:"cvc"`
+type NewStripePaymentMethod struct {
+	Type string                 `json:"type"`
+	Card messages.NewStripeCard `json:"card"`
 }
 
 type StripeCard struct {

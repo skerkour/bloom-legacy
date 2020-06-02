@@ -2,25 +2,25 @@ package contacts
 
 import "strings"
 
-func isEmailEmpty(email Email) bool {
+func isEmailEmpty(email ContactInformation) bool {
 	label := strings.ToLower(email.Label)
-	if email.Email == "" && (label == "" || label == "other" || label == "personal") {
+	if email.Value == "" && (label == "" || label == "other" || label == "personal") {
 		return true
 	}
 	return false
 }
 
-func isWebsiteEmpty(website Website) bool {
+func isWebsiteEmpty(website ContactInformation) bool {
 	label := strings.ToLower(website.Label)
-	if website.Website == "" && (label == "" || label == "other" || label == "personal") {
+	if website.Value == "" && (label == "" || label == "other" || label == "personal") {
 		return true
 	}
 	return false
 }
 
-func isPhoneEmpty(phone Phone) bool {
+func isPhoneEmpty(phone ContactInformation) bool {
 	label := strings.ToLower(phone.Label)
-	if phone.Phone == "" && (label == "" || label == "other" || label == "mobile") {
+	if phone.Value == "" && (label == "" || label == "other" || label == "mobile") {
 		return true
 	}
 	return false
@@ -55,13 +55,13 @@ func cleanContactCollections(contact *Contact) {
 	contact.Emails = contact.Emails[:n]
 
 	n = 0
-	for _, website := range contact.Websites {
+	for _, website := range contact.Online {
 		if !isWebsiteEmpty(website) {
-			contact.Websites[n] = website
+			contact.Online[n] = website
 			n++
 		}
 	}
-	contact.Websites = contact.Websites[:n]
+	contact.Online = contact.Online[:n]
 
 	n = 0
 	for _, phone := range contact.Phones {

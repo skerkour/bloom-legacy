@@ -3,7 +3,7 @@ package groups
 import (
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type Group struct {
@@ -13,4 +13,5 @@ type Group struct {
 	Name        string    `json:"name" db:"name"`
 	Description string    `json:"description" db:"description"`
 	AvatardID   *string   `json:"avatar_id" db:"avatar_id"`
+	State       int64     `db:"state"`
 }

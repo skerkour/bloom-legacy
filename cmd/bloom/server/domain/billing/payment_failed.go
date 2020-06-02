@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/stripe/stripe-go"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 func PaymentFailed(ctx context.Context, stripeInvoice *stripe.Invoice) error {
@@ -17,7 +17,7 @@ func PaymentFailed(ctx context.Context, stripeInvoice *stripe.Invoice) error {
 		return NewError(ErrorUpdatingInvoice)
 	}
 
-	customer, err = FindCustomerByStripeCustomerIdNoTx(ctx, stripeInvoice.Customer.ID)
+	customer, err = FindCustomerByStripeCustomerId(ctx, nil, stripeInvoice.Customer.ID)
 	if err != nil {
 		return NewError(ErrorUpdatingInvoice)
 	}

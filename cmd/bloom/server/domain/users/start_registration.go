@@ -8,9 +8,9 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // StartRegistrationParams are parameters for StartRegistration
@@ -52,12 +52,7 @@ func StartRegistration(ctx context.Context, params StartRegistrationParams) (new
 		return
 	}
 
-	err = sendUserVerificationCode(newPendingUser.Email, newPendingUser.DisplayName, verificationCode)
-	if err != nil {
-		tx.Rollback()
-		logger.Error("users.StartRegistration: Sending confirmation email", rz.Err(err))
-		return
-	}
+	go sendUserVerificationCode(newPendingUser.Email, newPendingUser.DisplayName, verificationCode)
 
 	err = tx.Commit()
 	if err != nil {

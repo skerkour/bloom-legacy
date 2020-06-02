@@ -29,6 +29,7 @@ const (
 	ErrorInternal
 	ErrorUserNotDisabled
 	ErrorCantDisableYourself
+	ErrorInvalidState
 )
 
 func NewError(domainError DomainError) errors.Error {
@@ -91,6 +92,9 @@ func NewError(domainError DomainError) errors.Error {
 	case ErrorCantDisableYourself:
 		code = errors.InvalidArgument
 		message = "You can't disable yourself."
+	case ErrorInvalidState:
+		code = errors.InvalidArgument
+		message = "You can't downgrade user's state"
 	}
 
 	return errors.New(code, message)

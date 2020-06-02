@@ -9,7 +9,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/groups"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/objects"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // CreateGroup is used to create a group
@@ -29,9 +30,10 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 	}
 
 	params := groups.CreateGroupParams{
-		Name:          input.Name,
-		Description:   input.Description,
-		UsersToInvite: input.UsersToInvite,
+		Name:               input.Name,
+		Description:        input.Description,
+		EncryptedMasterKey: input.EncryptedMasterKey,
+		MasterKeyNonce:     input.MasterKeyNonce,
 	}
 	newGroup, err := groups.CreateGroup(ctx, tx, currentUser, params)
 	if err != nil {
@@ -56,11 +58,13 @@ func (r *Resolver) CreateGroup(ctx context.Context, input model.CreateGroupInput
 		return
 	}
 
+	state := objects.EncodeState(newGroup.State)
 	ret = &model.Group{
 		ID:          &newGroup.ID,
 		Name:        newGroup.Name,
 		Description: newGroup.Description,
 		CreatedAt:   &newGroup.CreatedAt,
+		State:       &state,
 	}
 	return ret, nil
 }

@@ -5,16 +5,18 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
+// VerifyPendingUserParams are the parameters for VerifyPendingUser
 type VerifyPendingUserParams struct {
 	PendingUserID uuid.UUID
 	Code          string
 }
 
+// VerifyPendingUser verifies a pending user
 func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
@@ -36,7 +38,7 @@ func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err
 		return
 	}
 
-	if pendingUser.FailedAttempts+1 >= 5 {
+	if pendingUser.FailedAttempts+1 >= MAX_REGISTRATION_ATTEMPTS {
 		tx.Rollback()
 		err = NewError(ErrorMaximumVerificationTrialsReached)
 		return

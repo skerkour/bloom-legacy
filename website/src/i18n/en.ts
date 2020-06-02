@@ -21,7 +21,8 @@ export default {
       description: `As an Open Source project anyone can inspect how Bloom works.
       We use state of the art cryptography to keep your data secure.
       There are no ads, no affiliate marketing, no creepy tracking. <br />
-      Just open technology for a fast, simple, and secure experience.`,
+      Just <a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">open technology</a>
+      for a fast, simple, and secure experience.`,
     },
     feature2: {
       title: 'Bring your team together',
@@ -163,7 +164,8 @@ export default {
       encrypted data are stored in a  <a href="scaleway.com" target="_blank" rel="noopener">Scaleway</a>
       datacenter in a privacy friendly country: France.`,
     q3: 'Why Bloom is more ethical than other service providers?',
-    a3: `Bloom is <b>100% Open Source</b>. Anyone can inspect how Bloom works.
+    a3: `Bloom is <b><a href="https://gitlab.com/bloom42" target="_blank" rel="noopener">100% Open Source</a></b>.
+      Anyone can inspect how Bloom works.
       Also, there are no ads, no affiliate marketing, no creepy tracking.
       Just open technology for a fast, simple, and secure experience.`,
     q4: 'Why do I need to pay to store my data while $BigCompany Drive is (almost) free?',
@@ -174,7 +176,7 @@ export default {
       On the other side, with Bloom, we work for the people who value respect and privacy: You.
       Not investors, not advertisers.`,
     q5: 'I had a very bad experience with $BigCompany customer support, is yours better?',
-    a5: `Being an hulan scale company, we do our best to provide a fast and friendly support. <br />
+    a5: `Being an human scale company, we do our best to provide a fast and friendly support. <br />
       The people we value are our customers paying us, not the advertisers.`,
     q6: 'Do you issue refunds?',
     a6: `We do not issue refunds, but we offer a free tier
@@ -246,26 +248,27 @@ export default {
         laptop then update notes on your phone. Bloom Notes works on any device or platform.`,
       },
     },
-    bitflow_description: `Your cloud-based download manager.
-    Download any file and torrent directly to a secure cloud. Fast. Online.`,
-    bitflow: {
-      description: 'Download torrents to a secure cloud. Fast. Online.',
-      feature1: {
-        name: 'Download anywhere, anytime',
-        description: `Your files are downloaded directly to your Bloom files and can can be accessed from
-        any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
-      },
-      feature2: {
-        name: 'No need to install a torrent client',
-        description: `With Bitflow you don’t need to download any program, all you need is a
-        browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
-      },
-      feature3: {
-        name: 'Download big files faster',
-        description: `It takes a long time to download large files with a residential bandwidth.
-        Not with Bitflow! We'll download your files in the blink of an eye!`,
-      },
-    },
+    // bitflow_description: `Your cloud-based download manager.
+    // Download any file and torrent directly to a secure cloud. Fast. Online.`,
+    // bitflow: {
+    //   description: 'Download torrents to a secure cloud. Fast. Online.',
+    //   feature1: {
+    //     name: 'Download anywhere, anytime',
+    //     description: `Your files are downloaded directly to your Bloom files and can can be
+    //     accessed from
+    //     any smartphone, tablet, or computer. So wherever you go, your downloaded files follow.`,
+    //   },
+    //   feature2: {
+    //     name: 'No need to install a torrent client',
+    //     description: `With Bitflow you don’t need to download any program, all you need is a
+    //     browser. Bitflow currently supports Torrent and HTTP(S) protocols.`,
+    //   },
+    //   feature3: {
+    //     name: 'Download big files faster',
+    //     description: `It takes a long time to download large files with a residential bandwidth.
+    //     Not with Bitflow! We'll download your files in the blink of an eye!`,
+    //   },
+    // },
     arcade_description: `The best place to play! <br />
     None of our games contain ad.`,
     arcade: {

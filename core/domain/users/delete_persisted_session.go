@@ -1,22 +1,27 @@
 package users
 
 import (
+	"context"
+
 	"gitlab.com/bloom42/bloom/core/db"
+	"gitlab.com/bloom42/bloom/core/domain/preferences"
 )
 
 func DeletePersistedSession() error {
-	tx, err := db.DB.Begin()
+	ctx := context.Background()
+
+	tx, err := db.DB.Beginx()
 	if err != nil {
 		return err
 	}
 
-	_, err = tx.Exec("DELETE FROM  preferences WHERE key = ?", "me")
+	err = preferences.Delete(ctx, tx, "me")
 	if err != nil {
 		tx.Rollback()
 		return err
 	}
 
-	_, err = tx.Exec("DELETE FROM  preferences WHERE key = ?", "session")
+	err = preferences.Delete(ctx, tx, "session")
 	if err != nil {
 		tx.Rollback()
 		return err

@@ -3,7 +3,7 @@ package users
 import (
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // Session is a user's session. one per authenticated device

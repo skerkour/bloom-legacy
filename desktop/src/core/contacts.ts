@@ -1,41 +1,31 @@
-/* eslint-disable camelcase */
+export const CONTACT_TYPE = 'com.bloom42.bloom.contact';
 
 export enum Method {
-  ListContacts = 'contacts.listContacts',
+  FindContacts = 'contacts.findContacts',
   CreateContact = 'contacts.createContact',
   UpdateContact = 'contacts.updateContact',
   DeleteContact = 'contacts.deleteContact',
 }
 
 export type Contact = {
-  id: string,
-  createdAt: Date,
-  updatedAt: Date,
+  prefix: string,
+  suffix: string,
+  nickname: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,
   notes: string,
-  emails: Email[],
-  phones: Phone[],
-  websites: Website[],
+  emails: ContactInformation[],
+  phones: ContactInformation[],
+  online: ContactInformation[],
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
   bloomUsername: string,
 }
 
-export type Email = {
-  email: string,
-  label: string,
-}
-
-export type Phone = {
-  phone: string,
-  label: string,
-}
-
-export type Website = {
-  website: string,
+export type ContactInformation = {
+  value: string,
   label: string,
 }
 
@@ -53,22 +43,22 @@ export type Address = {
   state: string,
 }
 
-export type Contacts = {
-  contacts: Contact[],
-}
-
 export type CreateContactParams = {
+  prefix: string,
+  suffix: string,
+  nickname: string,
   birthday: Date | null,
   firstName: string,
   lastName: string,
   notes: string,
-  emails: Email[],
-  phones: Phone[],
-  websites: Website[],
+  emails: ContactInformation[],
+  phones: ContactInformation[],
+  online: ContactInformation[],
   organizations: Organization[],
   addresses: Address[],
   deviceId: string,
   bloomUsername: string,
+  groupID: string | null,
 }
 
 export type DeleteContact = {

@@ -19,14 +19,13 @@ func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfil
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	params := users.UpdateProfileInput{
+	params := users.UpdateProfileParams{
 		ID:          input.ID,
 		DisplayName: input.DisplayName,
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,
 		Bio:         input.Bio,
 	}
-
 	user, err := users.UpdateProfile(ctx, currentUser, params)
 	if err != nil {
 		return ret, gqlerrors.New(err)

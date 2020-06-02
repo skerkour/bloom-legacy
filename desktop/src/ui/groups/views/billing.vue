@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid class="text-left overflow-y-auto" style="height: 100vh">
 
     <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''">
       {{ error }}
@@ -121,8 +121,8 @@ import AddPaymentMethodDialog from '@/ui/billing/components/add_payment_method_d
 import core from '@/core';
 import { Method, NewStripeCard, FetchGroupProfileParams } from '@/core/billing';
 import {
-  Group, BillingPlan, Invoice, PaymentMethod, InvoiceEdge, Maybe, PaymentMethodEdge,
-  BillingPlanEdge, ChangeDefaultPaymentMethodInput, RemovePaymentMethodInput,
+  Group, BillingPlan, Invoice, PaymentMethod, Maybe,
+  ChangeDefaultPaymentMethodInput, RemovePaymentMethodInput,
   UpdateBillingSubscriptionInput,
 } from '@/api/models';
 
@@ -145,27 +145,26 @@ export default class Billing extends Vue {
   showAddPaymentDialog = false;
   stripePublicKey: string | null = null;
   paymentMethodError = '';
-  groupId = '';
+  groupID = '';
 
   // computed
   get invoices(): Invoice[] {
     if (this.group === null) {
       return [];
     }
-    return this.group.invoices!.edges!.map((edge: Maybe<InvoiceEdge>) => edge!.node!);
+    return this.group.invoices!.nodes;
   }
 
   get paymentMethods(): PaymentMethod[] {
     if (this.group === null) {
       return [];
     }
-    return this.group.paymentMethods!
-      .edges!.map((edge: Maybe<PaymentMethodEdge>) => edge!.node!);
+    return this.group.paymentMethods!.nodes;
   }
 
   // lifecycle
   created() {
-    this.groupId = this.$route.params.groupId;
+    this.groupID = this.$route.params.groupID;
     this.fetchData();
   }
 
@@ -175,14 +174,13 @@ export default class Billing extends Vue {
     this.error = '';
     this.loading = true;
     const params: FetchGroupProfileParams = {
-      id: this.groupId,
+      id: this.groupID,
     };
 
     try {
       const res = await core.call(Method.FetchGroupProfile, params);
       this.group = res.group;
-      this.plans = res.billingPlans
-        .edges!.map((edge: Maybe<BillingPlanEdge>) => edge!.node!);
+      this.plans = res.billingPlans.nodes;
       this.stripePublicKey = res.stripePublicKey;
     } catch (err) {
       this.error = err.message;
@@ -213,7 +211,7 @@ export default class Billing extends Vue {
     this.paymentMethodError = '';
     this.loading = true;
     const params = {
-      groupId: this.groupId,
+      groupID: this.groupID,
       stripePublicKey: this.stripePublicKey,
       card,
     };
@@ -221,7 +219,7 @@ export default class Billing extends Vue {
     try {
       const res: Maybe<PaymentMethod> = await core
         .call(Method.AddPaymentMethod, params);
-      this.group!.paymentMethods!.edges!.push({ node: res, cursor: '' });
+      this.group!.paymentMethods!.nodes.push(res!);
       if (this.planAfterAddingPaymentMethod) {
         await this.updateSubscription(this.planAfterAddingPaymentMethod);
       }
@@ -241,8 +239,8 @@ export default class Billing extends Vue {
 
     try {
       await core.call(Method.RemovePaymentMethod, input);
-      this.group!.paymentMethods!.edges = this.group!.paymentMethods!.edges!
-        .filter((edge: Maybe<PaymentMethodEdge>) => edge!.node!.id !== paymentMenthod.id); // eslint-disable-line
+      this.group!.paymentMethods!.nodes = this.group!.paymentMethods!.nodes
+        .filter((node: Maybe<PaymentMethod>) => node!.id !== paymentMenthod.id); // eslint-disable-line
     } catch (err) {
       this.paymentMethodError = err.message;
     } finally {
@@ -255,7 +253,7 @@ export default class Billing extends Vue {
     this.loading = true;
     this.planAfterAddingPaymentMethod = null;
     const input: UpdateBillingSubscriptionInput = {
-      groupId: this.groupId,
+      groupID: this.groupID,
       planId: newPlan.id,
     };
 
@@ -279,20 +277,20 @@ export default class Billing extends Vue {
     try {
       await core.call(Method.ChangeDefaultPaymentMethod, input);
       const paymentMehtods = this.group!.paymentMethods!
-        .edges!.map((edge: Maybe<PaymentMethodEdge>, index: number) => {
-          if (edge!.node!.isDefault) {
-            const newEdge = edge;
-            newEdge!.node!.isDefault = false;
-            this.$set(this.group!.paymentMethods!.edges!, index, newEdge);
+        .nodes.map((paymentMethod: Maybe<PaymentMethod>, index: number) => {
+          if (paymentMethod!.isDefault) {
+            const newPaymentMethod = paymentMethod;
+            newPaymentMethod!.isDefault = false;
+            this.$set(this.group!.paymentMethods!.nodes, index, newPaymentMethod);
           }
-          if (edge!.node!.id === newDefaultPaymentMethod.id) {
-            const newEdge = edge;
-            newEdge!.node!.isDefault = true;
-            this.$set(this.group!.paymentMethods!.edges!, index, newEdge);
+          if (paymentMethod!.id === newDefaultPaymentMethod.id) {
+            const newPaymentMethod = paymentMethod;
+            newPaymentMethod!.isDefault = true;
+            this.$set(this.group!.paymentMethods!.nodes, index, newPaymentMethod);
           }
-          return edge;
+          return paymentMethod!;
         });
-      this.group!.paymentMethods!.edges = paymentMehtods;
+      this.group!.paymentMethods!.nodes = paymentMehtods;
     } catch (err) {
       this.error = err.message;
     } finally {

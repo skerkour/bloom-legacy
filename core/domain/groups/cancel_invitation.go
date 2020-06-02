@@ -5,12 +5,16 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func CancelInvitation(input model.CancelGroupInvitationInput) (bool, error) {
+func CancelInvitation(params messages.GroupsCancelInvitationParams) error {
 	client := api.Client()
 
+	input := model.CancelGroupInvitationInput{
+		InvitationID: params.InvitationID,
+	}
 	var resp struct {
 		Success bool `json:"cancelGroupInvitation"`
 	}
@@ -23,5 +27,5 @@ func CancelInvitation(input model.CancelGroupInvitationInput) (bool, error) {
 
 	err := client.Do(context.Background(), req, &resp)
 
-	return resp.Success, err
+	return err
 }

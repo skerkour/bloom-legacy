@@ -2,17 +2,18 @@ package core
 
 import (
 	"C"
+	"context"
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/api/model"
 	"gitlab.com/bloom42/bloom/core/domain/groups"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
-import "gitlab.com/bloom42/bloom/core/domain/kernel"
 
 func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
 	case "createGroup":
-		var params model.CreateGroupInput
+		var params messages.GroupsCreateParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -23,7 +24,7 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "deleteGroup":
-		var params model.DeleteGroupInput
+		var params messages.GroupsDeleteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -32,37 +33,76 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: kernel.Empty{}}
+		return MessageOut{Data: messages.Empty{}}
 	case "findGroups":
-		res, err := groups.FindGroups()
+		res, err := groups.FindGroups(context.Background(), nil)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetchGroupMembers":
-		var params groups.FetchGroupMembersParams
+	case "fetchMembers":
+		var params messages.GroupsFetchMembersParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := groups.FetchGroupMembers(params)
+		res, err := groups.FetchMembers(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "inviteUsers":
-		var params model.InviteUsersInGroupInput
+	case "inviteUser":
+		var params messages.GroupsInviteUserParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := groups.InviteUsers(params)
+		res, err := groups.InviteUser(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "fetchMyInvitations":
+		res, err := groups.FetchMyInvitations()
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "acceptInvitation":
+		var params model.GroupInvitation
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := groups.AcceptInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: res}
+	case "declineInvitation":
+		var params model.DeclineGroupInvitationInput
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = groups.DeclineInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
+	case "cancelInvitation":
+		var params messages.GroupsCancelInvitationParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = groups.CancelInvitation(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	case "removeMembers":
-		var params model.RemoveGroupMembersInput
+		var params messages.GroupsRemoveMembersParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -78,8 +118,8 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "fetchGroupDetails":
-		var params groups.FetchGroupDetailsParams
+	case "fetchDetails":
+		var params messages.GroupsFetchDetailsParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -89,6 +129,17 @@ func handleGroupsMethod(method string, jsonParams json.RawMessage) MessageOut {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
+	case "quitGroup":
+		var params messages.GroupsQuitParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		err = groups.QuitGroup(params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "groups")
 	}

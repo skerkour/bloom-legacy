@@ -8,8 +8,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // StartRegistration initiate an account registration
@@ -22,7 +22,7 @@ func (resolver *Resolver) StartRegistration(ctx context.Context, input model.Sta
 	}
 
 	// sleep to prevent spam and bruteforce
-	sleep, err := crypto.RandInt64(500, 800)
+	sleep, err := crypto.RandInt64(1000, 1500)
 	if err != nil {
 		logger.Error("mutation.StartRegistration: generating random int", rz.Err(err))
 		err = gqlerrors.Internal()

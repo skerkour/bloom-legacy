@@ -2,7 +2,7 @@ import * as models from '@/api/models';
 
 export enum Method {
   StartRegistration = 'users.startRegistration',
-  VerifyRegistration = 'users.verifyRegistration',
+  VerifyUser = 'users.verifyUser',
   CompleteRegistration = 'users.completeRegistration',
   SignIn = 'users.signIn',
   SignOut = 'users.signOut',
@@ -15,6 +15,7 @@ export enum Method {
   FetchUserDetails = 'users.fetchUserDetails',
   EnableUser = 'users.enalbeUser',
   DisableUser = 'users.disableUser',
+  Sync = 'core.sync',
 }
 
 export type StartRegistration = {

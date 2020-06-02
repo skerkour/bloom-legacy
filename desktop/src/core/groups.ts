@@ -1,24 +1,18 @@
-import { Group } from '@/api/models';
-
+/* eslint-disable */
 export enum Method {
   CreateGroup = 'groups.createGroup',
   DeleteGroup = 'groups.deleteGroup',
   FindGroups = 'groups.findGroups',
-  FetchGroupMembers = 'groups.fetchGroupMembers',
-  InviteUsers = 'groups.inviteUsers',
-  RemoveMembers = 'groups.removeMembers',
   FetchGroups = 'groups.fetchGroups',
-  FetchGroupDetails = 'groups.fetchGroupDetails',
-}
-
-export type Groups = {
-  groups: Group[],
-}
-
-export type FetchGroupMembersParams = {
-  id: string,
-}
-
-export type FetchGroupDetailsParams = {
-  id: string,
+  FetchDetails = 'groups.fetchDetails',
+  QuitGroup = 'groups.quitGroup',
+  // members
+  FetchMembers = 'groups.fetchMembers',
+  InviteUser = 'groups.inviteUser',
+  RemoveMembers = 'groups.removeMembers',
+  // invitations
+  CancelInvitation = 'groups.cancelInvitation',
+  FetchMyInvitations = 'groups.fetchMyInvitations',
+  AcceptInvitation = 'groups.acceptInvitation',
+  DeclineInvitation = 'groups.declineInvitation',
 }

@@ -5,18 +5,19 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func FetchGroupDetails(params FetchGroupDetailsParams) (*model.Group, error) {
+func FetchGroupDetails(params messages.GroupsFetchDetailsParams) (*model.Group, error) {
 	client := api.Client()
 
 	var resp struct {
 		Group *model.Group `json:"group"`
 	}
 	req := graphql.NewRequest(`
-	query($groupId: ID!) {
-		group(id: $groupId) {
+	query($groupID: ID!) {
+		group(id: $groupID) {
 			id
 			createdAt
 			avatarUrl
@@ -24,6 +25,7 @@ func FetchGroupDetails(params FetchGroupDetailsParams) (*model.Group, error) {
 			description
 			members {
 				edges {
+					role
 					node {
 						id
 						username
@@ -47,34 +49,30 @@ func FetchGroupDetails(params FetchGroupDetailsParams) (*model.Group, error) {
 				}
 			}
 			paymentMethods {
-				edges {
-					node {
-						id
-						createdAt
-						cardLast4
-						cardExpirationMonth
-						cardExpirationYear
-						isDefault
-					}
+				nodes {
+					id
+					createdAt
+					cardLast4
+					cardExpirationMonth
+					cardExpirationYear
+					isDefault
 				}
 			}
 			invoices {
-				edges {
-					node {
-						id
-						createdAt
-						amount
-						stripeId
-						stripeHostedUrl
-						stripePdfUrl
-						paidAt
-					}
+				nodes {
+					id
+					createdAt
+					amount
+					stripeId
+					stripeHostedUrl
+					stripePdfUrl
+					paidAt
 				}
 			}
 		}
 	}
 	`)
-	req.Var("groupId", params.ID)
+	req.Var("groupID", params.GroupID)
 
 	err := client.Do(context.Background(), req, &resp)
 

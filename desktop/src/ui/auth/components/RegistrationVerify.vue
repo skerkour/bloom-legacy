@@ -132,7 +132,7 @@ export default class RegistrationVerify extends Vue {
       code,
     };
     try {
-      await core.call(Method.VerifyRegistration, params);
+      await core.call(Method.VerifyUser, params);
       this.$router.push({ path: '/auth/registration/complete', params: { pendingAccountId: this.pendingAccountId } });
     } catch (err) {
       this.error = err.message;

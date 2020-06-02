@@ -1,24 +1,47 @@
 package objects
 
+import (
+	"encoding/json"
+	"time"
+
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+// Object is an object stored in the local database
 type Object struct {
-	ID          string `db:"id"`
-	Type        string `db:"type"`
-	Data        string `db:"data"`
-	IsOutOfSync bool   `db:"is_out_of_sync"`
+	ID        []byte          `db:"id" json:"id"`
+	CreatedAt time.Time       `db:"created_at" json:"createdAt"`
+	UpdatedAt time.Time       `db:"updated_at" json:"updatedAt"`
+	Type      string          `db:"type" json:"type"`
+	Data      json.RawMessage `db:"data" json:"data"`
+	OutOfSync bool            `db:"out_of_sync" json:"-"`
 
-	GroupID *string `db:"group_id"`
+	GroupID *uuid.UUID `db:"group_id" json:"groupID"`
 }
 
-type DecryptedObjectData struct {
-	Type string `json:"string"`
-	Data string `json:"data"`
+func GenerateObjectID(username []byte) (ret []byte, err error) {
+	randData, err := crypto.RandBytes(crypto.KeySize512)
+	if err != nil {
+		return
+	}
+	ret, err = crypto.DeriveKeyFromKey(username, randData, crypto.KeySize512)
+	return
 }
 
-type EncryptedObject struct {
-	ID             string `json:"id"`
-	UpdatedAtState string `json:"updatedAtState"`
-	Cipher         string `json:"cipher"`
-	EncryptedKey   []byte `json:"encryptedKey"`
-	Nonce          []byte `json:"nonce"`
-	EncryptedData  []byte `json:"encryptedData"`
+func ToObject(id []byte, typ string, createdAt, updatedAt time.Time, groupID *uuid.UUID, outOfSync bool, entity interface{}) (ret *Object, err error) {
+	jsonData, err := json.Marshal(entity)
+	if err != nil {
+		return
+	}
+	ret = &Object{
+		ID:        id,
+		CreatedAt: createdAt,
+		UpdatedAt: updatedAt,
+		Type:      typ,
+		OutOfSync: outOfSync,
+		GroupID:   groupID,
+		Data:      jsonData,
+	}
+	return
 }

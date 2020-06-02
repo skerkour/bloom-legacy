@@ -1,5 +1,5 @@
 <template>
-  <v-container fluid class="text-left">
+  <v-container fluid class="text-left overflow-y-auto" style="height: 100vh">
     <v-row>
       <v-col cols="12" v-if="error">
         <v-alert icon="mdi-alert-circle" type="error" :value="error !== ''" dismissible>
@@ -98,7 +98,22 @@
                 <span>{{ item.inviter.displayName }} @{{ item.inviter.username }}</span>
               </td>
               <td>
-                Actions
+                <v-menu bottom left>
+                  <template v-slot:activator="{ on }">
+                    <v-btn icon v-on="on" v-if="!item.isDefault">
+                      <v-icon>mdi-dots-vertical</v-icon>
+                    </v-btn>
+                  </template>
+
+                  <v-list>
+                    <v-list-item @click="cancelInvitation(item)">
+                      <v-list-item-icon>
+                        <v-icon color="error">mdi-cancel</v-icon>
+                      </v-list-item-icon>
+                      <v-list-item-title>Cancel invitation</v-list-item-title>
+                    </v-list-item>
+                  </v-list>
+                </v-menu>
               </td>
             </tr>
           </template>
@@ -107,7 +122,7 @@
     </v-row>
 
     <blm-groups-invite-dialog :visible="showInviteDialog" :group-id="group.id" v-if="group"
-      @closed="inviteDialogClosed" @inviter="usersInvited"/>
+      @closed="inviteDialogClosed" @invited="usersInvited"/>
   </v-container>
 </template>
 
@@ -120,12 +135,12 @@ import {
   GroupMemberEdge,
   Maybe,
   GroupInvitationConnection,
-  GroupInvitationEdge,
   GroupInvitation,
-  RemoveGroupMembersInput,
 } from '@/api/models';
 import core from '@/core';
-import { Method, FetchGroupMembersParams } from '@/core/groups';
+import { Method } from '@/core/groups';
+import { GroupsFetchMembersParams, GroupsCancelInvitationParams, GroupsRemoveMembersParams } from '@/core/messages';
+
 
 @Component({
   components: {
@@ -190,7 +205,7 @@ export default class GroupsMembersView extends Vue {
 
   get invitations(): GroupInvitation[] {
     if (this.group) {
-      return this.group.invitations!.edges!.map((edge: Maybe<GroupInvitationEdge>) => edge!.node!);
+      return this.group.invitations!.nodes;
     }
     return [];
   }
@@ -205,12 +220,12 @@ export default class GroupsMembersView extends Vue {
   async fetchData() {
     this.error = '';
     this.loading = true;
-    const params: FetchGroupMembersParams = {
-      id: this.$route.params.groupId,
+    const params: GroupsFetchMembersParams = {
+      groupID: this.$route.params.groupID,
     };
 
     try {
-      this.group = await core.call(Method.FetchGroupMembers, params);
+      this.group = await core.call(Method.FetchMembers, params);
     } catch (err) {
       this.error = err.message;
     } finally {
@@ -235,14 +250,32 @@ export default class GroupsMembersView extends Vue {
   async removeGroupMember(member: GroupMemberEdge) {
     this.loading = true;
     this.error = '';
-    const params: RemoveGroupMembersInput = {
-      id: this.group!.id!,
-      members: [member!.node!.username],
+    const params: GroupsRemoveMembersParams = {
+      groupID: this.group!.id!,
+      username: member!.node!.username,
     };
 
     try {
       const res: Group = await core.call(Method.RemoveMembers, params);
       this.group!.members = res.members;
+    } catch (err) {
+      this.error = err.message;
+    } finally {
+      this.loading = false;
+    }
+  }
+
+  async cancelInvitation(invitation: GroupInvitation) {
+    this.loading = true;
+    this.error = '';
+    const params: GroupsCancelInvitationParams = {
+      invitationID: invitation.id,
+    };
+
+    try {
+      await core.call(Method.CancelInvitation, params);
+      this.group!.invitations!.nodes = this.group!.invitations!.nodes
+        .filter((invit: GroupInvitation) => invitation.id !== invit.id);
     } catch (err) {
       this.error = err.message;
     } finally {

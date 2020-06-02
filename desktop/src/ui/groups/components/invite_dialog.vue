@@ -20,13 +20,20 @@
         </v-col>
 
         <v-col cols="12">
-          <v-combobox
+          <!-- <v-combobox
             v-model="usersToInvite"
             label="Usernames"
             multiple
             chips
             :loading="loading"
-        ></v-combobox>
+        ></v-combobox> -->
+        <v-text-field
+           v-model="userToInvite"
+           :loading="loading"
+           placeholder="Username"
+           prefix="@"
+           @keyup.enter.native="invite"
+        />
         </v-col>
 
       </v-card-text>
@@ -46,20 +53,22 @@
 
 <script lang="ts">
 import { Component, Vue, Prop } from 'vue-property-decorator';
-import { InviteUsersInGroupInput, Group } from '@/api/models';
+import { Group } from '@/api/models';
 import core from '@/core';
 import { Method } from '@/core/groups';
+import { GroupsInviteUserParams } from '@/core/messages';
+
 
 @Component
 export default class Groups extends Vue {
   // props
   @Prop({ type: Boolean, default: false }) visible!: boolean;
-  @Prop({ type: String, default: false }) groupId!: string;
+  @Prop({ type: String, default: false }) groupID!: string;
 
   // data
   error = '';
   loading = false;
-  usersToInvite = [];
+  userToInvite = '';
 
   // computed
   get show() {
@@ -79,13 +88,13 @@ export default class Groups extends Vue {
   async invite() {
     this.loading = true;
     this.error = '';
-    const params: InviteUsersInGroupInput = {
-      id: this.groupId,
-      users: this.usersToInvite,
+    const params: GroupsInviteUserParams = {
+      groupID: this.groupID,
+      username: this.userToInvite,
     };
 
     try {
-      const res: Group = await core.call(Method.InviteUsers, params);
+      const res: Group = await core.call(Method.InviteUser, params);
       this.cancel();
       this.$emit('invited', res.invitations);
     } catch (err) {
@@ -96,7 +105,7 @@ export default class Groups extends Vue {
   }
 
   cancel() {
-    this.usersToInvite = [];
+    this.userToInvite = '';
     this.error = '';
     this.loading = false;
     this.close();

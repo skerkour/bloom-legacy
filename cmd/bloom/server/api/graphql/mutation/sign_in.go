@@ -8,8 +8,8 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
 )
 
 // SignIn is used to sign-in, or initiate a pending session if 2fa is enabled
@@ -45,6 +45,7 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 			OS:   input.Device.Os.String(),
 			Type: input.Device.Type.String(),
 		},
+		IPAddress: apiCtx.IP,
 	}
 	user, newSession, pendingSession, token, err := users.SignIn(ctx, params)
 	if err != nil {

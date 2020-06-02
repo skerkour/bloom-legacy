@@ -5,24 +5,36 @@ import (
 	"encoding/json"
 
 	"gitlab.com/bloom42/bloom/core/domain/notes"
+	"gitlab.com/bloom42/bloom/core/messages"
 )
+import "gitlab.com/bloom42/bloom/core/domain/objects"
 
 func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 	switch method {
-	case "listNotes":
-		res, err := notes.ListNotes()
+	case "findNotes":
+		var params messages.NotesFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := notes.FindNotes(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
-	case "listArchived":
-		res, err := notes.ListArchived()
+	case "findArchived":
+		var params messages.NotesFindParams
+		err := json.Unmarshal(jsonParams, &params)
+		if err != nil {
+			return InternalError(err) // TODO(z0mbie42): return error
+		}
+		res, err := notes.FindArchived(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
 		return MessageOut{Data: res}
 	case "createNote":
-		var params notes.CreateNoteParams
+		var params messages.NotesCreateParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -33,7 +45,7 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "updateNote":
-		var params notes.Note
+		var params objects.Object
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
@@ -44,16 +56,16 @@ func handleNotesMethod(method string, jsonParams json.RawMessage) MessageOut {
 		}
 		return MessageOut{Data: res}
 	case "deleteNote":
-		var params notes.DeleteNoteParams
+		var params messages.NotesDeleteParams
 		err := json.Unmarshal(jsonParams, &params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		res, err := notes.DeleteNote(params)
+		err = notes.DeleteNote(params)
 		if err != nil {
 			return InternalError(err) // TODO(z0mbie42): return error
 		}
-		return MessageOut{Data: res}
+		return MessageOut{Data: messages.Empty{}}
 	default:
 		return methodNotFoundError(method, "notes")
 	}

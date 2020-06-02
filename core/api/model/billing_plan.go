@@ -1,7 +1,7 @@
 package model
 
 import (
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type BillingPlan struct {

@@ -4,7 +4,7 @@ import router from '@/router';
 import store, { Mutations } from '@/store';
 import vuetify from '@/plugins/vuetify';
 import filters from '@/filters';
-import core from '@/core';
+import core, { InitRes, InitParams } from '@/core';
 import { log, Level } from '@/libs/rz';
 
 const { ipcRenderer } = window as any;
@@ -25,10 +25,36 @@ function sleep(ms: number) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
+// little hack to remove in the future. see https://github.com/vuetifyjs/vuetify/issues/9999
+const ignoreWarnMessage = 'The .native modifier for v-on is only valid on components but it was used on <div>.';
+Vue.config.warnHandler = (msg: any, vm: any, trace: any) => { //eslint-disable-line
+  // `trace` is the component hierarchy trace
+  if (msg === ignoreWarnMessage) {
+    msg = null; //eslint-disable-line
+    vm = null; //eslint-disable-line
+    trace = null; //eslint-disable-line
+  }
+};
+
 async function main() {
+  let res: InitRes | null = null;
   await ipcRenderer.send('server:start');
-  await sleep(1000);
-  const res = await core.init(['theme']);
+
+  while (true) { // eslint-disable-line
+    try {
+      const params: InitParams = {
+        env: process.env.NODE_ENV!,
+        preferences: ['theme'],
+        backgroundSync: false,
+      };
+      res = await core.init(params); // eslint-disable-line
+      break;
+    } catch (err) {
+      await sleep(100); // eslint-disable-line
+      continue; // eslint-disable-line
+    }
+  }
+
   if (res.preferences.me) {
     const params = {
       me: res.preferences.me,
@@ -39,6 +65,8 @@ async function main() {
   if (res.preferences.theme === 'dark') {
     store.commit(Mutations.SWITCH_DARK_MODE.toString());
   }
+
+  store.commit(Mutations.SET_GROUPS.toString(), res.groups);
 
   Vue.use(filters);
 

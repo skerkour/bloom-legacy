@@ -8,18 +8,19 @@ import (
 	"strconv"
 	"time"
 
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type AcceptGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID       uuid.UUID `json:"invitationID"`
+	EncryptedMasterKey []byte    `json:"encryptedMasterKey"`
+	MasterKeyNonce     []byte    `json:"masterKeyNonce"`
 }
 
 type AddPaymentMethodInput struct {
 	StripeID string `json:"stripeId"`
-	// if groupId is null, add to current user
-	GroupID *uuid.UUID `json:"groupId"`
+	// if groupID is null, add to current user
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type BillingPlanConnection struct {
@@ -56,17 +57,12 @@ type BloomMetadata struct {
 }
 
 type CancelGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID uuid.UUID `json:"invitationID"`
 }
 
 // set payment method with `id` as the default one
 type ChangeDefaultPaymentMethodInput struct {
 	ID uuid.UUID `json:"id"`
-}
-
-type Changes struct {
-	Todo *string `json:"todo"`
 }
 
 type CompletePasswordUpdateInput struct {
@@ -102,15 +98,14 @@ type CompleteTwoFAActivationInput struct {
 }
 
 type CreateGroupInput struct {
-	Name        string `json:"name"`
-	Description string `json:"description"`
-	// users to invite, by username
-	UsersToInvite []string `json:"usersToInvite"`
+	Name               string `json:"name"`
+	Description        string `json:"description"`
+	EncryptedMasterKey []byte `json:"encryptedMasterKey"`
+	MasterKeyNonce     []byte `json:"masterKeyNonce"`
 }
 
 type DeclineGroupInvitationInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	InvitationID uuid.UUID `json:"invitationID"`
 }
 
 type DeleteBillingPlanInput struct {
@@ -139,10 +134,13 @@ type GroupInput struct {
 }
 
 type GroupInvitation struct {
-	ID      uuid.UUID `json:"id"`
-	Group   *Group    `json:"group"`
-	Inviter *User     `json:"inviter"`
-	Invitee *User     `json:"invitee"`
+	ID                 uuid.UUID `json:"id"`
+	Group              *Group    `json:"group"`
+	Inviter            *User     `json:"inviter"`
+	Invitee            *User     `json:"invitee"`
+	EphemeralPublicKey *[]byte   `json:"ephemeralPublicKey"`
+	EncryptedMasterKey *[]byte   `json:"encryptedMasterKey"`
+	Signature          *[]byte   `json:"signature"`
 }
 
 type GroupInvitationConnection struct {
@@ -163,11 +161,12 @@ type GroupMemberEdge struct {
 	JoinedAt *time.Time       `json:"joinedAt"`
 }
 
-type InviteUsersInGroupInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
-	// users to invite, by username
-	Users []string `json:"users"`
+type InviteUserInGroupInput struct {
+	GroupID            uuid.UUID `json:"groupID"`
+	Username           string    `json:"username"`
+	EphemeralPublicKey []byte    `json:"ephemeralPublicKey"`
+	EncryptedMasterKey []byte    `json:"encryptedMasterKey"`
+	Signature          []byte    `json:"signature"`
 }
 
 type Invoice struct {
@@ -184,6 +183,22 @@ type InvoiceConnection struct {
 	Nodes      []*Invoice `json:"nodes"`
 	PageInfo   *PageInfo  `json:"pageInfo"`
 	TotalCount int64      `json:"totalCount"`
+}
+
+type Object struct {
+	ID            []byte `json:"id"`
+	Algorithm     string `json:"algorithm"`
+	EncryptedData []byte `json:"encryptedData"`
+	EncryptedKey  []byte `json:"encryptedKey"`
+	Nonce         []byte `json:"nonce"`
+}
+
+type ObjectInput struct {
+	ID            []byte `json:"id"`
+	Algorithm     string `json:"algorithm"`
+	EncryptedData []byte `json:"encryptedData"`
+	EncryptedKey  []byte `json:"encryptedKey"`
+	Nonce         []byte `json:"nonce"`
 }
 
 type PageInfo struct {
@@ -220,9 +235,24 @@ type PendingSession struct {
 	TwoFa *TwoFa    `json:"twoFA"`
 }
 
+type Pull struct {
+	Repositories []*RepositoryPull `json:"repositories"`
+}
+
+type PullInput struct {
+	Repositories []*RepositoryPullInput `json:"repositories"`
+}
+
+type Push struct {
+	Repositories []*RepositoryPush `json:"repositories"`
+}
+
+type PushInput struct {
+	Repositories []*RepositoryPushInput `json:"repositories"`
+}
+
 type QuitGroupInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 }
 
 type RegistrationStarted struct {
@@ -230,8 +260,7 @@ type RegistrationStarted struct {
 }
 
 type RemoveGroupMembersInput struct {
-	// group id
-	ID uuid.UUID `json:"id"`
+	GroupID uuid.UUID `json:"groupID"`
 	// members to remvove, by username
 	Members []string `json:"members"`
 }
@@ -239,6 +268,34 @@ type RemoveGroupMembersInput struct {
 // remove payment method with `id`
 type RemovePaymentMethodInput struct {
 	ID uuid.UUID `json:"id"`
+}
+
+type RepositoryPull struct {
+	OldState       string     `json:"oldState"`
+	NewState       string     `json:"newState"`
+	Objects        []*Object  `json:"objects"`
+	HasMoreChanges bool       `json:"hasMoreChanges"`
+	GroupID        *uuid.UUID `json:"groupID"`
+}
+
+type RepositoryPullInput struct {
+	SinceState string     `json:"sinceState"`
+	GroupID    *uuid.UUID `json:"groupID"`
+}
+
+type RepositoryPush struct {
+	OldState string     `json:"oldState"`
+	NewState string     `json:"newState"`
+	GroupID  *uuid.UUID `json:"groupID"`
+}
+
+type RepositoryPushInput struct {
+	// current state of the client
+	CurrentState string `json:"currentState"`
+	// out of sync objects
+	Objects []*ObjectInput `json:"objects"`
+	// to indicate whether it's the user's repository, or a group
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type RevokeSessionInput struct {
@@ -289,14 +346,6 @@ type StartRegistrationInput struct {
 	Email       string `json:"email"`
 }
 
-type Sync struct {
-	Todo *string `json:"todo"`
-}
-
-type SyncInput struct {
-	CurrentState string `json:"currentState"`
-}
-
 type TwoFa struct {
 	Method TwoFAMethod `json:"method"`
 }
@@ -305,11 +354,11 @@ type TwoFAActivationStarted struct {
 	QrCode []byte `json:"qrCode"`
 }
 
-// if groupId and userId (reserved for admins) are null, add to current user
+// if groupID and userId (reserved for admins) are null, add to current user
 type UpdateBillingSubscriptionInput struct {
 	PlanID  uuid.UUID  `json:"planId"`
 	UserID  *uuid.UUID `json:"userId"`
-	GroupID *uuid.UUID `json:"groupId"`
+	GroupID *uuid.UUID `json:"groupID"`
 }
 
 type UserConnection struct {

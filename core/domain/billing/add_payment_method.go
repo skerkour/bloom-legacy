@@ -12,10 +12,11 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func AddPaymentMethod(params AddPaymentMethodParams) (*model.PaymentMethod, error) {
+func AddPaymentMethod(params messages.AddPaymentMethodParams) (*model.PaymentMethod, error) {
 	client := api.Client()
 
 	data := url.Values{}

@@ -15,6 +15,7 @@ const (
 	PermissionDenied
 	InvalidArgument
 	AlreadyExists
+	OutOfSync
 )
 
 type Error struct {
@@ -36,6 +37,8 @@ func New(code Code, message string) Error {
 		codeStr = "INVALID_ARGUMENT"
 	case AlreadyExists:
 		codeStr = "ALREADY_EXISTS"
+	case OutOfSync:
+		codeStr = "OUT_OF_SYNC"
 	default:
 		codeStr = "INTERNAL"
 		if message == "" {

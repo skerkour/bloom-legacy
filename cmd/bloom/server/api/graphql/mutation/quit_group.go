@@ -17,7 +17,7 @@ func (r *Resolver) QuitGroup(ctx context.Context, input model.QuitGroupInput) (r
 		return ret, gqlerrors.AuthenticationRequired()
 	}
 
-	err = groups.QuitGroup(ctx, currentUser, input.ID)
+	err = groups.QuitGroup(ctx, currentUser, input.GroupID)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return

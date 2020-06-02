@@ -5,11 +5,12 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
-func EnableUser(ctx context.Context, actor *User, userId uuid.UUID) error {
+// EnableUser is used to enable a previously disabled user
+func EnableUser(ctx context.Context, actor *User, userID uuid.UUID) error {
 	logger := rz.FromCtx(ctx)
 
 	if actor == nil || !actor.IsAdmin {
@@ -23,7 +24,7 @@ func EnableUser(ctx context.Context, actor *User, userId uuid.UUID) error {
 		return NewError(ErrorInternal)
 	}
 
-	user, err := FindUserByID(ctx, tx, userId)
+	user, err := FindUserByID(ctx, tx, userID, true)
 	if err != nil {
 		tx.Rollback()
 		return err

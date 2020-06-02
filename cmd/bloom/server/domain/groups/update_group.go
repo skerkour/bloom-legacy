@@ -7,8 +7,8 @@ import (
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // UpdateGroupParams are the parameters for UpdateGroup
@@ -31,7 +31,7 @@ func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParam
 		return
 	}
 
-	ret, err = FindGroupById(ctx, tx, params.ID)
+	ret, err = FindGroupById(ctx, tx, params.ID, true)
 	if err != nil {
 		tx.Rollback()
 		logger.Error("mutation.UpdateGroup: fetching group", rz.Err(err),

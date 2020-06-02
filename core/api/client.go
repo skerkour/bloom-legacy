@@ -5,8 +5,10 @@ import (
 	"fmt"
 
 	"gitlab.com/bloom42/bloom/core/version"
-	"gitlab.com/bloom42/lily/graphql"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/graphql"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/rz/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 type ApiClient struct {
@@ -49,5 +51,10 @@ func (c *ApiClient) Do(ctx context.Context, req *graphql.Request, resp interface
 	if c.Token != nil {
 		req.Header.Add("authorization", fmt.Sprintf("Basic %s", *c.Token))
 	}
-	return c.graphql.Do(ctx, req, resp)
+
+	log.Debug("API request", rz.String("query", req.Query()), rz.Any("vars", req.Vars()))
+	err := c.graphql.Do(ctx, req, resp)
+	log.Debug("API response", rz.Any("response", resp))
+
+	return err
 }

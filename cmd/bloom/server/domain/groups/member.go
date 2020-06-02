@@ -6,6 +6,7 @@ import (
 	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 )
 
+// Member is used to list group members
 type Member struct {
 	users.User
 	Role     string    `db:"role"`

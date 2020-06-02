@@ -4,10 +4,11 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
+// CompleteRegistrationParams are the parameters for CompleteRegistration
 type CompleteRegistrationParams struct {
 	PendingUserID       uuid.UUID
 	Username            string
@@ -20,6 +21,7 @@ type CompleteRegistrationParams struct {
 	MasterKeyNonce      []byte
 }
 
+// CompleteRegistration is used to complete the registration of an account and create an user
 func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegistrationParams) (retUser *User, retSession *Session, token string, err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
@@ -33,19 +35,22 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 	}
 
 	// delete pending user
-	err = DeletePendingUser(ctx, tx, pendingUser.ID.String())
+	err = deletePendingUser(ctx, tx, pendingUser.ID)
 	if err != nil {
 		return
 	}
 
 	// create user
 	createUserParams := createUserParams{
-		PendingUser:         pendingUser,
+		Email:               pendingUser.Email,
+		DisplayName:         pendingUser.DisplayName,
 		Username:            params.Username,
 		AuthKey:             params.AuthKey,
 		PublicKey:           params.PublicKey,
 		EncryptedPrivateKey: params.EncryptedPrivateKey,
 		PrivateKeyNonce:     params.PrivateKeyNonce,
+		EncryptedMasterKey:  params.EncryptedMasterKey,
+		MasterKeyNonce:      params.MasterKeyNonce,
 	}
 	retUser, err = createUser(ctx, tx, createUserParams)
 	if err != nil {

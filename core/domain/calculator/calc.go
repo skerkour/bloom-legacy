@@ -5,7 +5,25 @@ import (
 	"go/parser"
 	"go/token"
 	"strconv"
+
+	"gitlab.com/bloom42/bloom/core/messages"
 )
+
+func Eval(expression string) (float64, error) {
+	exp, err := parser.ParseExpr(expression)
+	if err != nil {
+		return 0, err
+	}
+	return evalExpr(exp), nil
+}
+
+func Calc(params messages.CalcParams) (messages.CalcResult, error) {
+	res, err := Eval(params.Expression)
+	if err != nil {
+		return messages.CalcResult{}, err
+	}
+	return messages.CalcResult{Result: strconv.FormatFloat(res, 'f', -1, 64)}, nil
+}
 
 func evalExpr(exp ast.Expr) float64 {
 	switch exp := exp.(type) {
@@ -17,6 +35,9 @@ func evalExpr(exp ast.Expr) float64 {
 			i, _ := strconv.ParseFloat(exp.Value, 64)
 			return i
 		}
+	// parenthesis (e.g. "(1 + 2 ) * 3".)
+	case *ast.ParenExpr:
+		return (evalExpr(exp.X))
 	}
 
 	return 0
@@ -35,23 +56,10 @@ func evalBinaryExpr(exp *ast.BinaryExpr) float64 {
 		return left * right
 	case token.QUO:
 		return left / right
+	case token.REM:
+		// modulus
+		return float64(int(left) % int(right))
 	}
 
 	return 0
-}
-
-func Eval(expression string) (float64, error) {
-	exp, err := parser.ParseExpr(expression)
-	if err != nil {
-		return 0, err
-	}
-	return evalExpr(exp), nil
-}
-
-func Calc(params CalcParams) (CalcResult, error) {
-	res, err := Eval(params.Expression)
-	if err != nil {
-		return CalcResult{}, err
-	}
-	return CalcResult{Result: strconv.FormatFloat(res, 'f', -1, 64)}, nil
 }

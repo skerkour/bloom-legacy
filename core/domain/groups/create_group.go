@@ -5,13 +5,43 @@ import (
 
 	"gitlab.com/bloom42/bloom/core/api"
 	"gitlab.com/bloom42/bloom/core/api/model"
-	"gitlab.com/bloom42/bloom/core/db"
-	"gitlab.com/bloom42/lily/graphql"
+	"gitlab.com/bloom42/bloom/core/domain/keys"
+	"gitlab.com/bloom42/bloom/core/messages"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/graphql"
 )
 
-func CreateGroup(input model.CreateGroupInput) (model.Group, error) {
+func CreateGroup(params messages.GroupsCreateParams) (*model.Group, error) {
 	client := api.Client()
+	var err error
+	ctx := context.Background()
 
+	userMasterKey, err := keys.FindUserMasterKey(ctx, nil)
+	defer crypto.Zeroize(userMasterKey)
+	if err != nil {
+		return nil, err
+	}
+
+	// generate and save a random master key
+	groupMasterKey, err := crypto.NewAEADKey()
+	defer crypto.Zeroize(groupMasterKey)
+	if err != nil {
+		return nil, err
+	}
+
+	encryptedGroupMasterKey, nonce, err := crypto.AEADEncrypt(userMasterKey, groupMasterKey, nil)
+	defer crypto.Zeroize(encryptedGroupMasterKey)
+	defer crypto.Zeroize(nonce)
+	if err != nil {
+		return nil, err
+	}
+
+	input := model.CreateGroupInput{
+		Name:               params.Name,
+		Description:        params.Description,
+		EncryptedMasterKey: encryptedGroupMasterKey,
+		MasterKeyNonce:     nonce,
+	}
 	var resp struct {
 		CreateGroup model.Group `json:"createGroup"`
 	}
@@ -31,12 +61,10 @@ func CreateGroup(input model.CreateGroupInput) (model.Group, error) {
 	`)
 	req.Var("input", input)
 
-	err := client.Do(context.Background(), req, &resp)
+	err = client.Do(context.Background(), req, &resp)
 	if err == nil {
-		group := resp.CreateGroup
-		_, err = db.DB.Exec(`INSERT INTO groups (id, created_at, name, description, avatar_url)
-			VALUES (?, ?, ?, ?, ?)`, group.ID, group.CreatedAt, group.Name, group.Description, group.AvatarURL)
+		err = SaveGroup(ctx, nil, &resp.CreateGroup, groupMasterKey, "")
 	}
 
-	return resp.CreateGroup, err
+	return &resp.CreateGroup, err
 }

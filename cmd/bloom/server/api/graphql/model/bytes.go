@@ -4,6 +4,7 @@ import (
 	"encoding/base64"
 	"fmt"
 	"io"
+	"strconv"
 
 	"github.com/99designs/gqlgen/graphql"
 )
@@ -11,9 +12,8 @@ import (
 // MarshalBytes encodes a `[]byte` to JSON
 func MarshalBytes(buffer []byte) graphql.Marshaler {
 	return graphql.WriterFunc(func(w io.Writer) {
-		encoder := base64.NewEncoder(base64.StdEncoding, w)
-		encoder.Write(buffer)
-		encoder.Close()
+		b64 := base64.StdEncoding.EncodeToString(buffer)
+		io.WriteString(w, strconv.Quote(b64))
 	})
 }
 

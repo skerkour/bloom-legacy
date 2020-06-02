@@ -6,15 +6,16 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/lily/crypto"
-	"gitlab.com/bloom42/lily/rz"
-	"gitlab.com/bloom42/lily/uuid"
+	"gitlab.com/bloom42/gobox/crypto"
+	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device SessionDevice) (ret *Session, token string, err error) {
 	logger := rz.FromCtx(ctx)
 
-	newSessionId, secret, hash, salt, err := newSession()
+	newSessionID, secret, hash, salt, err := newSession()
+	defer crypto.Zeroize(secret) // wipe secret from memory
 	if err != nil {
 		logger.Error("users.StartSession: generating new session", rz.Err(err))
 		err = NewError(ErrorSingingIn)
@@ -23,7 +24,7 @@ func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 
 	now := time.Now().UTC()
 	ret = &Session{
-		ID:         newSessionId,
+		ID:         newSessionID,
 		CreatedAt:  now,
 		UpdatedAt:  now,
 		Hash:       hash,
@@ -46,8 +47,6 @@ func startSession(ctx context.Context, tx *sqlx.Tx, userID uuid.UUID, device Ses
 
 	tokenByte := append(ret.ID.Bytes(), secret...)
 	token = base64.StdEncoding.EncodeToString(tokenByte)
-	// remove secret from memory
-	crypto.Zeroize(secret)
 
 	return
 }
