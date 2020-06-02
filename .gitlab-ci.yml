@@ -146,17 +146,6 @@ test:cli:
     - postgres:$POSTGRES_VERSION
 
 
-test:bitflow:
-  stage: test
-  image: $GO_IMAGE
-  tags:
-    - docker
-  script:
-    - cd bitflow/
-    - cp bitflow.default.json bitflow.json
-    - make test
-
-
 test:website:
   stage: test
   image: node:lts
@@ -167,6 +156,16 @@ test:website:
     - make install
     - make lint
 
+
+# test:bitflow:
+#   stage: test
+#   image: $GO_IMAGE
+#   tags:
+#     - docker
+#   script:
+#     - cd bitflow/
+#     - cp bitflow.default.json bitflow.json
+#     - make test
 # test:bitflow:
 #   stage: test
 #   image: $RUST_IMAGE
@@ -271,16 +270,6 @@ build:cli:docker:
     - make docker
 
 
-build:bitflow:docker:
-  stage: build
-  image: docker:stable
-  tags:
-    - docker
-  script:
-    - apk update && apk add make
-    - cd bitflow/
-    - make docker
-
 
 build:website:
   stage: build
@@ -297,6 +286,17 @@ build:website:
   artifacts:
     paths:
     - website/dist
+
+
+# build:bitflow:docker:
+#   stage: build
+#   image: docker:stable
+#   tags:
+#     - docker
+#   script:
+#     - apk update && apk add make
+#     - cd bitflow/
+#     - make docker
 
 
 # build:bitflow:
