@@ -34,6 +34,11 @@ func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegis
 		return
 	}
 
+	if pendingUser.VerifiedAt == nil {
+		err = NewError(ErrorCompletingRegistration)
+		return
+	}
+
 	// delete pending user
 	err = deletePendingUser(ctx, tx, pendingUser.ID)
 	if err != nil {
