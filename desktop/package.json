@@ -31,12 +31,12 @@
     "vue-property-decorator": "^8.4.2",
     "vue-router": "^3.3.2",
     "vue-the-mask": "^0.11.1",
-    "vuetify": "^2.2.32",
+    "vuetify": "^2.2.33",
     "vuex": "^3.4.0"
   },
   "devDependencies": {
     "@babel/plugin-proposal-optional-chaining": "^7.10.1",
-    "@types/jest": "^25.2.3",
+    "@types/jest": "^26.0.0",
     "@types/vue-the-mask": "^0.11.0",
     "@typescript-eslint/eslint-plugin": "^3.2.0",
     "@typescript-eslint/parser": "^3.2.0",
