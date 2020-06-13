@@ -22,7 +22,6 @@ iOS: Coming soon
 Linux: Coming soom <br/>
 MacOS: Coming soon <br/>
 Docker: Coming soon <br/>
-CLI: Coming soom <br/><!-- [See instructions](https://help.bloom.sh/en/article/how-to-install-the-command-line-client-b9350j) <br /> -->
 <!-- Windows: Coming soon <br/> -->
 
 
