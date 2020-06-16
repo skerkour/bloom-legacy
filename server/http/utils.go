@@ -4,30 +4,34 @@ import (
 	"encoding/json"
 	"net/http"
 
-	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/gobox/log"
 )
 
-type ApiRes struct {
-	Data   interface{} `json:"data"`
-	Errors []Error     `json:"errors"`
-}
-
-// ResJSON write json response
-func ResJSON(w http.ResponseWriter, r *http.Request, status int, payload interface{}) {
+// SendJSON sends back a json response
+func (server *Server) SendJSON(w http.ResponseWriter, r *http.Request, status int, payload interface{}) {
 	w.Header().Set("Content-Type", "application/json")
 	w.WriteHeader(status)
 	err := json.NewEncoder(w).Encode(payload)
 	if err != nil {
-		rz.FromCtx(r.Context()).Error("encoding response to JSON", rz.Err(err))
-		errorMessage := "internal error, please try again later"
-		res := Error{
-			Message: errorMessage,
-			Extensions: map[string]string{
-				"code": "internal",
-			},
+		errorMessage := "server.ResJSON: encoding payload to JSON"
+		log.FromCtx(r.Context()).Error(errorMessage, log.Err("error", err))
+		res := api.Response{
+			Errors: []api.Error{api.NewError(errors.Internal(errorMessage, err))},
 		}
 		w.WriteHeader(500)
 		_ = json.NewEncoder(w).Encode(res)
 		return
 	}
+}
+
+// SendError sends back a json error response
+func (server *Server) SendError(w http.ResponseWriter, r *http.Request, status int, err error) {
+	w.Header().Set("Content-Type", "application/json")
+	w.WriteHeader(status)
+	payload := api.Response{
+		Errors: []api.Error{api.NewError(err)},
+	}
+	server.SendJSON(w, r, status, payload)
 }

@@ -53,39 +53,16 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 		logger:         logger,
 		router:         chi.NewRouter(),
 	}
-
-	return &server
-}
-
-// Run run the HTTP server
-func (server *Server) Run() error {
 	var allowedOrigins []string
 	var certManager *autocert.Manager
 	var tlsConfig *tls.Config
 	var serverAddress string
 
-	// replace size field name by latency and disable userAgent logging
-	loggingMiddleware := loghttp.Handler(logger, loghttp.Duration("latency"))
-
 	// setup middlewares
 
-	/*
-		router.Use(SetRequestID)
-		router.Use(rzhttp.Handler(log.Logger()))
-		router.Use(injectLoggerMiddleware(log.Logger()))
-		router.Use(middleware.Recoverer)
-		router.Use(middleware.Timeout(30 * time.Second))
-	*/
-
-	// here the order matters, otherwise loggingMiddleware won't see the request ID
-	router.Use(middleware.Compress(5, "application/*", "text/*", "image/*"))
-	router.Use(SetRequestIDMiddleware)
-	router.Use(loggingMiddleware)
-	router.Use(SetLoggerMiddleware(log.Logger()))
-	router.Use(middleware.Recoverer)
-	router.Use(middleware.RedirectSlashes)
-	// router.Use(middleware.Timeout(60 * time.Second))
-	if config.Env == consts.ENV_PRODUCTION {
+	// replace size field name by latency and disable userAgent logging
+	loggingMiddleware := loghttp.Handler(logger, loghttp.Duration("latency"))
+	if server.config.Env == config.EnvProduction {
 		allowedOrigins = []string{"https://*.bloom.sh", config.WebsiteUrl, "https://bloom42.com"}
 	} else {
 		allowedOrigins = []string{"*"}
@@ -96,21 +73,35 @@ func (server *Server) Run() error {
 		AllowedHeaders:   []string{"Accept", "Authorization", "Content-Type", "Origin"},
 		ExposedHeaders:   []string{},
 		AllowCredentials: false,
-		MaxAge:           3600,
+		MaxAge:           CORSMaxAge,
 	})
-	router.Use(cors.Handler)
-	if config.Env != consts.ENV_DEVELOPMENT {
-		router.Use(SetSecurityHeadersMiddleware)
+	/*
+		router.Use(SetRequestID)
+		router.Use(rzhttp.Handler(log.Logger()))
+		router.Use(injectLoggerMiddleware(log.Logger()))
+		router.Use(middleware.Recoverer)
+		router.Use(middleware.Timeout(30 * time.Second))
+	*/
+	server.router.Use(middleware.Compress(5, "application/*", "text/*", "image/*"))
+	server.router.Use(server.MiddlewareSetRequestID)
+	server.router.Use(loggingMiddleware)
+	server.router.Use(server.MiddlewareSetLogger)
+	server.router.Use(middleware.Recoverer)
+	server.router.Use(middleware.RedirectSlashes)
+	server.router.Use(server.MiddlewareSetHTTPContext)
+	server.router.Use(server.MiddlewareAuth)
+	// router.Use(middleware.Timeout(60 * time.Second))
+	server.router.Use(cors.Handler)
+	if server.config.Env != config.EnvDevelopment {
+		server.router.Use(server.MiddlewareSetSecurityHeaders)
 	}
-	router.Use(SetContextMiddleware)
-	router.Use(AuthMiddleware)
 
 	// setup routes
 	graphqlHandler := handler.NewDefaultServer(graphqlapi.NewExecutableSchema(graphqlapi.New()))
 	webhookAPI := webhook.NewAPI(server.billingService)
 
-	router.Get("/", IndexHandler)
-	router.Route("/api", func(apiRouter chi.Router) {
+	server.router.Get("/", IndexHandler)
+	server.router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Get("/", HelloWorlHandler)
 
 		apiRouter.Mount("/graphql", graphqlHandler)
@@ -122,15 +113,15 @@ func (server *Server) Run() error {
 			webhooksRouter.HandleFunc("/stripe", webhookAPI.StripeHandler)
 		})
 	})
-	router.NotFound(http.HandlerFunc(server.HandlerNotFound))
+	server.router.NotFound(http.HandlerFunc(server.HandlerNotFound))
 
-	if config.Server.HTTPSPort != nil {
+	if server.config.HTTP.HTTPSPort != nil {
 		server.logger.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
-			Email:      config.Server.CertsEmail,
+			Email:      server.config.Server.CertsEmail,
 			Prompt:     autocert.AcceptTOS,
-			HostPolicy: autocert.HostWhitelist(config.Server.Domains...),
-			Cache:      autocert.DirCache(config.Server.CertsDirectory),
+			HostPolicy: autocert.HostWhitelist(server.config.HTTP.Domains...),
+			Cache:      autocert.DirCache(server.config.HTTP.CertsDirectory),
 		}
 		tlsConfig = &tls.Config{
 			GetCertificate: certManager.GetCertificate,
@@ -151,7 +142,7 @@ func (server *Server) Run() error {
 		serverAddress = fmt.Sprintf(":%d", config.Server.HTTPPort)
 	}
 
-	httpServer := http.Server{
+	server.httpServer = http.Server{
 		Addr:         serverAddress,
 		Handler:      router,
 		ReadTimeout:  SERVER_READ_TIMEOUT,
@@ -160,15 +151,20 @@ func (server *Server) Run() error {
 		TLSConfig:    tlsConfig,
 	}
 
-	server.logger.Info("Starting server", log.Uint16("http_port", config.Server.HTTPPort))
+	return &server
+}
+
+// Run run the HTTP server
+func (server *Server) Run() error {
+	server.logger.Info("Starting server", log.Uint16("http_port", server.config.HTTP.HTTPPort))
 	go func() {
 		var err error
-		if config.Server.HTTPSPort != nil {
+		if server.config.HTTP.HTTPSPort != nil {
 			go func() {
-				httpServerAddress := fmt.Sprintf(":%d", config.Server.HTTPPort)
+				httpServerAddress := fmt.Sprintf(":%d", server.config.HTTP.HTTPPort)
 				err := http.ListenAndServe(httpServerAddress, certManager.HTTPHandler(nil))
 				if err != nil {
-					log.Fatal("listening HTTP", rz.Err(err))
+					log.Fatal("http.Run: listening HTTP", log.Err("error", err))
 				}
 			}()
 			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
@@ -176,7 +172,7 @@ func (server *Server) Run() error {
 			err = server.ListenAndServe()
 		}
 		if err != nil {
-			log.Fatal("listening", rz.Err(err))
+			log.Fatal("http.Run: listening", rz.Err(err))
 		}
 	}()
 
@@ -188,15 +184,15 @@ func (server *Server) Run() error {
 		syscall.SIGTERM,
 		syscall.SIGQUIT)
 	sig := <-signalCatcher
-	log.Info("Server is shutting down", rz.String("reason", sig.String()))
+	log.Info("http.Run: Server is shutting down", log.String("reason", sig.String()))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
-	server.SetKeepAlivesEnabled(false)
-	if err := server.Shutdown(ctx); err != nil {
-		log.Fatal("Could not gracefuly shutdown the server", rz.Err(err))
+	server.httpServer.SetKeepAlivesEnabled(false)
+	if err := server.httpServer.Shutdown(ctx); err != nil {
+		log.Fatal("http.Run: Could not gracefuly shutdown the server", log.Err("error", err))
 	}
-	log.Info("Server stopped")
+	log.Info("http.Run: Server stopped")
 	return nil
 }

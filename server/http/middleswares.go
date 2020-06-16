@@ -2,23 +2,21 @@ package http
 
 import (
 	"context"
-	"encoding/json"
 	"net"
 	"net/http"
 	"strings"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apictx"
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/config"
+	"gitlab.com/bloom42/bloom/server/http/httpctx"
+	"gitlab.com/bloom42/bloom/server/http/httputil"
 	"gitlab.com/bloom42/bloom/server/server/domain/users"
-	"gitlab.com/bloom42/gobox/crypto"
-	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/rz/rzhttp"
+	"gitlab.com/bloom42/gobox/log"
+	"gitlab.com/bloom42/gobox/log/loghttp"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-// SetSecurityHeadersMiddleware sets some security headers
-func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {
+// MiddlewareSetSecurityHeaders sets the `X-Content-Type-Options`, `X-Frame-Options`,
+// `Strict-Transport-Security` security headers
+func (server *Server) MiddlewareSetSecurityHeaders(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		w.Header().Set("X-Content-Type-Options", "nosniff")
 		w.Header().Set("X-Frame-Options", "Deny")
@@ -27,163 +25,101 @@ func SetSecurityHeadersMiddleware(next http.Handler) http.Handler {
 	})
 }
 
-// SetRequestIDMiddleware injects a random UUIDv4 in each request and set it as header with the
-// `HEADER_BLOOM_REQUEST_ID` key
-func SetRequestIDMiddleware(next http.Handler) http.Handler {
+// MiddlewareSetRequestID injects a random UUIDv4 in each request and set it as header with the
+// `HeaderBloomRequestID` key
+func (server *Server) MiddlewareSetRequestID(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		requestID := uuid.New()
 
 		ctx := r.Context()
-		ctx = context.WithValue(ctx, rzhttp.RequestIDCtxKey, requestID)
-		w.Header().Set(HEADER_BLOOM_REQUEST_ID, requestID.String())
+		ctx = context.WithValue(ctx, loghttp.RequestIDCtxKey, requestID)
+		w.Header().Set(HeaderBloomRequestID, requestID.String())
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-// SetContextMiddleware injects `apictx.Context` in requests' context
-func SetContextMiddleware(next http.Handler) http.Handler {
+// MiddlewareSetHTTPContext injects `httpctx.Context` in requests' context
+func (server *Server) MiddlewareSetHTTPContext(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 		var err error
 
 		ctx := r.Context()
-		apiCtx := apictx.Context{}
-		apiCtx.RequestID = ctx.Value(rzhttp.RequestIDCtxKey).(uuid.UUID)
+		httpCtx := httpctx.Context{}
+		httpCtx.RequestID = ctx.Value(loghttp.RequestIDCtxKey).(uuid.UUID)
 
-		remote := r.RemoteAddr
-		host, _, err := net.SplitHostPort(remote)
+		host, _, err := net.SplitHostPort(r.RemoteAddr)
 		if err == nil {
-			remote = host
-		}
-		// check that remote address is valid
-		if err = ValidateIP(remote); err != nil {
-			erro := Error{
-				Extensions: map[string]string{
-					"code": "invalid_argument",
-				},
-				Message: "remote IP address is not valid",
+			remoteIP := net.ParseIP(host)
+			if remoteIP != nil {
+				httpCtx.IP = host
 			}
-			ResError(w, r, http.StatusInternalServerError, erro)
-			return
 		}
-		apiCtx.IP = remote
-		apiCtx.UserAgent = r.UserAgent()
+		httpCtx.UserAgent = r.UserAgent()
 
-		ctx = context.WithValue(ctx, apictx.Key, &apiCtx)
+		ctx = context.WithValue(ctx, httpctx.Key, &httpCtx)
 
 		next.ServeHTTP(w, r.WithContext(ctx))
 	})
 }
 
-// SetLoggerMiddleware injects `logger` in the context of requests
-func SetLoggerMiddleware(logger rz.Logger) func(next http.Handler) http.Handler {
-	return func(next http.Handler) http.Handler {
-		return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-			if rid, ok := r.Context().Value(rzhttp.RequestIDCtxKey).(uuid.UUID); ok {
-				logger = logger.With(rz.Fields(rz.String("request_id", rid.String())))
-				ctx := logger.ToCtx(r.Context())
-				r = r.WithContext(ctx)
-			}
-
-			next.ServeHTTP(w, r)
-		})
-	}
-}
-
-type graphqlRes struct {
-	Data   interface{}    `json:"data"`
-	Errors []graphqlError `json:"errors"`
-}
-
-type graphqlError struct {
-	Message    string            `json:"message"`
-	Path       []string          `json:"path"`
-	Extensions map[string]string `json:"extensions"`
-}
-
-func invalidSession(w http.ResponseWriter, r *http.Request) {
-	w.Header().Set("Content-Type", "application/json")
-	code := "permission_denied"
-	message := "Session is not valid"
-
-	b, err := json.Marshal(graphqlRes{
-		Data: nil,
-		Errors: []graphqlError{
-			{Message: message, Path: []string{}, Extensions: map[string]string{"code": code}},
-		},
-	})
-	if err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
-	w.WriteHeader(200)
-	w.Write(b)
-}
-
-// AuthMiddleware is a middleware which checks the `Authorizartion`. If data is provided the
-// middleware verifies that the data is correct and then fill the context of the current request
-func AuthMiddleware(next http.Handler) http.Handler {
+// MiddlewareSetLogger injects `server.logger` in the context of requests
+func (server *Server) MiddlewareSetLogger(next http.Handler) http.Handler {
 	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
-		currentUser := &users.User{}
+		if rid, ok := r.Context().Value(loghttp.RequestIDCtxKey).(uuid.UUID); ok {
+			logger := server.logger.Clone(log.SetFields(log.String("request_id", rid.String())))
+			ctx := logger.ToCtx(r.Context())
+			r = r.WithContext(ctx)
+		}
+
+		next.ServeHTTP(w, r)
+	})
+}
+
+// MiddlewareAuth is a middleware which checks the `Authorizartion` header. If data is provided the
+// middleware verifies that the data is correct and then fill the context of the current request
+func (server *Server) MiddlewareAuth(next http.Handler) http.Handler {
+	return http.HandlerFunc(func(w http.ResponseWriter, r *http.Request) {
 
 		reqCtx := r.Context()
-		logger := rz.FromCtx(reqCtx)
 
-		apiCtx := apiutil.ApiCtxFromCtx(r.Context())
+		httpCtx := httputil.HTTPCtxFromCtx(r.Context())
 		authHeader := r.Header.Get("authorization")
 
 		if authHeader != "" {
-
-			parts := strings.FieldsFunc(authHeader, isSpace)
-			if len(parts) != 2 || (parts[0] != "Basic" && parts[0] != "Secret") {
-				logger.Debug("Session is not formated correctly")
-				invalidSession(w, r)
+			_, token, err := server.decodeAuthorizationHeader(authHeader)
+			if err != nil {
+				server.SendError(w, r, http.StatusUnauthorized, err)
 				return
 			}
-
-			if parts[0] == "Basic" {
-
-				sessionID, sessionSecret, err := users.ParseSessionToken(parts[1])
-				defer crypto.Zeroize(sessionSecret) // defer sessionSecret from memory
-				if err != nil {
-					logger.Debug("Error parsing session token")
-					invalidSession(w, r)
-					return
-				}
-
-				currentSession, err := users.VerifySession(sessionID, sessionSecret)
-				if err != nil {
-					logger.Debug("Error verifying session")
-					invalidSession(w, r)
-					return
-				}
-
-				currentUser, err = users.FindUserByID(reqCtx, nil, currentSession.UserID, false)
-				if err != nil {
-					logger.Debug("Error finding user in auth middleware")
-					invalidSession(w, r)
-					return
-				}
-				apiCtx.AuthenticatedUser = currentUser
-				apiCtx.Session = currentSession
-
-			} else { // Secret
-				secret := parts[1]
-				if secret == config.Bitflow.Secret {
-					service := "bitflow"
-					apiCtx.AuthenticatedService = &service
-				} else {
-					invalidSession(w, r)
-					return
-				}
+			currentUser, currentSession, err := server.usersService.VerifySessionToken(reqCtx, token)
+			if err != nil {
+				server.SendError(w, r, http.StatusUnauthorized, err)
+				return
 			}
+			httpCtx.AuthenticatedUser = &currentUser
+			httpCtx.Session = &currentSession
 		}
 
 		next.ServeHTTP(w, r.WithContext(reqCtx))
 	})
 }
 
-func isSpace(c rune) bool {
-	return c == ' '
+func (server *Server) decodeAuthorizationHeader(header string) (tokenType, token string, err error) {
+	header = strings.TrimSpace(header)
+	parts := strings.Split(header, " ")
+	if len(parts) != 2 {
+		err = users.ErrInvalidSession
+		return
+	}
+	tokenType = strings.ToLower(parts[0])
+	token = parts[1]
+
+	if tokenType != "basic" {
+		err = users.ErrInvalidSession
+		return
+	}
+
+	return
 }

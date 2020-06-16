@@ -14,4 +14,7 @@ const (
 	WriteTimeout = 10 * time.Second
 	// IdleTimeout is the IdleTimeout of the `http.Server`
 	IdleTimeout = 30 * time.Second
+
+	// CORSMAxAge is the MaxAge CORS value in secods
+	CORSMAxAge = 3600
 )
