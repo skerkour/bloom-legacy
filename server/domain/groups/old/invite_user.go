@@ -5,19 +5,11 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type InviteUserParams struct {
-	GroupID            uuid.UUID
-	Username           string
-	EphemeralPublicKey []byte
-	Signature          []byte
-	EncryptedMasterKey []byte
-}
 
 func InviteUser(ctx context.Context, actor *users.User, params InviteUserParams) (retGroup *Group, err error) {
 	logger := rz.FromCtx(ctx)

@@ -8,17 +8,12 @@ import (
 	"github.com/stripe/stripe-go"
 	stripecustomer "github.com/stripe/stripe-go/customer"
 	"github.com/stripe/stripe-go/paymentmethod"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/groups"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type AddPaymentMethodParams struct {
-	StripeID string
-	GroupID  *uuid.UUID
-}
 
 func AddPaymentMethod(ctx context.Context, actor *users.User, params AddPaymentMethodParams) (*PaymentMethod, error) {
 	var ret *PaymentMethod

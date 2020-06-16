@@ -3,15 +3,10 @@ package groups
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type CancelInvitationParams struct {
-	InvitationID uuid.UUID
-}
 
 func CancelInvitation(ctx context.Context, actor *users.User, params CancelInvitationParams) error {
 	logger := rz.FromCtx(ctx)

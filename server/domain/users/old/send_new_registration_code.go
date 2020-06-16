@@ -4,8 +4,10 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/errors"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
@@ -14,6 +16,15 @@ import (
 func SendNewRegistrationCode(ctx context.Context, pendingUserID uuid.UUID) (err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
+
+	// sleep to prevent spam and bruteforce
+	sleep, err := crypto.RandInt64(500, 800)
+	if err != nil {
+		logger.Error("mutaiton.SendNewRegistrationCode: generating random int", rz.Err(err))
+		err = gqlerrors.Internal()
+		return
+	}
+	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	tx, err := db.DB.Beginx()
 	if err != nil {

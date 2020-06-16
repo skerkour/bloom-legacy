@@ -35,9 +35,11 @@ type Resolver struct {
 
 func (resolver *Resolver) Query() QueryResolver {
 	return query.NewResolver(
+		resolver.config,
 		resolver.usersService,
 		resolver.groupsService,
 		resolver.syncService,
+		resolver.billingService,
 	)
 }
 

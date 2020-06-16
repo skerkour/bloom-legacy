@@ -1,7 +1,7 @@
 package notification
 
 import (
-	"gitlab.com/bloom42/bloom/server/server/config"
+	"gitlab.com/bloom42/bloom/server/config"
 	"gitlab.com/bloom42/gobox/email"
 )
 

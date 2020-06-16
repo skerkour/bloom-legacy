@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/http/httputil"
 )
 
@@ -13,7 +13,7 @@ func (resolver *Resolver) StripePublicKey(ctx context.Context) (string, error) {
 	httpCtx := httputil.HTTPCtxFromCtx(ctx)
 
 	if httpCtx.AuthenticatedUser == nil {
-		return "", api.NewError(errors.PermissionDenied("Authentication required."))
+		return "", api.NewError(users.ErrAuthenticationRequired)
 	}
 
 	return resolver.config.Stripe.PublicKey, nil

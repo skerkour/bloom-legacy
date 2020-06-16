@@ -19,6 +19,7 @@ type Service interface {
 	UpdateUserProfile(ctx context.Context, params UpdateUserProfileParams) (User, error)
 	UpdateUserState(ctx context.Context, db db.Queryer, user User, newState int64) error
 	VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err error)
+	DisableUser(ctx context.Context, userID uuid.UUID) error
 
 	// Queries
 	FindAllUsers(ctx context.Context) ([]User, error)

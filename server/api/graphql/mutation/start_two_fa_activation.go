@@ -3,7 +3,7 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // StartTwoFAActivation starts the activation of 2fa for an user

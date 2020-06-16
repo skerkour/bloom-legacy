@@ -4,12 +4,12 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
 )

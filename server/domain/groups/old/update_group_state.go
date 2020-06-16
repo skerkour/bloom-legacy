@@ -5,7 +5,7 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/server/server/db"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/gobox/rz"
 )
 

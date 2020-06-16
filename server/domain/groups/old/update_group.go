@@ -5,18 +5,11 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
-
-// UpdateGroupParams are the parameters for UpdateGroup
-type UpdateGroupParams struct {
-	ID          uuid.UUID
-	Name        *string
-	Description *string
-}
 
 // UpdateGroup update the basic info of a Group
 func UpdateGroup(ctx context.Context, actor *users.User, params UpdateGroupParams) (ret *Group, err error) {

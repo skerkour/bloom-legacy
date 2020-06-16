@@ -1,7 +1,7 @@
 package users
 
 import (
-	"gitlab.com/bloom42/bloom/server/server/errors"
+	"gitlab.com/bloom42/bloom/server/errors"
 )
 
 type DomainError int

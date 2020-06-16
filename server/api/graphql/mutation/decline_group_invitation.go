@@ -3,23 +3,15 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // DeclineGroupInvitation is used to decline a group invitation
-func (r *Resolver) DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (ret bool, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
-	}
-
-	err = groups.DeclineInvitation(ctx, currentUser, input.InvitationID)
+func (resolver *Resolver) DeclineGroupInvitation(ctx context.Context, input model.DeclineGroupInvitationInput) (ret bool, err error) {
+	err = resolver.groupsService.DeclineInvitation(ctx, input.InvitationID)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 

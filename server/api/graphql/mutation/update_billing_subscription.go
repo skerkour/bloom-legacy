@@ -3,25 +3,22 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 )
 
 // UpdateBillingSubscription is used by users to updated their subscriptions
-func (r *Resolver) UpdateBillingSubscription(ctx context.Context, input model.UpdateBillingSubscriptionInput) (*model.BillingSubscription, error) {
-	var ret *model.BillingSubscription
-	var err error
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+func (resolver *Resolver) UpdateBillingSubscription(ctx context.Context, input model.UpdateBillingSubscriptionInput) (ret *model.BillingSubscription, err error) {
+	params := billing.ChangeSubscriptionParams{
+		UserID:  input.UserID,
+		GroupID: input.GroupID,
+		PlanID:  input.PlanID,
 	}
-
-	customer, newPlan, err := billing.ChangeSubscription(ctx, currentUser, input.UserID, input.GroupID, input.PlanID)
+	customer, newPlan, err := resolver.billingService.ChangeSubscription(ctx, params)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &model.BillingSubscription{
@@ -37,5 +34,5 @@ func (r *Resolver) UpdateBillingSubscription(ctx context.Context, input model.Up
 		UpdatedAt:   customer.SubscriptionUpdatedAt,
 		UsedStorage: customer.UsedStorage,
 	}
-	return ret, nil
+	return
 }

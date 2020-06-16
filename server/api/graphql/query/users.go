@@ -3,22 +3,20 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // Users finds all users
 func (resolver *Resolver) Users(ctx context.Context) (ret *model.UserConnection, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil || !currentUser.IsAdmin {
-		err = gqlerrors.AdminRoleRequired()
+	me, err := resolver.usersService.Me(ctx)
+	if err != nil {
+		err = api.NewError(err)
 		return
 	}
 
-	users, err := users.FindAllUsers(ctx)
+	users, err := resolver.usersService.FindAllUsers(ctx)
 	if err != nil {
 		err = gqlerrors.New(err)
 		return
@@ -30,7 +28,7 @@ func (resolver *Resolver) Users(ctx context.Context) (ret *model.UserConnection,
 	}
 
 	for _, user := range users {
-		ret.Nodes = append(ret.Nodes, model.DomainUserToModelUser(currentUser, &user))
+		ret.Nodes = append(ret.Nodes, model.DomainUserToModelUser(me, user))
 	}
 	return
 }

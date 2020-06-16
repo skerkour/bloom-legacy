@@ -2,41 +2,21 @@ package mutation
 
 import (
 	"context"
-	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
-	"gitlab.com/bloom42/gobox/crypto"
-	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
 // VerifyUser is used to verify a pending user code received by email
 func (resolver *Resolver) VerifyUser(ctx context.Context, input model.VerifyUserInput) (ret bool, err error) {
-	logger := rz.FromCtx(ctx)
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser != nil {
-		return ret, gqlerrors.MustNotBeAuthenticated()
-	}
-
-	// sleep to prevent spam and bruteforce
-	sleep, err := crypto.RandInt64(500, 800)
-	if err != nil {
-		logger.Error("mutation.VerifyUser: generating random int", rz.Err(err))
-		err = gqlerrors.Internal()
-		return
-	}
-	time.Sleep(time.Duration(sleep) * time.Millisecond)
-
 	params := users.VerifyPendingUserParams{
 		PendingUserID: input.ID,
 		Code:          input.Code,
 	}
-	err = users.VerifyPendingUser(ctx, params)
+	err = resolver.usersService.VerifyPendingUser(ctx, params)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 

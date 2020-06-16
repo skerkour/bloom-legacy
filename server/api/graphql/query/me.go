@@ -15,7 +15,6 @@ func (resolver *Resolver) Me(ctx context.Context) (ret *model.User, err error) {
 		return
 	}
 
-	modeluser := model.DomainUserToModelUser(me, me)
-	ret = &modeluser
+	ret = model.DomainUserToModelUser(me, me)
 	return
 }

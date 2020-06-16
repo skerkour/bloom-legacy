@@ -3,34 +3,32 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
 // UpdateUserProfile is used to updated an user's profile
-func (r *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (*model.User, error) {
-	var ret *model.User
-	var err error
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+func (resolver *Resolver) UpdateUserProfile(ctx context.Context, input model.UserProfileInput) (ret *model.User, err error) {
+	me, err := resolver.usersService.Me(ctx)
+	if err != nil {
+		err = api.NewError(err)
+		return
 	}
 
-	params := users.UpdateProfileParams{
-		ID:          input.ID,
+	params := users.UpdateUserProfileParams{
+		UserID:      input.ID,
 		DisplayName: input.DisplayName,
 		FirstName:   input.FirstName,
 		LastName:    input.LastName,
 		Bio:         input.Bio,
 	}
-	user, err := users.UpdateProfile(ctx, currentUser, params)
+	user, err := resolver.usersService.UpdateUserProfile(ctx, params)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
-	ret = model.DomainUserToModelUser(currentUser, user)
+	ret = model.DomainUserToModelUser(me, user)
 	return ret, nil
 }

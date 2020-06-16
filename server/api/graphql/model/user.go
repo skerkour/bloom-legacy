@@ -9,7 +9,6 @@ import (
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
-	"gitlab.com/bloom42/bloom/server/domain/objects"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
@@ -39,8 +38,8 @@ type User struct {
 
 // DomainUserToModelUser transform a `users.User` to `model.User` with the good fields, according to
 // actor
-func DomainUserToModelUser(actor users.User, user users.User) User {
-	ret := User{
+func DomainUserToModelUser(actor users.User, user users.User) *User {
+	ret := &User{
 		AvatarURL:   nil,
 		Username:    user.Username,
 		DisplayName: user.DisplayName,

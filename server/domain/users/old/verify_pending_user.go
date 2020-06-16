@@ -4,22 +4,32 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/db"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-// VerifyPendingUserParams are the parameters for VerifyPendingUser
-type VerifyPendingUserParams struct {
-	PendingUserID uuid.UUID
-	Code          string
-}
 
 // VerifyPendingUser verifies a pending user
 func VerifyPendingUser(ctx context.Context, params VerifyPendingUserParams) (err error) {
 	logger := rz.FromCtx(ctx)
 	var pendingUser PendingUser
+
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser != nil {
+		return ret, gqlerrors.MustNotBeAuthenticated()
+	}
+
+	// sleep to prevent spam and bruteforce
+	sleep, err := crypto.RandInt64(500, 800)
+	if err != nil {
+		logger.Error("mutation.VerifyUser: generating random int", rz.Err(err))
+		err = gqlerrors.Internal()
+		return
+	}
+	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
 	// verify pending user
 	tx, err := db.DB.Beginx()

@@ -3,32 +3,24 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/groups"
-	"gitlab.com/bloom42/bloom/server/server/domain/objects"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
 )
 
 // AcceptGroupInvitation accepts a group invitaiton
-func (r *Resolver) AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (ret *model.Group, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
-	}
-
+func (resolver *Resolver) AcceptGroupInvitation(ctx context.Context, input model.AcceptGroupInvitationInput) (ret *model.Group, err error) {
 	params := groups.AcceptInvitationParams{
 		InvitationID:       input.InvitationID,
 		EncryptedMasterKey: input.EncryptedMasterKey,
 		MasterKeyNonce:     input.MasterKeyNonce,
 	}
-	group, err := groups.AcceptInvitation(ctx, currentUser, params)
+	group, err := resolver.groupsService.AcceptInvitation(ctx, params)
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
 
-	state := objects.EncodeState(group.State)
+	state := resolver.syncService.EncodeState(group.State)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,

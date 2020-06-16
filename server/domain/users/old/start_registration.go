@@ -6,8 +6,10 @@ import (
 	"time"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/server/server/config"
-	"gitlab.com/bloom42/bloom/server/server/db"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
@@ -16,6 +18,21 @@ import (
 // StartRegistration start a registration
 func StartRegistration(ctx context.Context, params StartRegistrationParams) (newPendingUserID uuid.UUID, err error) {
 	logger := rz.FromCtx(ctx)
+
+	// sleep to prevent spam and bruteforce
+	sleep, err := crypto.RandInt64(1000, 1500)
+	if err != nil {
+		logger.Error("mutation.StartRegistration: generating random int", rz.Err(err))
+		err = gqlerrors.Internal()
+		return
+	}
+	time.Sleep(time.Duration(sleep) * time.Millisecond)
+
+	currentUser := apiutil.UserFromCtx(ctx)
+
+	if currentUser != nil {
+		return ret, gqlerrors.MustNotBeAuthenticated()
+	}
 
 	// clean and validate params
 	params.DisplayName = strings.TrimSpace(params.DisplayName)

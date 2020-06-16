@@ -3,25 +3,16 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // ChangeDefaultPaymentMethod is used by users to change their default payment mehtod
-func (r *Resolver) ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (*model.PaymentMethod, error) {
-	var ret *model.PaymentMethod
-	var err error
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
-	}
-
-	newDefaultPaymentMethod, err := billing.ChangeDefaultPaymentMethod(ctx, currentUser, input.ID)
+func (resolver *Resolver) ChangeDefaultPaymentMethod(ctx context.Context, input model.ChangeDefaultPaymentMethodInput) (ret *model.PaymentMethod, err error) {
+	newDefaultPaymentMethod, err := resolver.billingService.ChangeDefaultPaymentMethod(ctx, input.ID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &model.PaymentMethod{

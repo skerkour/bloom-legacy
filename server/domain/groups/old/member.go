@@ -3,7 +3,7 @@ package groups
 import (
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
 // Member is used to list group members

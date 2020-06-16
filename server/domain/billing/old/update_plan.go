@@ -6,23 +6,11 @@ import (
 	"time"
 
 	stripeplan "github.com/stripe/stripe-go/plan"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
-	"gitlab.com/bloom42/bloom/server/server/errors"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type UpdatePlanParams struct {
-	ID       *uuid.UUID
-	Name     string
-	Product  string
-	StripeID string
-	// HTML description
-	Description string
-	IsPublic    bool
-	Storage     int64
-}
 
 func UpdatePlan(ctx context.Context, actor *users.User, params UpdatePlanParams) (ret *Plan, err error) {
 	logger := rz.FromCtx(ctx)

@@ -5,17 +5,10 @@ import (
 	"time"
 
 	"gitlab.com/bloom42/bloom/common/consts"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type AcceptInvitationParams struct {
-	InvitationID       uuid.UUID
-	EncryptedMasterKey []byte
-	MasterKeyNonce     []byte
-}
 
 func AcceptInvitation(ctx context.Context, actor *users.User, params AcceptInvitationParams) (ret *Group, err error) {
 	logger := rz.FromCtx(ctx)

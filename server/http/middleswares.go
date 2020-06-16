@@ -6,9 +6,9 @@ import (
 	"net/http"
 	"strings"
 
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/http/httpctx"
 	"gitlab.com/bloom42/bloom/server/http/httputil"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
 	"gitlab.com/bloom42/gobox/log"
 	"gitlab.com/bloom42/gobox/log/loghttp"
 	"gitlab.com/bloom42/gobox/uuid"

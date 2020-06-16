@@ -6,20 +6,11 @@ import (
 	"time"
 
 	"github.com/stripe/stripe-go/plan"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type CreatePlanParams struct {
-	Name        string
-	StripeID    string
-	Description string
-	Product     string
-	Storage     int64
-	IsPublic    bool
-}
 
 func CreatePlan(ctx context.Context, actor *users.User, params CreatePlanParams) (ret *Plan, err error) {
 	logger := rz.FromCtx(ctx)
