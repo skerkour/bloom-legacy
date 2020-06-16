@@ -3,7 +3,7 @@ package users
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/server/db"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
 )

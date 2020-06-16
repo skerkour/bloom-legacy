@@ -3,9 +3,9 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
+	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/server/config"
 )
 
 // StripePublicKey returns the stripe public key. For billing purpose

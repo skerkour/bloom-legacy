@@ -1,4 +1,4 @@
-module gitlab.com/bloom42/bloom/cmd/bloom
+module gitlab.com/bloom42/bloom/server
 
 go 1.14
 

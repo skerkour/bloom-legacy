@@ -3,10 +3,10 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/server/domain/billing"
 )
 
 // RemovePaymentMethod is used to remove a payment method

@@ -2,7 +2,7 @@ package gqlerrors
 
 import (
 	"github.com/vektah/gqlparser/gqlerror"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/server/server/errors"
 )
 
 type Error = *gqlerror.Error

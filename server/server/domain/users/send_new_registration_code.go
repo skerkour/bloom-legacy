@@ -4,8 +4,8 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/server/server/db"
+	"gitlab.com/bloom42/bloom/server/server/errors"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )

@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"github.com/jmoiron/sqlx"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/server/db"
 	"gitlab.com/bloom42/gobox/rz"
 )
 

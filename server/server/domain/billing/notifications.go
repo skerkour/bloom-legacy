@@ -5,7 +5,7 @@ import (
 	"net/mail"
 	"text/template"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
+	"gitlab.com/bloom42/bloom/server/server/services/notification"
 )
 
 const paymentFailedEmailTemplate = `

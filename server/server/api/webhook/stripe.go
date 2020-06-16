@@ -7,8 +7,8 @@ import (
 
 	"github.com/stripe/stripe-go"
 	"github.com/stripe/stripe-go/webhook"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/config"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/server/config"
+	"gitlab.com/bloom42/bloom/server/server/domain/billing"
 	"gitlab.com/bloom42/gobox/rz"
 )
 

@@ -3,9 +3,9 @@ package groups
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/db"
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/server/server/db"
+	"gitlab.com/bloom42/bloom/server/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )

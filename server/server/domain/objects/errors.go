@@ -1,7 +1,7 @@
 package objects
 
 import (
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/server/server/errors"
 )
 
 type DomainError int

@@ -50,7 +50,7 @@ clean:
 .PHONY: gqlgen
 gqlgen:
 	go run github.com/99designs/gqlgen
-	cp server/api/graphql/model/models_gen.go ../../core/api/model
+	cp server/api/graphql/model/models_gen.go ../core/api/model
 
 
 .PHONY: tidy
@@ -60,7 +60,7 @@ tidy:
 
 .PHONY: docker
 docker:
-	cp -r ../../website .
+	cp -r ../website .
 	docker build -t $(DOCKER_IMAGE):latest .
 
 .PHONY: docker_login

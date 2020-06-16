@@ -3,7 +3,7 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
 )
 
 // CompleteSignIn is used to complete a sign-in when 2fa is activated
