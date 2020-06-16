@@ -4,7 +4,6 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
@@ -18,7 +17,7 @@ func (resolver *Resolver) Users(ctx context.Context) (ret *model.UserConnection,
 
 	users, err := resolver.usersService.FindAllUsers(ctx)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 
