@@ -3,8 +3,8 @@
 
   "website_url": "https://bloom.sh",
 
-  "server": {
-    "http_port": 8080,
+  "http": {
+    "port": 8080,
     "https_port": 8443,
     "domains": ["bloom.bloom42.com"],
     "certs_directory": "/certs",
@@ -29,11 +29,6 @@
 
   "sentry": {
     "dsn": "${SENTRY_SERVER_URL}" // optional
-  },
-
-  "bitflow": {
-    // cryptographically secure random string of at least 65 characters
-    "secret": "${BITFLOW_SECRET}"
   },
 
   "smtp": {

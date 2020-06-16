@@ -37,15 +37,15 @@ RUN make build_static
 ####################################################################################################
 ## Build website
 ####################################################################################################
-FROM node:lts-alpine AS builder_node
+# FROM node:lts-alpine AS builder_node
 
-RUN apk update && apk add --no-cache git ca-certificates make gcc libc-dev
-RUN update-ca-certificates
+# RUN apk update && apk add --no-cache git ca-certificates make gcc libc-dev
+# RUN update-ca-certificates
 
-WORKDIR /bloom
-COPY . ./
-WORKDIR /bloom/website
-RUN make install && make build
+# WORKDIR /bloom
+# COPY . ./
+# WORKDIR /bloom/website
+# RUN make install && make build
 
 ####################################################################################################
 ## Final image
@@ -61,10 +61,10 @@ WORKDIR /bloom
 
 # Copy our builds
 COPY --from=builder_go /bloom/dist/ ./
-COPY --from=builder_node /bloom/website/dist/ ./website/
+# COPY --from=builder_node /bloom/website/dist/ ./website/
 
 # Use an unprivileged user.
 USER bloom:bloom
 
 EXPOSE 8080 8443
-CMD ["/bloom/bloom", "server", "run"]
+CMD ["/bloom/bloom", "server"]

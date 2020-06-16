@@ -1,5 +1,5 @@
-NAME = $(shell cat version/version.go| grep "\sName" | cut -d '"' -f2)
-VERSION := $(shell cat version/version.go| grep "\sVersion\s=" | cut -d '"' -f2)
+NAME = $(shell cat app/version.go| grep "\sName\s=" | cut -d '"' -f2)
+VERSION := $(shell cat app/version.go| grep "\sVersion\s=" | cut -d '"' -f2)
 COMMIT = $(shell git rev-parse HEAD)
 DATE := $(shell date +"%Y-%m-%d")
 GO_PKG = $(shell cat go.mod | grep module | cut -d' ' -f2)
@@ -18,27 +18,29 @@ fmt:
 
 .PHONY: test
 test:
-	go test ./...
+	CGO_ENABLED=0 go test ./...
 
 .PHONY: dev
 dev:
-	gowatch -log-prefix=false -build="make build" -command="$(DIST_DIR)/$(NAME) server run"
+	gowatch -log-prefix=false -build="make build" -command="$(DIST_DIR)/$(NAME) server"
 
 .PHONY: build
 build:
 	CGO_ENABLED=0 go build -o $(DIST_DIR)/$(NAME) -ldflags "-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
-		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
-		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
-	cp -r migrations $(DIST_DIR)/
+		-X $(GO_PKG)/app.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
+		-X $(GO_PKG)/app.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
+	mkdir -p $(DIST_DIR)/db
+	cp -r db/migrations $(DIST_DIR)/db/
 	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 .PHONY: build_static
 build_static:
 	CGO_ENABLED=0 go build -o $(DIST_DIR)/$(NAME) -a -ldflags "-extldflags "-static" -w -s \
-		-X $(GO_PKG)/version.GitCommit=$(COMMIT) \
-		-X $(GO_PKG)/version.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
-		-X $(GO_PKG)/version.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
-	cp -r migrations $(DIST_DIR)/
+		-X $(GO_PKG)/app.GitCommit=$(COMMIT) \
+		-X $(GO_PKG)/app.UTCBuildTime=`TZ=UTC date -u '+%Y-%m-%dT%H:%M:%SZ'` \
+		-X $(GO_PKG)/app.GoVersion=`go version | cut -d' ' -f 3 | cut -c3-`"
+	mkdir -p $(DIST_DIR)/db
+	cp -r db/migrations $(DIST_DIR)/db/
 	cp $(DEFAULT_CONFIG_FILE) $(DIST_DIR)/$(DIST_CONFIG_FILE)
 
 
