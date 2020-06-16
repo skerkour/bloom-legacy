@@ -5,6 +5,7 @@ import (
 )
 
 var (
-	ErrAuthenticationRequired = errors.AuthenticationRequired("Authentication required")
-	ErrMustNotBeAuthenticated = errors.PermissionDenied("Must not be authenticated")
+	ErrAuthenticationRequired = errors.AuthenticationRequired("Permission denied: authentication required")
+	ErrMustNotBeAuthenticated = errors.PermissionDenied("Permission denied: must not be authenticated")
+	ErrPermissionDenied       = errors.PermissionDenied("Permission denied")
 )

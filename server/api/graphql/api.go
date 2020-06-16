@@ -48,6 +48,7 @@ func (resolver *Resolver) Mutation() MutationResolver {
 		resolver.usersService,
 		resolver.groupsService,
 		resolver.syncService,
+		resolver.billingService,
 	)
 }
 
