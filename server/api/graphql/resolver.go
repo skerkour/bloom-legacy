@@ -10,16 +10,25 @@ import (
 )
 
 // NewAPI returns a new graphql API with the appropriate dependencies
-func NewAPI() Config {
+func NewAPI(conf config.Config, usersService  users.Service, groupsService groups.Service,
+	syncService   sync.Service, billingService billing.Service) Config {
 	return Config{
-		Resolvers: &Resolver{},
+		Resolvers: &Resolver{
+			config: conf,
+			usersService: usersService,
+			groupsService: groupsService,
+			syncService: syncService,
+			billingService: billingService,
+		},
 	}
 }
 
 type Resolver struct {
+	config config.Config
 	usersService  users.Service
 	syncService   sync.Service
 	groupsService groups.Service
+	billingService billing.Service
 }
 
 func (resolver *Resolver) Query() QueryResolver {

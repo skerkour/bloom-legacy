@@ -32,8 +32,8 @@ func (api *WebhookAPI) StripeHandler(w http.ResponseWriter, req *http.Request) {
 	req.Body = http.MaxBytesReader(w, req.Body, MaxBodyBytes)
 	payload, err := ioutil.ReadAll(req.Body)
 	if err != nil {
-		logger.Error("webhoo.StripeHandler: Error reading request body", log.Err("error", err))
-		w.WriteHeader(http.StatusServiceUnavailable)
+		logger.Error("webhook.StripeHandler: Error reading request body", log.Err("error", err))
+		w.WriteHeader(http.StatusInternalServerError)
 		return
 	}
 

@@ -3,19 +3,21 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
 )
 
 // BillingPlans find all visible billing plans for current user
-func (r *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingPlanConnection, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	plans, err := billing.FindPlans(ctx, currentUser)
+func (resolver *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingPlanConnection, err error) {
+	me, err := resolver.usersService.Me(ctx)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
+		return
+	}
+
+	plans, err := resolver.billingService.FindPlans(ctx)
+	if err != nil {
+		err = api.NewError(err)
 		return
 	}
 
@@ -26,7 +28,7 @@ func (r *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingPlanConn
 
 	for _, plan := range plans {
 		var stripeID *string
-		if currentUser.IsAdmin {
+		if me.IsAdmin {
 			stripeID = &plan.StripeID
 		}
 		billingPlan := &model.BillingPlan{
@@ -41,6 +43,5 @@ func (r *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingPlanConn
 		}
 		ret.Nodes = append(ret.Nodes, billingPlan)
 	}
-
-	return ret, nil
+	return
 }

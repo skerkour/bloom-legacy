@@ -3,33 +3,27 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
 )
 
 // User finds an user
 // username is optional for a future use
 func (resolver *Resolver) User(ctx context.Context, username *string) (ret *model.User, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		err = gqlerrors.AuthenticationRequired()
-		return
-	}
-
 	if username == nil {
-		err = gqlerrors.Internal()
+		err = api.NewError(errors.Internal("query.User: username is nil", nil))
 		return
 	}
 
-	user, err := users.FindUserByUsername(ctx, nil, *username)
+	user, err := resolver.usersService.FindUserByUsername(ctx, *username)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 
-	ret = model.DomainUserToModelUser(currentUser, user)
+	me, _ := resolver.usersService.Me(ctx)
+
+	ret = model.DomainUserToModelUser(me, user)
 	return
 }

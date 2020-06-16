@@ -15,5 +15,7 @@ type Service interface {
 	CreateCustomer(ctx context.Context, db db.Queryer, user users.User, groupID *uuid.UUID) (Customer, error)
 	CreateOrUpdateInvoice(ctx context.Context, invoice stripe.Invoice) error
 	PaymentFailed(ctx context.Context, invoice stripe.Invoice) error
+
 	// Queries
+	FindPlans(ctx context.Context) ([]Plan, error)
 }

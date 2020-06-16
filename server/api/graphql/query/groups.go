@@ -3,24 +3,15 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/groups"
 )
 
 // Groups finds all groups
-func (r *Resolver) Groups(ctx context.Context) (ret *model.GroupConnection, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil || !currentUser.IsAdmin {
-		err = gqlerrors.AdminRoleRequired()
-		return
-	}
-
-	groups, err := groups.FindAllGroups(ctx)
+func (resolver *Resolver) Groups(ctx context.Context) (ret *model.GroupConnection, err error) {
+	groups, err := resolver.groupsService.FindAllGroups(ctx)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 

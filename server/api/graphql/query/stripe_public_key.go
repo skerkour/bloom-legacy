@@ -3,18 +3,18 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/config"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/bloom/server/http/httputil"
 )
 
 // StripePublicKey returns the stripe public key. For billing purpose
 func (resolver *Resolver) StripePublicKey(ctx context.Context) (string, error) {
-	currentUser := apiutil.UserFromCtx(ctx)
+	httpCtx := httputil.HTTPCtxFromCtx(ctx)
 
-	if currentUser == nil {
-		return "", gqlerrors.AuthenticationRequired()
+	if httpCtx.AuthenticatedUser == nil {
+		return "", api.NewError(errors.PermissionDenied("Authentication required."))
 	}
 
-	return config.Stripe.PublicKey, nil
+	return resolver.config.Stripe.PublicKey, nil
 }

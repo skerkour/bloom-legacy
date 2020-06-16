@@ -3,21 +3,13 @@ package query
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/server/domain/objects"
 )
 
 // Pull returns the changes from a given state
 func (resolver *Resolver) Pull(ctx context.Context, input model.PullInput) (ret *model.Pull, err error) {
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		err = gqlerrors.AuthenticationRequired()
-		return
-	}
-
 	repositories := []objects.RepositoryPull{}
 	for _, repo := range input.Repositories {
 		repository := objects.RepositoryPull{
@@ -27,10 +19,12 @@ func (resolver *Resolver) Pull(ctx context.Context, input model.PullInput) (ret 
 		repositories = append(repositories, repository)
 	}
 
-	params := objects.PullParams{Repositories: repositories}
-	result, err := objects.Pull(ctx, currentUser, params)
+	params := objects.PullParams{
+		Repositories: repositories,
+	}
+	result, err := resolver.syncService.Pull(ctx, params)
 	if err != nil {
-		err = gqlerrors.New(err)
+		err = api.NewError(err)
 		return
 	}
 

@@ -7,23 +7,23 @@ schema:
   - schema.graphql
 
 exec:
-  filename: server/api/graphql/generated.go
+  filename: api/graphql/generated.go
 
 model:
-  filename: server/api/graphql/model/models_gen.go
+  filename: api/graphql/model/models_gen.go
 
 models:
   ID:
-    model: gitlab.com/bloom42/bloom/server/server/api/graphql/model.ID
+    model: gitlab.com/bloom42/bloom/server/api/graphql/model.ID
   Int64:
-    model: gitlab.com/bloom42/bloom/server/server/api/graphql/model.Int64
+    model: gitlab.com/bloom42/bloom/server/api/graphql/model.Int64
   Bytes:
-    model: gitlab.com/bloom42/bloom/server/server/api/graphql/model.Bytes
+    model: gitlab.com/bloom42/bloom/server/api/graphql/model.Bytes
 
 
 resolver:
-  filename: server/api/graphql/resolver.go
+  filename: api/graphql/resolver.go
   type: Resolver
 
 autobind:
-  - gitlab.com/bloom42/bloom/server/server/api/graphql/model
+  - gitlab.com/bloom42/bloom/server/api/graphql/model

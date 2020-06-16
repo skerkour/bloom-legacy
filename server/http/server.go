@@ -21,11 +21,10 @@ import (
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/sync"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	graphqlapi "gitlab.com/bloom42/bloom/server/server/api/graphql"
+	"gitlab.com/bloom42/bloom/server/server/api/graphql"
 	"gitlab.com/bloom42/bloom/server/server/api/webhook"
 	"gitlab.com/bloom42/gobox/log"
 	"gitlab.com/bloom42/gobox/log/loghttp"
-	"gitlab.com/bloom42/gobox/rz"
 	"golang.org/x/crypto/acme/autocert"
 )
 
@@ -75,13 +74,6 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 		AllowCredentials: false,
 		MaxAge:           CORSMaxAge,
 	})
-	/*
-		router.Use(SetRequestID)
-		router.Use(rzhttp.Handler(log.Logger()))
-		router.Use(injectLoggerMiddleware(log.Logger()))
-		router.Use(middleware.Recoverer)
-		router.Use(middleware.Timeout(30 * time.Second))
-	*/
 	server.router.Use(middleware.Compress(5, "application/*", "text/*", "image/*"))
 	server.router.Use(server.MiddlewareSetRequestID)
 	server.router.Use(loggingMiddleware)
@@ -97,7 +89,13 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 	}
 
 	// setup routes
-	graphqlHandler := handler.NewDefaultServer(graphqlapi.NewExecutableSchema(graphqlapi.New()))
+	graphqlHandler := handler.NewDefaultServer(graphql.NewExecutableSchema(graphq.New(
+		server.config,
+		server.usersService,
+		server.groupsService,
+		server.syncService,
+		server.billingService,
+	)))
 	webhookAPI := webhook.NewAPI(server.billingService)
 
 	server.router.Get("/", IndexHandler)
@@ -164,7 +162,7 @@ func (server *Server) Run() error {
 				httpServerAddress := fmt.Sprintf(":%d", server.config.HTTP.HTTPPort)
 				err := http.ListenAndServe(httpServerAddress, certManager.HTTPHandler(nil))
 				if err != nil {
-					log.Fatal("http.Run: listening HTTP", log.Err("error", err))
+					server.logger.Fatal("http.Run: listening HTTP", log.Err("error", err))
 				}
 			}()
 			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
@@ -172,7 +170,7 @@ func (server *Server) Run() error {
 			err = server.ListenAndServe()
 		}
 		if err != nil {
-			log.Fatal("http.Run: listening", rz.Err(err))
+			server.logger.Fatal("http.Run: listening", log.Err("error", err))
 		}
 	}()
 
@@ -184,15 +182,15 @@ func (server *Server) Run() error {
 		syscall.SIGTERM,
 		syscall.SIGQUIT)
 	sig := <-signalCatcher
-	log.Info("http.Run: Server is shutting down", log.String("reason", sig.String()))
+	server.logger.Info("http.Run: Server is shutting down", log.String("reason", sig.String()))
 
 	ctx, cancel := context.WithTimeout(context.Background(), 30*time.Second)
 	defer cancel()
 
 	server.httpServer.SetKeepAlivesEnabled(false)
 	if err := server.httpServer.Shutdown(ctx); err != nil {
-		log.Fatal("http.Run: Could not gracefuly shutdown the server", log.Err("error", err))
+		server.logger.Fatal("http.Run: Could not gracefuly shutdown the server", log.Err("error", err))
 	}
-	log.Info("http.Run: Server stopped")
+	server.logger.Info("http.Run: Server stopped")
 	return nil
 }

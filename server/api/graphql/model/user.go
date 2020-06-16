@@ -49,7 +49,7 @@ func DomainUserToModelUser(actor users.User, user users.User) User {
 	}
 
 	// if same user or admin
-	if actor != nil && (actor.IsAdmin || actor.ID == user.ID) {
+	if actor.IsAdmin || actor.ID == user.ID) {
 		ret.ID = &user.ID
 		ret.FirstName = &user.FirstName
 		ret.LastName = &user.LastName
@@ -57,19 +57,21 @@ func DomainUserToModelUser(actor users.User, user users.User) User {
 		ret.IsAdmin = user.IsAdmin
 		ret.Email = &user.Email
 		ret.DisabledAt = user.DisabledAt
+
+		// only if same user
+		if actor.ID == user.ID {
+			var state string
+
+			ret.EncryptedMasterKey = user.EncryptedMasterKey
+			ret.MasterKeyNonce = user.MasterKeyNonce
+			ret.EncryptedPrivateKey = user.EncryptedPrivateKey
+			ret.PrivateKeyNonce = user.PrivateKeyNonce
+			state = objects.EncodeState(user.State)
+			ret.State = &state
+		}
 	}
 
-	// only if same user
-	if actor != nil && actor.ID == user.ID {
-		var state string
 
-		ret.EncryptedMasterKey = user.EncryptedMasterKey
-		ret.MasterKeyNonce = user.MasterKeyNonce
-		ret.EncryptedPrivateKey = user.EncryptedPrivateKey
-		ret.PrivateKeyNonce = user.PrivateKeyNonce
-		state = objects.EncodeState(user.State)
-		ret.State = &state
-	}
 
 	return ret
 }
