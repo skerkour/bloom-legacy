@@ -8,17 +8,7 @@ import (
 
 	"gitlab.com/bloom42/bloom/server/server/db"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-// UpdateProfileParams are the parameters for UpdateProfile
-type UpdateProfileParams struct {
-	ID          *uuid.UUID `json:"id"`
-	DisplayName *string    `json:"displayName"`
-	Bio         *string    `json:"bio"`
-	FirstName   *string    `json:"firstName"`
-	LastName    *string    `json:"lastName"`
-}
 
 // UpdateProfile update a user's profile
 func UpdateProfile(ctx context.Context, user *User, params UpdateProfileParams) (*User, error) {

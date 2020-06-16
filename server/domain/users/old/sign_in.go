@@ -8,14 +8,6 @@ import (
 	"gitlab.com/bloom42/gobox/rz"
 )
 
-// SignInParams are the parameters for SignIn
-type SignInParams struct {
-	Username  string
-	AuthKey   []byte
-	Device    SessionDevice
-	IPAddress string
-}
-
 // SignIn is used to sign-in an user
 func SignIn(ctx context.Context, params SignInParams) (user *User, newSession *Session, pendingSession *PendingSession, token string, err error) {
 	logger := rz.FromCtx(ctx)

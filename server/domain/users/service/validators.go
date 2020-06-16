@@ -1,4 +1,4 @@
-package users
+package service
 
 import (
 	"errors"
@@ -7,56 +7,53 @@ import (
 	"strings"
 
 	"github.com/asaskevich/govalidator"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 )
 
-// ValidateFirstName validate a first name
-func ValidateFirstName(firstName string) error {
+func validateFirstName(firstName string) error {
 	firstNameLen := len(firstName)
 
 	if firstNameLen == 0 {
 		return errors.New("first_name cannot be empty")
 	}
 
-	if firstNameLen > FIRST_NAME_MAX_LENGTH {
+	if firstNameLen > users.FirstNameMaxLength {
 		return errors.New("first_name is too long")
 	}
 
 	return nil
 }
 
-// ValidateLastName validates a last name
-func ValidateLastName(lastName string) error {
+func validateLastName(lastName string) error {
 	lastNameLen := len(lastName)
 
 	if lastNameLen == 0 {
 		return errors.New("last_name cannot be empty")
 	}
 
-	if lastNameLen > LAST_NAME_MAX_LENGTH {
+	if lastNameLen > users.LastNameMaxLength {
 		return errors.New("last_name is too long")
 	}
 
 	return nil
 }
 
-// ValidateBio validate a user Bio
-func ValidateBio(bio string) error {
-	if len(bio) > BIO_MAX_LENGTH {
+func validateBio(bio string) error {
+	if len(bio) > users.BioMaxLength {
 		return errors.New("bio is too long")
 	}
 
 	return nil
 }
 
-// ValidateDisplayName validates a displayName
-func ValidateDisplayName(displayName string) error {
+func validateDisplayName(displayName string) error {
 	displayNameLen := len(displayName)
 
 	if displayNameLen == 0 {
 		return errors.New("display_name cannot be empty")
 	}
 
-	if displayNameLen > DISPLAY_NAME_MAX_LENGTH {
+	if displayNameLen > users.DisplayNameMaxLength {
 		return errors.New("display_name is too long")
 	}
 
@@ -120,8 +117,7 @@ pub fn email<S: std::hash::BuildHasher>(
 }
 */
 
-// ValidateEmail validates an email
-func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
+func validateEmail(email string, disposableEmailDomains map[string]bool) error {
 	if !govalidator.IsEmail(email) {
 		return errors.New("email is not valid")
 	}
@@ -130,20 +126,19 @@ func ValidateEmail(email string, disposableEmailDomains map[string]bool) error {
 
 var isAlphaNumeric = regexp.MustCompile(`^[a-z0-9]+$`).MatchString
 
-// ValidateUsername validates an username
-func ValidateUsername(username string) error {
+func validateUsername(username string) error {
 	usernameLength := len(username)
 
 	if usernameLength == 0 {
 		return errors.New("username cannot be empty")
 	}
 
-	if usernameLength < USERNAME_MIN_LENGTH {
-		return fmt.Errorf("username must be longer than %d characters", USERNAME_MIN_LENGTH-1)
+	if usernameLength < users.UsernameMinLength {
+		return fmt.Errorf("username must be longer than %d characters", users.UsernameMinLength-1)
 	}
 
-	if usernameLength > USERNAME_MAX_LENGTH {
-		return fmt.Errorf("username must be longer than %d characters", USERNAME_MAX_LENGTH)
+	if usernameLength > users.UsernameMaxLength {
+		return fmt.Errorf("username must be longer than %d characters", users.UsernameMaxLength)
 	}
 
 	if username != strings.ToLower(username) {

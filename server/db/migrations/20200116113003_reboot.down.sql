@@ -21,7 +21,6 @@ DROP TABLE groups;
 -- ################################################################################################@
 -- Users
 -- ################################################################################################@
-DROP TABLE deleted_usernames;
 DROP TABLE pending_users;
 DROP TABLE pending_sessions;
 DROP TABLE sessions;

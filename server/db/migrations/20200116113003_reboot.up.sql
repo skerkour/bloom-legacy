@@ -75,16 +75,6 @@ CREATE TABLE pending_users (
 );
 
 
-CREATE TABLE deleted_usernames (
-    username TEXT NOT NULL,
-    deleted_at TIMESTAMP WITH TIME ZONE NOT NULL,
-
-    PRIMARY KEY(username)
-);
-CREATE INDEX index_deleted_usernames_on_username ON deleted_usernames (username);
-
-
-
 -- ################################################################################################@
 -- Groups
 -- ################################################################################################@
