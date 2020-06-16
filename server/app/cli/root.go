@@ -11,7 +11,7 @@ func init() {
 	rootCmd.PersistentFlags().StringVarP(&configFileFlag, "config", "c", app.DefaultConfigPath, "Configuration file path")
 
 	rootCmd.AddCommand(versionCmd)
-	rootCmd.AddCommand(runCmd)
+	rootCmd.AddCommand(serverCmd)
 	rootCmd.AddCommand(migrationsCmd)
 }
 

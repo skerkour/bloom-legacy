@@ -39,8 +39,8 @@ type User struct {
 
 // DomainUserToModelUser transform a `users.User` to `model.User` with the good fields, according to
 // actor
-func DomainUserToModelUser(actor *users.User, user *users.User) *User {
-	ret := &User{
+func DomainUserToModelUser(actor users.User, user users.User) User {
+	ret := User{
 		AvatarURL:   nil,
 		Username:    user.Username,
 		DisplayName: user.DisplayName,
@@ -75,7 +75,15 @@ func DomainUserToModelUser(actor *users.User, user *users.User) *User {
 }
 
 // UserResolver is the resolver for the User type
-type UserResolver struct{}
+type UserResolver struct {
+	usersService users.Service
+}
+
+func NewUserResolver(usersService users.Service) *UserResolver {
+	return &UserResolver{
+		usersService: usersService,
+	}
+}
 
 type invit struct {
 	ID                 uuid.UUID `db:"invitation_id"`

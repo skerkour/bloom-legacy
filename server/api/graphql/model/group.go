@@ -22,7 +22,15 @@ type Group struct {
 }
 
 // GroupResolver is the resolver for the Group type
-type GroupResolver struct{}
+type GroupResolver struct {
+	groupsService groups.Service
+}
+
+func NewGroupResolver(groupsService groups.Service) *GroupResolver {
+	return &GroupResolver{
+		groupsService: groupsService,
+	}
+}
 
 // Members returns the members of the group
 func (resolver *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMemberConnection, error) {

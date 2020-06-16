@@ -12,6 +12,10 @@ import (
 // BillingPlanResolver is the resolver for the BillingPlan type
 type BillingPlanResolver struct{}
 
+func NewBillingPlanResolver() *BillingPlanResolver {
+	return &BillingPlanResolver{}
+}
+
 // BillingPlan represents a plan
 type BillingPlan struct {
 	ID          uuid.UUID      `json:"id"`

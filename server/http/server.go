@@ -16,27 +16,58 @@ import (
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
 	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/server/app/config"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	graphqlapi "gitlab.com/bloom42/bloom/server/server/api/graphql"
 	"gitlab.com/bloom42/bloom/server/server/api/webhook"
-	"gitlab.com/bloom42/bloom/server/server/config"
+	"gitlab.com/bloom42/gobox/log"
+	"gitlab.com/bloom42/gobox/log/loghttp"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/rz/log"
-	"gitlab.com/bloom42/gobox/rz/rzhttp"
 	"golang.org/x/crypto/acme/autocert"
 )
 
-// Run run the API server
-func Run() error {
+// Server represents an http server
+type Server struct {
+	usersService   users.Service
+	groupsService  groups.Service
+	syncService    sync.Service
+	billingService billing.Service
+	config         config.Config
+	logger         log.Logger
+	router         *chi.Mux
+	httpServer     http.Server
+}
+
+// NewServer returns a new, configured instance of `Server`
+func NewServer(conf config.Config, logger log.Logger, usersService users.Service, groupsService groups.Service,
+	syncService sync.Service, billingService billing.Service) *Server {
+	server := Server{
+		usersService:   usersService,
+		groupsService:  groupsService,
+		syncService:    syncService,
+		billingService: billingService,
+		config:         conf,
+		logger:         logger,
+		router:         chi.NewRouter(),
+	}
+
+	return &server
+}
+
+// Run run the HTTP server
+func (server *Server) Run() error {
 	var allowedOrigins []string
-	router := chi.NewRouter()
 	var certManager *autocert.Manager
 	var tlsConfig *tls.Config
 	var serverAddress string
 
 	// replace size field name by latency and disable userAgent logging
-	loggingMiddleware := rzhttp.Handler(log.Logger(), rzhttp.Duration("latency"))
+	loggingMiddleware := loghttp.Handler(logger, loghttp.Duration("latency"))
 
-	graphqlHandler := handler.NewDefaultServer(graphqlapi.NewExecutableSchema(graphqlapi.New()))
+	// setup middlewares
 
 	/*
 		router.Use(SetRequestID)
@@ -74,7 +105,10 @@ func Run() error {
 	router.Use(SetContextMiddleware)
 	router.Use(AuthMiddleware)
 
-	// routes
+	// setup routes
+	graphqlHandler := handler.NewDefaultServer(graphqlapi.NewExecutableSchema(graphqlapi.New()))
+	webhookAPI := webhook.NewAPI(server.billingService)
+
 	router.Get("/", IndexHandler)
 	router.Route("/api", func(apiRouter chi.Router) {
 		apiRouter.Get("/", HelloWorlHandler)
@@ -85,13 +119,13 @@ func Run() error {
 		}
 
 		apiRouter.Route("/webhooks", func(webhooksRouter chi.Router) {
-			webhooksRouter.HandleFunc("/stripe", webhook.StripeHandler)
+			webhooksRouter.HandleFunc("/stripe", webhookAPI.StripeHandler)
 		})
 	})
-	router.NotFound(http.HandlerFunc(NotFoundHandler))
+	router.NotFound(http.HandlerFunc(server.HandlerNotFound))
 
 	if config.Server.HTTPSPort != nil {
-		log.Info("HTTPS requested. starting autocert")
+		server.logger.Info("HTTPS requested. starting autocert")
 		certManager = &autocert.Manager{
 			Email:      config.Server.CertsEmail,
 			Prompt:     autocert.AcceptTOS,
@@ -117,7 +151,7 @@ func Run() error {
 		serverAddress = fmt.Sprintf(":%d", config.Server.HTTPPort)
 	}
 
-	server := http.Server{
+	httpServer := http.Server{
 		Addr:         serverAddress,
 		Handler:      router,
 		ReadTimeout:  SERVER_READ_TIMEOUT,
@@ -126,7 +160,7 @@ func Run() error {
 		TLSConfig:    tlsConfig,
 	}
 
-	log.Info("Starting server", rz.Uint16("http_port", config.Server.HTTPPort))
+	server.logger.Info("Starting server", log.Uint16("http_port", config.Server.HTTPPort))
 	go func() {
 		var err error
 		if config.Server.HTTPSPort != nil {
