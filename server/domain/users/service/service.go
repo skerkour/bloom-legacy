@@ -4,6 +4,7 @@ import (
 	"text/template"
 
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/driver"
 )
@@ -11,6 +12,7 @@ import (
 // UsersService is an implementation of `users.Service`
 type UsersService struct {
 	usersRepo             users.Repository
+	bilingService         billing.Service
 	db                    db.DB
 	mailer                driver.Mailer
 	signInEmailTemplate   *template.Template

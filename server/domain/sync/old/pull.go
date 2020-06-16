@@ -11,30 +11,6 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-// PullParams are the parameters for Pull
-type PullParams struct {
-	Repositories []RepositoryPull
-}
-
-type RepositoryPull struct {
-	SinceState    string
-	sinceStateInt int64
-	GroupID       *uuid.UUID
-	group         *groups.Group
-}
-
-type PullResult struct {
-	Repositories []RepositoryPullResult
-}
-
-type RepositoryPullResult struct {
-	OldState       string
-	NewState       string
-	HasMoreChanges bool
-	Objects        []Object
-	GroupID        *uuid.UUID
-}
-
 // Pull is used to pull changes
 func Pull(ctx context.Context, actor *users.User, params PullParams) (ret *PullResult, err error) {
 	ret = &PullResult{Repositories: []RepositoryPullResult{}}

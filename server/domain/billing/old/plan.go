@@ -2,7 +2,6 @@ package billing
 
 import (
 	"context"
-	"time"
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/server/server/db"
@@ -10,20 +9,6 @@ import (
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
-
-type Plan struct {
-	ID        uuid.UUID `json:"id" db:"id"`
-	CreatedAt time.Time `json:"created_at" db:"created_at"`
-	UpdatedAt time.Time `json:"updated_at" db:"updated_at"`
-
-	Name        string `json:"name" db:"name"`
-	StripeID    string `json:"stripe_id" db:"stripe_id"`
-	Price       int64  `json:"price" db:"price"`
-	Description string `json:"description" db:"description"`
-	IsPublic    bool   `json:"is_public" db:"is_public"`
-	Product     string `json:"product" db:"product"`
-	Storage     int64  `json:"storage" db:"storage"`
-}
 
 func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
 	var ret *Plan

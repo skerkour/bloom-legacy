@@ -11,30 +11,7 @@ import (
 	"gitlab.com/bloom42/bloom/server/server/domain/users"
 	"gitlab.com/bloom42/gobox/crypto"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-// PushParams are the parameters for Push
-type PushParams struct {
-	Repositories []RepositoryPush
-}
-
-type RepositoryPush struct {
-	CurrentState   string
-	curentStateInt int64
-	Objects        []APIObject
-	GroupID        *uuid.UUID
-}
-
-type PushResult struct {
-	Repositories []RepositoryPushResult
-}
-
-type RepositoryPushResult struct {
-	OldState string
-	NewState string
-	GroupID  *uuid.UUID
-}
 
 // Push is used to push changes
 func Push(ctx context.Context, actor *users.User, params PushParams) (ret *PushResult, err error) {

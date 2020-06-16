@@ -13,12 +13,6 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-// StartRegistrationParams are parameters for StartRegistration
-type StartRegistrationParams struct {
-	DisplayName string
-	Email       string
-}
-
 // StartRegistration start a registration
 func StartRegistration(ctx context.Context, params StartRegistrationParams) (newPendingUserID uuid.UUID, err error) {
 	logger := rz.FromCtx(ctx)

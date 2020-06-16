@@ -5,21 +5,7 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
 )
-
-// CompleteRegistrationParams are the parameters for CompleteRegistration
-type CompleteRegistrationParams struct {
-	PendingUserID       uuid.UUID
-	Username            string
-	AuthKey             []byte
-	Device              SessionDevice
-	PublicKey           []byte
-	EncryptedPrivateKey []byte
-	PrivateKeyNonce     []byte
-	EncryptedMasterKey  []byte
-	MasterKeyNonce      []byte
-}
 
 // CompleteRegistration is used to complete the registration of an account and create an user
 func CompleteRegistration(ctx context.Context, tx *sqlx.Tx, params CompleteRegistrationParams) (retUser *User, retSession *Session, token string, err error) {
