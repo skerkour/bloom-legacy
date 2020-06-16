@@ -3,17 +3,20 @@ package model
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/api"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // BillingPlanResolver is the resolver for the BillingPlan type
-type BillingPlanResolver struct{}
+type BillingPlanResolver struct {
+	billingService billing.Service
+}
 
-func NewBillingPlanResolver() *BillingPlanResolver {
-	return &BillingPlanResolver{}
+func NewBillingPlanResolver(billingService billing.Service) *BillingPlanResolver {
+	return &BillingPlanResolver{
+		billingService: billingService,
+	}
 }
 
 // BillingPlan represents a plan
@@ -29,21 +32,14 @@ type BillingPlan struct {
 }
 
 // Subscribers is used by admin to get the subscribers of a plan
-func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (*UserConnection, error) {
-	var ret *UserConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil || !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	count, err := billing.GetSubscribersCountForPlanId(ctx, uuid.UUID(plan.ID))
+func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (ret *UserConnection, err error) {
+	count, err := resolver.billingService.SubscribersCountForPlan(ctx, plan.ID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		return ret, api.NewError(err)
 	}
 
 	ret = &UserConnection{
 		TotalCount: count,
 	}
-	return ret, nil
+	return
 }

@@ -4,8 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/objects"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -17,7 +16,7 @@ func (resolver *Resolver) Group(ctx context.Context, groupID uuid.UUID) (ret *mo
 		return
 	}
 
-	state = objects.EncodeState(group.State)
+	state := resolver.syncService.EncodeState(group.State)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,

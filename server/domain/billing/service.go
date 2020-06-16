@@ -18,4 +18,5 @@ type Service interface {
 
 	// Queries
 	FindPlans(ctx context.Context) ([]Plan, error)
+	SubscribersCountForPlan(ctx context.Context, planID uuid.UUID) (int64, error)
 }

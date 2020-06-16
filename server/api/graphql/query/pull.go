@@ -4,22 +4,22 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
-	"gitlab.com/bloom42/bloom/server/server/domain/objects"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/domain/sync"
 )
 
 // Pull returns the changes from a given state
 func (resolver *Resolver) Pull(ctx context.Context, input model.PullInput) (ret *model.Pull, err error) {
-	repositories := []objects.RepositoryPull{}
+	repositories := []sync.RepositoryPull{}
 	for _, repo := range input.Repositories {
-		repository := objects.RepositoryPull{
+		repository := sync.RepositoryPull{
 			SinceState: repo.SinceState,
 			GroupID:    repo.GroupID,
 		}
 		repositories = append(repositories, repository)
 	}
 
-	params := objects.PullParams{
+	params := sync.PullParams{
 		Repositories: repositories,
 	}
 	result, err := resolver.syncService.Pull(ctx, params)

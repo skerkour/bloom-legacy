@@ -3,7 +3,7 @@ package sync
 import (
 	"context"
 
-	groups "gitlab.com/bloom42/bloom/server/domain/groups/old"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -12,7 +12,9 @@ type Service interface {
 	// Commands
 	Pull(ctx context.Context, params PullParams) (ret PullResult, err error)
 	Push(ctx context.Context, params PushParams) (ret PushResult, err error)
+
 	// Queries
+	EncodeState(state int64) string
 }
 
 // PullParams are the parameters for Pull

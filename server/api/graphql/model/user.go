@@ -4,13 +4,13 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/server/db"
-	"gitlab.com/bloom42/bloom/server/server/domain/billing"
-	"gitlab.com/bloom42/bloom/server/server/domain/groups"
-	"gitlab.com/bloom42/bloom/server/server/domain/objects"
-	"gitlab.com/bloom42/bloom/server/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/api/apiutil"
+	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/objects"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
@@ -49,7 +49,7 @@ func DomainUserToModelUser(actor users.User, user users.User) User {
 	}
 
 	// if same user or admin
-	if actor.IsAdmin || actor.ID == user.ID) {
+	if actor.IsAdmin || actor.ID == user.ID {
 		ret.ID = &user.ID
 		ret.FirstName = &user.FirstName
 		ret.LastName = &user.LastName
@@ -70,8 +70,6 @@ func DomainUserToModelUser(actor users.User, user users.User) User {
 			ret.State = &state
 		}
 	}
-
-
 
 	return ret
 }

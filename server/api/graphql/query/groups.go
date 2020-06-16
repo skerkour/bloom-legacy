@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // Groups finds all groups

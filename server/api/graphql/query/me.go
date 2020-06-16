@@ -9,13 +9,13 @@ import (
 
 // Me returns the current user
 func (resolver *Resolver) Me(ctx context.Context) (ret *model.User, err error) {
-	user, err := resolver.usersService.Me(ctx)
+	me, err := resolver.usersService.Me(ctx)
 	if err != nil {
 		err = api.NewError(err)
 		return
 	}
 
-	modeluser := model.DomainUserToModelUser(currentUser, currentUser)
+	modeluser := model.DomainUserToModelUser(me, me)
 	ret = &modeluser
 	return
 }

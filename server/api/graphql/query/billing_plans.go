@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/api"
-	"gitlab.com/bloom42/bloom/server/server/api/graphql/model"
+	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 )
 
 // BillingPlans find all visible billing plans for current user
