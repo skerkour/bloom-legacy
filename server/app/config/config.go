@@ -63,7 +63,7 @@ func Load(configFilePath string) (ret Config, err error) {
 	}
 
 	configData = []byte(os.ExpandEnv(string(configData)))
-	configData = stripeComments(configData)
+	configData = stripComments(configData)
 
 	err = json.Unmarshal(configData, &ret)
 	if err != nil {
@@ -83,7 +83,7 @@ func replaceEnvVars(configFileData string) string {
 	return configFileData
 }
 
-func stripeComments(jsonWithComment string) string {
+func stripComments(jsonWithComment []byte) []byte {
 	re := regexp.MustCompile(`(?m)(\/\/[^"\n]+$)|(^\s+\/\/.*$)`)
-	return re.ReplaceAllString(jsonWithComment, "")
+	return re.ReplaceAll(jsonWithComment, []byte(""))
 }
