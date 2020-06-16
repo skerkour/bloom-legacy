@@ -12,6 +12,7 @@ require (
 	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
+	github.com/jackc/pgx/v4 v4.0.0-pre1.0.20190824185557-6972a5742186
 	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.5.2
 	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
