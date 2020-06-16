@@ -75,12 +75,16 @@ func DomainUserToModelUser(actor users.User, user users.User) *User {
 
 // UserResolver is the resolver for the User type
 type UserResolver struct {
-	usersService users.Service
+	usersService   users.Service
+	groupsService  groups.Service
+	billingService billing.Service
 }
 
-func NewUserResolver(usersService users.Service) *UserResolver {
+func NewUserResolver(usersService users.Service, groupsService groups.Service, billingService billing.Service) *UserResolver {
 	return &UserResolver{
-		usersService: usersService,
+		usersService:   usersService,
+		groupsService:  groupsService,
+		billingService: billingService,
 	}
 }
 

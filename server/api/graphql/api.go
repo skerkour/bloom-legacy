@@ -61,6 +61,8 @@ func (resolver *Resolver) Group() GroupResolver {
 func (resolver *Resolver) User() UserResolver {
 	return model.NewUserResolver(
 		resolver.usersService,
+		resolver.groupsService,
+		resolver.billingService,
 	)
 }
 
