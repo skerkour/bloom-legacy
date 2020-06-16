@@ -16,9 +16,9 @@ type UsersService struct {
 }
 
 // NewUsersService instantiate a new `UsersService`
-func NewUsersService(db db.DB, userRepo users.Repository, billingService billing.Service, mailer driver.Mailer) *UsersService {
+func NewUsersService(db db.DB, usersRepo users.Repository, billingService billing.Service, mailer driver.Mailer) *UsersService {
 	return &UsersService{
-		userRepo:      userRepo,
+		usersRepo:     usersRepo,
 		db:            db,
 		mailer:        mailer,
 		bilingService: billingService,

@@ -152,7 +152,7 @@ func validateUsername(username string) error {
 	if strings.Contains(username, "admin") ||
 		strings.Contains(username, "bloom") ||
 		strings.HasSuffix(username, "bot") ||
-		stringSliceContains(INVALID_USERNAMES, username) {
+		stringSliceContains(users.InvalidUsername, username) {
 		return errors.New("username is not valid")
 	}
 

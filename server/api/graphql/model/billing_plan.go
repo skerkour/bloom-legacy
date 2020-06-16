@@ -35,7 +35,8 @@ type BillingPlan struct {
 func (resolver *BillingPlanResolver) Subscribers(ctx context.Context, plan *BillingPlan) (ret *UserConnection, err error) {
 	count, err := resolver.billingService.SubscribersCountForPlan(ctx, plan.ID)
 	if err != nil {
-		return ret, api.NewError(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &UserConnection{
