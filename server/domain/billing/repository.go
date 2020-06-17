@@ -35,4 +35,5 @@ type Repository interface {
 	FindPaymentMethodsForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) ([]PaymentMethod, error)
 	FindPaymentMethodsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) ([]PaymentMethod, error)
 	GetPaymentMethodsCountForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (int64, error)
+	FindPlanForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (Plan, error)
 }
