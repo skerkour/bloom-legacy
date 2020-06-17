@@ -4,14 +4,11 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
-	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/sync"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -89,48 +86,17 @@ func NewUserResolver(usersService users.Service, groupsService groups.Service, b
 	}
 }
 
-type invit struct {
-	ID                 uuid.UUID `db:"invitation_id"`
-	CreatedAt          time.Time `db:"invitation_created_at"`
-	EncryptedMasterKey []byte    `db:"invitation_encrypted_master_key"`
-	EphemeralPublicKey []byte    `db:"invitation_ephemeral_public_key"`
-	Signature          []byte    `db:"invitation_signature"`
-
-	GroupID          uuid.UUID `db:"group_id"`
-	GroupCreatedAt   time.Time `db:"group_created_at"`
-	GroupName        string    `db:"group_name"`
-	GroupDescription string    `db:"group_description"`
-
-	InviterUsername    string `db:"inviter_username"`
-	InviterDisplayName string `db:"inviter_display_name"`
-	InviterPublicKey   []byte `db:"inviter_public_key"`
-}
-
 // GroupInvitations returns the invitations for the user
-func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) (*GroupInvitationConnection, error) {
-	var ret *GroupInvitationConnection
-	logger := rz.FromCtx(ctx)
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) (ret *GroupInvitationConnection, err error) {
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	invitations := []invit{}
-	err := db.DB.Select(&invitations, `SELECT invit.id AS invitation_id, invit.created_at AS invitation_created_at,
-		invit.encrypted_master_key AS invitation_encrypted_master_key,
-		invit.ephemeral_public_key AS invitation_ephemeral_public_key, invit.signature AS invitation_signature,
-		groups.id AS group_id, groups.created_at AS group_created_at, groups.name AS group_name, groups.description AS group_description,
-			users.username AS inviter_username, users.display_name AS inviter_display_name, users.public_key AS inviter_public_key
-			FROM groups_invitations AS invit, groups, users
-			WHERE invit.group_id = groups.id AND invit.invitee_id = $1 AND users.id = invit.inviter_id`, user.ID)
+	invitations, err := resolver.groupsService.FindInvitationsForUser(ctx, *user.ID)
 	if err != nil {
-		logger.Error("groups.ListGroups: fetching invitations", rz.Err(err))
-		return ret, gqlerrors.Internal()
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &GroupInvitationConnection{
@@ -161,23 +127,16 @@ func (resolver *UserResolver) GroupInvitations(ctx context.Context, user *User) 
 }
 
 // Groups returns the groups of the user Groups
-func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupConnection, error) {
-	var ret *GroupConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-	logger := rz.FromCtx(ctx)
-
-	if currentUser == nil {
-		return ret, gqlerrors.AuthenticationRequired()
+func (resolver *UserResolver) Groups(ctx context.Context, user *User) (ret *GroupConnection, err error) {
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	groups, err := groups.FindGroupsForUser(ctx, nil, currentUser.ID)
+	groups, err := resolver.groupsService.FindGroupsForUser(ctx, *user.ID)
 	if err != nil {
-		logger.Error("User.groups: fetching groups", rz.Err(err))
-		return ret, gqlerrors.Internal()
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &GroupConnection{
@@ -195,21 +154,20 @@ func (resolver *UserResolver) Groups(ctx context.Context, user *User) (*GroupCon
 		ret.Nodes = append(ret.Nodes, grp)
 	}
 
-	return ret, nil
+	return
 }
 
 // Invoices return the invoices of the user
-func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*InvoiceConnection, error) {
-	var ret *InvoiceConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (ret *InvoiceConnection, err error) {
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	invoices, err := billing.FindInvoicesByUserId(ctx, nil, uuid.UUID(*user.ID).String())
+	invoices, err := resolver.billingService.FindInvoicesForUser(ctx, *user.ID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &InvoiceConnection{
@@ -229,21 +187,20 @@ func (resolver *UserResolver) Invoices(ctx context.Context, user *User) (*Invoic
 		ret.Nodes = append(ret.Nodes, inv)
 	}
 
-	return ret, nil
+	return
 }
 
 // PaymentMethods returns the payment methods of the user
-func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*PaymentMethodConnection, error) {
-	var ret *PaymentMethodConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (ret *PaymentMethodConnection, err error) {
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	paymentMethods, err := billing.FindPaymentMethodsByUserId(ctx, nil, uuid.UUID(*user.ID).String())
+	paymentMethods, err := resolver.billingService.FindPaymentMethodsForUser(ctx, *user.ID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &PaymentMethodConnection{
@@ -267,17 +224,16 @@ func (resolver *UserResolver) PaymentMethods(ctx context.Context, user *User) (*
 }
 
 // Sessions returns the sessions of the user
-func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*SessionConnection, error) {
-	var ret *SessionConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
+func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (ret *SessionConnection, err error) {
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	sessions, err := users.FindAllSessionsForUserID(ctx, nil, *user.ID)
+	sessions, err := resolver.usersService.FindSessionsForUser(ctx, *user.ID)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &SessionConnection{
@@ -302,27 +258,29 @@ func (resolver *UserResolver) Sessions(ctx context.Context, user *User) (*Sessio
 }
 
 // Subscription returns the subscription of the user
-func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*BillingSubscription, error) {
-	var ret *BillingSubscription
-	currentUser := apiutil.UserFromCtx(ctx)
+func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (ret *BillingSubscription, err error) {
 	var stripePlanID *string
 	var stripeCustomerID *string
 	var stripeSubscriptionID *string
 
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
+	if user.ID == nil {
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	customer, err := billing.FindCustomerByUserId(ctx, nil, *user.ID, false)
+	me, err := resolver.usersService.Me(ctx)
 	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-	plan, err := billing.FindPlanForCustomer(ctx, customer)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
-	if currentUser.IsAdmin {
+	customer, plan, err := resolver.billingService.SubscriptionForUser(ctx, *user.ID)
+	if err != nil {
+		err = api.NewError(err)
+		return
+	}
+
+	if me.IsAdmin {
 		stripePlanID = &plan.StripeID
 		stripeCustomerID = customer.StripeCustomerID
 		stripeSubscriptionID = customer.StripeSubscriptionID
@@ -344,5 +302,5 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (*Bi
 		StripeCustomerID:     stripeCustomerID,
 		StripeSubscriptionID: stripeSubscriptionID,
 	}
-	return ret, nil
+	return
 }

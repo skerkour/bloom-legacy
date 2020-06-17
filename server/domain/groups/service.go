@@ -20,6 +20,8 @@ type Service interface {
 	// Queries
 	FindAllGroups(ctx context.Context) ([]Group, error)
 	FindGroupById(ctx context.Context, groupID uuid.UUID) (Group, error)
+	FindInvitationsForUser(ctx context.Context, userID uuid.UUID) ([]UserInvitation, error)
+	FindGroupsForUser(ctx context.Context, userID uuid.UUID) ([]Group, error)
 }
 
 type AcceptInvitationParams struct {

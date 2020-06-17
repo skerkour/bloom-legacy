@@ -26,6 +26,7 @@ type Service interface {
 	VerifySessionToken(ctx context.Context, token string) (User, Session, error)
 	Me(ctx context.Context) (User, error)
 	FindUserByUsername(ctx context.Context, username string) (User, error)
+	FindSessionsForUser(ctx context.Context, userID uuid.UUID) ([]Session, error)
 }
 
 // SignInParams are the parameters for SignIn

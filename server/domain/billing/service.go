@@ -26,6 +26,9 @@ type Service interface {
 	// Queries
 	FindPlans(ctx context.Context) ([]Plan, error)
 	SubscribersCountForPlan(ctx context.Context, planID uuid.UUID) (int64, error)
+	FindInvoicesForUser(ctx context.Context, userID uuid.UUID) ([]Invoice, error)
+	FindPaymentMethodsForUser(ctx context.Context, userID uuid.UUID) ([]PaymentMethod, error)
+	SubscriptionForUser(ctx context.Context, userID uuid.UUID) (Customer, Plan, error)
 }
 
 type AddPaymentMethodParams struct {
