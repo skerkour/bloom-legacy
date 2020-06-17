@@ -61,6 +61,8 @@ var serverCmd = &cli.Command{
 		billingService := billingservice.NewBillingService(db)
 		usersService := usersservice.NewUsersService(db, usersRepo, billingService, mailer)
 		groupsService := groupservice.NewGroupsService(db)
+		billingService.InjectUsersService(usersService)
+		billingService.InjectGroupsService(groupsService)
 		syncService := syncservice.NewSyncService(db)
 
 		server := http.NewServer(

@@ -3,6 +3,7 @@ package groups
 import (
 	"context"
 
+	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -27,6 +28,7 @@ type Service interface {
 	GroupMembers(ctx context.Context, groupID uuid.UUID) ([]Member, error)
 	FindInvitationsForGroup(ctx context.Context, groupID uuid.UUID) ([]GroupInvitation, error)
 	Membership(ctx context.Context, groupID uuid.UUID) (Membership, error)
+	CheckUserIsGroupAdmin(ctx context.Context, db db.Queryer, userID, groupID uuid.UUID) error
 }
 
 type AcceptInvitationParams struct {
