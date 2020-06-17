@@ -1,52 +1,51 @@
 package repository
 
-/*
 import (
 	"context"
 
-	"github.com/jmoiron/sqlx"
+	"github.com/gofrs/uuid"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/gobox/rz"
-	"gitlab.com/bloom42/gobox/uuid"
+	"gitlab.com/bloom42/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/gobox/log"
 )
 
-func FindObjectSinceState(ctx context.Context, tx *sqlx.Tx, sinceState int64, userID, groupID *uuid.UUID) ([]Object, error) {
-	logger := rz.FromCtx(ctx)
-	ret := []Object{}
-	var err error
+// FindObjectsSinceState find objects since the given state
+func (repo *SyncRepository) FindObjectsSinceState(ctx context.Context, db db.Queryer, sinceState int64, userID, groupID *uuid.UUID) (ret []sync.Object, err error) {
+	logger := log.FromCtx(ctx)
+	ret = []sync.Object{}
 	var whereID uuid.UUID
 
 	if userID == nil && groupID == nil {
-		logger.Error("objects.FindObjectSinceState: userID and groupID can't be both nil")
-		err = NewError(ErrorInternal)
-		return ret, err
+		errMessage := "user.id and group.id can't be both nil"
+		logger.Warn("sync.FindObjectsSinceState: " + errMessage)
+		err = errors.InvalidArgument(errMessage)
+		return
 	}
 
 	if userID != nil && groupID != nil {
-		logger.Error("objects.FindObjectSinceState: userID and groupID can't be both non nil")
-		err = NewError(ErrorInternal)
-		return ret, err
+		errMessage := "userID and groupID can't be both non null"
+		logger.Warn("sync.FindObjectSinceState: " + errMessage)
+		err = errors.InvalidArgument(errMessage)
+		return
 	}
 
-	queryFind := "SELECT * FROM objects WHERE updated_at_state > $1 AND"
+	query := "SELECT * FROM objects WHERE updated_at_state > $1 AND"
 	if userID != nil {
-		queryFind += " user_id = $2"
+		query += " user_id = $2"
 		whereID = *userID
 	} else {
-		queryFind += " group_id = $2"
+		query += " group_id = $2"
 		whereID = *groupID
 	}
-	if tx == nil {
-		err = db.DB.Select(&ret, queryFind, sinceState, whereID)
-	} else {
-		err = tx.Select(&ret, queryFind, sinceState, whereID)
-	}
+
+	err = db.Select(ctx, &ret, query, sinceState, whereID)
 	if err != nil {
-		logger.Error("objects.FindObjectSinceState: finding objects", rz.Err(err),
-			rz.String("whereID", whereID.String()))
-		return ret, NewError(ErrorInternal)
+		logger := log.FromCtx(ctx)
+		const errMessage = "sync.FindObjectsSinceState: finding objects"
+		logger.Error(errMessage, log.Err("error", err), log.UUID("whereID", whereID), log.String("query", query))
+		err = errors.Internal(errMessage, err)
 	}
 
-	return ret, nil
+	return
 }
-*/

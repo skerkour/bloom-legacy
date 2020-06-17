@@ -1,42 +1,28 @@
 package repository
 
-/*
-
 import (
 	"context"
 	"database/sql"
-	"encoding/base64"
 
-	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/bloom/server/domain/sync"
+	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/gobox/log"
 )
 
-// FindObjectByID finds an object by its id. returns no error but nil if object not found
-func FindObjectByID(ctx context.Context, tx *sqlx.Tx, objectID []byte, forUpdate bool) (ret *Object, err error) {
-	var object Object
-	logger := rz.FromCtx(ctx)
+// FindObjectByID find an object with the given ID. returns an error if nut found
+func (repo *SyncRepository) FindObjectByID(ctx context.Context, db db.Queryer, objectID []byte) (ret sync.Object, err error) {
+	query := "SELECT * FROM objects WHERE id = $1"
+	err = db.Get(ctx, &ret, query, objectID)
 
-	queryFind := "SELECT * FROM objects WHERE id = $1"
-	if forUpdate {
-		queryFind += " FOR UPDATE"
-	}
-	if tx == nil {
-		err = db.DB.Get(&object, queryFind, objectID)
+	if err == sql.ErrNoRows {
+		err = sync.ErrObjectNotFound
 	} else {
-		err = tx.Get(&object, queryFind, objectID)
-	}
-	if err != nil {
-		if err == sql.ErrNoRows {
-			err = nil
-			return
-		}
-		logger.Error("objects.FindObjectByID: finding object", rz.Err(err),
-			rz.String("object.id", base64.StdEncoding.EncodeToString(objectID)))
-		return ret, NewError(ErrorInternal)
+		logger := log.FromCtx(ctx)
+		const errMessage = "sync.FindObjectByID: finding object"
+		logger.Error(errMessage, log.Err("error", err), log.Base64("object.id", objectID))
+		err = errors.Internal(errMessage, err)
 	}
 
-	ret = &object
-	return ret, err
+	return
 }
-*/
