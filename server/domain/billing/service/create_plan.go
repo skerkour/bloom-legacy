@@ -41,7 +41,6 @@ func (service *BillingService) CreatePlan(ctx context.Context, params billing.Cr
 		Description: params.Description,
 		StripeID:    params.StripeID,
 		Price:       stripePlan.Amount,
-		IsPublic:    params.IsPublic,
 		Product:     params.Product,
 		Storage:     params.Storage,
 	}

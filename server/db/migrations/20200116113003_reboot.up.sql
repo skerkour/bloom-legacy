@@ -143,7 +143,6 @@ CREATE TABLE billing_plans (
     price BIGINT NOT NULL,
     description TEXT NOT NULL,
     stripe_id TEXT NOT NULL,
-    is_public BOOLEAN NOT NULL,
     product TEXT NOT NULL,
     storage BIGINT NOT NULL,
 
@@ -153,9 +152,9 @@ CREATE UNIQUE INDEX index_billing_plans_on_stripe_id ON billing_plans (stripe_id
 
 
 INSERT INTO billing_plans
-		(id, created_at, updated_at, name, description, stripe_id, price, is_public, product, storage)
+		(id, created_at, updated_at, name, description, stripe_id, price, product, storage)
 		VALUES ('42fb1c42-caca-418d-81f3-a6313c4a0a42', '2020-02-10T14:33:39+00:00', '2020-02-10T14:33:39+00:00',
-    'Free', '', 'plan_Gck0Zy9Qx5qaGk', 0, true, 'FREE', 1000000000); -- 1GB
+    'Free', '', 'plan_Gck0Zy9Qx5qaGk', 0, 'FREE', 100000000); -- 100MB
 
 
 CREATE TABLE billing_customers (

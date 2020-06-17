@@ -28,4 +28,5 @@ type Repository interface {
 	FindInvoiceByStripeInvoiceID(ctx context.Context, db db.Queryer, stripeInvoiceID string) (Invoice, error)
 	FindCustomerByStripeCustomerID(ctx context.Context, db db.Queryer, stripeCustomerID string) (Customer, error)
 	GetSubscribersCountForPlan(ctx context.Context, db db.Queryer, planID uuid.UUID) (int64, error)
+	FindAllPlans(ctx context.Context, db db.Queryer) ([]Plan, error)
 }

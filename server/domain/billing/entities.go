@@ -15,7 +15,6 @@ type Plan struct {
 	StripeID    string `db:"stripe_id"`
 	Price       int64  `db:"price"`
 	Description string `db:"description"`
-	IsPublic    bool   `db:"is_public"`
 	Product     string `db:"product"`
 	Storage     int64  `db:"storage"`
 }
