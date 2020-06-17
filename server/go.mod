@@ -12,13 +12,11 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jackc/pgx/v4 v4.6.0
-	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.5.2 // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/sirupsen/logrus v1.5.0 // indirect
 	github.com/stripe/stripe-go v70.15.0+incompatible
 	github.com/vektah/gqlparser/v2 v2.0.1
-	gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55
 	gitlab.com/bloom42/gobox v0.0.0-20200610073802-24ed0fa2c625
 	golang.org/x/crypto v0.0.0-20200604202706-70a84ac30bf9
 	golang.org/x/net v0.0.0-20200226121028-0de0cce0169b // indirect

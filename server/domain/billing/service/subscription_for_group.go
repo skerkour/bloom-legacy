@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *BillingService) SubscriptionForGroup(ctx context.Context, groupID uuid.UUID) (customer billing.Customer, plan billing.Plan, err error) {
+	return
+}
+
 /*
 
 	var ret *BillingSubscription

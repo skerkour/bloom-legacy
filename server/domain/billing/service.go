@@ -24,7 +24,7 @@ type Service interface {
 	ChangeSubscription(ctx context.Context, params ChangeSubscriptionParams) (Customer, Plan, error)
 
 	// Queries
-	FindPlans(ctx context.Context) ([]Plan, error)
+	FindAllPlans(ctx context.Context) ([]Plan, error)
 	SubscribersCountForPlan(ctx context.Context, planID uuid.UUID) (int64, error)
 	FindInvoicesForUser(ctx context.Context, userID uuid.UUID) ([]Invoice, error)
 	FindPaymentMethodsForUser(ctx context.Context, userID uuid.UUID) ([]PaymentMethod, error)

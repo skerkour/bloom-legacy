@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *BillingService) SubscriptionForUser(ctx context.Context, userID uuid.UUID) (customer billing.Customer, plan billing.Plan, err error) {
+	return
+}
+
 /*
 
 currentUser := apiutil.UserFromCtx(ctx)

@@ -58,10 +58,10 @@ var serverCmd = &cli.Command{
 		}
 
 		usersRepo := usersrepository.NewUsersRepository(cache)
-		usersService := usersservice.NewUsersService(db, usersRepo, mailer)
+		billingService := billingservice.NewBillingService(db)
+		usersService := usersservice.NewUsersService(db, usersRepo, billingService, mailer)
 		groupsService := groupservice.NewGroupsService(db)
 		syncService := syncservice.NewSyncService(db)
-		billingService := billingservice.NewBillingService(db)
 
 		server := http.NewServer(
 			conf,

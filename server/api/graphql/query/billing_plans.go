@@ -15,7 +15,7 @@ func (resolver *Resolver) BillingPlans(ctx context.Context) (ret *model.BillingP
 		return
 	}
 
-	plans, err := resolver.billingService.FindPlans(ctx)
+	plans, err := resolver.billingService.FindAllPlans(ctx)
 	if err != nil {
 		err = api.NewError(err)
 		return

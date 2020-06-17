@@ -450,8 +450,6 @@ github.com/yudai/gojsondiff v1.0.0/go.mod h1:AY32+k2cwILAkW1fbgxQ5mUmMiZFgLIV+FB
 github.com/yudai/golcs v0.0.0-20170316035057-ecda9a501e82/go.mod h1:lgjkn3NuSvDfVJdfcVVdX+jpBxNmX4rDAzaS45IcYoM=
 github.com/yudai/pp v2.0.1+incompatible/go.mod h1:PuxR/8QJ7cyCkFp/aUDS+JY727OFEZkTdatxwunjIkc=
 github.com/zenazn/goji v0.9.0/go.mod h1:7S9M489iMyHBNxwZnk9/EHS098H4/F6TATF2mIxtB1Q=
-gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55 h1:RVYsovx2PTIfHpHUsEm9wrS9zNZvuSnHuN0iLQ418EA=
-gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55/go.mod h1:BnoB3kVaI1LganiLWHs4a5xn83auMMQ87Ivzh/LxaPg=
 gitlab.com/bloom42/gobox v0.0.0-20200610073802-24ed0fa2c625 h1:DLume9z73XuyqgaWOasEdiQmfV9WHXsa+J54gp78KH4=
 gitlab.com/bloom42/gobox v0.0.0-20200610073802-24ed0fa2c625/go.mod h1:2IKZ+c2seC+d/Y2S9C8F8DYxCkq3NrxekhC+Y4oae+k=
 gitlab.com/nyarla/go-crypt v0.0.0-20160106005555-d9a5dc2b789b/go.mod h1:T3BPAOm2cqquPa0MKWeNkmOM5RQsRhkrwMWonFMN7fE=

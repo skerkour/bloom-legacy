@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *BillingService) FindInvoicesForGroup(ctx context.Context, groupID uuid.UUID) (ret []billing.Invoice, err error) {
+	return
+}
+
 /*
 	currentUser := apiutil.UserFromCtx(ctx)
 	var err error
@@ -17,4 +28,4 @@ package service
 	if err != nil {
 		return ret, gqlerrors.New(err)
 	}
-	*/
+*/

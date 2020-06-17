@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *BillingService) FindInvoicesForUser(ctx context.Context, userID uuid.UUID) (ret []billing.Invoice, err error) {
+	return
+}
+
 /*
 
 	var ret *InvoiceConnection

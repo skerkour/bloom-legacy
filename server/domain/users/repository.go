@@ -29,7 +29,6 @@ type Repository interface {
 
 	// PendingSession
 	FindPendingSessionByID(ctx context.Context, db db.Queryer, pendingSessionID uuid.UUID) (PendingSession, error)
-	CreatePendingSession(ctx context.Context, db db.Queryer, pendingSession PendingSession) error
 	DeletePendingSession(ctx context.Context, db db.Queryer, pendingSessionID uuid.UUID) error
 	UpdatePendingSession(ctx context.Context, db db.Queryer, pendingSession PendingSession) error
 }
