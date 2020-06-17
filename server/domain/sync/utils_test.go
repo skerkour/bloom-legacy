@@ -1,4 +1,4 @@
-package objects
+package sync
 
 import (
 	"testing"
@@ -20,7 +20,7 @@ func TestEncodeDecodeState(t *testing.T) {
 			t.Error(err)
 		}
 		if decodedState != state {
-			t.Errorf("state != decodedState (%d, %d)", state, decodedState)
+			t.Errorf("state (%d) != decodedState (%d)", state, decodedState)
 		}
 	}
 }

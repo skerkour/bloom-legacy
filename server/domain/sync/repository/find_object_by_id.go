@@ -1,4 +1,6 @@
-package objects
+package repository
+
+/*
 
 import (
 	"context"
@@ -37,3 +39,4 @@ func FindObjectByID(ctx context.Context, tx *sqlx.Tx, objectID []byte, forUpdate
 	ret = &object
 	return ret, err
 }
+*/

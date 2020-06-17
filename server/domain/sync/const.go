@@ -2,5 +2,5 @@ package sync
 
 const (
 	StateInt64    = "0"
-	MaxObjectSize = 100000
+	MaxObjectSize = 100000 // 100KB
 )

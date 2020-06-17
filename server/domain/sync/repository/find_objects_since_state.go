@@ -1,5 +1,6 @@
-package objects
+package repository
 
+/*
 import (
 	"context"
 
@@ -48,3 +49,4 @@ func FindObjectSinceState(ctx context.Context, tx *sqlx.Tx, sinceState int64, us
 
 	return ret, nil
 }
+*/
