@@ -4,30 +4,26 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func (service *BillingService) SubscriptionForUser(ctx context.Context, userID uuid.UUID) (customer billing.Customer, plan billing.Plan, err error) {
+	me, err := service.usersService.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	if me.ID != userID && !me.IsAdmin {
+		err = users.ErrPermissionDenied
+		return
+	}
+
+	customer, err = service.billingRepo.FindCustomerByUserID(ctx, service.db, userID)
+	if err != nil {
+		return
+	}
+
+	plan, err = service.billingRepo.FindPlanForCustomer(ctx, tx, customer.ID)
 	return
 }
-
-/*
-
-currentUser := apiutil.UserFromCtx(ctx)
-	var stripePlanID *string
-	var stripeCustomerID *string
-	var stripeSubscriptionID *string
-
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	customer, err := billing.FindCustomerByUserId(ctx, nil, *user.ID, false)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-	plan, err := billing.FindPlanForCustomer(ctx, customer)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-*/
