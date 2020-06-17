@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *GroupsService) FindInvitationsForUser(ctx context.Context, userID uuid.UUID) (ret []groups.UserInvitation, err error) {
+	return
+}
+
 /*
 
 	logger := rz.FromCtx(ctx)

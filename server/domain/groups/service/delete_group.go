@@ -1,5 +1,15 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *GroupsService) DeleteGroup(ctx context.Context, groupID uuid.UUID) (err error) {
+	return
+}
+
 /*
 
 	if currentUser == nil {
@@ -41,4 +51,4 @@ package service
 		err = gqlerrors.New(groups.NewError(groups.ErrorDeletingGroup))
 		return
 	}
-	*/
+*/

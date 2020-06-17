@@ -1,5 +1,16 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/gobox/uuid"
+)
+
+func (service *GroupsService) FindGroupsForUser(ctx context.Context, userID uuid.UUID) (ret []groups.Group, err error) {
+	return
+}
+
 /*
 	var ret *GroupConnection
 	currentUser := apiutil.UserFromCtx(ctx)

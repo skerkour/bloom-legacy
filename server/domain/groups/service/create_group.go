@@ -1,5 +1,15 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/groups"
+)
+
+func (service *GroupsService) CreateGroup(ctx context.Context, params groups.CreateGroupParams) (ret groups.Group, err error) {
+	return
+}
+
 /*
 	logger := rz.FromCtx(ctx)
 	currentUser := apiutil.UserFromCtx(ctx)
@@ -43,4 +53,4 @@ package service
 		err = gqlerrors.New(groups.NewError(groups.ErrorCreatingGroup))
 		return
 	}
-	*/
+*/
