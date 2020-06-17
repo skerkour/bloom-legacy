@@ -4,9 +4,10 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/db"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 )
 
-func (repo *BillingRepository) CreateCustomer(ctx context.Context, db db.Queryer, customer Customer) (err error) {
+func (repo *BillingRepository) CreateCustomer(ctx context.Context, db db.Queryer, customer billing.Customer) (err error) {
 	return
 }
 

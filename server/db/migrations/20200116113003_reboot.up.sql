@@ -149,6 +149,7 @@ CREATE TABLE billing_plans (
     PRIMARY KEY(id)
 );
 CREATE UNIQUE INDEX index_billing_plans_on_stripe_id ON billing_plans (stripe_id);
+CREATE UNIQUE INDEX index_billing_plans_on_product ON billing_plans (product);
 
 
 INSERT INTO billing_plans
