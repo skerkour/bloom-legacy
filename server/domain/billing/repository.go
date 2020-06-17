@@ -16,6 +16,7 @@ type Repository interface {
 	CreateInvoice(ctx context.Context, db db.Queryer, invoice Invoice) error
 	UpdateInvoice(ctx context.Context, db db.Queryer, invoice Invoice) error
 	CreatePlan(ctx context.Context, db db.Queryer, plan Plan) error
+	DeletePlan(ctx context.Context, db db.Queryer, planID uuid.UUID) error
 
 	FindCustomerByUserID(ctx context.Context, db db.Queryer, userID uuid.UUID) (Customer, error)
 	FindCustomerByGroupID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (Customer, error)
@@ -26,4 +27,5 @@ type Repository interface {
 	FindDefaultPlan(ctx context.Context, db db.Queryer) (Plan, error)
 	FindInvoiceByStripeInvoiceID(ctx context.Context, db db.Queryer, stripeInvoiceID string) (Invoice, error)
 	FindCustomerByStripeCustomerID(ctx context.Context, db db.Queryer, stripeCustomerID string) (Customer, error)
+	GetSubscribersCountForPlan(ctx context.Context, db db.Queryer, planID uuid.UUID) (int64, error)
 }
