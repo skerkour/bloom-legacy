@@ -8,26 +8,16 @@ import (
 )
 
 func (service *BillingService) FindPaymentMethodsForGroup(ctx context.Context, groupID uuid.UUID) (ret []billing.PaymentMethod, err error) {
+	me, err := service.usersService.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	err = service.groupsService.CheckUserIsGroupAdmin(ctx, service.db, me.ID, groupID)
+	if err != nil {
+		return
+	}
+
+	ret, err = service.billingRepo.FindPaymentMethodsForGroup(ctx, service.db, groupID)
 	return
 }
-
-/*
-
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
-	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	paymentMethods, err := billing.FindPaymentMethodsByGroupId(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-
-*/

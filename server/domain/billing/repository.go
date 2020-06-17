@@ -31,4 +31,6 @@ type Repository interface {
 	FindAllPlans(ctx context.Context, db db.Queryer) ([]Plan, error)
 	FindInvoicesForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) ([]Invoice, error)
 	FindInvoicesForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) ([]Invoice, error)
+	FindPaymentMethodsForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) ([]PaymentMethod, error)
+	FindPaymentMethodsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) ([]PaymentMethod, error)
 }

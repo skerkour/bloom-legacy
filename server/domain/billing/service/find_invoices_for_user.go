@@ -19,6 +19,6 @@ func (service *BillingService) FindInvoicesForUser(ctx context.Context, userID u
 		return
 	}
 
-	ret = service.billingRepo.FindInvoicesForUser(ctx, service.db, userID)
+	ret, err = service.billingRepo.FindInvoicesForUser(ctx, service.db, userID)
 	return
 }

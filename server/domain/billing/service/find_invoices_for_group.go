@@ -18,6 +18,6 @@ func (service *BillingService) FindInvoicesForGroup(ctx context.Context, groupID
 		return
 	}
 
-	ret = service.billingRepo.FindInvoicesForGroup(ctx, service.db, groupID)
+	ret, err = service.billingRepo.FindInvoicesForGroup(ctx, service.db, groupID)
 	return
 }
