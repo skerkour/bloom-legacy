@@ -17,6 +17,7 @@ type Repository interface {
 	UpdateInvoice(ctx context.Context, db db.Queryer, invoice Invoice) error
 	CreatePlan(ctx context.Context, db db.Queryer, plan Plan) error
 	DeletePlan(ctx context.Context, db db.Queryer, planID uuid.UUID) error
+	DeletePaymentMethod(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) error
 
 	FindCustomerByUserID(ctx context.Context, db db.Queryer, userID uuid.UUID) (Customer, error)
 	FindCustomerByGroupID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (Customer, error)
@@ -33,4 +34,5 @@ type Repository interface {
 	FindInvoicesForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) ([]Invoice, error)
 	FindPaymentMethodsForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) ([]PaymentMethod, error)
 	FindPaymentMethodsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) ([]PaymentMethod, error)
+	GetPaymentMethodsCountForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (int64, error)
 }
