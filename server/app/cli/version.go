@@ -4,8 +4,8 @@ import (
 	"encoding/json"
 	"fmt"
 
+	"gitlab.com/bloom42/bloom/server/app"
 	"gitlab.com/bloom42/gobox/cli"
-	"gitlab.com/bloom42/megabox/server/app"
 )
 
 type versionJSON struct {

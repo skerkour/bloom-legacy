@@ -12,14 +12,6 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-// CreateGroupParams are parameters required to create a group
-type CreateGroupParams struct {
-	Name               string
-	Description        string
-	EncryptedMasterKey []byte
-	MasterKeyNonce     []byte
-}
-
 // CreateGroup creates a group
 func CreateGroup(ctx context.Context, tx *sqlx.Tx, actor *users.User, params CreateGroupParams) (ret *Group, err error) {
 	logger := rz.FromCtx(ctx)

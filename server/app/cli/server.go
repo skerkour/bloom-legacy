@@ -30,7 +30,7 @@ var serverCmd = &cli.Command{
 		}
 
 		logger := log.GlobalLogger().Clone(
-			log.SetFields(log.String("env", config.Env)),
+			log.SetFields(log.String("env", conf.Env)),
 			log.SetLevel(log.DebugLevel),
 		)
 

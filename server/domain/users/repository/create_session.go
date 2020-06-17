@@ -14,7 +14,7 @@ func (repo *UsersRepository) CreateSession(ctx context.Context, db db.Queryer, s
 	query := `INSERT INTO sessions
 	(id, created_at, updated_at, user_id, hash, device_os, device_type)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
-	_, err = db.Exec(query, session.ID, session.CreatedAt, session.UpdatedAt, session.UserID,
+	_, err := db.Exec(ctx, query, session.ID, session.CreatedAt, session.UpdatedAt, session.UserID,
 		session.Hash, session.DeviceOS, session.DeviceType)
 
 	if err == nil {

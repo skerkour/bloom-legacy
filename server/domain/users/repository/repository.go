@@ -1,7 +1,7 @@
 package repository
 
 import (
-	"gitlab.com/bloom42/megabox/server/driver"
+	"gitlab.com/bloom42/bloom/server/driver"
 )
 
 // UsersRepository is an implementation of `users.Repository`

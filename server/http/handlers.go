@@ -21,7 +21,7 @@ func (server *Server) HandlerNotFound(w http.ResponseWriter, r *http.Request) {
 	server.SendError(w, r, http.StatusNotFound, err)
 }
 
-// HandlerIndex simply redirect to `config.WebsiteUrl`
+// HandlerIndex simply redirect to `config.WebsiteURL`
 func (server *Server) HandlerIndex(w http.ResponseWriter, r *http.Request) {
-	http.Redirect(w, r, server.config.WebsiteUrl, 301)
+	http.Redirect(w, r, server.config.WebsiteURL, 301)
 }

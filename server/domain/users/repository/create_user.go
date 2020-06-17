@@ -16,7 +16,7 @@ func (repo *UsersRepository) CreateUser(ctx context.Context, db db.Queryer, user
 		state, is_admin, auth_key_hash, public_key, encrypted_private_key, private_key_nonce,
 		encrypted_master_key, master_key_nonce)
 	VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15, $16, $17, $18)`
-	_, err = db.Exec(queryCreateUser,
+	_, err := db.Exec(ctx, query,
 		user.ID, user.CreatedAt, user.UpdatedAt, user.DisabledAt, user.Username, user.Email, user.DisplayName,
 		user.Bio, user.FirstName, user.LastName,
 		user.State, user.IsAdmin, user.AuthKeyHash, user.PublicKey, user.EncryptedPrivateKey, user.PrivateKeyNonce,

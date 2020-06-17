@@ -7,8 +7,8 @@ import (
 	// import postgres driver for migration
 	_ "github.com/golang-migrate/migrate/v4/database/postgres"
 	_ "github.com/golang-migrate/migrate/v4/source/file"
+	"gitlab.com/bloom42/bloom/server/app/config"
 	"gitlab.com/bloom42/gobox/cli"
-	"gitlab.com/bloom42/megabox/server/app/config"
 )
 
 var revertAllMigrationsFlag bool

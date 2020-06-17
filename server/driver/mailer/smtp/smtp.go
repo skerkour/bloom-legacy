@@ -3,8 +3,8 @@ package smtp
 import (
 	"context"
 
+	"gitlab.com/bloom42/bloom/server/app/config"
 	"gitlab.com/bloom42/gobox/email"
-	"gitlab.com/bloom42/megabox/server/app/config"
 )
 
 // Mailer implements the `email.Mailer` interface to send emails using SMTP

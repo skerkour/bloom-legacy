@@ -14,7 +14,7 @@ func (repo *UsersRepository) CreatePendingUser(ctx context.Context, db db.Querye
 	query := `INSERT INTO pending_users
 		(id, created_at, updated_at, email, display_name, code_hash, failed_attempts, verified_at)
 		VALUES ($1, $2, $3, $4, $5, $6, $7, $8)`
-	_, err = db.Exec(query, pendingUser.ID, pendingUser.CreatedAt, pendingUser.UpdatedAt, pendingUser.Email,
+	_, err := db.Exec(ctx, query, pendingUser.ID, pendingUser.CreatedAt, pendingUser.UpdatedAt, pendingUser.Email,
 		pendingUser.DisplayName, pendingUser.CodeHash, pendingUser.FailedAttempts, pendingUser.VerifiedAt)
 	if err != nil {
 		logger := log.FromCtx(ctx)

@@ -1,8 +1,8 @@
 package cli
 
 import (
+	"gitlab.com/bloom42/bloom/server/app"
 	"gitlab.com/bloom42/gobox/cli"
-	"gitlab.com/bloom42/megabox/server/app"
 )
 
 var configFileFlag string

@@ -14,12 +14,14 @@ import (
 
 type WebhookAPI struct {
 	billingService billing.Service
+	config         config.Config
 }
 
 // NewAPI returns a new webhook API with the appropriate dependencies
-func NewAPI(billingService billing.Service) WebhookAPI {
+func NewAPI(conf config.Config, billingService billing.Service) WebhookAPI {
 	return WebhookAPI{
 		billingService: billingService,
+		config:         conf,
 	}
 }
 
@@ -38,7 +40,7 @@ func (api *WebhookAPI) StripeHandler(w http.ResponseWriter, req *http.Request) {
 	}
 
 	signature := req.Header.Get("Stripe-Signature")
-	event, err := webhook.ConstructEvent(payload, signature, config.Stripe.WebhookSecret)
+	event, err := webhook.ConstructEvent(payload, signature, api.config.Stripe.WebhookSecret)
 	if err != nil {
 		logger.Error("webhook.StripeHandler: Failed to verify webhook secret", log.Err("error", err))
 		w.WriteHeader(http.StatusBadRequest)
@@ -73,7 +75,7 @@ func (api *WebhookAPI) StripeHandler(w http.ResponseWriter, req *http.Request) {
 			w.WriteHeader(http.StatusBadRequest)
 			return
 		}
-		err = api.billingService.PaymentFailed(ctx, &invoice)
+		err = api.billingService.PaymentFailed(ctx, invoice)
 	default:
 		logger.Info("No action for stripe event", log.String("type", event.Type))
 		w.WriteHeader(http.StatusOK)

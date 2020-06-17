@@ -8,4 +8,5 @@ var (
 	ErrAuthenticationRequired = errors.AuthenticationRequired("Permission denied: authentication required")
 	ErrMustNotBeAuthenticated = errors.PermissionDenied("Permission denied: must not be authenticated")
 	ErrPermissionDenied       = errors.PermissionDenied("Permission denied")
+	ErrInvalidSession         = errors.PermissionDenied("Session is not valid")
 )

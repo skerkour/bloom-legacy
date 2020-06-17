@@ -6,23 +6,17 @@ require (
 	github.com/99designs/gqlgen v0.11.3
 	github.com/asaskevich/govalidator v0.0.0-20200108200545-475eaeb16496
 	github.com/getsentry/sentry-go v0.6.1
-	github.com/go-chi/chi v4.1.1+incompatible
+	github.com/go-chi/chi v4.1.2+incompatible
 	github.com/go-chi/cors v1.1.1
 	github.com/golang-migrate/migrate/v4 v4.11.0
-	github.com/google/uuid v1.1.1 // indirect
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
-	github.com/jackc/pgx/v4 v4.0.0-pre1.0.20190824185557-6972a5742186
+	github.com/jackc/pgx/v4 v4.6.0
 	github.com/jmoiron/sqlx v1.2.0
-	github.com/lib/pq v1.5.2
-	github.com/mattn/go-sqlite3 v2.0.3+incompatible // indirect
+	github.com/lib/pq v1.5.2 // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
-	github.com/rs/zerolog v1.15.0
 	github.com/sirupsen/logrus v1.5.0 // indirect
-	github.com/spf13/cobra v1.0.0
-	github.com/spf13/pflag v1.0.5 // indirect
 	github.com/stripe/stripe-go v70.15.0+incompatible
-	github.com/vektah/gqlparser v1.3.1
 	github.com/vektah/gqlparser/v2 v2.0.1
 	gitlab.com/bloom42/bloom/common v0.0.0-20200507191022-b05498037a55
 	gitlab.com/bloom42/gobox v0.0.0-20200610073802-24ed0fa2c625

@@ -15,7 +15,6 @@ import (
 	"github.com/go-chi/chi"
 	"github.com/go-chi/chi/middleware"
 	"github.com/go-chi/cors"
-	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/server/api/graphql"
 	"gitlab.com/bloom42/bloom/server/api/webhook"
 	"gitlab.com/bloom42/bloom/server/app/config"
@@ -36,8 +35,8 @@ type Server struct {
 	billingService billing.Service
 	config         config.Config
 	logger         log.Logger
-	router         *chi.Mux
 	httpServer     http.Server
+	certManager    *autocert.Manager
 }
 
 // NewServer returns a new, configured instance of `Server`
@@ -50,19 +49,18 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 		billingService: billingService,
 		config:         conf,
 		logger:         logger,
-		router:         chi.NewRouter(),
 	}
 	var allowedOrigins []string
-	var certManager *autocert.Manager
 	var tlsConfig *tls.Config
 	var serverAddress string
+	router := chi.NewRouter()
 
 	// setup middlewares
 
 	// replace size field name by latency and disable userAgent logging
 	loggingMiddleware := loghttp.Handler(logger, loghttp.Duration("latency"))
 	if server.config.Env == config.EnvProduction {
-		allowedOrigins = []string{"https://*.bloom.sh", config.WebsiteUrl, "https://bloom42.com"}
+		allowedOrigins = []string{"https://*.bloom.sh", server.config.WebsiteURL, "https://bloom42.com"}
 	} else {
 		allowedOrigins = []string{"*"}
 	}
@@ -74,36 +72,36 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 		AllowCredentials: false,
 		MaxAge:           CORSMaxAge,
 	})
-	server.router.Use(middleware.Compress(5, "application/*", "text/*", "image/*"))
-	server.router.Use(server.MiddlewareSetRequestID)
-	server.router.Use(loggingMiddleware)
-	server.router.Use(server.MiddlewareSetLogger)
-	server.router.Use(middleware.Recoverer)
-	server.router.Use(middleware.RedirectSlashes)
-	server.router.Use(server.MiddlewareSetHTTPContext)
-	server.router.Use(server.MiddlewareAuth)
+	router.Use(middleware.Compress(5, "application/*", "text/*", "image/*"))
+	router.Use(server.MiddlewareSetRequestID)
+	router.Use(loggingMiddleware)
+	router.Use(server.MiddlewareSetLogger)
+	router.Use(middleware.Recoverer)
+	router.Use(middleware.RedirectSlashes)
+	router.Use(server.MiddlewareSetHTTPContext)
+	router.Use(server.MiddlewareAuth)
 	// router.Use(middleware.Timeout(60 * time.Second))
-	server.router.Use(cors.Handler)
+	router.Use(cors.Handler)
 	if server.config.Env != config.EnvDevelopment {
-		server.router.Use(server.MiddlewareSetSecurityHeaders)
+		router.Use(server.MiddlewareSetSecurityHeaders)
 	}
 
 	// setup routes
-	graphqlHandler := handler.NewDefaultServer(graphql.NewExecutableSchema(graphq.New(
+	graphqlHandler := handler.NewDefaultServer(graphql.NewExecutableSchema(graphql.NewAPI(
 		server.config,
 		server.usersService,
 		server.groupsService,
 		server.syncService,
 		server.billingService,
 	)))
-	webhookAPI := webhook.NewAPI(server.billingService)
+	webhookAPI := webhook.NewAPI(server.config, server.billingService)
 
-	server.router.Get("/", IndexHandler)
-	server.router.Route("/api", func(apiRouter chi.Router) {
-		apiRouter.Get("/", HelloWorlHandler)
+	router.Get("/", server.HandlerIndex)
+	router.Route("/api", func(apiRouter chi.Router) {
+		apiRouter.Get("/", server.HandlerHelloWorld)
 
 		apiRouter.Mount("/graphql", graphqlHandler)
-		if config.Env == consts.ENV_DEVELOPMENT {
+		if server.config.Env == config.EnvDevelopment {
 			apiRouter.Mount("/graphql/playground", playground.Handler("Bloom", "/api/graphql"))
 		}
 
@@ -111,18 +109,18 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 			webhooksRouter.HandleFunc("/stripe", webhookAPI.StripeHandler)
 		})
 	})
-	server.router.NotFound(http.HandlerFunc(server.HandlerNotFound))
+	router.NotFound(http.HandlerFunc(server.HandlerNotFound))
 
 	if server.config.HTTP.HTTPSPort != nil {
 		server.logger.Info("HTTPS requested. starting autocert")
-		certManager = &autocert.Manager{
-			Email:      server.config.Server.CertsEmail,
+		server.certManager = &autocert.Manager{
+			Email:      server.config.HTTP.CertsEmail,
 			Prompt:     autocert.AcceptTOS,
 			HostPolicy: autocert.HostWhitelist(server.config.HTTP.Domains...),
 			Cache:      autocert.DirCache(server.config.HTTP.CertsDirectory),
 		}
 		tlsConfig = &tls.Config{
-			GetCertificate: certManager.GetCertificate,
+			GetCertificate: server.certManager.GetCertificate,
 			// Only use curves which have assembly implementations
 			CurvePreferences: []tls.CurveID{
 				tls.X25519,
@@ -135,17 +133,17 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 			MinVersion:               tls.VersionTLS13,
 			PreferServerCipherSuites: true,
 		}
-		serverAddress = fmt.Sprintf(":%d", *config.Server.HTTPSPort)
+		serverAddress = fmt.Sprintf(":%d", *server.config.HTTP.HTTPSPort)
 	} else {
-		serverAddress = fmt.Sprintf(":%d", config.Server.HTTPPort)
+		serverAddress = fmt.Sprintf(":%d", server.config.HTTP.Port)
 	}
 
 	server.httpServer = http.Server{
 		Addr:         serverAddress,
 		Handler:      router,
-		ReadTimeout:  SERVER_READ_TIMEOUT,
-		WriteTimeout: SERVER_WRITE_TIMEOUT,
-		IdleTimeout:  SERVER_IDLE_TIMEOUT,
+		ReadTimeout:  ReadTimeout,
+		WriteTimeout: WriteTimeout,
+		IdleTimeout:  IdleTimeout,
 		TLSConfig:    tlsConfig,
 	}
 
@@ -154,20 +152,20 @@ func NewServer(conf config.Config, logger log.Logger, usersService users.Service
 
 // Run run the HTTP server
 func (server *Server) Run() error {
-	server.logger.Info("Starting server", log.Uint16("http_port", server.config.HTTP.HTTPPort))
+	server.logger.Info("Starting server", log.Uint16("http_port", server.config.HTTP.Port))
 	go func() {
 		var err error
 		if server.config.HTTP.HTTPSPort != nil {
 			go func() {
-				httpServerAddress := fmt.Sprintf(":%d", server.config.HTTP.HTTPPort)
-				err := http.ListenAndServe(httpServerAddress, certManager.HTTPHandler(nil))
+				httpServerAddress := fmt.Sprintf(":%d", server.config.HTTP.Port)
+				err := http.ListenAndServe(httpServerAddress, server.certManager.HTTPHandler(nil))
 				if err != nil {
 					server.logger.Fatal("http.Run: listening HTTP", log.Err("error", err))
 				}
 			}()
-			err = server.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
+			err = server.httpServer.ListenAndServeTLS("", "") // Key and cert are coming from Let's Encrypt
 		} else {
-			err = server.ListenAndServe()
+			err = server.httpServer.ListenAndServe()
 		}
 		if err != nil {
 			server.logger.Fatal("http.Run: listening", log.Err("error", err))
