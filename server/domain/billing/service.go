@@ -49,7 +49,7 @@ type CreatePlanParams struct {
 }
 
 type UpdatePlanParams struct {
-	ID       *uuid.UUID
+	ID       uuid.UUID
 	Name     string
 	Product  string
 	StripeID string

@@ -6,12 +6,18 @@ import (
 	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
+	"gitlab.com/bloom42/bloom/server/errors"
 )
 
 // UpdateBillingPlan is used by admons to update a plan
 func (resolver *Resolver) UpdateBillingPlan(ctx context.Context, input model.BillingPlanInput) (ret *model.BillingPlan, err error) {
+	if input.ID == nil {
+		err = api.NewError(errors.InvalidArgument("plan.ID can't be null"))
+		return
+	}
+
 	params := billing.UpdatePlanParams{
-		ID:          input.ID,
+		ID:          *input.ID,
 		Name:        input.Name,
 		Product:     input.Product.String(),
 		StripeID:    input.StripeID,

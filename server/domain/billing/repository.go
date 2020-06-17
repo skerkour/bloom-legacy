@@ -18,6 +18,7 @@ type Repository interface {
 	CreatePlan(ctx context.Context, db db.Queryer, plan Plan) error
 	DeletePlan(ctx context.Context, db db.Queryer, planID uuid.UUID) error
 	DeletePaymentMethod(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) error
+	UpdatePlan(ctx context.Context, db db.Queryer, plan Plan) error
 
 	FindCustomerByUserID(ctx context.Context, db db.Queryer, userID uuid.UUID) (Customer, error)
 	FindCustomerByGroupID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (Customer, error)
