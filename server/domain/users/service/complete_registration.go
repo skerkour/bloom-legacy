@@ -1,5 +1,15 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/users"
+)
+
+func (service *UsersService) CompleteRegistration(ctx context.Context, params users.CompleteRegistrationParams) (user users.User, session users.Session, token string, err error) {
+	return
+}
+
 /*
 
 	logger := rz.FromCtx(ctx)

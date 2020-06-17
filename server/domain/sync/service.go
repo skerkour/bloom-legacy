@@ -10,10 +10,10 @@ import (
 // Service is the application service for the sync subdomain
 type Service interface {
 	// Commands
-	Pull(ctx context.Context, params PullParams) (ret PullResult, err error)
 	Push(ctx context.Context, params PushParams) (ret PushResult, err error)
 
 	// Queries
+	Pull(ctx context.Context, params PullParams) (ret PullResult, err error)
 }
 
 // PullParams are the parameters for Pull

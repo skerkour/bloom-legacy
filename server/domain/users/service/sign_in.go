@@ -1,5 +1,15 @@
 package service
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/domain/users"
+)
+
+func (service *UsersService) SignIn(ctx context.Context, params users.SignInParams) (user users.User, session users.Session, token string, err error) {
+	return
+}
+
 /*
 	if apiCtx == nil {
 		logger.Error("mutation.SignIn: error getting apiCtx from context")
