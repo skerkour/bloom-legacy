@@ -18,4 +18,5 @@ type Repository interface {
 	FindPaymentMethodByID(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) (PaymentMethod, error)
 	FindCustomerByPaymentMethodID(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) (Customer, error)
 	FindDefaultPaymentMethodForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (PaymentMethod, error)
+	FindPlanByID(ctx context.Context, db db.Queryer, planID uuid.UUID) (Plan, error)
 }

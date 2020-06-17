@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 	"strings"
+	"time"
 
 	"github.com/stripe/stripe-go"
 	stripecustomer "github.com/stripe/stripe-go/customer"
@@ -19,6 +20,7 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 		return
 	}
 	logger := log.FromCtx(ctx)
+	now := time.Now().UTC()
 
 	// clean and validate params
 	params.StripeID = strings.TrimSpace(params.StripeID)
