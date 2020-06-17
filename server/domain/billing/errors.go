@@ -15,4 +15,5 @@ var (
 	ErrCantDeletePlanWithSubscribers             = errors.InvalidArgument("Can't delete plan with subscribers. Please change and try again.")
 	ErrRemovingDefaultPaymentMethodOnNonFreePlan = errors.InvalidArgument("Please change your plan to FREE before removeing your payment method.")
 	ErrRemovingDefaultPaymentMethod              = errors.InvalidArgument("Please change your default payment method before removing it.")
+	ErrInvalidCustomerStorage                    = errors.InvalidArgument("Invalid storage amount.")
 )

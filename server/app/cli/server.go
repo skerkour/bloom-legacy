@@ -7,8 +7,11 @@ import (
 	"github.com/stripe/stripe-go"
 	"gitlab.com/bloom42/bloom/server/app/config"
 	"gitlab.com/bloom42/bloom/server/db"
+	billingrepository "gitlab.com/bloom42/bloom/server/domain/billing/repository"
 	billingservice "gitlab.com/bloom42/bloom/server/domain/billing/service"
+	groupsrepository "gitlab.com/bloom42/bloom/server/domain/groups/repository"
 	groupservice "gitlab.com/bloom42/bloom/server/domain/groups/service"
+	syncrepository "gitlab.com/bloom42/bloom/server/domain/sync/repository"
 	syncservice "gitlab.com/bloom42/bloom/server/domain/sync/service"
 	usersrepository "gitlab.com/bloom42/bloom/server/domain/users/repository"
 	usersservice "gitlab.com/bloom42/bloom/server/domain/users/service"
@@ -58,12 +61,17 @@ var serverCmd = &cli.Command{
 		}
 
 		usersRepo := usersrepository.NewUsersRepository(cache)
-		billingService := billingservice.NewBillingService(db)
+		billingRepo := billingrepository.NewBillingRepository()
+		groupsRepo := groupsrepository.NewGroupsRepository()
+		syncRepo := syncrepository.NewSyncRepository()
+
+		billingService := billingservice.NewBillingService(db, billingRepo, mailer)
 		usersService := usersservice.NewUsersService(db, usersRepo, billingService, mailer)
 		groupsService := groupservice.NewGroupsService(db)
 		billingService.InjectUsersService(usersService)
 		billingService.InjectGroupsService(groupsService)
-		syncService := syncservice.NewSyncService(db)
+		syncService := syncservice.NewSyncService(db, usersService, groupsService, syncRepo,
+			groupsRepo, billingRepo, billingService, usersRepo)
 
 		server := http.NewServer(
 			conf,

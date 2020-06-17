@@ -1,5 +1,15 @@
 package repository
 
+import (
+	"context"
+
+	"gitlab.com/bloom42/bloom/server/db"
+)
+
+func (repo *BillingRepository) CreateCustomer(ctx context.Context, db db.Queryer, customer Customer) (err error) {
+	return
+}
+
 /*
 queryCreateCustomer := `INSERT INTO billing_customers
 		(id, created_at, updated_at, plan_id, stripe_customer_id, stripe_subscription_id, email, used_storage, subscription_updated_at, user_id, group_id)

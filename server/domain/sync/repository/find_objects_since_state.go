@@ -3,11 +3,11 @@ package repository
 import (
 	"context"
 
-	"github.com/gofrs/uuid"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/sync"
 	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/gobox/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 // FindObjectsSinceState find objects since the given state
