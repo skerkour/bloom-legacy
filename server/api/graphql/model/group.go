@@ -4,10 +4,10 @@ import (
 	"context"
 	"time"
 
-	"gitlab.com/bloom42/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -23,33 +23,30 @@ type Group struct {
 
 // GroupResolver is the resolver for the Group type
 type GroupResolver struct {
-	groupsService groups.Service
+	groupsService  groups.Service
+	usersService   users.Service
+	billingService billing.Service
 }
 
-func NewGroupResolver(groupsService groups.Service) *GroupResolver {
+func NewGroupResolver(usersService users.Service, groupsService groups.Service, billingService billing.Service) *GroupResolver {
 	return &GroupResolver{
-		groupsService: groupsService,
+		usersService:   usersService,
+		groupsService:  groupsService,
+		billingService: billingService,
 	}
 }
 
 // Members returns the members of the group
-func (resolver *GroupResolver) Members(ctx context.Context, group *Group) (*GroupMemberConnection, error) {
-	var ret *GroupMemberConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) Members(ctx context.Context, group *Group) (ret *GroupMemberConnection, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	members, err := groups.FindGroupMembers(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	members, err := resolver.groupsService.GroupMembers(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &GroupMemberConnection{
@@ -70,27 +67,20 @@ func (resolver *GroupResolver) Members(ctx context.Context, group *Group) (*Grou
 		}
 		ret.Edges = append(ret.Edges, edge)
 	}
-	return ret, nil
+	return
 }
 
 // Invitations returns the pending invitations of the group
-func (resolver *GroupResolver) Invitations(ctx context.Context, group *Group) (*GroupInvitationConnection, error) {
-	var ret *GroupInvitationConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) Invitations(ctx context.Context, group *Group) (ret *GroupInvitationConnection, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	invitations, err := groups.FindGroupInvitations(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	invitations, err := resolver.groupsService.FindInvitationsForGroup(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &GroupInvitationConnection{
@@ -114,37 +104,33 @@ func (resolver *GroupResolver) Invitations(ctx context.Context, group *Group) (*
 		}
 		ret.Nodes = append(ret.Nodes, invit)
 	}
-	return ret, nil
+	return
 }
 
 // Subscription returns the subscription of the group
-func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (*BillingSubscription, error) {
-	var ret *BillingSubscription
-	currentUser := apiutil.UserFromCtx(ctx)
+func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (ret *BillingSubscription, err error) {
 	var stripePlanID *string
 	var stripeCustomerID *string
 	var stripeSubscriptionID *string
-	var err error
 
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	customer, err := billing.FindCustomerByGroupID(ctx, nil, *group.ID, false)
+	me, err := resolver.usersService.Me(ctx)
 	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-	plan, err := billing.FindPlanForCustomer(ctx, customer)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
-	if currentUser.IsAdmin {
+	customer, plan, err := resolver.billingService.SubscriptionForGroup(ctx, *group.ID)
+	if err != nil {
+		err = api.NewError(err)
+		return
+	}
+
+	if me.IsAdmin {
 		stripePlanID = &plan.StripeID
 		stripeCustomerID = customer.StripeCustomerID
 		stripeSubscriptionID = customer.StripeSubscriptionID
@@ -166,27 +152,20 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 			Storage:     plan.Storage,
 		},
 	}
-	return ret, nil
+	return
 }
 
 // Invoices returns the invoices of the group
-func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*InvoiceConnection, error) {
-	var ret *InvoiceConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (ret *InvoiceConnection, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	invoices, err := billing.FindInvoicesByGroupId(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	invoices, err := resolver.billingService.FindInvoicesForGroup(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &InvoiceConnection{
@@ -210,23 +189,16 @@ func (resolver *GroupResolver) Invoices(ctx context.Context, group *Group) (*Inv
 }
 
 // PaymentMethods returns the payment methods of the group
-func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group) (*PaymentMethodConnection, error) {
-	var ret *PaymentMethodConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group) (ret *PaymentMethodConnection, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	paymentMethods, err := billing.FindPaymentMethodsByGroupId(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	paymentMethods, err := resolver.billingService.FindPaymentMethodsForGroup(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &PaymentMethodConnection{
@@ -246,51 +218,37 @@ func (resolver *GroupResolver) PaymentMethods(ctx context.Context, group *Group)
 		ret.Nodes = append(ret.Nodes, method)
 	}
 
-	return ret, nil
+	return
 }
 
-func (resolver *GroupResolver) EncryptedMasterKey(ctx context.Context, group *Group) (*[]byte, error) {
-	var ret *[]byte
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) EncryptedMasterKey(ctx context.Context, group *Group) (ret *[]byte, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	membership, err := groups.FindGroupMasterKey(ctx, nil, *group.ID, currentUser.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	membership, err := resolver.groupsService.Membership(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &membership.EncryptedMasterKey
-	return ret, nil
+	return
 }
 
-func (resolver *GroupResolver) MasterKeyNonce(ctx context.Context, group *Group) (*[]byte, error) {
-	var ret *[]byte
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
+func (resolver *GroupResolver) MasterKeyNonce(ctx context.Context, group *Group) (ret *[]byte, err error) {
 	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
+		err = api.NewError(users.ErrPermissionDenied)
+		return
 	}
 
-	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	membership, err := groups.FindGroupMasterKey(ctx, nil, *group.ID, currentUser.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
+	membership, err := resolver.groupsService.Membership(ctx, *group.ID)
+	if err == nil {
+		err = api.NewError(err)
+		return
 	}
 
 	ret = &membership.MasterKeyNonce
-	return ret, nil
+	return
 }

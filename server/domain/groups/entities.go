@@ -3,6 +3,7 @@ package groups
 import (
 	"time"
 
+	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
@@ -31,4 +32,36 @@ type UserInvitation struct {
 	InviterUsername    string `db:"inviter_username"`
 	InviterDisplayName string `db:"inviter_display_name"`
 	InviterPublicKey   []byte `db:"inviter_public_key"`
+}
+
+// Member is used to list group members
+type Member struct {
+	users.User
+	Role     string    `db:"role"`
+	JoinedAt time.Time `db:"joined_at"`
+}
+
+type GroupInvitation struct {
+	ID                 uuid.UUID `db:"invitation_id"`
+	CreatedAt          time.Time `db:"invitation_created_at"`
+	GroupID            string    `db:"invitation_group_id"`
+	InviterID          string    `db:"inviter_id"`
+	InviterAvatarID    *string   `db:"inviter_avatar_id"`
+	InviterUsername    string    `db:"inviter_username"`
+	InviterDisplayName string    `db:"inviter_display_name"`
+	InvitedID          string    `db:"invitee_id"`
+	InviteeAvatarID    *string   `db:"invitee_avatar_id"`
+	InviteeUsername    string    `db:"invitee_username"`
+	InviteeDisplayName string    `db:"invitee_display_name"`
+}
+
+// Membership is the Go struct representing the `groups_members` table
+type Membership struct {
+	JoinedAt           time.Time `db:"joined_at"`
+	GroupID            uuid.UUID `db:"group_id"`
+	UserID             uuid.UUID `db:"user_id"`
+	Role               string    `db:"role"`
+	EncryptedMasterKey []byte    `db:"encrypted_master_key"`
+	MasterKeyNonce     []byte    `db:"master_key_nonce"`
+	InviterID          uuid.UUID `db:"inviter_id"`
 }

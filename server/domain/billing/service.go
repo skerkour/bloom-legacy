@@ -29,6 +29,9 @@ type Service interface {
 	FindInvoicesForUser(ctx context.Context, userID uuid.UUID) ([]Invoice, error)
 	FindPaymentMethodsForUser(ctx context.Context, userID uuid.UUID) ([]PaymentMethod, error)
 	SubscriptionForUser(ctx context.Context, userID uuid.UUID) (Customer, Plan, error)
+	SubscriptionForGroup(ctx context.Context, groupID uuid.UUID) (Customer, Plan, error)
+	FindInvoicesForGroup(ctx context.Context, groupID uuid.UUID) ([]Invoice, error)
+	FindPaymentMethodsForGroup(ctx context.Context, groupID uuid.UUID) ([]PaymentMethod, error)
 }
 
 type AddPaymentMethodParams struct {

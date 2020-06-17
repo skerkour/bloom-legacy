@@ -14,7 +14,6 @@ type Service interface {
 	Push(ctx context.Context, params PushParams) (ret PushResult, err error)
 
 	// Queries
-	EncodeState(state int64) string
 }
 
 // PullParams are the parameters for Pull

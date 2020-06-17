@@ -54,7 +54,9 @@ func (resolver *Resolver) Mutation() MutationResolver {
 
 func (resolver *Resolver) Group() GroupResolver {
 	return model.NewGroupResolver(
+		resolver.usersService,
 		resolver.groupsService,
+		resolver.billingService,
 	)
 }
 
