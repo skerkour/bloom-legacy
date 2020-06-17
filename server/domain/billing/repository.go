@@ -12,6 +12,7 @@ type Repository interface {
 	UpdateCustomer(ctx context.Context, db db.Queryer, customer Customer) error
 	CreatePaymentMethod(ctx context.Context, db db.Queryer, paymentMethod PaymentMethod) error
 	UpdatePaymentMethod(ctx context.Context, db db.Queryer, paymentMethod PaymentMethod) error
+	CreateCustomer(ctx context.Context, db db.Queryer, customer Customer) error
 
 	FindCustomerByUserID(ctx context.Context, db db.Queryer, userID uuid.UUID) (Customer, error)
 	FindCustomerByGroupID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (Customer, error)
@@ -19,4 +20,5 @@ type Repository interface {
 	FindCustomerByPaymentMethodID(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) (Customer, error)
 	FindDefaultPaymentMethodForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (PaymentMethod, error)
 	FindPlanByID(ctx context.Context, db db.Queryer, planID uuid.UUID) (Plan, error)
+	FindDefaultPlanBy(ctx context.Context, db db.Queryer) (Plan, error)
 }

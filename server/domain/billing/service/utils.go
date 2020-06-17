@@ -12,6 +12,6 @@ func allowedStorageForProduct(product string) int64 {
 	} else if product == consts.BILLING_PRODUCT_PRO {
 		return 400000000000 // 400GB
 	} else { // FREE
-		return 1000000000 // 1GB
+		return 100000000 // 100MB
 	}
 }

@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
@@ -10,5 +11,25 @@ import (
 )
 
 func (service *BillingService) CreateCustomer(ctx context.Context, db db.Queryer, user users.User, groupID *uuid.UUID) (ret billing.Customer, err error) {
+	defaultPlan, err := service.billingRepo.FindDefaultPlan(ctx, db)
+	if err != nil {
+		return
+	}
+
+	now := time.Now().UTC()
+	ret = Customer{
+		ID:                    uuid.New(),
+		CreatedAt:             now,
+		UpdatedAt:             now,
+		PlanID:                defaultPlan.ID,
+		StripeCustomerID:      nil,
+		StripeSubscriptionID:  nil,
+		Email:                 user.Email,
+		UsedStorage:           0,
+		SubscriptionUpdatedAt: now,
+		UserID:                userID,
+		GroupID:               groupID,
+	}
+	err = service.billingRepo.CreateCustomer(ctx, db, ret)
 	return
 }
