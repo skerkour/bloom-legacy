@@ -113,10 +113,10 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 
 	err = tx.Commit()
 	if err != nil {
+		tx.Rollback()
 		errMessage := "billing.AddPaymentMethod: committing transaction"
 		logger.Error(errMessage, log.Err("error", err))
 		err = errors.Internal(errMessage, err)
-		tx.Rollback()
 		return
 	}
 	return
