@@ -15,6 +15,7 @@ func (service *BillingService) RemovePaymentMethod(ctx context.Context, paymentM
 	if err != nil {
 		return
 	}
+	logger := log.FromCtx(ctx)
 
 	tx, err := service.db.Begin(ctx)
 	if err != nil {
@@ -47,7 +48,7 @@ func (service *BillingService) RemovePaymentMethod(ctx context.Context, paymentM
 		if me.ID != *customer.UserID {
 			tx.Rollback()
 			err = users.ErrPermissionDenied
-			return
+			return err
 		}
 	}
 
@@ -58,21 +59,21 @@ func (service *BillingService) RemovePaymentMethod(ctx context.Context, paymentM
 	}
 
 	if paymentMethod.IsDefault {
-		if existingPaymentMethodsCount == 1 {
+		if customerPaymentMethodsCount == 1 {
 			plan, err := service.billingRepo.FindPlanByID(ctx, tx, customer.PlanID)
 			if err != nil {
 				tx.Rollback()
-				return
+				return err
 			}
-			if plan.Product != "FREE" {
+			if plan.Product != billing.ProductFree {
 				tx.Rollback()
 				err = billing.ErrRemovingDefaultPaymentMethodOnNonFreePlan
-				return
+				return err
 			}
 		} else {
 			tx.Rollback()
 			err = billing.ErrRemovingDefaultPaymentMethod
-			return
+			return err
 		}
 	}
 

@@ -54,7 +54,7 @@ func (service *BillingService) DeletePlan(ctx context.Context, planID uuid.UUID)
 		return
 	}
 
-	err = service.billingRepo.DeletePlan(ctx tx, planID)
+	err = service.billingRepo.DeletePlan(ctx, tx, planID)
 	if err != nil {
 		tx.Rollback()
 		return

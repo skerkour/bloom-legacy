@@ -4,7 +4,7 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/sync"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/errors"
@@ -13,8 +13,8 @@ import (
 )
 
 func (service *SyncService) Push(ctx context.Context, params sync.PushParams) (ret sync.PushResult, err error) {
-	ret = PushResult{
-		Repositories: []RepositoryPushResult{},
+	ret = sync.PushResult{
+		Repositories: []sync.RepositoryPushResult{},
 	}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
@@ -29,7 +29,7 @@ func (service *SyncService) Push(ctx context.Context, params sync.PushParams) (r
 		if err != nil {
 			return
 		}
-		params.Repositories[i].curentStateInt = curentState
+		params.Repositories[i].CurentStateInt = curentState
 	}
 
 	tx, err := service.db.Begin(ctx)
@@ -41,7 +41,7 @@ func (service *SyncService) Push(ctx context.Context, params sync.PushParams) (r
 	}
 
 	for _, repo := range params.Repositories {
-		var result RepositoryPushResult
+		var result sync.RepositoryPushResult
 
 		result, err = service.pushToRepository(ctx, tx, me, repo)
 		if err != nil {
@@ -62,28 +62,26 @@ func (service *SyncService) Push(ctx context.Context, params sync.PushParams) (r
 	return
 }
 
-func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer, actor users.User, repo RepositoryPush) (ret RepositoryPushResult, err error) {
-	newState := repo.curentStateInt + 1
+func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer, actor users.User, repo sync.RepositoryPush) (ret sync.RepositoryPushResult, err error) {
+	newState := repo.CurentStateInt + 1
 	var pushSize int64
-	logger := log.FromCtx(ctx)
+	var customer billing.Customer
 
 	if repo.GroupID != nil {
-		var group *groups.Group
-
-		group, err = service.groupsRepo.FindGroupById(ctx, tx, *repo.GroupID)
+		group, err := service.groupsRepo.FindGroupByID(ctx, db, *repo.GroupID)
 		if err != nil {
-			return
+			return ret, err
 		}
 
 		// check if user is group member
 		err = service.groupsService.CheckUserIsGroupMember(ctx, db, actor.ID, group.ID)
 		if err != nil {
-			return
+			return ret, err
 		}
 
 		customer, err = service.billingRepo.FindCustomerByGroupID(ctx, db, group.ID)
 		if err != nil {
-			return
+			return ret, err
 		}
 
 		// for each object, check if it exists, if yes, if it belongs to group
@@ -93,17 +91,17 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 			// take in account the tag
 			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) > crypto.KeySize256+100 {
 				err = sync.ErrInvalidObjectKeySize
-				return
+				return ret, err
 			}
 			if len(repoObject.Nonce) != 0 && len(repoObject.Nonce) != crypto.AEADNonceSize {
 				err = sync.ErrInvalidObjectNonceSize
-				return
+				return ret, err
 			}
 
 			object, err := service.syncRepo.FindObjectByID(ctx, db, repoObject.ID)
 			if err != nil {
 				if _, ok := err.(*errors.NotFoundError); !ok {
-					return
+					return ret, err
 				}
 			}
 
@@ -121,13 +119,13 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 				pushSize += int64(len(object.EncryptedData))
 				err = service.syncRepo.CreateObject(ctx, db, object)
 				if err != nil {
-					return
+					return ret, err
 				}
 			} else {
 				// check if it belongs to user
 				if object.GroupID == nil || *object.GroupID != *repo.GroupID {
 					err = sync.ErrObjectNotFound
-					return
+					return ret, err
 				}
 
 				// update object
@@ -142,47 +140,47 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 				pushSize += int64(len(object.EncryptedData))
 				err = service.syncRepo.UpdateObject(ctx, db, object)
 				if err != nil {
-					return
+					return ret, err
 				}
 			}
 		}
 		group.State = newState
 		err = service.groupsRepo.UpdateGroup(ctx, db, group)
 		if err != nil {
-			return
+			return ret, err
 		}
-		err = service.billingService.CustomerUpdateUsedStorage(ctx, db, customer, pushSize)
+		_, err = service.billingService.UpdateCustomerUsedStorage(ctx, db, customer, pushSize)
 		if err != nil {
-			return
+			return ret, err
 		}
 
 	} else {
 		// user's repository
-		if actor.State != repo.curentStateInt {
+		if actor.State != repo.CurentStateInt {
 			err = sync.ErrOutOfSync
-			return
+			return ret, err
 		}
 
-		customer, err := service.billingRepo.FindCustomerByUserId(ctx, db, actor.ID)
+		customer, err := service.billingRepo.FindCustomerByUserID(ctx, db, actor.ID)
 		if err != nil {
-			return
+			return ret, err
 		}
 
 		for _, repoObject := range repo.Objects {
 			// take in account the tag
 			if len(repoObject.EncryptedKey) != 0 && len(repoObject.EncryptedKey) > crypto.KeySize256+100 {
 				err = sync.ErrInvalidObjectKeySize
-				return
+				return ret, err
 			}
 			if len(repoObject.Nonce) != 0 && len(repoObject.Nonce) != crypto.AEADNonceSize {
 				err = sync.ErrInvalidObjectNonceSize
-				return
+				return ret, err
 			}
 
 			object, err := service.syncRepo.FindObjectByID(ctx, db, repoObject.ID)
 			if err != nil {
 				if _, ok := err.(*errors.NotFoundError); !ok {
-					return
+					return ret, err
 				}
 			}
 			// object not found
@@ -200,13 +198,13 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 
 				err = service.syncRepo.CreateObject(ctx, db, object)
 				if err != nil {
-					return
+					return ret, err
 				}
 			} else {
 				// check if it belongs to user
 				if object.UserID == nil || *object.UserID != actor.ID {
 					err = sync.ErrObjectNotFound
-					return
+					return ret, err
 				}
 
 				// update object
@@ -222,7 +220,7 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 
 				err = service.syncRepo.UpdateObject(ctx, db, object)
 				if err != nil {
-					return
+					return ret, err
 				}
 			}
 		}
@@ -230,15 +228,15 @@ func (service *SyncService) pushToRepository(ctx context.Context, db db.Queryer,
 		actor.State = newState
 		err = service.usersRepo.UpdateUser(ctx, db, actor)
 		if err != nil {
-			return
+			return ret, err
 		}
-		err = service.billingService.UpdateCustomerUsedStorage(ctx, db, customer, pushSize)
+		_, err = service.billingService.UpdateCustomerUsedStorage(ctx, db, customer, pushSize)
 		if err != nil {
-			return
+			return ret, err
 		}
 	}
 
-	ret.NewState = EncodeState(newState)
+	ret.NewState = sync.EncodeState(newState)
 	ret.OldState = repo.CurrentState
 	ret.GroupID = repo.GroupID
 	return

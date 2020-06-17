@@ -46,7 +46,6 @@ type CreatePlanParams struct {
 	Description string
 	Product     string
 	Storage     int64
-	IsPublic    bool
 }
 
 type UpdatePlanParams struct {
@@ -56,7 +55,6 @@ type UpdatePlanParams struct {
 	StripeID string
 	// HTML description
 	Description string
-	IsPublic    bool
 	Storage     int64
 }
 

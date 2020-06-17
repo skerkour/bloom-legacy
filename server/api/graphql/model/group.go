@@ -146,7 +146,6 @@ func (resolver *GroupResolver) Subscription(ctx context.Context, group *Group) (
 			Price:       plan.Price,
 			Name:        plan.Name,
 			Description: plan.Description,
-			IsPublic:    plan.IsPublic,
 			StripeID:    stripePlanID,
 			Product:     BillingProduct(plan.Product),
 			Storage:     plan.Storage,

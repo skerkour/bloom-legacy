@@ -23,9 +23,9 @@ type PullParams struct {
 
 type RepositoryPull struct {
 	SinceState    string
-	sinceStateInt int64
+	SinceStateInt int64
 	GroupID       *uuid.UUID
-	group         *groups.Group
+	Group         *groups.Group
 }
 
 type PullResult struct {
@@ -47,7 +47,7 @@ type PushParams struct {
 
 type RepositoryPush struct {
 	CurrentState   string
-	curentStateInt int64
+	CurentStateInt int64
 	Objects        []APIObject
 	GroupID        *uuid.UUID
 }

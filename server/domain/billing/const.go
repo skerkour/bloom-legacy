@@ -7,4 +7,9 @@ const (
 
 	PlanNameMaxLength = 15
 	PlanNameMinLength = 3
+
+	ProductFree  = "FREE"
+	ProductLite  = "LITE"
+	ProductPro   = "PRO"
+	ProductUltra = "ULTRA"
 )

@@ -6,18 +6,19 @@ import (
 	"html/template"
 	"net/mail"
 
-	"gitlab.com/bloom42/bloom/cmd/bloom/server/services/notification"
-	"gitlab.com/bloom42/bloom/common/consts"
+	"gitlab.com/bloom42/bloom/server/app/config"
+	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/errors"
+	"gitlab.com/bloom42/gobox/email"
 	"gitlab.com/bloom42/gobox/log"
 )
 
 func allowedStorageForProduct(product string) int64 {
-	if product == consts.BILLING_PRODUCT_ULTRA {
+	if product == billing.ProductUltra {
 		return 100000000000000 // 1TB
-	} else if product == consts.BILLING_PRODUCT_LITE {
+	} else if product == billing.ProductLite {
 		return 100000000000 // 100GB
-	} else if product == consts.BILLING_PRODUCT_PRO {
+	} else if product == billing.ProductPro {
 		return 400000000000 // 400GB
 	} else { // FREE
 		return 100000000 // 100MB
@@ -54,14 +55,18 @@ func (service *BillingService) sendPaymentFailedEmail(ctx context.Context, toAdd
 		return
 	}
 
-	from := &mail.Address{Name: notification.DEFAULT_SENDER_NAME, Address: notification.DEFAULT_SENDER_ADDRESS}
-	to := []*mail.Address{{Name: "", Address: toAddr}}
-	err = notification.SendHTMLEmailWithDefaultTemplate(from, to, subject, content.Bytes())
+	message := email.Email{
+		From:    config.DefaultEmailAddressFrom,
+		To:      []mail.Address{{Name: "", Address: toAddr}},
+		Subject: subject,
+		HTML:    content.Bytes(),
+		Text:    content.Bytes(),
+	}
+	err = service.mailer.Send(ctx, message)
 	if err != nil {
-		errMessage := "billing.sendPaymentFailedEmail: sending email"
-		logger.Error(errMessage, log.Err("error", err))
+		errMessage := "billing.sendPaymentFailedEmail: Sending email"
+		logger.Error(errMessage, log.Err("err", err))
 		err = errors.Internal(errMessage, err)
-		return
 	}
 	return
 }

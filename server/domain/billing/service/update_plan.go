@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	stripeplan "github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/errors"
@@ -20,6 +21,7 @@ func (service *BillingService) UpdatePlan(ctx context.Context, params billing.Up
 		err = users.ErrPermissionDenied
 		return
 	}
+	logger := log.FromCtx(ctx)
 
 	params.Name = strings.TrimSpace(params.Name)
 	params.StripeID = strings.TrimSpace(params.StripeID)
@@ -57,7 +59,6 @@ func (service *BillingService) UpdatePlan(ctx context.Context, params billing.Up
 	plan.Description = params.Description
 	plan.Product = params.Product
 	plan.Price = stripePlan.Amount
-	plan.IsPublic = params.IsPublic
 	plan.StripeID = params.StripeID
 	plan.Storage = params.Storage
 

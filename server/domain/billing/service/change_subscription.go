@@ -38,31 +38,31 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 		if *params.UserID != me.ID && !me.IsAdmin {
 			tx.Rollback()
 			err = users.ErrPermissionDenied
-			return
+			return customer, plan, err
 		}
 		customer, err = service.billingRepo.FindCustomerByUserID(ctx, tx, *params.UserID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return customer, plan, err
 		}
 	} else if params.GroupID != nil {
 		if !me.IsAdmin {
 			err = service.groupsService.CheckUserIsGroupAdmin(ctx, tx, me.ID, *params.GroupID)
 			if err != nil {
 				tx.Rollback()
-				return
+				return customer, plan, err
 			}
 		}
 		customer, err = service.billingRepo.FindCustomerByGroupID(ctx, tx, *params.GroupID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return customer, plan, err
 		}
 	} else {
 		customer, err = service.billingRepo.FindCustomerByUserID(ctx, tx, me.ID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return customer, plan, err
 		}
 	}
 
@@ -71,38 +71,32 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 		errMessage := "billing.ChangeSubscription: stripe customer id is null"
 		logger.Error(errMessage)
 		err = errors.Internal(errMessage, nil)
-		return
+		return customer, plan, err
 	}
 
-	plan, err = service.billingRepo.FindPlanByID(ctx, tx, planId)
+	plan, err = service.billingRepo.FindPlanByID(ctx, tx, params.PlanID)
 	if err != nil {
 		tx.Rollback()
-		return
-	}
-
-	if !me.IsAdmin && !plan.IsPublic {
-		tx.Rollback()
-		err = billing.ErrPlanNotFound
 		return
 	}
 
 	oldPlan, err := service.billingRepo.FindPlanByID(ctx, tx, customer.PlanID)
 	if err != nil {
 		tx.Rollback()
-		return
+		return customer, plan, err
 	}
 
 	// check the ability to change plan (used storage)
-	if newPlan.ID == oldPlan.ID {
+	if plan.ID == oldPlan.ID {
 		tx.Rollback()
 		err = billing.ErrOldPlanIsTheSameAsNewPlan
-		return
+		return customer, plan, err
 	}
-	newAllowedStorage := allowedStorageForProduct(newPlan.Product)
+	newAllowedStorage := allowedStorageForProduct(plan.Product)
 	if customer.UsedStorage > newAllowedStorage {
 		tx.Rollback()
 		err = billing.ErrTooMuchStorageUsedForNewPlan
-		return
+		return customer, plan, err
 	}
 
 	if customer.StripeSubscriptionID == nil {
@@ -111,7 +105,7 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 		firstDayofNextMonth := firstDayOfMonth.AddDate(0, 1, 0)
 		items := []*stripe.SubscriptionItemsParams{
 			{
-				Plan: stripe.String(newPlan.StripeID),
+				Plan: stripe.String(plan.StripeID),
 			},
 		}
 		params := &stripe.SubscriptionParams{
@@ -126,7 +120,7 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 			errMessage := "billing.ChangeSubscription: creating stripe subscription"
 			logger.Error(errMessage, log.Err("error", err))
 			err = errors.Internal(errMessage, err)
-			return
+			return customer, plan, err
 		}
 		customer.StripeSubscriptionID = &stripeSubscription.ID
 	} else {
@@ -137,7 +131,7 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 			errMessage := "billing.ChangeSubscription: fetching stripe subscription"
 			logger.Error(errMessage, log.Err("error", err))
 			err = errors.Internal(errMessage, err)
-			return
+			return customer, plan, err
 		}
 		// currently we choose to create proration, in order to ease comptability, the alternative
 		// is to invocie at each changes
@@ -147,7 +141,7 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 			Items: []*stripe.SubscriptionItemsParams{
 				{
 					ID:   stripe.String(stripeSubscription.Items.Data[0].ID),
-					Plan: stripe.String(newPlan.StripeID),
+					Plan: stripe.String(plan.StripeID),
 				},
 			},
 			BillingCycleAnchorUnchanged: stripe.Bool(true),
@@ -159,12 +153,12 @@ func (service *BillingService) ChangeSubscription(ctx context.Context, params bi
 			errMessage := "billing.ChangeSubscription: updating stripe subscription"
 			logger.Error(errMessage, log.Err("error", err))
 			err = errors.Internal(errMessage, err)
-			return
+			return customer, plan, err
 		}
 	}
 
 	customer.UpdatedAt = now
-	customer.PlanID = newPlan.ID
+	customer.PlanID = plan.ID
 	customer.SubscriptionUpdatedAt = now
 	err = service.billingRepo.UpdateCustomer(ctx, tx, customer)
 	if err != nil {

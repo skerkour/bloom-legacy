@@ -294,7 +294,6 @@ func (resolver *UserResolver) Subscription(ctx context.Context, user *User) (ret
 			Price:       plan.Price,
 			Name:        plan.Name,
 			Description: plan.Description,
-			IsPublic:    plan.IsPublic,
 			StripeID:    stripePlanID,
 			Product:     BillingProduct(plan.Product),
 			Storage:     plan.Storage,

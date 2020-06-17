@@ -7,7 +7,7 @@ import (
 )
 
 func (service *BillingService) FindAllPlans(ctx context.Context) (ret []billing.Plan, err error) {
-	me, err := service.usersService.Me(ctx)
+	_, err = service.usersService.Me(ctx)
 	if err != nil {
 		return
 	}

@@ -15,9 +15,14 @@ func (service *BillingService) CreateCustomer(ctx context.Context, db db.Queryer
 	if err != nil {
 		return
 	}
+	var userID *uuid.UUID
+
+	if groupID == nil {
+		userID = &user.ID
+	}
 
 	now := time.Now().UTC()
-	ret = Customer{
+	ret = billing.Customer{
 		ID:                    uuid.New(),
 		CreatedAt:             now,
 		UpdatedAt:             now,

@@ -16,7 +16,6 @@ func (resolver *Resolver) CreateBillingPlan(ctx context.Context, input model.Bil
 		Description: input.Description,
 		Product:     input.Product.String(),
 		Storage:     input.Storage,
-		IsPublic:    input.IsPublic,
 	}
 	newPlan, err := resolver.billingService.CreatePlan(ctx, params)
 	if err != nil {
@@ -30,7 +29,6 @@ func (resolver *Resolver) CreateBillingPlan(ctx context.Context, input model.Bil
 		Description: newPlan.Description,
 		Product:     model.BillingProduct(newPlan.Product),
 		Price:       newPlan.Price,
-		IsPublic:    newPlan.IsPublic,
 		Storage:     newPlan.Storage,
 		StripeID:    &newPlan.StripeID,
 	}

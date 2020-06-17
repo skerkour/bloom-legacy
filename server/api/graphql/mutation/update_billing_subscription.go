@@ -28,7 +28,6 @@ func (resolver *Resolver) UpdateBillingSubscription(ctx context.Context, input m
 			Description: newPlan.Description,
 			Product:     model.BillingProduct(newPlan.Product),
 			Price:       newPlan.Price,
-			IsPublic:    newPlan.IsPublic,
 			Storage:     newPlan.Storage,
 		},
 		UpdatedAt:   customer.SubscriptionUpdatedAt,

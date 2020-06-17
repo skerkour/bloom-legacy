@@ -45,13 +45,13 @@ func (service *BillingService) ChangeDefaultPaymentMethod(ctx context.Context, p
 	}
 
 	if customer.GroupID != nil {
-		err = service.groupsService.CheckUserIsGroupAdmin(ctx, tx, user.ID, *customer.GroupID)
+		err = service.groupsService.CheckUserIsGroupAdmin(ctx, tx, me.ID, *customer.GroupID)
 		if err != nil {
 			tx.Rollback()
 			return
 		}
 	} else {
-		if user.ID != *customer.UserID {
+		if me.ID != *customer.UserID {
 			tx.Rollback()
 			err = billing.ErrPaymentMethodNotFound
 			return

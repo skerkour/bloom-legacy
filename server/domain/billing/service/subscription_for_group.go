@@ -23,6 +23,6 @@ func (service *BillingService) SubscriptionForGroup(ctx context.Context, groupID
 		return
 	}
 
-	plan, err = service.billingRepo.FindPlanForCustomer(ctx, tx, customer.ID)
+	plan, err = service.billingRepo.FindPlanForCustomer(ctx, service.db, customer.ID)
 	return
 }

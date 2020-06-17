@@ -184,7 +184,6 @@ type BillingPlan {
   name: String!
   """plan's description, in HTML """
   description: String!
-  isPublic: Boolean!
   product: BillingProduct!
   storage: Int64!
   stripeId: String
@@ -430,7 +429,6 @@ input BillingPlanInput {
   stripeId: String!
   """HTML description"""
   description: String!
-  isPublic: Boolean!
   storage: Int64!
 }
 

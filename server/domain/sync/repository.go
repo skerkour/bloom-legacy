@@ -11,7 +11,6 @@ import (
 type Repository interface {
 	DeleteGroupObjects(ctx context.Context, db db.Queryer, groupID uuid.UUID) (err error)
 	CreateObject(ctx context.Context, db db.Queryer, object Object) error
-	CreateObject(ctx context.Context, db db.Queryer, object Object) error
 	UpdateObject(ctx context.Context, db db.Queryer, object Object) error
 
 	FindObjectByID(ctx context.Context, db db.Queryer, objectID []byte) (ret Object, err error)

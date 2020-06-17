@@ -13,7 +13,6 @@ require (
 	github.com/gorilla/websocket v1.4.2 // indirect
 	github.com/hashicorp/golang-lru v0.5.4 // indirect
 	github.com/jackc/pgx/v4 v4.6.0
-	github.com/jmoiron/sqlx v1.2.0
 	github.com/lib/pq v1.5.2 // indirect
 	github.com/mitchellh/mapstructure v1.2.2 // indirect
 	github.com/sirupsen/logrus v1.5.0 // indirect

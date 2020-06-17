@@ -22,7 +22,6 @@ func (resolver *Resolver) UpdateBillingPlan(ctx context.Context, input model.Bil
 		Product:     input.Product.String(),
 		StripeID:    input.StripeID,
 		Description: input.Description,
-		IsPublic:    input.IsPublic,
 		Storage:     input.Storage,
 	}
 	plan, err := resolver.billingService.UpdatePlan(ctx, params)
@@ -37,7 +36,6 @@ func (resolver *Resolver) UpdateBillingPlan(ctx context.Context, input model.Bil
 		Description: plan.Description,
 		Product:     model.BillingProduct(plan.Product),
 		Price:       plan.Price,
-		IsPublic:    plan.IsPublic,
 		Storage:     plan.Storage,
 		StripeID:    &plan.StripeID,
 	}

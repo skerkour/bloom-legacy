@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"strings"
 
-	"gitlab.com/bloom42/bloom/common/consts"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/errors"
 )
@@ -28,11 +27,10 @@ func validatePlanName(name string) error {
 }
 
 func validateProduct(product string) error {
-	if product != consts.BILLING_PRODUCT_FREE && product != consts.BILLING_PRODUCT_LITE &&
-		product != consts.BILLING_PRODUCT_PRO && product != consts.BILLING_PRODUCT_ULTRA {
+	if product != billing.ProductFree && product != billing.ProductLite &&
+		product != billing.ProductPro && product != billing.ProductUltra {
 		return errors.InvalidArgument(fmt.Sprintf("product should be either %s, %s, %s or %s",
-			consts.BILLING_PRODUCT_FREE, consts.BILLING_PRODUCT_LITE,
-			consts.BILLING_PRODUCT_PRO, consts.BILLING_PRODUCT_ULTRA))
+			billing.ProductFree, billing.ProductLite, billing.ProductPro, billing.ProductUltra))
 	}
 
 	return nil

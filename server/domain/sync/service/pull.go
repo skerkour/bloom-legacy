@@ -3,18 +3,18 @@ package service
 import (
 	"context"
 
-	"github.com/gofrs/uuid"
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/domain/sync"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/gobox/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func (service *SyncService) Pull(ctx context.Context, params sync.PullParams) (ret sync.PullResult, err error) {
-	ret = PullResult{
-		Repositories: []RepositoryPullResult{},
+	ret = sync.PullResult{
+		Repositories: []sync.RepositoryPullResult{},
 	}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
@@ -24,14 +24,14 @@ func (service *SyncService) Pull(ctx context.Context, params sync.PullParams) (r
 
 	// clean and validate params
 	for i, repo := range params.Repositories {
-		var sinceStateInt int64
-		sinceStateInt, err = sync.DecodeStateString(repo.SinceState)
+		var SinceStateInt int64
+		SinceStateInt, err = sync.DecodeStateString(repo.SinceState)
 		if err != nil {
 			logger.Warn("sync.Pull: PullError decoding state",
 				log.String("state", repo.SinceState), log.UUID("user.id", me.ID))
 			return
 		}
-		params.Repositories[i].sinceStateInt = sinceStateInt
+		params.Repositories[i].SinceStateInt = SinceStateInt
 	}
 
 	groups, err := service.groupsService.FindGroupsForUser(ctx, me.ID)
@@ -50,7 +50,7 @@ func (service *SyncService) Pull(ctx context.Context, params sync.PullParams) (r
 	}
 
 	for _, repo := range params.Repositories {
-		var result RepositoryPullResult
+		var result sync.RepositoryPullResult
 		result, err = service.pullRepository(ctx, tx, me, repo)
 		if err != nil {
 			tx.Rollback()
@@ -70,45 +70,45 @@ func (service *SyncService) Pull(ctx context.Context, params sync.PullParams) (r
 	return
 }
 
-func (service *SyncService) pullRepository(ctx context.Context, db db.Queryer, actor users.User, repo RepositoryPull) (ret RepositoryPullResult, err error) {
-	ret.Objects = []Object{}
+func (service *SyncService) pullRepository(ctx context.Context, db db.Queryer, actor users.User, repo sync.RepositoryPull) (ret sync.RepositoryPullResult, err error) {
+	ret.Objects = []sync.Object{}
 	ret.OldState = repo.SinceState
 
-	if repo.group != nil {
-		var objects []Object
+	if repo.Group != nil {
+		var objects []sync.Object
 
-		if repo.sinceStateInt == repo.group.State {
-			ret.NewState = sync.EncodeState(repo.group.State)
+		if repo.SinceStateInt == repo.Group.State {
+			ret.NewState = sync.EncodeState(repo.Group.State)
 			return
 		}
-		objects, err = service.syncRepo.FindObjectsSinceState(ctx, db, repo.sinceStateInt, nil, &repo.group.ID)
+		objects, err = service.syncRepo.FindObjectsSinceState(ctx, db, repo.SinceStateInt, nil, &repo.Group.ID)
 		if err != nil {
 			return
 		}
-		ret.NewState = sync.EncodeState(repo.group.State)
+		ret.NewState = sync.EncodeState(repo.Group.State)
 		ret.Objects = objects
 
 	} else {
 		// user's repository
-		var objects []Object
+		var objects []sync.Object
 
-		if repo.sinceStateInt == actor.State {
+		if repo.SinceStateInt == actor.State {
 			ret.NewState = sync.EncodeState(actor.State)
 			return
 		}
 
-		objects, err = FindObjectSinceState(ctx, db, repo.sinceStateInt, &actor.ID, nil)
+		objects, err = service.syncRepo.FindObjectsSinceState(ctx, db, repo.SinceStateInt, &actor.ID, nil)
 		if err != nil {
 			return
 		}
-		ret.NewState = service.syncRepo.EncodeState(actor.State)
+		ret.NewState = sync.EncodeState(actor.State)
 		ret.Objects = objects
 	}
 	return
 }
 
-func cleanPulls(ctx context.Context, userGroups []groups.Group, pulls []RepositoryPull) []RepositoryPull {
-	ret := []RepositoryPull{}
+func cleanPulls(ctx context.Context, userGroups []groups.Group, pulls []sync.RepositoryPull) []sync.RepositoryPull {
+	ret := []sync.RepositoryPull{}
 	nullGroupPassed := false
 	groupsSet := map[uuid.UUID]groups.Group{}
 
@@ -122,7 +122,7 @@ func cleanPulls(ctx context.Context, userGroups []groups.Group, pulls []Reposito
 			group, inUserGroups := groupsSet[*pull.GroupID]
 			if inUserGroups {
 				delete(groupsSet, *pull.GroupID)
-				pull.group = &group
+				pull.Group = &group
 				ret = append(ret, pull)
 			}
 		} else {
@@ -135,18 +135,18 @@ func cleanPulls(ctx context.Context, userGroups []groups.Group, pulls []Reposito
 
 	// all remaining groups
 	for _, group := range groupsSet {
-		pull := RepositoryPull{
+		pull := sync.RepositoryPull{
 			GroupID:       &group.ID,
-			sinceStateInt: 0,
+			SinceStateInt: 0,
 			SinceState:    "",
-			group:         &group,
+			Group:         &group,
 		}
 		ret = append(ret, pull)
 	}
 
 	if !nullGroupPassed {
-		pullMe := RepositoryPull{
-			sinceStateInt: 0,
+		pullMe := sync.RepositoryPull{
+			SinceStateInt: 0,
 			SinceState:    "",
 		}
 		ret = append(ret, pullMe)

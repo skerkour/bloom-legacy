@@ -5,6 +5,7 @@ import (
 	"strings"
 	"time"
 
+	"github.com/stripe/stripe-go/plan"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/log"
@@ -32,8 +33,15 @@ func (service *BillingService) CreatePlan(ctx context.Context, params billing.Cr
 		return
 	}
 
+	stripePlan, err := plan.Get(params.StripeID, nil)
+	if err != nil {
+		logger.Warn("billing.CreatePlan: stripe plan not found", log.String("stripe_plan.id", params.StripeID))
+		err = billing.ErrPlanNotFound
+		return
+	}
+
 	now := time.Now().UTC()
-	ret = Plan{
+	ret = billing.Plan{
 		ID:          uuid.New(),
 		CreatedAt:   now,
 		UpdatedAt:   now,

@@ -21,6 +21,9 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 	}
 	logger := log.FromCtx(ctx)
 	now := time.Now().UTC()
+	var customer billing.Customer
+	var stripeCustomerID string
+	isDefault := false
 
 	// clean and validate params
 	params.StripeID = strings.TrimSpace(params.StripeID)
@@ -42,18 +45,18 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 		err = service.groupsService.CheckUserIsGroupAdmin(ctx, tx, me.ID, *params.GroupID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return ret, err
 		}
 		customer, err = service.billingRepo.FindCustomerByGroupID(ctx, tx, *params.GroupID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return ret, err
 		}
 	} else {
 		customer, err = service.billingRepo.FindCustomerByUserID(ctx, tx, me.ID)
 		if err != nil {
 			tx.Rollback()
-			return
+			return ret, err
 		}
 	}
 
@@ -73,18 +76,18 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 			errMessage := "billing.AddPaymentMethod: creating stripe customer"
 			logger.Error(errMessage, log.Err("error", err))
 			err = errors.Internal(errMessage, err)
-			return
+			return ret, err
 		}
-		stripeCustomerId = stripeCustomer.ID
+		stripeCustomerID = stripeCustomer.ID
 		customer.UpdatedAt = now
-		customer.StripeCustomerID = &stripeCustomerId
+		customer.StripeCustomerID = &stripeCustomerID
 		err = service.billingRepo.UpdateCustomer(ctx, tx, customer)
 		if err != nil {
 			tx.Rollback()
-			return
+			return ret, err
 		}
 	} else {
-		stripeCustomerId = *customer.StripeCustomerID
+		stripeCustomerID = *customer.StripeCustomerID
 	}
 
 	stripePaymentMethod, err := paymentmethod.Get(params.StripeID, nil)
@@ -96,7 +99,7 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 		return
 	}
 
-	ret = PaymentMethod{
+	ret = billing.PaymentMethod{
 		ID:                  uuid.New(),
 		CreatedAt:           now,
 		UpdatedAt:           now,
