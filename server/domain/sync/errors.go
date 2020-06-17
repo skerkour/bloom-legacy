@@ -10,4 +10,5 @@ var (
 	ErrObjectNotFound         = errors.NotFound("Object not found")
 	ErrInvalidObjectKeySize   = errors.InvalidArgument("Object's key size is not valid")
 	ErrInvalidObjectNonceSize = errors.InvalidArgument("Object's nonce size is not valid")
+	ErrInvalidState           = errors.InvalidArgument("State is not valid")
 )

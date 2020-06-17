@@ -19,8 +19,12 @@ func DecodeStateString(str string) (state int64, err error) {
 	}
 	decoded, err := base64.StdEncoding.DecodeString(str)
 	if err != nil {
+		err = ErrInvalidState
 		return
 	}
 	state, err = strconv.ParseInt(string(decoded[1:]), 10, 64)
+	if err != nil {
+		err = ErrInvalidState
+	}
 	return
 }

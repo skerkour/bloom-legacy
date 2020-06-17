@@ -29,7 +29,6 @@ func (service *SyncService) Pull(ctx context.Context, params sync.PullParams) (r
 		if err != nil {
 			logger.Warn("sync.Pull: PullError decoding state",
 				log.String("state", repo.SinceState), log.UUID("user.id", me.ID))
-
 			return
 		}
 		params.Repositories[i].sinceStateInt = sinceStateInt
@@ -82,7 +81,7 @@ func (service *SyncService) pullRepository(ctx context.Context, db db.Queryer, a
 			ret.NewState = sync.EncodeState(repo.group.State)
 			return
 		}
-		objects, err = service.syncRepo.FindObjectsSinceState(ctx, tx, repo.sinceStateInt, nil, &repo.group.ID)
+		objects, err = service.syncRepo.FindObjectsSinceState(ctx, db, repo.sinceStateInt, nil, &repo.group.ID)
 		if err != nil {
 			return
 		}
@@ -98,7 +97,7 @@ func (service *SyncService) pullRepository(ctx context.Context, db db.Queryer, a
 			return
 		}
 
-		objects, err = FindObjectSinceState(ctx, tx, repo.sinceStateInt, &actor.ID, nil)
+		objects, err = FindObjectSinceState(ctx, db, repo.sinceStateInt, &actor.ID, nil)
 		if err != nil {
 			return
 		}
