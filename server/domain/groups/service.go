@@ -16,6 +16,8 @@ type Service interface {
 	QuitGroup(ctx context.Context, groupID uuid.UUID) error
 	RemoveMembers(ctx context.Context, params RemoveMembersParams) (Group, error)
 	UpdateGroup(ctx context.Context, params UpdateGroupParams) (Group, error)
+	DeleteGroup(ctx context.Context, groupID uuid.UUID) error
+	CreateGroup(ctx context.Context, params CreateGroupParams) (Group, error)
 
 	// Queries
 	FindAllGroups(ctx context.Context) ([]Group, error)
@@ -51,4 +53,12 @@ type UpdateGroupParams struct {
 	ID          uuid.UUID
 	Name        *string
 	Description *string
+}
+
+// CreateGroupParams are parameters required to create a group
+type CreateGroupParams struct {
+	Name               string
+	Description        string
+	EncryptedMasterKey []byte
+	MasterKeyNonce     []byte
 }

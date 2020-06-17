@@ -3,9 +3,10 @@ package mutation
 import (
 	"context"
 
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/sync"
 )
 
 // AcceptGroupInvitation accepts a group invitaiton
@@ -17,10 +18,11 @@ func (resolver *Resolver) AcceptGroupInvitation(ctx context.Context, input model
 	}
 	group, err := resolver.groupsService.AcceptInvitation(ctx, params)
 	if err != nil {
-		return ret, gqlerrors.New(err)
+		err = api.NewError(err)
+		return
 	}
 
-	state := resolver.syncService.EncodeState(group.State)
+	state := sync.EncodeState(group.State)
 	ret = &model.Group{
 		ID:          &group.ID,
 		CreatedAt:   &group.CreatedAt,

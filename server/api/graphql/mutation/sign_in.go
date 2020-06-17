@@ -2,41 +2,16 @@ package mutation
 
 import (
 	"context"
-	"time"
 
-	"gitlab.com/bloom42/bloom/server/api/apiutil"
-	"gitlab.com/bloom42/bloom/server/api/graphql/gqlerrors"
+	"gitlab.com/bloom42/bloom/server/api"
 	"gitlab.com/bloom42/bloom/server/api/graphql/model"
 	"gitlab.com/bloom42/bloom/server/domain/users"
-	"gitlab.com/bloom42/gobox/crypto"
-	"gitlab.com/bloom42/gobox/rz"
+	"gitlab.com/bloom42/bloom/server/http/httputil"
 )
 
 // SignIn is used to sign-in, or initiate a pending session if 2fa is enabled
-func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *model.SignedIn, err error) {
-	logger := rz.FromCtx(ctx)
-	currentUser := apiutil.UserFromCtx(ctx)
-	apiCtx := apiutil.ApiCtxFromCtx(ctx)
-	var retSession *model.Session
-	var retPendingSession *model.PendingSession
-
-	if apiCtx == nil {
-		logger.Error("mutation.SignIn: error getting apiCtx from context")
-		return ret, gqlerrors.Internal()
-	}
-
-	if currentUser != nil {
-		return ret, gqlerrors.MustNotBeAuthenticated()
-	}
-
-	// sleep to prevent spam and bruteforce
-	sleep, err := crypto.RandInt64(500, 800)
-	if err != nil {
-		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
-		err = gqlerrors.Internal()
-		return
-	}
-	time.Sleep(time.Duration(sleep) * time.Millisecond)
+func (resolver *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *model.SignedIn, err error) {
+	httpCtx := httputil.HTTPCtxFromCtx(ctx)
 
 	params := users.SignInParams{
 		Username: input.Username,
@@ -45,40 +20,24 @@ func (r *Resolver) SignIn(ctx context.Context, input model.SignInInput) (ret *mo
 			OS:   input.Device.Os.String(),
 			Type: input.Device.Type.String(),
 		},
-		IPAddress: apiCtx.IP,
+		IPAddress: httpCtx.IP,
 	}
-	user, newSession, pendingSession, token, err := users.SignIn(ctx, params)
+	user, session, token, err := resolver.usersService.SignIn(ctx, params)
 	if err != nil {
-		err = gqlerrors.New(err)
-		return
-	}
-
-	if newSession != nil {
-		retSession = &model.Session{
-			ID:    newSession.ID,
-			Token: &token,
-			Device: &model.SessionDevice{
-				Os:   model.SessionDeviceOs(newSession.DeviceOS),
-				Type: model.SessionDeviceType(newSession.DeviceType),
-			},
-		}
-	} else if pendingSession != nil {
-		retPendingSession = &model.PendingSession{
-			ID:    pendingSession.ID,
-			Token: token,
-			TwoFa: &model.TwoFa{
-				Method: model.TwoFAMethodTotp,
-			},
-		}
-	} else {
-		err = gqlerrors.Internal()
+		err = api.NewError(err)
 		return
 	}
 
 	ret = &model.SignedIn{
-		Session:        retSession,
-		PendingSession: retPendingSession,
-		Me:             model.DomainUserToModelUser(user, user),
+		Session: &model.Session{
+			ID:    session.ID,
+			Token: &token,
+			Device: &model.SessionDevice{
+				Os:   model.SessionDeviceOs(session.DeviceOS),
+				Type: model.SessionDeviceType(session.DeviceType),
+			},
+		},
+		Me: model.DomainUserToModelUser(user, user),
 	}
 	return
 }
