@@ -13,7 +13,7 @@ func (service *UsersService) VerifySessionToken(ctx context.Context, token strin
 		return
 	}
 
-	session, err = service.userRepo.FindSessionByID(ctx, service.db, sessionID)
+	session, err = service.usersRepo.FindSessionByID(ctx, service.db, sessionID)
 	if err != nil {
 		if _, ok := err.(*errors.NotFoundError); ok {
 			err = users.ErrInvalidSession
@@ -22,12 +22,12 @@ func (service *UsersService) VerifySessionToken(ctx context.Context, token strin
 		return
 	}
 
-	err = verifySessionSecret(ctx, retSession, sessionSecret)
+	err = verifySessionSecret(ctx, session, sessionSecret)
 	if err != nil {
 		return
 	}
 
-	user, err = service.userRepo.FindUserByID(ctx, service.db, retSession.UserID)
+	user, err = service.usersRepo.FindUserByID(ctx, service.db, session.UserID)
 	if err != nil {
 		if _, ok := err.(*errors.NotFoundError); ok {
 			err = users.ErrInvalidSession

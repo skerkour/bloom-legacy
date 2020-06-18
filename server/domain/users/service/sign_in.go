@@ -2,47 +2,48 @@ package service
 
 import (
 	"context"
+	"time"
 
 	"gitlab.com/bloom42/bloom/server/domain/users"
+	"gitlab.com/bloom42/gobox/crypto"
 )
 
 func (service *UsersService) SignIn(ctx context.Context, params users.SignInParams) (user users.User, session users.Session, token string, err error) {
-	return
-}
-
-/*
-	if apiCtx == nil {
-		logger.Error("mutation.SignIn: error getting apiCtx from context")
-		return ret, gqlerrors.Internal()
-	}
-
-	if currentUser != nil {
-		return ret, gqlerrors.MustNotBeAuthenticated()
+	_, err = service.Me(ctx)
+	if err == nil {
+		err = users.ErrMustNotBeAuthenticated
+		return
 	}
 
 	// sleep to prevent spam and bruteforce
 	sleep, err := crypto.RandInt64(500, 800)
 	if err != nil {
-		logger.Error("mutation.SignIn: generating random int", rz.Err(err))
-		err = gqlerrors.Internal()
-		return
+		sleep = 650
+		err = nil
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
 
-	params := users.SignInParams{
-		Username: input.Username,
-		AuthKey:  input.AuthKey,
-		Device: users.SessionDevice{
-			OS:   input.Device.Os.String(),
-			Type: input.Device.Type.String(),
-		},
-		IPAddress: apiCtx.IP,
-	}
-	user, newSession, pendingSession, token, err := users.SignIn(ctx, params)
+	user, err = service.usersRepo.FindUserByUsername(ctx, service.db, params.Username)
 	if err != nil {
-		err = gqlerrors.New(err)
 		return
 	}
 
+	// verify password
+	if !crypto.VerifyPasswordHash(params.AuthKey, user.AuthKeyHash) {
+		err = users.ErrInvalidUsernamePasswordCombination
+		return
+	}
 
-*/
+	session, token, err = newSession(ctx, user.ID, params.Device)
+	if err != nil {
+		return
+	}
+	err = service.usersRepo.CreateSession(ctx, service.db, session)
+	if err != nil {
+		return
+	}
+
+	go service.sendSignInAlertEmail(ctx, user, params.IPAddress)
+
+	return
+}

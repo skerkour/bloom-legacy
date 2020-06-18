@@ -11,22 +11,25 @@ import (
 
 // UsersService is an implementation of `users.Service`
 type UsersService struct {
-	usersRepo             users.Repository
-	bilingService         billing.Service
-	db                    db.DB
-	mailer                driver.Mailer
-	registerEmailTemplate *template.Template
+	usersRepo                users.Repository
+	bilingService            billing.Service
+	db                       db.DB
+	mailer                   driver.Mailer
+	registerEmailTemplate    *template.Template
+	signInAlertEmailTemplate *template.Template
 }
 
 // NewUsersService instantiate a new `UsersService`
 func NewUsersService(db db.DB, usersRepo users.Repository, billingService billing.Service, mailer driver.Mailer) *UsersService {
 	registerEmailTemplate := template.Must(template.New("registerEmailTemplate").Parse(registerEmailTemplate))
+	signInAlertEmailTemplate := template.Must(template.New("signInAlertEmailTemplate").Parse(userSignInAlertTemplate))
 
 	return &UsersService{
-		usersRepo:             usersRepo,
-		db:                    db,
-		mailer:                mailer,
-		bilingService:         billingService,
-		registerEmailTemplate: registerEmailTemplate,
+		usersRepo:                usersRepo,
+		db:                       db,
+		mailer:                   mailer,
+		bilingService:            billingService,
+		registerEmailTemplate:    registerEmailTemplate,
+		signInAlertEmailTemplate: signInAlertEmailTemplate,
 	}
 }
