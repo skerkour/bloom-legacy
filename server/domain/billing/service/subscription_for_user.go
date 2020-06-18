@@ -24,6 +24,6 @@ func (service *BillingService) SubscriptionForUser(ctx context.Context, userID u
 		return
 	}
 
-	plan, err = service.billingRepo.FindPlanForCustomer(ctx, service.db, customer.ID)
+	plan, err = service.billingRepo.FindPlanByID(ctx, service.db, customer.PlanID)
 	return
 }
