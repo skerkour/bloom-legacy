@@ -17,7 +17,7 @@ func (repo *UsersRepository) DeleteAllSessionsForUser(ctx context.Context, db db
 
 	query := "DELETE FROM sessions WHERE user_id = $1"
 
-	_, err := db.Exec(ctx, query, userID)
+	_, err = db.Exec(ctx, query, userID)
 	if err == nil {
 		for _, session := range sessions {
 			repo.cache.Delete(getSessionCacheKey(session.ID))

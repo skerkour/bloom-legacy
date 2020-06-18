@@ -14,11 +14,11 @@ func (repo *UsersRepository) FindAllSessionsForUser(ctx context.Context, db db.Q
 	ret = []users.Session{}
 	query := "SELECT * FROM sessions WHERE user_id = $1 ORDER BY created_at"
 
-	err = db.Select(ctx, &ret, query)
+	err = db.Select(ctx, &ret, query, userID)
 	if err != nil {
 		logger := log.FromCtx(ctx)
 		const errMessage = "groups.FindAllSessionsForUser: finding sessions"
-		logger.Error(errMessage, log.Err("error", err))
+		logger.Error(errMessage, log.Err("error", err), log.UUID("user.id", userID))
 		err = errors.Internal(errMessage, err)
 	}
 	return
