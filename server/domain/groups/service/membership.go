@@ -8,25 +8,11 @@ import (
 )
 
 func (service *GroupsService) Membership(ctx context.Context, groupID uuid.UUID) (ret groups.Membership, err error) {
+	me, err := service.usersService.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	ret, err = service.groupsRepo.FindMembershipForUser(ctx, service.db, me.ID, groupID)
 	return
 }
-
-/*
-
-	currentUser := apiutil.UserFromCtx(ctx)
-	var err error
-
-	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	membership, err := groups.FindGroupMasterKey(ctx, nil, *group.ID, currentUser.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-*/
