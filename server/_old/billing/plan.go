@@ -9,42 +9,6 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (*Plan, error) {
-	var ret *Plan
-	var plan Plan
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1 AND is_public = true"
-	err = tx.Get(&plan, queryFindPlan, planId)
-	if err != nil {
-		logger.Error("billing.FindPublicPlanById: finding plan by id", rz.Err(err),
-			rz.String("plan.id", planId.String()))
-		return ret, NewError(ErrorPlanNotFound)
-	}
-
-	ret = &plan
-	return ret, err
-}
-
-func FindPlanById(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (*Plan, error) {
-	var ret *Plan
-	var plan Plan
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1"
-	err = tx.Get(&plan, queryFindPlan, planId)
-	if err != nil {
-		logger.Error("billing.FindPlanById: finding plan by id", rz.Err(err),
-			rz.String("plan.id", planId.String()))
-		return ret, NewError(ErrorPlanNotFound)
-	}
-
-	ret = &plan
-	return ret, err
-}
-
 func GetSubscribersCountForPlanId(ctx context.Context, planId uuid.UUID) (int64, error) {
 	var ret int64
 	var err error
