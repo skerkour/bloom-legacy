@@ -24,7 +24,6 @@ func FetchPlans() (*model.BillingPlanConnection, error) {
 				name
 				description
 				storage
-				isPublic
 				stripeId
 				subscribers {
 					totalCount

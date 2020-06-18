@@ -23,7 +23,6 @@ func UpdatePlan(input model.BillingPlanInput) (*model.BillingPlan, error) {
 				name
 				description
 				storage
-				isPublic
 				stripeId
 				subscribers {
 					totalCount
