@@ -7,7 +7,7 @@ FROM golang:1.14-alpine AS builder_go
 # Install git + SSL ca certificates.
 # Git is required for fetching the dependencies.
 # Ca-certificates is required to call HTTPS endpoints.
-RUN apk update && apk add --no-cache git ca-certificates make gcc libc-dev
+RUN apk update && apk add --no-cache git ca-certificates make
 RUN update-ca-certificates
 
 # Create appuser
@@ -26,6 +26,8 @@ RUN adduser \
 
 
 WORKDIR /bloom
+# required by Makefile to inject build constants
+COPY ./.git /bloom/.git
 COPY . ./
 
 # Using go mod with go >= 1.11
