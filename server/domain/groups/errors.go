@@ -6,4 +6,5 @@ import (
 
 var (
 	ErrInvitationNotFound = errors.NotFound("Invitation not found.")
+	ErrAdminRoleRequired  = errors.NotFound("Admin role is required.")
 )
