@@ -10,3 +10,7 @@ import (
 func (repo *GroupsRepository) DeleteInvitation(ctx context.Context, db db.Queryer, invitationID uuid.UUID) (err error) {
 	return
 }
+
+/*
+queryDeleteInvitation := "DELETE FROM groups_invitations WHERE id = $1"
+*/
