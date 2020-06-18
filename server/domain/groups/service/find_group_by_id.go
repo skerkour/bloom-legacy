@@ -4,25 +4,28 @@ import (
 	"context"
 
 	"gitlab.com/bloom42/bloom/server/domain/groups"
+	"gitlab.com/bloom42/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func (service *GroupsService) FindGroupById(ctx context.Context, groupID uuid.UUID) (ret groups.Group, err error) {
+	me, err := service.usersService.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	err = service.CheckUserIsGroupMember(ctx, service.db, me.ID, groupID)
+	if err != nil {
+		if _, ok := err.(*errors.PermissionDeniedError); !ok {
+			return
+		}
+	}
+	if err != nil && !me.IsAdmin {
+		err = users.ErrPermissionDenied
+		return
+	}
+
+	ret, err = service.groupsRepo.FindGroupByID(ctx, service.db, groupID)
 	return
 }
-
-/*
-	currentUser := apiutil.UserFromCtx(ctx)
-	var state string
-
-	if currentUser == nil {
-		err = gqlerrors.AuthenticationRequired()
-		return
-	}
-
-	err = groups.CheckUserIsGroupMember(ctx, nil, currentUser.ID, groupID)
-	if err != nil && !currentUser.IsAdmin {
-		err = gqlerrors.New(err)
-		return
-	}
-*/
