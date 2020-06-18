@@ -31,7 +31,7 @@ func (service *BillingService) RemovePaymentMethod(ctx context.Context, paymentM
 		return err
 	}
 
-	customer, err := service.billingRepo.FindCustomerByPaymentMethodID(ctx, tx, paymentMethod.ID)
+	customer, err := service.billingRepo.FindCustomerByID(ctx, tx, paymentMethod.CustomerID)
 	if err != nil {
 		tx.Rollback()
 		return

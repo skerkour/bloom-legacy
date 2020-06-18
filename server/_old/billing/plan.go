@@ -5,7 +5,6 @@ import (
 
 	"github.com/jmoiron/sqlx"
 	"gitlab.com/bloom42/bloom/server/db"
-	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/gobox/rz"
 	"gitlab.com/bloom42/gobox/uuid"
 )
@@ -91,44 +90,6 @@ func GetSubscribersCountForPlanIdTx(ctx context.Context, tx *sqlx.Tx, planId uui
 	if err != nil {
 		logger.Error("billing.GetSubscribersCountForPlanIdTx: finding plan by id", rz.Err(err),
 			rz.String("plan.id", planId.String()))
-		return ret, NewError(ErrorPlanNotFound)
-	}
-
-	return ret, err
-}
-
-func FindPlans(ctx context.Context, user *users.User) ([]Plan, error) {
-	if user == nil || !user.IsAdmin {
-		return FindPlansForUser(ctx)
-	} else {
-		return FindPlansForAdmin(ctx)
-	}
-}
-
-func FindPlansForUser(ctx context.Context) ([]Plan, error) {
-	ret := []Plan{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_plans WHERE is_public = true"
-	err = db.DB.Select(&ret, queryFind)
-	if err != nil {
-		logger.Error("billing.FindPlansForUser: finding plans", rz.Err(err))
-		return ret, NewError(ErrorPlanNotFound)
-	}
-
-	return ret, err
-}
-
-func FindPlansForAdmin(ctx context.Context) ([]Plan, error) {
-	ret := []Plan{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_plans"
-	err = db.DB.Select(&ret, queryFind)
-	if err != nil {
-		logger.Error("billing.FindPlansForAdmin: finding plans", rz.Err(err))
 		return ret, NewError(ErrorPlanNotFound)
 	}
 

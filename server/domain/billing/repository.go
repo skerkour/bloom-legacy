@@ -23,7 +23,7 @@ type Repository interface {
 	FindCustomerByUserID(ctx context.Context, db db.Queryer, userID uuid.UUID) (Customer, error)
 	FindCustomerByGroupID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (Customer, error)
 	FindPaymentMethodByID(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) (PaymentMethod, error)
-	FindCustomerByPaymentMethodID(ctx context.Context, db db.Queryer, paymentMethodID uuid.UUID) (ret Customer, err error)
+	FindCustomerByID(ctx context.Context, db db.Queryer, customerID uuid.UUID) (ret Customer, err error)
 	FindDefaultPaymentMethodForCustomer(ctx context.Context, db db.Queryer, customerID uuid.UUID) (ret PaymentMethod, err error)
 	FindPlanByID(ctx context.Context, db db.Queryer, planID uuid.UUID) (ret Plan, err error)
 	FindDefaultPlan(ctx context.Context, db db.Queryer) (ret Plan, err error)

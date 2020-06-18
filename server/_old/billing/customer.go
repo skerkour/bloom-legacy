@@ -8,22 +8,6 @@ import (
 	"gitlab.com/bloom42/gobox/rz"
 )
 
-func FindCustomerByPaymentMethod(ctx context.Context, tx *sqlx.Tx, paymentMethod *PaymentMethod) (*Customer, error) {
-	ret := &Customer{}
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	queryFind := "SELECT * FROM billing_customers WHERE id = $1"
-	err = tx.Get(ret, queryFind, paymentMethod.CustomerID)
-	if err != nil {
-		logger.Error("billing.FindCustomerByPaymentMethod: finding customer", rz.Err(err),
-			rz.String("customer.id", paymentMethod.CustomerID.String()))
-		return ret, NewError(ErrorCustomerNotFound)
-	}
-
-	return ret, err
-}
-
 func FindCustomerByStripeCustomerId(ctx context.Context, tx *sqlx.Tx, stripeCustomerId string) (*Customer, error) {
 	ret := &Customer{}
 	var err error

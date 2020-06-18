@@ -38,7 +38,7 @@ func (service *BillingService) ChangeDefaultPaymentMethod(ctx context.Context, p
 		return
 	}
 
-	customer, err := service.billingRepo.FindCustomerByPaymentMethodID(ctx, tx, paymentMethodID)
+	customer, err := service.billingRepo.FindCustomerByID(ctx, tx, ret.CustomerID)
 	if err != nil {
 		tx.Rollback()
 		return
