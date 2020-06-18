@@ -17,7 +17,7 @@ func (repo *GroupsRepository) FindGroupByID(ctx context.Context, db db.Queryer, 
 	err = db.Get(ctx, &ret, query, groupID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			err = errors.NotFound("PlGroupan not found")
+			err = errors.NotFound("Group not found")
 		} else {
 			logger := log.FromCtx(ctx)
 			const errMessage = "groups.FindGroupByID: finding group"
