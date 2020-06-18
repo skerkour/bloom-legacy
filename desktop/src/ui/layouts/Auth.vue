@@ -1,6 +1,6 @@
 <template>
 <div>
-  <v-content>
+  <v-main>
     <v-container grid-list-xl text-xs-center fluid>
       <v-flex xs12 sm8 md6 offset-sm2 offset-md3 id="main">
         <div id="main-card">
@@ -54,7 +54,7 @@
 
       <!-- <div>&copy; {{ new Date().getFullYear() }}</div> -->
     </v-footer>
-  </v-content>
+  </v-main>
 
   <blm-dialog-settings
     :visible="showSettingsDialog"

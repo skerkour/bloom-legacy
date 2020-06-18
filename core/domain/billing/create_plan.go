@@ -24,7 +24,6 @@ func CreatePlan(input model.BillingPlanInput) (*model.BillingPlan, error) {
 				description
 				storage
 				stripeId
-				isPublic
 				subscribers {
 					totalCount
 				}

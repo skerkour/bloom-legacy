@@ -24,7 +24,7 @@
           label="Your confirmation code"
           :disabled="isLoading"
           outlined
-          v-mask="codeMask"
+          v-mask="{ tokens: codeTokens, mask: codeMask }"
           @keyup="checkCodeLength"
         />
       </v-flex>
@@ -67,7 +67,7 @@ import { VerifyRegistration, Method } from '@/core/users';
 
 
 const RESEND_TIMEOUT = 42_000;
-const CODE_LENGTH = 9;
+const CODE_LENGTH = 11;
 
 @Component({
   directives: {
@@ -85,7 +85,13 @@ export default class RegistrationVerify extends Vue {
   email = '';
   success = '';
   showSendNewCode = false;
-  codeMask = 'XXXX-XXXX';
+  codeMask = 'XXXXX-XXXXX';
+  codeTokens = {
+    X: {
+      pattern: /[0-9a-zA-Z#@!]/,
+      transform: (v: string) => v.toLocaleLowerCase(),
+    },
+  };
 
   // computed
   get canVerify(): boolean {

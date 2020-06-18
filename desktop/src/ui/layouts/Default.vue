@@ -6,11 +6,11 @@
 
       <blm-navigation-drawer :app="app" />
 
-      <v-content>
+      <v-main>
         <!-- <v-container fluid class="fill-height"> -->
           <router-view />
         <!-- </v-container> -->
-      </v-content>
+      </v-main>
     </div>
   </div>
 </template>

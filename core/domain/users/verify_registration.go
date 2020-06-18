@@ -13,9 +13,7 @@ func VerifyUser(params VerifyRegistrationParams) (bool, error) {
 	client := api.Client()
 	ret := false
 
-	replacer := strings.NewReplacer("-", "", " ", "", "	", "")
-	code := replacer.Replace(params.Code)
-	code = strings.ToLower(code)
+	code := strings.ToLower(params.Code)
 
 	input := model.VerifyUserInput{
 		ID:   params.ID,

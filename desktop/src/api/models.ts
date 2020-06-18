@@ -1,4 +1,5 @@
 export type Maybe<T> = T | null;
+export type Exact<T extends { [key: string]: any }> = { [K in keyof T]: T[K] };
 /** All built-in and custom scalars, mapped to their actual values */
 export type Scalars = {
   ID: string;
@@ -10,7 +11,6 @@ export type Scalars = {
   Bytes: any;
   Int64: any;
 };
-
 
 export enum SessionDeviceOs {
   Linux = 'LINUX',
@@ -189,7 +189,6 @@ export type BillingPlan = {
   name: Scalars['String'];
   /** plan's description, in HTML  */
   description: Scalars['String'];
-  isPublic: Scalars['Boolean'];
   product: BillingProduct;
   storage: Scalars['Int64'];
   stripeId?: Maybe<Scalars['String']>;
@@ -457,7 +456,6 @@ export type BillingPlanInput = {
   stripeId: Scalars['String'];
   /** HTML description */
   description: Scalars['String'];
-  isPublic: Scalars['Boolean'];
   storage: Scalars['Int64'];
 };
 
