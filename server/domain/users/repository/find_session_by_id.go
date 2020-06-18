@@ -3,7 +3,6 @@ package repository
 import (
 	"context"
 	"database/sql"
-	"fmt"
 
 	"gitlab.com/bloom42/bloom/server/db"
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -26,7 +25,7 @@ func (repo *UsersRepository) FindSessionByID(ctx context.Context, db db.Queryer,
 	if err == nil {
 		repo.cache.Set(getSessionCacheKey(ret.ID), ret)
 	} else if err == sql.ErrNoRows {
-		err = errors.NotFound(fmt.Sprintf("Session with id: %s not found", sessionID.String()))
+		err = errors.NotFound("Session not found")
 	} else {
 		logger := log.FromCtx(ctx)
 		const errMessage = "users.FindSessionByID: finding session"

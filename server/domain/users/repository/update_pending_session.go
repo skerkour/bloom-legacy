@@ -12,10 +12,10 @@ import (
 // UpdatePendingSession update a pending session in the database
 func (repo *UsersRepository) UpdatePendingSession(ctx context.Context, db db.Queryer, pendingSession users.PendingSession) error {
 	query := `UPDATE pending_sessions SET
-		updated_at = $1, failed_attempts = $2, verified_at = $3
-		WHERE id = $4`
+		updated_at = $1, failed_attempts = $2, verified_at = $3, hash = $4
+		WHERE id = $5`
 	_, err := db.Exec(ctx, query, pendingSession.UpdatedAt, pendingSession.FailedAttempts,
-		pendingSession.VerifiedAt, pendingSession.ID)
+		pendingSession.VerifiedAt, pendingSession.Hash, pendingSession.ID)
 
 	if err != nil {
 		logger := log.FromCtx(ctx)

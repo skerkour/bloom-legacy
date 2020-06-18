@@ -13,9 +13,9 @@ import (
 func (repo *UsersRepository) UpdateUser(ctx context.Context, db db.Queryer, user users.User) error {
 	query := `UPDATE users SET
 			updated_at = $1, disabled_at = $2, avatar = $3, email = $4, display_name = $5, auth_key_hash = $6,
-			bio = $7, first_name = $8, last_name = $9, is_admin = $9, public_key = $10, private_key_nonce = $11,
-			encrypted_master_key = $12, master_key_nonce = $13, state = $14
-		WHERE id = $15`
+			bio = $7, first_name = $8, last_name = $9, is_admin = $10, public_key = $11, private_key_nonce = $12,
+			encrypted_master_key = $13, master_key_nonce = $14, state = $15
+		WHERE id = $16`
 	_, err := db.Exec(ctx, query, user.UpdatedAt, user.DisabledAt, user.Avatar, user.Email, user.DisplayName,
 		user.AuthKeyHash, user.Bio, user.FirstName, user.LastName, user.IsAdmin, user.PublicKey, user.PrivateKeyNonce,
 		user.EncryptedMasterKey, user.MasterKeyNonce, user.State, user.ID)
