@@ -61,11 +61,11 @@ export default class Auth extends Vue {
 </script>
 
 <style lang="scss" scoped>
-.v-content, .blm-content {
+.v-main, .blm-content {
   height: 100%;
 }
 
-.v-content {
+.v-main {
   margin-left: 72px;
 }
 </style>
