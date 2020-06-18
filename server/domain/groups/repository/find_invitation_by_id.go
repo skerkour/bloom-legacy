@@ -14,7 +14,7 @@ import (
 func (repo *GroupsRepository) FindInvitationByID(ctx context.Context, db db.Queryer, invitationID uuid.UUID) (ret groups.Invitation, err error) {
 	query := "SELECT * FROM groups_invitations WHERE id = $1"
 
-	err = db.Get(ctx, &ret, query, groupID)
+	err = db.Get(ctx, &ret, query, invitationID)
 	if err != nil {
 		if err == sql.ErrNoRows {
 			err = errors.NotFound("Invitation not found")
