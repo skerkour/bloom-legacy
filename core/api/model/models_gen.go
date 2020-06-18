@@ -37,7 +37,6 @@ type BillingPlanInput struct {
 	StripeID string `json:"stripeId"`
 	// HTML description
 	Description string `json:"description"`
-	IsPublic    bool   `json:"isPublic"`
 	Storage     int64  `json:"storage"`
 }
 
