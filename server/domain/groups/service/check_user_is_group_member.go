@@ -8,5 +8,6 @@ import (
 )
 
 func (service *GroupsService) CheckUserIsGroupMember(ctx context.Context, db db.Queryer, userID, groupID uuid.UUID) (err error) {
+	_, err = service.groupsRepo.FindMembershipForUser(ctx, db, userID, groupID)
 	return
 }
