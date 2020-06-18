@@ -35,14 +35,6 @@
             <span>{{ item.subscribers.totalCount }}</span>
           </td>
           <td>
-            <v-chip color="success" outlined v-if="item.isPublic">
-              Public
-            </v-chip>
-            <v-chip color="error" outlined v-else>
-              Private
-            </v-chip>
-          </td>
-          <td>
             <span>{{ item.product }}</span>
           </td>
           <td>
@@ -107,13 +99,6 @@
               <v-text-field label="Stripe ID" outlined v-model="planToEdit.stripeId"></v-text-field>
             </v-col>
 
-            <v-col cols="12">
-               <v-switch
-                v-model="planToEdit.isPublic"
-                :label="`Is Public: ${planToEdit.isPublic}`"
-              ></v-switch>
-            </v-col>
-
           </v-row>
         </v-card-text>
 
@@ -171,12 +156,6 @@ export default class PlansTable extends Vue {
     {
       align: 'left',
       sortable: true,
-      text: 'Is Public',
-      value: 'isPublic',
-    },
-    {
-      align: 'left',
-      sortable: true,
       text: 'Product',
       value: 'product',
     },
@@ -221,7 +200,6 @@ export default class PlansTable extends Vue {
       price: 0.0,
       name: '',
       description: '',
-      isPublic: false,
       product: models.BillingProduct.Free,
       storage: 0,
       stripeId: '',
