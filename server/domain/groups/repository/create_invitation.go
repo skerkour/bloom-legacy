@@ -24,6 +24,5 @@ func (repo *GroupsRepository) CreateInvitation(ctx context.Context, db db.Querye
 		logger.Error(errMessage, log.Err("error", err), log.UUID("invitation.id", invitation.ID))
 		err = errors.Internal(errMessage, err)
 	}
-
 	return
 }
