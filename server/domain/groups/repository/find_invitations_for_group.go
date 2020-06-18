@@ -12,6 +12,24 @@ import (
 
 func (repo *GroupsRepository) FindInvitationsForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret []groups.GroupInvitation, err error) {
 	ret = []groups.GroupInvitation{}
+	// query := `SELECT DISTINCT ON (invitation_id) groups_invitations.id invitation_id, groups_invitations.group_id invitation_group_id,
+	// groups_invitations.created_at invitation_created_at, inviters.*, invitees.*
+	// 		FROM
+	// 			(SELECT
+	// 				id inviter_id, users.username inviter_username,
+	// 				users.display_name inviter_display_name, users.avatar_id inviter_avatar_id
+	// 				FROM users
+	// 			) AS inviters,
+	// 			(SELECT
+	// 				id invitee_id, users.username invitee_username,
+	// 				users.display_name invitee_display_name, users.avatar_id invitee_avatar_id
+	// 				FROM users
+	// 			) AS invitees
+	// 			INNER JOIN groups_invitations
+	// 				ON groups_invitations.inviter_id = inviter_id
+	// 				OR groups_invitations.invitee_id = invitees.invitee_id
+	// 		WHERE groups_invitations.group_id = $1
+	// 		`
 	query := `SELECT DISTINCT ON (invitation_id) groups_invitations.id invitation_id, groups_invitations.group_id invitation_group_id,
 	groups_invitations.created_at invitation_created_at,
 	inviters.id inviter_id, inviters.username inviter_username, inviters.display_name inviter_display_name, inviters.avatar_id inviter_avatar_id,

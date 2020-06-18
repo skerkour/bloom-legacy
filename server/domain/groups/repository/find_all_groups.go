@@ -11,7 +11,7 @@ import (
 
 func (repo *GroupsRepository) FindAllGroups(ctx context.Context, db db.Queryer) (ret []groups.Group, err error) {
 	ret = []groups.Group{}
-	query := "SELECT * FROM groups"
+	query := "SELECT * FROM groups ORDER BY created_at"
 
 	err = db.Select(ctx, &ret, query)
 	if err != nil {
