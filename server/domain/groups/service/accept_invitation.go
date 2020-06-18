@@ -58,7 +58,7 @@ func (service *GroupsService) AcceptInvitation(ctx context.Context, params group
 		return
 	}
 
-	ret = service.groupsRepo.FindGroupByID(ctx, tx, membership.GroupID)
+	ret, err = service.groupsRepo.FindGroupByID(ctx, tx, membership.GroupID)
 	if err != nil {
 		tx.Rollback()
 		return
