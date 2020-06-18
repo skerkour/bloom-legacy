@@ -15,6 +15,7 @@ type Repository interface {
 	DeleteInvitation(ctx context.Context, db db.Queryer, invitationID uuid.UUID) (err error)
 	DeleteGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) (err error)
 	CreateInvitation(ctx context.Context, db db.Queryer, invitation Invitation) (err error)
+	DeleteMembership(ctx context.Context, db db.Queryer, userID, groupID uuid.UUID) (err error)
 
 	FindGroupByID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret Group, err error)
 	FindInvitationByID(ctx context.Context, db db.Queryer, invitationID uuid.UUID) (ret Invitation, err error)
@@ -24,4 +25,5 @@ type Repository interface {
 	FindInvitationsForGroup(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret []GroupInvitation, err error)
 	FindInvitationsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) (ret []UserInvitation, err error)
 	FindGroupMembers(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret []Member, err error)
+	GetGroupAdminsCount(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret int64, err error)
 }
