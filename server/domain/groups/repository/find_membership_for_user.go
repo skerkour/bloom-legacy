@@ -17,7 +17,7 @@ func (repo *GroupsRepository) FindMembershipForUser(ctx context.Context, db db.Q
 	err = db.Get(ctx, &ret, query, userID, groupID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			err = errors.NotFound("Not member of group")
+			err = errors.NotFound("Not a member of group")
 		} else {
 			logger := log.FromCtx(ctx)
 			const errMessage = "groups.FindMembershipForUser: finding membership"
