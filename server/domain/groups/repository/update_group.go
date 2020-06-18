@@ -11,10 +11,10 @@ import (
 
 func (repo *GroupsRepository) UpdateGroup(ctx context.Context, db db.Queryer, group groups.Group) (err error) {
 	query := `UPDATE groups SET
-	updated_at = $1, name = $2, description = $3, avatar_id = $4, state = $5
+	updated_at = $1, name = $2, description = $3, avatar = $4, state = $5
 	WHERE id = $6`
 
-	_, err = db.Exec(ctx, query, group.UpdatedAt, group.Name, group.Description, group.AvatardID,
+	_, err = db.Exec(ctx, query, group.UpdatedAt, group.Name, group.Description, group.Avatar,
 		group.State, group.ID)
 	if err != nil {
 		logger := log.FromCtx(ctx)

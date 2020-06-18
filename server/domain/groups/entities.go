@@ -13,7 +13,7 @@ type Group struct {
 	UpdatedAt   time.Time `db:"updated_at"`
 	Name        string    `db:"name"`
 	Description string    `db:"description"`
-	AvatardID   *string   `db:"avatar_id"`
+	Avatar      *string   `db:"avatar"`
 	State       int64     `db:"state"`
 }
 
@@ -46,11 +46,11 @@ type GroupInvitation struct {
 	CreatedAt          time.Time `db:"invitation_created_at"`
 	GroupID            string    `db:"invitation_group_id"`
 	InviterID          string    `db:"inviter_id"`
-	InviterAvatarID    *string   `db:"inviter_avatar_id"`
+	InviterAvatar      *string   `db:"inviter_avatar"`
 	InviterUsername    string    `db:"inviter_username"`
 	InviterDisplayName string    `db:"inviter_display_name"`
 	InvitedID          string    `db:"invitee_id"`
-	InviteeAvatarID    *string   `db:"invitee_avatar_id"`
+	InviteeAvatar      *string   `db:"invitee_avatar"`
 	InviteeUsername    string    `db:"invitee_username"`
 	InviteeDisplayName string    `db:"invitee_display_name"`
 }

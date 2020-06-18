@@ -32,8 +32,8 @@ func (repo *GroupsRepository) FindInvitationsForGroup(ctx context.Context, db db
 	// 		`
 	query := `SELECT DISTINCT ON (invitation_id) groups_invitations.id invitation_id, groups_invitations.group_id invitation_group_id,
 	groups_invitations.created_at invitation_created_at,
-	inviters.id inviter_id, inviters.username inviter_username, inviters.display_name inviter_display_name, inviters.avatar_id inviter_avatar_id,
-	invitees.id invitee_id, invitees.username invitee_username, invitees.display_name invitee_display_name, invitees.avatar_id invitee_avatar_id
+	inviters.id inviter_id, inviters.username inviter_username, inviters.display_name inviter_display_name, inviters.avatar inviter_avatar,
+	invitees.id invitee_id, invitees.username invitee_username, invitees.display_name invitee_display_name, invitees.avatar invitee_avatar
 		FROM groups_invitations
 			INNER JOIN users AS inviters ON (groups_invitations.inviter_id = inviters.id)
 			INNER JOIN users AS invitees ON (groups_invitations.invitee_id = invitees.id)

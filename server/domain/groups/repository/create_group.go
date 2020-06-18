@@ -11,11 +11,11 @@ import (
 
 func (repo *GroupsRepository) CreateGroup(ctx context.Context, db db.Queryer, group groups.Group) (err error) {
 	query := `INSERT INTO groups
-	(id, created_at, updated_at, name, description, avatar_id, state)
+	(id, created_at, updated_at, name, description, avatar, state)
 	VALUES ($1, $2, $3, $4, $5, $6, $7)`
 
 	_, err = db.Exec(ctx, query, group.ID, group.CreatedAt, group.UpdatedAt, group.Name,
-		group.Description, group.AvatardID, group.State)
+		group.Description, group.Avatar, group.State)
 	if err != nil {
 		logger := log.FromCtx(ctx)
 		const errMessage = "groups.CreateGroup: inserting group"

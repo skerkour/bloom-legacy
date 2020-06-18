@@ -17,4 +17,4 @@ const (
 )
 
 // DefaultEmailAddressFrom is the default email sender address
-var DefaultEmailAddressFrom = mail.Address{Name: "Megabox", Address: "hello@bloom.sh"}
+var DefaultEmailAddressFrom = mail.Address{Name: "Bloom", Address: "hello@bloom.sh"}

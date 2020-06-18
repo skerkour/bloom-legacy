@@ -2,6 +2,7 @@ package service
 
 import (
 	"context"
+	"strings"
 	"time"
 
 	"gitlab.com/bloom42/bloom/server/domain/users"
@@ -24,6 +25,11 @@ func (service *UsersService) VerifyPendingUser(ctx context.Context, params users
 		sleep = 650
 	}
 	time.Sleep(time.Duration(sleep) * time.Millisecond)
+
+	// clean and validate data
+	params.Code = strings.ToLower(params.Code)
+	params.Code = strings.TrimSpace(params.Code)
+	params.Code = cleanCodeHyphen(params.Code)
 
 	tx, err := service.db.Begin(ctx)
 	if err != nil {

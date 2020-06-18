@@ -60,7 +60,7 @@ func (service *UsersService) sendSignInAlertEmail(ctx context.Context, user user
 	err = service.mailer.Send(ctx, message)
 	if err != nil {
 		errMessage := "users.sendSignInAlertEmail: Sending email"
-		logger.Error(errMessage, log.Err("err", err))
+		logger.Error(errMessage, log.Err("error", err))
 		err = errors.Internal(errMessage, err)
 	}
 	return

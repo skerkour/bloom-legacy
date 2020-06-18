@@ -29,7 +29,7 @@ CREATE TABLE users (
 );
 CREATE UNIQUE INDEX index_users_on_username ON users (username);
 CREATE UNIQUE INDEX index_users_on_email ON users (email);
-CREATE UNIQUE INDEX index_users_on_avatar_id ON users (avatar_id);
+CREATE UNIQUE INDEX index_users_on_avatar ON users (avatar);
 
 
 CREATE TABLE sessions (
@@ -84,14 +84,14 @@ CREATE TABLE groups (
     created_at TIMESTAMP WITH TIME ZONE NOT NULL,
     updated_at TIMESTAMP WITH TIME ZONE NOT NULL,
 
-    avatar_id TEXT,
+    avatar TEXT,
     name TEXT NOT NULL,
     description TEXT NOT NULL,
     state BIGINT NOT NULL,
 
     PRIMARY KEY(id)
 );
-CREATE UNIQUE INDEX index_groups_on_avatar_id ON groups (avatar_id);
+CREATE UNIQUE INDEX index_groups_on_avatar ON groups (avatar);
 
 
 CREATE TABLE groups_members (
