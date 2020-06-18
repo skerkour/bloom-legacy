@@ -14,4 +14,7 @@ var (
 	ErrUsernameAlreadyInUse               = errors.AlreadyExists("An account with this username already exsits. Please change and try again.")
 	ErrInvalidUsernamePasswordCombination = errors.InvalidArgument("Invalid Username / Password combination")
 	ErrCantDowngradeUserState             = errors.InvalidArgument("You can't downgrade user's state")
+	ErrMaximumAttemptsReached             = errors.InvalidArgument("Maximum attemps reached. Please create a new account.")
+	ErrCodeExpired                        = errors.InvalidArgument("Code expired Please create a new account.")
+	ErrInvalidCode                        = errors.InvalidArgument("Code is not valid")
 )
