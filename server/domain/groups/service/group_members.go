@@ -17,6 +17,7 @@ func (service *GroupsService) GroupMembers(ctx context.Context, groupID uuid.UUI
 
 	err = service.CheckUserIsGroupMember(ctx, service.db, me.ID, groupID)
 	if err != nil {
+		// if permission denied error, we don't return yet before checking that actor is an instance admin
 		if _, ok := err.(*errors.PermissionDeniedError); !ok {
 			return
 		}
