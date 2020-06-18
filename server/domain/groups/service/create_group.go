@@ -5,10 +5,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/google/uuid"
 	"gitlab.com/bloom42/bloom/server/domain/groups"
 	"gitlab.com/bloom42/bloom/server/errors"
 	"gitlab.com/bloom42/gobox/log"
+	"gitlab.com/bloom42/gobox/uuid"
 )
 
 func (service *GroupsService) CreateGroup(ctx context.Context, params groups.CreateGroupParams) (ret groups.Group, err error) {
