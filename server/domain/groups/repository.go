@@ -18,4 +18,5 @@ type Repository interface {
 	FindGroupByID(ctx context.Context, db db.Queryer, groupID uuid.UUID) (ret Group, err error)
 	FindInvitationByID(ctx context.Context, db db.Queryer, invitationID uuid.UUID) (ret Invitation, err error)
 	FindMembershipForUser(ctx context.Context, db db.Queryer, userID, groupID uuid.UUID) (ret Membership, err error)
+	FindAllGroups(ctx context.Context, db db.Queryer) (ret []Group, err error)
 }
