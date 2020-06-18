@@ -9,25 +9,6 @@ import (
 	"gitlab.com/bloom42/gobox/uuid"
 )
 
-func FindDefaultPlan(ctx context.Context, tx *sqlx.Tx) (*Plan, error) {
-	var ret *Plan
-	var plan Plan
-	var err error
-	logger := rz.FromCtx(ctx)
-
-	// queryFindPlan := "SELECT * FROM billing_plans WHERE product = $1 AND is_public = $2"
-	// err = tx.Get(&plan, queryFindPlan, consts.BILLING_PRODUCT_FREE, true)
-	queryFindPlan := "SELECT * FROM billing_plans WHERE id = $1"
-	err = tx.Get(&plan, queryFindPlan, DefaultBillingPlanId)
-	if err != nil {
-		logger.Error("billing.FindDefaultPlan: finding plan by id", rz.Err(err))
-		return ret, NewError(ErrorPlanNotFound)
-	}
-
-	ret = &plan
-	return ret, err
-}
-
 func FindPublicPlanById(ctx context.Context, tx *sqlx.Tx, planId uuid.UUID) (*Plan, error) {
 	var ret *Plan
 	var plan Plan
