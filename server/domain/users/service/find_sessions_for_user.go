@@ -22,19 +22,3 @@ func (service *UsersService) FindSessionsForUser(ctx context.Context, userID uui
 	ret, err = service.usersRepo.FindAllSessionsForUser(ctx, service.db, userID)
 	return
 }
-
-/*
-
-	var ret *SessionConnection
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if currentUser.ID != uuid.UUID(*user.ID) && !currentUser.IsAdmin {
-		return ret, gqlerrors.AdminRoleRequired()
-	}
-
-	sessions, err := users.FindAllSessionsForUserID(ctx, nil, *user.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-
-*/
