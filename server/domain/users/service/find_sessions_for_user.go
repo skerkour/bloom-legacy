@@ -8,6 +8,18 @@ import (
 )
 
 func (service *UsersService) FindSessionsForUser(ctx context.Context, userID uuid.UUID) (ret []users.Session, err error) {
+	ret = []users.Session{}
+	me, err := service.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	if me.ID != user.ID && !me.IsAdmin {
+		err = users.ErrPermissionDenied
+		return
+	}
+
+	ret, err = service.usersRepo.FindAllSessionsForUser(ctx, service.db, userID)
 	return
 }
 

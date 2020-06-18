@@ -8,6 +8,7 @@ import (
 )
 
 func (service *GroupsService) FindInvitationsForGroup(ctx context.Context, groupID uuid.UUID) (ret []groups.GroupInvitation, err error) {
+	ret = []groups.GroupInvitation{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return

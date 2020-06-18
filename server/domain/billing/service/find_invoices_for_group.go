@@ -8,6 +8,7 @@ import (
 )
 
 func (service *BillingService) FindInvoicesForGroup(ctx context.Context, groupID uuid.UUID) (ret []billing.Invoice, err error) {
+	ret = []billing.Invoice{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return

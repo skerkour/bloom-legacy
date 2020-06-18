@@ -8,6 +8,7 @@ import (
 )
 
 func (service *GroupsService) FindAllGroups(ctx context.Context) (ret []groups.Group, err error) {
+	ret = []groups.Group{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return

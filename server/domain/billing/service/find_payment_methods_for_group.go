@@ -8,6 +8,7 @@ import (
 )
 
 func (service *BillingService) FindPaymentMethodsForGroup(ctx context.Context, groupID uuid.UUID) (ret []billing.PaymentMethod, err error) {
+	ret = []billing.PaymentMethod{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return

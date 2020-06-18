@@ -10,6 +10,7 @@ import (
 )
 
 func (service *GroupsService) GroupMembers(ctx context.Context, groupID uuid.UUID) (ret []groups.Member, err error) {
+	ret = []groups.Member{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return
