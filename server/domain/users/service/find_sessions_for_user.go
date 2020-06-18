@@ -14,7 +14,7 @@ func (service *UsersService) FindSessionsForUser(ctx context.Context, userID uui
 		return
 	}
 
-	if me.ID != user.ID && !me.IsAdmin {
+	if me.ID != userID && !me.IsAdmin {
 		err = users.ErrPermissionDenied
 		return
 	}

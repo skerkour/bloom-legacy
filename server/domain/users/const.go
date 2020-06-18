@@ -3,7 +3,7 @@ package users
 import "gitlab.com/bloom42/gobox/crypto"
 
 const (
-	VerificationCodeAlphabet = "abcdefghijkmnpqrstuvwxyz23456789#@!"
+	RegisterCodeAlphabet = "abcdefghijkmnpqrstuvwxyz23456789#@!"
 	// RegisterCodeLength is the length in characters of the verification code sent for registration
 	RegisterCodeLength = 10
 
@@ -27,8 +27,8 @@ const (
 	SessionSecretSize = crypto.KeySize512
 )
 
-var PendingUserCodeHashParams = crypto.DefaultHashPasswordParams
-var PasswordUpdateCodehashParams = PendingUserCodeHashParams
+var RegisterCodeHashParams = crypto.DefaultHashPasswordParams
+var PasswordUpdateCodehashParams = RegisterCodeHashParams
 var AuthKeyHashParams = &crypto.HashPasswordParams{
 	Memory:      6 * 1024,
 	Iterations:  1,

@@ -9,7 +9,7 @@ import (
 )
 
 func (service *BillingService) FindInvoicesForUser(ctx context.Context, userID uuid.UUID) (ret []billing.Invoice, err error) {
-	ret = ]billing.Invoice{}
+	ret = []billing.Invoice{}
 	me, err := service.usersService.Me(ctx)
 	if err != nil {
 		return

@@ -23,6 +23,6 @@ func (service *UsersService) RevokeSession(ctx context.Context, sessionID uuid.U
 		return
 	}
 
-	err = service.usersRepo.DeleteSession(crx, service.db, serssionID)
+	err = service.usersRepo.DeleteSession(ctx, service.db, sessionID)
 	return
 }

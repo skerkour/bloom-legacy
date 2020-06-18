@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/base64"
 	"time"
+	"unicode"
 
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/errors"
@@ -102,4 +103,44 @@ func decodeSessionToken(ctx context.Context, token string) (sessionID uuid.UUID,
 	}
 
 	return
+}
+
+func formatCodeHyphen(code string) string {
+	middle := len(code) / 2
+	isEven := len(code)%2 == 0 && len(code) != 0
+
+	if !isEven {
+		return code
+	}
+	return code[:middle] + "-" + code[middle:]
+}
+
+func cleanCodeHyphen(code string) string {
+	ret := ""
+	for _, character := range code {
+		if character != '-' {
+			ret += string(character)
+		}
+	}
+	return ret
+}
+
+// confirmationCodeToHTML transforms a confirmation code to an HTML span, with letters in red and
+// symbols in blue for better readability
+func confirmationCodeToHTML(code string) string {
+	htmlCode := "<span>"
+
+	for _, character := range code {
+		if unicode.IsLetter(character) || character == '-' {
+			htmlCode += string(character)
+		} else if unicode.IsNumber(character) {
+			htmlCode += `<span style="color: red">` + string(character) + `</span>`
+		} else {
+			htmlCode += `<span style="color: blue">` + string(character) + `</span>`
+		}
+	}
+
+	htmlCode += "</span>"
+
+	return htmlCode
 }
