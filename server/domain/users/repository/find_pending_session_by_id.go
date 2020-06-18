@@ -13,12 +13,12 @@ import (
 
 // FindPendingSessionByID find a session user with the given ID. returns an error if not found
 func (repo *UsersRepository) FindPendingSessionByID(ctx context.Context, db db.Queryer, pendingSessionID uuid.UUID) (ret users.PendingSession, err error) {
-	query := `SELECT * FROM pending_sessions WHERE id = $1`
-	err = db.Get(ctx, &ret, query, pendingSessionID)
+	query := "SELECT * FROM pending_sessions WHERE id = $1"
 
+	err = db.Get(ctx, &ret, query, pendingSessionID)
 	if err != nil {
 		if err == sql.ErrNoRows {
-			err = errors.NotFound(err.Error())
+			err = errors.NotFound("Pending session not found")
 		} else {
 			logger := log.FromCtx(ctx)
 			const errMessage = "users.FindPendingSessionByID: finding pending session"
@@ -26,6 +26,5 @@ func (repo *UsersRepository) FindPendingSessionByID(ctx context.Context, db db.Q
 			err = errors.Internal(errMessage, err)
 		}
 	}
-
 	return
 }

@@ -18,7 +18,7 @@ func (repo *UsersRepository) FindPendingUserByID(ctx context.Context, db db.Quer
 
 	if err != nil {
 		if err == sql.ErrNoRows {
-			err = errors.NotFound(err.Error())
+			err = errors.NotFound("Pending user not found")
 		} else {
 			logger := log.FromCtx(ctx)
 			const errMessage = "users.FindPendingUserByID: finding pending user"
