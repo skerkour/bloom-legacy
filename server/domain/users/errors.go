@@ -9,4 +9,7 @@ var (
 	ErrMustNotBeAuthenticated = errors.PermissionDenied("Permission denied: must not be authenticated")
 	ErrPermissionDenied       = errors.PermissionDenied("Permission denied")
 	ErrInvalidSession         = errors.PermissionDenied("Session is not valid")
+	ErrPendingUserNotVerified = errors.PermissionDenied("User is not verified")
+	ErrEmailAlreadyInUse      = errors.AlreadyExists("An account with this email already exsits. Please change and try again.")
+	ErrUsernameAlreadyInUse   = errors.AlreadyExists("An account with this username already exsits. Please change and try again.")
 )

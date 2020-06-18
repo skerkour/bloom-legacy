@@ -15,6 +15,7 @@ type Repository interface {
 	DeleteUser(ctx context.Context, db db.Queryer, userID uuid.UUID) error
 	FindUserByID(ctx context.Context, db db.Queryer, userID uuid.UUID) (User, error)
 	FindUserByEmail(ctx context.Context, db db.Queryer, email string) (User, error)
+	FindUserByUsername(ctx context.Context, db db.Queryer, username string) (User, error)
 
 	// Session
 	CreateSession(ctx context.Context, db db.Queryer, session Session) error

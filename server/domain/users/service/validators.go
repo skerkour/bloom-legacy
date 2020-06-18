@@ -1,24 +1,24 @@
 package service
 
 import (
-	"errors"
 	"fmt"
 	"regexp"
 	"strings"
 
 	"github.com/asaskevich/govalidator"
 	"gitlab.com/bloom42/bloom/server/domain/users"
+	"gitlab.com/bloom42/bloom/server/errors"
 )
 
 func validateFirstName(firstName string) error {
 	firstNameLen := len(firstName)
 
 	if firstNameLen == 0 {
-		return errors.New("first_name cannot be empty")
+		return errors.InvalidArgument("first_name cannot be empty")
 	}
 
 	if firstNameLen > users.FirstNameMaxLength {
-		return errors.New("first_name is too long")
+		return errors.InvalidArgument("first_name is too long")
 	}
 
 	return nil
@@ -28,11 +28,11 @@ func validateLastName(lastName string) error {
 	lastNameLen := len(lastName)
 
 	if lastNameLen == 0 {
-		return errors.New("last_name cannot be empty")
+		return errors.InvalidArgument("last_name cannot be empty")
 	}
 
 	if lastNameLen > users.LastNameMaxLength {
-		return errors.New("last_name is too long")
+		return errors.InvalidArgument("last_name is too long")
 	}
 
 	return nil
@@ -40,7 +40,7 @@ func validateLastName(lastName string) error {
 
 func validateBio(bio string) error {
 	if len(bio) > users.BioMaxLength {
-		return errors.New("bio is too long")
+		return errors.InvalidArgument("bio is too long")
 	}
 
 	return nil
@@ -50,11 +50,11 @@ func validateDisplayName(displayName string) error {
 	displayNameLen := len(displayName)
 
 	if displayNameLen == 0 {
-		return errors.New("display_name cannot be empty")
+		return errors.InvalidArgument("display_name cannot be empty")
 	}
 
 	if displayNameLen > users.DisplayNameMaxLength {
-		return errors.New("display_name is too long")
+		return errors.InvalidArgument("display_name is too long")
 	}
 
 	return nil
@@ -119,7 +119,7 @@ pub fn email<S: std::hash::BuildHasher>(
 
 func validateEmail(email string, disposableEmailDomains map[string]bool) error {
 	if !govalidator.IsEmail(email) {
-		return errors.New("email is not valid")
+		return errors.InvalidArgument("email is not valid")
 	}
 	return nil
 }
@@ -130,30 +130,30 @@ func validateUsername(username string) error {
 	usernameLength := len(username)
 
 	if usernameLength == 0 {
-		return errors.New("username cannot be empty")
+		return errors.InvalidArgument("username cannot be empty")
 	}
 
 	if usernameLength < users.UsernameMinLength {
-		return fmt.Errorf("username must be longer than %d characters", users.UsernameMinLength-1)
+		return errors.InvalidArgument(fmt.Sprintf("username must be longer than %d characters", users.UsernameMinLength-1))
 	}
 
 	if usernameLength > users.UsernameMaxLength {
-		return fmt.Errorf("username must be longer than %d characters", users.UsernameMaxLength)
+		return errors.InvalidArgument(fmt.Sprintf("username must be longer than %d characters", users.UsernameMaxLength))
 	}
 
 	if username != strings.ToLower(username) {
-		return errors.New("username must be lowercase")
+		return errors.InvalidArgument("username must be lowercase")
 	}
 
 	if !isAlphaNumeric(username) {
-		return errors.New("username must contains only alphanumeric characters")
+		return errors.InvalidArgument("username must contains only alphanumeric characters")
 	}
 
 	if strings.Contains(username, "admin") ||
 		strings.Contains(username, "bloom") ||
 		strings.HasSuffix(username, "bot") ||
 		stringSliceContains(users.InvalidUsername, username) {
-		return errors.New("username is not valid")
+		return errors.InvalidArgument("username is not valid")
 	}
 
 	return nil
