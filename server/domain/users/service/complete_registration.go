@@ -108,6 +108,12 @@ func (service *UsersService) CompleteRegistration(ctx context.Context, params us
 		return
 	}
 
+	err = service.usersRepo.DeletePendingUser(ctx, tx, pendingUser.ID)
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+
 	now := time.Now().UTC()
 	user = users.User{
 		ID:                  uuid.New(),
@@ -141,12 +147,6 @@ func (service *UsersService) CompleteRegistration(ctx context.Context, params us
 		return
 	}
 	err = service.usersRepo.CreateSession(ctx, tx, session)
-	if err != nil {
-		tx.Rollback()
-		return
-	}
-
-	err = service.usersRepo.DeletePendingUser(ctx, tx, pendingUser.ID)
 	if err != nil {
 		tx.Rollback()
 		return

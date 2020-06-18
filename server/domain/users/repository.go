@@ -21,6 +21,8 @@ type Repository interface {
 	CreateSession(ctx context.Context, db db.Queryer, session Session) error
 	DeleteSession(ctx context.Context, db db.Queryer, sessionID uuid.UUID) error
 	FindSessionByID(ctx context.Context, db db.Queryer, sessionID uuid.UUID) (Session, error)
+	DeleteAllSessionsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) (err error)
+	FindAllSessionsForUser(ctx context.Context, db db.Queryer, userID uuid.UUID) (ret []Session, err error)
 
 	// PendingUser
 	FindPendingUserByID(ctx context.Context, db db.Queryer, pendingUserID uuid.UUID) (PendingUser, error)

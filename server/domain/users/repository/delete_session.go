@@ -22,6 +22,5 @@ func (repo *UsersRepository) DeleteSession(ctx context.Context, db db.Queryer, s
 		logger.Error(errMessage, log.Err("error", err), log.UUID("session.id", sessionID))
 		err = errors.Internal(errMessage, err)
 	}
-
 	return err
 }
