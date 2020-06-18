@@ -23,6 +23,7 @@ type Service interface {
 	UpdatePlan(ctx context.Context, params UpdatePlanParams) (Plan, error)
 	ChangeSubscription(ctx context.Context, params ChangeSubscriptionParams) (Customer, Plan, error)
 	UpdateCustomerUsedStorage(ctx context.Context, db db.Queryer, customer Customer, storage int64) (Customer, error)
+	DetachCustomer(ctx context.Context, db db.Queryer, user users.User, groupID *uuid.UUID) (err error)
 
 	// Queries
 	FindAllPlans(ctx context.Context) ([]Plan, error)

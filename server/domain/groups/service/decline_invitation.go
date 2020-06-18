@@ -19,7 +19,7 @@ func (service *GroupsService) DeclineInvitation(ctx context.Context, invitationI
 	}
 
 	// validate action
-	if actor.ID != invitation.InviteeID {
+	if me.ID != invitation.InviteeID {
 		err = groups.ErrInvitationNotFound
 		return
 	}

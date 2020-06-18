@@ -5,6 +5,7 @@ import (
 
 	"github.com/getsentry/sentry-go"
 	"github.com/stripe/stripe-go"
+	"gitlab.com/bloom42/bloom/server/app"
 	"gitlab.com/bloom42/bloom/server/app/config"
 	"gitlab.com/bloom42/bloom/server/db"
 	billingrepository "gitlab.com/bloom42/bloom/server/domain/billing/repository"
@@ -47,7 +48,9 @@ var serverCmd = &cli.Command{
 		// init 3rd party services
 		stripe.Key = conf.Stripe.SecretKey
 		err = sentry.Init(sentry.ClientOptions{
-			Dsn: conf.Sentry.Dsn,
+			Dsn:         conf.Sentry.Dsn,
+			Environment: conf.Env,
+			Release:     app.Version,
 		})
 		if err != nil {
 			return fmt.Errorf("Initializing Sentry: %w", err)
@@ -67,7 +70,8 @@ var serverCmd = &cli.Command{
 
 		billingService := billingservice.NewBillingService(db, billingRepo, mailer)
 		usersService := usersservice.NewUsersService(db, usersRepo, billingService, mailer)
-		groupsService := groupservice.NewGroupsService(db, groupsRepo, usersService, billingService)
+		groupsService := groupservice.NewGroupsService(db, groupsRepo, usersService, billingService,
+			billingRepo, syncRepo)
 		billingService.InjectUsersService(usersService)
 		billingService.InjectGroupsService(groupsService)
 		syncService := syncservice.NewSyncService(db, usersService, groupsService, syncRepo,
