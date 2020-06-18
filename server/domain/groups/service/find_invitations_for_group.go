@@ -8,25 +8,16 @@ import (
 )
 
 func (service *GroupsService) FindInvitationsForGroup(ctx context.Context, groupID uuid.UUID) (ret []groups.GroupInvitation, err error) {
+	me, err := service.usersService.Me(ctx)
+	if err != nil {
+		return
+	}
+
+	err = service.CheckUserIsGroupAdmin(ctx, service.db, me.ID, groupID)
+	if err != nil {
+		return
+	}
+
+	ret, err = service.groupsRepo.FindInvitationsForGroup(ctx, service.db, groupID)
 	return
 }
-
-/*
-
-	currentUser := apiutil.UserFromCtx(ctx)
-
-	if group.ID == nil {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	err = groups.CheckUserIsGroupAdmin(ctx, nil, currentUser.ID, *group.ID)
-	if err != nil && !currentUser.IsAdmin {
-		return ret, PermissionDeniedToAccessField()
-	}
-
-	invitations, err := groups.FindGroupInvitations(ctx, nil, *group.ID)
-	if err != nil {
-		return ret, gqlerrors.New(err)
-	}
-
-*/
