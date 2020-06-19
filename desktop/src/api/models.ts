@@ -449,7 +449,7 @@ export type QuitGroupInput = {
 };
 
 export type BillingPlanInput = {
-  id?: Maybe<Scalars['ID']>;
+  id: Scalars['ID'];
   name: Scalars['String'];
   product: BillingProduct;
   /** the strip id of the stripe plan. starting with 'plan_' */
@@ -457,10 +457,6 @@ export type BillingPlanInput = {
   /** HTML description */
   description: Scalars['String'];
   storage: Scalars['Int64'];
-};
-
-export type DeleteBillingPlanInput = {
-  id: Scalars['ID'];
 };
 
 /** if groupID and userId (reserved for admins) are null, add to current user */
@@ -590,9 +586,7 @@ export type Mutation = {
   cancelGroupInvitation: Scalars['Boolean'];
   /** Quit a group */
   quitGroup: Scalars['Boolean'];
-  createBillingPlan: BillingPlan;
   updateBillingPlan: BillingPlan;
-  deleteBillingPlan: Scalars['Boolean'];
   updateBillingSubscription: BillingSubscription;
   addPaymentMethod?: Maybe<PaymentMethod>;
   removePaymentMethod: Scalars['Boolean'];
@@ -716,18 +710,8 @@ export type MutationQuitGroupArgs = {
 };
 
 
-export type MutationCreateBillingPlanArgs = {
-  input: BillingPlanInput;
-};
-
-
 export type MutationUpdateBillingPlanArgs = {
   input: BillingPlanInput;
-};
-
-
-export type MutationDeleteBillingPlanArgs = {
-  input: DeleteBillingPlanInput;
 };
 
 

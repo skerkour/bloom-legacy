@@ -30,7 +30,7 @@ type BillingPlanConnection struct {
 }
 
 type BillingPlanInput struct {
-	ID      *uuid.UUID     `json:"id"`
+	ID      uuid.UUID      `json:"id"`
 	Name    string         `json:"name"`
 	Product BillingProduct `json:"product"`
 	// the strip id of the stripe plan. starting with 'plan_'
@@ -105,10 +105,6 @@ type CreateGroupInput struct {
 
 type DeclineGroupInvitationInput struct {
 	InvitationID uuid.UUID `json:"invitationID"`
-}
-
-type DeleteBillingPlanInput struct {
-	ID uuid.UUID `json:"id"`
 }
 
 type DeleteGroupInput struct {
