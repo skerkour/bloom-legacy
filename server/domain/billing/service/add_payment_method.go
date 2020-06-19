@@ -61,18 +61,6 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 		}
 	}
 
-	customerPaymentMethodsCount, err := service.billingRepo.GetPaymentMethodsCountForCustomer(ctx, tx, customer.ID)
-	if err != nil {
-		tx.Rollback()
-		return
-	}
-
-	if customerPaymentMethodsCount != 0 {
-		tx.Rollback()
-		err = errors.InvalidArgument("Please remove your payment method before adding a new one")
-		return
-	}
-
 	if customer.StripeCustomerID == nil {
 		isDefault = true
 		// create stripe customer + update customer
