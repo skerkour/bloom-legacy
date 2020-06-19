@@ -13,6 +13,7 @@ func init() {
 	rootCmd.AddCommand(versionCmd)
 	rootCmd.AddCommand(serverCmd)
 	rootCmd.AddCommand(migrationsCmd)
+	rootCmd.AddCommand(initCmd)
 }
 
 var rootCmd = &cli.Command{

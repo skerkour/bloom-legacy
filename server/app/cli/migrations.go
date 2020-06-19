@@ -12,13 +12,12 @@ import (
 )
 
 var revertAllMigrationsFlag bool
-var migrationsDirPath string
+var migrationsDirPath = fmt.Sprintf("file://%s", config.MigrationsDir)
 
 func init() {
 	migrationsRevertCmd.PersistentFlags().BoolVarP(&revertAllMigrationsFlag, "all", "a", false, "Revert all migrations")
 	migrationsCmd.AddCommand(migrationsRunCmd)
 	migrationsCmd.AddCommand(migrationsRevertCmd)
-	migrationsDirPath = fmt.Sprintf("file://%s", config.MigrationsDir)
 }
 
 var migrationsCmd = &cli.Command{

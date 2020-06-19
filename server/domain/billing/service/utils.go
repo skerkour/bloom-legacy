@@ -15,13 +15,13 @@ import (
 
 func allowedStorageForProduct(product string) int64 {
 	if product == billing.ProductUltra {
-		return 100000000000000 // 1TB
+		return billing.StorageUltra
 	} else if product == billing.ProductLite {
-		return 100000000000 // 100GB
+		return billing.StorageLite
 	} else if product == billing.ProductPro {
-		return 400000000000 // 400GB
-	} else { // FREE
-		return 100000000 // 100MB
+		return billing.StoragePro
+	} else {
+		return billing.StorageFree
 	}
 }
 

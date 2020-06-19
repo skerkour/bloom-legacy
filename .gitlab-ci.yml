@@ -141,7 +141,7 @@ test:server:
   script:
     - cd server
     - cp bloom.default.json bloom.json
-    - go run main.go migrations run
+    - go run main.go init
     - go run main.go migrations revert
     - go run main.go migrations run
     - make test

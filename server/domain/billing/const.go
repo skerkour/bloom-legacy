@@ -1,10 +1,6 @@
 package billing
 
 const (
-	DefaultStorage                  = 100000000 // 100MB
-	DefaultParallelBitflowDownloads = 0
-	DefaultBillingPlanId            = "42fb1c42-caca-418d-81f3-a6313c4a0a42"
-
 	PlanNameMaxLength = 15
 	PlanNameMinLength = 3
 
@@ -12,4 +8,14 @@ const (
 	ProductLite  = "LITE"
 	ProductPro   = "PRO"
 	ProductUltra = "ULTRA"
+
+	PlanPriceFree  = 0
+	PlanPriceLite  = 800
+	PlanPricePro   = 1600
+	PlanPriceUltra = 3200
+
+	StorageFree  = 100000000       // 100MB
+	StorageLite  = 100000000000    // 100GB
+	StoragePro   = 400000000000    // 400GB
+	StorageUltra = 100000000000000 // 1TB
 )
