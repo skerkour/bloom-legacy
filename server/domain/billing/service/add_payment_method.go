@@ -47,6 +47,7 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 			tx.Rollback()
 			return ret, err
 		}
+
 		customer, err = service.billingRepo.FindCustomerByGroupID(ctx, tx, *params.GroupID)
 		if err != nil {
 			tx.Rollback()
@@ -58,6 +59,18 @@ func (service *BillingService) AddPaymentMethod(ctx context.Context, params bill
 			tx.Rollback()
 			return ret, err
 		}
+	}
+
+	customerPaymentMethodsCount, err := service.billingRepo.GetPaymentMethodsCountForCustomer(ctx, tx, customer.ID)
+	if err != nil {
+		tx.Rollback()
+		return
+	}
+
+	if customerPaymentMethodsCount != 0 {
+		tx.Rollback()
+		err = errors.InvalidArgument("Please remove your payment method before adding a new one")
+		return
 	}
 
 	if customer.StripeCustomerID == nil {

@@ -3,6 +3,7 @@ package service
 import (
 	"context"
 
+	"github.com/stripe/stripe-go/paymentmethod"
 	"gitlab.com/bloom42/bloom/server/domain/billing"
 	"gitlab.com/bloom42/bloom/server/domain/users"
 	"gitlab.com/bloom42/bloom/server/errors"
@@ -80,6 +81,15 @@ func (service *BillingService) RemovePaymentMethod(ctx context.Context, paymentM
 	err = service.billingRepo.DeletePaymentMethod(ctx, tx, paymentMethod.ID)
 	if err != nil {
 		tx.Rollback()
+		return
+	}
+
+	_, err = paymentmethod.Detach(paymentMethod.StripeID, nil)
+	if err != nil {
+		tx.Rollback()
+		errMessage := "billing.RemovePaymentMethod: deleting stripe payment method"
+		logger.Error(errMessage, log.Err("error", err))
+		err = errors.Internal(errMessage, err)
 		return
 	}
 
