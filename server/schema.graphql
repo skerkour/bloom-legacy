@@ -422,7 +422,7 @@ input QuitGroupInput {
 }
 
 input BillingPlanInput {
-  id: ID
+  id: ID!
   name: String!
   product: BillingProduct!
   """the strip id of the stripe plan. starting with 'plan_'"""
@@ -430,10 +430,6 @@ input BillingPlanInput {
   """HTML description"""
   description: String!
   storage: Int64!
-}
-
-input DeleteBillingPlanInput {
-  id: ID!
 }
 
 """if groupID and userId (reserved for admins) are null, add to current user"""
@@ -569,9 +565,7 @@ type Mutation {
   quitGroup(input: QuitGroupInput!): Boolean!
 
   # billing
-  createBillingPlan(input: BillingPlanInput!): BillingPlan!
   updateBillingPlan(input: BillingPlanInput!): BillingPlan!
-  deleteBillingPlan(input: DeleteBillingPlanInput!): Boolean!
   updateBillingSubscription(input: UpdateBillingSubscriptionInput!): BillingSubscription!
   addPaymentMethod(input: AddPaymentMethodInput!): PaymentMethod
   removePaymentMethod(input: RemovePaymentMethodInput!): Boolean!

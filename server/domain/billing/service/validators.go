@@ -55,3 +55,30 @@ func validatePlanStripeID(stripeID string) error {
 
 	return nil
 }
+
+func validateUpdatePlan(name, description, product, stripeID string, storage int64) (err error) {
+	err = validatePlanName(name)
+	if err != nil {
+		return
+	}
+
+	err = validateProduct(product)
+	if err != nil {
+		return
+	}
+
+	// if err = validator.BillingPlanPrice(price); err != nil {
+	// 	return NewErrorMessage(ErrorInvalidArgument, err.Error())
+	// }
+
+	err = validatePlanStripeID(stripeID)
+	if err != nil {
+		return
+	}
+
+	if storage < 0 {
+		return billing.ErrPlanStorageCantBeNegative
+	}
+
+	return nil
+}

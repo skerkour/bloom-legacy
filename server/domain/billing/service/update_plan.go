@@ -27,7 +27,7 @@ func (service *BillingService) UpdatePlan(ctx context.Context, params billing.Up
 	params.StripeID = strings.TrimSpace(params.StripeID)
 	params.Description = strings.TrimSpace(params.Description)
 	params.Product = strings.TrimSpace(params.Product)
-	err = validateCreatePlan(params.Name, params.Description, params.Product, params.StripeID, params.Storage)
+	err = validateUpdatePlan(params.Name, params.Description, params.Product, params.StripeID, params.Storage)
 	if err != nil {
 		return
 	}

@@ -17,8 +17,6 @@ type Service interface {
 	PaymentFailed(ctx context.Context, invoice stripe.Invoice) error
 	AddPaymentMethod(ctx context.Context, params AddPaymentMethodParams) (PaymentMethod, error)
 	ChangeDefaultPaymentMethod(ctx context.Context, paymentMethodID uuid.UUID) (PaymentMethod, error)
-	CreatePlan(ctx context.Context, params CreatePlanParams) (Plan, error)
-	DeletePlan(ctx context.Context, planID uuid.UUID) error
 	RemovePaymentMethod(ctx context.Context, paymentMethodID uuid.UUID) error
 	UpdatePlan(ctx context.Context, params UpdatePlanParams) (Plan, error)
 	ChangeSubscription(ctx context.Context, params ChangeSubscriptionParams) (Customer, Plan, error)
