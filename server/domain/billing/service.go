@@ -39,14 +39,6 @@ type AddPaymentMethodParams struct {
 	GroupID  *uuid.UUID
 }
 
-type CreatePlanParams struct {
-	Name        string
-	StripeID    string
-	Description string
-	Product     string
-	Storage     int64
-}
-
 type UpdatePlanParams struct {
 	ID       uuid.UUID
 	Name     string
