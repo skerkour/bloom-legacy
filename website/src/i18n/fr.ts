@@ -152,7 +152,7 @@ export default {
   faq: {
     title: 'Foire Aux Questions',
     q1: 'How secure are my data?',
-    a1: `Some of your most personal moments are shared on WhatsApp, which is why we built end-to-end encryption.
+    a1: `Some of your most personal moments are shared on Bloom, which is why we built end-to-end encryption.
       We use state of the art cryptography
       (<a href="https://tools.ietf.org/html/draft-irtf-cfrg-xchacha-03" target="_blank" rel="noopener">XChaCha20Poly1305</a>,
       <a href="https://en.wikipedia.org/wiki/Argon2" target="_blank" rel="noopener">Argon2id</a>,
