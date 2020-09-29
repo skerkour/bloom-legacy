@@ -18,10 +18,10 @@ much more.
 
 Status:
 
-* backenb: 90%
-* core (multi platform, end to end encrypted differential sync engine): 90%
-* desktop: 80%
-* mobile: 50%
+* backend (Go): 90%
+* core (multi platform, end to end encrypted, differential sync engine, Go): 90%
+* desktop (VueJS / electron): 80%
+* mobile (Flutter): 70%
 
 
 
