@@ -13,6 +13,18 @@ You are tired of being abused by Big Companies?
 Bloom is an open source and encrypted productivity suite: Files, Notes, Calendar, Contacts &
 much more.
 
+
+## This project is looking for a maintainer
+
+Status:
+
+* backenb: 90%
+* core (multi platform, end to end encrypted differential sync engine): 90%
+* desktop: 80%
+* mobile: 50%
+
+
+
 [Try it for free](https://bloom.sh/download)
 
 
