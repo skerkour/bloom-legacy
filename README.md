@@ -16,7 +16,7 @@ much more.
 
 ## This project is looking for a maintainer
 
-Status:
+Status: The server, core and desktop app are working but need polishing.
 
 * backend (Go): 90%
 * core (multi platform, end to end encrypted, differential sync engine, Go): 90%
