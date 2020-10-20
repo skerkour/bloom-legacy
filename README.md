@@ -8,10 +8,13 @@ You no longer trust tech monopolies with your data?<br/>
 You are done with your privacy invaded by advertisers? <br/>
 You are tired of being abused by Big Companies?
 
+
 **We too, so we built Bloom.**
 
 Bloom is an open source and encrypted productivity suite: Files, Notes, Calendar, Contacts &
 much more.
+
+[Try it for free](https://bloom.sh)
 
 
 ## This project is looking for a maintainer
@@ -32,7 +35,6 @@ Status: The server, core and desktop app are working but need polishing.
 
 
 
-[Try it for free](https://bloom.sh)
 
 <!--
 Android: [Google play store](https://play.google.com/store/apps/details?id=com.bloom42.bloomx) <br/>
@@ -45,6 +47,7 @@ Windows: Coming soon <br/> -->
 
 
 --------
+
 
 Why? How? What? 👉 Read the launch post: https://kerkour.fr/blog/bloom-a-free-and-open-source-google/
 
