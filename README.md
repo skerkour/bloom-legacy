@@ -24,6 +24,13 @@ Status: The server, core and desktop app are working but need polishing.
 * mobile (Flutter): 70%
 
 
+### How to become the new maintainer?
+
+* fork the project
+* change the name, logo and all other trademarked assets
+* Enjoy thousands hours of engineering for free
+
+
 
 [Try it for free](https://bloom.sh)
 
@@ -44,9 +51,8 @@ Why? How? What? 👉 Read the launch post: https://kerkour.fr/blog/bloom-a-free-
 1. [Documentation](#documentation)
 2. [Development instructions](#development-instructions)
 3. [Community](#Community)
-4. [Contributing](#contributing)
-5. [Licensing](#licensing)
-6. [Security](#security)
+4. [Licensing](#licensing)
+5. [Security](#security)
 
 --------
 
@@ -65,18 +71,9 @@ See https://github.com/bloom42/bloom-legacy/blob/main/wiki/development.md
 
 <!-- Join our Reddit community: https://www.reddit.com/r/bloom42 -->
 
-Please use [issues](https://gitlab.com/bloom42/bloom/-/issues) if you have some suggestions or want to report bugs.
-
- Twitter: [@42bloom](https://twitter.com/@42bloom)
+* Twitter: [@42bloom](https://twitter.com/@42bloom)
 * Mastodon: [@42bloom@mastodon.social](https://mastodon.social/@42bloom)
 * Blog / Newsletter: [kerkour.fr](https://kerkour.fr)
-
-
-## Contributing
-
-Thank you for your interest in contributing!
-
-Please open an issue to discuss before making a Merge Request (for things other than typos).
 
 
 ## Licensing
@@ -86,7 +83,7 @@ See `LICENSE.txt` and https://bloom.sh/licensing
 
 ## Security
 
-You can read the details of our security architecture here: https://github.com/bloom42/bloom-legacy/blob/main/wiki/security.md.
+You can read the details of the security architecture here: https://github.com/bloom42/bloom-legacy/blob/main/wiki/security.md.
 
-If you found a security issue affecting this project, please do not open a public issue and refer to our
+If you find a security issue affecting this project, please do not open a public issue and refer to our
 [dedicated security page](https://bloom.sh/security) instead. Thank you!
