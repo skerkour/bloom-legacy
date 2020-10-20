@@ -1,7 +1,7 @@
 <p align="center">
   <img alt="bloom logo" src="assets/icons/bloom_256.png" height="180" />
   <h3 align="center">Bloom</h3>
-  <p align="center">A safe place for all your data (Android, IOS, Linux, MacOS, CLI)</p>
+  <p align="center">A safe place for all your data (Android, IOS, Linux, MacOS)</p>
 </p>
 
 You no longer trust tech monopolies with your data?<br/>
