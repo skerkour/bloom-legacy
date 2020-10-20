@@ -14,7 +14,7 @@ You are tired of being abused by Big Companies?
 Bloom is an open source and encrypted productivity suite: Files, Notes, Calendar, Contacts &
 much more.
 
-[Try it for free](https://bloom.sh)
+# [Try it for free](https://bloom.sh)
 
 
 ## This project is looking for a maintainer
