@@ -1,0 +1,30 @@
+[workspace]
+members = [
+  # core
+  "bloom",
+  "kernel",
+  "http_server",
+  "scheduler",
+  "worker",
+  "libs/stdx",
+  "libs/crypto42",
+  "libs/crypto42_libsodium_sys",
+
+  # apps
+  "analytics",
+  "files",
+  "inbox",
+  "calendar",
+]
+
+# to be able to run with `cargo run`, `check` and so on without selecting a specific package with `-p`
+default-members = [
+  "bloom",
+]
+
+
+[profile.release]
+lto = true
+debug = false
+debug-assertions = false
+codegen-units = 1

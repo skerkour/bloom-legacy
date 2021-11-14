@@ -1,0 +1,92 @@
+name: CI
+
+# This workflow run tests and build for each push
+
+on:
+  push:
+    branches:
+      - main
+      - 'feature-**'
+
+jobs:
+
+  bloom:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Update local toolchain
+        run: |
+          rustup update
+          rustup component add clippy
+          rustup install nightly
+
+      - name: Toolchain info
+        run: |
+          cargo --version --verbose
+          rustc --version
+          cargo clippy --version
+
+      # - name: Lint
+      #   run: |
+      #     cd bloom
+      #     make lint
+
+      - name: Test
+        # make test
+        run: |
+          cd bloom
+          make check
+
+
+  # build_bloom:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+
+  #     - name: Build Docker
+  #       run: |
+  #         make docker
+
+  #     - name: Docker image info
+  #       run: |
+  #         docker images
+
+
+  webapp:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # todo: tests, lint
+      - name: Build
+        run: |
+          cd webapp
+          make install
+          make build
+
+
+  chatbox-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # todo: tests, lint
+      - name: Build
+        run: |
+          cd chatbox.js
+          make install
+          make build
+
+
+  bloom-js:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+
+      # todo: tests, lint
+      - name: Build
+        run: |
+          cd bloom.js
+          make install
+          make build

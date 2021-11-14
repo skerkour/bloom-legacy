@@ -1,0 +1,30 @@
+use crate::{
+    api::newsletter::model::{self, input},
+    ServerContext,
+};
+use actix_web::web;
+use inbox::service::CreateNewsletterMessageInput;
+use kernel::{http::api, Actor};
+use std::sync::Arc;
+use web::Json;
+
+pub async fn create_message(
+    ctx: web::Data<Arc<ServerContext>>,
+    input: Json<input::CreateMessage>,
+    actor: Actor,
+) -> Result<api::Response<model::Message>, kernel::Error> {
+    let input = input.into_inner();
+    let service_input = CreateNewsletterMessageInput {
+        list_id: input.list_id,
+        name: input.name,
+        subject: input.subject,
+        body: input.body,
+        scheduled_for: None,
+    };
+    let message = ctx
+        .inbox_service
+        .create_newsletter_message(actor, service_input)
+        .await?;
+
+    Ok(api::Response::ok(message.into()))
+}

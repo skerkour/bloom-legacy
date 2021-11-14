@@ -1,0 +1,49 @@
+name: Release
+
+# This workflow releases the docker image and deploy it on staging
+
+on:
+  push:
+    branches:
+      - release
+    # tags:
+    # - v*
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+
+      - name: Build and tag Docker image
+        run: |
+          make docker
+          docker tag ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy registry.heroku.com/${{ secrets.HEROKU_APP_STAGING }}/web
+          docker build -t ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy:release -f Dockerfile.release .
+          docker tag ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy:release registry.heroku.com/${{ secrets.HEROKU_APP_STAGING }}/release
+
+      - name: Docker image info
+        run: docker images
+
+      - name: Login to container registries
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:login
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      - name: Push Docker images
+        # see here for the details of the release phase https://devcenter.heroku.com/articles/container-registry-and-runtime#release-phase
+        run: |
+          docker push ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy
+          docker push ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy:release
+          docker push registry.heroku.com/${{ secrets.HEROKU_APP_STAGING }}/web
+          docker push registry.heroku.com/${{ secrets.HEROKU_APP_STAGING }}/release
+
+
+
+      - name: Release
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ secrets.HEROKU_APP_STAGING }} web release

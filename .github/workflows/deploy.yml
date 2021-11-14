@@ -1,0 +1,55 @@
+name: Deploy
+
+# This workflow deploys the docker image to production
+
+on: [workflow_dispatch]
+
+jobs:
+  deploy:
+    name: Deploy job
+    # runs-on: ubuntu-latest
+    # temporary fix: https://github.com/aws/aws-cli/issues/5262
+    runs-on: ubuntu-18.04
+
+    steps:
+      - name: Deploy on Render
+        run: |
+          curl ${{ secrets.RENDER_DEPLOY_HOOK }}
+
+      - name: Login to container registries
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: |
+          heroku container:login
+          echo ${{ secrets.GITHUB_TOKEN }} | docker login ghcr.io -u ${{ secrets.DOCKER_USERNAME }} --password-stdin
+
+      # replace heroku pull by docker pull ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom:latest
+      # docker build -t registry.heroku.com/${{ secrets.HEROKU_APP_PRODUCTION }}/release -f Dockerfile.release .
+      - name: Build and tag Docker image
+        run: |
+          docker pull ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy
+          docker pull ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy:release
+          docker tag ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy registry.heroku.com/${{ secrets.HEROKU_APP_PRODUCTION }}/web
+          docker tag ghcr.io/${{ secrets.DOCKER_USERNAME }}/bloom-legacy:release registry.heroku.com/${{ secrets.HEROKU_APP_PRODUCTION }}/release
+
+      - name: Docker image info
+        run: docker images
+
+      - name: Tag and push Heroku image
+        # see here for the details of the release pahse https://devcenter.heroku.com/articles/container-registry-and-runtime#release-phase
+        run: |
+          docker push registry.heroku.com/${{ secrets.HEROKU_APP_PRODUCTION }}/web
+          docker push registry.heroku.com/${{ secrets.HEROKU_APP_PRODUCTION }}/release
+
+      - name: Deploy
+        env:
+          HEROKU_API_KEY: ${{ secrets.HEROKU_API_KEY }}
+        run: heroku container:release -a ${{ secrets.HEROKU_APP_PRODUCTION }} web release
+
+      - name: Purge CDN
+        run: |
+          curl -X POST "https://api.cloudflare.com/client/v4/zones/${{ secrets.CF_ZONE_ID }}/purge_cache" \
+            -H "X-Auth-Email: ${{ secrets.CF_EMAIL }}" \
+            -H "Authorization: Bearer ${{ secrets.CF_API_TOKEN }}" \
+            -H "Content-Type: application/json" \
+            --data '{"purge_everything":true}'

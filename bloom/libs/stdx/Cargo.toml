@@ -1,0 +1,41 @@
+[package]
+name = "stdx"
+description = "The missing pieces of Rust's standard library"
+version = "0.1.0"
+authors = ["skerkour <sylvain@kerkour.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+ammonia = "3"
+atomic = "0.5"
+askama_escape = "0.10"
+base64 = "0.13"
+byteorder = "1.4"
+chrono = { version  = "0.4", features = ["serde"] }
+cron = "0.7"
+crypto42 = { path = "../crypto42" }
+csv = "1"
+dotenv = "0.15"
+env_logger = "0.8"
+futures = "0.3"
+hex = "0.4"
+image = "0.23"
+lazy_static = "1.4"
+lettre = { version = "0.10.0-alpha.4", default-features = false, features = ["builder"] }
+log = "0.4"
+num_cpus = "1"
+pulldown-cmark = "0.8"
+rand = { version = "0.8" }
+regex = "1"
+reqwest = { version = "0.10", default-features = false, features = ["json", "rustls-tls"] }
+ring = "0.16"
+serde = { version = "1", features = ["derive"] }
+serde_qs = "0.8"
+sqlx = { version = "0.4", features = [ "runtime-actix-rustls", "uuid", "json", "postgres", "migrate", "chrono", "time", "ipnetwork" ] }
+thiserror = "1"
+tokio = { version = "0.2", features = ["full"] }
+tryhard = { version = "0.2", default-features = false, features = ["tokio-02"] }
+uuid = { version = "0.8", features = ["serde", "v4"] }
+url = "2"

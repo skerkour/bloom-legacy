@@ -1,0 +1,23 @@
+[package]
+name = "kernel"
+version = "0.1.0"
+authors = ["Sylvain Kerkour <sylvain@kerkour.fr>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+stdx = { path = "../libs/stdx" }
+
+
+async-trait = "0.1"
+serde_json = "1.0"
+thiserror = "1.0"
+actix-web = "3"
+tera = { version = "1", default-features = false }
+futures-util = "0.3"
+serde = { version = "1", features = ["derive"] }
+rusoto_core = { version = "0.45", default-features = false, features = ["rustls"] }
+rusoto_s3 = { version = "0.45", default-features = false, features = ["rustls"] }
+rusoto_ses = { version = "0.45", default-features = false, features = ["rustls"] }
+sentry = { version = "0.21", default-features = false, features = ["backtrace", "contexts", "panic", "reqwest", "rustls"] }

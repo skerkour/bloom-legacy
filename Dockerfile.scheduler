@@ -1,0 +1,3 @@
+FROM ghcr.io/skerkour/bloom-legacy:latest
+
+CMD ["/bloom/bloom", "scheduler"]
