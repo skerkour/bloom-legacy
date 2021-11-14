@@ -1,7 +1,0 @@
-# https://www.robotstxt.org/
-
-# Attack us, we will strike back twice, attack one of our customers and we will phase you :)
-
-# Allow crawling of all content
-User-agent: *
-Disallow:

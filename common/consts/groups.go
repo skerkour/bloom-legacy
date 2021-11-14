@@ -1,6 +1,0 @@
-package consts
-
-const (
-	GROUP_ROLE_MEMBER        = "MEMBER"
-	GROUP_ROLE_ADMINISTRATOR = "ADMINISTRATOR"
-)
