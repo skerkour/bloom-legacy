@@ -1,3 +1,15 @@
+## Project Status
+
+as of february 2022
+
+Bloom is about to see a new major release that will completely diverge from the current features set.
+
+
+I prefer not to say much before shipping, not to say things that won't be true, but it means that Bloom is no longer meant to be a Google Suite / NextCloud alternative.
+
+
+--------------------------------
+
 <p align="center">
   <a href="https://bloom.sh" target="_blank" rel="noopener"><img alt="Bloom logo" src="./docs/logo.png" height="200" /></a>
   <h1 align="center">Bloom</h1>
